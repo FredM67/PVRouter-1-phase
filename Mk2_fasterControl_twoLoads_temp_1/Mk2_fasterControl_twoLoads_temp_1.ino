@@ -103,7 +103,10 @@
  * - The diversion of surplus power can no longer be affected by slower
  *     activities which may be running in the main code such as Serial statements and RF.
  * - Temperature sensing is supported. A pullup resistor (4K7 or similar) is required for the Dallas sensor.
- * - Display shows diverted envergy and temperature in a cycling way (5 seconds cycle) 
+ * - Display shows diverted energy and temperature in a cycling way (5 seconds cycle) 
+ * 
+ * __October 2020: updated Mk2_fasterControl_twoLoads_2 with these changes:__
+ * - fix a couple of small compiler errors depending on the defines set/unset (thx Gaetan)
  * 
  *   Fred Metrich
  *  
@@ -121,7 +124,7 @@
 #include <OneWire.h> // for temperature sensing
 #endif
 
-// In this sketch, the ADC is free-running with a cycle time of ~104uS.
+//In this sketch, the ADC is free-running with a cycle time of ~104uS.
 
 // Change these values to suit the local mains frequency and supply meter
 constexpr int32_t CYCLES_PER_SECOND{50};         /**< number of cycles/s of the grid power supply */
@@ -243,7 +246,9 @@ constexpr int32_t DCoffset_V_max{(512L + 100L) * 256L}; /**< mid-point of ADC pl
 int32_t divertedEnergyRecent_IEU{0}; /**< Hi-res accumulator of limited range */
 uint16_t divertedEnergyTotal_Wh{0};  /**< WattHour register of 63K range */
 
+#ifdef TEMP_SENSOR
 constexpr uint8_t displayCyclingInSeconds{5}; /**< duration for cycling between diverted energy and temperature */
+#endif
 constexpr uint32_t displayShutdown_inMainsCycles{DISPLAY_SHUTDOWN_IN_HOURS * CYCLES_PER_SECOND * 3600L};
 uint32_t absenceOfDivertedEnergyCount{0};         /**< count the # of cycles w/o energy diversion */
 int16_t sampleSetsDuringNegativeHalfOfMainsCycle; /**< for arming the triac/trigger */
@@ -348,11 +353,13 @@ constexpr uint8_t noOfPossibleCharacters{22};
 #define DRIVER_CHIP_DISABLED HIGH
 #define DRIVER_CHIP_ENABLED LOW
 
-constexpr uint8_t tempSensorPin{xx};         /**< <- a free pin must be choosen for temperatur sensor
+#ifdef TEMP_SENSOR
+constexpr uint8_t tempSensorPin{xx}; /**< <- a free pin must be choosen for temperature sensor */
+#endif
 
 // the primary segments are controlled by a pair of logic chips
 constexpr uint8_t noOfDigitSelectionLines{4}; /**< <- for the 74HC4543 7-segment display driver */
-constexpr uint8_t noOfDigitLocationLines{2}; /**< <- for the 74HC138 2->4 line demultiplexer */
+constexpr uint8_t noOfDigitLocationLines{2};  /**< <- for the 74HC138 2->4 line demultiplexer */
 
 constexpr uint8_t enableDisableLine{5}; /**< <- affects the primary 7 segments only (not the DP) */
 constexpr uint8_t decimalPointLine{14}; /**< <- this line has to be individually controlled. */
@@ -404,7 +411,9 @@ constexpr uint8_t digitLocationMap[noOfDigitLocations][noOfDigitLocationLines]{
 #define ON HIGH
 #define OFF LOW
 
-constexpr uint8_t tempSensorPin{15}; /**< the only free pin left in thins case (pin1 of IC4) */
+#ifdef TEMP_SENSOR
+constexpr uint8_t tempSensorPin{15}; /**< the only free pin left in this case (pin1 of IC4) */
+#endif
 
 constexpr uint8_t noOfSegmentsPerDigit{8}; /**< includes one for the decimal point */
 
@@ -1375,7 +1384,9 @@ void loop()
 {
   static uint8_t perSecondTimer{0};
   static bool bToggleDisplayTemp{false};
+#ifdef TEMP_SENSOR
   static uint16_t displayCyclingTimer{0};
+#endif
 
   if (b_newMainsCycle)
   {
@@ -1385,7 +1396,9 @@ void loop()
     if (perSecondTimer >= CYCLES_PER_SECOND)
     {
       perSecondTimer = 0;
+#ifdef TEMP_SENSOR
       ++displayCyclingTimer;
+#endif
 
       // After a pre-defined period of inactivity, the 4-digit display needs to
       // close down in readiness for the next's day's data.
@@ -1404,12 +1417,13 @@ void loop()
       configureValueForDisplay(bToggleDisplayTemp); // this timing is not critical so does not need to be in the ISR
     }
   }
-
+#ifdef TEMP_SENSOR
   if (displayCyclingTimer >= displayCyclingInSeconds)
   {
     displayCyclingTimer = 0;
     bToggleDisplayTemp = !bToggleDisplayTemp;
   }
+#endif
 
   if (b_datalogEventPending)
   {
