@@ -338,8 +338,8 @@ int16_t lowestNoOfSampleSetsPerMainsCycle;        /**< lowest # of sample sets d
 // powerCal is the RECIPR0CAL of the power conversion rate. A good value
 // to start with is therefore 1/20 = 0.05 (Watts per ADC-step squared)
 //
-constexpr float powerCal_grid{0.0435};     /**< for CT1 */
-constexpr float powerCal_diverted{0.0435}; /**< for CT2 */
+constexpr float powerCal_grid{0.0765};     /**< for CT1 */
+constexpr float powerCal_diverted{0.0854}; /**< for CT2 */
 
 // For datalogging purposes, f_voltageCal has been added too. Because the range of ADC values is
 // similar to the actual range of volts, the optimal value for this cal factor is likely to be
