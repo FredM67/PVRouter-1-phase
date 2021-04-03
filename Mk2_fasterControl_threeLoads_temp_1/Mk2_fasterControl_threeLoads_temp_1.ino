@@ -268,7 +268,6 @@ static long lpf_long; // new LPF, for ofsetting the behaviour of CT1 as a HPF
 // They are matched to the physical behaviour of the YHDC SCT-013-000 CT
 // and the CT1 samples being 375 us apart
 constexpr float lpf_gain{12}; // <- setting this to 0 disables this extra processing
-//const float lpf_gain = 0;  // <- setting this to 0 disables this extra processing
 constexpr float alpha{0.002}; //
 
 // for interaction between the main processor and the ISRs
@@ -486,6 +485,8 @@ constexpr int32_t requiredExportPerMainsCycle_inIEU{(int32_t)REQUIRED_EXPORT_IN_
 OneWire oneWire(tempSensorPin);
 #endif
 
+#define __FILENAME__ (__builtin_strrchr("\\"__FILE__, '\\') + 1)
+
 /**
  * @brief Called once during startup.
  * @details This function initializes a couple of variables we cannot init at compile time and
@@ -515,8 +516,13 @@ void setup()
 
   Serial.begin(9600);
   Serial.println();
-  Serial.println("-------------------------------------");
-  Serial.println("Sketch ID:      Mk2_fasterControl_threeLoads_temp_3.ino");
+  Serial.println(F("-------------------------------------"));
+  Serial.print(F("Sketch ID:      "));
+  Serial.println(__FILENAME__);
+  Serial.print(F("Build on "));
+  Serial.print(__DATE__);
+  Serial.print(F(" "));
+  Serial.println(__TIME__);
   Serial.println();
 
 #ifdef PIN_SAVING_HARDWARE
@@ -594,27 +600,27 @@ void setup()
   ADCSRA |= (1 << ADSC); // start ADC manually first time
   sei();                 // Enable Global Interrupts
 
-  Serial.print("powerCal_grid =      ");
+  Serial.print(F("powerCal_grid =      "));
   Serial.println(powerCal_grid, 4);
-  Serial.print("powerCal_diverted = ");
+  Serial.print(F("powerCal_diverted = "));
   Serial.println(powerCal_diverted, 4);
 
-  Serial.print("Anti-creep limit (Joules / mains cycle) = ");
+  Serial.print(F("Anti-creep limit (Joules / mains cycle) = "));
   Serial.println(ANTI_CREEP_LIMIT);
-  Serial.print("Export rate (Watts) = ");
+  Serial.print(F("Export rate (Watts) = "));
   Serial.println(REQUIRED_EXPORT_IN_WATTS);
 
-  Serial.print("zero-crossing persistence (sample sets) = ");
+  Serial.print(F("zero-crossing persistence (sample sets) = "));
   Serial.println(PERSISTENCE_FOR_POLARITY_CHANGE);
-  Serial.print("continuity sampling display rate (mains cycles) = ");
+  Serial.print(F("continuity sampling display rate (mains cycles) = "));
   Serial.println(CONTINUITY_CHECK_MAXCOUNT);
 
-  Serial.print("  capacityOfEnergyBucket_long = ");
+  Serial.print(F("  capacityOfEnergyBucket_long = "));
   Serial.println(capacityOfEnergyBucket_long);
-  Serial.print("  nominalEnergyThreshold   = ");
+  Serial.print(F("  nominalEnergyThreshold   = "));
   Serial.println(nominalEnergyThreshold);
 
-  Serial.print(">>free RAM = ");
+  Serial.print(F(">>free RAM = "));
   Serial.println(freeRam()); // a useful value to keep an eye on
 
   Serial.println("----");
@@ -662,7 +668,7 @@ ISR(ADC_vect)
   int32_t filtI_div4;
   int32_t instP;
   int32_t inst_Vsquared;
-  long last_lpf_long;
+  int32_t last_lpf_long;
 
   switch (sample_index)
   {
@@ -1452,30 +1458,30 @@ void loop()
 #endif
 
 #ifdef DATALOG_OUTPUT
-    Serial.print("grid power ");
+    Serial.print(F("grid power "));
     Serial.print(tx_data.powerAtSupplyPoint_Watts);
-    Serial.print(", diverted energy (Wh) ");
+    Serial.print(F(", diverted energy (Wh) "));
     Serial.print(tx_data.divertedEnergyTotal_Wh);
-    Serial.print(", Vrms ");
+    Serial.print(F(", Vrms "));
     Serial.print((float)tx_data.Vrms_times100 / 100);
     for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
     {
-      Serial.print(", #");
+      Serial.print(F(", #"));
       Serial.print(i);
-      Serial.print(" ");
+      Serial.print(F(" "));
       Serial.print((float)(100 * copyOf_countLoadON[i]) / DATALOG_PERIOD_IN_MAINS_CYCLES);
-      Serial.print("%");
+      Serial.print(F("%"));
     }
 #ifdef TEMP_SENSOR
-    Serial.print(", temperature ");
+    Serial.print(F(", temperature "));
     Serial.print((float)tx_data.temperature_times100 / 100);
-    Serial.print("°C ");
+    Serial.print(F("°C "));
 #endif
-    Serial.print(",  (minSampleSets/MC ");
+    Serial.print(F(",  (minSampleSets/MC "));
     Serial.print(copyOf_lowestNoOfSampleSetsPerMainsCycle);
-    Serial.print(",  #ofSampleSets ");
+    Serial.print(F(",  #ofSampleSets "));
     Serial.print(copyOf_sampleSetsDuringThisDatalogPeriod);
-    Serial.println(')');
+    Serial.println(F(")"));
 #endif
 
 #ifdef TEMP_SENSOR

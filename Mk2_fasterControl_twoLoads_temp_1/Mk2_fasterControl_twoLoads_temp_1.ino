@@ -87,6 +87,10 @@
  * - improved multi-load control logic to prevent the primary load from being disturbed by
  *     the lower priority one. This logic now mirrors that in the Mk2_multiLoad_wired_n line.
  * 
+ * __March 2021: updated to Mk2_fasterControl_twoLoads_3 with these changes:__
+ * - extra filtering added to offset the HPF effect of CT1.  This allows the energy state in
+ *     10 ms time to be predicted with more confidence.  Specifically, it is no longer necessary 
+ *     to include a 30% boost factor after each change of load state.
  *   
  *      Robin Emley
  *      www.Mk2PVrouter.co.uk
@@ -116,7 +120,7 @@
 
 #include <Arduino.h>
 
-#define TEMP_SENSOR ///< this line must be commented out if the temperature sensor is not present
+//#define TEMP_SENSOR ///< this line must be commented out if the temperature sensor is not present
 
 #define DATALOG_OUTPUT ///< this line can be commented if no datalogging is needed
 
@@ -129,7 +133,7 @@
 // Change these values to suit the local mains frequency and supply meter
 constexpr int32_t CYCLES_PER_SECOND{50};         /**< number of cycles/s of the grid power supply */
 constexpr uint32_t WORKING_RANGE_IN_JOULES{360}; /**< 0.1 Wh, reduced for faster start-up */
-constexpr int32_t REQUIRED_EXPORT_IN_WATTS{0};   /**< when set to a Polarities::NEGATIVE value, this acts as a PV generator */
+constexpr int32_t REQUIRED_EXPORT_IN_WATTS{0};   /**< when set to a NEGATIVE value, this acts as a PV generator */
 
 // Physical constants, please do not change!
 constexpr int32_t JOULES_PER_WATT_HOUR{3600}; /**< (0.001 kWh = 3600 Joules) */
@@ -253,7 +257,13 @@ constexpr uint32_t displayShutdown_inMainsCycles{DISPLAY_SHUTDOWN_IN_HOURS * CYC
 uint32_t absenceOfDivertedEnergyCount{0};         /**< count the # of cycles w/o energy diversion */
 int16_t sampleSetsDuringNegativeHalfOfMainsCycle; /**< for arming the triac/trigger */
 int32_t energyInBucket_prediction;                /**< predicted energy level until the end of the cycle */
-bool loadHasJustChangedState;                     /**< load has just changed its state - for predictive algorithm */
+// extra items for an LPF to improve the processing of data samples from CT1
+static long lpf_long; // new LPF, for ofsetting the behaviour of CT1 as a HPF
+// The next two constants determine the profile of the LPF.
+// They are matched to the physical behaviour of the YHDC SCT-013-000 CT
+// and the CT1 samples being 375 us apart
+constexpr float lpf_gain{12}; // <- setting this to 0 disables this extra processing
+constexpr float alpha{0.002}; //
 
 // for interaction between the main processor and the ISRs
 volatile bool b_datalogEventPending{false}; /**< async trigger to signal datalog is available */
@@ -470,6 +480,8 @@ constexpr int32_t requiredExportPerMainsCycle_inIEU{(int32_t)REQUIRED_EXPORT_IN_
 OneWire oneWire(tempSensorPin);
 #endif
 
+#define __FILENAME__ (__builtin_strrchr("\\"__FILE__, '\\') + 1)
+
 /**
  * @brief Called once during startup.
  * @details This function initializes a couple of variables we cannot init at compile time and
@@ -497,8 +509,13 @@ void setup()
 
   Serial.begin(9600);
   Serial.println();
-  Serial.println("-------------------------------------");
-  Serial.println("Sketch ID:      Mk2_fasterControl_twoLoads_2.ino");
+  Serial.println(F("-------------------------------------"));
+  Serial.print(F("Sketch ID:      "));
+  Serial.println(__FILENAME__);
+  Serial.print(F("Build on "));
+  Serial.print(__DATE__);
+  Serial.print(F(" "));
+  Serial.println(__TIME__);
   Serial.println();
 
 #ifdef PIN_SAVING_HARDWARE
@@ -576,27 +593,27 @@ void setup()
   ADCSRA |= (1 << ADSC); // start ADC manually first time
   sei();                 // Enable Global Interrupts
 
-  Serial.print("powerCal_grid =      ");
+  Serial.print(F("powerCal_grid =      "));
   Serial.println(powerCal_grid, 4);
-  Serial.print("powerCal_diverted = ");
+  Serial.print(F("powerCal_diverted = "));
   Serial.println(powerCal_diverted, 4);
 
-  Serial.print("Anti-creep limit (Joules / mains cycle) = ");
+  Serial.print(F("Anti-creep limit (Joules / mains cycle) = "));
   Serial.println(ANTI_CREEP_LIMIT);
-  Serial.print("Export rate (Watts) = ");
+  Serial.print(F("Export rate (Watts) = "));
   Serial.println(REQUIRED_EXPORT_IN_WATTS);
 
-  Serial.print("zero-crossing persistence (sample sets) = ");
+  Serial.print(F("zero-crossing persistence (sample sets) = "));
   Serial.println(PERSISTENCE_FOR_POLARITY_CHANGE);
-  Serial.print("continuity sampling display rate (mains cycles) = ");
+  Serial.print(F("continuity sampling display rate (mains cycles) = "));
   Serial.println(CONTINUITY_CHECK_MAXCOUNT);
 
-  Serial.print("  capacityOfEnergyBucket_long = ");
+  Serial.print(F("  capacityOfEnergyBucket_long = "));
   Serial.println(capacityOfEnergyBucket_long);
-  Serial.print("  nominalEnergyThreshold   = ");
+  Serial.print(F("  nominalEnergyThreshold   = "));
   Serial.println(nominalEnergyThreshold);
 
-  Serial.print(">>free RAM = ");
+  Serial.print(F(">>free RAM = "));
   Serial.println(freeRam()); // a useful value to keep an eye on
 
   Serial.println("----");
@@ -638,11 +655,13 @@ ISR(ADC_vect)
 {
   static unsigned char sample_index{0};
   int16_t rawSample;
-  int32_t sampleIminusDC;
+  int32_t sampleIminusDC_grid;
+  int32_t sampleIminusDC_diverted;
   int32_t filtV_div4;
   int32_t filtI_div4;
   int32_t instP;
   int32_t inst_Vsquared;
+  int32_t last_lpf_long;
 
   switch (sample_index)
   {
@@ -676,12 +695,18 @@ ISR(ADC_vect)
     ADMUX = 0x40 + voltageSensor; // set up the next conversion, which is for Voltage
     ++sample_index;               // increment the control flag
     //
+    // First, deal with the power at the grid connection point (as measured via CT1)
     // remove most of the DC offset from the current sample (the precise value does not matter)
-    sampleIminusDC = ((int32_t)(rawSample - DCoffset_I)) << 8;
+    sampleIminusDC_grid = ((int32_t)(rawSample - DCoffset_I)) << 8;
+    //
+    // extra filtering to offset the HPF effect of CT1
+    last_lpf_long = lpf_long;
+    lpf_long = last_lpf_long + alpha * (sampleIminusDC_grid - last_lpf_long);
+    sampleIminusDC_grid += (lpf_gain * lpf_long);
     //
     // calculate the "real power" in this sample pair and add to the accumulated sum
     filtV_div4 = sampleVminusDC_long >> 2; // reduce to 16-bits (now x64, or 2^6)
-    filtI_div4 = sampleIminusDC >> 2;      // reduce to 16-bits (now x64, or 2^6)
+    filtI_div4 = sampleIminusDC_grid >> 2; // reduce to 16-bits (now x64, or 2^6)
     instP = filtV_div4 * filtI_div4;       // 32-bits (now x4096, or 2^12)
     instP >>= 12;                          // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
     sumP_forEnergyBucket += instP;         // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
@@ -693,14 +718,14 @@ ISR(ADC_vect)
     sample_index = 0;                  // reset the control flag
     //
     // remove most of the DC offset from the current sample (the precise value does not matter)
-    sampleIminusDC = ((int32_t)(rawSample - DCoffset_I)) << 8;
+    sampleIminusDC_diverted = ((int32_t)(rawSample - DCoffset_I)) << 8;
     //
     // calculate the "real power" in this sample pair and add to the accumulated sum
-    filtV_div4 = sampleVminusDC_long >> 2; // reduce to 16-bits (now x64, or 2^6)
-    filtI_div4 = sampleIminusDC >> 2;      // reduce to 16-bits (now x64, or 2^6)
-    instP = filtV_div4 * filtI_div4;       // 32-bits (now x4096, or 2^12)
-    instP >>= 12;                          // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
-    sumP_diverted += instP;                // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
+    filtV_div4 = sampleVminusDC_long >> 2;     // reduce to 16-bits (now x64, or 2^6)
+    filtI_div4 = sampleIminusDC_diverted >> 2; // reduce to 16-bits (now x64, or 2^6)
+    instP = filtV_div4 * filtI_div4;           // 32-bits (now x4096, or 2^12)
+    instP >>= 12;                              // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
+    sumP_diverted += instP;                    // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
     break;
   default:
     sample_index = 0; // to prevent lockup (should never get here)
@@ -984,15 +1009,6 @@ void processMinusHalfCycle()
   // as measured. Although the average power has been determined over only half a mains cycle, the correct
   // number of contributing sample sets has been used so the result can be expected to be a true measurement
   // of average power, not half of it.
-  // However, it can be shown that the average power during the first half of any mains cycle after the
-  // load has changed state will alway be under-recorded so its value should now be increased by 30%. This
-  // arbitrary looking adjustment gives good test results with differening amounts of surplus power and it
-  // only affects the predicted value of the energy state at the end of the current mains cycle; it does
-  // not affect the value in the main energy bucket. This complication is a fundamental consequence
-  // of the floating CTs that we use.
-  //
-  if (loadHasJustChangedState)
-    averagePower *= 1.3;
 
   energyInBucket_prediction = energyInBucket_long + averagePower; // at end of this mains cycle
 }
@@ -1013,8 +1029,6 @@ void postProcessMinusHalfCycle()
   * - update the PHYSICAL load states according to the logical -> physical mapping 
   * - update the driver lines for each of the loads.
   */
-
-  loadHasJustChangedState = false; // clear the predictive algorithm's flag
 
   if (energyInBucket_prediction > workingEnergyThreshold_upper)
     proceedHighEnergyLevel();
@@ -1062,7 +1076,6 @@ void proceedHighEnergyLevel()
     activeLoad = tempLoad;
     postTransitionCount = 0;
     b_recentTransition = true;
-    loadHasJustChangedState = true;
   }
 }
 
@@ -1091,7 +1104,6 @@ void proceedLowEnergyLevel()
     activeLoad = tempLoad;
     postTransitionCount = 0;
     b_recentTransition = true;
-    loadHasJustChangedState = true;
   }
 }
 
@@ -1439,30 +1451,30 @@ void loop()
 #endif
 
 #ifdef DATALOG_OUTPUT
-    Serial.print("datalog event: grid power ");
+    Serial.print(F("grid power "));
     Serial.print(tx_data.powerAtSupplyPoint_Watts);
-    Serial.print(", diverted energy (Wh) ");
+    Serial.print(F(", diverted energy (Wh) "));
     Serial.print(tx_data.divertedEnergyTotal_Wh);
-    Serial.print(", Vrms ");
+    Serial.print(F(", Vrms "));
     Serial.print((float)tx_data.Vrms_times100 / 100);
     for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
     {
-      Serial.print(", #");
+      Serial.print(F(", #"));
       Serial.print(i);
-      Serial.print(" ");
+      Serial.print(F(" "));
       Serial.print((float)(100 * copyOf_countLoadON[i]) / DATALOG_PERIOD_IN_MAINS_CYCLES);
-      Serial.print("%");
+      Serial.print(F("%"));
     }
 #ifdef TEMP_SENSOR
-    Serial.print(", temperature ");
+    Serial.print(F(", temperature "));
     Serial.print((float)tx_data.temperature_times100 / 100);
-    Serial.print("°C ");
+    Serial.print(F("°C "));
 #endif
-    Serial.print(",  (minSampleSets/MC ");
+    Serial.print(F(",  (minSampleSets/MC "));
     Serial.print(copyOf_lowestNoOfSampleSetsPerMainsCycle);
-    Serial.print(",  #ofSampleSets ");
+    Serial.print(F(",  #ofSampleSets "));
     Serial.print(copyOf_sampleSetsDuringThisDatalogPeriod);
-    Serial.println(')');
+    Serial.println(F(")"));
 #endif
 
 #ifdef TEMP_SENSOR
