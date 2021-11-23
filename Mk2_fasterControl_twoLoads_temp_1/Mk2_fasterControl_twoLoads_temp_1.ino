@@ -4,33 +4,33 @@
  * @author Frederic Metrich (frederic.metrich@live.fr)
  * @brief Mk2_fasterControl_twoLoads_temp_1.ino - A photovoltaïc energy diverter.
  * @date 2020-04-08
- * 
+ *
  * @mainpage A 3-phase photovoltaïc router/diverter
- * 
+ *
  * @section description Description
  * Mk2_fasterControl_twoLoads_temp_1.ino - Arduino program that maximizes the use of home photovoltaïc production
  * by monitoring energy consumption and diverting power to one or more resistive charge(s) when needed.
  * In the absence of such a system, surplus energy flows away to the grid and is of no benefit to the PV-owner.
- * 
+ *
  * @section history History
  * __Initially released as Mk2_bothDisplays_1 in March 2014.__
  *
- * This sketch is for diverting suplus PV power to a dump load using a triac or  
- * Solid State Relay. It is based on the Mk2i PV Router code that I have posted in on  
- * the OpenEnergyMonitor forum. The original version, and other related material, 
+ * This sketch is for diverting suplus PV power to a dump load using a triac or
+ * Solid State Relay. It is based on the Mk2i PV Router code that I have posted in on
+ * the OpenEnergyMonitor forum. The original version, and other related material,
  * can be found on my Summary Page at www.openenergymonitor.org/emon/node/1757
  *
- * In this latest version, the pin-allocations have been changed to suit my 
- * PCB-based hardware for the Mk2 PV Router. The integral voltage sensor is 
- * fed from one of the secondary coils of the transformer. Current is measured 
- * via Current Transformers at the CT1 and CT1 ports. 
- * 
+ * In this latest version, the pin-allocations have been changed to suit my
+ * PCB-based hardware for the Mk2 PV Router. The integral voltage sensor is
+ * fed from one of the secondary coils of the transformer. Current is measured
+ * via Current Transformers at the CT1 and CT1 ports.
+ *
  * CT1 is for 'grid' current, to be measured at the grid supply point.
  * CT2 is for the load current, so that diverted energy can be recorded
  *
  * A persistence-based 4-digit display is supported. This can be driven in two
- * different ways, one with an extra pair of logic chips, and one without. The 
- * appropriate version of the sketch must be selected by including or commenting 
+ * different ways, one with an extra pair of logic chips, and one without. The
+ * appropriate version of the sketch must be selected by including or commenting
  * out the "#define PIN_SAVING_HARDWARE" statement near the top of the code.
  *
  * __September 2014: renamed as Mk2_bothDisplays_2, with these changes:__
@@ -50,48 +50,52 @@
  * - a minor change in the ISR to remove a timing uncertainty.
  *
  * __January 2016: updated to Mk2_bothDisplays_3c:__
- * -  The variables to store the ADC results are now declared as "volatile" to remove 
+ * -  The variables to store the ADC results are now declared as "volatile" to remove
  *      any possibility of incorrect operation due to optimisation by the compiler.
  *
  * __February 2016: updated to Mk2_bothDisplays_4, with these changes:__
- * - improvements to the start-up logic. The start of normal operation is now 
+ * - improvements to the start-up logic. The start of normal operation is now
  *     synchronised with the start of a new mains cycle.
  * - reduce the amount of feedback in the Low Pass Filter for removing the DC content
- *     from the Vsample stream. This resolves an anomaly which has been present since 
- *     the start of this project. Although the amount of feedback has previously been 
+ *     from the Vsample stream. This resolves an anomaly which has been present since
+ *     the start of this project. Although the amount of feedback has previously been
  *     excessive, this anomaly has had minimal effect on the system's overall behaviour.
  * - removal of the unhelpful "triggerNeedsToBeArmed" mechanism
  * - tidying of the "confirmPolarity" logic to make its behaviour more clear
- * - SWEETZONE_IN_JOULES changed to WORKING_RANGE_IN_JOULES 
+ * - SWEETZONE_IN_JOULES changed to WORKING_RANGE_IN_JOULES
  * - change "triac" to "load" wherever appropriate
  *
  * __November 2019: updated to Mk2_fasterControl_1 with these changes:__
  * - Half way through each mains cycle, a prediction is made of the likely energy level at the
- *     end of the cycle. That predicted value allows the triac to be switched at the +ve going 
- *     zero-crossing point rather than waiting for a further 10 ms. These changes allow for 
+ *     end of the cycle. That predicted value allows the triac to be switched at the +ve going
+ *     zero-crossing point rather than waiting for a further 10 ms. These changes allow for
  *     faster switching of the load.
  * - The range of the energy bucket has been reduced to one tenth of its former value. This
  *     allows the unit's operation to commence more rapidly whenever surplus power is available.
- * - controlMode is no longer selectable, the unit's operation being effectively hard-coded 
- *     as "Normal" rather than Anti-flicker. 
+ * - controlMode is no longer selectable, the unit's operation being effectively hard-coded
+ *     as "Normal" rather than Anti-flicker.
  * - Port D3 now supports an indicator which shows when the level in the energy bucket
  *     reaches either end of its range. While the unit is actively diverting surplus power,
- *     it is vital that the level in the reduced capacity energy bucket remains within its 
+ *     it is vital that the level in the reduced capacity energy bucket remains within its
  *     permitted range, hence the addition of this indicator.
- *   
+ *
  * __February 2020: updated to Mk2_fasterControl_twoLoads_1 with these changes:__
- * - the energy overflow indicator has been disabled to free up port D3 
+ * - the energy overflow indicator has been disabled to free up port D3
  * - port D3 now supports a second load
- * 
+ *
  * __February 2020: updated to Mk2_fasterControl_twoLoads_2 with these changes:__
  * - improved multi-load control logic to prevent the primary load from being disturbed by
  *     the lower priority one. This logic now mirrors that in the Mk2_multiLoad_wired_n line.
- * 
+ *
  * __March 2021: updated to Mk2_fasterControl_twoLoads_3 with these changes:__
  * - extra filtering added to offset the HPF effect of CT1.  This allows the energy state in
- *     10 ms time to be predicted with more confidence.  Specifically, it is no longer necessary 
+ *     10 ms time to be predicted with more confidence.  Specifically, it is no longer necessary
  *     to include a 30% boost factor after each change of load state.
- *   
+ *
+ * __June 2021: updated to Mk2_fasterControl_3 with these changes:__
+ * - to reflect the performance of recently manufactured YHDC SCT_013_000 CTs,
+ *     the value of the parameter lpf_gain has been reduced from 12 to 8.
+ *
  *      Robin Emley
  *      www.Mk2PVrouter.co.uk
  *
@@ -107,28 +111,28 @@
  * - The diversion of surplus power can no longer be affected by slower
  *     activities which may be running in the main code such as Serial statements and RF.
  * - Temperature sensing is supported. A pullup resistor (4K7 or similar) is required for the Dallas sensor.
- * - Display shows diverted energy and temperature in a cycling way (5 seconds cycle) 
- * 
+ * - Display shows diverted energy and temperature in a cycling way (5 seconds cycle)
+ *
  * __October 2020: updated Mk2_fasterControl_twoLoads_2 with these changes:__
  * - fix a couple of small compiler errors depending on the defines set/unset (thx Gaetan)
- * 
+ *
  *   Fred Metrich
- *  
+ *
  * @copyright Copyright (c) 2020
- * 
-*/
+ *
+ */
 
 #include <Arduino.h>
 
+//--------------------------------------------------------------------------------------------------
 //#define TEMP_SENSOR ///< this line must be commented out if the temperature sensor is not present
 
-#define DATALOG_OUTPUT ///< this line can be commented if no datalogging is needed
+//#define EMONESP     ///< Uncomment if an ESP WiFi module is used
+//#define SERIALPRINT ///< include 'human-friendly' print statement for commissioning - comment this line to exclude.
+#define SERIALOUT ///< Uncomment if a wired serial connection is used
+//--------------------------------------------------------------------------------------------------
 
-#ifdef TEMP_SENSOR
-#include <OneWire.h> // for temperature sensing
-#endif
-
-//In this sketch, the ADC is free-running with a cycle time of ~104uS.
+// In this sketch, the ADC is free-running with a cycle time of ~104uS.
 
 // Change these values to suit the local mains frequency and supply meter
 constexpr int32_t CYCLES_PER_SECOND{50};         /**< number of cycles/s of the grid power supply */
@@ -156,6 +160,7 @@ constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{8}; /**< auto-reset after this perio
 constexpr uint8_t NO_OF_DUMPLOADS{2}; /**< number of dump loads connected to the diverter */
 
 #ifdef TEMP_SENSOR
+#include <OneWire.h> // for temperature sensing
 // --------------------------
 // Dallas DS18B20 commands
 constexpr uint8_t SKIP_ROM{0xcc};
@@ -183,11 +188,27 @@ enum class LoadStates : uint8_t
 
 LoadStates logicalLoadState[NO_OF_DUMPLOADS];  /**< Logical state of the loads */
 LoadStates physicalLoadState[NO_OF_DUMPLOADS]; /**< Physical state of the loads */
+uint16_t countLoadON[NO_OF_DUMPLOADS];         /**< Number of cycle the load was ON (over 1 datalog period) */
+
+//--------------------------------------------------------------------------------------------------
+#ifdef EMONESP
+#undef SERIALPRINT // Must not corrupt serial output to emonHub with 'human-friendly' printout
+#undef SERIALOUT
+#undef DEBUGGING
+#include <ArduinoJson.h>
+#endif
+
+#ifdef SERIALOUT
+#undef EMONESP
+#undef SERIALPRINT // Must not corrupt serial output to emonHub with 'human-friendly' printout
+#undef DEBUGGING
+#endif
+//--------------------------------------------------------------------------------------------------
 
 /** @brief container for datalogging
  *  @details This class is used for datalogging.
-*/
-class Tx_struct
+ */
+class PayloadTx_struct
 {
 public:
   int16_t powerAtSupplyPoint_Watts; /**< main power, import = +ve, to match OEM convention */
@@ -198,14 +219,14 @@ public:
 #endif
 };
 
-Tx_struct tx_data; /**< logging data */
+PayloadTx_struct tx_data; /**< logging data */
 
 // For this go-faster version, the unit's operation will effectively always be "Normal";
 // there is no "Anti-flicker" option. The controlMode variable has been removed.
 
 // allocation of digital pins which are not dependent on the display type that is in use
 // *************************************************************************************
-// constexpr uint8_t outOfRangeIndication{3}; /**< <-- this output port is active-high */
+
 constexpr uint8_t physicalLoad_1_pin{3}; /**< <-- the "mode" port is active-high */
 constexpr uint8_t physicalLoad_0_pin{4}; /**< <-- the "trigger" port is active-low */
 
@@ -229,9 +250,8 @@ int32_t energyInBucket_long{0}; /**< in Integer Energy Units */
 bool b_recentTransition{false};                 /**< a load state has been recently toggled */
 uint8_t postTransitionCount;                    /**< counts the number of cycle since last transition */
 constexpr uint8_t POST_TRANSITION_MAX_COUNT{3}; /**< allows each transition to take effect */
-//constexpr uint8_t POST_TRANSITION_MAX_COUNT{50}; /**< for testing only */
-uint8_t activeLoad{NO_OF_DUMPLOADS};   /**< current active load */
-uint16_t countLoadON[NO_OF_DUMPLOADS]; /**< Number of cycle the load was ON (over 1 datalog period) */
+// constexpr uint8_t POST_TRANSITION_MAX_COUNT{50}; /**< for testing only */
+uint8_t activeLoad{NO_OF_DUMPLOADS}; /**< current active load */
 
 int32_t sumP_forEnergyBucket;                   /**< for per-cycle summation of 'real power' */
 int32_t sumP_atSupplyPoint;                     /**< for per-cycle summation of 'real power' during datalog period */
@@ -262,7 +282,7 @@ static long lpf_long; // new LPF, for ofsetting the behaviour of CT1 as a HPF
 // The next two constants determine the profile of the LPF.
 // They are matched to the physical behaviour of the YHDC SCT-013-000 CT
 // and the CT1 samples being 375 us apart
-constexpr float lpf_gain{12}; // <- setting this to 0 disables this extra processing
+constexpr float lpf_gain{8};  // <- setting this to 0 disables this extra processing
 constexpr float alpha{0.002}; //
 
 // for interaction between the main processor and the ISRs
@@ -486,7 +506,7 @@ OneWire oneWire(tempSensorPin);
  * @brief Called once during startup.
  * @details This function initializes a couple of variables we cannot init at compile time and
  *          sets a couple of parameters for runtime.
- * 
+ *
  */
 void setup()
 {
@@ -495,6 +515,7 @@ void setup()
 
   pinMode(physicalLoad_0_pin, OUTPUT); // driver pin for the primary load
   pinMode(physicalLoad_1_pin, OUTPUT); // driver pin for an additional load
+
   //
   for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i) // re-using the logic from my multiLoad code
   {
@@ -627,21 +648,21 @@ void setup()
  * @brief Interrupt Service Routine - Interrupt-Driven Analog Conversion.
  * @details An Interrupt Service Routine is now defined which instructs the ADC to perform a conversion
  *          for each of the voltage and current sensors in turn.
- *        
+ *
  *          This Interrupt Service Routine is for use when the ADC is in the free-running mode.
  *          It is executed whenever an ADC conversion has finished, approx every 104 µs. In
  *          free-running mode, the ADC has already started its next conversion by the time that
  *          the ISR is executed. The ISR therefore needs to "look ahead".
- *        
+ *
  *          At the end of conversion Type N, conversion Type N+1 will start automatically. The ISR
  *          which runs at this point therefore needs to capture the results of conversion Type N,
  *          and set up the conditions for conversion Type N+2, and so on.
- *        
+ *
  *          By means of various helper functions, all of the time-critical activities are processed
  *          within the ISR.
- *        
+ *
  *          The main code is notified by means of a flag when fresh copies of loggable data are available.
- *        
+ *
  *          Keep in mind, when writing an Interrupt Service Routine (ISR):
  *            - Keep it short
  *            - Don't use delay ()
@@ -649,7 +670,7 @@ void setup()
  *            - Make variables shared with the main code volatile
  *            - Variables shared with main code may need to be protected by "critical sections"
  *            - Don't try to turn interrupts off or on
- * 
+ *
  */
 ISR(ADC_vect)
 {
@@ -737,13 +758,13 @@ ISR(ADC_vect)
 */
 
 /*!
-*  @defgroup TimeCritical Time critical functions Group
-*  Functions used by the ISR
-*/
+ *  @defgroup TimeCritical Time critical functions Group
+ *  Functions used by the ISR
+ */
 
 /**
  * @brief This routine is called by the ISR when a pair of V & I sample becomes available.
- * 
+ *
  * @ingroup TimeCritical
  */
 void processRawSamples()
@@ -763,7 +784,7 @@ void processRawSamples()
     if (beyondStartUpPhase && (sampleSetsDuringThisMainsCycle == 5)) // to distribute the workload within each mains cycle
       postProcessPlusHalfCycle();
   }    // end of processing that is specific to samples where the voltage is Polarities::POSITIVE
-  else // the polatity of this sample is Polarities::NEGATIVE
+  else // the polarity of this sample is Polarities::NEGATIVE
   {
     if (polarityConfirmedOfLastSampleV != Polarities::NEGATIVE)
       processMinusHalfCycle();
@@ -778,7 +799,7 @@ void processRawSamples()
 
 /**
  * @brief Process the startup period for the router.
- * 
+ *
  * @ingroup TimeCritical
  */
 void processStartUp()
@@ -801,7 +822,7 @@ void processStartUp()
 
 /**
  * @brief Process the start of a new +ve half cycle, just after the zero-crossing point.
- * 
+ *
  * @ingroup TimeCritical
  */
 void processLatestContribution()
@@ -857,23 +878,24 @@ void processLatestContribution()
   // Apply max and min limits to bucket's level. This is to ensure correct operation
   // when conditions change, i.e. when import changes to export, and vici versa.
   //
-  //bool endOfRangeEncountered{false};
+  // bool endOfRangeEncountered{false};
   if (energyInBucket_long > capacityOfEnergyBucket_long)
   {
     energyInBucket_long = capacityOfEnergyBucket_long;
-    //endOfRangeEncountered = true;
+    // endOfRangeEncountered = true;
   }
   else if (energyInBucket_long < 0)
   {
     energyInBucket_long = 0;
-    //endOfRangeEncountered = true;
+    // endOfRangeEncountered = true;
   }
 
   /*
-        if (endOfRangeEncountered) {
-          digitalWriteFast (outOfRangeIndication , LED_ON); }
-        else {
-          digitalWriteFast (outOfRangeIndication , LED_OFF); }*/
+  if (endOfRangeEncountered)
+    digitalWriteFast (outOfRangeIndication , LED_ON);
+  else
+    digitalWriteFast (outOfRangeIndication , LED_OFF);
+  */
 
   if (EDD_isActive) // Energy Diversion Display
   {
@@ -898,12 +920,12 @@ void processLatestContribution()
   if (sampleCount_forContinuityChecker >= CONTINUITY_CHECK_MAXCOUNT)
   {
     sampleCount_forContinuityChecker = 0;
-    //Serial.println(lowestNoOfSampleSetsPerMainsCycle);
+    // Serial.println(lowestNoOfSampleSetsPerMainsCycle);
     lowestNoOfSampleSetsPerMainsCycle = 999;
   }
 
   /* At the end of each datalogging period, copies are made of the relevant variables
-   * for use by the main code.  These variable are then reset for use during the next 
+   * for use by the main code.  These variable are then reset for use during the next
    * datalogging period.
    */
   if (++cycleCountForDatalogging_long >= DATALOG_PERIOD_IN_MAINS_CYCLES)
@@ -938,7 +960,7 @@ void processLatestContribution()
 
 /**
  * @brief Post processing after the start of a new +ve half cycle, just after the zero-crossing point.
- * 
+ *
  * @ingroup TimeCritical
  */
 void postProcessPlusHalfCycle()
@@ -973,7 +995,7 @@ void postProcessPlusHalfCycle()
 
 /**
  * @brief Process the start of a new -ve half cycle, just after the zero-crossing point.
- * 
+ *
  * @ingroup TimeCritical
  */
 void processMinusHalfCycle()
@@ -1015,7 +1037,7 @@ void processMinusHalfCycle()
 
 /**
  * @brief Post processing after the start of a new -ve half cycle, just after the zero-crossing point.
- * 
+ *
  * @ingroup TimeCritical
  */
 void postProcessMinusHalfCycle()
@@ -1025,10 +1047,10 @@ void postProcessMinusHalfCycle()
     return;
 
   /* Determining whether any of the loads need to be changed is is a 3-stage process:
-  * - change the LOGICAL load states as necessary to maintain the energy level
-  * - update the PHYSICAL load states according to the logical -> physical mapping 
-  * - update the driver lines for each of the loads.
-  */
+   * - change the LOGICAL load states as necessary to maintain the energy level
+   * - update the PHYSICAL load states according to the logical -> physical mapping
+   * - update the driver lines for each of the loads.
+   */
 
   if (energyInBucket_prediction > workingEnergyThreshold_upper)
     proceedHighEnergyLevel();
@@ -1053,7 +1075,7 @@ void postProcessMinusHalfCycle()
 
 /**
  * @brief Process the case of high energy level, some action may be required.
- * 
+ *
  * @ingroup TimeCritical
  */
 void proceedHighEnergyLevel()
@@ -1081,7 +1103,7 @@ void proceedHighEnergyLevel()
 
 /**
  * @brief Process the case of low energy level, some action may be required.
- * 
+ *
  * @ingroup TimeCritical
  */
 void proceedLowEnergyLevel()
@@ -1110,14 +1132,14 @@ void proceedLowEnergyLevel()
 /**
  * @brief This routine prevents a zero-crossing point from being declared until a certain number
  *        of consecutive samples in the 'other' half of the waveform have been encountered.
- * 
+ *
  * @ingroup TimeCritical
  */
 void confirmPolarity()
 {
-  /* This routine prevents a zero-crossing point from being declared until 
-   * a certain number of consecutive samples in the 'other' half of the 
-   * waveform have been encountered. 
+  /* This routine prevents a zero-crossing point from being declared until
+   * a certain number of consecutive samples in the 'other' half of the
+   * waveform have been encountered.
    */
   static uint8_t count{0};
   if (polarityOfMostRecentVsample != polarityConfirmedOfLastSampleV)
@@ -1134,9 +1156,9 @@ void confirmPolarity()
 
 /**
  * @brief Retrieve the next load that could be added (be aware of the order)
- * 
- * @return The load number if successfull, NO_OF_DUMPLOADS in case of failure 
- * 
+ *
+ * @return The load number if successfull, NO_OF_DUMPLOADS in case of failure
+ *
  * @ingroup TimeCritical
  */
 uint8_t nextLogicalLoadToBeAdded()
@@ -1150,9 +1172,9 @@ uint8_t nextLogicalLoadToBeAdded()
 
 /**
  * @brief Retrieve the next load that could be removed (be aware of the reverse-order)
- * 
- * @return The load number if successfull, NO_OF_DUMPLOADS in case of failure 
- * 
+ *
+ * @return The load number if successfull, NO_OF_DUMPLOADS in case of failure
+ *
  * @ingroup TimeCritical
  */
 uint8_t nextLogicalLoadToBeRemoved()
@@ -1173,31 +1195,31 @@ uint8_t nextLogicalLoadToBeRemoved()
  * @details The array, logicalLoadState[], contains the on/off state of all logical loads, with
  *          element 0 being for the one with the highest priority. The array,
  *          physicalLoadState[], contains the on/off state of all physical loads.
- * 
+ *
  *          The association between the physical and logical loads is 1:1. By default, numerical
- *          equivalence is maintained, so logical(N) maps to physical(N). If physical load 1 is set 
- *          to have priority, rather than physical load 0, the logical-to-physical association for 
+ *          equivalence is maintained, so logical(N) maps to physical(N). If physical load 1 is set
+ *          to have priority, rather than physical load 0, the logical-to-physical association for
  *          loads 0 and 1 are swapped.
- * 
+ *
  *          Any other mapping relationships could be configured here.
- * 
+ *
  * @ingroup TimeCritical
  */
 void updatePhysicalLoadStates()
 {
   for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i)
-  {
-    if (logicalLoadState[i] == LoadStates::LOAD_ON)
-      ++countLoadON[i];
     physicalLoadState[i] = logicalLoadState[i];
-  }
+
+  for (int16_t i = 0; i < 2; ++i)
+    if (physicalLoadState[i] == LoadStates::LOAD_ON)
+      ++countLoadON[i];
 }
 
 /**
- * @brief This routine keeps track of which digit is being displayed and checks when its display 
+ * @brief This routine keeps track of which digit is being displayed and checks when its display
  *        time has expired. It then makes the necessary adjustments for displaying the next digit.
  *        The two versions of the hardware require different logic.
- * 
+ *
  * @ingroup TimeCritical
  */
 void refreshDisplay()
@@ -1304,8 +1326,8 @@ void refreshDisplay()
 
 /**
  * @brief Called infrequently, to update the characters to be displayed
- * 
- * @param bToggleDisplayTemp true for temperature, false for diverted energy 
+ *
+ * @param bToggleDisplayTemp true for temperature, false for diverted energy
  */
 void configureValueForDisplay(const bool bToggleDisplayTemp)
 {
@@ -1390,8 +1412,8 @@ void configureValueForDisplay(const bool bToggleDisplayTemp)
  * @brief Main processor.
  * @details None of the workload in loop() is time-critical.
  *          All the processing of ADC data is done within the ISR.
- * 
-*/
+ *
+ */
 void loop()
 {
   static uint8_t perSecondTimer{0};
@@ -1450,32 +1472,7 @@ void loop()
     tx_data.temperature_times100 = readTemperature();
 #endif
 
-#ifdef DATALOG_OUTPUT
-    Serial.print(F("grid power "));
-    Serial.print(tx_data.powerAtSupplyPoint_Watts);
-    Serial.print(F(", diverted energy (Wh) "));
-    Serial.print(tx_data.divertedEnergyTotal_Wh);
-    Serial.print(F(", Vrms "));
-    Serial.print((float)tx_data.Vrms_times100 / 100);
-    for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
-    {
-      Serial.print(F(", #"));
-      Serial.print(i);
-      Serial.print(F(" "));
-      Serial.print((float)(100 * copyOf_countLoadON[i]) / DATALOG_PERIOD_IN_MAINS_CYCLES);
-      Serial.print(F("%"));
-    }
-#ifdef TEMP_SENSOR
-    Serial.print(F(", temperature "));
-    Serial.print((float)tx_data.temperature_times100 / 100);
-    Serial.print(F("°C "));
-#endif
-    Serial.print(F(",  (minSampleSets/MC "));
-    Serial.print(copyOf_lowestNoOfSampleSetsPerMainsCycle);
-    Serial.print(F(",  #ofSampleSets "));
-    Serial.print(copyOf_sampleSetsDuringThisDatalogPeriod);
-    Serial.println(F(")"));
-#endif
+    sendResults();
 
 #ifdef TEMP_SENSOR
     convertTemperature(); // for use next time around
@@ -1483,10 +1480,94 @@ void loop()
   }
 } // end of loop()
 
+/**
+ * @brief Prints data logs to the Serial output in text or json format
+ */
+void sendResults()
+{
+#ifdef RF_PRESENT
+  send_rf_data(); // *SEND RF DATA*
+#endif
+
+#if defined SERIALOUT && !defined EMONESP
+  Serial.print(F("grid power "));
+  Serial.print(tx_data.powerAtSupplyPoint_Watts);
+  Serial.print(F(", diverted energy (Wh) "));
+  Serial.print(tx_data.divertedEnergyTotal_Wh);
+  Serial.print(F(", Vrms "));
+  Serial.print((float)tx_data.Vrms_times100 / 100);
+  for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
+  {
+    Serial.print(F(", #"));
+    Serial.print(i);
+    Serial.print(F(" "));
+    Serial.print((float)(100 * copyOf_countLoadON[i]) / DATALOG_PERIOD_IN_MAINS_CYCLES);
+    Serial.print(F("%"));
+  }
+#ifdef TEMP_SENSOR
+  Serial.print(F(", temperature "));
+  Serial.print((float)tx_data.temperature_times100 / 100);
+  Serial.print(F("°C "));
+#endif
+  Serial.print(F(", (minSampleSets/MC "));
+  Serial.print(copyOf_lowestNoOfSampleSetsPerMainsCycle);
+  Serial.print(F(", #ofSampleSets "));
+  Serial.print(copyOf_sampleSetsDuringThisDatalogPeriod);
+  Serial.println(F(")"));
+#endif // if defined SERIALOUT && !defined EMONESP
+
+#if defined EMONESP && !defined SERIALOUT
+  StaticJsonDocument<512> doc;
+  static const auto powerAtSupplyPoint_Watts{F("Load_mains")};
+  static const auto divertedEnergyTotal_Wh{F("Load_diverted")};
+  static const auto temp{F("Temp")};
+  static const auto priorities{F("Priorities")};
+
+  doc[powerAtSupplyPoint_Watts] = tx_data.powerAtSupplyPoint_Watts;
+  doc[divertedEnergyTotal_Wh] = tx_data.divertedEnergyTotal_Wh;
+
+#ifdef TEMP_SENSOR
+  doc[temp] = tx_data.temperature_times100 / 100; /**< temperature in 100th of °C */
+#endif
+
+  // Generate the minified JSON and send it to the Serial port.
+  //
+  serializeJson(doc, Serial);
+
+  // Start a new line
+  Serial.println();
+  delay(50);
+#endif // if defined EMONESP && !defined SERIALOUT
+}
+
+/**
+ * @brief Set the Pin state for the specified pin
+ *
+ * @param pin pin to change [2..13]
+ * @param bState state to be set
+ */
+inline void setPinState(const uint8_t pin, bool bState)
+{
+  if (bState)
+  {
+    if (pin < 8)
+      PORTD |= bit(pin);
+    else
+      PORTB |= bit(pin - 8);
+  }
+  else
+  {
+    if (pin < 8)
+      PORTD &= ~bit(pin);
+    else
+      PORTB &= ~bit(pin - 8);
+  }
+}
+
 #ifdef TEMP_SENSOR
 /**
  * @brief Convert the internal value read from the sensor to a value in °C.
- * 
+ *
  */
 void convertTemperature()
 {
@@ -1497,8 +1578,8 @@ void convertTemperature()
 
 /**
  * @brief Read the temperature.
- * 
- * @return The temperature in °C. 
+ *
+ * @return The temperature in °C.
  */
 int16_t readTemperature()
 {
