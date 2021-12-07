@@ -352,8 +352,8 @@ int16_t lowestNoOfSampleSetsPerMainsCycle;        /**< lowest # of sample sets d
 // powerCal is the RECIPR0CAL of the power conversion rate. A good value
 // to start with is therefore 1/20 = 0.05 (Watts per ADC-step squared)
 //
-constexpr float powerCal_grid{0.0435};     /**< for CT1 */
-constexpr float powerCal_diverted{0.0435}; /**< for CT2 */
+constexpr float powerCal_grid{0.06490};     /**< for CT1 */
+constexpr float powerCal_diverted{0.06742}; /**< for CT2 */
 
 // For datalogging purposes, f_voltageCal has been added too. Because the range of ADC values is
 // similar to the actual range of volts, the optimal value for this cal factor is likely to be
@@ -615,9 +615,9 @@ void setup()
   sei();                 // Enable Global Interrupts
 
   Serial.print(F("powerCal_grid =      "));
-  Serial.println(powerCal_grid, 4);
+  Serial.println(powerCal_grid, 5);
   Serial.print(F("powerCal_diverted = "));
-  Serial.println(powerCal_diverted, 4);
+  Serial.println(powerCal_diverted, 5);
 
   Serial.print(F("Anti-creep limit (Joules / mains cycle) = "));
   Serial.println(ANTI_CREEP_LIMIT);
