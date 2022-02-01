@@ -352,13 +352,13 @@ int16_t lowestNoOfSampleSetsPerMainsCycle;        /**< lowest # of sample sets d
 // powerCal is the RECIPR0CAL of the power conversion rate. A good value
 // to start with is therefore 1/20 = 0.05 (Watts per ADC-step squared)
 //
-constexpr float powerCal_grid{0.06490};     /**< for CT1 */
+constexpr float powerCal_grid{0.06639};     /**< for CT1 */
 constexpr float powerCal_diverted{0.06742}; /**< for CT2 */
 
 // For datalogging purposes, f_voltageCal has been added too. Because the range of ADC values is
 // similar to the actual range of volts, the optimal value for this cal factor is likely to be
 // close to unity.
-constexpr float f_voltageCal{1.03f}; /**< compared with Fluke 77 meter */
+constexpr float f_voltageCal{1.015f}; /**< compared with Fluke 77 meter */
 
 constexpr int32_t capacityOfEnergyBucket_long{(int32_t)WORKING_RANGE_IN_JOULES * CYCLES_PER_SECOND * (1 / powerCal_grid)}; /**< depends on powerCal, frequency & the 'sweetzone' size. */
 constexpr int32_t nominalEnergyThreshold{capacityOfEnergyBucket_long * 0.5};
