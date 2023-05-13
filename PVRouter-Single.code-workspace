@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "Router program",
+			"path": "Mk2_fasterControl_n_Loads_temp"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"xtr1common": "cpp"
+		}
+	}
+}

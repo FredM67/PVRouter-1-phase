@@ -278,7 +278,7 @@ uint32_t absenceOfDivertedEnergyCount{0};         /**< count the # of cycles w/o
 int16_t sampleSetsDuringNegativeHalfOfMainsCycle; /**< for arming the triac/trigger */
 int32_t energyInBucket_prediction;                /**< predicted energy level until the end of the cycle */
 // extra items for an LPF to improve the processing of data samples from CT1
-static long lpf_long; // new LPF, for ofsetting the behaviour of CT1 as a HPF
+static long lpf_long; // new LPF, for offsetting the behaviour of CT1 as a HPF
 // The next two constants determine the profile of the LPF.
 // They are matched to the physical behaviour of the YHDC SCT-013-000 CT
 // and the CT1 samples being 375 us apart
