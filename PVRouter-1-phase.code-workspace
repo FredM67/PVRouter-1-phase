@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "Router program",
+			"path": "Mk2_fasterControl_Full"
+		},
+	],
+	"settings": {
+		"files.associations": {
+			"xtr1common": "cpp",
+			"new": "cpp"
+		}
+	}
+}
