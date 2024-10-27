@@ -192,13 +192,14 @@ volatile int16_t sampleI_diverted;
 volatile int16_t sampleV;
 
 // For an enhanced polarity detection mechanism, which includes a persistence check
-#define PERSISTENCE_FOR_POLARITY_CHANGE 1  // sample sets
+inline constexpr uint8_t PERSISTENCE_FOR_POLARITY_CHANGE{ 1 }; /**< allows polarity changes to be confirmed */
+
 enum polarities polarityOfMostRecentVsample;
 enum polarities polarityConfirmed;
 enum polarities polarityConfirmedOfLastSampleV;
 
 // For a mechanism to check the continuity of the sampling sequence
-#define CONTINUITY_CHECK_MAXCOUNT 250  // mains cycles
+inline constexpr uint16_t CONTINUITY_CHECK_MAXCOUNT{ 250 };  // mains cycles
 int16_t sampleCount_forContinuityChecker;
 int16_t sampleSetsDuringThisMainsCycle;
 int16_t lowestNoOfSampleSetsPerMainsCycle;
@@ -316,7 +317,7 @@ void setup()
   pinMode(physicalLoad_0_pin, OUTPUT);  // driver pin for the local dump-load
   pinMode(physicalLoad_1_pin, OUTPUT);  // driver pin for an additional load
 
-  for (int16_t i = 0; i < NO_OF_DUMPLOADS; i++)
+  for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i)
   {
     logicalLoadState[i] = loadStates::LOAD_OFF;
     physicalLoadState[i] = loadStates::LOAD_OFF;
@@ -340,7 +341,7 @@ void setup()
   pinMode(decimalPointLine, OUTPUT);  // the 'decimal point' line
 
   // set up the control lines for the 74HC4543 7-seg display driver
-  for (int16_t i = 0; i < noOfDigitSelectionLines; i++)
+  for (int16_t i = 0; i < noOfDigitSelectionLines; ++i)
   {
     pinMode(digitSelectionLine[i], OUTPUT);
   }
@@ -350,27 +351,27 @@ void setup()
   digitalWrite(enableDisableLine, DRIVER_CHIP_DISABLED);
 
   // set up the control lines for the 74HC138 2->4 demux
-  for (int16_t i = 0; i < noOfDigitLocationLines; i++)
+  for (int16_t i = 0; i < noOfDigitLocationLines; ++i)
   {
     pinMode(digitLocationLine[i], OUTPUT);
   }
 #else
-  for (int16_t i = 0; i < noOfSegmentsPerDigit; i++)
+  for (int16_t i = 0; i < noOfSegmentsPerDigit; ++i)
   {
     pinMode(segmentDrivePin[i], OUTPUT);
   }
 
-  for (int16_t i = 0; i < noOfDigitLocations; i++)
+  for (int16_t i = 0; i < noOfDigitLocations; ++i)
   {
     pinMode(digitSelectorPin[i], OUTPUT);
   }
 
-  for (int16_t i = 0; i < noOfDigitLocations; i++)
+  for (int16_t i = 0; i < noOfDigitLocations; ++i)
   {
     digitalWrite(digitSelectorPin[i], DIGIT_DISABLED);
   }
 
-  for (int16_t i = 0; i < noOfSegmentsPerDigit; i++)
+  for (int16_t i = 0; i < noOfSegmentsPerDigit; ++i)
   {
     digitalWrite(segmentDrivePin[i], OFF);
   }
@@ -438,7 +439,9 @@ void setup()
 //
 ISR(ADC_vect)
 {
-  static unsigned char sample_index = 0;
+  static uint8_t sample_index{ 0 };
+  int16_t rawSample;
+
   static int16_t sampleI_grid_raw;
   static int16_t sampleI_diverted_raw;
 
@@ -653,33 +656,37 @@ void processVoltage()
   ++sampleSetsDuringThisMainsCycle;
 }
 
-void processCurrentRawSample()
+void processGridCurrentRawSample()
 {
   // First, deal with the power at the grid connection point (as measured via CT1)
   // remove most of the DC offset from the current sample (the precise value does not matter)
-  long sampleIminusDC_grid = ((long)(sampleI_grid - DCoffset_I)) << 8;
+  int32_t sampleIminusDC_grid = ((int32_t)(sampleI_grid - DCoffset_I)) << 8;
   //
   // extra filtering to offset the HPF effect of CT1
-  long last_lpf_long = lpf_long;
+  int32_t last_lpf_long = lpf_long;
   lpf_long = last_lpf_long + alpha * (sampleIminusDC_grid - last_lpf_long);
   sampleIminusDC_grid += (lpf_gain * lpf_long);
 
   // calculate the "real power" in this sample pair and add to the accumulated sum
-  long filtV_div4 = sampleVminusDC_long >> 2;  // reduce to 16-bits (now x64, or 2^6)
-  long filtI_div4 = sampleIminusDC_grid >> 2;  // reduce to 16-bits (now x64, or 2^6)
-  long instP = filtV_div4 * filtI_div4;        // 32-bits (now x4096, or 2^12)
-  instP = instP >> 12;                         // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
-  sumP_grid += instP;                          // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
+  const int32_t filtV_div4 = sampleVminusDC_long >> 2;  // reduce to 16-bits (now x64, or 2^6)
+  const int32_t filtI_div4 = sampleIminusDC_grid >> 2;  // reduce to 16-bits (now x64, or 2^6)
+  int32_t instP = filtV_div4 * filtI_div4;              // 32-bits (now x4096, or 2^12)
+  instP = instP >> 12;                                  // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
+  sumP_grid += instP;                                   // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
+}
 
+void processDivertedCurrentRawSample()
+{
   // Now deal with the diverted power (as measured via CT2)
   // remove most of the DC offset from the current sample (the precise value does not matter)
-  long sampleIminusDC_diverted = ((long)(sampleI_diverted - DCoffset_I)) << 8;
+  int32_t sampleIminusDC_diverted = ((int32_t)(sampleI_diverted - DCoffset_I)) << 8;
 
   // calculate the "real power" in this sample pair and add to the accumulated sum
-  filtI_div4 = sampleIminusDC_diverted >> 2;  // reduce to 16-bits (now x64, or 2^6)
-  instP = filtV_div4 * filtI_div4;            // 32-bits (now x4096, or 2^12)
-  instP = instP >> 12;                        // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
-  sumP_diverted += instP;                     // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
+  const int32_t filtV_div4 = sampleVminusDC_long >> 2;      // reduce to 16-bits (now x64, or 2^6)
+  const int32_t filtI_div4 = sampleIminusDC_diverted >> 2;  // reduce to 16-bits (now x64, or 2^6)
+  int32_t instP = filtV_div4 * filtI_div4;                  // 32-bits (now x4096, or 2^12)
+  instP = instP >> 12;                                      // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
+  sumP_diverted += instP;                                   // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
 }
 
 void proceedHighEnergyLevel()
@@ -793,7 +800,7 @@ void allGeneralProcessing()
           if (divertedEnergyRecent_IEU > IEU_per_Wh)
           {
             divertedEnergyRecent_IEU -= IEU_per_Wh;
-            divertedEnergyTotal_Wh++;
+            ++divertedEnergyTotal_Wh;
           }
         }
 
@@ -818,11 +825,11 @@ void allGeneralProcessing()
         }
         else
         {
-          timerForDisplayUpdate++;
+          ++timerForDisplayUpdate;
         }
 
         // continuity checker
-        sampleCount_forContinuityChecker++;
+        ++sampleCount_forContinuityChecker;
         if (sampleCount_forContinuityChecker >= CONTINUITY_CHECK_MAXCOUNT)
         {
           sampleCount_forContinuityChecker = 0;
@@ -864,7 +871,7 @@ void allGeneralProcessing()
         // Here the recentTransition flag is checked and updated as necessary.
         if (recentTransition)
         {
-          postTransitionCount++;
+          ++postTransitionCount;
           if (postTransitionCount >= POST_TRANSITION_MAX_COUNT)
           {
             recentTransition = false;
@@ -905,7 +912,7 @@ void allGeneralProcessing()
         }
         else
         {
-          absenceOfDivertedEnergyCount++;
+          ++absenceOfDivertedEnergyCount;
         }
 
         // Now that the energy-related decisions have been taken, min and max limits can now
@@ -930,7 +937,7 @@ void allGeneralProcessing()
   //
   processVoltage();
 
-  processCurrentRawSample();
+  processGridCurrentRawSample();
 
   refreshDisplay();
 }
@@ -1008,7 +1015,7 @@ void updatePhysicalLoadStates()
  * Any other mapping relaionships could be configured here.
  */
 {
-  for (int16_t i = 0; i < NO_OF_DUMPLOADS; i++)
+  for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i)
   {
     physicalLoadState[i] = logicalLoadState[i];
   }
@@ -1076,7 +1083,7 @@ void configureValueForDisplay()
     // "walking dots" display
     charsForDisplay[locationOfDot] = 20;  // blank
 
-    locationOfDot++;
+    ++locationOfDot;
     if (locationOfDot >= noOfDigitLocations)
     {
       locationOfDot = 0;
@@ -1111,7 +1118,7 @@ void refreshDisplay()
   static uint8_t displayTime_count = 0;
   static uint8_t digitLocationThatIsActive = 0;
 
-  displayTime_count++;
+  ++displayTime_count;
 
   if (displayTime_count > MAX_DISPLAY_TIME_COUNT)
   {
@@ -1126,14 +1133,14 @@ void refreshDisplay()
     digitalWrite(enableDisableLine, DRIVER_CHIP_DISABLED);
 
     // 3. determine the next digit location to be active
-    digitLocationThatIsActive++;
+    ++digitLocationThatIsActive;
     if (digitLocationThatIsActive >= noOfDigitLocations)
     {
       digitLocationThatIsActive = 0;
     }
 
     // 4. set up the digit location drivers for the new active location
-    for (uint8_t line = 0; line < noOfDigitLocationLines; line++)
+    for (uint8_t line = 0; line < noOfDigitLocationLines; ++line)
     {
       lineState = digitLocationMap[digitLocationThatIsActive][line];
       digitalWrite(digitLocationLine[line], lineState);
@@ -1144,7 +1151,7 @@ void refreshDisplay()
     uint8_t digitVal = charsForDisplay[digitLocationThatIsActive];
 
     // 6. configure the 7-segment driver for the character to be displayed
-    for (uint8_t line = 0; line < noOfDigitSelectionLines; line++)
+    for (uint8_t line = 0; line < noOfDigitSelectionLines; ++line)
     {
       lineState = digitValueMap[digitVal][line];
       digitalWrite(digitSelectionLine[line], lineState);
@@ -1172,7 +1179,7 @@ void refreshDisplay()
   static uint8_t displayTime_count = 0;
   static uint8_t digitLocationThatIsActive = 0;
 
-  displayTime_count++;
+  ++displayTime_count;
 
   if (displayTime_count > MAX_DISPLAY_TIME_COUNT)
   {
@@ -1182,7 +1189,7 @@ void refreshDisplay()
     digitalWrite(digitSelectorPin[digitLocationThatIsActive], DIGIT_DISABLED);
 
     // 2. determine the next digit location which is to be displayed
-    digitLocationThatIsActive++;
+    ++digitLocationThatIsActive;
     if (digitLocationThatIsActive >= noOfDigitLocations)
     {
       digitLocationThatIsActive = 0;
@@ -1192,7 +1199,7 @@ void refreshDisplay()
     uint8_t digitVal = charsForDisplay[digitLocationThatIsActive];
 
     // 4. set up the segment drivers for the character to be displayed (includes the DP)
-    for (uint8_t segment = 0; segment < noOfSegmentsPerDigit; segment++)
+    for (uint8_t segment = 0; segment < noOfSegmentsPerDigit; ++segment)
     {
       uint8_t segmentState = segMap[digitVal][segment];
       digitalWrite(segmentDrivePin[segment], segmentState);
