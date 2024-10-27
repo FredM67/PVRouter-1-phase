@@ -20,7 +20,7 @@ inline constexpr uint8_t voltageSensor{ 3 };           // A3 is for the voltage 
 inline constexpr uint8_t currentSensor_diverted{ 4 };  // A4 is for CT2 which measures diverted current
 inline constexpr uint8_t currentSensor_grid{ 5 };      // A5 is for CT1 which measures grid current
 
-inline constexpr uint8_t delayBeforeSerialStarts{ 1000 };  // in milli-seconds, to allow Serial window to be opened
-inline constexpr uint8_t startUpPeriod{ 3000 };            // in milli-seconds, to allow LP filter to settle
+inline constexpr uint16_t delayBeforeSerialStarts{ 1000 };  // in milli-seconds, to allow Serial window to be opened
+inline constexpr uint16_t startUpPeriod{ 3000 };            // in milli-seconds, to allow LP filter to settle
 
 #endif  // _PROCESSING_H

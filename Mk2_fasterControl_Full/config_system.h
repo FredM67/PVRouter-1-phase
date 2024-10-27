@@ -16,8 +16,6 @@
 
 #include "type_traits.hpp"
 
-inline constexpr uint8_t ADC_TIMER_PERIOD{ 125 };  // uS (determines the sampling rate / amount of idle time)
-
 // Physical constants, please do not change!
 inline constexpr uint16_t SECONDS_PER_MINUTE{ 60 };
 inline constexpr uint16_t MINUTES_PER_HOUR{ 60 };
