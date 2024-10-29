@@ -18,14 +18,14 @@
 // definitions of enumerated types
 
 /** Polarities */
-enum class polarities : uint8_t
+enum class Polarities : uint8_t
 {
   NEGATIVE, /**< polarity is negative */
   POSITIVE  /**< polarity is positive */
 };
 
 /** Load state (for use if loads are active high (Rev 2 PCB)) */
-enum class loadStates : uint8_t
+enum class LoadStates : uint8_t
 {
   LOAD_OFF, /**< load is OFF */
   LOAD_ON   /**< load is ON */

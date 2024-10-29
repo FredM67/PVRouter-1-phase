@@ -12,6 +12,8 @@
 #ifndef UTILS_DISPLAY
 #define UTILS_DISPLAY
 
+#include "config_system.h"
+
 // Various settings for the 4-digit display, which needs to be refreshed every few mS
 constexpr uint8_t noOfDigitLocations{ 4 };
 constexpr uint8_t noOfPossibleCharacters{ 22 };
@@ -19,6 +21,8 @@ constexpr uint8_t MAX_DISPLAY_TIME_COUNT{ 10 };            // no of processing l
 constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50 };  // mains cycles
 constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 };          // auto-reset after this period of inactivity
 // #define DISPLAY_SHUTDOWN_IN_HOURS 0.01 // for testing that the display clears after 36 seconds
+
+constexpr uint32_t displayShutdown_inMainsCycles{ DISPLAY_SHUTDOWN_IN_HOURS * mainsCyclesPerHour };
 
 //  The two versions of the hardware require different logic.
 #ifdef PIN_SAVING_HARDWARE
@@ -169,15 +173,15 @@ void initializeDisplay()
 }
 
 // called infrequently, to update the characters to be displayed
-void configureValueForDisplay()
+void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _divertedEnergyTotal_Wh)
 {
   static uint8_t locationOfDot = 0;
 
   //  Serial.println(divertedEnergyTotal_Wh);
 
-  if (EDD_isActive)
+  if (_EDD_isActive)
   {
-    uint16_t val = divertedEnergyTotal_Wh;
+    uint16_t val = _divertedEnergyTotal_Wh;
     bool energyValueExceeds10kWh;
 
     if (val < 10000)

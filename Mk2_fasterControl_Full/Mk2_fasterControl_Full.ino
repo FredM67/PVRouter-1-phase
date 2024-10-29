@@ -47,7 +47,7 @@
  *     excessive, this anomaly has had minimal effect on the system's overall behaviour.
  * - removal of the unhelpful "triggerNeedsToBeArmed" mechanism
  * - tidying of the "confirmPolarity" logic to make its behaviour more clear
- * - SWEETZONE_IN_JOULES changed to WORKING_RANGE_IN_JOULES 
+ * - SWEETZONE_IN_JOULES changed to WORKING_ZONE_IN_JOULES 
  * - change "triac" to "load" wherever appropriate
  *
  * November 2019: updated to Mk2_fasterControl_1 with these changes:
@@ -107,8 +107,8 @@ static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVR
 #include "utils_pins.h"
 #include "utils_display.h"
 
-loadStates logicalLoadState[NO_OF_DUMPLOADS];
-loadStates physicalLoadState[NO_OF_DUMPLOADS];
+LoadStates logicalLoadState[NO_OF_DUMPLOADS];
+LoadStates physicalLoadState[NO_OF_DUMPLOADS];
 
 // For this go-faster version, the unit's operation will effectively always be "Normal";
 // there is no "Anti-flicker" option. The controlMode variable has been removed.
@@ -134,9 +134,9 @@ bool beyondStartUpPhase = false;  // start-up delay, allows things to settle
 // bucket of a PV Router should match this value.  The sweet-zone value is therefore
 // included in the calculation below.
 //
-int32_t energyInBucket_long{ 0 };                                                                                                            // in Integer Energy Units
-constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_RANGE_IN_JOULES * CYCLES_PER_SECOND * (1 / powerCal_grid)) };  // depends on powerCal, frequency & the 'sweetzone' size.
-constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 };                                                           // used for 'normal' and single-threshold 'AF' logic
+int32_t energyInBucket_long{ 0 };                                                                                                          // in Integer Energy Units
+constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1 / powerCal_grid)) };  // depends on powerCal, frequency & the 'sweetzone' size.
+constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 };                                                         // used for 'normal' and single-threshold 'AF' logic
 
 constexpr int32_t lowerThreshold_default{ capacityOfEnergyBucket_long >> 1 };
 constexpr int32_t upperThreshold_default{ capacityOfEnergyBucket_long >> 1 };
@@ -158,15 +158,11 @@ constexpr int32_t DCoffset_V_max{ (512L + 100) * 256 };  // mid-point of ADC plu
 // to avoid the diverted energy accumulator 'creeping' when the load is not active
 constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1 / powerCal_grid)) };
 
-constexpr int32_t mainsCyclesPerHour{ CYCLES_PER_SECOND * SECONDS_PER_MINUTE * MINUTES_PER_HOUR };
-
-constexpr uint32_t displayShutdown_inMainsCycles{ DISPLAY_SHUTDOWN_IN_HOURS * mainsCyclesPerHour };
-
 constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1 / powerCal_grid)) };
 
-int32_t divertedEnergyRecent_IEU{ 0 };                                                                                       // Hi-res accumulator of limited range
-uint16_t divertedEnergyTotal_Wh{ 0 };                                                                                        // WattHour register of 63K range
-constexpr int32_t IEU_per_Wh{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * CYCLES_PER_SECOND * (1 / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
+int32_t divertedEnergyRecent_IEU{ 0 };                                                                                      // Hi-res accumulator of limited range
+uint16_t divertedEnergyTotal_Wh{ 0 };                                                                                       // WattHour register of 63K range
+constexpr int32_t IEU_per_Wh{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1 / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
 
 uint32_t absenceOfDivertedEnergyCount{ 0 };
 
@@ -187,15 +183,15 @@ volatile int16_t sampleV;
 // For an enhanced polarity detection mechanism, which includes a persistence check
 inline constexpr uint8_t PERSISTENCE_FOR_POLARITY_CHANGE{ 1 }; /**< allows polarity changes to be confirmed */
 
-polarities polarityOfMostRecentVsample;
-polarities polarityConfirmed;
-polarities polarityConfirmedOfLastSampleV;
+Polarities polarityOfMostRecentVsample;
+Polarities polarityConfirmed;
+Polarities polarityConfirmedOfLastSampleV;
 
 // For a mechanism to check the continuity of the sampling sequence
-inline constexpr uint16_t CONTINUITY_CHECK_MAXCOUNT{ 250 };  // mains cycles
+inline constexpr uint16_t CONTINUITY_CHECK_MAXCOUNT{ 250 }; /**< mains cycles */
 uint16_t sampleCount_forContinuityChecker;
-uint16_t sampleSetsDuringThisMainsCycle;
-uint16_t lowestNoOfSampleSetsPerMainsCycle;
+uint16_t sampleSetsDuringThisMainsCycle;    /**< number of sample sets during each mains cycle */
+uint16_t lowestNoOfSampleSetsPerMainsCycle; /**< For a mechanism to check the integrity of this code structure */
 
 // for this go-faster sketch, the phaseCal logic has been removed.  If required, it can be
 // found in most of the standard Mk2_bothDisplay_n versions
@@ -204,18 +200,6 @@ bool EDD_isActive = false;  // energy diversion detection
 
 void setup()
 {
-  pinMode(physicalLoad_0_pin, OUTPUT);  // driver pin for the local dump-load
-  pinMode(physicalLoad_1_pin, OUTPUT);  // driver pin for an additional load
-
-  for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i)
-  {
-    logicalLoadState[i] = loadStates::LOAD_OFF;
-    physicalLoadState[i] = loadStates::LOAD_OFF;
-  }
-
-  digitalWrite(physicalLoad_0_pin, physicalLoadState[0]);   // the local load is active low.
-  digitalWrite(physicalLoad_1_pin, !physicalLoadState[1]);  // additional loads are active high.
-
   delay(delayBeforeSerialStarts);  // allow time to open Serial monitor
 
   Serial.begin(9600);
@@ -223,6 +207,15 @@ void setup()
   Serial.println("-------------------------------------");
   Serial.println("Sketch ID:      Mk2_fasterControl_twoLoads_5.ino");
   Serial.println();
+
+  for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i)
+  {
+    logicalLoadState[i] = LoadStates::LOAD_OFF;
+    pinMode(physicalLoadPin[i], OUTPUT);  // driver pin for Load #n
+    physicalLoadState[i] = LoadStates::LOAD_OFF;
+  }
+
+  updatePortsStates();
 
   initializeDisplay();
 
@@ -356,7 +349,7 @@ void processPolarity(const int16_t rawSample)
   // as determined by a LP filter.
   sampleVminusDC_long = ((long)rawSample << 8) - DCoffset_V_long;
   // determine the polarity of the latest voltage sample
-  polarityOfMostRecentVsample = (sampleVminusDC_long > 0) ? polarities::POSITIVE : polarities::NEGATIVE;
+  polarityOfMostRecentVsample = (sampleVminusDC_long > 0) ? Polarities::POSITIVE : Polarities::NEGATIVE;
 }
 
 void processPlusHalfCycle()
@@ -475,10 +468,10 @@ void processLatestContribution()
   // being used, a repetitive power-to-energy conversion seems an unnecessary workload.
   // As all sampling periods are of similar duration, it is more efficient to just
   // add all of the power samples together, and note that their sum is actually
-  // CYCLES_PER_SECOND greater than it would otherwise be.
+  // SUPPLY_FREQUENCY greater than it would otherwise be.
   //   Although the numerical value itself does not change, I thought that a new name
   // may be helpful so as to minimise confusion.
-  //   The 'energy' variable below is CYCLES_PER_SECOND * (1/powerCal) times larger than
+  //   The 'energy' variable below is SUPPLY_FREQUENCY * (1/powerCal) times larger than
   // the actual energy in Joules.
   //
   realEnergy_grid = realPower_grid;
@@ -566,7 +559,7 @@ void proceedHighEnergyLevel()
 
     if (OK_toAddLoad)
     {
-      logicalLoadState[tempLoad] = loadStates::LOAD_ON;
+      logicalLoadState[tempLoad] = LoadStates::LOAD_ON;
       activeLoad = tempLoad;
       postTransitionCount = 0;
       recentTransition = true;
@@ -602,12 +595,47 @@ void proceedLowEnergyLevel()
 
     if (OK_toRemoveLoad)
     {
-      logicalLoadState[tempLoad] = loadStates::LOAD_OFF;
+      logicalLoadState[tempLoad] = LoadStates::LOAD_OFF;
       activeLoad = tempLoad;
       postTransitionCount = 0;
       recentTransition = true;
     }
   }
+}
+
+#if !defined(__DOXYGEN__)
+void updatePortsStates() __attribute__((optimize("-O3")));
+#endif
+/**
+ * @brief update the control ports for each of the physical loads
+ *
+ */
+void updatePortsStates()
+{
+  uint16_t pinsON{ 0 };
+  uint16_t pinsOFF{ 0 };
+
+  uint8_t i{ NO_OF_DUMPLOADS };
+
+  do
+  {
+    --i;
+    // update the local load's state.
+    if (LoadStates::LOAD_OFF == physicalLoadState[i])
+    {
+      // setPinOFF(physicalLoadPin[i]);
+      pinsOFF |= bit(physicalLoadPin[i]);
+    }
+    else
+    {
+      ++countLoadON[i];
+      // setPinON(physicalLoadPin[i]);
+      pinsON |= bit(physicalLoadPin[i]);
+    }
+  } while (i);
+
+  setPinsOFF(pinsOFF);
+  setPinsON(pinsON);
 }
 
 // This routine is called to process each set of V & I samples. The main processor and
@@ -618,14 +646,14 @@ void proceedLowEnergyLevel()
 void allGeneralProcessing()
 {
   static uint8_t timerForDisplayUpdate = 0;
-  static enum loadStates nextStateOfLoad = loadStates::LOAD_OFF;
+  static enum LoadStates nextStateOfLoad = LoadStates::LOAD_OFF;
 
   processPolarity(sampleV);
   confirmPolarity();
 
-  if (polarityConfirmed == polarities::POSITIVE)
+  if (polarityConfirmed == Polarities::POSITIVE)
   {
-    if (polarityConfirmedOfLastSampleV != polarities::POSITIVE)
+    if (polarityConfirmedOfLastSampleV != Polarities::POSITIVE)
     {
       // This is the start of a new +ve half cycle (just after the zero-crossing point)
       if (beyondStartUpPhase)
@@ -669,7 +697,7 @@ void allGeneralProcessing()
             EDD_isActive = false;  // energy diversion detector is now inactive
           }
 
-          configureValueForDisplay();
+          configureValueForDisplay(EDD_isActive, divertedEnergyTotal_Wh);
           //          Serial.println(energyInBucket_prediction);
         }
         else
@@ -692,14 +720,14 @@ void allGeneralProcessing()
       }
     }  // end of processing that is specific to the first Vsample in each +ve half cycle
 
-    // still processing samples where the voltage is polarities::POSITIVE ...
+    // still processing samples where the voltage is Polarities::POSITIVE ...
     // (in this go-faster code, the action from here has moved to the negative half of the cycle)
 
   }  // end of processing that is specific to samples where the voltage is positive
 
   else  // the polarity of this sample is negative
   {
-    if (polarityConfirmedOfLastSampleV != polarities::NEGATIVE)
+    if (polarityConfirmedOfLastSampleV != Polarities::NEGATIVE)
     {
       // This is the start of a new -ve half cycle (just after the zero-crossing point)
       processMinusHalfCycle();
@@ -750,11 +778,10 @@ void allGeneralProcessing()
         updatePhysicalLoadStates();  // allows the logical-to-physical mapping to be changed
 
         // update each of the physical loads
-        digitalWrite(physicalLoad_0_pin, physicalLoadState[0]);   // active low for trigger
-        digitalWrite(physicalLoad_1_pin, !physicalLoadState[1]);  // active high for additional load
+        updatePortsStates();
 
         // update the Energy Diversion Detector
-        if (physicalLoadState[0] == loadStates::LOAD_ON)
+        if (physicalLoadState[0] == LoadStates::LOAD_ON)
         {
           absenceOfDivertedEnergyCount = 0;
           EDD_isActive = true;
@@ -831,7 +858,7 @@ uint8_t nextLogicalLoadToBeAdded()
 {
   for (uint8_t index = 0; index < NO_OF_DUMPLOADS; ++index)
   {
-    if (logicalLoadState[index] == loadStates::LOAD_OFF)
+    if (logicalLoadState[index] == LoadStates::LOAD_OFF)
     {
       return (index);
     }
@@ -850,7 +877,7 @@ uint8_t nextLogicalLoadToBeRemoved()
 
   do
   {
-    if (logicalLoadState[--index] == loadStates::LOAD_ON)
+    if (logicalLoadState[--index] == LoadStates::LOAD_ON)
     {
       return (index);
     }

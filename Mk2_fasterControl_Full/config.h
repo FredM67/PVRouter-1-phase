@@ -27,7 +27,6 @@ inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 };  // The logic expects a minimum o
 
 // allocation of digital pins which are not dependent on the display type that is in use
 // *************************************************************************************
-inline constexpr uint8_t physicalLoad_1_pin = 3;  // <-- the "mode" port is active-high
-inline constexpr uint8_t physicalLoad_0_pin = 4;  // <-- the "trigger" port is active-low
+inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 4, 3 }; /**< for 1-phase PCB */
 
 #endif  // _CONFIG_H
