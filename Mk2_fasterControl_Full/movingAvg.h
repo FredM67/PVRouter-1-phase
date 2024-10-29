@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef MOVINGAVG_H
-#define MOVINGAVG_H
+#ifndef _MOVINGAVG_H
+#define _MOVINGAVG_H
 
 #include <Arduino.h>
 

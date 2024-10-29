@@ -31,4 +31,7 @@ inline constexpr uint8_t ANTI_CREEP_LIMIT{ 5 };  // in Joules per mains cycle (h
 
 constexpr int32_t mainsCyclesPerHour{ SUPPLY_FREQUENCY * SECONDS_PER_MINUTE * MINUTES_PER_HOUR };
 
+inline constexpr uint8_t DATALOG_PERIOD_IN_SECONDS{ 5 };                                                                                                                                                    /**< Period of datalogging in seconds */
+inline constexpr typename conditional< DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUENCY >= UINT8_MAX, uint16_t, uint8_t >::type DATALOG_PERIOD_IN_MAINS_CYCLES{ DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUENCY }; /**< Period of datalogging in cycles */
+
 #endif  // __CONFIG_SYSTEM_H__
