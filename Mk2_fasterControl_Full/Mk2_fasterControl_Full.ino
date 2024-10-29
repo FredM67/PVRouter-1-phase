@@ -1,7 +1,7 @@
 /* Mk2_fasterControl_twoLoads_5.ino
  *
  *  (initially released as Mk2_bothDisplays_1 in March 2014)
- * This sketch is for diverting suplus PV power to a dump load using a triac or  
+ * This sketch is for diverting surplus PV power to a dump load using a triac or  
  * Solid State Relay. It is based on the Mk2i PV Router code that I have posted in on  
  * the OpenEnergyMonitor forum.  The original version, and other related material, 
  * can be found on my Summary Page at www.openenergymonitor.org/emon/node/1757
@@ -40,7 +40,7 @@
  *
  * February 2016: updated to Mk2_bothDisplays_4, with these changes:
  * - improvements to the start-up logic.  The start of normal operation is now 
- *    synchronised with the start of a new mains cycle.
+ *    synchronized with the start of a new mains cycle.
  * - reduce the amount of feedback in the Low Pass Filter for removing the DC content
  *     from the Vsample stream. This resolves an anomaly which has been present since 
  *     the start of this project.  Although the amount of feedback has previously been 
@@ -105,6 +105,7 @@ static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVR
 #include "config.h"
 #include "processing.h"
 #include "utils_pins.h"
+#include "utils_display.h"
 
 loadStates logicalLoadState[NO_OF_DUMPLOADS];
 loadStates physicalLoadState[NO_OF_DUMPLOADS];
@@ -118,14 +119,6 @@ constexpr int16_t DCoffset_I{ 512 };  // nominal mid-point value of ADC @ x1 sca
 // For integer maths, many variables need to be 'long'
 //
 bool beyondStartUpPhase = false;  // start-up delay, allows things to settle
-
-// Various settings for the 4-digit display, which needs to be refreshed every few mS
-const uint8_t noOfDigitLocations = 4;
-const uint8_t noOfPossibleCharacters = 22;
-constexpr uint8_t MAX_DISPLAY_TIME_COUNT{ 10 };            // no of processing loops between display updates
-constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50 };  // mains cycles
-constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 };          // auto-reset after this period of inactivity
-// #define DISPLAY_SHUTDOWN_IN_HOURS 0.01 // for testing that the display clears after 36 seconds
 
 // When using integer maths, calibration values that have supplied in floating point
 // form need to be rescaled.
@@ -183,10 +176,10 @@ int32_t upperEnergyThreshold;
 bool recentTransition = false;
 uint8_t postTransitionCount;
 constexpr uint8_t POST_TRANSITION_MAX_COUNT{ 3 }; /**< allows each transition to take effect */
-uint8_t activeLoad = 0;
+uint8_t activeLoad{ 0 };
 
 // for interaction between the main processor and the ISRs
-volatile bool dataReady = false;
+volatile bool dataReady{ false };
 volatile int16_t sampleI_grid;
 volatile int16_t sampleI_diverted;
 volatile int16_t sampleV;
@@ -194,123 +187,20 @@ volatile int16_t sampleV;
 // For an enhanced polarity detection mechanism, which includes a persistence check
 inline constexpr uint8_t PERSISTENCE_FOR_POLARITY_CHANGE{ 1 }; /**< allows polarity changes to be confirmed */
 
-enum polarities polarityOfMostRecentVsample;
-enum polarities polarityConfirmed;
-enum polarities polarityConfirmedOfLastSampleV;
+polarities polarityOfMostRecentVsample;
+polarities polarityConfirmed;
+polarities polarityConfirmedOfLastSampleV;
 
 // For a mechanism to check the continuity of the sampling sequence
 inline constexpr uint16_t CONTINUITY_CHECK_MAXCOUNT{ 250 };  // mains cycles
-int16_t sampleCount_forContinuityChecker;
-int16_t sampleSetsDuringThisMainsCycle;
-int16_t lowestNoOfSampleSetsPerMainsCycle;
+uint16_t sampleCount_forContinuityChecker;
+uint16_t sampleSetsDuringThisMainsCycle;
+uint16_t lowestNoOfSampleSetsPerMainsCycle;
 
 // for this go-faster sketch, the phaseCal logic has been removed.  If required, it can be
 // found in most of the standard Mk2_bothDisplay_n versions
 
-
-//  The two versions of the hardware require different logic.
-#ifdef PIN_SAVING_HARDWARE
-
-#define DRIVER_CHIP_DISABLED HIGH
-#define DRIVER_CHIP_ENABLED LOW
-
-// the primary segments are controlled by a pair of logic chips
-const uint8_t noOfDigitSelectionLines = 4;  // <- for the 74HC4543 7-segment display driver
-const uint8_t noOfDigitLocationLines = 2;   // <- for the 74HC138 2->4 line demultiplexer
-
-uint8_t enableDisableLine = 5;  // <- affects the primary 7 segments only (not the DP)
-uint8_t decimalPointLine = 14;  // <- this line has to be individually controlled.
-
-uint8_t digitLocationLine[noOfDigitLocationLines] = { 16, 15 };
-uint8_t digitSelectionLine[noOfDigitSelectionLines] = { 7, 9, 8, 6 };
-
-// The final column of digitValueMap[] is for the decimal point status.  In this version,
-// the decimal point has to be treated differently than the other seven segments, so
-// a convenient means of accessing this column is provided.
-//
-uint8_t digitValueMap[noOfPossibleCharacters][noOfDigitSelectionLines + 1] = {
-  LOW, LOW, LOW, LOW, LOW,      // '0' <- element 0
-  LOW, LOW, LOW, HIGH, LOW,     // '1' <- element 1
-  LOW, LOW, HIGH, LOW, LOW,     // '2' <- element 2
-  LOW, LOW, HIGH, HIGH, LOW,    // '3' <- element 3
-  LOW, HIGH, LOW, LOW, LOW,     // '4' <- element 4
-  LOW, HIGH, LOW, HIGH, LOW,    // '5' <- element 5
-  LOW, HIGH, HIGH, LOW, LOW,    // '6' <- element 6
-  LOW, HIGH, HIGH, HIGH, LOW,   // '7' <- element 7
-  HIGH, LOW, LOW, LOW, LOW,     // '8' <- element 8
-  HIGH, LOW, LOW, HIGH, LOW,    // '9' <- element 9
-  LOW, LOW, LOW, LOW, HIGH,     // '0.' <- element 10
-  LOW, LOW, LOW, HIGH, HIGH,    // '1.' <- element 11
-  LOW, LOW, HIGH, LOW, HIGH,    // '2.' <- element 12
-  LOW, LOW, HIGH, HIGH, HIGH,   // '3.' <- element 13
-  LOW, HIGH, LOW, LOW, HIGH,    // '4.' <- element 14
-  LOW, HIGH, LOW, HIGH, HIGH,   // '5.' <- element 15
-  LOW, HIGH, HIGH, LOW, HIGH,   // '6.' <- element 16
-  LOW, HIGH, HIGH, HIGH, HIGH,  // '7.' <- element 17
-  HIGH, LOW, LOW, LOW, HIGH,    // '8.' <- element 18
-  HIGH, LOW, LOW, HIGH, HIGH,   // '9.' <- element 19
-  HIGH, HIGH, HIGH, HIGH, LOW,  // ' '  <- element 20
-  HIGH, HIGH, HIGH, HIGH, HIGH  // '.'  <- element 21
-};
-
-// a tidy means of identifying the DP status data when accessing the above table
-const uint8_t DPstatus_columnID = noOfDigitSelectionLines;
-
-uint8_t digitLocationMap[noOfDigitLocations][noOfDigitLocationLines] = {
-  LOW, LOW,    // Digit 1
-  LOW, HIGH,   // Digit 2
-  HIGH, LOW,   // Digit 3
-  HIGH, HIGH,  // Digit 4
-};
-
-#else  // PIN_SAVING_HARDWARE
-
-#define ON HIGH
-#define OFF LOW
-
-const uint8_t noOfSegmentsPerDigit = 8;  // includes one for the decimal point
-enum digitEnableStates
-{
-  DIGIT_ENABLED,
-  DIGIT_DISABLED
-};
-
-uint8_t digitSelectorPin[noOfDigitLocations] = { 16, 10, 13, 11 };
-uint8_t segmentDrivePin[noOfSegmentsPerDigit] = { 2, 5, 12, 6, 7, 9, 8, 14 };
-
-// The final column of segMap[] is for the decimal point status.  In this version,
-// the decimal point is treated just like all the other segments, so there is
-// no need to access this column specifically.
-//
-uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit] = {
-  ON, ON, ON, ON, ON, ON, OFF, OFF,        // '0' <- element 0
-  OFF, ON, ON, OFF, OFF, OFF, OFF, OFF,    // '1' <- element 1
-  ON, ON, OFF, ON, ON, OFF, ON, OFF,       // '2' <- element 2
-  ON, ON, ON, ON, OFF, OFF, ON, OFF,       // '3' <- element 3
-  OFF, ON, ON, OFF, OFF, ON, ON, OFF,      // '4' <- element 4
-  ON, OFF, ON, ON, OFF, ON, ON, OFF,       // '5' <- element 5
-  ON, OFF, ON, ON, ON, ON, ON, OFF,        // '6' <- element 6
-  ON, ON, ON, OFF, OFF, OFF, OFF, OFF,     // '7' <- element 7
-  ON, ON, ON, ON, ON, ON, ON, OFF,         // '8' <- element 8
-  ON, ON, ON, ON, OFF, ON, ON, OFF,        // '9' <- element 9
-  ON, ON, ON, ON, ON, ON, OFF, ON,         // '0.' <- element 10
-  OFF, ON, ON, OFF, OFF, OFF, OFF, ON,     // '1.' <- element 11
-  ON, ON, OFF, ON, ON, OFF, ON, ON,        // '2.' <- element 12
-  ON, ON, ON, ON, OFF, OFF, ON, ON,        // '3.' <- element 13
-  OFF, ON, ON, OFF, OFF, ON, ON, ON,       // '4.' <- element 14
-  ON, OFF, ON, ON, OFF, ON, ON, ON,        // '5.' <- element 15
-  ON, OFF, ON, ON, ON, ON, ON, ON,         // '6.' <- element 16
-  ON, ON, ON, OFF, OFF, OFF, OFF, ON,      // '7.' <- element 17
-  ON, ON, ON, ON, ON, ON, ON, ON,          // '8.' <- element 18
-  ON, ON, ON, ON, OFF, ON, ON, ON,         // '9.' <- element 19
-  OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 20
-  OFF, OFF, OFF, OFF, OFF, OFF, OFF, ON    // '.' <- element 11
-};
-#endif  // PIN_SAVING_HARDWARE
-
-uint8_t charsForDisplay[noOfDigitLocations] = { 20, 20, 20, 20 };  // all blank
-
-bool EDD_isActive = false;  // energy divertion detection
+bool EDD_isActive = false;  // energy diversion detection
 
 void setup()
 {
@@ -334,48 +224,7 @@ void setup()
   Serial.println("Sketch ID:      Mk2_fasterControl_twoLoads_5.ino");
   Serial.println();
 
-#ifdef PIN_SAVING_HARDWARE
-  // configure the IO drivers for the 4-digit display
-  //
-  // the Decimal Point line is driven directly from the processor
-  pinMode(decimalPointLine, OUTPUT);  // the 'decimal point' line
-
-  // set up the control lines for the 74HC4543 7-seg display driver
-  for (int16_t i = 0; i < noOfDigitSelectionLines; ++i)
-  {
-    pinMode(digitSelectionLine[i], OUTPUT);
-  }
-
-  // an enable line is required for the 74HC4543 7-seg display driver
-  pinMode(enableDisableLine, OUTPUT);  // for the 74HC4543 7-seg display driver
-  digitalWrite(enableDisableLine, DRIVER_CHIP_DISABLED);
-
-  // set up the control lines for the 74HC138 2->4 demux
-  for (int16_t i = 0; i < noOfDigitLocationLines; ++i)
-  {
-    pinMode(digitLocationLine[i], OUTPUT);
-  }
-#else
-  for (int16_t i = 0; i < noOfSegmentsPerDigit; ++i)
-  {
-    pinMode(segmentDrivePin[i], OUTPUT);
-  }
-
-  for (int16_t i = 0; i < noOfDigitLocations; ++i)
-  {
-    pinMode(digitSelectorPin[i], OUTPUT);
-  }
-
-  for (int16_t i = 0; i < noOfDigitLocations; ++i)
-  {
-    digitalWrite(digitSelectorPin[i], DIGIT_DISABLED);
-  }
-
-  for (int16_t i = 0; i < noOfSegmentsPerDigit; ++i)
-  {
-    digitalWrite(segmentDrivePin[i], OFF);
-  }
-#endif
+  initializeDisplay();
 
   // First stop the ADC
   bit_clear(ADCSRA, ADEN);
@@ -796,7 +645,7 @@ void allGeneralProcessing()
           }
           divertedEnergyRecent_IEU += realEnergy_diverted;
 
-          // Whole kWhours are then recorded separately
+          // Whole kWh are then recorded separately
           if (divertedEnergyRecent_IEU > IEU_per_Wh)
           {
             divertedEnergyRecent_IEU -= IEU_per_Wh;
@@ -1023,7 +872,7 @@ void updatePhysicalLoadStates()
  * to have priority, rather than physical load 0, the logical-to-physical association for 
  * loads 0 and 1 are swapped.
  *
- * Any other mapping relaionships could be configured here.
+ * Any other mapping relationships could be configured here.
  */
 {
   for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i)
@@ -1040,188 +889,6 @@ void updatePhysicalLoadStates()
   } 
 */
 }
-
-// called infrequently, to update the characters to be displayed
-void configureValueForDisplay()
-{
-  static uint8_t locationOfDot = 0;
-
-  //  Serial.println(divertedEnergyTotal_Wh);
-
-  if (EDD_isActive)
-  {
-    uint16_t val = divertedEnergyTotal_Wh;
-    bool energyValueExceeds10kWh;
-
-    if (val < 10000)
-    {
-      // no need to re-scale (display to 3 DPs)
-      energyValueExceeds10kWh = false;
-    }
-    else
-    {
-      // re-scale is needed (display to 2 DPs)
-      energyValueExceeds10kWh = true;
-      val = val / 10;
-    }
-
-    uint8_t thisDigit = val / 1000;
-    charsForDisplay[0] = thisDigit;
-    val -= 1000 * thisDigit;
-
-    thisDigit = val / 100;
-    charsForDisplay[1] = thisDigit;
-    val -= 100 * thisDigit;
-
-    thisDigit = val / 10;
-    charsForDisplay[2] = thisDigit;
-    val -= 10 * thisDigit;
-
-    charsForDisplay[3] = val;
-
-    // assign the decimal point location
-    if (energyValueExceeds10kWh)
-    {
-      charsForDisplay[1] += 10;
-    }  // dec point after 2nd digit
-    else
-    {
-      charsForDisplay[0] += 10;
-    }  // dec point after 1st digit
-  }
-  else
-  {
-    // "walking dots" display
-    charsForDisplay[locationOfDot] = 20;  // blank
-
-    ++locationOfDot;
-    if (locationOfDot >= noOfDigitLocations)
-    {
-      locationOfDot = 0;
-    }
-
-    charsForDisplay[locationOfDot] = 21;  // dot
-  }
-}
-
-void refreshDisplay()
-{
-  // This routine keeps track of which digit is being displayed and checks when its
-  // display time has expired.  It then makes the necessary adjustments for displaying
-  // the next digit.
-  //   The two versions of the hardware require different logic.
-
-#ifdef PIN_SAVING_HARDWARE
-  // With this version of the hardware, care must be taken that all transitory states
-  // are masked out.  Note that the enableDisableLine only masks the seven primary
-  // segments, not the Decimal Point line which must therefore be treated separately.
-  // The sequence is:
-  //
-  // 1. set the decimal point line to 'off'
-  // 2. disable the 7-segment driver chip
-  // 3. determine the next location which is to be active
-  // 4. set up the location lines for the new active location
-  // 5. determine the relevant character for the new active location
-  // 6. configure the driver chip for the new character to be displayed
-  // 7. set up decimal point line for the new active location
-  // 8. enable the 7-segment driver chip
-
-  static uint8_t displayTime_count = 0;
-  static uint8_t digitLocationThatIsActive = 0;
-
-  ++displayTime_count;
-
-  if (displayTime_count > MAX_DISPLAY_TIME_COUNT)
-  {
-    uint8_t lineState;
-
-    displayTime_count = 0;
-
-    // 1. disable the Decimal Point driver line;
-    digitalWrite(decimalPointLine, LOW);
-
-    // 2. disable the driver chip while changes are taking place
-    digitalWrite(enableDisableLine, DRIVER_CHIP_DISABLED);
-
-    // 3. determine the next digit location to be active
-    ++digitLocationThatIsActive;
-    if (digitLocationThatIsActive >= noOfDigitLocations)
-    {
-      digitLocationThatIsActive = 0;
-    }
-
-    // 4. set up the digit location drivers for the new active location
-    for (uint8_t line = 0; line < noOfDigitLocationLines; ++line)
-    {
-      lineState = digitLocationMap[digitLocationThatIsActive][line];
-      digitalWrite(digitLocationLine[line], lineState);
-    }
-
-    // 5. determine the character to be displayed at this new location
-    // (which includes the decimal point information)
-    uint8_t digitVal = charsForDisplay[digitLocationThatIsActive];
-
-    // 6. configure the 7-segment driver for the character to be displayed
-    for (uint8_t line = 0; line < noOfDigitSelectionLines; ++line)
-    {
-      lineState = digitValueMap[digitVal][line];
-      digitalWrite(digitSelectionLine[line], lineState);
-    }
-
-    // 7. set up the Decimal Point driver line;
-    digitalWrite(decimalPointLine, digitValueMap[digitVal][DPstatus_columnID]);
-
-    // 8. enable the 7-segment driver chip
-    digitalWrite(enableDisableLine, DRIVER_CHIP_ENABLED);
-  }
-
-#else   // PIN_SAVING_HARDWARE
-
-  // This version is more straightforward because the digit-enable lines can be
-  // used to mask out all of the transitory states, including the Decimal Point.
-  // The sequence is:
-  //
-  // 1. de-activate the digit-enable line that was previously active
-  // 2. determine the next location which is to be active
-  // 3. determine the relevant character for the new active location
-  // 4. set up the segment drivers for the character to be displayed (includes the DP)
-  // 5. activate the digit-enable line for the new active location
-
-  static uint8_t displayTime_count = 0;
-  static uint8_t digitLocationThatIsActive = 0;
-
-  ++displayTime_count;
-
-  if (displayTime_count > MAX_DISPLAY_TIME_COUNT)
-  {
-    displayTime_count = 0;
-
-    // 1. de-activate the location which is currently being displayed
-    digitalWrite(digitSelectorPin[digitLocationThatIsActive], DIGIT_DISABLED);
-
-    // 2. determine the next digit location which is to be displayed
-    ++digitLocationThatIsActive;
-    if (digitLocationThatIsActive >= noOfDigitLocations)
-    {
-      digitLocationThatIsActive = 0;
-    }
-
-    // 3. determine the relevant character for the new active location
-    uint8_t digitVal = charsForDisplay[digitLocationThatIsActive];
-
-    // 4. set up the segment drivers for the character to be displayed (includes the DP)
-    for (uint8_t segment = 0; segment < noOfSegmentsPerDigit; ++segment)
-    {
-      uint8_t segmentState = segMap[digitVal][segment];
-      digitalWrite(segmentDrivePin[segment], segmentState);
-    }
-
-    // 5. activate the digit-enable line for the new active location
-    digitalWrite(digitSelectorPin[digitLocationThatIsActive], DIGIT_ENABLED);
-  }
-#endif  // PIN_SAVING_HARDWARE
-
-}  // end of refreshDisplay()
 
 int16_t freeRam()
 {
