@@ -57,13 +57,25 @@ inline void printConfiguration()
   DBUG("\tExport rate (Watts) = ");
   DBUGLN(REQUIRED_EXPORT_IN_WATTS);
 
-  DBUG("\tzero-crossing persistence (sample sets) = ");
-  DBUGLN(PERSISTENCE_FOR_POLARITY_CHANGE);
-  DBUG("\tcontinuity sampling display rate (mains cycles) = ");
-  DBUGLN(CONTINUITY_CHECK_MAXCOUNT);
+  printParamsForSelectedOutputMode();
+}
 
-  DBUG("\tcapacityOfEnergyBucket_long = ");
-  DBUGLN(capacityOfEnergyBucket_long);
+/**
+ * @brief Prints the load priorities to the Serial output.
+ *
+ */
+inline void logLoadPriorities()
+{
+#ifdef ENABLE_DEBUG
+
+  DBUGLN(F("Load Priorities: "));
+  for (const auto& loadPrioAndState : loadPrioritiesAndState)
+  {
+    DBUG(F("\tload "));
+    DBUGLN(loadPrioAndState);
+  }
+
+#endif
 }
 
 /**

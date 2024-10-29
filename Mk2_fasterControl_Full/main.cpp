@@ -63,9 +63,6 @@ ISR(ADC_vect)
   static uint8_t sample_index{ 0 };
   int16_t rawSample;
 
-  static int16_t sampleI_grid_raw;
-  static int16_t sampleI_diverted_raw;
-
   switch (sample_index)
   {
     case 0:
@@ -73,21 +70,24 @@ ISR(ADC_vect)
       //sampleV = ADC;                                // store the ADC value (this one is for Voltage)
       ADMUX = bit(REFS0) + currentSensor_diverted;  // set up the next conversion, which is for Diverted Current
       ++sample_index;                               // increment the control flag
-      sampleI_diverted = sampleI_diverted_raw;
-      sampleI_grid = sampleI_grid_raw;
-      dataReady = true;  // all three ADC values can now be processed
+      //
+      processVoltageRawSample(rawSample);
       break;
     case 1:
       rawSample = ADC;  // store the ADC value (this one is for Voltage L1)
       //sampleI_diverted_raw = ADC;               // store the ADC value (this one is for Diverted Current)
       ADMUX = bit(REFS0) + currentSensor_grid;  // set up the next conversion, which is for Grid Current
       ++sample_index;                           // increment the control flag
+      //
+      processDivertedCurrentRawSample(rawSample);
       break;
     case 2:
       rawSample = ADC;  // store the ADC value (this one is for Voltage L1)
       //sampleI_grid_raw = ADC;              // store the ADC value (this one is for Grid Current)
       ADMUX = bit(REFS0) + voltageSensor;  // set up the next conversion, which is for Voltage
       sample_index = 0;                    // reset the control flag
+      //
+      processGridCurrentRawSample(rawSample);
       break;
     default:
       sample_index = 0;  // to prevent lockup (should never get here)
@@ -110,41 +110,14 @@ void setup()
   // On start, always display config info in the serial monitor
   printConfiguration();
 
-  for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i)
-  {
-    logicalLoadState[i] = LoadStates::LOAD_OFF;
-    pinMode(physicalLoadPin[i], OUTPUT);  // driver pin for Load #n
-    physicalLoadState[i] = LoadStates::LOAD_OFF;
-  }
+  // initializes all loads to OFF at startup
+  initializeProcessing();
 
-  updatePortsStates();
+  initializeOptionalPins();
+
+  logLoadPriorities();
 
   initializeDisplay();
-
-  // First stop the ADC
-  bit_clear(ADCSRA, ADEN);
-
-  // Activate free-running mode
-  ADCSRB = 0x00;
-
-  // Set up the ADC to be free-running
-  bit_set(ADCSRA, ADPS0);  // Set the ADC's clock to system clock / 128
-  bit_set(ADCSRA, ADPS1);
-  bit_set(ADCSRA, ADPS2);
-
-  bit_set(ADCSRA, ADATE);  // set the Auto Trigger Enable bit in the ADCSRA register. Because
-  // bits ADTS0-2 have not been set (i.e. they are all zero), the
-  // ADC's trigger source is set to "free running mode".
-
-  bit_set(ADCSRA, ADIE);  // set the ADC interrupt enable bit. When this bit is written
-  // to one and the I-bit in SREG is set, the
-  // ADC Conversion Complete Interrupt is activated.
-
-  bit_set(ADCSRA, ADEN);  // Enable the ADC
-
-  bit_set(ADCSRA, ADSC);  // start ADC manually first time
-
-  sei();  // Enable Global Interrupts
 
   DBUG(F(">>free RAM = "));
   DBUGLN(freeRam());  // a useful value to keep an eye on
@@ -159,9 +132,69 @@ void setup()
  */
 void loop()
 {
-  if (dataReady)  // flag is set after every set of ADC conversions
+  static uint8_t perSecondTimer{ 0 };
+  static uint8_t timerForDisplayUpdate{ 0 };
+
+  if (b_newCycle)  // flag is set after every pair of ADC conversions
   {
-    dataReady = false;       // reset the flag
-    allGeneralProcessing();  // executed once for each set of V&I samples
+    b_newCycle = false;  // reset the flag
+    ++perSecondTimer;
+    ++timerForDisplayUpdate;
+
+    if (timerForDisplayUpdate >= UPDATE_PERIOD_FOR_DISPLAYED_DATA)
+    {  // the 4-digit display needs to be refreshed every few mS. For convenience,
+      // this action is performed every N times around this processing loop.
+      timerForDisplayUpdate = 0;
+
+      // After a pre-defined period of inactivity, the 4-digit display needs to
+      // close down in readiness for the next's day's data.
+      //
+      if (absenceOfDivertedEnergyCount > displayShutdown_inMainsCycles)
+      {
+        // clear the accumulators for diverted energy
+        divertedEnergyTotal_Wh = 0;
+        divertedEnergyRecent_IEU = 0;
+        EDD_isActive = false;  // energy diversion detector is now inactive
+      }
+
+      configureValueForDisplay(EDD_isActive, divertedEnergyTotal_Wh);
+      //          Serial.println(energyInBucket_prediction);
+    }
+
+    if (perSecondTimer >= SUPPLY_FREQUENCY)
+    {
+      perSecondTimer = 0;
+
+      if constexpr (WATCHDOG_PIN_PRESENT)
+      {
+        togglePin(watchDogPin);
+      }
+
+      // checkDiversionOnOff();
+
+      // if (!forceFullPower())
+      // {
+      //   bOffPeak = proceedLoadPrioritiesAndOverriding(iTemperature_x100);  // called every second
+      // }
+
+      if constexpr (RELAY_DIVERSION)
+      {
+        relays.inc_duration();
+        relays.proceed_relays();
+      }
+
+      refreshDisplay();
+    }
+  }
+
+  if (b_datalogEventPending)
+  {
+    b_datalogEventPending = false;
+    // logData();
+
+    if constexpr (RELAY_DIVERSION)
+    {
+      //relays.update_average(tx_data.power);
+    }
   }
 }  // end of loop()

@@ -32,9 +32,7 @@
 #include "utils_relay.h"
 #include "utils_temp.h"
 
-inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 };  // The logic expects a minimum of 2 dumploads,
-                                                // for local & remote loads, but neither has to
-                                                // be physically present.
+inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 };  /**< number of dump loads connected to the diverter */
 
 #ifdef EMONESP
 inline constexpr bool EMONESP_CONTROL{ true };
