@@ -79,6 +79,96 @@ inline void logLoadPriorities()
 }
 
 /**
+ * @brief Prints data logs to the Serial output in text format
+ *
+ */
+inline void printForSerialText()
+{
+  Serial.print(copyOf_energyInBucket_long * invSUPPLY_FREQUENCY);
+  Serial.print(F(", P:"));
+  Serial.print(tx_data.power);
+
+  if constexpr (RELAY_DIVERSION)
+  {
+    Serial.print(F("/"));
+    Serial.print(relays.get_average());
+  }
+
+  Serial.print(F(", P"));
+  Serial.print(F(":"));
+  Serial.print(tx_data.power);
+
+  Serial.print(F(", V"));
+  Serial.print(F(":"));
+  Serial.print((float)tx_data.Vrms_L_x100 * 0.01F);
+
+  if constexpr (TEMP_SENSOR_PRESENT)
+  {
+    for (uint8_t idx = 0; idx < temperatureSensing.get_size(); ++idx)
+    {
+      if ((OUTOFRANGE_TEMPERATURE == tx_data.temperature_x100[idx])
+          || (DEVICE_DISCONNECTED_RAW == tx_data.temperature_x100[idx]))
+      {
+        continue;
+      }
+
+      Serial.print(F(", T"));
+      Serial.print(idx + 1);
+      Serial.print(F(":"));
+      Serial.print((float)tx_data.temperature_x100[idx] * 0.01F);
+    }
+  }
+
+  Serial.print(F(", (minSampleSets/MC "));
+  Serial.print(copyOf_lowestNoOfSampleSetsPerMainsCycle);
+  Serial.print(F(", #ofSampleSets "));
+  Serial.print(copyOf_sampleSetsDuringThisDatalogPeriod);
+
+#ifndef DUAL_TARIFF
+  if constexpr (PRIORITY_ROTATION != RotationModes::OFF)
+  {
+    Serial.print(F(", NoED "));
+    Serial.print(absenceOfDivertedEnergyCount);
+  }
+#endif  // DUAL_TARIFF
+
+  Serial.println(F(")"));
+}
+
+/**
+ * @brief Prints data logs to the Serial output in text or json format
+ *
+ * @param bOffPeak true if off-peak tariff is active
+ */
+inline void sendResults(bool bOffPeak)
+{
+  static bool startup{ true };
+
+  if (startup)
+  {
+    startup = false;
+    return;  // reject the first datalogging which is incomplete !
+  }
+
+#ifdef RF_PRESENT
+  send_rf_data();  // *SEND RF DATA*
+#endif
+
+#if defined SERIALOUT
+  printForSerialJson();
+#endif  // if defined SERIALOUT
+
+  if constexpr (EMONESP_CONTROL)
+  {
+    //printForEmonESP(bOffPeak);
+  }
+
+#if defined SERIALPRINT && !defined EMONESP
+  printForSerialText();
+#endif  // if defined SERIALPRINT && !defined EMONESP
+}
+
+/**
  * @brief Get the available RAM during setup
  *
  * @return int The amount of free RAM

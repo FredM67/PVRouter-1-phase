@@ -119,6 +119,11 @@ void setup()
 
   initializeDisplay();
 
+  if constexpr (TEMP_SENSOR_PRESENT)
+  {
+    temperatureSensing.initTemperatureSensors();
+  }
+
   DBUG(F(">>free RAM = "));
   DBUGLN(freeRam());  // a useful value to keep an eye on
   DBUGLN(F("----"));
@@ -133,6 +138,7 @@ void setup()
 void loop()
 {
   static uint8_t perSecondTimer{ 0 };
+  static bool bOffPeak{ false };
   static uint8_t timerForDisplayUpdate{ 0 };
 
   if (b_newCycle)  // flag is set after every pair of ADC conversions
@@ -190,11 +196,41 @@ void loop()
   if (b_datalogEventPending)
   {
     b_datalogEventPending = false;
-    // logData();
+
+    tx_data.power = 0;
+    if constexpr (DATALOG_PERIOD_IN_SECONDS > 10)
+    {
+      tx_data.Vrms_L_x100 = static_cast< int32_t >((100 << 2) * f_voltageCal * sqrt(copyOf_sum_Vsquared / copyOf_sampleSetsDuringThisDatalogPeriod));
+    }
+    else
+    {
+      tx_data.Vrms_L_x100 = static_cast< int32_t >(100 * f_voltageCal * sqrt(copyOf_sum_Vsquared / copyOf_sampleSetsDuringThisDatalogPeriod));
+    }
 
     if constexpr (RELAY_DIVERSION)
     {
-      //relays.update_average(tx_data.power);
+      relays.update_average(tx_data.power);
     }
+
+    if constexpr (TEMP_SENSOR_PRESENT)
+    {
+      uint8_t idx{ temperatureSensing.get_size() };
+      do
+      {
+        auto tmp = temperatureSensing.readTemperature(--idx);
+
+        // if read temperature is 85 and the delta with previous is greater than 5, skip the value
+        if (8500 == tmp && (abs(tmp - tx_data.temperature_x100[idx]) > 500))
+        {
+          tmp = DEVICE_DISCONNECTED_RAW;
+        }
+
+        tx_data.temperature_x100[idx] = tmp;
+      } while (idx);
+
+      temperatureSensing.requestTemperatures();  // for use next time around
+    }
+
+    sendResults(bOffPeak);
   }
 }  // end of loop()

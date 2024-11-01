@@ -53,8 +53,6 @@ int32_t upperEnergyThreshold;     /**< dynamic upper threshold */
 // accumulator's value is decremented accordingly. The calculation below is to determine
 // the scaling for this accumulator.
 
-int32_t divertedEnergyRecent_IEU{ 0 };                                                                                      // Hi-res accumulator of limited range
-uint16_t divertedEnergyTotal_Wh{ 0 };                                                                                       // WattHour register of 63K range
 constexpr int32_t IEU_per_Wh{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1 / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
 
 bool recentTransition{ false };                   /**< a load state has been recently toggled */
@@ -63,6 +61,7 @@ constexpr uint8_t POST_TRANSITION_MAX_COUNT{ 3 }; /**< allows each transition to
 uint8_t activeLoad{ 0 };                          /**< current active load */
 
 int32_t sumP_grid;                /**< for per-cycle summation of 'real power' */
+int32_t sumP_grid_overDL_Period;  /**< for per-cycle summation of 'real power' during datalog period */
 int32_t sumP_diverted;            /**< for per-cycle summation of 'real power' */
 int32_t cumVdeltasThisCycle_long; /**< for the LPF which determines DC offset (voltage) */
 int32_t l_sum_Vsquared;           /**< for summation of V^2 values during datalog period */
@@ -77,16 +76,17 @@ Polarities polarityConfirmed;              /**< for zero-crossing detection */
 Polarities polarityConfirmedOfLastSampleV; /**< for zero-crossing detection */
 
 // For a mechanism to check the continuity of the sampling sequence
-constexpr uint16_t CONTINUITY_CHECK_MAXCOUNT{ 250 }; /**< mains cycles */
-uint16_t sampleCount_forContinuityChecker;
-uint16_t sampleSetsDuringThisMainsCycle;      /**< number of sample sets during each mains cycle */
-uint16_t lowestNoOfSampleSetsPerMainsCycle;   /**< For a mechanism to check the integrity of this code structure */
+uint8_t sampleSetsDuringThisMainsCycle;     /**< number of sample sets during each mains cycle */
 uint16_t sampleSetsDuringThisDatalogPeriod; /**< number of sample sets during each datalogging period */
+
+uint8_t lowestNoOfSampleSetsPerMainsCycle; /**< For a mechanism to check the integrity of this code structure */
 
 uint16_t sampleSetsDuringNegativeHalfOfMainsCycle{ 0 }; /**< for arming the triac/trigger */
 
 LoadStates physicalLoadState[NO_OF_DUMPLOADS]; /**< Physical state of the loads */
 uint16_t countLoadON[NO_OF_DUMPLOADS];         /**< Number of cycle the load was ON (over 1 datalog period) */
+
+remove_cv< remove_reference< decltype(DATALOG_PERIOD_IN_MAINS_CYCLES) >::type >::type n_cycleCountForDatalogging{ 0 }; /**< for counting how often datalog is updated */
 
 bool beyondStartUpPeriod{ false }; /**< start-up delay, allows things to settle */
 
@@ -307,8 +307,8 @@ void processGridCurrentRawSample(const int16_t rawSample)
   int32_t sampleIminusDC_grid = ((int32_t)(rawSample - DCoffset_I)) << 8;
   //
   // extra filtering to offset the HPF effect of CT1
-  int32_t last_lpf_long = lpf_long;
-  lpf_long = last_lpf_long + alpha * (sampleIminusDC_grid - last_lpf_long);
+  const int32_t last_lpf_long = lpf_long;
+  lpf_long += alpha * (sampleIminusDC_grid - last_lpf_long);
   sampleIminusDC_grid += (lpf_gain * lpf_long);
 
   // calculate the "real power" in this sample pair and add to the accumulated sum
@@ -317,6 +317,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
   int32_t instP = filtV_div4 * filtI_div4;              // 32-bits (now x4096, or 2^12)
   instP = instP >> 12;                                  // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
   sumP_grid += instP;                                   // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
+  sumP_grid_overDL_Period += instP;
 }
 
 /**
@@ -403,15 +404,6 @@ void processRawSamples()
             divertedEnergyRecent_IEU -= IEU_per_Wh;
             ++divertedEnergyTotal_Wh;
           }
-        }
-
-        // continuity checker
-        ++sampleCount_forContinuityChecker;
-        if (sampleCount_forContinuityChecker >= CONTINUITY_CHECK_MAXCOUNT)
-        {
-          sampleCount_forContinuityChecker = 0;
-          Serial.println(lowestNoOfSampleSetsPerMainsCycle);
-          lowestNoOfSampleSetsPerMainsCycle = 999;
         }
       }
       else
@@ -550,7 +542,7 @@ void processVoltageRawSample(const int16_t rawSample)
   processPolarity(rawSample);
   confirmPolarity();
 
-  processRawSamples();
+  processRawSamples();  // deals with aspects that only occur at particular stages of each mains cycle
 
   // processing for EVERY set of samples
   //
@@ -576,10 +568,10 @@ void processStartUp()
 
   beyondStartUpPeriod = true;
   sumP_grid = 0;
+  sumP_grid_overDL_Period = 0;
   sumP_diverted = 0;
-  sampleSetsDuringThisMainsCycle = 0;    // not yet dealt with for this cycle
-  sampleCount_forContinuityChecker = 1;  // opportunity has been missed for this cycle
-  lowestNoOfSampleSetsPerMainsCycle = 999;
+  sampleSetsDuringThisMainsCycle = 0;  // not yet dealt with for this cycle
+  lowestNoOfSampleSetsPerMainsCycle = UINT8_MAX;
   // can't say "Go!" here 'cos we're in an ISR!
 }
 
@@ -623,6 +615,8 @@ void processPlusHalfCycle()
   {
     lowestNoOfSampleSetsPerMainsCycle = sampleSetsDuringThisMainsCycle;
   }
+
+  processDataLogging();
 
   // clear the per-cycle accumulators for use in this new mains cycle.
   sampleSetsDuringThisMainsCycle = 0;
@@ -697,8 +691,8 @@ void processLatestContribution()
   // to save time, calibration of power is omitted at this stage.  Real Power (stored as
   // a 'long') is therefore (1/powerCal) times larger than the actual power in Watts.
   //
-  long realPower_grid = sumP_grid / sampleSetsDuringThisMainsCycle;          // proportional to Watts
-  long realPower_diverted = sumP_diverted / sampleSetsDuringThisMainsCycle;  // proportional to Watts
+  int32_t realPower_grid = sumP_grid / sampleSetsDuringThisMainsCycle;          // proportional to Watts
+  int32_t realPower_diverted = sumP_diverted / sampleSetsDuringThisMainsCycle;  // proportional to Watts
 
   realPower_grid -= requiredExportPerMainsCycle_inIEU;  // <- useful for PV simulation
 
@@ -861,6 +855,52 @@ uint8_t nextLogicalLoadToBeRemoved()
   return (NO_OF_DUMPLOADS);
 }
 
+#if !defined(__DOXYGEN__)
+void processDataLogging() __attribute__((optimize("-O3")));
+#endif
+/**
+ * @brief Process with data logging.
+ * @details At the end of each datalogging period, copies are made of the relevant variables
+ *          for use by the main code. These variable are then reset for use during the next
+ *          datalogging period.
+ *
+ * @ingroup TimeCritical
+ */
+void processDataLogging()
+{
+  if (++n_cycleCountForDatalogging < DATALOG_PERIOD_IN_MAINS_CYCLES)
+  {
+    return;  // data logging period not yet reached
+  }
+
+  n_cycleCountForDatalogging = 0;
+
+  copyOf_sumP_grid_overDL_Period = sumP_grid_overDL_Period;
+  sumP_grid_overDL_Period = 0;
+
+  copyOf_sum_Vsquared = l_sum_Vsquared;
+  l_sum_Vsquared = 0;
+
+  uint8_t i{ NO_OF_DUMPLOADS };
+  do
+  {
+    --i;
+    copyOf_countLoadON[i] = countLoadON[i];
+    countLoadON[i] = 0;
+  } while (i);
+
+  copyOf_sampleSetsDuringThisDatalogPeriod = sampleSetsDuringThisDatalogPeriod;  // (for diags only)
+  copyOf_lowestNoOfSampleSetsPerMainsCycle = lowestNoOfSampleSetsPerMainsCycle;  // (for diags only)
+  copyOf_energyInBucket_long = energyInBucket_long;                              // (for diags only)
+
+  lowestNoOfSampleSetsPerMainsCycle = UINT8_MAX;
+  sampleSetsDuringThisDatalogPeriod = 0;
+
+  // signal the main processor that logging data are available
+  // we skip the period from start to running stable
+  b_datalogEventPending = beyondStartUpPeriod;
+}
+
 /**
  * @brief Print the settings used for the selected output mode.
  *
@@ -869,8 +909,6 @@ void printParamsForSelectedOutputMode()
 {
   DBUG("\tzero-crossing persistence (sample sets) = ");
   DBUGLN(PERSISTENCE_FOR_POLARITY_CHANGE);
-  DBUG("\tcontinuity sampling display rate (mains cycles) = ");
-  DBUGLN(CONTINUITY_CHECK_MAXCOUNT);
 
   DBUG("\tcapacityOfEnergyBucket_long = ");
   DBUGLN(capacityOfEnergyBucket_long);

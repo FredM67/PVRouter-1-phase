@@ -38,15 +38,24 @@ inline volatile bool b_reOrderLoads{ false };               /**< async trigger f
 inline volatile bool b_diversionOff{ false };               /**< async trigger to stop diversion */
 inline volatile bool EDD_isActive{ false };                 /**< energy diversion detection */
 
+inline volatile int32_t divertedEnergyRecent_IEU{ 0 };  // Hi-res accumulator of limited range
+inline volatile uint16_t divertedEnergyTotal_Wh{ 0 };   // WattHour register of 63K range
+
 // since there's no real locking feature for shared variables, a couple of data
 // generated from inside the ISR are copied from time to time to be passed to the
 // main processor. When the data are available, the ISR signals it to the main processor.
-inline volatile int32_t copyOf_sumP_atSupplyPoint;                 /**< copy of cumulative power per phase */
+inline volatile int32_t copyOf_sumP_grid_overDL_Period;            /**< copy of cumulative power */
 inline volatile int32_t copyOf_sum_Vsquared;                       /**< copy of for summation of V^2 values during datalog period */
-inline volatile float copyOf_energyInBucket_main;                  /**< copy of main energy bucket (over all phases) */
+inline volatile int32_t copyOf_energyInBucket_long;                /**< copy of main energy bucket (over all phases) */
 inline volatile uint8_t copyOf_lowestNoOfSampleSetsPerMainsCycle;  /**<  */
 inline volatile uint16_t copyOf_sampleSetsDuringThisDatalogPeriod; /**< copy of for counting the sample sets during each datalogging period */
 inline volatile uint16_t copyOf_countLoadON[NO_OF_DUMPLOADS];      /**< copy of number of cycle the load was ON (over 1 datalog period) */
+
+#ifdef TEMP_ENABLED
+inline PayloadTx_struct< temperatureSensing.get_size() > tx_data; /**< logging data */
+#else
+inline PayloadTx_struct<> tx_data; /**< logging data */
+#endif
 
 void initializeProcessing();
 void initializeOptionalPins();
