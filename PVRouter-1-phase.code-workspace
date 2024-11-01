@@ -7,6 +7,10 @@
 			"name": "Router program",
 			"path": "Mk2_fasterControl_Full"
 		},
+		{
+			"name": "CT Analyzer",
+			"path": "dev/RST_104us_dev"
+		},
 	],
 	"settings": {
 		"files.associations": {
