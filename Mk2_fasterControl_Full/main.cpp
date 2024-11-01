@@ -20,7 +20,7 @@ static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVR
 #include "utils.h"
 #include "utils_relay.h"
 #include "utils_display.h"
-//#include "validation.h"
+#include "validation.h"
 
 // --------------  general global variables -----------------
 //
@@ -92,6 +92,48 @@ ISR(ADC_vect)
     default:
       sample_index = 0;  // to prevent lockup (should never get here)
   }
+}
+
+/**
+ * @brief Check the diversion state
+ * 
+ */
+void checkDiversionOnOff()
+{
+  if constexpr (DIVERSION_PIN_PRESENT)
+  {
+    const auto pinState{ getPinState(diversionPin) };
+
+#ifdef ENABLE_DEBUG
+    static auto previousState{ HIGH };
+    if (previousState != pinState)
+    {
+      DBUGLN(!pinState ? F("Trigger diversion OFF!") : F("End diversion OFF!"));
+    }
+
+    previousState = pinState;
+#endif
+
+    b_diversionOff = !pinState;
+  }
+}
+
+/**
+ * @brief Proceed load priority rotation
+ * 
+ */
+void proceedRotation()
+{
+  b_reOrderLoads = true;
+
+  // waits till the priorities have been rotated from inside the ISR
+  do
+  {
+    delay(10);
+  } while (b_reOrderLoads);
+
+  // prints the (new) load priorities
+  logLoadPriorities();
 }
 
 /**
@@ -176,7 +218,7 @@ void loop()
         togglePin(watchDogPin);
       }
 
-      // checkDiversionOnOff();
+      checkDiversionOnOff();
 
       // if (!forceFullPower())
       // {
