@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef _CONFIG_H
-#define _CONFIG_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
 //--------------------------------------------------------------------------------------------------
 //#define TEMP_ENABLED  /**< this line must be commented out if the temperature sensor is not present */
@@ -81,4 +81,4 @@ inline constexpr TemperatureSensing temperatureSensing{ 0xff,
 
 inline constexpr uint32_t ROTATION_AFTER_CYCLES{ 8UL * 3600UL * SUPPLY_FREQUENCY }; /**< rotates load priorities after this period of inactivity */
 
-#endif  // _CONFIG_H
+#endif  // CONFIG_H

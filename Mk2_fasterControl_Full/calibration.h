@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef _CALIBRATION_H
-#define _CALIBRATION_H
+#ifndef CALIBRATION_H
+#define CALIBRATION_H
 
 #include "config.h"
 
@@ -41,4 +41,4 @@ inline constexpr float alpha{ 0.002 };
 
 //--------------------------------------------------------------------------------------------------
 
-#endif  // _CALIBRATION_H
+#endif  // CALIBRATION_H

@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef VALIDATION
-#define VALIDATION
+#ifndef VALIDATION_H
+#define VALIDATION_H
 
 #include "config_system.h"
 #include "utils_pins.h"
@@ -162,4 +162,4 @@ static_assert((check_pins() & 0xC000) == 0, "******** Pins 14 and/or 15 do not e
 //static_assert(!(RF_CHIP_PRESENT && ((check_pins() & 0x3C04) != 0)), "******** Pins from RF chip are reserved ! Please check your config ! ********");
 static_assert(check_relay_pins(), "******** Wrong pin(s) configuration for relay(s) ********");
 
-#endif /* VALIDATION */
+#endif /* VALIDATION_H */

@@ -1,5 +1,5 @@
-#ifndef _UTILS_H
-#define _UTILS_H
+#ifndef UTILS_H
+#define UTILS_H
 
 #include "calibration.h"
 #include "constants.h"
@@ -180,4 +180,4 @@ inline int freeRam()
   return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
 }
 
-#endif /* _UTILS_H */
+#endif /* UTILS_H */

@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef _UTILS_DISPLAY_H
-#define _UTILS_DISPLAY_H
+#ifndef UTILS_DISPLAY_H
+#define UTILS_DISPLAY_H
 
 #include "config_system.h"
 
@@ -354,4 +354,4 @@ void refreshDisplay()
 
 }  // end of refreshDisplay()
 
-#endif /* _UTILS_DISPLAY_H */
+#endif /* UTILS_DISPLAY_H */

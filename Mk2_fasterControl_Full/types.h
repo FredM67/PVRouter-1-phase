@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef _TYPES_H
-#define _TYPES_H
+#ifndef TYPES_H
+#define TYPES_H
 
 #include <Arduino.h>
 
@@ -105,4 +105,4 @@ constexpr integral_constant< uint8_t, ival(Vs...) > operator""_i()
   return {};
 }
 
-#endif  // _TYPES_H
+#endif  // TYPES_H

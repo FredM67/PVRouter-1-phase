@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef _UTILS_RELAY_H
-#define _UTILS_RELAY_H
+#ifndef UTILS_RELAY_H
+#define UTILS_RELAY_H
 
 #include "types.h"
 #include "type_traits.hpp"
@@ -412,4 +412,4 @@ template< uint8_t N, uint8_t D > void RelayEngine< N, D >::inc_duration() const
   }
 }
 
-#endif  // _UTILS_RELAY_H
+#endif  // UTILS_RELAY_H
