@@ -94,11 +94,51 @@ unsigned long recordingMayStartAt;
 bool firstLoop = true;
 int settlingDelay = 5; // <<---  settling time (seconds) for HPF
 
-char blankLine[82];
-char newLine[82];
+char blankLine[162];
+char newLine[162];
 int storedSample_V[170];
 int storedSample_I1[170];
 
+ISR(ADC_vect)
+{
+    static unsigned char sample_index = 0;
+    static int sample_I2_raw;
+    static int sample_I1_raw;
+
+    switch (sample_index)
+    {
+    case 0:
+        sample_V = ADC;           // store the ADC value (this one is for Voltage)
+        ADMUX = 0x40 + sensor_I1; // set up the next conversion, which is for current at CT1
+        ADCSRA |= (1 << ADSC);    // start the ADC
+        ++sample_index;           // increment the control flag
+        sample_I1 = sample_I1_raw;
+        sample_I2 = sample_I2_raw;
+        dataReady = true; // all three ADC values can now be processed
+        break;
+    case 1:
+        sample_I1_raw = ADC;      // store the ADC value (this one is for current at CT1)
+        ADMUX = 0x40 + sensor_I2; // set up the next conversion, which is for current at CT2
+        ADCSRA |= (1 << ADSC);    // start the ADC
+        ++sample_index;           // increment the control flag
+        break;
+    case 2:
+        sample_I2_raw = ADC;     // store the ADC value (this one is for current at CT2)
+        ADMUX = 0x40 + sensor_V; // set up the next conversion, which is for Voltage
+        ADCSRA |= (1 << ADSC);   // start the ADC
+        sample_index = 0;        // reset the control flag
+        break;
+    default:
+        sample_index = 0; // to prevent lockup (should never get here)
+    }
+}
+
+/**
+ * @brief Called once during startup.
+ * @details This function initializes a couple of variables we cannot init at compile time and
+ *          sets a couple of parameters for runtime.
+ *
+ */
 void setup()
 {
     pinMode(outputForTrigger, OUTPUT);
@@ -117,13 +157,13 @@ void setup()
 
     // initialise each character of the display line
     blankLine[0] = '|';
-    blankLine[80] = '|';
+    blankLine[160] = '|';
 
-    for (int i = 1; i < 80; ++i)
+    for (uint8_t i = 1; i < sizeof(blankLine) - 2; ++i)
     {
         blankLine[i] = ' ';
     }
-    blankLine[40] = '.';
+    blankLine[(sizeof(blankLine) - 2) >> 1] = '.';
 
     // Define operating limits for the LP filter which identifies DC offset in the voltage
     // sample stream.  By limiting the output range, the filter always should start up
@@ -161,40 +201,12 @@ void setup()
     Serial.println(freeRam()); // a useful value to keep an eye on
 }
 
-ISR(ADC_vect)
-{
-    static unsigned char sample_index = 0;
-    static int sample_I2_raw;
-    static int sample_I1_raw;
-
-    switch (sample_index)
-    {
-    case 0:
-        sample_V = ADC;           // store the ADC value (this one is for Voltage)
-        ADMUX = 0x40 + sensor_I1; // set up the next conversion, which is for current at CT1
-        ADCSRA |= (1 << ADSC);    // start the ADC
-        ++sample_index;           // increment the control flag
-        sample_I1 = sample_I1_raw;
-        sample_I2 = sample_I2_raw;
-        dataReady = true; // all three ADC values can now be processed
-        break;
-    case 1:
-        sample_I1_raw = ADC;      // store the ADC value (this one is for current at CT1)
-        ADMUX = 0x40 + sensor_I2; // set up the next conversion, which is for current at CT2
-        ADCSRA |= (1 << ADSC);    // start the ADC
-        ++sample_index;           // increment the control flag
-        break;
-    case 2:
-        sample_I2_raw = ADC;     // store the ADC value (this one is for current at CT2)
-        ADMUX = 0x40 + sensor_V; // set up the next conversion, which is for Voltage
-        ADCSRA |= (1 << ADSC);   // start the ADC
-        sample_index = 0;        // reset the control flag
-        break;
-    default:
-        sample_index = 0; // to prevent lockup (should never get here)
-    }
-}
-
+/**
+ * @brief Main processor.
+ * @details None of the workload in loop() is time-critical.
+ *          All the processing of ADC data is done within the ISR.
+ *
+ */
 void loop()
 {
     if (dataReady) // flag is set after every set of ADC conversions
@@ -391,14 +403,14 @@ void dispatch_recorded_data()
             max_I1 = I1;
         }
 
-        newLine[map(V, 0, 1023, 0, 80)] = 'v';
+        newLine[map(V, 0, 1023, 0, 160)] = 'v';
 
         int halfRange = 200;
         int lowerLimit = 512 - halfRange;
         int upperLimit = 512 + halfRange;
         if ((I1 > lowerLimit) && (I1 < upperLimit))
         {
-            newLine[map(I1, lowerLimit, upperLimit, 0, 80)] = '1'; // <-- raw sample scale
+            newLine[map(I1, lowerLimit, upperLimit, 0, 160)] = '1'; // <-- raw sample scale
         }
 
         if ((index % 2) == 0) // change this to "% 1" for full resolution
