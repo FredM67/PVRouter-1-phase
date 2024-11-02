@@ -159,12 +159,21 @@ void setup()
 
     bit_set(ADCSRA, ADEN); // Enable the ADC
 
-    bit_set(ADCSRA, ADSC); // start ADC manually first time
+    startADC();
 
     sei(); // Enable Global Interrupts
 
     Serial.print(">>free RAM = ");
     Serial.println(freeRam()); // a useful value to keep an eye on
+}
+
+void startADC(void)
+{
+    bit_set(ADCSRA, ADSC);
+}
+void stopADC(void)
+{
+    bit_clear(ADCSRA, ADSC);
 }
 
 ISR(ADC_vect)
@@ -278,6 +287,8 @@ void allGeneralProcessing() // each iteration is for one set of data samples
             {
                 if (cycleNumberBeingRecorded >= noOfCyclesToBeRecorded)
                 {
+                    stopADC();
+
                     Serial.print("No of cycles recorded = ");
                     Serial.println(cycleNumberBeingRecorded);
 
