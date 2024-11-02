@@ -207,9 +207,6 @@ void allGeneralProcessing() // each iteration is for one set of data samples
   static long cumVdeltasThisCycle_long; // for the LPF which determines DC offset (voltage)
   static byte oneSecondTimer = 0;
   static byte fiveSecondTimer = 0;
-  static int sample_V_mag_sum;
-  static int sample_I2_mag_sum;
-  static int sample_I1_mag_sum;
   static int sampleSetsDuringThisHalfMainsCycle;
   //
   if (firstLoop)
@@ -353,9 +350,9 @@ void dispatch_recorded_data()
   Serial.print(",  samplesRecorded ");
   Serial.println(samplesRecorded);
 
-  int V, I1, I2;
-  int min_V = 1023, min_I1 = 1023, min_I2 = 1023;
-  int max_V = 0, max_I1 = 0, max_I2 = 0;
+  int V, I1;
+  int min_V = 1023, min_I1 = 1023;
+  int max_V = 0, max_I1 = 0;
 
   for (int index = 0; index < samplesRecorded; index++)
   {
@@ -410,10 +407,6 @@ void dispatch_recorded_data()
   Serial.print(min_I1);
   Serial.print(",  max_I1 ");
   Serial.println(max_I1);
-  Serial.print("min_I2 ");
-  Serial.print(min_I2);
-  Serial.print(",  max_I2 ");
-  Serial.println(max_I2);
 
   Serial.println();
 

@@ -85,53 +85,19 @@ int lastSample_V;            // stored value from the previous loop (HP filter i
 float lastFiltered_V;        //  voltage values after HP-filtering to remove the DC offset
 byte polarityOfLastSample_V; // for zero-crossing detection
 
-bool recordingNow;
-bool recordingComplete;
-byte cycleNumberBeingRecorded;
-byte noOfCyclesToBeRecorded;
+volatile bool recordingNow;
+volatile bool recordingComplete;
+volatile byte cycleNumberBeingRecorded;
+byte noOfCyclesToBeRecorded{3}; // more array space may be needed if this value is >1 !!!
 
 unsigned long recordingMayStartAt;
 bool firstLoop = true;
 int settlingDelay = 5; // <<---  settling time (seconds) for HPF
 
-char blankLine[162];
-char newLine[162];
-int storedSample_V[170];
-int storedSample_I1[170];
-
-ISR(ADC_vect)
-{
-    static unsigned char sample_index = 0;
-    static int sample_I2_raw;
-    static int sample_I1_raw;
-
-    switch (sample_index)
-    {
-    case 0:
-        sample_V = ADC;           // store the ADC value (this one is for Voltage)
-        ADMUX = 0x40 + sensor_I1; // set up the next conversion, which is for current at CT1
-        ADCSRA |= (1 << ADSC);    // start the ADC
-        ++sample_index;           // increment the control flag
-        sample_I1 = sample_I1_raw;
-        sample_I2 = sample_I2_raw;
-        dataReady = true; // all three ADC values can now be processed
-        break;
-    case 1:
-        sample_I1_raw = ADC;      // store the ADC value (this one is for current at CT1)
-        ADMUX = 0x40 + sensor_I2; // set up the next conversion, which is for current at CT2
-        ADCSRA |= (1 << ADSC);    // start the ADC
-        ++sample_index;           // increment the control flag
-        break;
-    case 2:
-        sample_I2_raw = ADC;     // store the ADC value (this one is for current at CT2)
-        ADMUX = 0x40 + sensor_V; // set up the next conversion, which is for Voltage
-        ADCSRA |= (1 << ADSC);   // start the ADC
-        sample_index = 0;        // reset the control flag
-        break;
-    default:
-        sample_index = 0; // to prevent lockup (should never get here)
-    }
-}
+char blankLine[82];
+char newLine[82];
+int storedSample_V[240];
+int storedSample_I1[240];
 
 /**
  * @brief Called once during startup.
@@ -147,7 +113,7 @@ void setup()
     Serial.begin(9600);
     Serial.println();
     Serial.println("-------------------------------------");
-    Serial.println("Sketch ID:      RST_375us_dev.ino");
+    Serial.println("Sketch ID:      RST_104us_dev.ino");
     //
     Serial.print("alpha = ");
     Serial.println(alpha, 4);
@@ -157,13 +123,13 @@ void setup()
 
     // initialise each character of the display line
     blankLine[0] = '|';
-    blankLine[160] = '|';
+    blankLine[80] = '|';
 
-    for (uint8_t i = 1; i < sizeof(blankLine) - 2; ++i)
+    for (uint8_t i = 1; i < 80; ++i)
     {
         blankLine[i] = ' ';
     }
-    blankLine[(sizeof(blankLine) - 2) >> 1] = '.';
+    blankLine[40] = '.';
 
     // Define operating limits for the LP filter which identifies DC offset in the voltage
     // sample stream.  By limiting the output range, the filter always should start up
@@ -201,6 +167,40 @@ void setup()
     Serial.println(freeRam()); // a useful value to keep an eye on
 }
 
+ISR(ADC_vect)
+{
+    static unsigned char sample_index = 0;
+    static int sample_I2_raw;
+    static int sample_I1_raw;
+
+    switch (sample_index)
+    {
+    case 0:
+        sample_V = ADC;                 // store the ADC value (this one is for Voltage)
+        ADMUX = bit(REFS0) + sensor_I1; // set up the next conversion, which is for current at CT1
+        // ADCSRA |= (1 << ADSC);    // start the ADC
+        ++sample_index; // increment the control flag
+        sample_I1 = sample_I1_raw;
+        sample_I2 = sample_I2_raw;
+        dataReady = true; // all three ADC values can now be processed
+        break;
+    case 1:
+        sample_I1_raw = ADC;            // store the ADC value (this one is for current at CT1)
+        ADMUX = bit(REFS0) + sensor_I2; // set up the next conversion, which is for current at CT2
+        // ADCSRA |= (1 << ADSC);    // start the ADC
+        ++sample_index; // increment the control flag
+        break;
+    case 2:
+        sample_I2_raw = ADC;           // store the ADC value (this one is for current at CT2)
+        ADMUX = bit(REFS0) + sensor_V; // set up the next conversion, which is for Voltage
+        // ADCSRA |= (1 << ADSC);   // start the ADC
+        sample_index = 0; // reset the control flag
+        break;
+    default:
+        sample_index = 0; // to prevent lockup (should never get here)
+    }
+}
+
 /**
  * @brief Main processor.
  * @details None of the workload in loop() is time-critical.
@@ -211,7 +211,8 @@ void loop()
 {
     if (dataReady) // flag is set after every set of ADC conversions
     {
-        dataReady = false;      // reset the flag
+        dataReady = false; // reset the flag
+
         allGeneralProcessing(); // executed once for each set of V&I samples
     }
 }
@@ -247,7 +248,6 @@ void allGeneralProcessing() // each iteration is for one set of data samples
         recordingNow = false;
         firstLoop = false;
         recordingComplete = false;
-        noOfCyclesToBeRecorded = 3; // more array space may be needed if this value is >1 !!!
         cycleNumberBeingRecorded = 0;
         samplesRecorded = 0;
     }
@@ -280,6 +280,10 @@ void allGeneralProcessing() // each iteration is for one set of data samples
                 {
                     Serial.print("No of cycles recorded = ");
                     Serial.println(cycleNumberBeingRecorded);
+
+                    recordingNow = false;
+                    firstLoop = true;
+
                     dispatch_recorded_data();
                 }
                 else
@@ -290,15 +294,16 @@ void allGeneralProcessing() // each iteration is for one set of data samples
 
             else if ((cycleCount % MAINS_CYCLES_PER_SECOND) == 1)
             {
-                unsigned long timeNow = millis();
-                if (timeNow > recordingMayStartAt)
+                // unsigned long timeNow = millis();
+                // if (timeNow > recordingMayStartAt)
+                if (cycleCount > MAINS_CYCLES_PER_SECOND * 6)
                 {
                     recordingNow = true;
-                    ++cycleNumberBeingRecorded;
+                    cycleNumberBeingRecorded++;
                 }
                 else
                 {
-                    Serial.println((int)(recordingMayStartAt - timeNow) / 1000);
+                    // Serial.println((int)(recordingMayStartAt - timeNow));
                 }
             }
         } // end of specific processing for first +ve Vsample in each mains cycle
@@ -403,14 +408,14 @@ void dispatch_recorded_data()
             max_I1 = I1;
         }
 
-        newLine[map(V, 0, 1023, 0, 160)] = 'v';
+        newLine[map(V, 0, 1023, 0, 80)] = 'v';
 
         int halfRange = 200;
         int lowerLimit = 512 - halfRange;
         int upperLimit = 512 + halfRange;
         if ((I1 > lowerLimit) && (I1 < upperLimit))
         {
-            newLine[map(I1, lowerLimit, upperLimit, 0, 160)] = '1'; // <-- raw sample scale
+            newLine[map(I1, lowerLimit, upperLimit, 0, 80)] = '1'; // <-- raw sample scale
         }
 
         if ((index % 2) == 0) // change this to "% 1" for full resolution
@@ -430,8 +435,6 @@ void dispatch_recorded_data()
 
     Serial.println();
 
-    recordingNow = false;
-    firstLoop = true;
     pause();
 }
 

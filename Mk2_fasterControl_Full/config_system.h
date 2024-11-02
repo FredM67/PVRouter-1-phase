@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef CONFIG_SYSTEM_H
-#define CONFIG_SYSTEM_H
+#ifndef CONFIG_SYSTEM
+#define CONFIG_SYSTEM
 
 #include <Arduino.h>
 
@@ -31,11 +31,13 @@ inline constexpr uint8_t ANTI_CREEP_LIMIT{ 5 };  // in Joules per mains cycle (h
 
 constexpr int32_t mainsCyclesPerHour{ SUPPLY_FREQUENCY * SECONDS_PER_MINUTE * MINUTES_PER_HOUR };
 
-inline constexpr uint8_t DATALOG_PERIOD_IN_SECONDS{ 5 };                                                                                                                                                    /**< Period of datalogging in seconds */
-inline constexpr typename conditional< DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUENCY >= UINT8_MAX, uint16_t, uint8_t >::type DATALOG_PERIOD_IN_MAINS_CYCLES{ DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUENCY }; /**< Period of datalogging in cycles */
+inline constexpr uint8_t DATALOG_PERIOD_IN_SECONDS{ 5 }; /**< Period of datalogging in seconds */
+
+inline constexpr typename conditional< DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUENCY >= UINT8_MAX, uint16_t, uint8_t >::type
+  DATALOG_PERIOD_IN_MAINS_CYCLES{ DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUENCY }; /**< Period of datalogging in cycles */
 
 // Computes inverse value at compile time to use '*' instead of '/'
 inline constexpr float invSUPPLY_FREQUENCY{ 1.0F / SUPPLY_FREQUENCY };
 inline constexpr float invDATALOG_PERIOD_IN_MAINS_CYCLES{ 1.0F / DATALOG_PERIOD_IN_MAINS_CYCLES };
 
-#endif  // CONFIG_SYSTEM_H
+#endif /* CONFIG_SYSTEM */

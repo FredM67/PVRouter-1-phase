@@ -11,6 +11,10 @@
 			"name": "CT Analyzer",
 			"path": "dev/RST_104us_dev"
 		},
+		{
+			"name": "CT Analyzer 125us",
+			"path": "dev/RST_375us_dev"
+		},
 	],
 	"settings": {
 		"files.associations": {
