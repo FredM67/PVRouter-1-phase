@@ -77,18 +77,18 @@ ISR(ADC_vect)
     case 1:
       rawSample = ADC;  // store the ADC value (this one is for Voltage L1)
       //sampleI_diverted_raw = ADC;               // store the ADC value (this one is for Diverted Current)
-      ADMUX = bit(REFS0) + currentSensor_grid;  // set up the next conversion, which is for Grid Current
-      ++sample_index;                           // increment the control flag
+      ADMUX = bit(REFS0) + voltageSensor;  // set up the next conversion, which is for Grid Current
+      ++sample_index;                      // increment the control flag
       //
-      processDivertedCurrentRawSample(rawSample);
+      processGridCurrentRawSample(rawSample);
       break;
     case 2:
       rawSample = ADC;  // store the ADC value (this one is for Voltage L1)
       //sampleI_grid_raw = ADC;              // store the ADC value (this one is for Grid Current)
-      ADMUX = bit(REFS0) + voltageSensor;  // set up the next conversion, which is for Voltage
-      sample_index = 0;                    // reset the control flag
+      ADMUX = bit(REFS0) + currentSensor_grid;  // set up the next conversion, which is for Voltage
+      sample_index = 0;                         // reset the control flag
       //
-      processGridCurrentRawSample(rawSample);
+      processDivertedCurrentRawSample(rawSample);
       break;
     default:
       sample_index = 0;  // to prevent lockup (should never get here)
