@@ -67,7 +67,7 @@ long lpf_long = 512; // new LPF, for offsetting the behaviour of CT1 as a HPF
 // They are matched to the physical behaviour of the YHDC SCT-013-000 CT
 // and the CT1 samples being 3x104us apart (free-running mode)
 //
-constexpr float lpf_gain{8}; // <- setting this to 0 disables this extra processing
+constexpr float lpf_gain{0}; // <- setting this to 0 disables this extra processing
 // const float lpf_gain = 0;  // <- setting this to 0 disables this extra processing
 constexpr float alpha = 0.002; //
 
@@ -95,8 +95,8 @@ unsigned long recordingMayStartAt{0};
 bool firstLoop = true;
 int settlingDelay = 5; // <<---  settling time (seconds) for HPF
 
-char blankLine[162];
-char newLine[162];
+char blankLine[122];
+char newLine[122];
 int storedSample_V[210];
 int storedSample_I1[210];
 
@@ -110,7 +110,7 @@ void setup()
 {
     pinMode(2, OUTPUT);
     pinMode(outputForTrigger, OUTPUT);
-    setPinOFF(outputForTrigger);
+    setPinON(outputForTrigger);
 
     Serial.begin(9600);
     Serial.println();
@@ -125,13 +125,13 @@ void setup()
 
     // initialise each character of the display line
     blankLine[0] = '|';
-    blankLine[160] = '|';
+    blankLine[120] = '|';
 
-    for (uint8_t i = 1; i < 160; ++i)
+    for (uint8_t i = 1; i < 120; ++i)
     {
         blankLine[i] = ' ';
     }
-    blankLine[80] = '.';
+    blankLine[60] = '.';
 
     // Define operating limits for the LP filter which identifies DC offset in the voltage
     // sample stream.  By limiting the output range, the filter always should start up
@@ -214,7 +214,7 @@ void ISRProcessing()
         // check to see whether the trigger device can now be reliably armed
         if ((sampleSetsDuringThisHalfMainsCycle == 3) && (cycleNumberBeingRecorded == 1))
         {
-            setPinON(outputForTrigger); // triac will fire at the next ZC point
+            setPinOFF(outputForTrigger); // triac will fire at the next ZC point
         }
     }    // end of specific processing of +ve cycles
     else // the polarity of this sample is negative
@@ -241,7 +241,7 @@ void ISRProcessing()
         // check to see whether the trigger device can now be reliably armed
         if ((sampleSetsDuringThisHalfMainsCycle == 3) && (cycleNumberBeingRecorded == 1))
         {
-            setPinOFF(outputForTrigger); // triac will release at the next ZC point
+            setPinON(outputForTrigger); // triac will release at the next ZC point
         }
     } // end of processing that is specific to samples where the voltage is negative
       //
@@ -416,7 +416,7 @@ void allGeneralProcessing() // each iteration is for one set of data samples
         // check to see whether the trigger device can now be reliably armed
         if ((sampleSetsDuringThisHalfMainsCycle == 3) && (cycleNumberBeingRecorded == 1))
         {
-            setPinON(outputForTrigger); // triac will fire at the next ZC point
+            setPinOFF(outputForTrigger); // triac will fire at the next ZC point
         }
     }    // end of specific processing of +ve cycles
     else // the polarity of this sample is negative
@@ -443,7 +443,7 @@ void allGeneralProcessing() // each iteration is for one set of data samples
         // check to see whether the trigger device can now be reliably armed
         if ((sampleSetsDuringThisHalfMainsCycle == 3) && (cycleNumberBeingRecorded == 1))
         {
-            setPinOFF(outputForTrigger); // triac will release at the next ZC point
+            setPinON(outputForTrigger); // triac will release at the next ZC point
         }
     } // end of processing that is specific to samples where the voltage is negative
       //
@@ -512,14 +512,14 @@ void dispatch_recorded_data()
             max_I1 = I1;
         }
 
-        newLine[map(V, 0, 1023, 0, 160)] = 'v';
+        newLine[map(V, 0, 1023, 0, 120)] = 'v';
 
         int halfRange = 200;
         int lowerLimit = 512 - halfRange;
         int upperLimit = 512 + halfRange;
         if ((I1 > lowerLimit) && (I1 < upperLimit))
         {
-            newLine[map(I1, lowerLimit, upperLimit, 0, 160)] = '1'; // <-- raw sample scale
+            newLine[map(I1, lowerLimit, upperLimit, 0, 120)] = '1'; // <-- raw sample scale
         }
 
         if ((index % 2) == 0) // change this to "% 1" for full resolution
