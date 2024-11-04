@@ -54,7 +54,7 @@ byte sensor_I2{4};
 
 uint32_t cycleCount{0};
 uint16_t samplesRecorded{0};
-const uint16_t DCoffsetI1_nominal{511}; // nominal mid-point value of ADC @ x1 scale
+constexpr uint16_t DCoffsetI1_nominal{511}; // nominal mid-point value of ADC @ x1 scale
 
 int32_t DCoffset_V_long; // <--- for LPF
 int32_t DCoffset_V_min;  // <--- for LPF
@@ -390,6 +390,7 @@ void allGeneralProcessing() // each iteration is for one set of data samples
                 {
                     Serial.print("No of cycles recorded = ");
                     Serial.println(cycleNumberBeingRecorded);
+                    dispatch_recorded_raw_data();
                     dispatch_recorded_data();
                 }
                 else
@@ -472,6 +473,22 @@ void allGeneralProcessing() // each iteration is for one set of data samples
     cumVdeltasThisCycle_long += sample_VminusDC_long;    // for use with LP filter
     polarityOfLastVsample = polarityOfMostRecentVsample; // for identification of half cycle boundaries
 } // end of allGeneralProcessing()
+
+void dispatch_recorded_raw_data()
+{
+    // display raw samples via the Serial Monitor
+    // ------------------------------------------
+
+    Serial.println("Raw data:");
+
+    for (uint16_t index = 0; index < samplesRecorded; ++index)
+    {
+        Serial.print("V: ");
+        Serial.print(storedSample_V[index]);
+        Serial.print(" - I1: ");
+        Serial.println(storedSample_I1[index]);
+    }
+}
 
 void dispatch_recorded_data()
 {

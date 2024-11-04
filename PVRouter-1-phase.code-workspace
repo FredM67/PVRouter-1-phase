@@ -8,7 +8,7 @@
 			"path": "Mk2_fasterControl_Full"
 		},
 		{
-			"name": "CT Analyzer",
+			"name": "CT Analyzer free-running",
 			"path": "dev/RST_104us_dev"
 		},
 		{
