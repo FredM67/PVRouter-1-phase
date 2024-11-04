@@ -67,7 +67,7 @@ long lpf_long = 512; // new LPF, for offsetting the behaviour of CT1 as a HPF
 // They are matched to the physical behaviour of the YHDC SCT-013-000 CT
 // and the CT1 samples being 3x104us apart (free-running mode)
 //
-constexpr float lpf_gain{0}; // <- setting this to 0 disables this extra processing
+constexpr float lpf_gain{3}; // <- setting this to 0 disables this extra processing
 // const float lpf_gain = 0;  // <- setting this to 0 disables this extra processing
 constexpr float alpha = 0.002; //
 
