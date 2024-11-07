@@ -178,99 +178,6 @@ void stopADC(void)
     bit_clear(ADCSRA, ADSC);
 }
 
-void ISRProcessing()
-{
-    static long cumVdeltasThisCycle_long{0}; // for the LPF which determines DC offset (voltage)
-    static uint16_t sampleSetsDuringThisHalfMainsCycle{0};
-    //
-
-    // remove DC offset from the raw voltage sample by subtracting the accurate value
-    // as determined by a LP filter.
-    const long sample_VminusDC_long = ((long)sample_V << 8) - DCoffset_V_long;
-
-    // determine the polarity of the latest voltage sample
-    if (sample_VminusDC_long > 0)
-    {
-        polarityOfMostRecentVsample = POSITIVE;
-    }
-    else
-    {
-        polarityOfMostRecentVsample = NEGATIVE;
-    }
-
-    if (polarityOfMostRecentVsample == POSITIVE)
-    {
-        if (polarityOfLastVsample != POSITIVE)
-        {
-            // This is the start of a new mains cycle
-            newCycle = true;
-
-            ++cycleCount;
-            sampleSetsDuringThisHalfMainsCycle = 0;
-
-        } // end of specific processing for first +ve Vsample in each mains cycle
-
-        // still processing samples where the voltage is POSITIVE ...
-        // check to see whether the trigger device can now be reliably armed
-        if ((sampleSetsDuringThisHalfMainsCycle == 3) && (cycleNumberBeingRecorded == 1))
-        {
-            setPinOFF(outputForTrigger); // triac will fire at the next ZC point
-        }
-    }    // end of specific processing of +ve cycles
-    else // the polarity of this sample is negative
-    {
-        if (polarityOfLastVsample != NEGATIVE)
-        {
-            sampleSetsDuringThisHalfMainsCycle = 0;
-
-            long previousOffset = DCoffset_V_long;
-            DCoffset_V_long = previousOffset + (cumVdeltasThisCycle_long >> 12);
-            cumVdeltasThisCycle_long = 0;
-
-            if (DCoffset_V_long < DCoffset_V_min)
-            {
-                DCoffset_V_long = DCoffset_V_min;
-            }
-            else if (DCoffset_V_long > DCoffset_V_max)
-            {
-                DCoffset_V_long = DCoffset_V_max;
-            }
-
-        } // end of processing that is specific to the first Vsample in each -ve half cycle
-        // still processing samples where the voltage is NEGATIVE ...
-        // check to see whether the trigger device can now be reliably armed
-        if ((sampleSetsDuringThisHalfMainsCycle == 3) && (cycleNumberBeingRecorded == 1))
-        {
-            setPinON(outputForTrigger); // triac will release at the next ZC point
-        }
-    } // end of processing that is specific to samples where the voltage is negative
-      //
-    // processing for EVERY set of samples
-    //
-    // extra filtering to offset the HPF effect of CT1
-    //
-    // subtract the nominal DC offset so the data stream is based around zero, as is required
-    // for the LPF, and left-shift for integer maths use.
-    long sampleI1minusDC_long = ((long)(sample_I1 - DCoffsetI1_nominal)) << 8;
-
-    long last_lpf_long = lpf_long;
-    lpf_long = last_lpf_long + alpha * (sampleI1minusDC_long - last_lpf_long);
-    sampleI1minusDC_long += (lpf_gain * lpf_long);
-
-    sample_I1 = (sampleI1minusDC_long >> 8) + DCoffsetI1_nominal;
-    //
-    if (recordingNow)
-    {
-        storedSample_V[samplesRecorded] = sample_V;
-        storedSample_I1[samplesRecorded] = sample_I1;
-        ++samplesRecorded;
-    }
-
-    ++sampleSetsDuringThisHalfMainsCycle;
-    cumVdeltasThisCycle_long += sample_VminusDC_long;    // for use with LP filter
-    polarityOfLastVsample = polarityOfMostRecentVsample; // for identification of half cycle boundaries
-} // end of allGeneralProcessing()
-
 ISR(ADC_vect)
 {
     static unsigned char sample_index = 0;
@@ -288,7 +195,6 @@ ISR(ADC_vect)
         sample_I2 = sample_I2_raw;
 
         dataReady = true;
-        // ISRProcessing();
         break;
     case 1:
         sample_I1_raw = ADC;           // store the ADC value (this one is for current at CT1)
