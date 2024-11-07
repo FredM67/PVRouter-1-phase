@@ -5,6 +5,8 @@
 #include "constants.h"
 #include "processing.h"
 
+#include "FastDivision.h"
+
 /**
  * @brief Print the configuration during start
  *
@@ -86,7 +88,7 @@ inline void printForSerialText()
 {
   Serial.print(copyOf_energyInBucket_long * invSUPPLY_FREQUENCY);
   Serial.print(F(", P:"));
-  Serial.print(tx_data.power);
+  Serial.print(tx_data.powerGrid);
 
   if constexpr (RELAY_DIVERSION)
   {
@@ -94,9 +96,11 @@ inline void printForSerialText()
     Serial.print(relays.get_average());
   }
 
-  Serial.print(F(", P"));
-  Serial.print(F(":"));
-  Serial.print(tx_data.power);
+  Serial.print(F(", D:"));
+  Serial.print(tx_data.powerDiverted);
+
+  Serial.print(F(", E:"));
+  Serial.print((float)divertedEnergyTotal_Wh * 0.001F, 3);
 
   Serial.print(F(", V"));
   Serial.print(F(":"));

@@ -60,7 +60,8 @@ enum class RotationModes : uint8_t
 template< uint8_t S = 0 > class PayloadTx_struct
 {
 public:
-  int16_t power;               /**< main power, import = +ve, to match OEM convention */
+  int16_t powerGrid;           /**< main power, import = +ve, to match OEM convention */
+  int16_t powerDiverted;       /**< diverted power */
   int16_t Vrms_L_x100;         /**< average voltage over datalogging period (in 100th of Volt)*/
   int16_t temperature_x100[S]; /**< temperature in 100th of °C */
 };

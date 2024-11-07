@@ -22,7 +22,6 @@ constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 
 constexpr int32_t lowerThreshold_default{ capacityOfEnergyBucket_long >> 1 };
 constexpr int32_t upperThreshold_default{ capacityOfEnergyBucket_long >> 1 };
 
-
 // to avoid the diverted energy accumulator 'creeping' when the load is not active
 constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1 / powerCal_grid)) };
 
