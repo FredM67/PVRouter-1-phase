@@ -50,6 +50,8 @@ inline constexpr bool WATCHDOG_PIN_PRESENT{ false }; /**< set it to 'true' if th
 inline constexpr bool RELAY_DIVERSION{ false };      /**< set it to 'true' if a relay is used for diversion */
 inline constexpr bool DUAL_TARIFF{ false };          /**< set it to 'true' if there's a dual tariff each day AND the router is connected to the billing meter */
 
+inline constexpr bool OLED_DISPLAY{false};  /**< set it to 'true' if an OLED display is present */
+
 //  The two versions of the hardware require different logic.  The following line should
 //  be included if the additional logic chips are present, or excluded if they are
 //  absent (in which case some wire links need to be fitted)
@@ -80,4 +82,4 @@ inline constexpr TemperatureSensing temperatureSensing{ 0xff,
 
 inline constexpr uint32_t ROTATION_AFTER_CYCLES{ 8UL * 3600UL * SUPPLY_FREQUENCY }; /**< rotates load priorities after this period of inactivity */
 
-#endif  // CONFIG_H
+#endif /* CONFIG_H */

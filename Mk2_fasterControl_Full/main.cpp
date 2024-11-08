@@ -163,6 +163,8 @@ void setup()
 
   initializeDisplay();
 
+  setupOLED();
+
   if constexpr (TEMP_SENSOR_PRESENT)
   {
     temperatureSensing.initTemperatureSensors();
@@ -207,7 +209,7 @@ void loop()
         EDD_isActive = false;  // energy diversion detector is now inactive
       }
 
-      configureValueForDisplay(EDD_isActive, divertedEnergyTotal_Wh);
+      //configureValueForDisplay(EDD_isActive, divertedEnergyTotal_Wh);
       //          Serial.println(energyInBucket_prediction);
     }
 
@@ -233,7 +235,7 @@ void loop()
         relays.proceed_relays();
       }
 
-      refreshDisplay();
+      //refreshDisplay();
     }
   }
 
@@ -274,6 +276,8 @@ void loop()
 
       temperatureSensing.requestTemperatures();  // for use next time around
     }
+
+    updateOLED(tx_data.powerGrid);
 
     sendResults(bOffPeak);
   }

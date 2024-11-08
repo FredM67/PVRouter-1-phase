@@ -17,8 +17,8 @@
 // allocation of analogue pins which are not dependent on the display type that is in use
 // **************************************************************************************
 inline constexpr uint8_t voltageSensor{ 3 };           // A3 is for the voltage sensor
-inline constexpr uint8_t currentSensor_diverted{ 4 };  // A4 is for CT2 which measures diverted current
-inline constexpr uint8_t currentSensor_grid{ 5 };      // A5 is for CT1 which measures grid current
+inline constexpr uint8_t currentSensor_diverted{ 0 };  // A4 is for CT2 which measures diverted current
+inline constexpr uint8_t currentSensor_grid{ 1 };      // A5 is for CT1 which measures grid current
 // ------------------------------------------
 
 inline uint8_t loadPrioritiesAndState[NO_OF_DUMPLOADS]; /**< load priorities */
