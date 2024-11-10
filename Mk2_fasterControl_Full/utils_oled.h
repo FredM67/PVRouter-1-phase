@@ -91,10 +91,11 @@ void updateOLED(uint16_t value)
     static char buffer[5];  // Buffer to hold the formatted string
 
     u8x8.noInverse();
-    u8x8.setFont(u8x8_font_inb33_3x6_r);
+    // u8x8.setFont(u8x8_font_inb33_3x6_r);
+    u8x8.setFont(u8x8_font_inb21_2x4_r);
     // u8x8.setCursor(0, 1);
     // u8x8.print(value);
-    dtostrf(value * 0.001F, 4, 3, buffer);
+    dtostrf(value * 0.01F, 5, 2, buffer);
 
     u8x8.drawString(0, 1, buffer);
     u8x8.setFont(u8x8_font_7x14B_1x2_r);

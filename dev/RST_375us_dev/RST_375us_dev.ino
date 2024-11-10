@@ -49,9 +49,9 @@ enum loadStates
 
 const byte outputForTrigger = 4; // active low
 
-byte sensor_V = 3;
-byte sensor_I1 = 5;
-byte sensor_I2 = 4;
+byte sensor_V = 0;
+byte sensor_I1 = 1;
+byte sensor_I2 = 3;
 
 long cycleCount = 0;
 int samplesRecorded = 0;
@@ -98,6 +98,7 @@ int settlingDelay = 5; // <<---  settling time (seconds) for HPF
 char blankLine[82];
 char newLine[82];
 int storedSample_V[170];
+int storedSample_I1_raw[170];
 int storedSample_I1[170];
 // int storedSample_I2[100];
 
@@ -255,6 +256,7 @@ void allGeneralProcessing() // each iteration is for one set of data samples
         {
           Serial.print("No of cycles recorded = ");
           Serial.println(cycleNumberBeingRecorded);
+          dispatch_recorded_raw_data();
           dispatch_recorded_data();
         }
         else
@@ -319,6 +321,10 @@ void allGeneralProcessing() // each iteration is for one set of data samples
   //
   // subtract the nominal DC offset so the data stream is based around zero, as is required
   // for the LPF, and left-shift for integer maths use.
+
+  if (recordingNow)
+    storedSample_I1_raw[samplesRecorded] = sample_I1;
+
   long sampleI1minusDC_long = ((long)(sample_I1 - DCoffsetI1_nominal)) << 8;
 
   long last_lpf_long = lpf_long;
@@ -332,13 +338,31 @@ void allGeneralProcessing() // each iteration is for one set of data samples
     storedSample_V[samplesRecorded] = sample_V;
     storedSample_I1[samplesRecorded] = sample_I1;
     //    storedSample_I2[samplesRecorded] = sample_I2;
-    samplesRecorded++;
+    ++samplesRecorded;
   }
 
   sampleSetsDuringThisHalfMainsCycle++;
   cumVdeltasThisCycle_long += sample_VminusDC_long;    // for use with LP filter
   polarityOfLastVsample = polarityOfMostRecentVsample; // for identification of half cycle boundaries
 } // end of allGeneralProcessing()
+
+void dispatch_recorded_raw_data()
+{
+  // display raw samples via the Serial Monitor
+  // ------------------------------------------
+
+  Serial.println("Raw data:");
+
+  for (uint16_t index = 0; index < samplesRecorded; ++index)
+  {
+    Serial.print("V: ");
+    Serial.print(storedSample_V[index]);
+    Serial.print(" - I1 raw: ");
+    Serial.print(storedSample_I1_raw[index]);
+    Serial.print(" - I1: ");
+    Serial.println(storedSample_I1[index]);
+  }
+}
 
 void dispatch_recorded_data()
 {

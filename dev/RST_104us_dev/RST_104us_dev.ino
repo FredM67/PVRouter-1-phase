@@ -48,9 +48,9 @@ constexpr uint8_t MAINS_CYCLES_PER_SECOND{50};
 
 const byte outputForTrigger = 4; // active low
 
-byte sensor_V{3};
-byte sensor_I1{5};
-byte sensor_I2{4};
+byte sensor_V{0};
+byte sensor_I1{1};
+byte sensor_I2{3};
 
 uint32_t cycleCount{0};
 uint16_t samplesRecorded{0};
@@ -67,16 +67,16 @@ long lpf_long = 512; // new LPF, for offsetting the behaviour of CT1 as a HPF
 // They are matched to the physical behaviour of the YHDC SCT-013-000 CT
 // and the CT1 samples being 3x104us apart (free-running mode)
 //
-constexpr float lpf_gain{3}; // <- setting this to 0 disables this extra processing
+constexpr float lpf_gain{0}; // <- setting this to 0 disables this extra processing
 // const float lpf_gain = 0;  // <- setting this to 0 disables this extra processing
 constexpr float alpha = 0.002; //
 
 // for interaction between the main processor and the ISRs
 volatile bool newCycle{false};
 volatile bool dataReady{false};
-volatile int16_t sample_I2;
-volatile int16_t sample_I1;
 volatile int16_t sample_V;
+volatile int16_t sample_I1;
+volatile int16_t sample_I2;
 
 enum polarities polarityOfMostRecentVsample;
 enum polarities polarityOfLastVsample;
@@ -89,16 +89,17 @@ byte polarityOfLastSample_V; // for zero-crossing detection
 volatile bool recordingNow{false};
 volatile bool recordingComplete{false};
 volatile byte cycleNumberBeingRecorded{0};
-byte noOfCyclesToBeRecorded{3}; // more array space may be needed if this value is >1 !!!
+constexpr byte noOfCyclesToBeRecorded{2}; // more array space may be needed if this value is >1 !!!
 
 unsigned long recordingMayStartAt{0};
 bool firstLoop = true;
 int settlingDelay = 5; // <<---  settling time (seconds) for HPF
 
-char blankLine[122];
-char newLine[122];
-int storedSample_V[210];
-int storedSample_I1[210];
+char blankLine[82];
+char newLine[82];
+int storedSample_V[138];
+int storedSample_I1[138];
+int storedSample_I2[138];
 
 /**
  * @brief Called once during startup.
@@ -125,13 +126,13 @@ void setup()
 
     // initialise each character of the display line
     blankLine[0] = '|';
-    blankLine[120] = '|';
+    blankLine[80] = '|';
 
-    for (uint8_t i = 1; i < 120; ++i)
+    for (uint8_t i = 1; i < 80; ++i)
     {
         blankLine[i] = ' ';
     }
-    blankLine[60] = '.';
+    blankLine[40] = '.';
 
     // Define operating limits for the LP filter which identifies DC offset in the voltage
     // sample stream.  By limiting the output range, the filter always should start up
@@ -261,7 +262,6 @@ void allGeneralProcessing() // each iteration is for one set of data samples
         recordingNow = false;
         firstLoop = false;
         recordingComplete = false;
-        noOfCyclesToBeRecorded = 3; // more array space may be needed if this value is >1 !!!
         cycleNumberBeingRecorded = 0;
         samplesRecorded = 0;
     }
@@ -360,6 +360,12 @@ void allGeneralProcessing() // each iteration is for one set of data samples
     //
     // subtract the nominal DC offset so the data stream is based around zero, as is required
     // for the LPF, and left-shift for integer maths use.
+
+    if (recordingNow)
+    {
+        storedSample_I2[samplesRecorded] = sample_I1;
+    }
+
     long sampleI1minusDC_long = ((long)(sample_I1 - DCoffsetI1_nominal)) << 8;
 
     long last_lpf_long = lpf_long;
@@ -372,6 +378,7 @@ void allGeneralProcessing() // each iteration is for one set of data samples
     {
         storedSample_V[samplesRecorded] = sample_V;
         storedSample_I1[samplesRecorded] = sample_I1;
+        // storedSample_I2[samplesRecorded] = sample_I2;
         ++samplesRecorded;
     }
 
@@ -392,7 +399,9 @@ void dispatch_recorded_raw_data()
         Serial.print("V: ");
         Serial.print(storedSample_V[index]);
         Serial.print(" - I1: ");
-        Serial.println(storedSample_I1[index]);
+        Serial.print(storedSample_I1[index]);
+        Serial.print(" - I2: ");
+        Serial.println(storedSample_I2[index]);
     }
 }
 
@@ -406,17 +415,20 @@ void dispatch_recorded_data()
     Serial.print(",  samplesRecorded ");
     Serial.println(samplesRecorded);
 
-    int V, I1;
+    int V, I1, I2;
     int min_V{1023};
     int min_I1{1023};
+    int min_I2{1023};
     int max_V{0};
     int max_I1{0};
+    int max_I2{0};
 
     for (uint16_t index = 0; index < samplesRecorded; ++index)
     {
         strcpy(newLine, blankLine);
         V = storedSample_V[index];
         I1 = storedSample_I1[index];
+        I2 = storedSample_I2[index];
 
         if (V < min_V)
         {
@@ -435,14 +447,23 @@ void dispatch_recorded_data()
             max_I1 = I1;
         }
 
-        newLine[map(V, 0, 1023, 0, 120)] = 'v';
+        if (I2 < min_I2)
+        {
+            min_I2 = I2;
+        }
+        if (I2 > max_I2)
+        {
+            max_I2 = I2;
+        }
+
+        newLine[map(V, 0, 1023, 0, 80)] = 'v';
 
         int halfRange = 200;
         int lowerLimit = 512 - halfRange;
         int upperLimit = 512 + halfRange;
         if ((I1 > lowerLimit) && (I1 < upperLimit))
         {
-            newLine[map(I1, lowerLimit, upperLimit, 0, 120)] = '1'; // <-- raw sample scale
+            newLine[map(I1, lowerLimit, upperLimit, 0, 80)] = '1'; // <-- raw sample scale
         }
 
         if ((index % 2) == 0) // change this to "% 1" for full resolution
@@ -459,15 +480,22 @@ void dispatch_recorded_data()
     Serial.print(min_I1);
     Serial.print(",  max_I1 ");
     Serial.println(max_I1);
+    Serial.print("min_I2 ");
+    Serial.print(min_I2);
+    Serial.print(",  max_I2 ");
+    Serial.println(max_I2);
 
     Serial.println();
+
+    recordingNow = false;
+    firstLoop = true;
 
     pause();
 }
 
 void pause()
 {
-    byte done = false;
+    bool done = false;
     byte dummyByte;
 
     while (done != true)
@@ -476,7 +504,9 @@ void pause()
         {
             dummyByte = Serial.read(); // to 'consume' the incoming byte
             if (dummyByte == 'g')
-                ++done;
+            {
+                done = true;
+            }
         }
     }
 }

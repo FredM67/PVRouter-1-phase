@@ -68,7 +68,7 @@ ISR(ADC_vect)
   switch (sample_index)
   {
     case 0:
-      rawSample = ADC;  // store the ADC value (this one is for Voltage L1)
+      rawSample = ADC;  // store the ADC value (this one is for Voltage)
       //sampleV = ADC;                                // store the ADC value (this one is for Voltage)
       ADMUX = bit(REFS0) + currentSensor_diverted;  // set up the next conversion, which is for Diverted Current
       ++sample_index;                               // increment the control flag
@@ -76,7 +76,7 @@ ISR(ADC_vect)
       processVoltageRawSample(rawSample);
       break;
     case 1:
-      rawSample = ADC;  // store the ADC value (this one is for Voltage L1)
+      rawSample = ADC;  // store the ADC value (this one is for current at CT1)
       //sampleI_diverted_raw = ADC;               // store the ADC value (this one is for Diverted Current)
       ADMUX = bit(REFS0) + voltageSensor;  // set up the next conversion, which is for Grid Current
       ++sample_index;                      // increment the control flag
@@ -84,7 +84,7 @@ ISR(ADC_vect)
       processGridCurrentRawSample(rawSample);
       break;
     case 2:
-      rawSample = ADC;  // store the ADC value (this one is for Voltage L1)
+      rawSample = ADC;  // store the ADC value (this one is for current at CT2)
       //sampleI_grid_raw = ADC;              // store the ADC value (this one is for Grid Current)
       ADMUX = bit(REFS0) + currentSensor_grid;  // set up the next conversion, which is for Voltage
       sample_index = 0;                         // reset the control flag
@@ -151,8 +151,12 @@ void setup()
   DEBUG_PORT.begin(9600);
   Serial.begin(9600);  // initialize Serial interface, Do NOT set greater than 9600
 
+  pinMode(4, OUTPUT);
+
   // On start, always display config info in the serial monitor
   printConfiguration();
+
+  setupOLED();
 
   // initializes all loads to OFF at startup
   initializeProcessing();
@@ -161,9 +165,7 @@ void setup()
 
   logLoadPriorities();
 
-  initializeDisplay();
-
-  setupOLED();
+  //initializeDisplay();
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
@@ -277,7 +279,7 @@ void loop()
       temperatureSensing.requestTemperatures();  // for use next time around
     }
 
-    updateOLED(tx_data.powerGrid);
+    updateOLED(tx_data.Vrms_L_x100);
 
     sendResults(bOffPeak);
   }
