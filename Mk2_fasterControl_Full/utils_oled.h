@@ -1,12 +1,21 @@
-#ifndef UTILS_OLED
-#define UTILS_OLED
+/**
+ * @file utils_oled.h
+ * @author Frédéric Metrich (frederic.metrich@live.fr)
+ * @brief Some utility functions for OLED display
+ * @version 0.1
+ * @date 2024-11-10
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 
-#ifndef SSD1306_NO_SPLASH
-#define SSD1306_NO_SPLASH
-#endif
+#ifndef UTILS_OLED_H
+#define UTILS_OLED_H
 
 #include <Arduino.h>
 #include <U8g2lib.h>
+
+#include "types.h"
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 // The pins for I2C are defined by the Wire-library.
@@ -18,8 +27,8 @@
 
 U8X8_SSD1306_128X64_NONAME_HW_I2C u8x8(/* reset=*/U8X8_PIN_NONE);
 
-#define LOGO_WIDTH 72
-#define LOGO_HEIGHT 64
+inline constexpr uint8_t LOGO_WIDTH{ 72 };
+inline constexpr uint8_t LOGO_HEIGHT{ 64 };
 
 const unsigned char logo_bmp[] PROGMEM = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x02, 0x00, 0x00,
@@ -63,9 +72,13 @@ const unsigned char logo_bmp[] PROGMEM = {
   0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
+/**
+ * @brief Setup the OLED display
+ * 
+ */
 void setupOLED()
 {
-  if constexpr (OLED_DISPLAY)
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
   {  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
     if (!u8x8.begin())
     {
@@ -84,25 +97,28 @@ void setupOLED()
   }
 }
 
+/**
+ * @brief Update the OLED display with the given value
+ * 
+ * @param value The value to display
+ */
 void updateOLED(uint16_t value)
 {
-  if constexpr (OLED_DISPLAY)
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
   {
-    static char buffer[5];  // Buffer to hold the formatted string
+    static char buffer[6];  // Buffer to hold the formatted string
 
     u8x8.noInverse();
 
-    u8x8.setFont(u8x8_font_inb21_2x4_n);
-    dtostrf(value * 0.01F, 5, 2, buffer);
-
-    // u8x8.setFont(u8x8_font_inb33_3x6_r);
-    // dtostrf(value * 0.001F, 4, 3, buffer);
-
+    u8x8.setFont(u8x8_font_inb33_3x6_r);
+    // Format the value as a float with max 3 decimal places and 4 digits wide
+    dtostrf(value * 0.001F, 4, 3, buffer);
     u8x8.drawString(0, 1, buffer);
+
     u8x8.setFont(u8x8_font_7x14B_1x2_r);
     u8x8.drawString(12, 6, "kWh");
     u8x8.refreshDisplay();  // only required for SSD1606/7
   }
 }
 
-#endif /* UTILS_OLED */
+#endif /* UTILS_OLED_H */

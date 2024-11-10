@@ -52,6 +52,15 @@ enum class RotationModes : uint8_t
   PIN   /**< Pin triggered */
 };
 
+/** Display type */
+enum class DisplayType : uint8_t
+{
+  NONE,   /**< No display */
+  OLED,   /**< Pin triggered */
+  SEG,    /**< 7-segments */
+  SEG_HW, /**< 7-segments with Pin saving hardware */
+};
+
 /** @brief container for datalogging
  *  @details This class is used for datalogging.
  *

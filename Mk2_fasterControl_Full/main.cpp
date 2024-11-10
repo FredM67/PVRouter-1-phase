@@ -158,14 +158,14 @@ void setup()
 
   setupOLED();
 
+  initializeDisplay();
+
   // initializes all loads to OFF at startup
   initializeProcessing();
 
   initializeOptionalPins();
 
   logLoadPriorities();
-
-  //initializeDisplay();
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
@@ -211,7 +211,7 @@ void loop()
         EDD_isActive = false;  // energy diversion detector is now inactive
       }
 
-      //configureValueForDisplay(EDD_isActive, divertedEnergyTotal_Wh);
+      configureValueForDisplay(EDD_isActive, divertedEnergyTotal_Wh);
       //          Serial.println(energyInBucket_prediction);
     }
 
@@ -237,7 +237,7 @@ void loop()
         relays.proceed_relays();
       }
 
-      //refreshDisplay();
+      refreshDisplay();
     }
   }
 

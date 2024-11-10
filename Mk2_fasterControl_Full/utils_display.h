@@ -129,7 +129,7 @@ uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
 
 void initializeDisplay()
 {
-  if constexpr (PIN_SAVING_HARDWARE)
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG_HW)
   {
     // configure the IO drivers for the 4-digit display
     //
@@ -152,7 +152,7 @@ void initializeDisplay()
       pinMode(digitLocationLine[i], OUTPUT);
     }
   }
-  else
+  else if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG)
   {
     for (int16_t i = 0; i < noOfSegmentsPerDigit; ++i)
     {
@@ -179,63 +179,64 @@ void initializeDisplay()
 // called infrequently, to update the characters to be displayed
 void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _)
 {
-  static uint8_t locationOfDot = 0;
-
-  //  Serial.println();
-
-  if (_EDD_isActive)
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG || TYPE_OF_DISPLAY == DisplayType::SEG_HW)
   {
-    uint16_t val = _;
-    bool energyValueExceeds10kWh;
+    static uint8_t locationOfDot = 0;
 
-    if (val < 10000)
+    if (_EDD_isActive)
     {
-      // no need to re-scale (display to 3 DPs)
-      energyValueExceeds10kWh = false;
+      uint16_t val = _;
+      bool energyValueExceeds10kWh;
+
+      if (val < 10000)
+      {
+        // no need to re-scale (display to 3 DPs)
+        energyValueExceeds10kWh = false;
+      }
+      else
+      {
+        // re-scale is needed (display to 2 DPs)
+        energyValueExceeds10kWh = true;
+        val = divu10(val);
+      }
+
+      uint8_t thisDigit = divu10(divu10(divu10(val)));
+      charsForDisplay[0] = thisDigit;
+      val -= 1000 * thisDigit;
+
+      thisDigit = divu10(divu10(val));
+      charsForDisplay[1] = thisDigit;
+      val -= 100 * thisDigit;
+
+      thisDigit = divu10(val);
+      charsForDisplay[2] = thisDigit;
+      val -= 10 * thisDigit;
+
+      charsForDisplay[3] = val;
+
+      // assign the decimal point location
+      if (energyValueExceeds10kWh)
+      {
+        charsForDisplay[1] += 10;
+      }  // dec point after 2nd digit
+      else
+      {
+        charsForDisplay[0] += 10;
+      }  // dec point after 1st digit
     }
     else
     {
-      // re-scale is needed (display to 2 DPs)
-      energyValueExceeds10kWh = true;
-      val = divu10(val);
+      // "walking dots" display
+      charsForDisplay[locationOfDot] = 20;  // blank
+
+      ++locationOfDot;
+      if (locationOfDot >= noOfDigitLocations)
+      {
+        locationOfDot = 0;
+      }
+
+      charsForDisplay[locationOfDot] = 21;  // dot
     }
-
-    uint8_t thisDigit = divu10(divu10(divu10(val)));
-    charsForDisplay[0] = thisDigit;
-    val -= 1000 * thisDigit;
-
-    thisDigit = divu10(divu10(val));
-    charsForDisplay[1] = thisDigit;
-    val -= 100 * thisDigit;
-
-    thisDigit = divu10(val);
-    charsForDisplay[2] = thisDigit;
-    val -= 10 * thisDigit;
-
-    charsForDisplay[3] = val;
-
-    // assign the decimal point location
-    if (energyValueExceeds10kWh)
-    {
-      charsForDisplay[1] += 10;
-    }  // dec point after 2nd digit
-    else
-    {
-      charsForDisplay[0] += 10;
-    }  // dec point after 1st digit
-  }
-  else
-  {
-    // "walking dots" display
-    charsForDisplay[locationOfDot] = 20;  // blank
-
-    ++locationOfDot;
-    if (locationOfDot >= noOfDigitLocations)
-    {
-      locationOfDot = 0;
-    }
-
-    charsForDisplay[locationOfDot] = 21;  // dot
   }
 }
 
@@ -246,7 +247,7 @@ void refreshDisplay()
   // the next digit.
   //   The two versions of the hardware require different logic.
 
-  if constexpr (PIN_SAVING_HARDWARE)
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG_HW)
   {
     // With this version of the hardware, care must be taken that all transitory states
     // are masked out.  Note that the enableDisableLine only masks the seven primary
@@ -309,7 +310,7 @@ void refreshDisplay()
       setPinState(enableDisableLine, DRIVER_CHIP_ENABLED);
     }
   }
-  else
+  else if (TYPE_OF_DISPLAY == DisplayType::SEG)
   {
     // This version is more straightforward because the digit-enable lines can be
     // used to mask out all of the transitory states, including the Decimal Point.
