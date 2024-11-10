@@ -44,7 +44,8 @@ inline volatile uint16_t divertedEnergyTotal_Wh{ 0 };   // WattHour register of 
 // since there's no real locking feature for shared variables, a couple of data
 // generated from inside the ISR are copied from time to time to be passed to the
 // main processor. When the data are available, the ISR signals it to the main processor.
-inline volatile int32_t copyOf_sumP_grid_overDL_Period;            /**< copy of cumulative power */
+inline volatile int32_t copyOf_sumP_grid_overDL_Period;            /**< copy of cumulative grid power */
+inline volatile int32_t copyOf_sumP_diverted_overDL_Period;        /**< copy of cumulative diverted power */
 inline volatile int32_t copyOf_sum_Vsquared;                       /**< copy of for summation of V^2 values during datalog period */
 inline volatile int32_t copyOf_energyInBucket_long;                /**< copy of main energy bucket (over all phases) */
 inline volatile uint8_t copyOf_lowestNoOfSampleSetsPerMainsCycle;  /**<  */

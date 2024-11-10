@@ -59,11 +59,12 @@ uint8_t postTransitionCount;                      /**< counts the number of cycl
 constexpr uint8_t POST_TRANSITION_MAX_COUNT{ 3 }; /**< allows each transition to take effect */
 uint8_t activeLoad{ 0 };                          /**< current active load */
 
-int32_t sumP_grid;                /**< for per-cycle summation of 'real power' */
-int32_t sumP_grid_overDL_Period;  /**< for per-cycle summation of 'real power' during datalog period */
-int32_t sumP_diverted;            /**< for per-cycle summation of 'real power' */
-int32_t cumVdeltasThisCycle_long; /**< for the LPF which determines DC offset (voltage) */
-int32_t l_sum_Vsquared;           /**< for summation of V^2 values during datalog period */
+int32_t sumP_grid;                   /**< for per-cycle summation of 'real power' */
+int32_t sumP_grid_overDL_Period;     /**< for per-cycle summation of 'real power' during datalog period */
+int32_t sumP_diverted;               /**< for per-cycle summation of 'real power' */
+int32_t sumP_diverted_overDL_Period; /**< for per-cycle summation of 'real power' during datalog period */
+int32_t cumVdeltasThisCycle_long;    /**< for the LPF which determines DC offset (voltage) */
+int32_t l_sum_Vsquared;              /**< for summation of V^2 values during datalog period */
 
 int32_t realEnergy_grid{ 0 };
 int32_t realEnergy_diverted{ 0 };
@@ -338,6 +339,7 @@ void processDivertedCurrentRawSample(const int16_t rawSample)
   int32_t instP = filtV_div4 * filtI_div4;                  // 32-bits (now x4096, or 2^12)
   instP = instP >> 12;                                      // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
   sumP_diverted += instP;                                   // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
+  sumP_diverted_overDL_Period += instP;
 }
 
 /**
@@ -569,6 +571,7 @@ void processStartUp()
   sumP_grid = 0;
   sumP_grid_overDL_Period = 0;
   sumP_diverted = 0;
+  sumP_diverted_overDL_Period = 0;
   sampleSetsDuringThisMainsCycle = 0;  // not yet dealt with for this cycle
   lowestNoOfSampleSetsPerMainsCycle = UINT8_MAX;
   // can't say "Go!" here 'cos we're in an ISR!
@@ -876,6 +879,9 @@ void processDataLogging()
 
   copyOf_sumP_grid_overDL_Period = sumP_grid_overDL_Period;
   sumP_grid_overDL_Period = 0;
+
+  copyOf_sumP_diverted_overDL_Period = sumP_diverted_overDL_Period;
+  sumP_diverted_overDL_Period = 0;
 
   copyOf_sum_Vsquared = l_sum_Vsquared;
   l_sum_Vsquared = 0;

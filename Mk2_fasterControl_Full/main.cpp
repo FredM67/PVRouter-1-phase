@@ -246,6 +246,8 @@ void loop()
     b_datalogEventPending = false;
 
     tx_data.powerGrid = copyOf_sumP_grid_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_grid;
+    tx_data.powerDiverted = copyOf_sumP_diverted_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_diverted;
+
     if constexpr (DATALOG_PERIOD_IN_SECONDS > 10)
     {
       tx_data.Vrms_L_x100 = static_cast< int32_t >((100 << 2) * f_voltageCal * sqrt(copyOf_sum_Vsquared / copyOf_sampleSetsDuringThisDatalogPeriod));

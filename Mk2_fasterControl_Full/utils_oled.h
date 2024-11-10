@@ -99,7 +99,7 @@ void updateOLED(uint16_t value)
     // dtostrf(value * 0.001F, 4, 3, buffer);
 
     u8x8.drawString(0, 1, buffer);
-    u8x8.setFont(u8x8_font_7x14B_1x2_f);
+    u8x8.setFont(u8x8_font_7x14B_1x2_r);
     u8x8.drawString(12, 6, "kWh");
     u8x8.refreshDisplay();  // only required for SSD1606/7
   }
