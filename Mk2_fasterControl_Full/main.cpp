@@ -185,6 +185,7 @@ void setup()
  */
 void loop()
 {
+  static bool initLoop{ true };
   static uint8_t perSecondTimer{ 0 };
   static bool bOffPeak{ false };
   static uint8_t timerForDisplayUpdate{ 0 };
@@ -243,6 +244,12 @@ void loop()
 
   if (b_datalogEventPending)
   {
+    if (initLoop)
+    {
+      initLoop = false;
+      clearDisplay();
+    }
+
     b_datalogEventPending = false;
 
     tx_data.powerGrid = copyOf_sumP_grid_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_grid;
@@ -281,7 +288,7 @@ void loop()
       temperatureSensing.requestTemperatures();  // for use next time around
     }
 
-    updateOLED(tx_data.Vrms_L_x100);
+    updateOLED(divertedEnergyTotal_Wh);
 
     sendResults(bOffPeak);
   }
