@@ -197,7 +197,7 @@ void updateOLED(uint16_t value)
     u8x8.setFont(u8x8_font_inb33_3x6_n);
     // Format the value as a float with max 3 decimal places and 4 digits wide
     dtostrf(value * 0.001F, 4, 3, buffer);
-    u8x8.drawString(0, 1, buffer);
+    u8x8.drawString(0, 0, buffer);
 
     u8x8.setFont(u8x8_font_7x14B_1x2_r);
     u8x8.drawString(12, 6, "kWh");
