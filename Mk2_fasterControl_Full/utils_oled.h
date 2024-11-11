@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef UTILS_OLED
-#define UTILS_OLED
+#ifndef UTILS_OLED_H
+#define UTILS_OLED_H
 
 #include <Arduino.h>
 #include <U8g2lib.h>
@@ -140,6 +140,8 @@ void setupOLED()
     // Clear the buffer
     u8x8.clearDisplay();
 
+    u8x8.noInverse();
+
     u8x8_draw_xbm((u8x8.getCols() - (LOGO_WIDTH >> 3)) >> 1, (u8x8.getRows() - (LOGO_HEIGHT >> 3)) >> 1, LOGO_WIDTH, LOGO_HEIGHT, logo_xbm);
   }
 }
@@ -161,10 +163,7 @@ void updateWatchdog()
 {
   if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
   {
-    static char buffer[6];               // Buffer to hold the formatted string
     static bool WATCHDOG_OLED{ false };  // State of the blinking LED
-
-    u8x8.noInverse();
 
     // Blinking LED control
     WATCHDOG_OLED ^= true;
@@ -192,16 +191,14 @@ void updateOLED(uint16_t value)
   {
     static char buffer[6];  // Buffer to hold the formatted string
 
-    u8x8.noInverse();
-
     u8x8.setFont(u8x8_font_inb33_3x6_n);
     // Format the value as a float with max 3 decimal places and 4 digits wide
     dtostrf(value * 0.001F, 4, 3, buffer);
-    u8x8.drawString(0, 1, buffer);
+    u8x8.drawString(0, 0, buffer);
 
     u8x8.setFont(u8x8_font_7x14B_1x2_r);
     u8x8.drawString(12, 6, "kWh");
   }
 }
 
-#endif /* UTILS_OLED */
+#endif /* UTILS_OLED_H */

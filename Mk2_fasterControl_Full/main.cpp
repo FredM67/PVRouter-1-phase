@@ -139,6 +139,53 @@ void proceedRotation()
 }
 
 /**
+ * @brief Update the temperature and send a new request
+ * 
+ */
+void updateTemperature()
+{
+  if constexpr (TEMP_SENSOR_PRESENT)
+  {
+    uint8_t idx{ temperatureSensing.get_size() };
+    do
+    {
+      auto tmp = temperatureSensing.readTemperature(--idx);
+
+      // if read temperature is 85 and the delta with previous is greater than 5, skip the value
+      if (8500 == tmp && (abs(tmp - tx_data.temperature_x100[idx]) > 500))
+      {
+        tmp = DEVICE_DISCONNECTED_RAW;
+      }
+
+      tx_data.temperature_x100[idx] = tmp;
+    } while (idx);
+
+    temperatureSensing.requestTemperatures();  // for use next time around
+  }
+}
+
+/**
+ * @brief Perform calculations on data for logging
+ * 
+ */
+void processCalcultationsForLogging()
+{
+  tx_data.powerGrid = copyOf_sumP_grid_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_grid;
+  tx_data.powerGrid *= -1;
+
+  tx_data.powerDiverted = copyOf_sumP_diverted_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_diverted;
+
+  if constexpr (DATALOG_PERIOD_IN_SECONDS > 10)
+  {
+    tx_data.Vrms_L_x100 = static_cast< int32_t >((100 << 2) * f_voltageCal * sqrt(copyOf_sum_Vsquared / copyOf_sampleSetsDuringThisDatalogPeriod));
+  }
+  else
+  {
+    tx_data.Vrms_L_x100 = static_cast< int32_t >(100 * f_voltageCal * sqrt(copyOf_sum_Vsquared / copyOf_sampleSetsDuringThisDatalogPeriod));
+  }
+}
+
+/**
  * @brief Called once during startup.
  * @details This function initializes a couple of variables we cannot init at compile time and
  *          sets a couple of parameters for runtime.
@@ -225,7 +272,10 @@ void loop()
         togglePin(watchDogPin);
       }
 
-      updateWatchdog();
+      if (!initLoop)
+      {
+        updateWatchdog();
+      }
 
       checkDiversionOnOff();
 
@@ -254,43 +304,14 @@ void loop()
 
     b_datalogEventPending = false;
 
-    tx_data.powerGrid = copyOf_sumP_grid_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_grid;
-    tx_data.powerGrid *= -1;
-
-    tx_data.powerDiverted = copyOf_sumP_diverted_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_diverted;
-
-    if constexpr (DATALOG_PERIOD_IN_SECONDS > 10)
-    {
-      tx_data.Vrms_L_x100 = static_cast< int32_t >((100 << 2) * f_voltageCal * sqrt(copyOf_sum_Vsquared / copyOf_sampleSetsDuringThisDatalogPeriod));
-    }
-    else
-    {
-      tx_data.Vrms_L_x100 = static_cast< int32_t >(100 * f_voltageCal * sqrt(copyOf_sum_Vsquared / copyOf_sampleSetsDuringThisDatalogPeriod));
-    }
+    processCalcultationsForLogging();
 
     if constexpr (RELAY_DIVERSION)
     {
       relays.update_average(tx_data.powerGrid);
     }
 
-    if constexpr (TEMP_SENSOR_PRESENT)
-    {
-      uint8_t idx{ temperatureSensing.get_size() };
-      do
-      {
-        auto tmp = temperatureSensing.readTemperature(--idx);
-
-        // if read temperature is 85 and the delta with previous is greater than 5, skip the value
-        if (8500 == tmp && (abs(tmp - tx_data.temperature_x100[idx]) > 500))
-        {
-          tmp = DEVICE_DISCONNECTED_RAW;
-        }
-
-        tx_data.temperature_x100[idx] = tmp;
-      } while (idx);
-
-      temperatureSensing.requestTemperatures();  // for use next time around
-    }
+    updateTemperature();
 
     updateOLED(divertedEnergyTotal_Wh);
 
