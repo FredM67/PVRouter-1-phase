@@ -9,12 +9,13 @@
  * 
  */
 
-#ifndef UTILS_OLED_H
-#define UTILS_OLED_H
+#ifndef UTILS_OLED
+#define UTILS_OLED
 
 #include <Arduino.h>
 #include <U8g2lib.h>
 
+#include "FastDivision.h"
 #include "types.h"
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
@@ -91,9 +92,9 @@ uint8_t *get_tile_from_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_byte_width, const
   p += tx;
   p += xbm_byte_width * ty * 8;
 
-  for (i = 0; i < 8; i++)
+  for (i = 0; i < 8; ++i)
     d[i] = 0;
-  for (i = 0; i < 8; i++)
+  for (i = 0; i < 8; ++i)
   {
     b = u8x8_pgm_read(p);
     if (b & 1) d[0] |= mask;
@@ -112,13 +113,12 @@ uint8_t *get_tile_from_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_byte_width, const
 
 void u8x8_draw_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_width, uint8_t xbm_height, const unsigned char *xbm)
 {
-  uint8_t x, y;
   uint8_t *tile;
-  for (y = 0; y < xbm_height / 8; y++)
+  for (uint8_t y = 0; y < (xbm_height >> 3); ++y)
   {
-    for (x = 0; x < xbm_width / 8; x++)
+    for (uint8_t x = 0; x < (xbm_width >> 3); ++x)
     {
-      tile = get_tile_from_xbm(x, y, xbm_width / 8, xbm);
+      tile = get_tile_from_xbm(x, y, xbm_width >> 3, xbm);
       u8x8.drawTile(tx + x, ty + y, 1, tile);
     }
   }
@@ -131,23 +131,16 @@ void u8x8_draw_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_width, uint8_t xbm_height
 void setupOLED()
 {
   if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
-  {  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+  {
     if (!u8x8.begin())
     {
-      Serial.println(F("SSD1306 allocation failed"));
+      Serial.println(F("u8x8 allocation failed"));
     }
 
     // Clear the buffer
     u8x8.clearDisplay();
 
-    u8x8_draw_xbm((u8x8.getCols() - LOGO_WIDTH / 8) / 2, (u8x8.getRows() - LOGO_HEIGHT / 8) / 2, LOGO_WIDTH, LOGO_HEIGHT, logo_xbm);
-
-    // display.drawBitmap(
-    //   (display.width() - LOGO_WIDTH) / 2,
-    //   (display.height() - LOGO_HEIGHT) / 2,
-    //   logo_bmp, LOGO_WIDTH, LOGO_HEIGHT, 1);
-    // display.display();
-    // delay(1000);
+    u8x8_draw_xbm((u8x8.getCols() - (LOGO_WIDTH >> 3)) >> 1, (u8x8.getRows() - (LOGO_HEIGHT >> 3)) >> 1, LOGO_WIDTH, LOGO_HEIGHT, logo_xbm);
   }
 }
 
@@ -158,6 +151,34 @@ void setupOLED()
 void clearDisplay()
 {
   u8x8.clearDisplay();
+}
+
+/**
+ * @brief Update the watchdog on the display
+ * 
+ */
+void updateWatchdog()
+{
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
+  {
+    static char buffer[6];               // Buffer to hold the formatted string
+    static bool WATCHDOG_OLED{ false };  // State of the blinking LED
+
+    u8x8.noInverse();
+
+    // Blinking LED control
+    WATCHDOG_OLED ^= true;
+
+    if (WATCHDOG_OLED)
+    {
+      u8x8.setFont(u8x8_font_open_iconic_embedded_2x2);  // Change the font if needed
+      u8x8.drawGlyph(0, 6, 70);                          // The symbol code
+    }
+    else
+    {
+      u8x8.drawString(0, 6, "  ");
+    }
+  }
 }
 
 /**
@@ -173,15 +194,14 @@ void updateOLED(uint16_t value)
 
     u8x8.noInverse();
 
-    u8x8.setFont(u8x8_font_inb33_3x6_r);
+    u8x8.setFont(u8x8_font_inb33_3x6_n);
     // Format the value as a float with max 3 decimal places and 4 digits wide
     dtostrf(value * 0.001F, 4, 3, buffer);
     u8x8.drawString(0, 1, buffer);
 
     u8x8.setFont(u8x8_font_7x14B_1x2_r);
     u8x8.drawString(12, 6, "kWh");
-    u8x8.refreshDisplay();  // only required for SSD1606/7
   }
 }
 
-#endif /* UTILS_OLED_H */
+#endif /* UTILS_OLED */

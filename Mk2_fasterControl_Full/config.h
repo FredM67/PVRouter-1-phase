@@ -58,7 +58,7 @@ inline constexpr DisplayType TYPE_OF_DISPLAY{DisplayType::OLED};  /**< set it to
 
 // allocation of digital pins which are not dependent on the display type that is in use
 // *************************************************************************************
-inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 4, 3 };         /**< for 1-phase PCB */
+inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 5, 6 };         /**< for 1-phase PCB */
 inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1 }; /**< load priorities and states at startup */
 
 // Set the value to 0xff when the pin is not needed (feature deactivated)

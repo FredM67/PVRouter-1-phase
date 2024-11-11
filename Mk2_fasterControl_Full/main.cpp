@@ -225,6 +225,8 @@ void loop()
         togglePin(watchDogPin);
       }
 
+      updateWatchdog();
+
       checkDiversionOnOff();
 
       // if (!forceFullPower())
@@ -253,6 +255,8 @@ void loop()
     b_datalogEventPending = false;
 
     tx_data.powerGrid = copyOf_sumP_grid_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_grid;
+    tx_data.powerGrid *= -1;
+
     tx_data.powerDiverted = copyOf_sumP_diverted_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_diverted;
 
     if constexpr (DATALOG_PERIOD_IN_SECONDS > 10)
