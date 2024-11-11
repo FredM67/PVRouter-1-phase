@@ -54,7 +54,7 @@ inline constexpr bool DUAL_TARIFF{ false };          /**< set it to 'true' if th
 //  be included if the additional logic chips are present, or excluded if they are
 //  absent (in which case some wire links need to be fitted)
 //
-inline constexpr DisplayType TYPE_OF_DISPLAY{DisplayType::OLED};  /**< set it to 'true' if the additional logic chips are present */
+inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED }; /**< set it to 'true' if the additional logic chips are present */
 
 // allocation of digital pins which are not dependent on the display type that is in use
 // *************************************************************************************

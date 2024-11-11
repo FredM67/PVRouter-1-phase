@@ -3,6 +3,7 @@
 
 #include "calibration.h"
 #include "constants.h"
+#include "dualtariff.h"
 #include "processing.h"
 
 #include "FastDivision.h"

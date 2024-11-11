@@ -2,6 +2,7 @@
 #include <Arduino.h>
 
 #include "calibration.h"
+#include "dualtariff.h"
 #include "processing.h"
 #include "utils_pins.h"
 
