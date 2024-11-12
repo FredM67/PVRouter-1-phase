@@ -21,8 +21,6 @@
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 // The pins for I2C are defined by the Wire-library.
 // On an arduino UNO:       A4(SDA), A5(SCL)
-// On an arduino MEGA 2560: 20(SDA), 21(SCL)
-// On an arduino LEONARDO:   2(SDA),  3(SCL), ...
 #define OLED_RESET -1        // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C  ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 
@@ -84,28 +82,22 @@ const unsigned char logo_xbm[] U8X8_PROGMEM = {
 
 uint8_t *get_tile_from_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_byte_width, const unsigned char *xbm)
 {
-  static uint8_t d[8];
-  uint8_t mask = 1;
-  uint8_t i;
-  uint8_t b;
-  const uint8_t *p = xbm;
-  p += tx;
-  p += xbm_byte_width * ty * 8;
+  uint8_t d[8];
+  const auto *p{ xbm + tx + xbm_byte_width * (ty << 3) };
 
-  for (i = 0; i < 8; ++i)
-    d[i] = 0;
-  for (i = 0; i < 8; ++i)
+  // Clear the tile buffer
+  memset(d, 0, sizeof(d));
+
+  for (uint8_t i = 0; i < 8; ++i)
   {
-    b = u8x8_pgm_read(p);
-    if (b & 1) d[0] |= mask;
-    if (b & 2) d[1] |= mask;
-    if (b & 4) d[2] |= mask;
-    if (b & 8) d[3] |= mask;
-    if (b & 16) d[4] |= mask;
-    if (b & 32) d[5] |= mask;
-    if (b & 64) d[6] |= mask;
-    if (b & 128) d[7] |= mask;
-    mask <<= 1;
+    uint8_t b = u8x8_pgm_read(p);
+    for (uint8_t bit = 0; bit < 8; ++bit)
+    {
+      if (b & (1 << bit))
+      {
+        d[bit] |= (1 << i);
+      }
+    }
     p += xbm_byte_width;
   }
   return d;
@@ -113,12 +105,11 @@ uint8_t *get_tile_from_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_byte_width, const
 
 void u8x8_draw_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_width, uint8_t xbm_height, const unsigned char *xbm)
 {
-  uint8_t *tile;
   for (uint8_t y = 0; y < (xbm_height >> 3); ++y)
   {
     for (uint8_t x = 0; x < (xbm_width >> 3); ++x)
     {
-      tile = get_tile_from_xbm(x, y, xbm_width >> 3, xbm);
+      const auto tile{ get_tile_from_xbm(x, y, xbm_width >> 3, xbm) };
       u8x8.drawTile(tx + x, ty + y, 1, tile);
     }
   }
@@ -163,12 +154,12 @@ void updateWatchdog()
 {
   if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
   {
-    static bool WATCHDOG_OLED{ false };  // State of the blinking LED
+    static bool watchdogState{ false };  // State of the blinking LED
 
-    // Blinking LED control
-    WATCHDOG_OLED ^= true;
+    // Toggle the watchdog state
+    watchdogState ^= true;
 
-    if (WATCHDOG_OLED)
+    if (watchdogState)
     {
       u8x8.setFont(u8x8_font_open_iconic_embedded_2x2);  // Change the font if needed
       u8x8.drawGlyph(0, 6, 70);                          // The symbol code
@@ -191,11 +182,12 @@ void updateOLED(uint16_t value)
   {
     static char buffer[6];  // Buffer to hold the formatted string
 
+    // Set the font and format the value as a float with max 3 decimal places and 4 digits wide
     u8x8.setFont(u8x8_font_inb33_3x6_n);
-    // Format the value as a float with max 3 decimal places and 4 digits wide
     dtostrf(value * 0.001F, 4, 3, buffer);
     u8x8.drawString(0, 0, buffer);
 
+    // Set the font and draw the unit
     u8x8.setFont(u8x8_font_7x14B_1x2_r);
     u8x8.drawString(12, 6, "kWh");
   }
