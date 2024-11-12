@@ -14,6 +14,8 @@
 
 #include <Arduino.h>
 
+#include "type_traits.hpp"
+
 #include "constants.h"
 
 // -------------------------------
