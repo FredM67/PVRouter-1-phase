@@ -75,6 +75,8 @@ jobs:
         cli-compile-flags: |
           - --build-property
           - compiler.cpp.extra_flags=-std=gnu++17
+        libraries: |
+          - U8g2
         sketch-paths: |
           - Mk2_fasterControl_Full
 
