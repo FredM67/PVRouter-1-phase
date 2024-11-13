@@ -1,0 +1,19 @@
+name: Doxygen
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+    - 'Mk2_fasterControl_Full/**'
+    - Doxyfile
+  workflow_dispatch:
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: DenverCoder1/doxygen-github-pages-action@v1.3.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          config_file: Doxyfile
