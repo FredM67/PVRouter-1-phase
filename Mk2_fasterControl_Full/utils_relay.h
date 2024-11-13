@@ -412,4 +412,4 @@ template< uint8_t N, uint8_t D > void RelayEngine< N, D >::inc_duration() const
   }
 }
 
-#endif  // UTILS_RELAY_H
+#endif /* UTILS_RELAY_H */

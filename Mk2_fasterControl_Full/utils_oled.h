@@ -80,6 +80,8 @@ const unsigned char logo_xbm[] U8X8_PROGMEM = {
   0x0f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
+inline uint8_t *get_tile_from_xbm(uint8_t, uint8_t, uint8_t, const unsigned char *) __attribute__((always_inline));
+
 uint8_t *get_tile_from_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_byte_width, const unsigned char *xbm)
 {
   uint8_t d[8];
