@@ -19,6 +19,30 @@ void tearDown(void)
   // clean stuff up here
 }
 
+void test_relay_initialization(void)
+{
+  relayOutput relay(4, 500, 100);
+  TEST_ASSERT_EQUAL(4, relay.get_pin());
+  TEST_ASSERT_EQUAL(-500, relay.get_surplusThreshold());
+  TEST_ASSERT_EQUAL(100, relay.get_importThreshold());
+}
+
+void test_relay_initialization_with_positive_thresholds(void)
+{
+  relayOutput relay(4, 500, 100);
+  TEST_ASSERT_EQUAL(4, relay.get_pin());
+  TEST_ASSERT_EQUAL(-500, relay.get_surplusThreshold());
+  TEST_ASSERT_EQUAL(100, relay.get_importThreshold());
+}
+
+void test_relay_initialization_with_negative_thresholds(void)
+{
+  relayOutput relay(4, -500, -100);
+  TEST_ASSERT_EQUAL(4, relay.get_pin());
+  TEST_ASSERT_EQUAL(-500, relay.get_surplusThreshold());
+  TEST_ASSERT_EQUAL(100, relay.get_importThreshold());
+}
+
 void test_get_pin(void)
 {
   TEST_ASSERT_EQUAL(2, relays.get_relay(0).get_pin());
@@ -28,20 +52,24 @@ void test_get_pin(void)
 void test_get_surplusThreshold(void)
 {
   TEST_ASSERT_EQUAL(1000, relays.get_relay(0).get_surplusThreshold());
+  TEST_ASSERT_EQUAL(100, relays.get_relay(1).get_surplusThreshold());
 }
 
 void test_get_importThreshold(void)
 {
+  TEST_ASSERT_EQUAL(200, relays.get_relay(0).get_importThreshold());
   TEST_ASSERT_EQUAL(20, relays.get_relay(1).get_importThreshold());
 }
 
 void test_get_minON(void)
 {
   TEST_ASSERT_EQUAL(1 * 60, relays.get_relay(0).get_minON());
+  TEST_ASSERT_EQUAL(2 * 60, relays.get_relay(1).get_minON());
 }
 
 void test_get_minOFF(void)
 {
+  TEST_ASSERT_EQUAL(1 * 60, relays.get_relay(0).get_minOFF());
   TEST_ASSERT_EQUAL(3 * 60, relays.get_relay(1).get_minOFF());
 }
 
@@ -121,33 +149,25 @@ void setup()
   UNITY_BEGIN();  // IMPORTANT LINE!
 }
 
-uint8_t i = 0;
-uint8_t max_blinks = 1;
-
 void loop()
 {
+  RUN_TEST(test_relay_initialization);
+  RUN_TEST(test_relay_initialization_with_positive_thresholds);
+  RUN_TEST(test_relay_initialization_with_negative_thresholds);
+  
+  RUN_TEST(test_get_size);
+
   RUN_TEST(test_get_pin);
 
-  delay(100);
   RUN_TEST(test_get_surplusThreshold);
-
-  delay(100);
   RUN_TEST(test_get_importThreshold);
 
-  delay(100);
   RUN_TEST(test_get_minON);
-
-  delay(100);
   RUN_TEST(test_get_minOFF);
 
-  delay(100);
   RUN_TEST(test_isRelayON);
 
-  delay(100);
   RUN_TEST(test_proceed_relay);
-
-  delay(100);
-  RUN_TEST(test_get_size);
 
   UNITY_END();  // stop unit testing
 }
