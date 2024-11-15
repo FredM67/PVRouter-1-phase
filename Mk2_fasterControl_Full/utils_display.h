@@ -140,14 +140,14 @@ uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
  * This function sets up the necessary pin modes and initial states for the display.
  * It supports two types of displays: SEG_HW and SEG.
  * 
- * - For SEG_HW (hardware-driven 7-segment display):
+ * - For DisplayType::SEG_HW (hardware-driven 7-segment display):
  *   - Configures the IO drivers for the 4-digit display.
  *   - Sets the pin mode for the decimal point line.
  *   - Sets up the control lines for the 74HC4543 7-seg display driver.
  *   - Sets up the enable line for the 74HC4543 7-seg display driver.
  *   - Sets up the control lines for the 74HC138 2->4 demux.
  * 
- * - For SEG (software-driven 7-segment display):
+ * - For DisplayType::SEG (software-driven 7-segment display):
  *   - Sets the pin mode for each segment drive pin.
  *   - Sets the pin mode for each digit selector pin.
  *   - Disables all digit selector pins initially.

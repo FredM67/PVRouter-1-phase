@@ -58,12 +58,12 @@ enum class RotationModes : uint8_t
 enum class DisplayType : uint8_t
 {
   NONE,   /**< No display */
-  OLED,   /**< Pin triggered */
+  OLED,   /**< OLED through HW-I2C */
   SEG,    /**< 7-segments */
   SEG_HW, /**< 7-segments with Pin saving hardware */
 };
 
-/** @brief container for datalogging
+/** @brief Container for datalogging
  *  @details This class is used for datalogging.
  *
  * @tparam S # of temperature sensors

@@ -23,6 +23,8 @@ inline constexpr bool TEMP_SENSOR_PRESENT{ true }; /**< set it to 'true' if temp
 inline constexpr bool TEMP_SENSOR_PRESENT{ false }; /**< set it to 'true' if temperature sensing is needed */
 #endif
 
+class OneWire;
+
 /**
  * @struct DeviceAddress
  * @brief Structure representing the address of a device.
@@ -155,9 +157,7 @@ private:
 
   const DeviceAddress sensorAddrs[N]; /**< Array of sensors */
 
-#ifdef TEMP_ENABLED
   static inline OneWire oneWire; /**< For temperature sensing */
-#endif
 };
 
 #endif  // UTILS_TEMP_H
