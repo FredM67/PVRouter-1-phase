@@ -1,6 +1,6 @@
 /**
  * @file utils_display.h
- * @author your name (you@domain.com)
+ * @author Frederic Metrich (frederic.metrich@live.fr)
  * @brief 
  * @version 0.1
  * @date 2024-10-29
