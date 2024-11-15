@@ -144,6 +144,11 @@
  *  Functions used for the OLED display
  */
 
+/*!
+ *  @defgroup 7SegDisplay 7-segments display feature
+ *  Functions used for the 7-segments display
+ */
+
 static_assert(__cplusplus >= 201703L, "**** Please define 'gnu++17' in 'platform.txt' ! ****");
 static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVRouter-3-phase/blob/main/Mk2_fasterControl_Full/Readme.md");
 

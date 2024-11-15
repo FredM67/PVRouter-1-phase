@@ -1,12 +1,13 @@
 /**
  * @file utils_display.h
  * @author Frederic Metrich (frederic.metrich@live.fr)
- * @brief 
+ * @brief 7-segments display functions
  * @version 0.1
  * @date 2024-10-29
  * 
  * @copyright Copyright (c) 2024
  * 
+ * @ingroup 7SegDisplay
  */
 
 #ifndef UTILS_DISPLAY_H
@@ -22,13 +23,14 @@ inline constexpr uint8_t noOfPossibleCharacters{ 22 };
 inline constexpr uint8_t MAX_DISPLAY_TIME_COUNT{ 10 };            // no of processing loops between display updates
 inline constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50 };  // mains cycles
 inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 };          // auto-reset after this period of inactivity
-// #define DISPLAY_SHUTDOWN_IN_HOURS 0.01 // for testing that the display clears after 36 seconds
 
 inline constexpr uint32_t displayShutdown_inMainsCycles{ DISPLAY_SHUTDOWN_IN_HOURS * mainsCyclesPerHour };
 
 //  The two versions of the hardware require different logic.
 
+////////////////////////////////////////////////////////////////////////////////////////
 // This is for a config with the extra logic chips
+//
 inline constexpr uint8_t DRIVER_CHIP_DISABLED{ HIGH };
 inline constexpr uint8_t DRIVER_CHIP_ENABLED{ LOW };
 
@@ -82,8 +84,11 @@ inline constexpr uint8_t digitLocationMap[noOfDigitLocations][noOfDigitLocationL
 };
 
 // End of config for the version with the extra logic chips
+////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////
 // This is for a config without the extra logic chips
+//
 inline constexpr uint8_t ON{ HIGH };
 inline constexpr uint8_t OFF{ LOW };
 
@@ -123,10 +128,32 @@ inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit]{
   OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 20
   OFF, OFF, OFF, OFF, OFF, OFF, OFF, ON    // '.' <- element 11
 };
+
 // End of config for the version without the extra logic chips
+////////////////////////////////////////////////////////////////////////////////////////
 
 uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
 
+
+/**
+ * @brief Initializes the display based on the type of display defined by TYPE_OF_DISPLAY.
+ * 
+ * This function sets up the necessary pin modes and initial states for the display.
+ * It supports two types of displays: SEG_HW and SEG.
+ * 
+ * - For SEG_HW (hardware-driven 7-segment display):
+ *   - Configures the IO drivers for the 4-digit display.
+ *   - Sets the pin mode for the decimal point line.
+ *   - Sets up the control lines for the 74HC4543 7-seg display driver.
+ *   - Sets up the enable line for the 74HC4543 7-seg display driver.
+ *   - Sets up the control lines for the 74HC138 2->4 demux.
+ * 
+ * - For SEG (software-driven 7-segment display):
+ *   - Sets the pin mode for each segment drive pin.
+ *   - Sets the pin mode for each digit selector pin.
+ *   - Disables all digit selector pins initially.
+ *   - Turns off all segment drive pins initially.
+ */
 void initializeDisplay()
 {
   if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG_HW)
@@ -176,8 +203,25 @@ void initializeDisplay()
   }
 }
 
-// called infrequently, to update the characters to be displayed
-void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _)
+/**
+ * @brief Configures the value for display on a 7-segment display.
+ *
+ * This function configures the value to be displayed on a 7-segment display.
+ * It handles both active energy display and a "walking dots" display when the
+ * energy display is not active.
+ *
+ * @param _EDD_isActive A boolean indicating whether the energy display is active.
+ * @param _ValueToDisplay The value to be displayed, represented as a 16-bit unsigned integer.
+ *
+ * When the energy display is active, the function scales the value appropriately
+ * and assigns digits to the display characters. If the value exceeds 10,000, it
+ * is rescaled to fit within the display's constraints. The decimal point is placed
+ * after the first or second digit based on the value.
+ *
+ * When the energy display is not active, the function displays a "walking dots"
+ * pattern by cycling a dot through the display positions.
+ */
+void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToDisplay)
 {
   if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG || TYPE_OF_DISPLAY == DisplayType::SEG_HW)
   {
@@ -185,7 +229,7 @@ void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _)
 
     if (_EDD_isActive)
     {
-      uint16_t val = _;
+      uint16_t val = _ValueToDisplay;
       bool energyValueExceeds10kWh;
 
       if (val < 10000)
@@ -240,6 +284,35 @@ void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _)
   }
 }
 
+
+/**
+ * @brief Refreshes the display by updating the active digit and its segments.
+ *
+ * This routine manages the display of digits on a 7-segment display. It keeps track of 
+ * which digit is currently being displayed and updates the display when the current 
+ * digit's display time has expired. The logic differs based on the type of display hardware.
+ *
+ * For DisplayType::SEG_HW:
+ * 1. Sets the decimal point line to 'off'.
+ * 2. Disables the 7-segment driver chip.
+ * 3. Determines the next digit location to be active.
+ * 4. Sets up the location lines for the new active location.
+ * 5. Determines the relevant character for the new active location.
+ * 6. Configures the driver chip for the new character to be displayed.
+ * 7. Sets up the decimal point line for the new active location.
+ * 8. Enables the 7-segment driver chip.
+ *
+ * For DisplayType::SEG:
+ * 1. Deactivates the digit-enable line that was previously active.
+ * 2. Determines the next digit location to be active.
+ * 3. Determines the relevant character for the new active location.
+ * 4. Sets up the segment drivers for the character to be displayed (includes the DP).
+ * 5. Activates the digit-enable line for the new active location.
+ *
+ * The function uses static variables to keep track of the display time count and the 
+ * currently active digit location. When the display time count exceeds a predefined 
+ * maximum value, the function updates the display to show the next digit.
+ */
 void refreshDisplay()
 {
   // This routine keeps track of which digit is being displayed and checks when its
