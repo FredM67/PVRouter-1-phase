@@ -1,3 +1,14 @@
+/**
+ * @file test_main.cpp
+ * @author Frederic Metrich (frederic.metrich@live.fr)
+ * @test Tests for pins manipulation
+ * @version 0.1
+ * @date 2024-11-15
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #include <Arduino.h>
 #include <U8g2lib.h>
 
@@ -5,16 +16,25 @@
 
 #include "utils_pins.h"
 
+/**
+ * @test Set up function for the tests
+ */
 void setUp(void)
 {
   // set stuff up here
 }
 
+/**
+ * @test Tear down function for the tests
+ */
 void tearDown(void)
 {
   // clean stuff up here
 }
 
+/**
+ * @test Test setting a pin ON
+ */
 void test_setPinON(void)
 {
   setPinON(LED_BUILTIN);
@@ -22,6 +42,9 @@ void test_setPinON(void)
   TEST_ASSERT_EQUAL(HIGH, digitalRead(LED_BUILTIN));
 }
 
+/**
+ * @test Test setting a pin OFF
+ */
 void test_setPinOFF(void)
 {
   setPinOFF(LED_BUILTIN);
@@ -29,6 +52,9 @@ void test_setPinOFF(void)
   TEST_ASSERT_EQUAL(LOW, digitalRead(LED_BUILTIN));
 }
 
+/**
+ * @test Test toggling a pin
+ */
 void test_togglePin(void)
 {
   digitalWrite(LED_BUILTIN, HIGH);
@@ -42,6 +68,9 @@ void test_togglePin(void)
   TEST_ASSERT_EQUAL(HIGH, digitalRead(LED_BUILTIN));
 }
 
+/**
+ * @test Test setting a pin state
+ */
 void test_setPinState(void)
 {
   setPinState(LED_BUILTIN, true);
@@ -52,6 +81,9 @@ void test_setPinState(void)
   TEST_ASSERT_EQUAL(LOW, digitalRead(LED_BUILTIN));
 }
 
+/**
+ * @test Test setting multiple pins ON
+ */
 void test_setPinsON(void)
 {
   const uint16_t pinsToSet{ 0b11111111111100 };
@@ -65,6 +97,9 @@ void test_setPinsON(void)
   }
 }
 
+/**
+ * @test Test setting multiple pins OFF
+ */
 void test_setPinsOFF(void)
 {
   const uint16_t pinsToSet{ 0b11111111111100 };
@@ -78,7 +113,9 @@ void test_setPinsOFF(void)
   }
 }
 
-
+/**
+ * @test Setup function for the tests
+ */
 void setup()
 {
   delay(1000);
@@ -94,6 +131,9 @@ void setup()
 uint8_t i = 0;
 uint8_t max_blinks = 2;
 
+/**
+ * @test Loop function for running the tests
+ */
 void loop()
 {
   if (i < max_blinks)
