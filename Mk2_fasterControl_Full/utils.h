@@ -1,5 +1,16 @@
-#ifndef UTILS
-#define UTILS
+/**
+ * @file utils.h
+ * @author Fredéric Metrich (frederic.metrich@live.fr)
+ * @brief Some utility functions
+ * @version 0.1
+ * @date 2023-02-09
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
+#ifndef UTILS_H
+#define UTILS_H
 
 #include "calibration.h"
 #include "constants.h"
@@ -185,4 +196,4 @@ inline int freeRam()
   return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
 }
 
-#endif /* UTILS */
+#endif  // UTILS_H
