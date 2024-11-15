@@ -9,7 +9,7 @@ var indexSectionsWithContent =
   6: "dlopr",
   7: "alnops",
   8: "bcdeopst",
-  9: "drt",
+  9: "dort",
   10: "at"
 };
 

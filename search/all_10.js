@@ -23,7 +23,7 @@ var searchData=
   ['settle_5fchange_20',['settle_change',['../classRelayEngine.html#a62a753c9ea9c15e35211398fb155a971',1,'RelayEngine']]],
   ['setup_21',['setup',['../test__utils__relay_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;test_main.cpp'],['../test__utils__pins_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;test_main.cpp'],['../main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;main.cpp']]],
   ['setup_22',['setUp',['../test__utils__relay_2test__main_8cpp.html#a95c834d6178047ce9e1bce7cbfea2836',1,'setUp(void):&#160;test_main.cpp'],['../test__utils__pins_2test__main_8cpp.html#a95c834d6178047ce9e1bce7cbfea2836',1,'setUp(void):&#160;test_main.cpp']]],
-  ['setupoled_23',['setupOLED',['../utils__oled_8h.html#a513f8a3bd4cc3304364bb4e550d576b9',1,'utils_oled.h']]],
+  ['setupoled_23',['setupOLED',['../group__OLEDDisplay.html#ga513f8a3bd4cc3304364bb4e550d576b9',1,'utils_oled.h']]],
   ['size_24',['size',['../types_8h.html#a694147b7171ec0b06bc8880dc100e756',1,'size(const _Tp(&amp;)[_Nm]) noexcept:&#160;types.h'],['../types_8h.html#a598e71b269336fef3370d0420348332d',1,'size(const _Tp(&amp;)[0]) noexcept:&#160;types.h']]],
   ['startupperiod_25',['startUpPeriod',['../processing_8h.html#a0d30025137b8f9bfe6d4e9c832db76b4',1,'processing.h']]],
   ['sump_5fdiverted_26',['sumP_diverted',['../processing_8cpp.html#a7a0380b1befbb8b2256fa68e7e346cbb',1,'processing.cpp']]],

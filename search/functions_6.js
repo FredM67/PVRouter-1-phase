@@ -8,7 +8,7 @@ var searchData=
   ['get_5frelay_5',['get_relay',['../classRelayEngine.html#a981b20422ed19d2aa87d042c583173ee',1,'RelayEngine']]],
   ['get_5fsize_6',['get_size',['../classRelayEngine.html#a1ed9500ebf4f6d7afb519c377fab42d3',1,'RelayEngine::get_size()'],['../classTemperatureSensing.html#a2ee48e23ceaf2bbc08cc4be575bb7d90',1,'TemperatureSensing::get_size()']]],
   ['get_5fsurplusthreshold_7',['get_surplusThreshold',['../classrelayOutput.html#a53d146f5a123d31cae6146e8fb4c038a',1,'relayOutput']]],
-  ['get_5ftile_5ffrom_5fxbm_8',['get_tile_from_xbm',['../utils__oled_8h.html#a3df3d00dc2898dcce3209b2cbd79f65a',1,'utils_oled.h']]],
+  ['get_5ftile_5ffrom_5fxbm_8',['get_tile_from_xbm',['../group__OLEDDisplay.html#gaa57d8826eabcc4fdd9ff420cf69038ce',1,'utils_oled.h']]],
   ['getaverage_9',['getAverage',['../classmovingAvg.html#a1dcbea2038fad2497a67aecbf8605aae',1,'movingAvg']]],
   ['getaveraged_10',['getAverageD',['../classEWMA__average.html#a8caa754acdd5f485f7cd2a183cee1286',1,'EWMA_average']]],
   ['getaverages_11',['getAverageS',['../classEWMA__average.html#ad9343d2edcd78461e66118196e76fa2c',1,'EWMA_average']]],

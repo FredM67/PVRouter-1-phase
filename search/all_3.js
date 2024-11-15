@@ -8,7 +8,7 @@ var searchData=
   ['check_5frelay_5fpins_5',['check_relay_pins',['../validation_8h.html#a60096a6d3a2fc387b51a01b6ff8c53d2',1,'validation.h']]],
   ['checkdiversiononoff_6',['checkDiversionOnOff',['../main_8cpp.html#a31f3d562faae6b598324b56299d74f7d',1,'main.cpp']]],
   ['clear_7',['clear',['../classmovingAvg.html#adc157cfdb883805b88f3979cebb72de7',1,'movingAvg']]],
-  ['cleardisplay_8',['clearDisplay',['../utils__oled_8h.html#afaa5f070126ac5184a648b484e7cf276',1,'utils_oled.h']]],
+  ['cleardisplay_8',['clearDisplay',['../group__OLEDDisplay.html#gafaa5f070126ac5184a648b484e7cf276',1,'utils_oled.h']]],
   ['commit_5fhash_9',['COMMIT_HASH',['../utils_8h.html#a2c55f8693f5917de9217fba7c72ce663',1,'utils.h']]],
   ['conditional_10',['conditional',['../structconditional.html',1,'']]],
   ['conditional_2ehpp_11',['conditional.hpp',['../conditional_8hpp.html',1,'']]],
