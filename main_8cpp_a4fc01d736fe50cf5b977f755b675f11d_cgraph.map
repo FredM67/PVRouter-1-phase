@@ -1,7 +1,7 @@
 <map id="setup" name="setup">
 <area shape="rect" id="node1" title="Called once during startup." alt="" coords="5,187,64,212"/>
 <area shape="rect" id="node2" href="$utils_8h.html#aac7b29dc45caaaca67299571f6a2dcc0" title="Get the available RAM during setup." alt="" coords="165,8,243,33"/>
-<area shape="rect" id="node3" href="$utils__display_8h.html#a3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="141,57,267,83"/>
+<area shape="rect" id="node3" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="141,57,267,83"/>
 <area shape="rect" id="node9" href="$processing_8cpp.html#a65d7d37eebe737ce9985aafedb2cb061" title="Initializes the optional pins." alt="" coords="124,107,284,132"/>
 <area shape="rect" id="node11" href="$processing_8cpp.html#adeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the ports and load states for processing." alt="" coords="648,105,796,131"/>
 <area shape="rect" id="node16" href="$classTemperatureSensing.html#af739aa9acd846f3ac2da655d9ba8e1a8" title="Initialize the Dallas sensors." alt="" coords="112,207,296,247"/>

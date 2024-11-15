@@ -17,7 +17,7 @@ var searchData=
   ['conditional_3c_20is_5ffloating_5fpoint_3c_20t_20_3e_3a_3avalue_2c_20t_2c_20int32_5ft_20_3e_14',['conditional&lt; is_floating_point&lt; T &gt;::value, T, int32_t &gt;',['../structconditional.html',1,'']]],
   ['config_2eh_15',['config.h',['../config_8h.html',1,'']]],
   ['config_5fsystem_2eh_16',['config_system.h',['../config__system_8h.html',1,'']]],
-  ['configurevaluefordisplay_17',['configureValueForDisplay',['../utils__display_8h.html#a955fe37f3ba164eb42378ba17ed90f42',1,'utils_display.h']]],
+  ['configurevaluefordisplay_17',['configureValueForDisplay',['../group__SegDisplay.html#ga955fe37f3ba164eb42378ba17ed90f42',1,'utils_display.h']]],
   ['confirmpolarity_18',['confirmPolarity',['../group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672',1,'confirmPolarity():&#160;processing.cpp'],['../group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672',1,'confirmPolarity():&#160;processing.cpp']]],
   ['constants_2eh_19',['constants.h',['../constants_8h.html',1,'']]],
   ['convert_5ftemperature_20',['CONVERT_TEMPERATURE',['../constants_8h.html#a0fc0867cb8eb64709ec9326821f0657c',1,'constants.h']]],

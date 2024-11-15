@@ -5,7 +5,7 @@ var searchData=
   ['realenergy_5fdiverted_2',['realEnergy_diverted',['../processing_8cpp.html#ab7bba643100d679d1dcf1a8aff81d2f3',1,'processing.cpp']]],
   ['realenergy_5fgrid_3',['realEnergy_grid',['../processing_8cpp.html#a5cad71887d7425aba03f377a26224413',1,'processing.cpp']]],
   ['recenttransition_4',['recentTransition',['../processing_8cpp.html#a21746c4720d63888ffd00929388d2236',1,'processing.cpp']]],
-  ['refreshdisplay_5',['refreshDisplay',['../utils__display_8h.html#aa93cf18ded17c52a21fa1bd80ac95ac2',1,'utils_display.h']]],
+  ['refreshdisplay_5',['refreshDisplay',['../group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2',1,'utils_display.h']]],
   ['relay_6',['relay',['../classRelayEngine.html#a4771d7ed435411f4fd06dc480c1b1508',1,'RelayEngine']]],
   ['relay_20diversion_20feature_7',['Relay diversion feature',['../group__RelayDiversion.html',1,'']]],
   ['relay_5fdiversion_8',['RELAY_DIVERSION',['../config_8h.html#a200f51c8bd47e8b14cdc6522f2223742',1,'config.h']]],
