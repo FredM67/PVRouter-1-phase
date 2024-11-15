@@ -139,6 +139,11 @@
  *  Functions used for the RF feature
  */
 
+/*!
+ *  @defgroup OLEDDisplay OLED display feature
+ *  Functions used for the OLED display
+ */
+
 static_assert(__cplusplus >= 201703L, "**** Please define 'gnu++17' in 'platform.txt' ! ****");
 static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVRouter-3-phase/blob/main/Mk2_fasterControl_Full/Readme.md");
 

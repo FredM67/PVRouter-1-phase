@@ -24,10 +24,10 @@
 #define OLED_RESET -1        // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C  ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 
-U8X8_SSD1306_128X64_NONAME_HW_I2C u8x8(/* reset=*/U8X8_PIN_NONE);
+U8X8_SSD1306_128X64_NONAME_HW_I2C u8x8(/* reset=*/U8X8_PIN_NONE); /**< The OLED display object */
 
-inline constexpr uint8_t LOGO_WIDTH{ 72 };
-inline constexpr uint8_t LOGO_HEIGHT{ 64 };
+inline constexpr uint8_t LOGO_WIDTH{ 72 };  /**< The widthof the object, in pixel */
+inline constexpr uint8_t LOGO_HEIGHT{ 64 }; /**< The Height of the object, in pixel */
 
 const unsigned char logo_xbm[] U8X8_PROGMEM = {
   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -78,10 +78,23 @@ const unsigned char logo_xbm[] U8X8_PROGMEM = {
   0xff, 0xff, 0xff, 0xff, 0x3f, 0xfc, 0xc3, 0xff, 0xff, 0xff, 0xff, 0xff,
   0xff, 0x1f, 0xf8, 0x87, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0xfc,
   0x0f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-};
+}; /**< The xml object */
 
+#if !defined(__DOXYGEN__)
 inline uint8_t *get_tile_from_xbm(uint8_t, uint8_t, uint8_t, const unsigned char *) __attribute__((always_inline));
+#endif
 
+/**
+ * @brief Get the tile from xbm object
+ * 
+ * @param tx Relative x position of the tile
+ * @param ty Relative y position of the tile
+ * @param xbm_byte_width Width of the xbm object
+ * @param xbm The xbm object
+ * @return uint8_t* 
+ * 
+ * @ingroup OLEDDisplay
+ */
 uint8_t *get_tile_from_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_byte_width, const unsigned char *xbm)
 {
   uint8_t d[8];
@@ -105,6 +118,17 @@ uint8_t *get_tile_from_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_byte_width, const
   return d;
 }
 
+/**
+ * @brief Draw the xbm on the OLED display
+ * 
+ * @param tx x position for drawing the xbm
+ * @param ty y position for drawing the xbm
+ * @param xbm_width Width of the xbm
+ * @param xbm_height Height of the xbm
+ * @param xbm The xbm object
+ * 
+ * @ingroup OLEDDisplay
+ */
 void u8x8_draw_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_width, uint8_t xbm_height, const unsigned char *xbm)
 {
   for (uint8_t y = 0; y < (xbm_height >> 3); ++y)
@@ -120,6 +144,7 @@ void u8x8_draw_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_width, uint8_t xbm_height
 /**
  * @brief Setup the OLED display
  * 
+ * @ingroup OLEDDisplay
  */
 void setupOLED()
 {
@@ -142,6 +167,7 @@ void setupOLED()
 /**
  * @brief Clear the display
  * 
+ * @ingroup OLEDDisplay
  */
 void clearDisplay()
 {
@@ -151,6 +177,7 @@ void clearDisplay()
 /**
  * @brief Update the watchdog on the display
  * 
+ * @ingroup OLEDDisplay
  */
 void updateWatchdog()
 {
@@ -177,6 +204,8 @@ void updateWatchdog()
  * @brief Update the OLED display with the given value
  * 
  * @param value The value to display
+ * 
+ * @ingroup OLEDDisplay
  */
 void updateOLED(uint16_t value)
 {
