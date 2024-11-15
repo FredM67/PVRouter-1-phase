@@ -15,7 +15,7 @@
  * In the absence of such a system, surplus energy flows away to the grid and is of no benefit to the PV-owner.
  *
  * @section history History
- * __Issue 1 was released as Mk2_bothDisplays_1 in March 2014.
+ * __Issue 1 was released as Mk2_bothDisplays_1 in March 2014.__
  *
  * This sketch is for diverting surplus PV power to a dump load using a triac or  
  * Solid State Relay. It is based on the Mk2i PV Router code that I have posted in on  
@@ -35,26 +35,26 @@
  * appropriate version of the sketch must be selected by including or commenting 
  * out the "#define PIN_SAVING_HARDWARE" statement near the top of the code.
  *
- * __September 2014: renamed as Mk2_bothDisplays_2, with these changes:
+ * __September 2014: renamed as Mk2_bothDisplays_2, with these changes:__
  * - cycleCount removed (was not actually used in this sketch, but could have overflowed);
  * - removal of unhelpful comments in the IO pin section;
  * - tidier initialisation of display logic in setup();
  * - addition of REQUIRED_EXPORT_IN_WATTS logic (useful as a built-in PV simulation facility);
  *
- * __December 2014: renamed as Mk2_bothDisplays_3, with these changes:
+ * __December 2014: renamed as Mk2_bothDisplays_3, with these changes:__
  * - persistence check added for zero-crossing detection (polarityConfirmed)
  * - lowestNoOfSampleSetsPerMainsCycle added, to check for any disturbances
  *
- * __December 2014: renamed as Mk2_bothDisplays_3a, with some typographical errors fixed.
+ * __December 2014: renamed as Mk2_bothDisplays_3a, with some typographical errors fixed.__
  *
- * __January 2016: renamed as Mk2_bothDisplays_3b, with a minor change in the ISR to 
- *   remove a timing uncertainty.
+ * __January 2016: renamed as Mk2_bothDisplays_3b, with this change:__
+ * - a minor change in the ISR to remove a timing uncertainty.
  *
- * __January 2016: updated to Mk2_bothDisplays_3c:
+ * __January 2016: updated to Mk2_bothDisplays_3c:__
  *   The variables to store the ADC results are now declared as "volatile" to remove 
  *   any possibility of incorrect operation due to optimisation by the compiler.
  *
- * __February 2016: updated to Mk2_bothDisplays_4, with these changes:
+ * __February 2016: updated to Mk2_bothDisplays_4, with these changes:__
  * - improvements to the start-up logic.  The start of normal operation is now 
  *    synchronized with the start of a new mains cycle.
  * - reduce the amount of feedback in the Low Pass Filter for removing the DC content
@@ -66,7 +66,7 @@
  * - SWEETZONE_IN_JOULES changed to WORKING_ZONE_IN_JOULES 
  * - change "triac" to "load" wherever appropriate
  *
- * __November 2019: updated to Mk2_fasterControl_1 with these changes:
+ * __November 2019: updated to Mk2_fasterControl_1 with these changes:__
  * - Half way through each mains cycle, a prediction is made of the likely energy level at the
  *   end of the cycle.  That predicted value allows the triac to be switched at the +ve going 
  *   zero-crossing point rather than waiting for a further 10 ms.  These changes allow for 
@@ -80,19 +80,19 @@
  *   it is vital that the level in the reduced capacity energy bucket remains within its 
  *   permitted range, hence the addition of this indicator.
  *   
- * __February 2020: updated to Mk2_fasterControl_1a with these changes:
+ * __February 2020: updated to Mk2_fasterControl_1a with these changes:__
  * - removal of some redundant code in the logic for determining the next load state.
  * 
- * __March 2021: updated to Mk2_fasterControl_2 with these changes:
+ * __March 2021: updated to Mk2_fasterControl_2 with these changes:__
  * - extra filtering added to offset the HPF effect of CT1.  This allows the energy state in
  *   10 ms time to be predicted with more confidence.  Specifically, it is no longer necessary 
  *   to include a 30% boost factor after each change of load state.
  * 
- * __June 2021: updated to Mk2_fasterControl_3 with these changes:
+ * __June 2021: updated to Mk2_fasterControl_3 with these changes:__
  * - to reflect the performance of recently manufactured YHDC SCT_013_000 CTs, 
  *   the value of the parameter lpf_gain has been reduced from 12 to 8.
  *   
- * __July 2023: updated to Mk2_fasterControl_twoLoads_5 with these changes:
+ * __July 2023: updated to Mk2_fasterControl_twoLoads_5 with these changes:__
  * - the ability to control two loads has been transferred from the latest version of my
  *   standard multiLoad sketch, Mk2_multiLoad_wired_7a.  The faster control algorithm  
  *   has been retained.  
