@@ -186,7 +186,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:gab3316018d6752ecf79ce8be7f2ee800d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the start of a new +ve half cycle, just after the zero-crossing point.  <br /></td></tr>
 <tr class="separator:gab3316018d6752ecf79ce8be7f2ee800d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga600ddbf70fa2468f097466638126fbed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__TimeCritical.html#ga600ddbf70fa2468f097466638126fbed">processPolarity</a> (int16_t rawSample)</td></tr>
-<tr class="memdesc:ga600ddbf70fa2468f097466638126fbed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process with the polarity for the actual voltage sample for the specific phase.  <br /></td></tr>
+<tr class="memdesc:ga600ddbf70fa2468f097466638126fbed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process with the polarity for the actual voltage sample.  <br /></td></tr>
 <tr class="separator:ga600ddbf70fa2468f097466638126fbed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga18d241dba2cc74c17026ee33d2442478"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478">processRawSamples</a> ()</td></tr>
 <tr class="memdesc:ga18d241dba2cc74c17026ee33d2442478"><td class="mdescLeft">&#160;</td><td class="mdescRight">This routine is called by the ISR when a pair of V &amp; I sample becomes available.  <br /></td></tr>
@@ -198,10 +198,10 @@ Functions</h2></td></tr>
 <tr class="memdesc:gaeae271d1c55664c3424b634191a0996b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the startup period for the router.  <br /></td></tr>
 <tr class="separator:gaeae271d1c55664c3424b634191a0996b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9747b6178245c423a864bff088cfa453"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__TimeCritical.html#ga9747b6178245c423a864bff088cfa453">processVoltage</a> ()</td></tr>
-<tr class="memdesc:ga9747b6178245c423a864bff088cfa453"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the calculation for the current voltage sample for the specific phase.  <br /></td></tr>
+<tr class="memdesc:ga9747b6178245c423a864bff088cfa453"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the calculation for the current voltage sample.  <br /></td></tr>
 <tr class="separator:ga9747b6178245c423a864bff088cfa453"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae9c9eca31752ead2923dd75b9ff9fd57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57">processVoltageRawSample</a> (int16_t rawSample)</td></tr>
-<tr class="memdesc:gae9c9eca31752ead2923dd75b9ff9fd57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the current voltage raw sample for the specific phase.  <br /></td></tr>
+<tr class="memdesc:gae9c9eca31752ead2923dd75b9ff9fd57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the current voltage raw sample.  <br /></td></tr>
 <tr class="separator:gae9c9eca31752ead2923dd75b9ff9fd57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1950a35c4c210dae480943adca0a3c88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88">updatePhysicalLoadStates</a> ()</td></tr>
 <tr class="memdesc:ga1950a35c4c210dae480943adca0a3c88"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function provides the link between the logical and physical loads.  <br /></td></tr>
@@ -372,7 +372,7 @@ Here is the caller graph for this function:</div>
 
 <p>Print the settings used for the selected output mode. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00914">914</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00910">910</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -423,7 +423,7 @@ Here is the caller graph for this function:</div>
 <area shape="rect" href="processing_8cpp.html#adeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the ports and load states for processing." alt="" coords="347,5,495,31"/>
 <area shape="rect" href="group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I sample becomes available." alt="" coords="343,55,499,80"/>
 <area shape="rect" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="166,5,225,31"/>
-<area shape="rect" href="group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample for the specific phase." alt="" coords="96,55,295,80"/>
+<area shape="rect" href="group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="96,55,295,80"/>
 <area shape="rect" href="group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,55,48,80"/>
 </map>
 </div>
