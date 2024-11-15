@@ -134,7 +134,6 @@ inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit]{
 
 uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
 
-
 /**
  * @brief Initializes the display based on the type of display defined by TYPE_OF_DISPLAY.
  * 
@@ -153,6 +152,8 @@ uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
  *   - Sets the pin mode for each digit selector pin.
  *   - Disables all digit selector pins initially.
  *   - Turns off all segment drive pins initially.
+ * 
+ * @ingroup 7SegDisplay
  */
 void initializeDisplay()
 {
@@ -220,6 +221,8 @@ void initializeDisplay()
  *
  * When the energy display is not active, the function displays a "walking dots"
  * pattern by cycling a dot through the display positions.
+ * 
+ * @ingroup 7SegDisplay
  */
 void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToDisplay)
 {
@@ -312,6 +315,8 @@ void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToD
  * The function uses static variables to keep track of the display time count and the 
  * currently active digit location. When the display time count exceeds a predefined 
  * maximum value, the function updates the display to show the next digit.
+ * 
+ * @ingroup 7SegDisplay
  */
 void refreshDisplay()
 {
