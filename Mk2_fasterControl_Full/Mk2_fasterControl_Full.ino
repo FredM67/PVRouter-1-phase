@@ -1,7 +1,7 @@
 /**
  * @file Mk2_fasterControl_Full.ino
  * @author your name (you@domain.com)
- * @brief 
+ * @brief A photovoltaic energy diverter.
  * @version 0.1
  * @date 2024-11-15
  * 

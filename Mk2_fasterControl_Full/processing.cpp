@@ -276,9 +276,9 @@ void updatePhysicalLoadStates()
 }
 
 /**
- * @brief Process with the polarity for the actual voltage sample for the specific phase
+ * @brief Process with the polarity for the actual voltage sample
  *
- * @param rawSample the current sample for the specified phase
+ * @param rawSample the current sample
  *
  * @ingroup TimeCritical
  */
@@ -294,7 +294,7 @@ void processPolarity(const int16_t rawSample)
 /**
  * @brief Process the calculation for the actual current raw sample for the grid
  *
- * @param rawSample the current sample for the specified phase
+ * @param rawSample the current sample
  *
  * @ingroup TimeCritical
  */
@@ -324,7 +324,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
 /**
  * @brief Process the calculation for the actual current raw sample for the diverted power
  *
- * @param rawSample the current sample for the specified phase
+ * @param rawSample the current sample
  *
  * @ingroup TimeCritical
  */
@@ -371,8 +371,6 @@ void confirmPolarity()
 
 /**
  * @brief This routine is called by the ISR when a pair of V & I sample becomes available.
- *
- * @param phase the phase number [0..NO_OF_PHASES[
  *
  * @ingroup TimeCritical
  */
@@ -505,7 +503,7 @@ void processRawSamples()
 }
 
 /**
- * @brief Process the calculation for the current voltage sample for the specific phase
+ * @brief Process the calculation for the current voltage sample
  *
  * @ingroup TimeCritical
  */
@@ -533,9 +531,9 @@ void processVoltage()
 }
 
 /**
- * @brief Process the current voltage raw sample for the specific phase
+ * @brief Process the current voltage raw sample
  *
- * @param rawSample the current sample for the specified phase
+ * @param rawSample the current sample
  *
  * @ingroup TimeCritical
  */
@@ -555,8 +553,6 @@ void processVoltageRawSample(const int16_t rawSample)
 
 /**
  * @brief Process the startup period for the router.
- *
- * @param phase the phase number [0..NO_OF_PHASES[
  *
  * @ingroup TimeCritical
  */
