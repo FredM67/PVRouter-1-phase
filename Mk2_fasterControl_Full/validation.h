@@ -111,6 +111,53 @@ constexpr uint16_t check_pins()
     }
   }
 
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG)
+  {
+    for (const auto &segPin : digitSelectorPin)
+    {
+      if (segPin == 0xff)
+        return 0;
+
+      if (bitRead(used_pins, segPin))
+        return 0;
+
+      bit_set(used_pins, segPin);
+    }
+    for (const auto &segPin : segmentDrivePin)
+    {
+      if (segPin == 0xff)
+        return 0;
+
+      if (bitRead(used_pins, segPin))
+        return 0;
+
+      bit_set(used_pins, segPin);
+    }
+  }
+  else if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG_HW)
+  {
+    for (const auto &segPin : digitLocationLine)
+    {
+      if (segPin == 0xff)
+        return 0;
+
+      if (bitRead(used_pins, segPin))
+        return 0;
+
+      bit_set(used_pins, segPin);
+    }
+    for (const auto &segPin : digitSelectionLine)
+    {
+      if (segPin == 0xff)
+        return 0;
+
+      if (bitRead(used_pins, segPin))
+        return 0;
+
+      bit_set(used_pins, segPin);
+    }
+  }
+
   return used_pins;
 }
 
