@@ -12,7 +12,7 @@ For a three-phase version, please see [PVRouter-3-phase](https://github.com/Fred
 
 ---
 
-***Mk2_fasterControl_twoLoads_temp_1*** is a refactored version of the original sketch ***Mk2_fasterControl_twoLoads_2*** from Robin Emley.
+***Mk2_fasterControl_Full*** is a refactored version of the original sketch ***Mk2_fasterControl_twoLoads_x*** from Robin Emley.
 
 Main changes in this version:
 
