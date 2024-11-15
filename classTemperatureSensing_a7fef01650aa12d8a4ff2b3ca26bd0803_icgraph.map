@@ -1,0 +1,5 @@
+<map id="TemperatureSensing::readTemperature" name="TemperatureSensing::readTemperature">
+<area shape="rect" id="node1" title="Read temperature of a specific device." alt="" coords="301,5,456,45"/>
+<area shape="rect" id="node2" href="$main_8cpp.html#aac4a0e0b4ad49cbbab8b2626204f9492" title="Update the temperature and send a new request." alt="" coords="104,13,253,38"/>
+<area shape="rect" id="node3" href="$main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor." alt="" coords="5,13,56,38"/>
+</map>

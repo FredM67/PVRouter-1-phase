@@ -1,0 +1,6 @@
+<map id="sendResults" name="sendResults">
+<area shape="rect" id="node1" title="Prints data logs to the Serial output in text or json format." alt="" coords="5,35,107,60"/>
+<area shape="rect" id="node2" href="$utils_8h.html#ae46d07fd4694c49e10360b5d79163443" title="Prints data logs to the Serial output in text format." alt="" coords="155,35,291,60"/>
+<area shape="rect" id="node3" href="$classRelayEngine.html#a2c586921b020480449159786461195aa" title="Get the current average." alt="" coords="339,5,531,31"/>
+<area shape="rect" id="node4" href="$classTemperatureSensing.html#a2ee48e23ceaf2bbc08cc4be575bb7d90" title="Get the number of sensors." alt="" coords="357,55,512,95"/>
+</map>

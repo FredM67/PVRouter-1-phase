@@ -1,0 +1,9 @@
+<map id="relayOutput::get_pin" name="relayOutput::get_pin">
+<area shape="rect" id="node1" title="Get the control pin of the relay." alt="" coords="591,84,745,109"/>
+<area shape="rect" id="node2" href="$classrelayOutput.html#aa900099d8298cde7d15e3e2dd804df4a" title="Print the configuration of the current relay&#45;diversion." alt="" coords="281,5,543,31"/>
+<area shape="rect" id="node4" href="$test__utils__relay_2test__main_8cpp.html#acf18f50974498226d414b44788f59752" title=" " alt="" coords="325,55,499,80"/>
+<area shape="rect" id="node6" href="$test__utils__relay_2test__main_8cpp.html#af6ddac18c62df593b1a20bb447f953a4" title=" " alt="" coords="314,105,510,145"/>
+<area shape="rect" id="node7" href="$test__utils__relay_2test__main_8cpp.html#ab5b1d70e0be648ef2951a655bf828574" title=" " alt="" coords="317,169,507,209"/>
+<area shape="rect" id="node3" href="$classRelayEngine.html#ab3ff0ac83bf3a665174f0ea373974e3a" title="Print the configuration of each relay." alt="" coords="5,5,233,31"/>
+<area shape="rect" id="node5" href="$test__utils__relay_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="94,112,145,137"/>
+</map>

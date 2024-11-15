@@ -1,0 +1,24 @@
+<map id="ISR" name="ISR">
+<area shape="rect" id="node1" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,105,48,131"/>
+<area shape="rect" id="node2" href="$group__TimeCritical.html#ga200d938da53f9e12f5a174d109944e64" title="Process the calculation for the actual current raw sample for the diverted power." alt="" coords="106,41,310,81"/>
+<area shape="rect" id="node3" href="$group__TimeCritical.html#ga022d99b2096ea8d30d401959ac464301" title="Process the calculation for the actual current raw sample for the grid." alt="" coords="96,105,320,131"/>
+<area shape="rect" id="node4" href="$group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample for the specific phase." alt="" coords="109,155,307,180"/>
+<area shape="rect" id="node5" href="$group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672" title="This routine prevents a zero&#45;crossing point from being declared until a certain number of consecutive..." alt="" coords="385,80,507,105"/>
+<area shape="rect" id="node6" href="$group__TimeCritical.html#ga600ddbf70fa2468f097466638126fbed" title="Process with the polarity for the actual voltage sample for the specific phase." alt="" coords="385,129,507,155"/>
+<area shape="rect" id="node7" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I sample becomes available." alt="" coords="368,179,524,204"/>
+<area shape="rect" id="node22" href="$group__TimeCritical.html#ga9747b6178245c423a864bff088cfa453" title="Process the calculation for the current voltage sample for the specific phase." alt="" coords="385,228,507,253"/>
+<area shape="rect" id="node8" href="$group__TimeCritical.html#gaef29df3a6c44ea8477b816cbdf3005f3" title="Process the case of high energy level, some action may be required." alt="" coords="577,5,761,31"/>
+<area shape="rect" id="node10" href="$group__TimeCritical.html#ga7ecb8f04a958d86156a6c95581f242d3" title="Process the case of low energy level, some action may be required." alt="" coords="579,55,759,80"/>
+<area shape="rect" id="node12" href="$group__TimeCritical.html#ga4e9b38eebfc1c509d74dd4614209f3e7" title="Process the start of a new &#45;ve half cycle, just after the zero&#45;crossing point." alt="" coords="581,104,756,129"/>
+<area shape="rect" id="node13" href="$group__TimeCritical.html#gab3316018d6752ecf79ce8be7f2ee800d" title="Process the start of a new +ve half cycle, just after the zero&#45;crossing point." alt="" coords="587,153,750,179"/>
+<area shape="rect" id="node16" href="$group__TimeCritical.html#ga5a8b9dce34e44a69a46344e8ee1c0dd6" title="This code is executed once per 20mS, shortly after the start of each new mains cycle on phase 0." alt="" coords="585,203,753,228"/>
+<area shape="rect" id="node17" href="$group__TimeCritical.html#gaeae271d1c55664c3424b634191a0996b" title="Process the startup period for the router." alt="" coords="608,252,729,277"/>
+<area shape="rect" id="node18" href="$group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="This function provides the link between the logical and physical loads." alt="" coords="572,301,765,327"/>
+<area shape="rect" id="node19" href="$processing_8cpp.html#a44ac46a7ff4e0717bd668d5907b38249" title="update the control ports for each of the physical loads" alt="" coords="598,351,739,376"/>
+<area shape="rect" id="node9" href="$group__TimeCritical.html#ga8e7b88bb4b21554d23b57676a45e034e" title="Retrieve the next load that could be added (be aware of the order)" alt="" coords="824,5,1024,31"/>
+<area shape="rect" id="node11" href="$group__TimeCritical.html#gabfb25288a79335282af6922e833d3c35" title="Retrieve the next load that could be removed (be aware of the reverse&#45;order)" alt="" coords="813,55,1035,80"/>
+<area shape="rect" id="node14" href="$group__TimeCritical.html#gaabf10592d01250ef862370d26c5a382b" title="Process with data logging." alt="" coords="847,129,1001,155"/>
+<area shape="rect" id="node15" href="$group__TimeCritical.html#gac31343a7bf773ef82723f61a0c0b6856" title="Process the latest contribution after each new cycle additional processing is performed after each ma..." alt="" coords="828,179,1020,204"/>
+<area shape="rect" id="node20" href="$utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd" title="Set the Pins state to OFF." alt="" coords="877,325,971,351"/>
+<area shape="rect" id="node21" href="$utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3" title="Set the Pins state to ON." alt="" coords="879,375,969,400"/>
+</map>

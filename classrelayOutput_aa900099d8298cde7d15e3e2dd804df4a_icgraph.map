@@ -1,0 +1,4 @@
+<map id="relayOutput::printRelayConfiguration" name="relayOutput::printRelayConfiguration">
+<area shape="rect" id="node1" title="Print the configuration of the current relay&#45;diversion." alt="" coords="281,5,543,31"/>
+<area shape="rect" id="node2" href="$classRelayEngine.html#ab3ff0ac83bf3a665174f0ea373974e3a" title="Print the configuration of each relay." alt="" coords="5,5,233,31"/>
+</map>

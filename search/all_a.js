@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['l_5fsum_5fvsquared_0',['l_sum_Vsquared',['../processing_8cpp.html#a98ec9049e0076bcf6a00afa7e66f1eaa',1,'processing.cpp']]],
+  ['load_5foff_1',['LOAD_OFF',['../types_8h.html#aa689e963b2305ff62d412abb6ebf7244a8f99352268add095fefd3881ea0a06de',1,'types.h']]],
+  ['load_5fon_2',['LOAD_ON',['../types_8h.html#aa689e963b2305ff62d412abb6ebf7244a9c23d2669d8e4741a50b2db484750152',1,'types.h']]],
+  ['loadprioritiesandstate_3',['loadPrioritiesAndState',['../processing_8h.html#a49958eb014b70dfb9d8cb9ded3564ef7',1,'processing.h']]],
+  ['loadprioritiesatstartup_4',['loadPrioritiesAtStartup',['../config_8h.html#a00662b40b4d1afe819f2bdb6ad0ed191',1,'config.h']]],
+  ['loadstatemask_5',['loadStateMask',['../types_8h.html#a9679e65b07cf301abc92aadaef35b3a8',1,'types.h']]],
+  ['loadstateonbit_6',['loadStateOnBit',['../types_8h.html#a9e72b6e05ef972b4929a13596b0ceec6',1,'types.h']]],
+  ['loadstates_7',['LoadStates',['../types_8h.html#aa689e963b2305ff62d412abb6ebf7244',1,'types.h']]],
+  ['logloadpriorities_8',['logLoadPriorities',['../utils_8h.html#ae473b1c0d80fe056d1fab9bdee38aca1',1,'utils.h']]],
+  ['logo_5fheight_9',['LOGO_HEIGHT',['../utils__oled_8h.html#ad2ca40462c15f86859ed5b126db6cf28',1,'utils_oled.h']]],
+  ['logo_5fwidth_10',['LOGO_WIDTH',['../utils__oled_8h.html#a38f32d0c115e8616b381cb8bac2eb15d',1,'utils_oled.h']]],
+  ['loop_11',['loop',['../main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;test_main.cpp'],['../test__utils__relay_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;test_main.cpp']]],
+  ['lowerenergythreshold_12',['lowerEnergyThreshold',['../processing_8cpp.html#ab90abf1e4f398064d5151def545f0e8c',1,'processing.cpp']]],
+  ['lowerthreshold_5fdefault_13',['lowerThreshold_default',['../processing_8cpp.html#a9d2aaccd1924b13d9324b1091831661f',1,'processing.cpp']]],
+  ['lowestnoofsamplesetspermainscycle_14',['lowestNoOfSampleSetsPerMainsCycle',['../processing_8cpp.html#ab935f4f3c343be21384a6ed896561b61',1,'processing.cpp']]],
+  ['lpf_5fgain_15',['lpf_gain',['../calibration_8h.html#a74d2e520152cb559bdb6e18153dcb5e4',1,'calibration.h']]]
+];

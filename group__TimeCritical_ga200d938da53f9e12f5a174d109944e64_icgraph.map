@@ -1,0 +1,4 @@
+<map id="processDivertedCurrentRawSample" name="processDivertedCurrentRawSample">
+<area shape="rect" id="node1" title="Process the calculation for the actual current raw sample for the diverted power." alt="" coords="96,5,300,45"/>
+<area shape="rect" id="node2" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,13,48,38"/>
+</map>

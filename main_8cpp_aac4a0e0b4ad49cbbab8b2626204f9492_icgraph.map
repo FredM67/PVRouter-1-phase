@@ -1,0 +1,4 @@
+<map id="updateTemperature" name="updateTemperature">
+<area shape="rect" id="node1" title="Update the temperature and send a new request." alt="" coords="104,5,253,31"/>
+<area shape="rect" id="node2" href="$main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor." alt="" coords="5,5,56,31"/>
+</map>
