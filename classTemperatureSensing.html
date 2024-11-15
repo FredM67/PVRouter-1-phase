@@ -73,6 +73,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classTemperatureSensing-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">TemperatureSensing&lt; N &gt; Class Template Reference<div class="ingroups"><a class="el" href="group__TemperatureSensing.html">Temperature sensing feature</a></div></div></div>
 </div><!--header-->
@@ -126,6 +127,11 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a2bd6eab63a275b8b5bc372189c59cec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a9a904dfc27f7a5b9465f9c5a1f5875"><td class="memItemLeft" align="right" valign="top">const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTemperatureSensing.html#a6a9a904dfc27f7a5b9465f9c5a1f5875">sensorPin</a></td></tr>
 <tr class="separator:a6a9a904dfc27f7a5b9465f9c5a1f5875"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:acdfefbaeb9c348a409d97a373d8305ac"><td class="memItemLeft" align="right" valign="top">static OneWire&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTemperatureSensing.html#acdfefbaeb9c348a409d97a373d8305ac">oneWire</a></td></tr>
+<tr class="separator:acdfefbaeb9c348a409d97a373d8305ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;uint8_t N&gt;<br />
@@ -137,7 +143,7 @@ class TemperatureSensing&lt; N &gt;</div><p>This class implements the temperatur
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00046">46</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00048">48</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a89c7e0a0d9d1ce58b1583f591701d2c4" name="a89c7e0a0d9d1ce58b1583f591701d2c4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a89c7e0a0d9d1ce58b1583f591701d2c4">&#9670;&#160;</a></span>ScratchPad</h2>
@@ -161,7 +167,7 @@ template&lt;uint8_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00048">48</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00050">50</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
 
 </div>
 </div>
@@ -238,7 +244,7 @@ template&lt;uint8_t N&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00059">59</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00061">61</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
 
 </div>
 </div>
@@ -271,7 +277,7 @@ template&lt;uint8_t N&gt; </div>
 <p>Get the pin of the sensor(s) </p>
 <dl class="section return"><dt>Returns</dt><dd>constexpr auto </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00104">104</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00106">106</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -312,7 +318,7 @@ template&lt;uint8_t N&gt; </div>
 <p>Get the number of sensors. </p>
 <dl class="section return"><dt>Returns</dt><dd>constexpr auto </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00094">94</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00096">96</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -355,7 +361,7 @@ template&lt;uint8_t N&gt; </div>
 
 <p>Initialize the Dallas sensors. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00081">81</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00083">83</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -412,7 +418,7 @@ template&lt;uint8_t N&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>int16_t Temperature * 100 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00115">115</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00117">117</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -453,7 +459,7 @@ template&lt;uint8_t N&gt; </div>
 
 <p>Request temperature for all sensors. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00068">68</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00070">70</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -470,6 +476,33 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="acdfefbaeb9c348a409d97a373d8305ac" name="acdfefbaeb9c348a409d97a373d8305ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdfefbaeb9c348a409d97a373d8305ac">&#9670;&#160;</a></span>oneWire</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint8_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">OneWire <a class="el" href="classTemperatureSensing.html">TemperatureSensing</a>&lt; N &gt;::oneWire</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>For temperature sensing </p>
+
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00160">160</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+
+</div>
+</div>
 <a id="a2bd6eab63a275b8b5bc372189c59cec5" name="a2bd6eab63a275b8b5bc372189c59cec5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2bd6eab63a275b8b5bc372189c59cec5">&#9670;&#160;</a></span>sensorAddrs</h2>
 
@@ -493,7 +526,7 @@ template&lt;uint8_t N&gt; </div>
 </div><div class="memdoc">
 <p>Array of sensors </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00156">156</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00158">158</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
 
 </div>
 </div>
@@ -520,7 +553,7 @@ template&lt;uint8_t N&gt; </div>
 </div><div class="memdoc">
 <p>The pin of the sensor(s) </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00154">154</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__temp_8h_source.html#l00156">156</a> of file <a class="el" href="utils__temp_8h_source.html">utils_temp.h</a>.</p>
 
 </div>
 </div>

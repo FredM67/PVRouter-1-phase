@@ -176,7 +176,7 @@ Here is the caller graph for this function:</div>
 <p>Initializes the display based on the type of display defined by TYPE_OF_DISPLAY. </p>
 <p>This function sets up the necessary pin modes and initial states for the display. It supports two types of displays: SEG_HW and SEG.</p>
 <ul>
-<li>For SEG_HW (hardware-driven 7-segment display):<ul>
+<li>For <a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0">DisplayType::SEG_HW</a> (hardware-driven 7-segment display):<ul>
 <li>Configures the IO drivers for the 4-digit display.</li>
 <li>Sets the pin mode for the decimal point line.</li>
 <li>Sets up the control lines for the 74HC4543 7-seg display driver.</li>
@@ -184,7 +184,7 @@ Here is the caller graph for this function:</div>
 <li>Sets up the control lines for the 74HC138 2-&gt;4 demux.</li>
 </ul>
 </li>
-<li>For SEG (software-driven 7-segment display):<ul>
+<li>For <a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ae0bd48751b29b4132b70ded3310b718a">DisplayType::SEG</a> (software-driven 7-segment display):<ul>
 <li>Sets the pin mode for each segment drive pin.</li>
 <li>Sets the pin mode for each digit selector pin.</li>
 <li>Disables all digit selector pins initially.</li>
