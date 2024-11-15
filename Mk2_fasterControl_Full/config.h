@@ -50,17 +50,15 @@ inline constexpr bool WATCHDOG_PIN_PRESENT{ false }; /**< set it to 'true' if th
 inline constexpr bool RELAY_DIVERSION{ false };      /**< set it to 'true' if a relay is used for diversion */
 inline constexpr bool DUAL_TARIFF{ false };          /**< set it to 'true' if there's a dual tariff each day AND the router is connected to the billing meter */
 
-//  The two versions of the hardware require different logic.  The following line should
-//  be included if the additional logic chips are present, or excluded if they are
-//  absent (in which case some wire links need to be fitted)
-//
-inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED }; /**< set it to 'true' if the additional logic chips are present */
+inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED }; /**< set it to installed display including optional additional logic chips */
 
+////////////////////////////////////////////////////////////////////////////////////////
 // allocation of digital pins which are not dependent on the display type that is in use
-// *************************************************************************************
+//
 inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 5, 6 };         /**< for 1-phase PCB */
 inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1 }; /**< load priorities and states at startup */
 
+////////////////////////////////////////////////////////////////////////////////////////
 // Set the value to 0xff when the pin is not needed (feature deactivated)
 inline constexpr uint8_t dualTariffPin{ 0xff }; /**< for 3-phase PCB, off-peak trigger */
 inline constexpr uint8_t diversionPin{ 0xff };  /**< if LOW, set diversion on standby */
@@ -70,11 +68,14 @@ inline constexpr uint8_t watchDogPin{ 0xff };   /**< watch dog LED */
 
 inline constexpr RelayEngine relays{ { { 0xff, 1000, 200, 1, 1 } } }; /**< config for relay diversion, see class definition for defaults and advanced options */
 
+////////////////////////////////////////////////////////////////////////////////////////
+// Dual tariff configuration
 inline constexpr uint8_t ul_OFF_PEAK_DURATION{ 8 };                        /**< Duration of the off-peak period in hours */
 inline constexpr pairForceLoad rg_ForceLoad[NO_OF_DUMPLOADS]{ { -3, 2 } }; /**< force config for load #1 ONLY for dual tariff */
 
+////////////////////////////////////////////////////////////////////////////////////////
+// Temperature sensor configuration
 inline constexpr int16_t iTemperatureThreshold{ 100 }; /**< the temperature threshold to stop overriding in °C */
-
 inline constexpr TemperatureSensing temperatureSensing{ 0xff,
                                                         { { 0x28, 0x1B, 0xD7, 0x6A, 0x09, 0x00, 0x00, 0xB7 } } }; /**< list of temperature sensor Addresses */
 

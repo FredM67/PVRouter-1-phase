@@ -17,6 +17,7 @@
 
 #include "FastDivision.h"
 
+////////////////////////////////////////////////////////////////////////////////////////
 // Various settings for the 4-digit display, which needs to be refreshed every few mS
 inline constexpr uint8_t noOfDigitLocations{ 4 };
 inline constexpr uint8_t noOfPossibleCharacters{ 22 };
@@ -26,7 +27,12 @@ inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 };          // auto-reset 
 
 inline constexpr uint32_t displayShutdown_inMainsCycles{ DISPLAY_SHUTDOWN_IN_HOURS * mainsCyclesPerHour };
 
-//  The two versions of the hardware require different logic.
+////////////////////////////////////////////////////////////////////////////////////////
+// The 7-segment display can be driven in two ways:
+// 1. By a set of logic chips (74HC4543 7-segment display driver and 74HC138 2->4 line demultiplexer)
+// 2. By direct control of the segment lines and digit selection lines
+//
+////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // This is for a config with the extra logic chips
@@ -44,6 +50,7 @@ inline constexpr uint8_t decimalPointLine{ 14 };  // <- this line has to be indi
 inline constexpr uint8_t digitLocationLine[noOfDigitLocationLines]{ 16, 15 };
 inline constexpr uint8_t digitSelectionLine[noOfDigitSelectionLines]{ 7, 9, 8, 6 };
 
+////////////////////////////////////////////////////////////////////////////////////////
 // The final column of digitValueMap[] is for the decimal point status.  In this version,
 // the decimal point has to be treated differently than the other seven segments, so
 // a convenient means of accessing this column is provided.
@@ -100,6 +107,7 @@ inline constexpr bool DIGIT_DISABLED{ true };
 inline constexpr uint8_t digitSelectorPin[noOfDigitLocations]{ 16, 10, 13, 11 };
 inline constexpr uint8_t segmentDrivePin[noOfSegmentsPerDigit]{ 2, 5, 12, 6, 7, 9, 8, 14 };
 
+////////////////////////////////////////////////////////////////////////////////////////
 // The final column of segMap[] is for the decimal point status.  In this version,
 // the decimal point is treated just like all the other segments, so there is
 // no need to access this column specifically.
