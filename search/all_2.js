@@ -1,13 +1,13 @@
 var searchData=
 [
-  ['b_5fdatalogeventpending_0',['b_datalogEventPending',['../processing_8h.html#ab76a3cdd049ea024d204d62770405dc9',1,'processing.h']]],
-  ['b_5fdiversionoff_1',['b_diversionOff',['../processing_8h.html#abbcd9c205506eb70e668fc430b531d4d',1,'processing.h']]],
-  ['b_5fnewcycle_2',['b_newCycle',['../processing_8h.html#a2c332cbc3524bdfcff5efae84749ad58',1,'processing.h']]],
-  ['b_5foverrideloadon_3',['b_overrideLoadOn',['../processing_8h.html#aa1d0d82b79554d3f491238534b2dc4c3',1,'processing.h']]],
-  ['b_5freorderloads_4',['b_reOrderLoads',['../processing_8h.html#a4be9b67cfa7c4e48c63817d06f3d293c',1,'processing.h']]],
-  ['beyondstartupperiod_5',['beyondStartUpPeriod',['../processing_8cpp.html#aaecb72fa3ab0755ac124b5fa6ffa1c6f',1,'processing.cpp']]],
-  ['bit_5fclear_6',['bit_clear',['../utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e',1,'utils_pins.h']]],
-  ['bit_5fread_7',['bit_read',['../utils__pins_8h.html#abaa54130a12679d0dcc0e7578e0e4d37',1,'utils_pins.h']]],
-  ['bit_5fset_8',['bit_set',['../utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc',1,'utils_pins.h']]],
-  ['branch_5fname_9',['BRANCH_NAME',['../utils_8h.html#a2372128ceadf4346a0a2fe0995e719aa',1,'utils.h']]]
+  ['a_201_2dphase_20photovoltaic_20router_2fdiverter_0',['A 1-phase photovoltaic router/diverter',['../index.html',1,'']]],
+  ['absenceofdivertedenergycount_1',['absenceOfDivertedEnergyCount',['../processing_8h.html#ab96e74c302f7348daf97a84011e31fcd',1,'processing.h']]],
+  ['activeload_2',['activeLoad',['../processing_8cpp.html#ae3ad049e6ee90e4eacc823d1387f02e0',1,'processing.cpp']]],
+  ['addr_3',['addr',['../structDeviceAddress.html#ae90422657105a8cff63931e274f2d391',1,'DeviceAddress']]],
+  ['addvalue_4',['addValue',['../classEWMA__average.html#a208b9b3d82809466b4d90aedb3c7e4db',1,'EWMA_average::addValue()'],['../classmovingAvg.html#aa0d0d8ba97b9d3fdfdbcf3a0b8d8f0f5',1,'movingAvg::addValue()']]],
+  ['alpha_5',['alpha',['../calibration_8h.html#a19b3d4f09bab83f43bd3a3ed5295bddb',1,'calibration.h']]],
+  ['anti_5fcreep_5flimit_6',['ANTI_CREEP_LIMIT',['../config__system_8h.html#aa3b33e12ca9d02da59889eb87948e62b',1,'config_system.h']]],
+  ['anti_5fflicker_7',['ANTI_FLICKER',['../types_8h.html#aae913bd32d3b848f4a5ba5b9d32e9a1fa086599a6d23b3982c7ebfeb833fdd6c0',1,'types.h']]],
+  ['anticreeplimit_5finieupermainscycle_8',['antiCreepLimit_inIEUperMainsCycle',['../processing_8cpp.html#a560d64f936f459063fd3aabb327f3696',1,'processing.cpp']]],
+  ['auto_9',['AUTO',['../types_8h.html#a06b890c4a964752df814257dc1f13073ae1f2d5134ed2543d38a0de9751cf75d9',1,'types.h']]]
 ];

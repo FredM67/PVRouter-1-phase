@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['oled_20display_20feature_0',['OLED display feature',['../group__OLEDDisplay.html',1,'']]]
+  ['dual_20tariff_20feature_0',['Dual tariff feature',['../group__DualTariff.html',1,'']]]
 ];

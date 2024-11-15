@@ -5,8 +5,8 @@
 <area shape="rect" id="node10" href="$test__utils__pins_2test__main_8cpp.html#ad88b28b663dbedb3135d1eabb5ca3cb1" title=" " alt="" coords="351,180,471,205"/>
 <area shape="rect" id="node11" href="$classrelayOutput.html#a788868018f39545aa8178198f36b4e06" title="Turn OFF the relay if the &#39;time&#39; condition is met." alt="" coords="319,233,503,259"/>
 <area shape="rect" id="node3" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
-<area shape="rect" id="node5" href="$utils__display_8h.html#a3533a6f04780d5ed82d704bf39cebb69" title=" " alt="" coords="128,31,255,56"/>
-<area shape="rect" id="node6" href="$utils__display_8h.html#aa93cf18ded17c52a21fa1bd80ac95ac2" title=" " alt="" coords="133,80,250,105"/>
+<area shape="rect" id="node5" href="$utils__display_8h.html#a3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="128,31,255,56"/>
+<area shape="rect" id="node6" href="$utils__display_8h.html#aa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="133,80,250,105"/>
 <area shape="rect" id="node8" href="$test__utils__pins_2test__main_8cpp.html#abd1c12218f5c492bdeb765dfc01a1965" title=" " alt="" coords="127,129,255,155"/>
 <area shape="rect" id="node7" href="$main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor." alt="" coords="9,80,60,105"/>
 <area shape="rect" id="node9" href="$test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="9,155,60,180"/>

@@ -7,7 +7,7 @@
 <area shape="rect" id="node16" href="$types_8h.html" title="Some basics classes/types." alt="" coords="871,93,1043,133"/>
 <area shape="rect" id="node3" href="$config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="449,277,621,317"/>
 <area shape="rect" id="node10" href="$validation_8h.html" title=" " alt="" coords="5,372,177,412"/>
-<area shape="rect" id="node11" href="$utils__display_8h.html" title=" " alt="" coords="155,277,327,317"/>
+<area shape="rect" id="node11" href="$utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="155,277,327,317"/>
 <area shape="rect" id="node4" href="$calibration_8h.html" title="Calibration values definition." alt="" coords="645,372,817,412"/>
 <area shape="rect" id="node5" href="$main_8cpp.html" title="Main code." alt="" coords="713,548,885,588"/>
 <area shape="rect" id="node8" href="$dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="449,372,621,412"/>

@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title="Basic configuration values to be set by the end&#45;user." alt="" coords="559,5,731,45"/>
 <area shape="rect" id="node2" href="$config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="449,189,621,229"/>
 <area shape="rect" id="node9" href="$validation_8h.html" title=" " alt="" coords="5,284,177,324"/>
-<area shape="rect" id="node10" href="$utils__display_8h.html" title=" " alt="" coords="851,93,1023,133"/>
+<area shape="rect" id="node10" href="$utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="851,93,1023,133"/>
 <area shape="rect" id="node11" href="$utils__relay_8h.html" title="Some utility functions for the relay output feature." alt="" coords="621,93,793,133"/>
 <area shape="rect" id="node3" href="$calibration_8h.html" title="Calibration values definition." alt="" coords="645,284,817,324"/>
 <area shape="rect" id="node4" href="$main_8cpp.html" title="Main code." alt="" coords="351,460,523,500"/>

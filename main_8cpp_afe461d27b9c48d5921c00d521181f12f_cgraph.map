@@ -2,13 +2,13 @@
 <area shape="rect" id="node1" title="Main processor." alt="" coords="5,398,56,424"/>
 <area shape="rect" id="node2" href="$main_8cpp.html#a31f3d562faae6b598324b56299d74f7d" title="Check the diversion state." alt="" coords="395,10,553,36"/>
 <area shape="rect" id="node4" href="$group__OLEDDisplay.html#gafaa5f070126ac5184a648b484e7cf276" title="Clear the display." alt="" coords="167,201,269,226"/>
-<area shape="rect" id="node6" href="$utils__display_8h.html#a41058bd3c78de37755e8ae71c2bfc8f3" title=" " alt="" coords="125,349,311,374"/>
+<area shape="rect" id="node6" href="$utils__display_8h.html#a955fe37f3ba164eb42378ba17ed90f42" title="Configures the value for display on a 7&#45;segment display." alt="" coords="125,349,311,374"/>
 <area shape="rect" id="node8" href="$main_8cpp.html#a5157f7f79cf8c75c2d7b41d8ed47a7ef" title="This function set all 3 loads to full power." alt="" coords="415,60,533,85"/>
 <area shape="rect" id="node9" href="$classRelayEngine.html#a4f831b566b2da140a17333ab6a39e5dc" title="Increment the duration&#39;s state of each relay." alt="" coords="123,398,313,424"/>
 <area shape="rect" id="node10" href="$classRelayEngine.html#a2891986bc989d9c35301711f674bc523" title="Proceed all relays in increasing order (surplus) or decreasing order (import)" alt="" coords="137,448,299,488"/>
 <area shape="rect" id="node11" href="$main_8cpp.html#aa0f1d282805a9e6027f2a84720d60d0b" title="This function changes the value of the load priorities." alt="" coords="124,136,312,176"/>
 <area shape="rect" id="node15" href="$main_8cpp.html#aba8ed48f0741c264f9b6052298fe1e72" title="Perform calculations on data for logging." alt="" coords="104,513,332,538"/>
-<area shape="rect" id="node16" href="$utils__display_8h.html#aa93cf18ded17c52a21fa1bd80ac95ac2" title=" " alt="" coords="159,562,277,588"/>
+<area shape="rect" id="node16" href="$utils__display_8h.html#aa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="159,562,277,588"/>
 <area shape="rect" id="node22" href="$utils_8h.html#ade56d6fce22a518b8feff1a150461f94" title="Prints data logs to the Serial output in text or json format." alt="" coords="167,664,269,689"/>
 <area shape="rect" id="node26" href="$utils__pins_8h.html#aaec5db9d46ba784c4f16046e6deb6977" title="Toggle the specified pin." alt="" coords="671,612,753,637"/>
 <area shape="rect" id="node27" href="$classRelayEngine.html#a2c8796258ac6cd4006a55c236c383287" title="Update the sliding average." alt="" coords="140,764,296,804"/>
