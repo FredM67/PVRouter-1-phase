@@ -295,7 +295,6 @@ void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToD
   }
 }
 
-
 /**
  * @brief Refreshes the display by updating the active digit and its segments.
  *
