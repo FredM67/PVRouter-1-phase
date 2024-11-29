@@ -106,24 +106,25 @@ bool forceFullPower()
 {
   if constexpr (OVERRIDE_PIN_PRESENT)
   {
-    const auto pinState{ getPinState(forcePin) };
+    for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
+
+    {
+      const auto pinState{ getPinState(forcePin[i]) };
 
 #ifdef ENABLE_DEBUG
-    static uint8_t previousState{ HIGH };
-    if (previousState != pinState)
-    {
-      DBUGLN(!pinState ? F("Trigger override!") : F("End override!"));
-    }
+      static uint8_t previousState{ HIGH };
+      if (previousState != pinState)
+      {
+        DBUGLN(!pinState ? F("Trigger override!") : F("End override!"));
+      }
 
-    previousState = pinState;
+      previousState = pinState;
 #endif
 
-    for (auto &bOverrideLoad : b_overrideLoadOn)
-    {
-      bOverrideLoad = !pinState;
+      b_overrideLoadOn[i] = !pinState;
     }
 
-    return !pinState;
+    return true;
   }
   else
   {
@@ -147,112 +148,6 @@ void proceedRotation()
 
   // prints the (new) load priorities
   logLoadPriorities();
-}
-
-/**
- * @brief Proceed load priority in combination with dual tariff
- * 
- * @param currentTemperature_x100 current temperature x 100 (default to 0 if deactivated)
- * @return true if high tariff (on-peak period)
- * @return false if low tariff (off-peak period)
- */
-bool proceedLoadPrioritiesAndOverridingDualTariff(const int16_t currentTemperature_x100)
-{
-  constexpr int16_t iTemperatureThreshold_x100{ iTemperatureThreshold * 100 };
-  static bool pinOffPeakState{ HIGH };
-  const auto pinNewState{ getPinState(dualTariffPin) };
-
-  if (pinOffPeakState && !pinNewState)
-  {
-    // we start off-peak period
-    DBUGLN(F("Change to off-peak period!"));
-
-    ul_TimeOffPeak = millis();
-
-    if constexpr (PRIORITY_ROTATION == RotationModes::AUTO)
-    {
-      proceedRotation();
-    }
-  }
-  else
-  {
-    const auto ulElapsedTime{ static_cast< uint32_t >(millis() - ul_TimeOffPeak) };
-    const auto pinState{ getPinState(forcePin) };
-
-    for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
-    {
-      // for each load, if we're inside off-peak period and within the 'force period', trigger the ISR to turn the load ON
-      if (!pinOffPeakState && !pinNewState && (ulElapsedTime >= rg_OffsetForce[i][0]) && (ulElapsedTime < rg_OffsetForce[i][1]))
-      {
-        b_overrideLoadOn[i] = !pinState || (currentTemperature_x100 <= iTemperatureThreshold_x100);
-      }
-      else
-      {
-        b_overrideLoadOn[i] = !pinState;
-      }
-    }
-  }
-  // end of off-peak period
-  if (!pinOffPeakState && pinNewState)
-  {
-    DBUGLN(F("Change to peak period!"));
-  }
-
-  pinOffPeakState = pinNewState;
-
-  return (LOW == pinOffPeakState);
-}
-
-/**
- * @brief This function changes the value of the load priorities.
- * @details Since we don't have access to a clock, we detect the offPeak start from the main energy meter.
- *          Additionally, when off-peak period starts, we rotate the load priorities for the next day.
- *
- * @param currentTemperature_x100 current temperature x 100 (default to 0 if deactivated)
- * @return true if off-peak tariff is active
- * @return false if on-peak tariff is active
- */
-bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
-{
-  if constexpr (DUAL_TARIFF)
-  {
-    return proceedLoadPrioritiesAndOverridingDualTariff(currentTemperature_x100);
-  }
-
-  if constexpr (EMONESP_CONTROL)
-  {
-    static uint8_t pinRotationState{ HIGH };
-    const auto pinNewState{ getPinState(rotationPin) };
-
-    if (pinRotationState && !pinNewState)
-    {
-      DBUGLN(F("Trigger rotation!"));
-
-      proceedRotation();
-    }
-    pinRotationState = pinNewState;
-  }
-  else if constexpr (PRIORITY_ROTATION == RotationModes::AUTO)
-  {
-    if (ROTATION_AFTER_CYCLES < absenceOfDivertedEnergyCount)
-    {
-      proceedRotation();
-
-      absenceOfDivertedEnergyCount = 0;
-    }
-  }
-
-  if constexpr (OVERRIDE_PIN_PRESENT)
-  {
-    const auto pinState{ getPinState(forcePin) };
-
-    for (auto &bOverrideLoad : b_overrideLoadOn)
-    {
-      bOverrideLoad = !pinState;
-    }
-  }
-
-  return false;
 }
 
 /**
@@ -423,7 +318,7 @@ void loop()
 
       if (!forceFullPower())
       {
-        bOffPeak = proceedLoadPrioritiesAndOverriding(iTemperature_x100);  // called every second
+        // bOffPeak = proceedLoadPrioritiesAndOverriding(iTemperature_x100);  // called every second
       }
 
       if constexpr (RELAY_DIVERSION)

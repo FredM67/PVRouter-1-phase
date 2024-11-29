@@ -155,7 +155,8 @@ void initializeOptionalPins()
 
   if constexpr (OVERRIDE_PIN_PRESENT)
   {
-    pinMode(forcePin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
+    pinMode(forcePin[0], INPUT_PULLUP);  // set as input & enable the internal pullup resistor
+    pinMode(forcePin[1], INPUT_PULLUP);  // set as input & enable the internal pullup resistor
     delay(100);                       // allow time to settle
   }
 
