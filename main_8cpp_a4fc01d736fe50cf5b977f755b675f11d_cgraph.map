@@ -20,7 +20,7 @@
 <area shape="rect" id="node15" href="$utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3" title="Set the Pins state to ON." alt="" coords="1088,179,1177,204"/>
 <area shape="rect" id="node17" href="$classTemperatureSensing.html#ab40e9df6930615d4c700780b6174e14f" title="Request temperature for all sensors." alt="" coords="388,207,556,247"/>
 <area shape="rect" id="node20" href="$processing_8cpp.html#aa2b3b1d496e37e5f29af6a766743dc8b" title="Print the settings used for the selected output mode." alt="" coords="344,320,600,345"/>
-<area shape="rect" id="node22" href="$utils__oled_8h.html#aa1f830b6ee033f89b624a2aefa9d1dbc" title=" " alt="" coords="695,371,749,396"/>
+<area shape="rect" id="node22" href="$utils__oled_8h.html#a3a5f8feefdddd371b3c454e2e2925f7f" title=" " alt="" coords="695,371,749,396"/>
 <area shape="rect" id="node23" href="$group__OLEDDisplay.html#ga2303391296efb5abb3f851b8bda64855" title="Draw the xbm on the OLED display." alt="" coords="407,421,537,447"/>
 <area shape="rect" id="node24" href="$group__OLEDDisplay.html#gaa57d8826eabcc4fdd9ff420cf69038ce" title="Get the tile from xbm object." alt="" coords="649,421,795,447"/>
 </map>

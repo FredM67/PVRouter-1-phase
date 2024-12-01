@@ -5,11 +5,12 @@ var searchData=
   ['nextlogicalloadtobeadded_2',['nextLogicalLoadToBeAdded',['../group__TimeCritical.html#ga8e7b88bb4b21554d23b57676a45e034e',1,'nextLogicalLoadToBeAdded():&#160;processing.cpp'],['../group__TimeCritical.html#ga8e7b88bb4b21554d23b57676a45e034e',1,'nextLogicalLoadToBeAdded():&#160;processing.cpp']]],
   ['nextlogicalloadtoberemoved_3',['nextLogicalLoadToBeRemoved',['../group__TimeCritical.html#gabfb25288a79335282af6922e833d3c35',1,'nextLogicalLoadToBeRemoved():&#160;processing.cpp'],['../group__TimeCritical.html#gabfb25288a79335282af6922e833d3c35',1,'nextLogicalLoadToBeRemoved():&#160;processing.cpp']]],
   ['no_5fof_5fdumploads_4',['NO_OF_DUMPLOADS',['../config_8h.html#aa2458020f21db854d8f2fe0e500dcd05',1,'config.h']]],
-  ['none_5',['NONE',['../types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ab50339a10e1de285ac99d4c3990b8693',1,'types.h']]],
-  ['noofdigitlocationlines_6',['noOfDigitLocationLines',['../utils__display_8h.html#a62d0c9099af6d401b59b3a4bcaea73bb',1,'utils_display.h']]],
-  ['noofdigitlocations_7',['noOfDigitLocations',['../utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654',1,'utils_display.h']]],
-  ['noofdigitselectionlines_8',['noOfDigitSelectionLines',['../utils__display_8h.html#a50d1645f3f220eaddf4dc01e9ce3778e',1,'utils_display.h']]],
-  ['noofpossiblecharacters_9',['noOfPossibleCharacters',['../utils__display_8h.html#aa74f2c2474570fdadf3b439848514b5f',1,'utils_display.h']]],
-  ['noofsegmentsperdigit_10',['noOfSegmentsPerDigit',['../utils__display_8h.html#a0158e223e6e79ce639b843d9134f8965',1,'utils_display.h']]],
-  ['normal_11',['NORMAL',['../types_8h.html#aae913bd32d3b848f4a5ba5b9d32e9a1fa1e23852820b9154316c7c06e2b7ba051',1,'types.h']]]
+  ['noinverse_5',['noInverse',['../classu8x8__fake.html#a971822c969bce5a8425750e847d30e81',1,'u8x8_fake']]],
+  ['none_6',['NONE',['../types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ab50339a10e1de285ac99d4c3990b8693',1,'types.h']]],
+  ['noofdigitlocationlines_7',['noOfDigitLocationLines',['../utils__display_8h.html#a62d0c9099af6d401b59b3a4bcaea73bb',1,'utils_display.h']]],
+  ['noofdigitlocations_8',['noOfDigitLocations',['../utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654',1,'utils_display.h']]],
+  ['noofdigitselectionlines_9',['noOfDigitSelectionLines',['../utils__display_8h.html#a50d1645f3f220eaddf4dc01e9ce3778e',1,'utils_display.h']]],
+  ['noofpossiblecharacters_10',['noOfPossibleCharacters',['../utils__display_8h.html#aa74f2c2474570fdadf3b439848514b5f',1,'utils_display.h']]],
+  ['noofsegmentsperdigit_11',['noOfSegmentsPerDigit',['../utils__display_8h.html#a0158e223e6e79ce639b843d9134f8965',1,'utils_display.h']]],
+  ['normal_12',['NORMAL',['../types_8h.html#aae913bd32d3b848f4a5ba5b9d32e9a1fa1e23852820b9154316c7c06e2b7ba051',1,'types.h']]]
 ];

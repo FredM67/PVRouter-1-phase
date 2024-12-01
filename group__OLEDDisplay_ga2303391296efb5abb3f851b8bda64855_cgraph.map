@@ -1,5 +1,5 @@
 <map id="u8x8_draw_xbm" name="u8x8_draw_xbm">
 <area shape="rect" id="node1" title="Draw the xbm on the OLED display." alt="" coords="5,31,135,56"/>
 <area shape="rect" id="node2" href="$group__OLEDDisplay.html#gaa57d8826eabcc4fdd9ff420cf69038ce" title="Get the tile from xbm object." alt="" coords="183,5,328,31"/>
-<area shape="rect" id="node3" href="$utils__oled_8h.html#aa1f830b6ee033f89b624a2aefa9d1dbc" title=" " alt="" coords="228,55,283,80"/>
+<area shape="rect" id="node3" href="$utils__oled_8h.html#a3a5f8feefdddd371b3c454e2e2925f7f" title=" " alt="" coords="228,55,283,80"/>
 </map>

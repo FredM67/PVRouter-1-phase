@@ -5,7 +5,7 @@ var searchData=
   ['check_5frelay_5fpins_2',['check_relay_pins',['../validation_8h.html#a60096a6d3a2fc387b51a01b6ff8c53d2',1,'validation.h']]],
   ['checkdiversiononoff_3',['checkDiversionOnOff',['../main_8cpp.html#a31f3d562faae6b598324b56299d74f7d',1,'main.cpp']]],
   ['clear_4',['clear',['../classmovingAvg.html#adc157cfdb883805b88f3979cebb72de7',1,'movingAvg']]],
-  ['cleardisplay_5',['clearDisplay',['../group__OLEDDisplay.html#gafaa5f070126ac5184a648b484e7cf276',1,'utils_oled.h']]],
+  ['cleardisplay_5',['clearDisplay',['../classu8x8__fake.html#ae52ea4436df7b4d975c4e075e86db1d3',1,'u8x8_fake::clearDisplay()'],['../group__OLEDDisplay.html#gafaa5f070126ac5184a648b484e7cf276',1,'clearDisplay():&#160;utils_oled.h']]],
   ['configurevaluefordisplay_6',['configureValueForDisplay',['../group__SegDisplay.html#ga955fe37f3ba164eb42378ba17ed90f42',1,'utils_display.h']]],
   ['confirmpolarity_7',['confirmPolarity',['../group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672',1,'confirmPolarity():&#160;processing.cpp'],['../group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672',1,'confirmPolarity():&#160;processing.cpp']]]
 ];
