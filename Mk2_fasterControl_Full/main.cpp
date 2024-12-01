@@ -112,13 +112,13 @@ bool forceFullPower()
       const auto pinState{ getPinState(forcePin[i]) };
 
 #ifdef ENABLE_DEBUG
-      static uint8_t previousState{ HIGH };
-      if (previousState != pinState)
+      static uint8_t previousState[NO_OF_DUMPLOADS]{ HIGH , HIGH };
+      if (previousState[i] != pinState)
       {
         DBUGLN(!pinState ? F("Trigger override!") : F("End override!"));
       }
 
-      previousState = pinState;
+      previousState[i] = pinState;
 #endif
 
       b_overrideLoadOn[i] = !pinState;
