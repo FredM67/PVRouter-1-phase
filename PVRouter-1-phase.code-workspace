@@ -19,7 +19,8 @@
 	"settings": {
 		"files.associations": {
 			"xtr1common": "cpp",
-			"new": "cpp"
+			"new": "cpp",
+			"initializer_list": "cpp"
 		}
 	}
 }

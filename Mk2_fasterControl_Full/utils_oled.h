@@ -15,6 +15,7 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
 
+#include "type_traits.hpp"
 #include "FastDivision.h"
 #include "types.h"
 
@@ -24,9 +25,47 @@
 #define OLED_RESET -1        // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C  ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 
-U8X8_SSD1306_128X64_NONAME_HW_I2C u8x8(/* reset=*/U8X8_PIN_NONE); /**< The OLED display object */
+/**
+ * @brief This is a fake class in case there's no OLED display
+ * 
+ * When declaring a variable with the real OLED class, even it's not used, it is
+ * loaded and partially initialized.
+ * This leads to "break" the ADC measurement on old boards and
+ * consumes memory on any board.
+ * This is to avoid the use of "#ifdef" in the code to activate/deactivate
+ * portions of code.
+ * 
+ */
+class u8x8_fake
+{
+public:
+  u8x8_fake(uint8_t) {}
 
-inline constexpr uint8_t LOGO_WIDTH{ 72 };  /**< The widthof the object, in pixel */
+  bool begin()
+  {
+    return true;
+  }
+  void clearDisplay() {}
+  void noInverse() {}
+  uint8_t getCols()
+  {
+    return 0;
+  }
+  uint8_t getRows()
+  {
+    return 0;
+  }
+
+  void setFont(const uint8_t *) {}
+  void drawString(uint8_t, uint8_t, const char *) {}
+  void drawGlyph(uint8_t, uint8_t, uint8_t) {}
+
+  void drawTile(uint8_t, uint8_t, uint8_t, uint8_t *) {}
+};
+
+conditional< TYPE_OF_DISPLAY == DisplayType::OLED, U8X8_SSD1306_128X64_NONAME_HW_I2C, u8x8_fake >::type u8x8(/* reset=*/U8X8_PIN_NONE); /**< The OLED display object */
+
+inline constexpr uint8_t LOGO_WIDTH{ 72 };  /**< The width of the object, in pixel */
 inline constexpr uint8_t LOGO_HEIGHT{ 64 }; /**< The Height of the object, in pixel */
 
 const unsigned char logo_xbm[] U8X8_PROGMEM = {
