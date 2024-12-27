@@ -238,9 +238,9 @@ Variables</h2></td></tr>
 <tr class="separator:a0a94f2575692ee6cc664422862a06973"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bcbf95314adb8b4f7e12c1bbffb3182"><td class="memItemLeft" align="right" valign="top">volatile int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#a4bcbf95314adb8b4f7e12c1bbffb3182">copyOf_sumP_grid_overDL_Period</a></td></tr>
 <tr class="separator:a4bcbf95314adb8b4f7e12c1bbffb3182"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc81dd6395f3e81e9017503274f6baef"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#acc81dd6395f3e81e9017503274f6baef">currentSensor_diverted</a> { 3 }</td></tr>
+<tr class="memitem:acc81dd6395f3e81e9017503274f6baef"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#acc81dd6395f3e81e9017503274f6baef">currentSensor_diverted</a> { <a class="el" href="config_8h.html#a8b5ec5ad0f115c9bd4e6a1beb4d1b185">OLD_PCB</a> ? 4 : 3 }</td></tr>
 <tr class="separator:acc81dd6395f3e81e9017503274f6baef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ee19cf2edef14f00c131bd773dbb76a"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#a2ee19cf2edef14f00c131bd773dbb76a">currentSensor_grid</a> { 1 }</td></tr>
+<tr class="memitem:a2ee19cf2edef14f00c131bd773dbb76a"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#a2ee19cf2edef14f00c131bd773dbb76a">currentSensor_grid</a> { <a class="el" href="config_8h.html#a8b5ec5ad0f115c9bd4e6a1beb4d1b185">OLD_PCB</a> ? 5 : 1 }</td></tr>
 <tr class="separator:a2ee19cf2edef14f00c131bd773dbb76a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3c1c911bda4daa550c3d3ca7287f41f"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#ad3c1c911bda4daa550c3d3ca7287f41f">delayBeforeSerialStarts</a> { 1000 }</td></tr>
 <tr class="separator:ad3c1c911bda4daa550c3d3ca7287f41f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -258,7 +258,7 @@ Variables</h2></td></tr>
 <tr class="separator:a0d30025137b8f9bfe6d4e9c832db76b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a673a8bde5c8cb0ac65947604cd88f6a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPayloadTx__struct.html">PayloadTx_struct</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#a673a8bde5c8cb0ac65947604cd88f6a8">tx_data</a></td></tr>
 <tr class="separator:a673a8bde5c8cb0ac65947604cd88f6a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f0dc9e8ff302baddb5398aaed54f975"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#a4f0dc9e8ff302baddb5398aaed54f975">voltageSensor</a> { 0 }</td></tr>
+<tr class="memitem:a4f0dc9e8ff302baddb5398aaed54f975"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#a4f0dc9e8ff302baddb5398aaed54f975">voltageSensor</a> { <a class="el" href="config_8h.html#a8b5ec5ad0f115c9bd4e6a1beb4d1b185">OLD_PCB</a> ? 3 : 0 }</td></tr>
 <tr class="separator:a4f0dc9e8ff302baddb5398aaed54f975"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -765,7 +765,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr uint8_t currentSensor_diverted { 3 }</td>
+          <td class="memname">constexpr uint8_t currentSensor_diverted { <a class="el" href="config_8h.html#a8b5ec5ad0f115c9bd4e6a1beb4d1b185">OLD_PCB</a> ? 4 : 3 }</td>
         </tr>
       </table>
   </td>
@@ -789,7 +789,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr uint8_t currentSensor_grid { 1 }</td>
+          <td class="memname">constexpr uint8_t currentSensor_grid { <a class="el" href="config_8h.html#a8b5ec5ad0f115c9bd4e6a1beb4d1b185">OLD_PCB</a> ? 5 : 1 }</td>
         </tr>
       </table>
   </td>
@@ -1009,7 +1009,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr uint8_t voltageSensor { 0 }</td>
+          <td class="memname">constexpr uint8_t voltageSensor { <a class="el" href="config_8h.html#a8b5ec5ad0f115c9bd4e6a1beb4d1b185">OLD_PCB</a> ? 3 : 0 }</td>
         </tr>
       </table>
   </td>
