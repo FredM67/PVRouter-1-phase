@@ -50,7 +50,7 @@ inline constexpr bool WATCHDOG_PIN_PRESENT{ false }; /**< set it to 'true' if th
 inline constexpr bool RELAY_DIVERSION{ false };      /**< set it to 'true' if a relay is used for diversion */
 inline constexpr bool DUAL_TARIFF{ false };          /**< set it to 'true' if there's a dual tariff each day AND the router is connected to the billing meter */
 
-inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED }; /**< set it to installed display including optional additional logic chips */
+inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE }; /**< set it to installed display including optional additional logic chips */
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // allocation of digital pins which are not dependent on the display type that is in use
