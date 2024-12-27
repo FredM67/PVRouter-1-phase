@@ -1,7 +1,7 @@
 var searchData=
 [
   ['read_5fscratchpad_0',['READ_SCRATCHPAD',['../constants_8h.html#a4efcca8a8902b210fd176b46753964f1',1,'constants.h']]],
-  ['readtemperature_1',['readTemperature',['../classTemperatureSensing.html#a7fef01650aa12d8a4ff2b3ca26bd0803',1,'TemperatureSensing']]],
+  ['readtemperature_1',['readTemperature',['../classTemperatureSensing.html#a818e69732219334348f6e6e44774d0fe',1,'TemperatureSensing']]],
   ['realenergy_5fdiverted_2',['realEnergy_diverted',['../processing_8cpp.html#ab7bba643100d679d1dcf1a8aff81d2f3',1,'processing.cpp']]],
   ['realenergy_5fgrid_3',['realEnergy_grid',['../processing_8cpp.html#a5cad71887d7425aba03f377a26224413',1,'processing.cpp']]],
   ['recenttransition_4',['recentTransition',['../processing_8cpp.html#a21746c4720d63888ffd00929388d2236',1,'processing.cpp']]],
@@ -25,7 +25,7 @@ var searchData=
   ['remove_5freference_22',['remove_reference',['../structremove__reference.html',1,'']]],
   ['remove_5freference_2ehpp_23',['remove_reference.hpp',['../remove__reference_8hpp.html',1,'']]],
   ['remove_5freference_3c_20t_20_26_20_3e_24',['remove_reference&lt; T &amp; &gt;',['../structremove__reference_3_01T_01_6_01_4.html',1,'']]],
-  ['requesttemperatures_25',['requestTemperatures',['../classTemperatureSensing.html#ab40e9df6930615d4c700780b6174e14f',1,'TemperatureSensing']]],
+  ['requesttemperatures_25',['requestTemperatures',['../classTemperatureSensing.html#a10629740380a6f688ac5c70346a94c80',1,'TemperatureSensing']]],
   ['required_5fexport_5fin_5fwatts_26',['REQUIRED_EXPORT_IN_WATTS',['../config__system_8h.html#a0d838172b50bebc493c09edb7b7606d5',1,'config_system.h']]],
   ['requiredexportpermainscycle_5finieu_27',['requiredExportPerMainsCycle_inIEU',['../processing_8cpp.html#a22ac107a8fe19694803bd2b1b597bc0c',1,'processing.cpp']]],
   ['rf_20feature_28',['RF feature',['../group__RF.html',1,'']]],

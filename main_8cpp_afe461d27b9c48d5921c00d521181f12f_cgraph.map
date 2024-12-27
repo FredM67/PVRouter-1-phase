@@ -29,6 +29,6 @@
 <area shape="rect" id="node23" href="$utils_8h.html#ae46d07fd4694c49e10360b5d79163443" title="Prints data logs to the Serial output in text format." alt="" coords="406,664,542,689"/>
 <area shape="rect" id="node24" href="$classRelayEngine.html#a2c586921b020480449159786461195aa" title="Get the current average." alt="" coords="616,661,808,686"/>
 <area shape="rect" id="node25" href="$classTemperatureSensing.html#a2ee48e23ceaf2bbc08cc4be575bb7d90" title="Get the number of sensors." alt="" coords="635,711,789,751"/>
-<area shape="rect" id="node30" href="$classTemperatureSensing.html#a7fef01650aa12d8a4ff2b3ca26bd0803" title="Read temperature of a specific device." alt="" coords="397,764,551,804"/>
-<area shape="rect" id="node31" href="$classTemperatureSensing.html#ab40e9df6930615d4c700780b6174e14f" title="Request temperature for all sensors." alt="" coords="390,828,558,868"/>
+<area shape="rect" id="node30" href="$classTemperatureSensing.html#a818e69732219334348f6e6e44774d0fe" title="Read temperature of a specific device." alt="" coords="397,764,551,804"/>
+<area shape="rect" id="node31" href="$classTemperatureSensing.html#a10629740380a6f688ac5c70346a94c80" title="Request temperature for all sensors." alt="" coords="390,828,558,868"/>
 </map>
