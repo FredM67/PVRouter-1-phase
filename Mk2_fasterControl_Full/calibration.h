@@ -36,8 +36,8 @@ inline constexpr float powerCal_diverted{ 0.0435F };  // for CT2
 
 inline constexpr float f_voltageCal{ 0.8151F }; /**< compared with Sentron PAC 4200 */
 
-inline constexpr float lpf_gain{ 0 }; /**< setting this to 0 disables this extra processing */
-inline constexpr float alpha{ 0.002 };
+inline constexpr float lpf_gain{ 9 }; /**< setting this to 0 disables this extra processing */
+inline constexpr float alpha{ 0.0011 };
 
 //--------------------------------------------------------------------------------------------------
 
