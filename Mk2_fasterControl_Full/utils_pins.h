@@ -23,7 +23,7 @@ inline void setPinsON(const uint16_t pins);
 inline constexpr void setPinOFF(const uint8_t pin);
 inline void setPinsOFF(const uint16_t pins);
 
-inline bool getPinState(const uint8_t pin);
+inline constexpr bool getPinState(const uint8_t pin);
 #else
 inline constexpr void togglePin(const uint8_t pin) __attribute__((always_inline));
 
@@ -33,7 +33,7 @@ inline void setPinsON(const uint16_t pins) __attribute__((always_inline));
 inline constexpr void setPinOFF(const uint8_t pin) __attribute__((always_inline));
 inline void setPinsOFF(const uint16_t pins) __attribute__((always_inline));
 
-inline bool getPinState(const uint8_t pin) __attribute__((always_inline));
+inline constexpr bool getPinState(const uint8_t pin) __attribute__((always_inline));
 #endif
 
 /**
@@ -84,9 +84,13 @@ void constexpr togglePin(const uint8_t pin)
   {
     bit_set(PIND, pin);
   }
-  else
+  else if (pin < 14)
   {
     bit_set(PINB, pin - 8);
+  }
+  else
+  {
+    bit_set(PINC, pin - 14);
   }
 }
 
@@ -119,9 +123,13 @@ inline constexpr void setPinON(const uint8_t pin)
   {
     bit_set(PORTD, pin);
   }
-  else
+  else if (pin < 14)
   {
     bit_set(PORTB, pin - 8);
+  }
+  else
+  {
+    bit_set(PORTC, pin - 14);
   }
 }
 
@@ -147,9 +155,13 @@ inline constexpr void setPinOFF(const uint8_t pin)
   {
     bit_clear(PORTD, pin);
   }
-  else
+  else if (pin < 14)
   {
     bit_clear(PORTB, pin - 8);
+  }
+  else
+  {
+    bit_clear(PORTC, pin - 14);
   }
 }
 
@@ -171,9 +183,10 @@ inline void setPinsOFF(const uint16_t pins)
  * @return true if HIGH
  * @return false if LOW
  */
-inline bool getPinState(const uint8_t pin)
+inline constexpr bool getPinState(const uint8_t pin)
 {
-  return (pin < 8) ? bitRead(PIND, pin) : bitRead(PINB, pin - 8);
+  return (pin < 8) ? bit_read(PIND, pin) : (pin < 14) ? bit_read(PINB, pin - 8)
+                                                      : bit_read(PINC, pin - 14);
 }
 
 #endif  // UTILS_PINS_H

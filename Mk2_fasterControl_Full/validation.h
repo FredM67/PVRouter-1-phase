@@ -43,7 +43,7 @@ static_assert(!RELAY_DIVERSION | (60 / DATALOG_PERIOD_IN_SECONDS * DATALOG_PERIO
 
 constexpr uint16_t check_pins()
 {
-  uint16_t used_pins{ 0 };
+  uint32_t used_pins{ 0 };
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
@@ -89,7 +89,7 @@ constexpr uint16_t check_pins()
     if (loadPin == 0xff)
       return 0;
 
-    if (bitRead(used_pins, loadPin))
+    if (bit_read(used_pins, loadPin))
       return 0;
 
     bit_set(used_pins, loadPin);
@@ -103,7 +103,7 @@ constexpr uint16_t check_pins()
 
       if (relayPin != 0xff)
       {
-        if (bitRead(used_pins, relayPin))
+        if (bit_read(used_pins, relayPin))
           return 0;
 
         bit_set(used_pins, relayPin);
@@ -118,7 +118,7 @@ constexpr uint16_t check_pins()
       if (segPin == 0xff)
         return 0;
 
-      if (bitRead(used_pins, segPin))
+      if (bit_read(used_pins, segPin))
         return 0;
 
       bit_set(used_pins, segPin);
@@ -128,7 +128,7 @@ constexpr uint16_t check_pins()
       if (segPin == 0xff)
         return 0;
 
-      if (bitRead(used_pins, segPin))
+      if (bit_read(used_pins, segPin))
         return 0;
 
       bit_set(used_pins, segPin);
@@ -141,7 +141,7 @@ constexpr uint16_t check_pins()
       if (segPin == 0xff)
         return 0;
 
-      if (bitRead(used_pins, segPin))
+      if (bit_read(used_pins, segPin))
         return 0;
 
       bit_set(used_pins, segPin);
@@ -151,7 +151,7 @@ constexpr uint16_t check_pins()
       if (segPin == 0xff)
         return 0;
 
-      if (bitRead(used_pins, segPin))
+      if (bit_read(used_pins, segPin))
         return 0;
 
       bit_set(used_pins, segPin);
@@ -205,7 +205,7 @@ constexpr bool check_load_priorities()
 static_assert(check_load_priorities(), "******** Load Priorities wrong ! Please check your config ! ********");
 static_assert(check_pins(), "******** Duplicate pin definition ! Please check your config ! ********");
 static_assert((check_pins() & B00000011) == 0, "******** Pins 0 & 1 are reserved for RX/TX ! Please check your config ! ********");
-static_assert((check_pins() & 0xC000) == 0, "******** Pins 14 and/or 15 do not exist ! Please check your config ! ********");
+//static_assert((check_pins() & 0xC000) == 0, "******** Pins 14 and/or 15 do not exist ! Please check your config ! ********");
 //static_assert(!(RF_CHIP_PRESENT && ((check_pins() & 0x3C04) != 0)), "******** Pins from RF chip are reserved ! Please check your config ! ********");
 static_assert(check_relay_pins(), "******** Wrong pin(s) configuration for relay(s) ********");
 
