@@ -55,20 +55,20 @@ byte sensor_I2{ 3 };
 
 uint32_t cycleCount{ 0 };
 uint16_t samplesRecorded{ 0 };
-constexpr uint16_t DCoffsetI1_nominal{ 511 };  // nominal mid-point value of ADC @ x1 scale
+constexpr int16_t DCoffsetI1_nominal{ 511 };  // nominal mid-point value of ADC @ x1 scale
 
 int32_t DCoffset_V_long;  // <--- for LPF
 int32_t DCoffset_V_min;   // <--- for LPF
 int32_t DCoffset_V_max;   // <--- for LPF
 
 // extra items for an LPF to improve the processing of data samples from CT1
-long lpf_long = 512;  // new LPF, for offsetting the behaviour of CT1 as a HPF
+int32_t lpf_long = 512;  // new LPF, for offsetting the behaviour of CT1 as a HPF
 //
 // The next two constants determine the profile of the LPF.
 // They are matched to the physical behaviour of the YHDC SCT-013-000 CT
 // and the CT1 samples being 3x104us apart (free-running mode)
 //
-constexpr float lpf_gain{ 0 };  // <- setting this to 0 disables this extra processing
+constexpr float lpf_gain{ 8 };  // <- setting this to 0 disables this extra processing
 // const float lpf_gain = 0;  // <- setting this to 0 disables this extra processing
 constexpr float alpha = 0.002;  //
 
@@ -371,9 +371,9 @@ void allGeneralProcessing()  // each iteration is for one set of data samples
     storedSample_I1_from_ADC[samplesRecorded] = sample_I1;
   }
 
-  long sampleI1minusDC_long = ((long)(sample_I1 - DCoffsetI1_nominal)) << 8;
+  int32_t sampleI1minusDC_long = ((int32_t)(sample_I1 - DCoffsetI1_nominal)) << 8;
 
-  long last_lpf_long = lpf_long;
+  const int32_t last_lpf_long = lpf_long;
   lpf_long = last_lpf_long + alpha * (sampleI1minusDC_long - last_lpf_long);
   sampleI1minusDC_long += (lpf_gain * lpf_long);
 
