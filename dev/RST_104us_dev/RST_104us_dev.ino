@@ -76,7 +76,7 @@ volatile bool newCycle{false};
 volatile bool dataReady{false};
 volatile int16_t sample_V;
 volatile int16_t sample_I1;
-volatile int16_t sample_I2;
+//volatile int16_t sample_I2;
 
 enum polarities polarityOfMostRecentVsample;
 enum polarities polarityOfLastVsample;
@@ -193,7 +193,7 @@ ISR(ADC_vect)
         // ADCSRA |= (1 << ADSC);    // start the ADC
         ++sample_index; // increment the control flag
         sample_I1 = sample_I1_raw;
-        sample_I2 = sample_I2_raw;
+        //sample_I2 = sample_I2_raw;
 
         dataReady = true;
         break;
