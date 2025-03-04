@@ -251,18 +251,6 @@ void updatePhysicalLoadStates()
 
       b_reOrderLoads = false;
     }
-
-    if constexpr (!DUAL_TARIFF)
-    {
-      if (0x00 == (loadPrioritiesAndState[0] & loadStateOnBit))
-      {
-        ++absenceOfDivertedEnergyCount;
-      }
-      else
-      {
-        absenceOfDivertedEnergyCount = 0;
-      }
-    }
   }
 
   const bool bDiversionOff{ b_diversionOff };
