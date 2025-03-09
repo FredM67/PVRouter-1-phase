@@ -12,14 +12,15 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <Arduino.h>
+#include <ArduinoJson.h>
+
 #include "calibration.h"
 #include "constants.h"
 #include "dualtariff.h"
 #include "processing.h"
 
 #include "FastDivision.h"
-
-#include <ArduinoJson.h>
 
 /**
  * @brief Print the configuration during start
