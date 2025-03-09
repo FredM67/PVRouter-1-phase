@@ -19,6 +19,8 @@
 
 #include "FastDivision.h"
 
+#include <ArduinoJson.h>
+
 /**
  * @brief Print the configuration during start
  *
@@ -149,6 +151,45 @@ inline void printForSerialText()
 #endif  // DUAL_TARIFF
 
   Serial.println(F(")"));
+}
+
+inline void printForSerialJson()
+{
+  ArduinoJson::StaticJsonDocument<256> doc;
+
+  doc["P"] = tx_data.powerGrid;
+
+  if constexpr (RELAY_DIVERSION)
+  {
+    doc["R"] = relays.get_average();
+  }
+
+  doc["D"] = tx_data.powerDiverted;
+  doc["E"] = (float)divertedEnergyTotal_Wh * 0.001F;
+  doc["V"] = (float)tx_data.Vrms_L_x100 * 0.01F;
+
+  if constexpr (TEMP_SENSOR_PRESENT)
+  {
+    for (uint8_t idx = 0; idx < temperatureSensing.get_size(); ++idx)
+    {
+      if ((OUTOFRANGE_TEMPERATURE == tx_data.temperature_x100[idx])
+          || (DEVICE_DISCONNECTED_RAW == tx_data.temperature_x100[idx]))
+      {
+        continue;
+      }
+      doc[String("T") + (idx + 1)] = (float)tx_data.temperature_x100[idx] * 0.01F;
+    }
+  }
+
+#ifndef DUAL_TARIFF
+  if constexpr (PRIORITY_ROTATION != RotationModes::OFF)
+  {
+    doc["NoED"] = absenceOfDivertedEnergyCount;
+  }
+#endif  // DUAL_TARIFF
+
+  serializeJson(doc, Serial);
+  Serial.println();
 }
 
 /**

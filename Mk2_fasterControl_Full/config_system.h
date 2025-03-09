@@ -40,4 +40,19 @@ inline constexpr typename conditional< DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUE
 inline constexpr float invSUPPLY_FREQUENCY{ 1.0F / SUPPLY_FREQUENCY };
 inline constexpr float invDATALOG_PERIOD_IN_MAINS_CYCLES{ 1.0F / DATALOG_PERIOD_IN_MAINS_CYCLES };
 
+//--------------------------------------------------------------------------------------------------
+#ifdef EMONESP
+#undef SERIALPRINT // Must not corrupt serial output to emonHub with 'human-friendly' printout
+#undef SERIALOUT
+#undef DEBUGGING
+#include <ArduinoJson.h>
+#endif
+
+#ifdef SERIALOUT
+#undef EMONESP
+#undef SERIALPRINT // Must not corrupt serial output to emonHub with 'human-friendly' printout
+#undef DEBUGGING
+#endif
+//--------------------------------------------------------------------------------------------------
+
 #endif  // CONFIG_SYSTEM_H
