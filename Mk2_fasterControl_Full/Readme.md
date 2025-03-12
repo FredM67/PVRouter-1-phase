@@ -3,6 +3,7 @@
 Ce programme est conçu pour être utilisé avec l'IDE Arduino et/ou d'autres IDE de développement comme VSCode + PlatformIO.
 
 - [Utilisation avec Arduino IDE](#utilisation-avec-arduino-ide)
+  - [Bibliothèques requises](#bibliothèques-requises)
 - [Utilisation avec Visual Studio Code](#utilisation-avec-visual-studio-code)
 - [Aperçu rapide des fichiers](#aperçu-rapide-des-fichiers)
 - [Documentation de développement](#documentation-de-développement)
@@ -24,6 +25,8 @@ Ce programme est conçu pour être utilisé avec l'IDE Arduino et/ou d'autres ID
   - [Rotation des priorités](#rotation-des-priorités)
   - [Configuration de la marche forcée](#configuration-de-la-marche-forcée)
   - [Arrêt du routage](#arrêt-du-routage)
+- [Dépannage](#dépannage)
+- [Contribuer](#contribuer)
 
 # Utilisation avec Arduino IDE
 
@@ -42,6 +45,13 @@ Pour **MacOSX**, ce fichier se trouve dans '/Users/[user]/Library/Arduino15/pack
 Ouvrez le fichier dans n'importe quel éditeur de texte (vous aurez besoin des droits d'administrateur) et remplacez le paramètre '**-std=gnu++11**' par '**-std=gnu++17**'. C'est tout !
 
 Si votre IDE Arduino était ouvert, veuillez fermer toutes les instances et le rouvrir.
+
+## Bibliothèques requises
+
+Pour utiliser le projet, et selon la configuration du programme, vous aurez besoin des bibliothèques :
+- ArduinoJson
+- U8g2
+- OneWire
 
 # Utilisation avec Visual Studio Code
 
@@ -106,12 +116,12 @@ La cohérence de la configuration est vérifiée lors de la compilation. Par exe
 
 ## Configuration de l'affichage
 
-Selon le type d'affichage présent, il faudra configurer la ligne :
+Configurez le type d'affichage dans `config.h` :
 ```cpp
 inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE };
 ```
 
-Il y a 4 possibilités :
+Les options possibles sont :
 - **DisplayType::NONE** : Aucun affichage n'est utilisé.
 - **DisplayType::OLED** : Utilise un écran OLED pour afficher les informations.
 - **DisplayType::SEG** : Utilise un afficheur à segments pour afficher les informations.
@@ -357,5 +367,13 @@ Vous devez également spécifier la *pin* à laquelle le contact sec est connect
 ```cpp
 inline constexpr uint8_t diversionPin{ 12 };
 ```
+
+# Dépannage
+- Assurez-vous que toutes les bibliothèques requises sont installées.
+- Vérifiez la configuration correcte des pins et des paramètres.
+- Consultez la sortie série pour les messages d'erreur.
+
+# Contribuer
+Les contributions sont les bienvenues ! Veuillez soumettre des problèmes, des demandes de fonctionnalités et des pull requests via GitHub.
 
 *doc non finie*
