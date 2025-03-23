@@ -42,7 +42,7 @@ inline constexpr float invDATALOG_PERIOD_IN_MAINS_CYCLES{ 1.0F / DATALOG_PERIOD_
 
 //--------------------------------------------------------------------------------------------------
 #ifdef EMONESP
-#undef SERIALPRINT // Must not corrupt serial output to emonHub with 'human-friendly' printout
+#undef SERIALPRINT  // Must not corrupt serial output to emonHub with 'human-friendly' printout
 #undef SERIALOUT
 #undef DEBUGGING
 #include <ArduinoJson.h>
@@ -50,9 +50,9 @@ inline constexpr float invDATALOG_PERIOD_IN_MAINS_CYCLES{ 1.0F / DATALOG_PERIOD_
 
 #ifdef SERIALOUT
 #undef EMONESP
-#undef SERIALPRINT // Must not corrupt serial output to emonHub with 'human-friendly' printout
+#undef SERIALPRINT  // Must not corrupt serial output to emonHub with 'human-friendly' printout
 #undef DEBUGGING
 #endif
 //--------------------------------------------------------------------------------------------------
 
-#endif  // CONFIG_SYSTEM_H
+#endif /* CONFIG_SYSTEM_H */

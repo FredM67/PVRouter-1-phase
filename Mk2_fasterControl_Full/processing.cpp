@@ -390,7 +390,10 @@ void processRawSamples()
           if (divertedEnergyRecent_IEU > IEU_per_Wh)
           {
             divertedEnergyRecent_IEU -= IEU_per_Wh;
-            ++divertedEnergyTotal_Wh;
+            if (!b_overrideLoadOn[0])
+            {
+              ++divertedEnergyTotal_Wh;
+            }
           }
         }
       }

@@ -19,9 +19,9 @@
 // Output messages
 //#define EMONESP  /**< Uncomment if an ESP WiFi module is used
 
-//#define ENABLE_DEBUG /**< enable this line to include debugging print statements */
+#define ENABLE_DEBUG /**< enable this line to include debugging print statements */
 #define SERIALPRINT  /**< include 'human-friendly' print statement for commissioning - comment this line to exclude. */
-#define SERIALOUT /**< Uncomment if a wired serial connection is used */
+#define SERIALOUT    /**< Uncomment if a wired serial connection is used */
 //--------------------------------------------------------------------------------------------------
 
 #include "config_system.h"
@@ -32,7 +32,7 @@
 #include "utils_relay.h"
 #include "utils_temp.h"
 
-inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 }; /**< number of dump loads connected to the diverter */
+inline constexpr uint8_t NO_OF_DUMPLOADS{ 1 }; /**< number of dump loads connected to the diverter */
 
 #ifdef EMONESP
 inline constexpr bool EMONESP_CONTROL{ true };
@@ -41,9 +41,9 @@ inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::PIN }; /**< man
 inline constexpr bool OVERRIDE_PIN_PRESENT{ true };                     /**< managed through EmonESP */
 #else
 inline constexpr bool EMONESP_CONTROL{ false };
-inline constexpr bool DIVERSION_PIN_PRESENT{ false };                   /**< set it to 'true' if you want to control diversion ON/OFF */
+inline constexpr bool DIVERSION_PIN_PRESENT{ true };                    /**< set it to 'true' if you want to control diversion ON/OFF */
 inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::OFF }; /**< set it to 'OFF/AUTO/PIN' if you want manual/automatic rotation of priorities */
-inline constexpr bool OVERRIDE_PIN_PRESENT{ false };                    /**< set it to 'true' if there's a override pin */
+inline constexpr bool OVERRIDE_PIN_PRESENT{ true };                     /**< set it to 'true' if there's a override pin */
 #endif
 
 inline constexpr bool WATCHDOG_PIN_PRESENT{ false }; /**< set it to 'true' if there's a watch led */
@@ -57,15 +57,15 @@ inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::SEG }; /**< set it to
 ////////////////////////////////////////////////////////////////////////////////////////
 // allocation of digital pins which are not dependent on the display type that is in use
 //
-inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 4, 3 };         /**< for 1-phase PCB - "trigger" port is pin 4, "mode" port is pin 3 */
-inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1 }; /**< load priorities and states at startup */
+inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 4 };         /**< for 1-phase PCB - "trigger" port is pin 4, "mode" port is pin 3 */
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0 }; /**< load priorities and states at startup */
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Set the value to 0xff when the pin is not needed (feature deactivated)
 inline constexpr uint8_t dualTariffPin{ 0xff }; /**< for 3-phase PCB, off-peak trigger */
-inline constexpr uint8_t diversionPin{ 0xff };  /**< if LOW, set diversion on standby */
+inline constexpr uint8_t diversionPin{ 15 };    /**< if LOW, set diversion on standby */
 inline constexpr uint8_t rotationPin{ 0xff };   /**< if LOW, trigger a load priority rotation */
-inline constexpr uint8_t forcePin{ 0xff };      /**< for 3-phase PCB, force pin */
+inline constexpr uint8_t forcePin{ 3 };         /**< for 3-phase PCB, force pin */
 inline constexpr uint8_t watchDogPin{ 0xff };   /**< watch dog LED */
 
 inline constexpr RelayEngine relays{ { { 0xff, 1000, 200, 1, 1 } } }; /**< config for relay diversion, see class definition for defaults and advanced options */

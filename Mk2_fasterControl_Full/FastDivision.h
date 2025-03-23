@@ -24,6 +24,8 @@ extern unsigned int divu3(unsigned int n) __attribute__((noinline));            
 #define divu2(n) (unsigned int)((unsigned int)n >> 1)                                      //These are done as #defines as no improvement can be made.
 #define divu1(n) (unsigned int)((unsigned int)n)                                           //These are done as #defines as no improvement can be made.
 
+extern unsigned int divu50(unsigned int n) __attribute__((noinline));
+
 extern void divmod10(uint32_t in, uint32_t &div, uint8_t &mod) __attribute__((noinline));
 
 #endif /* FASTDIVISION_H */

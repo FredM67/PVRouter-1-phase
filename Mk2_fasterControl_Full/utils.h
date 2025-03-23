@@ -156,7 +156,7 @@ inline void printForSerialText()
 
 inline void printForSerialJson()
 {
-  ArduinoJson::StaticJsonDocument<256> doc;
+  ArduinoJson::StaticJsonDocument< 256 > doc;
 
   doc["P"] = tx_data.powerGrid;
 
@@ -182,12 +182,16 @@ inline void printForSerialJson()
     }
   }
 
-#ifndef DUAL_TARIFF
-  if constexpr (PRIORITY_ROTATION != RotationModes::OFF)
+  if constexpr (SUPPLY_FREQUENCY == 50)
   {
-    doc["NoED"] = absenceOfDivertedEnergyCount;
+    doc["NoED"] = divu50(absenceOfDivertedEnergyCount);
   }
-#endif  // DUAL_TARIFF
+  else if constexpr (SUPPLY_FREQUENCY == 60)
+  {
+    doc["NoED"] = divu60(absenceOfDivertedEnergyCount);
+  }
+  else
+    static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "SUPPLY_FREQUENCY must be either 50 or 60");
 
   serializeJson(doc, Serial);
   Serial.println();
