@@ -3,6 +3,40 @@
 
 #include <Arduino.h>
 
+#include "config.h"
+
+// Size calculations
+inline static constexpr size_t lineSize(size_t tagLen, size_t valueLen)
+{
+  return 1 + tagLen + 1 + valueLen + 1 + 1 + 1;  // LF+tag+TAB+value+TAB+checksum+CR
+}
+
+inline static constexpr size_t calcBufferSize()
+{
+  size_t size = 1;  // STX
+
+  size += lineSize(1, 6);  // P (signed 5 digits)
+
+  if constexpr (RELAY_DIVERSION)
+  {
+    size += lineSize(1, 6);  // R (signed 5 digits)
+  }
+
+  if constexpr (TEMP_SENSOR_PRESENT)
+  {
+    size += temperatureSensing.get_size() * lineSize(2, 4);  // T1-Tn (4 digits)
+  }
+
+  size += lineSize(1, 4);  // D (unsigned 4 digits)
+  size += lineSize(1, 5);  // E (unsigned 5 digits)
+  size += lineSize(2, 5);  // V1 (unsigned 5 digits)
+  size += lineSize(1, 5);  // N (unsigned 5 digits)
+
+  size += 1;  // ETX
+
+  return size;
+}
+
 /**
  * @class TeleInfo
  * @brief A class for managing and sending telemetry information in a specific frame format.
@@ -16,8 +50,8 @@ private:
   static const char CR = 0x0D;  /**< Carriage Return character. */
   static const char TAB = 0x09; /**< Tab character. */
 
-  char buffer[35];   /**< Buffer to store the frame data. Adjust size as needed. */
-  uint8_t bufferPos; /**< Current position in the buffer. */
+  char buffer[calcBufferSize()]; /**< Buffer to store the frame data. Adjust size as needed. */
+  uint8_t bufferPos;             /**< Current position in the buffer. */
 
   /**
    * @brief Calculates the checksum for a portion of the buffer.
@@ -33,20 +67,20 @@ private:
     // Process 4 bytes at a time (loop unrolling)
     for (; i + 3 < endPos; i += 4)
     {
-        sum += buffer[i];
-        sum += buffer[i + 1];
-        sum += buffer[i + 2];
-        sum += buffer[i + 3];
+      sum += buffer[i];
+      sum += buffer[i + 1];
+      sum += buffer[i + 2];
+      sum += buffer[i + 3];
     }
 
     // Process remaining bytes
     for (; i < endPos; i++)
     {
-        sum += buffer[i];
+      sum += buffer[i];
     }
 
     return (sum & 0x3F) + 0x20;
-}
+  }
 
   /**
    * @brief Writes a tag to the buffer.
@@ -62,7 +96,7 @@ private:
     // If an index is provided, append it to the tag
     if (index > 0)
     {
-        buffer[bufferPos++] = '0' + index; // Convert index to a character
+      buffer[bufferPos++] = '0' + index;  // Convert index to a character
     }
 
     buffer[bufferPos++] = TAB;
