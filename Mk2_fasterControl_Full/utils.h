@@ -19,6 +19,7 @@
 #include "constants.h"
 #include "dualtariff.h"
 #include "processing.h"
+#include "teleinfo.h"
 
 #include "FastDivision.h"
 
@@ -115,7 +116,7 @@ inline void printForSerialText()
   Serial.print(tx_data.powerDiverted);
 
   Serial.print(F(", E:"));
-  Serial.print((float)divertedEnergyTotal_Wh * 0.001F, 3);
+  Serial.print(divertedEnergyTotal_Wh);
 
   Serial.print(F(", V"));
   Serial.print(F(":"));
@@ -166,7 +167,7 @@ inline void printForSerialJson()
   }
 
   doc["D"] = tx_data.powerDiverted;
-  doc["E"] = (float)divertedEnergyTotal_Wh * 0.001F;
+  doc["E"] = divertedEnergyTotal_Wh;
   doc["V"] = (float)tx_data.Vrms_L_x100 * 0.01F;
 
   if constexpr (TEMP_SENSOR_PRESENT)
@@ -184,7 +185,7 @@ inline void printForSerialJson()
 
   if constexpr (SUPPLY_FREQUENCY == 50)
   {
-    doc["NoED"] = divu50(absenceOfDivertedEnergyCount);
+    //doc["NoED"] = divu50(absenceOfDivertedEnergyCount);
   }
   else if constexpr (SUPPLY_FREQUENCY == 60)
   {
@@ -195,6 +196,52 @@ inline void printForSerialJson()
 
   serializeJson(doc, Serial);
   Serial.println();
+}
+
+void sendTelemetryData()
+{
+  TeleInfo teleInfo;
+
+    teleInfo.startFrame(); // Start a new telemetry frame
+
+    teleInfo.send("P", tx_data.powerGrid); // Send power grid data
+
+    if constexpr (RELAY_DIVERSION)
+    {
+        teleInfo.send("R", static_cast<int16_t>(relays.get_average())); // Send relay average if diversion is enabled
+    }
+
+    teleInfo.send("D", tx_data.powerDiverted); // Send power diverted
+    teleInfo.send("E", static_cast<int16_t>(divertedEnergyTotal_Wh)); // Send diverted energy in Wh
+    teleInfo.send("V", tx_data.Vrms_L_x100); // Send voltage in volts
+
+    if constexpr (TEMP_SENSOR_PRESENT)
+    {
+        for (uint8_t idx = 0; idx < temperatureSensing.get_size(); ++idx)
+        {
+            if ((OUTOFRANGE_TEMPERATURE == tx_data.temperature_x100[idx])
+                || (DEVICE_DISCONNECTED_RAW == tx_data.temperature_x100[idx]))
+            {
+                continue; // Skip invalid temperature readings
+            }
+            teleInfo.send("T", tx_data.temperature_x100[idx], idx + 1); // Send temperature
+        }
+    }
+
+    if constexpr (SUPPLY_FREQUENCY == 50)
+    {
+        teleInfo.send("NoED", static_cast<int16_t>(divu50(absenceOfDivertedEnergyCount))); // Send absence of diverted energy count for 50Hz
+    }
+    else if constexpr (SUPPLY_FREQUENCY == 60)
+    {
+        teleInfo.send("NoED", static_cast<int16_t>(divu60(absenceOfDivertedEnergyCount))); // Send absence of diverted energy count for 60Hz
+    }
+    else
+    {
+        static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "SUPPLY_FREQUENCY must be either 50 or 60");
+    }
+
+    teleInfo.endFrame(); // Finalize and send the telemetry frame
 }
 
 /**

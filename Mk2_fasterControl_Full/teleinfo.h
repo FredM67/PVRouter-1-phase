@@ -1,0 +1,125 @@
+#ifndef TELEINFO_H
+#define TELEINFO_H
+
+#include <Arduino.h>
+
+/**
+ * @class TeleInfo
+ * @brief A class for managing and sending telemetry information in a specific frame format.
+ */
+class TeleInfo
+{
+private:
+  static const char STX = 0x02; /**< Start of Text character. */
+  static const char ETX = 0x03; /**< End of Text character. */
+  static const char LF = 0x0A;  /**< Line Feed character. */
+  static const char CR = 0x0D;  /**< Carriage Return character. */
+  static const char TAB = 0x09; /**< Tab character. */
+
+  char buffer[35];   /**< Buffer to store the frame data. Adjust size as needed. */
+  uint8_t bufferPos; /**< Current position in the buffer. */
+
+  /**
+   * @brief Calculates the checksum for a portion of the buffer.
+   * @param startPos The starting position in the buffer.
+   * @param endPos The ending position in the buffer.
+   * @return The calculated checksum as a single byte.
+   */
+  uint8_t calculateChecksum(uint8_t startPos, uint8_t endPos)
+  {
+    uint8_t sum = 0;
+    uint8_t i = startPos;
+
+    // Process 4 bytes at a time (loop unrolling)
+    for (; i + 3 < endPos; i += 4)
+    {
+        sum += buffer[i];
+        sum += buffer[i + 1];
+        sum += buffer[i + 2];
+        sum += buffer[i + 3];
+    }
+
+    // Process remaining bytes
+    for (; i < endPos; i++)
+    {
+        sum += buffer[i];
+    }
+
+    return (sum & 0x3F) + 0x20;
+}
+
+  /**
+   * @brief Writes a tag to the buffer.
+   * @param tag The tag to write.
+   */
+  void writeTag(const char* tag, uint8_t index)
+  {
+    buffer[bufferPos++] = LF;
+
+    const char* ptr = tag;
+    while (*ptr) buffer[bufferPos++] = *ptr++;
+
+    // If an index is provided, append it to the tag
+    if (index > 0)
+    {
+        buffer[bufferPos++] = '0' + index; // Convert index to a character
+    }
+
+    buffer[bufferPos++] = TAB;
+  }
+
+public:
+  /**
+   * @brief Initializes a new frame by resetting the buffer and adding the start character.
+   */
+  void startFrame()
+  {
+    bufferPos = 0;
+    buffer[bufferPos++] = STX;
+  }
+
+  /**
+   * @brief Sends a telemetry value as a float.
+   * @param tag The tag associated with the value.
+   * @param value The float value to send.
+   */
+  void send(const char* tag, float value, uint8_t index = 0)
+  {
+    uint8_t startPos = bufferPos;
+
+    writeTag(tag, index);
+    auto str = dtostrf(value, 6, 2, buffer + bufferPos);  // 3 digits + point + 2 decimals
+    bufferPos += strlen(str);                             // Advance bufferPos by the length of the written string
+    buffer[bufferPos++] = TAB;
+
+    calculateChecksum(startPos, bufferPos);
+  }
+
+  /**
+   * @brief Sends a telemetry value as an integer.
+   * @param tag The tag associated with the value.
+   * @param value The integer value to send.
+   */
+  void send(const char* tag, int16_t value, uint8_t index = 0)
+  {
+    uint8_t startPos = bufferPos;
+
+    writeTag(tag, index);
+    auto str = itoa(value, buffer + bufferPos, 10);
+    bufferPos += strlen(str);  // Advance bufferPos by the length of the written string
+    buffer[bufferPos++] = TAB;
+
+    calculateChecksum(startPos, bufferPos);
+  }
+
+  /**
+   * @brief Finalizes the frame by adding the end character and sending the buffer over Serial.
+   */
+  void endFrame()
+  {
+    buffer[bufferPos++] = ETX;
+    Serial.write(buffer, bufferPos);
+  }
+};
+
+#endif /* TELEINFO_H */
