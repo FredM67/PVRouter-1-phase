@@ -21,7 +21,7 @@
 #include "processing.h"
 #include "teleinfo.h"
 
-#include "FastDivision.h"
+#include <FastDivision.h>
 
 /**
  * @brief Print the configuration during start
@@ -198,50 +198,73 @@ inline void printForSerialJson()
   Serial.println();
 }
 
+/**
+ * @brief Sends telemetry data using the TeleInfo class.
+ *
+ * This function collects various telemetry data points, such as power grid data, 
+ * relay averages, diverted power, energy, voltage, and temperature readings, 
+ * and sends them in a structured telemetry frame using the `TeleInfo` class.
+ *
+ * The telemetry frame includes:
+ * - Power grid data ("P").
+ * - Relay average ("R") if relay diversion is enabled (`RELAY_DIVERSION`).
+ * - Diverted power ("D").
+ * - Diverted energy in watt-hours ("E").
+ * - Voltage in volts ("V").
+ * - Temperature readings ("T1", "T2", ..., "Tn") if temperature sensors are present (`TEMP_SENSOR_PRESENT`).
+ * - Absence of diverted energy count ("NoED") for 50Hz or 60Hz supply frequency.
+ *
+ * The function skips invalid temperature readings (e.g., out-of-range or disconnected sensors).
+ *
+ * @note The function uses compile-time constants (`constexpr`) to include or exclude
+ *       specific telemetry data points based on the configuration.
+ *
+ * @see TeleInfo
+ */
 void sendTelemetryData()
 {
-  TeleInfo teleInfo;
+  static TeleInfo teleInfo;
 
-    teleInfo.startFrame(); // Start a new telemetry frame
+  teleInfo.startFrame();  // Start a new telemetry frame
 
-    teleInfo.send("P", tx_data.powerGrid); // Send power grid data
+  teleInfo.send("P", tx_data.powerGrid);  // Send power grid data
 
-    if constexpr (RELAY_DIVERSION)
+  if constexpr (RELAY_DIVERSION)
+  {
+    teleInfo.send("R", static_cast< int16_t >(relays.get_average()));  // Send relay average if diversion is enabled
+  }
+
+  teleInfo.send("D", tx_data.powerDiverted);                           // Send power diverted
+  teleInfo.send("E", static_cast< int16_t >(divertedEnergyTotal_Wh));  // Send diverted energy in Wh
+  teleInfo.send("V", tx_data.Vrms_L_x100);                             // Send voltage in volts
+
+  if constexpr (TEMP_SENSOR_PRESENT)
+  {
+    for (uint8_t idx = 0; idx < temperatureSensing.get_size(); ++idx)
     {
-        teleInfo.send("R", static_cast<int16_t>(relays.get_average())); // Send relay average if diversion is enabled
+      if ((OUTOFRANGE_TEMPERATURE == tx_data.temperature_x100[idx])
+          || (DEVICE_DISCONNECTED_RAW == tx_data.temperature_x100[idx]))
+      {
+        continue;  // Skip invalid temperature readings
+      }
+      teleInfo.send("T", tx_data.temperature_x100[idx], idx + 1);  // Send temperature
     }
+  }
 
-    teleInfo.send("D", tx_data.powerDiverted); // Send power diverted
-    teleInfo.send("E", static_cast<int16_t>(divertedEnergyTotal_Wh)); // Send diverted energy in Wh
-    teleInfo.send("V", tx_data.Vrms_L_x100); // Send voltage in volts
+  if constexpr (SUPPLY_FREQUENCY == 50)
+  {
+    teleInfo.send("NoED", static_cast< int16_t >(divu5(divu10(absenceOfDivertedEnergyCount))));  // Send absence of diverted energy count for 50Hz
+  }
+  else if constexpr (SUPPLY_FREQUENCY == 60)
+  {
+    teleInfo.send("NoED", static_cast< int16_t >(divu60(absenceOfDivertedEnergyCount)));  // Send absence of diverted energy count for 60Hz
+  }
+  else
+  {
+    static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "SUPPLY_FREQUENCY must be either 50 or 60");
+  }
 
-    if constexpr (TEMP_SENSOR_PRESENT)
-    {
-        for (uint8_t idx = 0; idx < temperatureSensing.get_size(); ++idx)
-        {
-            if ((OUTOFRANGE_TEMPERATURE == tx_data.temperature_x100[idx])
-                || (DEVICE_DISCONNECTED_RAW == tx_data.temperature_x100[idx]))
-            {
-                continue; // Skip invalid temperature readings
-            }
-            teleInfo.send("T", tx_data.temperature_x100[idx], idx + 1); // Send temperature
-        }
-    }
-
-    if constexpr (SUPPLY_FREQUENCY == 50)
-    {
-        teleInfo.send("NoED", static_cast<int16_t>(divu50(absenceOfDivertedEnergyCount))); // Send absence of diverted energy count for 50Hz
-    }
-    else if constexpr (SUPPLY_FREQUENCY == 60)
-    {
-        teleInfo.send("NoED", static_cast<int16_t>(divu60(absenceOfDivertedEnergyCount))); // Send absence of diverted energy count for 60Hz
-    }
-    else
-    {
-        static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "SUPPLY_FREQUENCY must be either 50 or 60");
-    }
-
-    teleInfo.endFrame(); // Finalize and send the telemetry frame
+  teleInfo.endFrame();  // Finalize and send the telemetry frame
 }
 
 /**

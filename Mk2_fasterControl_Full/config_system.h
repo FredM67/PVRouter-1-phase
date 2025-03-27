@@ -16,6 +16,8 @@
 
 #include "type_traits.hpp"
 
+inline constexpr uint8_t NO_OF_PHASES{ 1 }; /**< number of phases of the main supply. */
+
 // Physical constants, please do not change!
 inline constexpr uint16_t SECONDS_PER_MINUTE{ 60 };
 inline constexpr uint16_t MINUTES_PER_HOUR{ 60 };
