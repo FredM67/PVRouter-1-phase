@@ -16,7 +16,6 @@
 #include <U8g2lib.h>
 
 #include "type_traits.hpp"
-#include "FastDivision.h"
 #include "types.h"
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)

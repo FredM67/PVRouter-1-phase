@@ -15,13 +15,13 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
+#include "FastDivision.h"
+
 #include "calibration.h"
 #include "constants.h"
 #include "dualtariff.h"
 #include "processing.h"
 #include "teleinfo.h"
-
-#include <FastDivision.h>
 
 /**
  * @brief Print the configuration during start
@@ -185,7 +185,7 @@ inline void printForSerialJson()
 
   if constexpr (SUPPLY_FREQUENCY == 50)
   {
-    //doc["NoED"] = divu50(absenceOfDivertedEnergyCount);
+    doc["NoED"] = divu5(divu10(absenceOfDivertedEnergyCount));
   }
   else if constexpr (SUPPLY_FREQUENCY == 60)
   {
