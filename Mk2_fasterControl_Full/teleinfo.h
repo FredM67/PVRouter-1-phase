@@ -82,6 +82,9 @@ inline static constexpr size_t calcBufferSize()
 
   size += lineSize(1, 5);  // N (unsigned 5 digits)
 
+  size += lineSize(4, 2);  // N (unsigned 5 digits)
+  size += lineSize(1, 5);  // N (unsigned 5 digits)
+
   size += 1;  // ETX
 
   return size;

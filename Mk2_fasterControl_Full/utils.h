@@ -251,18 +251,11 @@ void sendTelemetryData()
     }
   }
 
-  if constexpr (SUPPLY_FREQUENCY == 50)
-  {
-    teleInfo.send("NoED", static_cast< int16_t >(divu5(divu10(absenceOfDivertedEnergyCount))));  // Send absence of diverted energy count for 50Hz
-  }
-  else if constexpr (SUPPLY_FREQUENCY == 60)
-  {
-    teleInfo.send("NoED", static_cast< int16_t >(divu60(absenceOfDivertedEnergyCount)));  // Send absence of diverted energy count for 60Hz
-  }
-  else
-  {
-    static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "SUPPLY_FREQUENCY must be either 50 or 60");
-  }
+
+  teleInfo.send("N", static_cast< int16_t >(absenceOfDivertedEnergyCount));  // Send absence of diverted energy count for 50Hz
+
+  teleInfo.send("S_MC", copyOf_lowestNoOfSampleSetsPerMainsCycle);
+  teleInfo.send("S", copyOf_sampleSetsDuringThisDatalogPeriod);
 
   teleInfo.endFrame();  // Finalize and send the telemetry frame
 }
@@ -287,7 +280,8 @@ inline void sendResults(bool bOffPeak)
 #endif
 
 #if defined SERIALOUT
-  printForSerialJson();
+  //printForSerialJson();
+  sendTelemetryData();
 #endif  // if defined SERIALOUT
 
   if constexpr (EMONESP_CONTROL)

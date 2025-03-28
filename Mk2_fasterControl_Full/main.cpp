@@ -309,7 +309,7 @@ void updateTemperature()
  * @brief Perform calculations on data for logging
  * 
  */
-void processCalcultationsForLogging()
+void processCalculationsForLogging()
 {
   tx_data.powerGrid = copyOf_sumP_grid_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_grid;
   tx_data.powerGrid *= -1;
@@ -409,6 +409,11 @@ void loop()
     {
       perSecondTimer = 0;
 
+      if (EDD_isIdle)
+      {
+        ++absenceOfDivertedEnergyCount;
+      }
+      
       if constexpr (WATCHDOG_PIN_PRESENT)
       {
         togglePin(watchDogPin);
@@ -446,7 +451,7 @@ void loop()
 
     b_datalogEventPending = false;
 
-    processCalcultationsForLogging();
+    processCalculationsForLogging();
 
     if constexpr (RELAY_DIVERSION)
     {

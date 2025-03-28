@@ -37,6 +37,7 @@ inline volatile bool b_overrideLoadOn[NO_OF_DUMPLOADS];     /**< async trigger t
 inline volatile bool b_reOrderLoads{ false };               /**< async trigger for loads re-ordering */
 inline volatile bool b_diversionOff{ false };               /**< async trigger to stop diversion */
 inline volatile bool EDD_isActive{ false };                 /**< energy diversion detection */
+inline volatile bool EDD_isIdle{ true };                    /**< energy diversion detection */
 
 inline volatile int32_t divertedEnergyRecent_IEU{ 0 };  // Hi-res accumulator of limited range
 inline volatile uint16_t divertedEnergyTotal_Wh{ 0 };   // WattHour register of 63K range

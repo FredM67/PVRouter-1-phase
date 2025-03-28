@@ -467,11 +467,12 @@ void processRawSamples()
         if (loadPrioritiesAndState[0] & loadStateOnBit)
         {
           absenceOfDivertedEnergyCount = 0;
+          EDD_isIdle = false;
           EDD_isActive = true;
         }
         else
         {
-          ++absenceOfDivertedEnergyCount;
+          EDD_isIdle = true;
         }
 
         // Now that the energy-related decisions have been taken, min and max limits can now
