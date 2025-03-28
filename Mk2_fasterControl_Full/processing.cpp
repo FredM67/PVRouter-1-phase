@@ -464,7 +464,7 @@ void processRawSamples()
         updatePortsStates();
 
         // update the Energy Diversion Detector
-        if (physicalLoadState[0] == LoadStates::LOAD_ON)
+        if (loadPrioritiesAndState[0] & loadStateOnBit)
         {
           absenceOfDivertedEnergyCount = 0;
           EDD_isActive = true;

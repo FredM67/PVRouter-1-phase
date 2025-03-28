@@ -30,7 +30,7 @@ inline constexpr uint16_t delayBeforeSerialStarts{ 1000 };  // in milli-seconds,
 inline constexpr uint16_t startUpPeriod{ 3000 };            // in milli-seconds, to allow LP filter to settle
 
 // for interaction between the main processor and the ISR
-inline volatile uint32_t absenceOfDivertedEnergyCount{ 0 }; /**< number of main cycles without diverted energy */
+inline volatile uint16_t absenceOfDivertedEnergyCount{ 0 }; /**< number of main cycles without diverted energy */
 inline volatile bool b_datalogEventPending{ false };        /**< async trigger to signal datalog is available */
 inline volatile bool b_newCycle{ false };                   /**< async trigger to signal start of new main cycle based on first phase */
 inline volatile bool b_overrideLoadOn[NO_OF_DUMPLOADS];     /**< async trigger to force specific load(s) to ON */
