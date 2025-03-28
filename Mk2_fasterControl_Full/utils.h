@@ -185,11 +185,11 @@ inline void printForSerialJson()
 
   if constexpr (SUPPLY_FREQUENCY == 50)
   {
-    doc["NoED"] = divu5(divu10(absenceOfDivertedEnergyCount));
+    doc["NoED"] = absenceOfDivertedEnergyCount;
   }
   else if constexpr (SUPPLY_FREQUENCY == 60)
   {
-    doc["NoED"] = divu60(absenceOfDivertedEnergyCount);
+    doc["NoED"] = absenceOfDivertedEnergyCount;
   }
   else
     static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "SUPPLY_FREQUENCY must be either 50 or 60");
