@@ -232,7 +232,13 @@ void sendTelemetryData()
   if constexpr (RELAY_DIVERSION)
   {
     teleInfo.send("R", static_cast< int16_t >(relays.get_average()));  // Send relay average if diversion is enabled
-  }
+
+    uint8_t idx = 0;
+    do
+    {
+      teleInfo.send("R", relays.get_relay(idx).isRelayON());  // Send diverted energy count for each relay
+    } while (++idx < relays.get_size());
+}
 
   teleInfo.send("D", tx_data.powerDiverted);                           // Send power diverted
   teleInfo.send("E", static_cast< int16_t >(divertedEnergyTotal_Wh));  // Send diverted energy in Wh
@@ -251,11 +257,10 @@ void sendTelemetryData()
     }
   }
 
-
   teleInfo.send("N", static_cast< int16_t >(absenceOfDivertedEnergyCount));  // Send absence of diverted energy count for 50Hz
 
-  teleInfo.send("S_MC", copyOf_lowestNoOfSampleSetsPerMainsCycle);
   teleInfo.send("S", copyOf_sampleSetsDuringThisDatalogPeriod);
+  teleInfo.send("S_MC", copyOf_lowestNoOfSampleSetsPerMainsCycle);
 
   teleInfo.endFrame();  // Finalize and send the telemetry frame
 }
