@@ -1,19 +1,20 @@
 <map id="Mk2_fasterControl_Full/type_traits.hpp" name="Mk2_fasterControl_Full/type_traits.hpp">
-<area shape="rect" id="node1" title="Some useful but missing stl functions templates." alt="" coords="576,5,748,45"/>
-<area shape="rect" id="node2" href="$config__system_8h.html" title="Basic configuration values to be set by the end&#45;user." alt="" coords="231,93,403,133"/>
-<area shape="rect" id="node12" href="$utils__relay_8h.html" title="Some utility functions for the relay output feature." alt="" coords="525,181,697,221"/>
-<area shape="rect" id="node14" href="$ewma__avg_8hpp.html" title="This file implements an Exponentially Weighted Moving Average template class." alt="" coords="479,93,651,133"/>
-<area shape="rect" id="node15" href="$movingAvg_8h.html" title="Code for sliding&#45;window average." alt="" coords="675,93,847,133"/>
-<area shape="rect" id="node16" href="$types_8h.html" title="Some basics classes/types." alt="" coords="871,93,1043,133"/>
-<area shape="rect" id="node17" href="$utils__oled_8h.html" title="Some utility functions for OLED display." alt="" coords="995,181,1167,221"/>
-<area shape="rect" id="node3" href="$config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="449,277,621,317"/>
-<area shape="rect" id="node10" href="$validation_8h.html" title=" " alt="" coords="5,372,177,412"/>
-<area shape="rect" id="node11" href="$utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="168,277,340,317"/>
-<area shape="rect" id="node4" href="$calibration_8h.html" title="Calibration values definition." alt="" coords="645,372,817,412"/>
-<area shape="rect" id="node5" href="$main_8cpp.html" title="Main code." alt="" coords="713,548,885,588"/>
-<area shape="rect" id="node8" href="$dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="449,372,621,412"/>
-<area shape="rect" id="node9" href="$processing_8h.html" title="Public functions/variables of processing engine." alt="" coords="253,372,425,412"/>
-<area shape="rect" id="node6" href="$processing_8cpp.html" title=" " alt="" coords="589,460,761,500"/>
-<area shape="rect" id="node7" href="$utils_8h.html" title="Some utility functions." alt="" coords="393,460,565,500"/>
-<area shape="rect" id="node13" href="$test__utils__relay_2test__main_8cpp.html" title="Tests for the relay output feature." alt="" coords="645,269,833,324"/>
+<area shape="rect" id="node1" title="Some useful but missing stl functions templates." alt="" coords="787,5,959,45"/>
+<area shape="rect" id="node2" href="$config__system_8h.html" title="Basic configuration values to be set by the end&#45;user." alt="" coords="319,93,491,133"/>
+<area shape="rect" id="node13" href="$utils__relay_8h.html" title="Some utility functions for the relay output feature." alt="" coords="751,181,923,221"/>
+<area shape="rect" id="node15" href="$ewma__avg_8hpp.html" title="This file implements an Exponentially Weighted Moving Average template class." alt="" coords="849,93,1021,133"/>
+<area shape="rect" id="node16" href="$movingAvg_8h.html" title="Code for sliding&#45;window average." alt="" coords="601,93,773,133"/>
+<area shape="rect" id="node17" href="$types_8h.html" title="Some basics classes/types." alt="" coords="1045,93,1217,133"/>
+<area shape="rect" id="node18" href="$utils__oled_8h.html" title="Some utility functions for OLED display." alt="" coords="1169,181,1341,221"/>
+<area shape="rect" id="node3" href="$config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="573,277,745,317"/>
+<area shape="rect" id="node10" href="$teleinfo_8h.html" title=" " alt="" coords="232,372,404,412"/>
+<area shape="rect" id="node11" href="$validation_8h.html" title=" " alt="" coords="36,372,208,412"/>
+<area shape="rect" id="node12" href="$utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="5,277,177,317"/>
+<area shape="rect" id="node4" href="$calibration_8h.html" title="Calibration values definition." alt="" coords="428,372,600,412"/>
+<area shape="rect" id="node5" href="$main_8cpp.html" title="Main code." alt="" coords="872,548,1044,588"/>
+<area shape="rect" id="node8" href="$dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="624,372,796,412"/>
+<area shape="rect" id="node9" href="$processing_8h.html" title="Public functions/variables of processing engine." alt="" coords="820,372,992,412"/>
+<area shape="rect" id="node6" href="$processing_8cpp.html" title=" " alt="" coords="748,460,920,500"/>
+<area shape="rect" id="node7" href="$utils_8h.html" title="Some utility functions." alt="" coords="552,460,724,500"/>
+<area shape="rect" id="node14" href="$test__utils__relay_2test__main_8cpp.html" title="Tests for the relay output feature." alt="" coords="769,269,957,324"/>
 </map>

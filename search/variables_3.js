@@ -12,7 +12,8 @@ var searchData=
   ['copyof_5fsump_5fdiverted_5foverdl_5fperiod_9',['copyOf_sumP_diverted_overDL_Period',['../processing_8h.html#a0a94f2575692ee6cc664422862a06973',1,'processing.h']]],
   ['copyof_5fsump_5fgrid_5foverdl_5fperiod_10',['copyOf_sumP_grid_overDL_Period',['../processing_8h.html#a4bcbf95314adb8b4f7e12c1bbffb3182',1,'processing.h']]],
   ['countloadon_11',['countLoadON',['../processing_8cpp.html#a2f61fd181a2806e678e5473eaad03891',1,'processing.cpp']]],
-  ['cumvdeltasthiscycle_5flong_12',['cumVdeltasThisCycle_long',['../processing_8cpp.html#a237efa864aaf231398b703d968fb3cc3',1,'processing.cpp']]],
-  ['currentsensor_5fdiverted_13',['currentSensor_diverted',['../processing_8h.html#acc81dd6395f3e81e9017503274f6baef',1,'processing.h']]],
-  ['currentsensor_5fgrid_14',['currentSensor_grid',['../processing_8h.html#a2ee19cf2edef14f00c131bd773dbb76a',1,'processing.h']]]
+  ['cr_12',['CR',['../classTeleInfo.html#a710390df1d82afc54addcd2edb3405ae',1,'TeleInfo']]],
+  ['cumvdeltasthiscycle_5flong_13',['cumVdeltasThisCycle_long',['../processing_8cpp.html#a237efa864aaf231398b703d968fb3cc3',1,'processing.cpp']]],
+  ['currentsensor_5fdiverted_14',['currentSensor_diverted',['../processing_8h.html#acc81dd6395f3e81e9017503274f6baef',1,'processing.h']]],
+  ['currentsensor_5fgrid_15',['currentSensor_grid',['../processing_8h.html#a2ee19cf2edef14f00c131bd773dbb76a',1,'processing.h']]]
 ];

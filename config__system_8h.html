@@ -121,18 +121,19 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="config__system_8h__dep__incl.png" border="0" usemap="#aMk2__fasterControl__Full_2config__system_8hdep" alt=""/></div>
 <map name="aMk2__fasterControl__Full_2config__system_8hdep" id="aMk2__fasterControl__Full_2config__system_8hdep">
-<area shape="rect" title="Basic configuration values to be set by the end&#45;user." alt="" coords="559,5,731,45"/>
-<area shape="rect" href="config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="449,189,621,229"/>
+<area shape="rect" title="Basic configuration values to be set by the end&#45;user." alt="" coords="593,5,765,45"/>
+<area shape="rect" href="config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="593,189,765,229"/>
+<area shape="rect" href="teleinfo_8h.html" title=" " alt="" coords="201,284,373,324"/>
 <area shape="rect" href="validation_8h.html" title=" " alt="" coords="5,284,177,324"/>
-<area shape="rect" href="utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="851,93,1023,133"/>
-<area shape="rect" href="utils__relay_8h.html" title="Some utility functions for the relay output feature." alt="" coords="621,93,793,133"/>
-<area shape="rect" href="calibration_8h.html" title="Calibration values definition." alt="" coords="645,284,817,324"/>
-<area shape="rect" href="main_8cpp.html" title="Main code." alt="" coords="351,460,523,500"/>
-<area shape="rect" href="dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="449,284,621,324"/>
-<area shape="rect" href="processing_8h.html" title="Public functions/variables of processing engine." alt="" coords="253,284,425,324"/>
-<area shape="rect" href="processing_8cpp.html" title=" " alt="" coords="547,372,719,412"/>
-<area shape="rect" href="utils_8h.html" title="Some utility functions." alt="" coords="351,372,523,412"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html" title="Tests for the relay output feature." alt="" coords="795,181,983,236"/>
+<area shape="rect" href="utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="743,93,915,133"/>
+<area shape="rect" href="utils__relay_8h.html" title="Some utility functions for the relay output feature." alt="" coords="989,93,1161,133"/>
+<area shape="rect" href="calibration_8h.html" title="Calibration values definition." alt="" coords="397,284,569,324"/>
+<area shape="rect" href="main_8cpp.html" title="Main code." alt="" coords="841,460,1013,500"/>
+<area shape="rect" href="dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="593,284,765,324"/>
+<area shape="rect" href="processing_8h.html" title="Public functions/variables of processing engine." alt="" coords="789,284,961,324"/>
+<area shape="rect" href="processing_8cpp.html" title=" " alt="" coords="717,372,889,412"/>
+<area shape="rect" href="utils_8h.html" title="Some utility functions." alt="" coords="521,372,693,412"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html" title="Tests for the relay output feature." alt="" coords="1139,181,1327,236"/>
 </map>
 </div>
 </div>
@@ -158,6 +159,8 @@ Variables</h2></td></tr>
 <tr class="separator:a898199dd615c02b23314a1f531594dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93191ef22c17d49de593d101863b56a3"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config__system_8h.html#a93191ef22c17d49de593d101863b56a3">MINUTES_PER_HOUR</a> { 60 }</td></tr>
 <tr class="separator:a93191ef22c17d49de593d101863b56a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac17be2735ad17e6198cd2a24eb39eb91"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config__system_8h.html#ac17be2735ad17e6198cd2a24eb39eb91">NO_OF_PHASES</a> { 1 }</td></tr>
+<tr class="separator:ac17be2735ad17e6198cd2a24eb39eb91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d838172b50bebc493c09edb7b7606d5"><td class="memItemLeft" align="right" valign="top">constexpr int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config__system_8h.html#a0d838172b50bebc493c09edb7b7606d5">REQUIRED_EXPORT_IN_WATTS</a> { 0 }</td></tr>
 <tr class="separator:a0d838172b50bebc493c09edb7b7606d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21793523c5b617a21d2f5a639f483037"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config__system_8h.html#a21793523c5b617a21d2f5a639f483037">SECONDS_PER_MINUTE</a> { 60 }</td></tr>
@@ -198,7 +201,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00030">30</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00032">32</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -222,7 +225,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00036">36</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00038">38</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -239,7 +242,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>Period of datalogging in cycles </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00037">37</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00039">39</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -264,7 +267,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>Period of datalogging in seconds </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00034">34</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00036">36</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -288,7 +291,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00041">41</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00043">43</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -312,7 +315,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00040">40</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00042">42</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -336,7 +339,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00022">22</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00024">24</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -360,7 +363,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00032">32</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00034">34</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -384,7 +387,32 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00021">21</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00023">23</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+
+</div>
+</div>
+<a id="ac17be2735ad17e6198cd2a24eb39eb91" name="ac17be2735ad17e6198cd2a24eb39eb91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac17be2735ad17e6198cd2a24eb39eb91">&#9670;&#160;</a></span>NO_OF_PHASES</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t NO_OF_PHASES { 1 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>number of phases of the main supply. </p>
+
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00019">19</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -408,7 +436,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00027">27</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00029">29</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -432,7 +460,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00020">20</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00022">22</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -456,7 +484,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00025">25</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00027">27</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -472,7 +500,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00036">36</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00038">38</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -496,7 +524,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00026">26</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00028">28</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>

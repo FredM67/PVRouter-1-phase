@@ -1,8 +1,27 @@
 var searchData=
 [
-  ['validation_2eh_0',['validation.h',['../validation_8h.html',1,'']]],
-  ['value_1',['value',['../structintegral__constant.html#ac7331c704031e5e636cf419dfe4c58b5',1,'integral_constant::value()'],['../classis__base__of.html#af5099c0b8b7ac33766bbc071e8df525b',1,'is_base_of::value()'],['../structis__class.html#a8e480c366229d83043464856beaef26f',1,'is_class::value()'],['../structis__convertible.html#ae961431c0a8dc3506828194f8ec1c684',1,'is_convertible::value()'],['../structis__enum.html#aecdd48955dfb72b90880aafdec94e2db',1,'is_enum::value()']]],
-  ['value_5ftype_2',['value_type',['../structintegral__constant.html#a07e143946a71db61112a1c57d4238f04',1,'integral_constant']]],
-  ['voltagesensor_3',['voltageSensor',['../processing_8h.html#a4f0dc9e8ff302baddb5398aaed54f975',1,'processing.h']]],
-  ['vrms_5fl_5fx100_4',['Vrms_L_x100',['../classPayloadTx__struct.html#abbc20e5a7d3981fb34ce08a4a05fe8f0',1,'PayloadTx_struct']]]
+  ['u8x8_0',['u8x8',['../utils__oled_8h.html#a3a5f8feefdddd371b3c454e2e2925f7f',1,'utils_oled.h']]],
+  ['u8x8_5fdraw_5fxbm_1',['u8x8_draw_xbm',['../group__OLEDDisplay.html#ga2303391296efb5abb3f851b8bda64855',1,'utils_oled.h']]],
+  ['u8x8_5ffake_2',['u8x8_fake',['../classu8x8__fake.html',1,'u8x8_fake'],['../classu8x8__fake.html#a65fc19e18829336cdce489cfbb6fb74f',1,'u8x8_fake::u8x8_fake()']]],
+  ['u8x8_5fprogmem_3',['U8X8_PROGMEM',['../utils__oled_8h.html#a5b11b89511c75790dde5b3b3cbaa84d3',1,'utils_oled.h']]],
+  ['uiduration_4',['uiDuration',['../classpairForceLoad.html#a2f581be85688ba176fc977442b6065ff',1,'pairForceLoad']]],
+  ['uint16_5ft_5',['uint16_t',['../config__system_8h.html#a3180c835bce68b1c59f64f4055088cca',1,'config_system.h']]],
+  ['ul_5foff_5fpeak_5fduration_6',['ul_OFF_PEAK_DURATION',['../config_8h.html#abd1baf11732956aa199473daae453926',1,'config.h']]],
+  ['ul_5ftimeoffpeak_7',['ul_TimeOffPeak',['../dualtariff_8h.html#a9b220149c714c37067af68c2056d9316',1,'dualtariff.h']]],
+  ['update_5faverage_8',['update_average',['../classRelayEngine.html#a2c8796258ac6cd4006a55c236c383287',1,'RelayEngine']]],
+  ['update_5fperiod_5ffor_5fdisplayed_5fdata_9',['UPDATE_PERIOD_FOR_DISPLAYED_DATA',['../utils__display_8h.html#a379ab6d628249a17d8dbf41886fb9159',1,'utils_display.h']]],
+  ['updateoled_10',['updateOLED',['../group__OLEDDisplay.html#gaf39aee6f9a448b67c84a828071a39f71',1,'utils_oled.h']]],
+  ['updatephysicalloadstates_11',['updatePhysicalLoadStates',['../group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88',1,'updatePhysicalLoadStates():&#160;processing.cpp'],['../group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88',1,'updatePhysicalLoadStates():&#160;processing.cpp']]],
+  ['updateportsstates_12',['updatePortsStates',['../processing_8cpp.html#a44ac46a7ff4e0717bd668d5907b38249',1,'updatePortsStates():&#160;processing.cpp'],['../processing_8h.html#a44ac46a7ff4e0717bd668d5907b38249',1,'updatePortsStates():&#160;processing.cpp']]],
+  ['updatetemperature_13',['updateTemperature',['../main_8cpp.html#aac4a0e0b4ad49cbbab8b2626204f9492',1,'main.cpp']]],
+  ['updatewatchdog_14',['updateWatchdog',['../group__OLEDDisplay.html#ga1c38ae281a8a132599b5619660e7d306',1,'utils_oled.h']]],
+  ['upperenergythreshold_15',['upperEnergyThreshold',['../processing_8cpp.html#aa0ffc2df0a3a6a925cccb81093ae92f2',1,'processing.cpp']]],
+  ['upperthreshold_5fdefault_16',['upperThreshold_default',['../processing_8cpp.html#a817a4dab9d78694fd475def89899747f',1,'processing.cpp']]],
+  ['utils_2eh_17',['utils.h',['../utils_8h.html',1,'']]],
+  ['utils_5fdisplay_2eh_18',['utils_display.h',['../utils__display_8h.html',1,'']]],
+  ['utils_5fdualtariff_2eh_19',['utils_dualtariff.h',['../utils__dualtariff_8h.html',1,'']]],
+  ['utils_5foled_2eh_20',['utils_oled.h',['../utils__oled_8h.html',1,'']]],
+  ['utils_5fpins_2eh_21',['utils_pins.h',['../utils__pins_8h.html',1,'']]],
+  ['utils_5frelay_2eh_22',['utils_relay.h',['../utils__relay_8h.html',1,'']]],
+  ['utils_5ftemp_2eh_23',['utils_temp.h',['../utils__temp_8h.html',1,'']]]
 ];

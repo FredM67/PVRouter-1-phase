@@ -87,19 +87,17 @@ $(function() {
 <div class="textblock"><code>#include &lt;Arduino.h&gt;</code><br />
 <code>#include &lt;U8g2lib.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="type__traits_8hpp_source.html">type_traits.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="FastDivision_8h_source.html">FastDivision.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="types_8h_source.html">types.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for utils_oled.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__oled_8h__incl.png" border="0" usemap="#aMk2__fasterControl__Full_2utils__oled_8h" alt=""/></div>
 <map name="aMk2__fasterControl__Full_2utils__oled_8h" id="aMk2__fasterControl__Full_2utils__oled_8h">
-<area shape="rect" title="Some utility functions for OLED display." alt="" coords="900,5,1072,45"/>
-<area shape="rect" title=" " alt="" coords="887,167,971,192"/>
-<area shape="rect" title=" " alt="" coords="864,93,948,119"/>
+<area shape="rect" title="Some utility functions for OLED display." alt="" coords="967,5,1139,45"/>
+<area shape="rect" title=" " alt="" coords="884,167,968,192"/>
+<area shape="rect" title=" " alt="" coords="960,93,1044,119"/>
 <area shape="rect" href="type__traits_8hpp.html" title="Some useful but missing stl functions templates." alt="" coords="1117,167,1237,192"/>
-<area shape="rect" href="FastDivision_8h.html" title=" " alt="" coords="727,93,840,119"/>
-<area shape="rect" href="types_8h.html" title="Some basics classes/types." alt="" coords="1024,93,1095,119"/>
+<area shape="rect" href="types_8h.html" title="Some basics classes/types." alt="" coords="1068,93,1139,119"/>
 <area shape="rect" href="conditional_8hpp.html" title=" " alt="" coords="5,247,201,273"/>
 <area shape="rect" href="enable__if_8hpp.html" title=" " alt="" coords="225,240,365,280"/>
 <area shape="rect" href="integral__constant_8hpp.html" title=" " alt="" coords="1407,475,1554,515"/>
@@ -149,7 +147,6 @@ Macros</h2></td></tr>
 <tr class="memitem:a619e07239fb3b9b14d40646ab41d5b4f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__oled_8h.html#a619e07239fb3b9b14d40646ab41d5b4f">OLED_RESET</a>&#160;&#160;&#160;-1</td></tr>
 <tr class="separator:a619e07239fb3b9b14d40646ab41d5b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4dc358585abdaa9531e340bab60ae0b5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__oled_8h.html#a4dc358585abdaa9531e340bab60ae0b5">SCREEN_ADDRESS</a>&#160;&#160;&#160;0x3C</td></tr>
-<tr class="memdesc:a4dc358585abdaa9531e340bab60ae0b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32.  <br /></td></tr>
 <tr class="separator:a4dc358585abdaa9531e340bab60ae0b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
@@ -204,8 +201,9 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reset pin # (or -1 if sharing Arduino reset pin) </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__oled_8h_source.html#l00025">25</a> of file <a class="el" href="utils__oled_8h_source.html">utils_oled.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__oled_8h_source.html#l00024">24</a> of file <a class="el" href="utils__oled_8h_source.html">utils_oled.h</a>.</p>
 
 </div>
 </div>
@@ -220,10 +218,9 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32 </p>
 
-<p>See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32. </p>
-
-<p class="definition">Definition at line <a class="el" href="utils__oled_8h_source.html#l00026">26</a> of file <a class="el" href="utils__oled_8h_source.html">utils_oled.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__oled_8h_source.html#l00025">25</a> of file <a class="el" href="utils__oled_8h_source.html">utils_oled.h</a>.</p>
 
 </div>
 </div>
@@ -284,7 +281,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p>The Height of the object, in pixel </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__oled_8h_source.html#l00069">69</a> of file <a class="el" href="utils__oled_8h_source.html">utils_oled.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__oled_8h_source.html#l00068">68</a> of file <a class="el" href="utils__oled_8h_source.html">utils_oled.h</a>.</p>
 
 </div>
 </div>
@@ -309,7 +306,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p>The width of the object, in pixel </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__oled_8h_source.html#l00068">68</a> of file <a class="el" href="utils__oled_8h_source.html">utils_oled.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__oled_8h_source.html#l00067">67</a> of file <a class="el" href="utils__oled_8h_source.html">utils_oled.h</a>.</p>
 
 </div>
 </div>
@@ -326,7 +323,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p>The xml object </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__oled_8h_source.html#l00071">71</a> of file <a class="el" href="utils__oled_8h_source.html">utils_oled.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__oled_8h_source.html#l00070">70</a> of file <a class="el" href="utils__oled_8h_source.html">utils_oled.h</a>.</p>
 
 </div>
 </div>

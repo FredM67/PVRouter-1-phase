@@ -1,14 +1,15 @@
 <map id="Mk2_fasterControl_Full/config_system.h" name="Mk2_fasterControl_Full/config_system.h">
-<area shape="rect" id="node1" title="Basic configuration values to be set by the end&#45;user." alt="" coords="559,5,731,45"/>
-<area shape="rect" id="node2" href="$config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="449,189,621,229"/>
-<area shape="rect" id="node9" href="$validation_8h.html" title=" " alt="" coords="5,284,177,324"/>
-<area shape="rect" id="node10" href="$utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="851,93,1023,133"/>
-<area shape="rect" id="node11" href="$utils__relay_8h.html" title="Some utility functions for the relay output feature." alt="" coords="621,93,793,133"/>
-<area shape="rect" id="node3" href="$calibration_8h.html" title="Calibration values definition." alt="" coords="645,284,817,324"/>
-<area shape="rect" id="node4" href="$main_8cpp.html" title="Main code." alt="" coords="351,460,523,500"/>
-<area shape="rect" id="node7" href="$dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="449,284,621,324"/>
-<area shape="rect" id="node8" href="$processing_8h.html" title="Public functions/variables of processing engine." alt="" coords="253,284,425,324"/>
-<area shape="rect" id="node5" href="$processing_8cpp.html" title=" " alt="" coords="547,372,719,412"/>
-<area shape="rect" id="node6" href="$utils_8h.html" title="Some utility functions." alt="" coords="351,372,523,412"/>
-<area shape="rect" id="node12" href="$test__utils__relay_2test__main_8cpp.html" title="Tests for the relay output feature." alt="" coords="795,181,983,236"/>
+<area shape="rect" id="node1" title="Basic configuration values to be set by the end&#45;user." alt="" coords="593,5,765,45"/>
+<area shape="rect" id="node2" href="$config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="593,189,765,229"/>
+<area shape="rect" id="node9" href="$teleinfo_8h.html" title=" " alt="" coords="201,284,373,324"/>
+<area shape="rect" id="node10" href="$validation_8h.html" title=" " alt="" coords="5,284,177,324"/>
+<area shape="rect" id="node11" href="$utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="743,93,915,133"/>
+<area shape="rect" id="node12" href="$utils__relay_8h.html" title="Some utility functions for the relay output feature." alt="" coords="989,93,1161,133"/>
+<area shape="rect" id="node3" href="$calibration_8h.html" title="Calibration values definition." alt="" coords="397,284,569,324"/>
+<area shape="rect" id="node4" href="$main_8cpp.html" title="Main code." alt="" coords="841,460,1013,500"/>
+<area shape="rect" id="node7" href="$dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="593,284,765,324"/>
+<area shape="rect" id="node8" href="$processing_8h.html" title="Public functions/variables of processing engine." alt="" coords="789,284,961,324"/>
+<area shape="rect" id="node5" href="$processing_8cpp.html" title=" " alt="" coords="717,372,889,412"/>
+<area shape="rect" id="node6" href="$utils_8h.html" title="Some utility functions." alt="" coords="521,372,693,412"/>
+<area shape="rect" id="node13" href="$test__utils__relay_2test__main_8cpp.html" title="Tests for the relay output feature." alt="" coords="1139,181,1327,236"/>
 </map>
