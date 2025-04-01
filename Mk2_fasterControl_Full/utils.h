@@ -15,12 +15,13 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
+#include "FastDivision.h"
+
 #include "calibration.h"
 #include "constants.h"
 #include "dualtariff.h"
 #include "processing.h"
-
-#include "FastDivision.h"
+#include "teleinfo.h"
 
 /**
  * @brief Print the configuration during start
@@ -75,6 +76,24 @@ inline void printConfiguration()
   DBUGLN(REQUIRED_EXPORT_IN_WATTS);
 
   printParamsForSelectedOutputMode();
+
+  DBUG(F("Datalogging capability "));
+  if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::HumanReadable)
+  {
+    DBUGLN(F("in Human-readable format"));
+  }
+  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::IoT)
+  {
+    DBUGLN(F("in IoT format"));
+  }
+  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::EmonCMS)
+  {
+    DBUGLN(F("in EmonCMS format"));
+  }
+  else
+  {
+    DBUGLN(F("is NOT present"));
+  }
 }
 
 /**
@@ -115,7 +134,7 @@ inline void printForSerialText()
   Serial.print(tx_data.powerDiverted);
 
   Serial.print(F(", E:"));
-  Serial.print((float)divertedEnergyTotal_Wh * 0.001F, 3);
+  Serial.print(divertedEnergyTotal_Wh);
 
   Serial.print(F(", V"));
   Serial.print(F(":"));
@@ -154,9 +173,14 @@ inline void printForSerialText()
   Serial.println(F(")"));
 }
 
-inline void printForSerialJson()
+/**
+ * @brief Write on Serial in EmonESP format
+ * 
+ * @param bOffPeak state of on/off-peak period
+ */
+inline void printForEmonCMS(const bool bOffPeak)
 {
-  ArduinoJson::StaticJsonDocument<256> doc;
+  ArduinoJson::StaticJsonDocument< 256 > doc;
 
   doc["P"] = tx_data.powerGrid;
 
@@ -166,7 +190,7 @@ inline void printForSerialJson()
   }
 
   doc["D"] = tx_data.powerDiverted;
-  doc["E"] = (float)divertedEnergyTotal_Wh * 0.001F;
+  doc["E"] = divertedEnergyTotal_Wh;
   doc["V"] = (float)tx_data.Vrms_L_x100 * 0.01F;
 
   if constexpr (TEMP_SENSOR_PRESENT)
@@ -182,15 +206,86 @@ inline void printForSerialJson()
     }
   }
 
-#ifndef DUAL_TARIFF
-  if constexpr (PRIORITY_ROTATION != RotationModes::OFF)
+  if constexpr (SUPPLY_FREQUENCY == 50)
   {
     doc["NoED"] = absenceOfDivertedEnergyCount;
   }
-#endif  // DUAL_TARIFF
+  else if constexpr (SUPPLY_FREQUENCY == 60)
+  {
+    doc["NoED"] = absenceOfDivertedEnergyCount;
+  }
+  else
+    static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "SUPPLY_FREQUENCY must be either 50 or 60");
 
   serializeJson(doc, Serial);
   Serial.println();
+}
+
+/**
+ * @brief Sends telemetry data using the TeleInfo class.
+ *
+ * This function collects various telemetry data points, such as power grid data, 
+ * relay averages, diverted power, energy, voltage, and temperature readings, 
+ * and sends them in a structured telemetry frame using the `TeleInfo` class.
+ *
+ * The telemetry frame includes:
+ * - Power grid data ("P").
+ * - Relay average ("R") if relay diversion is enabled (`RELAY_DIVERSION`).
+ * - Diverted power ("D").
+ * - Diverted energy in watt-hours ("E").
+ * - Voltage in volts ("V").
+ * - Temperature readings ("T1", "T2", ..., "Tn") if temperature sensors are present (`TEMP_SENSOR_PRESENT`).
+ * - Absence of diverted energy count ("NoED") for 50Hz or 60Hz supply frequency.
+ *
+ * The function skips invalid temperature readings (e.g., out-of-range or disconnected sensors).
+ *
+ * @note The function uses compile-time constants (`constexpr`) to include or exclude
+ *       specific telemetry data points based on the configuration.
+ *
+ * @see TeleInfo
+ */
+void sendTelemetryData()
+{
+  static TeleInfo teleInfo;
+
+  teleInfo.startFrame();  // Start a new telemetry frame
+
+  teleInfo.send("P", tx_data.powerGrid);  // Send power grid data
+
+  if constexpr (RELAY_DIVERSION)
+  {
+    teleInfo.send("R", static_cast< int16_t >(relays.get_average()));  // Send relay average if diversion is enabled
+
+    uint8_t idx = 0;
+    do
+    {
+      teleInfo.send("R", relays.get_relay(idx).isRelayON());  // Send diverted energy count for each relay
+    } while (++idx < relays.get_size());
+  }
+
+  teleInfo.send("D", tx_data.powerDiverted);                           // Send power diverted
+  teleInfo.send("E", static_cast< int16_t >(divertedEnergyTotal_Wh));  // Send diverted energy in Wh
+  teleInfo.send("V", tx_data.Vrms_L_x100);                             // Send voltage in volts
+
+  if constexpr (TEMP_SENSOR_PRESENT)
+  {
+    for (uint8_t idx = 0; idx < temperatureSensing.get_size(); ++idx)
+    {
+      if ((OUTOFRANGE_TEMPERATURE == tx_data.temperature_x100[idx])
+          || (DEVICE_DISCONNECTED_RAW == tx_data.temperature_x100[idx]))
+      {
+        continue;  // Skip invalid temperature readings
+      }
+      teleInfo.send("T", tx_data.temperature_x100[idx], idx + 1);  // Send temperature
+    }
+  }
+
+  teleInfo.send("N", static_cast< int16_t >(absenceOfDivertedEnergyCount));  // Send absence of diverted energy count for 50Hz
+
+  teleInfo.send("S", copyOf_sampleSetsDuringThisDatalogPeriod);
+  teleInfo.send("S_MC", copyOf_lowestNoOfSampleSetsPerMainsCycle);
+
+  teleInfo.endFrame();  // Finalize and send the telemetry frame
 }
 
 /**
@@ -212,18 +307,18 @@ inline void sendResults(bool bOffPeak)
   send_rf_data();  // *SEND RF DATA*
 #endif
 
-#if defined SERIALOUT
-  printForSerialJson();
-#endif  // if defined SERIALOUT
-
-  if constexpr (EMONESP_CONTROL)
+  if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::HumanReadable)
   {
-    //printForEmonESP(bOffPeak);
+    printForSerialText();
   }
-
-#if defined SERIALPRINT && !defined EMONESP
-  printForSerialText();
-#endif  // if defined SERIALPRINT && !defined EMONESP
+  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::IoT)
+  {
+    sendTelemetryData();
+  }
+  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::EmonCMS)
+  {
+    printForEmonCMS(bOffPeak);
+  }
 }
 
 /**

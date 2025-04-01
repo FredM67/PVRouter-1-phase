@@ -20,7 +20,11 @@
 		"files.associations": {
 			"xtr1common": "cpp",
 			"new": "cpp",
-			"initializer_list": "cpp"
+			"initializer_list": "cpp",
+			"format": "cpp",
+			"utility": "cpp",
+			"xstring": "cpp",
+			"xutility": "cpp"
 		}
 	}
 }

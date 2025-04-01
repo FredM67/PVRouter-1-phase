@@ -390,7 +390,10 @@ void processRawSamples()
           if (divertedEnergyRecent_IEU > IEU_per_Wh)
           {
             divertedEnergyRecent_IEU -= IEU_per_Wh;
-            ++divertedEnergyTotal_Wh;
+            if (!b_overrideLoadOn[0])
+            {
+              ++divertedEnergyTotal_Wh;
+            }
           }
         }
       }
@@ -461,14 +464,15 @@ void processRawSamples()
         updatePortsStates();
 
         // update the Energy Diversion Detector
-        if (physicalLoadState[0] == LoadStates::LOAD_ON)
+        if (loadPrioritiesAndState[0] & loadStateOnBit)
         {
           absenceOfDivertedEnergyCount = 0;
+          EDD_isIdle = false;
           EDD_isActive = true;
         }
         else
         {
-          ++absenceOfDivertedEnergyCount;
+          EDD_isIdle = true;
         }
 
         // Now that the energy-related decisions have been taken, min and max limits can now
