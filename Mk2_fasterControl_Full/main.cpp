@@ -234,7 +234,7 @@ bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
   }
   else if constexpr (PRIORITY_ROTATION == RotationModes::AUTO)
   {
-    if (ROTATION_AFTER_CYCLES < absenceOfDivertedEnergyCount)
+    if (ROTATION_AFTER_SECONDS < absenceOfDivertedEnergyCount)
     {
       proceedRotation();
 

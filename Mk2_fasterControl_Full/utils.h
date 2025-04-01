@@ -76,6 +76,24 @@ inline void printConfiguration()
   DBUGLN(REQUIRED_EXPORT_IN_WATTS);
 
   printParamsForSelectedOutputMode();
+
+  DBUG(F("Datalogging capability "));
+  if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::HumanReadable)
+  {
+    DBUGLN(F("in Human-readable format"));
+  }
+  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::IoT)
+  {
+    DBUGLN(F("in IoT format"));
+  }
+  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::EmonCMS)
+  {
+    DBUGLN(F("in EmonCMS format"));
+  }
+  else
+  {
+    DBUGLN(F("is NOT present"));
+  }
 }
 
 /**
@@ -155,7 +173,12 @@ inline void printForSerialText()
   Serial.println(F(")"));
 }
 
-inline void printForSerialJson()
+/**
+ * @brief Write on Serial in EmonESP format
+ * 
+ * @param bOffPeak state of on/off-peak period
+ */
+inline void printForEmonCMS(const bool bOffPeak)
 {
   ArduinoJson::StaticJsonDocument< 256 > doc;
 
@@ -238,7 +261,7 @@ void sendTelemetryData()
     {
       teleInfo.send("R", relays.get_relay(idx).isRelayON());  // Send diverted energy count for each relay
     } while (++idx < relays.get_size());
-}
+  }
 
   teleInfo.send("D", tx_data.powerDiverted);                           // Send power diverted
   teleInfo.send("E", static_cast< int16_t >(divertedEnergyTotal_Wh));  // Send diverted energy in Wh
@@ -284,19 +307,18 @@ inline void sendResults(bool bOffPeak)
   send_rf_data();  // *SEND RF DATA*
 #endif
 
-#if defined SERIALOUT
-  //printForSerialJson();
-  sendTelemetryData();
-#endif  // if defined SERIALOUT
-
-  if constexpr (EMONESP_CONTROL)
+  if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::HumanReadable)
   {
-    //printForEmonESP(bOffPeak);
+    printForSerialText();
   }
-
-#if defined SERIALPRINT && !defined EMONESP
-  printForSerialText();
-#endif  // if defined SERIALPRINT && !defined EMONESP
+  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::IoT)
+  {
+    sendTelemetryData();
+  }
+  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::EmonCMS)
+  {
+    printForEmonCMS(bOffPeak);
+  }
 }
 
 /**

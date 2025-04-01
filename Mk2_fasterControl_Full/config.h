@@ -32,19 +32,14 @@
 #include "utils_relay.h"
 #include "utils_temp.h"
 
+inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable; /**< constexpr variable to set the serial output type */
+
 inline constexpr uint8_t NO_OF_DUMPLOADS{ 1 }; /**< number of dump loads connected to the diverter */
 
-#ifdef EMONESP
-inline constexpr bool EMONESP_CONTROL{ true };
-inline constexpr bool DIVERSION_PIN_PRESENT{ true };                    /**< managed through EmonESP */
-inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::PIN }; /**< managed through EmonESP */
-inline constexpr bool OVERRIDE_PIN_PRESENT{ true };                     /**< managed through EmonESP */
-#else
 inline constexpr bool EMONESP_CONTROL{ false };
 inline constexpr bool DIVERSION_PIN_PRESENT{ true };                    /**< set it to 'true' if you want to control diversion ON/OFF */
 inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::OFF }; /**< set it to 'OFF/AUTO/PIN' if you want manual/automatic rotation of priorities */
 inline constexpr bool OVERRIDE_PIN_PRESENT{ true };                     /**< set it to 'true' if there's a override pin */
-#endif
 
 inline constexpr bool WATCHDOG_PIN_PRESENT{ false }; /**< set it to 'true' if there's a watch led */
 inline constexpr bool RELAY_DIVERSION{ false };      /**< set it to 'true' if a relay is used for diversion */
@@ -81,6 +76,6 @@ inline constexpr int16_t iTemperatureThreshold{ 100 }; /**< the temperature thre
 inline constexpr TemperatureSensing temperatureSensing{ 0xff,
                                                         { { 0x28, 0x1B, 0xD7, 0x6A, 0x09, 0x00, 0x00, 0xB7 } } }; /**< list of temperature sensor Addresses */
 
-inline constexpr uint32_t ROTATION_AFTER_CYCLES{ 8UL * 3600UL * SUPPLY_FREQUENCY }; /**< rotates load priorities after this period of inactivity */
+inline constexpr uint32_t ROTATION_AFTER_SECONDS{ 8UL * 3600UL }; /**< rotates load priorities after this period of inactivity */
 
 #endif /* CONFIG_H */
