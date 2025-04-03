@@ -1,9 +1,10 @@
 <map id="setPinState" name="setPinState">
-<area shape="rect" id="node1" title="Set the Pin state for the specified pin." alt="" coords="288,55,384,80"/>
-<area shape="rect" id="node2" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="113,5,239,31"/>
-<area shape="rect" id="node4" href="$group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="117,55,235,80"/>
-<area shape="rect" id="node6" href="$test__utils__pins_2test__main_8cpp.html#abd1c12218f5c492bdeb765dfc01a1965" title=" " alt="" coords="112,104,240,129"/>
-<area shape="rect" id="node3" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
-<area shape="rect" id="node5" href="$main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor." alt="" coords="9,55,60,80"/>
-<area shape="rect" id="node7" href="$test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="9,104,60,129"/>
+<area shape="rect" id="node1" title="Set the Pin state for the specified pin." alt="" coords="499,55,595,80"/>
+<area shape="rect" id="node2" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="323,5,450,31"/>
+<area shape="rect" id="node4" href="$group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="328,55,445,80"/>
+<area shape="rect" id="node7" href="$test__utils__pins_2test__main_8cpp.html#abd1c12218f5c492bdeb765dfc01a1965" title=" " alt="" coords="323,104,451,129"/>
+<area shape="rect" id="node3" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="160,5,219,31"/>
+<area shape="rect" id="node5" href="$main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761" title="Handles tasks that need to be executed every second." alt="" coords="104,55,275,80"/>
+<area shape="rect" id="node6" href="$main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,55,56,80"/>
+<area shape="rect" id="node8" href="$test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="164,104,215,129"/>
 </map>

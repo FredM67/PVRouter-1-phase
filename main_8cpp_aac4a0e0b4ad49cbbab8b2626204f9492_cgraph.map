@@ -1,5 +1,5 @@
 <map id="updateTemperature" name="updateTemperature">
-<area shape="rect" id="node1" title="Update the temperature and send a new request." alt="" coords="5,77,155,102"/>
+<area shape="rect" id="node1" title="Updates the temperature readings and sends a new request for the next cycle." alt="" coords="5,77,155,102"/>
 <area shape="rect" id="node2" href="$classTemperatureSensing.html#a2ee48e23ceaf2bbc08cc4be575bb7d90" title="Get the number of sensors." alt="" coords="209,5,364,45"/>
 <area shape="rect" id="node3" href="$classTemperatureSensing.html#a818e69732219334348f6e6e44774d0fe" title="Read temperature of a specific device." alt="" coords="209,69,364,109"/>
 <area shape="rect" id="node4" href="$classTemperatureSensing.html#a10629740380a6f688ac5c70346a94c80" title="Request temperature for all sensors." alt="" coords="203,133,371,173"/>
