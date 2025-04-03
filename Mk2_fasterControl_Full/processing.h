@@ -98,6 +98,8 @@ inline void proceedHighEnergyLevel() __attribute__((always_inline));
 inline uint8_t nextLogicalLoadToBeAdded() __attribute__((always_inline));
 inline uint8_t nextLogicalLoadToBeRemoved() __attribute__((always_inline));
 inline void processLatestContribution() __attribute__((always_inline));
+
+void handlePerSecondTasks(bool& bOffPeak, int16_t iTemperature_x100) __attribute__((always_inline));
 #endif
 
 void processDataLogging();

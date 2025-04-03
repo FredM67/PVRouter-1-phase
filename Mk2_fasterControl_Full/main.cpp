@@ -97,10 +97,25 @@ ISR(ADC_vect)
 }
 
 /**
- * @brief This function set all 3 loads to full power.
- *
- * @return true if loads are forced
- * @return false
+ * @brief Forces all loads to full power.
+ * 
+ * @details This function overrides the normal load control logic and forces all loads to operate 
+ *          at full power. It checks the state of the override pin and updates the override flags 
+ *          for all loads accordingly. If debugging is enabled, it logs the state transitions 
+ *          (e.g., "Trigger override!" or "End override!") to the debug output.
+ * 
+ *          Key operations include:
+ *          - Checking the state of the override pin.
+ *          - Updating the override flags for all loads.
+ *          - Logging state transitions if debugging is enabled.
+ * 
+ * @return true if the override is active and all loads are forced to full power.
+ * @return false if the override is not active.
+ * 
+ * @note This function is only executed if the `OVERRIDE_PIN_PRESENT` compile-time constant is defined.
+ * 
+ * @see getPinState
+ * @see ENABLE_DEBUG
  */
 bool forceFullPower()
 {
@@ -132,8 +147,22 @@ bool forceFullPower()
 }
 
 /**
- * @brief Proceed load priority rotation
+ * @brief Rotates the load priorities.
  * 
+ * @details This function triggers a reordering of load priorities. It sets a flag to indicate 
+ *          that the priorities need to be rotated and waits until the rotation is completed 
+ *          within the Interrupt Service Routine (ISR). Once the rotation is done, it logs the 
+ *          updated load priorities for debugging or monitoring purposes.
+ * 
+ *          Key operations include:
+ *          - Setting the `b_reOrderLoads` flag to initiate priority rotation.
+ *          - Waiting for the ISR to complete the rotation.
+ *          - Logging the updated load priorities.
+ * 
+ * @note This function uses a delay to wait for the ISR to complete the rotation. Ensure that 
+ *       the delay duration is appropriate for the system's timing requirements.
+ * 
+ * @see logLoadPriorities
  */
 void proceedRotation()
 {
@@ -150,11 +179,30 @@ void proceedRotation()
 }
 
 /**
- * @brief Proceed load priority in combination with dual tariff
+ * @brief Handles load priority in combination with dual tariff.
  * 
- * @param currentTemperature_x100 current temperature x 100 (default to 0 if deactivated)
- * @return true if high tariff (on-peak period)
- * @return false if low tariff (off-peak period)
+ * @details This function manages load priorities and overrides during dual tariff operation. 
+ *          It detects transitions between off-peak and peak periods using the state of the 
+ *          dual tariff pin. During the off-peak period, it rotates load priorities (if enabled) 
+ *          and manages load overrides based on the elapsed time and temperature thresholds. 
+ *          At the end of the off-peak period, it resets the state and logs the transition.
+ * 
+ *          Key operations include:
+ *          - Detecting the start and end of off-peak periods.
+ *          - Rotating load priorities automatically during off-peak periods.
+ *          - Managing load overrides based on elapsed time and temperature thresholds.
+ * 
+ * @param currentTemperature_x100 The current temperature multiplied by 100 (e.g., 25.00°C is represented as 2500).
+ *                                Used for temperature-based load override logic.
+ * 
+ * @return true if the high tariff (on-peak period) is active.
+ * @return false if the low tariff (off-peak period) is active.
+ * 
+ * @note This function relies on several compile-time constants and global variables, such as 
+ *       `PRIORITY_ROTATION`, `NO_OF_DUMPLOADS`, and `rg_OffsetForce`.
+ * 
+ * @see proceedRotation
+ * @see getPinState
  */
 bool proceedLoadPrioritiesAndOverridingDualTariff(const int16_t currentTemperature_x100)
 {
@@ -204,13 +252,31 @@ bool proceedLoadPrioritiesAndOverridingDualTariff(const int16_t currentTemperatu
 }
 
 /**
- * @brief This function changes the value of the load priorities.
- * @details Since we don't have access to a clock, we detect the offPeak start from the main energy meter.
- *          Additionally, when off-peak period starts, we rotate the load priorities for the next day.
- *
- * @param currentTemperature_x100 current temperature x 100 (default to 0 if deactivated)
- * @return true if off-peak tariff is active
- * @return false if on-peak tariff is active
+ * @brief Handles load priority rotation and overriding logic.
+ * 
+ * @details This function manages the load priorities and overrides based on the current system state. 
+ *          Since the system does not have access to a clock, it detects the start of the off-peak 
+ *          period using the main energy meter. When the off-peak period starts, the function rotates 
+ *          the load priorities for the next day. It also supports dual tariff systems, rotation after 
+ *          a specified time, and manual overrides using a force pin. The function detects transitions 
+ *          between off-peak and peak periods and triggers load priority rotations accordingly.
+ * 
+ *          Key operations include:
+ *          - Detecting off-peak and peak period transitions.
+ *          - Rotating load priorities automatically or based on user input.
+ *          - Managing load overrides using a force pin.
+ * 
+ * @param currentTemperature_x100 The current temperature multiplied by 100 (e.g., 25.00°C is represented as 2500).
+ *                                Used for temperature-based load override logic.
+ * 
+ * @return true if the off-peak tariff is active.
+ * @return false if the on-peak tariff is active.
+ * 
+ * @note This function relies on several compile-time constants and global variables, such as 
+ *       `DUAL_TARIFF`, `EMONESP_CONTROL`, `PRIORITY_ROTATION`, and `OVERRIDE_PIN_PRESENT`.
+ * 
+ * @see proceedLoadPrioritiesAndOverridingDualTariff
+ * @see proceedRotation
  */
 bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
 {
@@ -254,8 +320,17 @@ bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
 }
 
 /**
- * @brief Check the diversion state
+ * @brief Checks and updates the diversion state.
  * 
+ * @details This function monitors the state of the diversion pin to determine whether the diversion 
+ *          is active or not. If the diversion pin state changes, it updates the `b_diversionOff` 
+ *          flag accordingly. Additionally, if debugging is enabled, it logs the state transitions 
+ *          (e.g., "Trigger diversion OFF!" or "End diversion OFF!") to the debug output.
+ * 
+ * @note This function is only executed if the `DIVERSION_PIN_PRESENT` compile-time constant is defined.
+ * 
+ * @see getPinState
+ * @see ENABLE_DEBUG
  */
 void checkDiversionOnOff()
 {
@@ -278,8 +353,25 @@ void checkDiversionOnOff()
 }
 
 /**
- * @brief Update the temperature and send a new request
+ * @brief Updates the temperature readings and sends a new request for the next cycle.
  * 
+ * @details This function reads the temperature values from the sensors, validates them, 
+ *          and updates the global temperature data. If a temperature reading is invalid 
+ *          (e.g., disconnected sensor or out-of-range value), it is replaced with a 
+ *          default value (`DEVICE_DISCONNECTED_RAW`). After processing the current 
+ *          readings, the function sends a new request to the sensors to prepare for 
+ *          the next cycle.
+ * 
+ *          Key operations include:
+ *          - Reading temperature values from all sensors.
+ *          - Validating the temperature readings.
+ *          - Updating the global temperature data structure.
+ *          - Sending a new request to the sensors for the next cycle.
+ * 
+ * @note This function is only executed if the `TEMP_SENSOR_PRESENT` compile-time constant is defined.
+ * 
+ * @see temperatureSensing
+ * @see DEVICE_DISCONNECTED_RAW
  */
 void updateTemperature()
 {
@@ -304,8 +396,20 @@ void updateTemperature()
 }
 
 /**
- * @brief Perform calculations on data for logging
+ * @brief Performs calculations on data for logging purposes.
  * 
+ * @details This function processes accumulated data over a logging period to calculate key metrics 
+ *          such as power grid usage, diverted power, and voltage. These calculations are based on 
+ *          the number of sample sets collected during the logging period and calibration constants.
+ * 
+ *          The function also adjusts the calculated voltage based on the logging period duration 
+ *          (e.g., for periods longer than 10 seconds, a scaling factor is applied).
+ * 
+ * @note This function relies on global variables such as `copyOf_sumP_grid_overDL_Period`, 
+ *       `copyOf_sampleSetsDuringThisDatalogPeriod`, and `f_voltageCal`.
+ * 
+ * @see sendResults
+ * @see updateTemperature
  */
 void processCalculationsForLogging()
 {
@@ -326,9 +430,28 @@ void processCalculationsForLogging()
 
 /**
  * @brief Called once during startup.
- * @details This function initializes a couple of variables we cannot init at compile time and
- *          sets a couple of parameters for runtime.
- *
+ * 
+ * @details This function initializes various components and settings required for the program to run. 
+ *          It sets up the serial communication, initializes the display, configures optional pins, 
+ *          and ensures all loads are turned off at startup. Additionally, it logs the load priorities 
+ *          and initializes temperature sensors if present.
+ * 
+ *          Key operations include:
+ *          - Delaying to allow time for the Serial monitor to open.
+ *          - Initializing the Serial interface and debug port.
+ *          - Setting up the OLED display and initializing it.
+ *          - Configuring optional pins and logging load priorities.
+ *          - Initializing temperature sensors if the feature is enabled.
+ *          - Printing the available free RAM for debugging purposes.
+ * 
+ * @note This function is executed only once at the beginning of the program.
+ * 
+ * @see printConfiguration
+ * @see setupOLED
+ * @see initializeDisplay
+ * @see initializeProcessing
+ * @see initializeOptionalPins
+ * @see logLoadPriorities
  */
 void setup()
 {
@@ -364,10 +487,79 @@ void setup()
 }
 
 /**
- * @brief Main processor.
- * @details None of the workload in loop() is time-critical.
- *          All the processing of ADC data is done within the ISR.
- *
+ * @brief Handles tasks that need to be executed every second.
+ * 
+ * @details This function performs a series of operations that are executed once per second. 
+ *          These include updating the absence of diverted energy count, toggling the watchdog pin 
+ *          (if present), updating the watchdog, checking the diversion state, managing load priorities 
+ *          and overrides, and refreshing the display. It also handles relay operations if relay diversion 
+ *          is enabled.
+ * 
+ * @param bOffPeak A reference to a boolean indicating whether the off-peak tariff is active.
+ *                 This value may be updated based on load priorities and overriding logic.
+ * @param iTemperature_x100 The current temperature multiplied by 100 (e.g., 25.00°C is represented as 2500).
+ *                          Used for temperature-based logic, such as load overrides.
+ * 
+ * @note This function relies on several compile-time constants and global variables, such as 
+ *       `WATCHDOG_PIN_PRESENT`, `RELAY_DIVERSION`, and `EDD_isIdle`.
+ * 
+ * @see proceedLoadPrioritiesAndOverriding
+ * @see forceFullPower
+ * @see checkDiversionOnOff
+ * @see refreshDisplay
+ */
+void handlePerSecondTasks(bool& bOffPeak, int16_t iTemperature_x100)
+{
+  if (EDD_isIdle)
+  {
+    ++absenceOfDivertedEnergyCount;
+  }
+
+  if constexpr (WATCHDOG_PIN_PRESENT)
+  {
+    togglePin(watchDogPin);
+  }
+
+  updateWatchdog();
+  checkDiversionOnOff();
+
+  if (!forceFullPower())
+  {
+    bOffPeak = proceedLoadPrioritiesAndOverriding(iTemperature_x100);
+  }
+
+  if constexpr (RELAY_DIVERSION)
+  {
+    relays.inc_duration();
+    relays.proceed_relays();
+  }
+
+  refreshDisplay();
+}
+
+/**
+ * @brief Main processor loop.
+ * 
+ * @details This function is the main execution loop of the program. It handles periodic tasks, 
+ *          including refreshing the display, managing load priorities, processing data for logging, 
+ *          and sending results. The loop is designed to handle non-time-critical tasks, as all 
+ *          time-sensitive operations are performed within the Interrupt Service Routine (ISR).
+ * 
+ *          Key operations include:
+ *          - Incrementing timers for periodic tasks.
+ *          - Refreshing the display at a defined interval.
+ *          - Managing energy diversion and load priorities.
+ *          - Processing accumulated data for logging purposes.
+ *          - Sending results to external systems.
+ * 
+ * @note The loop relies on several global variables and flags, such as `b_newCycle`, 
+ *       `b_datalogEventPending`, and `absenceOfDivertedEnergyCount`. It also uses compile-time 
+ *       constants like `SUPPLY_FREQUENCY` and `UPDATE_PERIOD_FOR_DISPLAYED_DATA`.
+ * 
+ * @see handlePerSecondTasks
+ * @see processCalculationsForLogging
+ * @see updateTemperature
+ * @see sendResults
  */
 void loop()
 {
@@ -406,36 +598,7 @@ void loop()
     if (perSecondTimer >= SUPPLY_FREQUENCY)
     {
       perSecondTimer = 0;
-
-      if (EDD_isIdle)
-      {
-        ++absenceOfDivertedEnergyCount;
-      }
-
-      if constexpr (WATCHDOG_PIN_PRESENT)
-      {
-        togglePin(watchDogPin);
-      }
-
-      if (!initLoop)
-      {
-        updateWatchdog();
-      }
-
-      checkDiversionOnOff();
-
-      if (!forceFullPower())
-      {
-        bOffPeak = proceedLoadPrioritiesAndOverriding(iTemperature_x100);  // called every second
-      }
-
-      if constexpr (RELAY_DIVERSION)
-      {
-        relays.inc_duration();
-        relays.proceed_relays();
-      }
-
-      refreshDisplay();
+      handlePerSecondTasks(bOffPeak, iTemperature_x100);
     }
   }
 
