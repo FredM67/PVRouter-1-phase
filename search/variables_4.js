@@ -18,7 +18,7 @@ var searchData=
   ['digitselectorpin_15',['digitSelectorPin',['../utils__display_8h.html#a7bff10ac4da623f3745574c8450ee1c0',1,'utils_display.h']]],
   ['digitvaluemap_16',['digitValueMap',['../utils__display_8h.html#a9f66d634c5fbf097ac1e170caf0dcd95',1,'utils_display.h']]],
   ['display_5fshutdown_5fin_5fhours_17',['DISPLAY_SHUTDOWN_IN_HOURS',['../utils__display_8h.html#ad5dee3d18ada0c321e30d000e453dd8b',1,'utils_display.h']]],
-  ['displayshutdown_5finmainscycles_18',['displayShutdown_inMainsCycles',['../utils__display_8h.html#ad04c40c06bfad1357e628c157ec8f642',1,'utils_display.h']]],
+  ['displayshutdown_5finseconds_18',['displayShutdown_inSeconds',['../utils__display_8h.html#ae2658f0418fe4445abbe322dd7ce7067',1,'utils_display.h']]],
   ['diversion_5fpin_5fpresent_19',['DIVERSION_PIN_PRESENT',['../config_8h.html#af4fafac7a898d0c42cf814b9ab893d8c',1,'config.h']]],
   ['diversionpin_20',['diversionPin',['../config_8h.html#a7356f13f5bd190e1c4617b7143e4416d',1,'config.h']]],
   ['divertedenergyrecent_5fieu_21',['divertedEnergyRecent_IEU',['../processing_8h.html#a1e974854de2c5bd51630066ae8f27207',1,'processing.h']]],

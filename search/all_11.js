@@ -31,7 +31,7 @@ var searchData=
   ['rf_20feature_28',['RF feature',['../group__RF.html',1,'']]],
   ['rg_5fforceload_29',['rg_ForceLoad',['../config_8h.html#a281368464ae362f565124959a02d2888',1,'config.h']]],
   ['rg_5foffsetforce_30',['rg_OffsetForce',['../dualtariff_8h.html#ab30c3e5dcd33bc810290f64f0e41f3c4',1,'dualtariff.h']]],
-  ['rotation_5fafter_5fseconds_31',['ROTATION_AFTER_SECONDS',['../config_8h.html#a31c1d96ed6ba0d5d3fa8172b1191f8db',1,'config.h']]],
+  ['rotation_5fafter_5fseconds_31',['ROTATION_AFTER_SECONDS',['../config_8h.html#a92aba947fa85b5d91ebb92ed7179f57f',1,'config.h']]],
   ['rotationmodes_32',['RotationModes',['../types_8h.html#a06b890c4a964752df814257dc1f13073',1,'RotationModes():&#160;types.h'],['../config_8h.html#a0e46594bb69d18074193e096a4470dce',1,'RotationModes():&#160;config.h']]],
   ['rotationpin_33',['rotationPin',['../config_8h.html#af668b2a5b07a913bd673318dc30654bb',1,'config.h']]],
   ['round_5fup_5fto_5fpower_5fof_5f2_34',['round_up_to_power_of_2',['../ewma__avg_8hpp.html#ab2d65d6104cd09368e1b72bb4342cae5',1,'ewma_avg.hpp']]]
