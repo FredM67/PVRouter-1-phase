@@ -232,16 +232,14 @@ bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
     }
     pinRotationState = pinNewState;
   }
-  else if constexpr (PRIORITY_ROTATION == RotationModes::AUTO)
+  else if (ROTATION_AFTER_SECONDS < absenceOfDivertedEnergyCount)
   {
-    if (ROTATION_AFTER_SECONDS < absenceOfDivertedEnergyCount)
+    if constexpr (PRIORITY_ROTATION == RotationModes::AUTO)
     {
       proceedRotation();
-
-      absenceOfDivertedEnergyCount = 0;
     }
+    absenceOfDivertedEnergyCount = 0;
   }
-
   if constexpr (OVERRIDE_PIN_PRESENT)
   {
     const auto pinState{ getPinState(forcePin) };
@@ -393,7 +391,7 @@ void loop()
       // After a pre-defined period of inactivity, the 4-digit display needs to
       // close down in readiness for the next's day's data.
       //
-      if (absenceOfDivertedEnergyCount > displayShutdown_inMainsCycles)
+      if (absenceOfDivertedEnergyCount > displayShutdown_inSeconds)
       {
         // clear the accumulators for diverted energy
         divertedEnergyTotal_Wh = 0;
@@ -413,7 +411,7 @@ void loop()
       {
         ++absenceOfDivertedEnergyCount;
       }
-      
+
       if constexpr (WATCHDOG_PIN_PRESENT)
       {
         togglePin(watchDogPin);

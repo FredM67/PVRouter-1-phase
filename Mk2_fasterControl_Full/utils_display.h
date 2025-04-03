@@ -24,7 +24,7 @@ inline constexpr uint8_t MAX_DISPLAY_TIME_COUNT{ 10 };            // no of proce
 inline constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50 };  // mains cycles
 inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 };          // auto-reset after this period of inactivity
 
-inline constexpr uint32_t displayShutdown_inMainsCycles{ DISPLAY_SHUTDOWN_IN_HOURS * mainsCyclesPerHour };
+inline constexpr uint16_t displayShutdown_inSeconds{ DISPLAY_SHUTDOWN_IN_HOURS * 3600 };
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The 7-segment display can be driven in two ways:
