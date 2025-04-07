@@ -139,9 +139,21 @@ Functions</h2></td></tr>
 <tr class="memitem:ga3533a6f04780d5ed82d704bf39cebb69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69">initializeDisplay</a> ()</td></tr>
 <tr class="memdesc:ga3533a6f04780d5ed82d704bf39cebb69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the display based on the type of display defined by TYPE_OF_DISPLAY.  <br /></td></tr>
 <tr class="separator:ga3533a6f04780d5ed82d704bf39cebb69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gada41f61abba371bab816bae257291f92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#gada41f61abba371bab816bae257291f92">initializeDisplayHW</a> ()</td></tr>
+<tr class="memdesc:gada41f61abba371bab816bae257291f92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the display for hardware-driven 7-segment displays.  <br /></td></tr>
+<tr class="separator:gada41f61abba371bab816bae257291f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga41e6969691858ccbfcc03d15d9008c63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#ga41e6969691858ccbfcc03d15d9008c63">initializeDisplaySW</a> ()</td></tr>
+<tr class="memdesc:ga41e6969691858ccbfcc03d15d9008c63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the display for software-driven 7-segment displays.  <br /></td></tr>
+<tr class="separator:ga41e6969691858ccbfcc03d15d9008c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa93cf18ded17c52a21fa1bd80ac95ac2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2">refreshDisplay</a> ()</td></tr>
 <tr class="memdesc:gaa93cf18ded17c52a21fa1bd80ac95ac2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refreshes the display by updating the active digit and its segments.  <br /></td></tr>
 <tr class="separator:gaa93cf18ded17c52a21fa1bd80ac95ac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadb2a22aeca7b926144982ff2278f3c92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92">update7SegmentHWDisplay</a> ()</td></tr>
+<tr class="memdesc:gadb2a22aeca7b926144982ff2278f3c92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the 7-segment display for the next digit (hardware-driven).  <br /></td></tr>
+<tr class="separator:gadb2a22aeca7b926144982ff2278f3c92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa7c3b04920d5065ca6b6b7d9c261bc93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93">update7SegmentSWDisplay</a> ()</td></tr>
+<tr class="memdesc:gaa7c3b04920d5065ca6b6b7d9c261bc93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the 7-segment display for the next digit (software-driven).  <br /></td></tr>
+<tr class="separator:gaa7c3b04920d5065ca6b6b7d9c261bc93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -163,9 +175,9 @@ Variables</h2></td></tr>
 <tr class="separator:a7bff10ac4da623f3745574c8450ee1c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f66d634c5fbf097ac1e170caf0dcd95"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a9f66d634c5fbf097ac1e170caf0dcd95">digitValueMap</a> [<a class="el" href="utils__display_8h.html#aa74f2c2474570fdadf3b439848514b5f">noOfPossibleCharacters</a>][<a class="el" href="utils__display_8h.html#a50d1645f3f220eaddf4dc01e9ce3778e">noOfDigitSelectionLines</a>+1]</td></tr>
 <tr class="separator:a9f66d634c5fbf097ac1e170caf0dcd95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5dee3d18ada0c321e30d000e453dd8b"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#ad5dee3d18ada0c321e30d000e453dd8b">DISPLAY_SHUTDOWN_IN_HOURS</a> { 8 }</td></tr>
+<tr class="memitem:ad5dee3d18ada0c321e30d000e453dd8b"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#ad5dee3d18ada0c321e30d000e453dd8b">DISPLAY_SHUTDOWN_IN_HOURS</a> { 8U }</td></tr>
 <tr class="separator:ad5dee3d18ada0c321e30d000e453dd8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2658f0418fe4445abbe322dd7ce7067"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#ae2658f0418fe4445abbe322dd7ce7067">displayShutdown_inSeconds</a> { <a class="el" href="utils__display_8h.html#ad5dee3d18ada0c321e30d000e453dd8b">DISPLAY_SHUTDOWN_IN_HOURS</a> * 3600 }</td></tr>
+<tr class="memitem:ae2658f0418fe4445abbe322dd7ce7067"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#ae2658f0418fe4445abbe322dd7ce7067">displayShutdown_inSeconds</a> { <a class="el" href="utils__display_8h.html#ad5dee3d18ada0c321e30d000e453dd8b">DISPLAY_SHUTDOWN_IN_HOURS</a> * 3600U }</td></tr>
 <tr class="separator:ae2658f0418fe4445abbe322dd7ce7067"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94a209cc49723ce156cf651e8ee35a89"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a94a209cc49723ce156cf651e8ee35a89">DPstatus_columnID</a> = <a class="el" href="utils__display_8h.html#a50d1645f3f220eaddf4dc01e9ce3778e">noOfDigitSelectionLines</a></td></tr>
 <tr class="separator:a94a209cc49723ce156cf651e8ee35a89"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -175,15 +187,13 @@ Variables</h2></td></tr>
 <tr class="separator:ac5981a648014ccfc5ecf9d350be2af58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e18b2597ce4e271d3b0740c843932f3"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a2e18b2597ce4e271d3b0740c843932f3">enableDisableLine</a> { 5 }</td></tr>
 <tr class="separator:a2e18b2597ce4e271d3b0740c843932f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdac89f5f7235d6b1b407c43486997bb"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#afdac89f5f7235d6b1b407c43486997bb">MAX_DISPLAY_TIME_COUNT</a> { 10 }</td></tr>
-<tr class="separator:afdac89f5f7235d6b1b407c43486997bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62d0c9099af6d401b59b3a4bcaea73bb"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a62d0c9099af6d401b59b3a4bcaea73bb">noOfDigitLocationLines</a> { 2 }</td></tr>
 <tr class="separator:a62d0c9099af6d401b59b3a4bcaea73bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96a7273b2984378dd24913d76bc3b654"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654">noOfDigitLocations</a> { 4 }</td></tr>
+<tr class="memitem:a96a7273b2984378dd24913d76bc3b654"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654">noOfDigitLocations</a> { 4U }</td></tr>
 <tr class="separator:a96a7273b2984378dd24913d76bc3b654"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50d1645f3f220eaddf4dc01e9ce3778e"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a50d1645f3f220eaddf4dc01e9ce3778e">noOfDigitSelectionLines</a> { 4 }</td></tr>
 <tr class="separator:a50d1645f3f220eaddf4dc01e9ce3778e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa74f2c2474570fdadf3b439848514b5f"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#aa74f2c2474570fdadf3b439848514b5f">noOfPossibleCharacters</a> { 22 }</td></tr>
+<tr class="memitem:aa74f2c2474570fdadf3b439848514b5f"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#aa74f2c2474570fdadf3b439848514b5f">noOfPossibleCharacters</a> { 22U }</td></tr>
 <tr class="separator:aa74f2c2474570fdadf3b439848514b5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0158e223e6e79ce639b843d9134f8965"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a0158e223e6e79ce639b843d9134f8965">noOfSegmentsPerDigit</a> { 8 }</td></tr>
 <tr class="separator:a0158e223e6e79ce639b843d9134f8965"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,7 +205,7 @@ Variables</h2></td></tr>
 <tr class="separator:afb7660090abe4e5ccdcc89cb62e4f4a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af88b8bf554461890b80aa663a44e9fdc"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#af88b8bf554461890b80aa663a44e9fdc">segmentDrivePin</a> [<a class="el" href="utils__display_8h.html#a0158e223e6e79ce639b843d9134f8965">noOfSegmentsPerDigit</a>] { 2, 5, 12, 6, 7, 9, 8, 14 }</td></tr>
 <tr class="separator:af88b8bf554461890b80aa663a44e9fdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a379ab6d628249a17d8dbf41886fb9159"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a379ab6d628249a17d8dbf41886fb9159">UPDATE_PERIOD_FOR_DISPLAYED_DATA</a> { 50 }</td></tr>
+<tr class="memitem:a379ab6d628249a17d8dbf41886fb9159"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a379ab6d628249a17d8dbf41886fb9159">UPDATE_PERIOD_FOR_DISPLAYED_DATA</a> { 50U }</td></tr>
 <tr class="separator:a379ab6d628249a17d8dbf41886fb9159"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -220,7 +230,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00142">142</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00141">141</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -244,7 +254,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00047">47</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00046">46</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -268,7 +278,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00104">104</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00103">103</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -292,7 +302,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00103">103</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00102">102</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -316,7 +326,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00049">49</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00048">48</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -346,7 +356,7 @@ Variables</h2></td></tr>
 <div class="line">  HIGH, HIGH,  </div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00085">85</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00084">84</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -370,7 +380,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00050">50</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00049">49</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -394,7 +404,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00106">106</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00105">105</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -442,7 +452,7 @@ Variables</h2></td></tr>
 <div class="line">  HIGH, HIGH, HIGH, HIGH, HIGH  </div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00057">57</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00056">56</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -456,7 +466,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS { 8 }</td>
+          <td class="memname">constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS { 8U }</td>
         </tr>
       </table>
   </td>
@@ -466,7 +476,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00025">25</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00024">24</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -480,7 +490,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a> displayShutdown_inSeconds { <a class="el" href="utils__display_8h.html#ad5dee3d18ada0c321e30d000e453dd8b">DISPLAY_SHUTDOWN_IN_HOURS</a> * 3600 }</td>
+          <td class="memname">constexpr <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a> displayShutdown_inSeconds { <a class="el" href="utils__display_8h.html#ad5dee3d18ada0c321e30d000e453dd8b">DISPLAY_SHUTDOWN_IN_HOURS</a> * 3600U }</td>
         </tr>
       </table>
   </td>
@@ -490,7 +500,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00027">27</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00026">26</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -514,7 +524,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00083">83</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00082">82</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -538,7 +548,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00039">39</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00038">38</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -562,7 +572,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00040">40</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00039">39</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -586,31 +596,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00046">46</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
-
-</div>
-</div>
-<a id="afdac89f5f7235d6b1b407c43486997bb" name="afdac89f5f7235d6b1b407c43486997bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afdac89f5f7235d6b1b407c43486997bb">&#9670;&#160;</a></span>MAX_DISPLAY_TIME_COUNT</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr uint8_t MAX_DISPLAY_TIME_COUNT { 10 }</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00023">23</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00045">45</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -634,7 +620,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00044">44</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00043">43</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -648,7 +634,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr uint8_t noOfDigitLocations { 4 }</td>
+          <td class="memname">constexpr uint8_t noOfDigitLocations { 4U }</td>
         </tr>
       </table>
   </td>
@@ -682,7 +668,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00043">43</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00042">42</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -696,7 +682,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr uint8_t noOfPossibleCharacters { 22 }</td>
+          <td class="memname">constexpr uint8_t noOfPossibleCharacters { 22U }</td>
         </tr>
       </table>
   </td>
@@ -730,7 +716,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00101">101</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00100">100</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -754,7 +740,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00099">99</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00098">98</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -778,7 +764,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00098">98</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00097">97</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -825,10 +811,10 @@ Variables</h2></td></tr>
 <div class="line">  <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>,  </div>
 <div class="line">  <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>    </div>
 <div class="line">}</div>
-<div class="ttc" id="autils__display_8h_html_a7048fc75a5cff8a51368e3fbb53521db"><div class="ttname"><a href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a></div><div class="ttdeci">constexpr uint8_t ON</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00098">utils_display.h:98</a></div></div>
-<div class="ttc" id="autils__display_8h_html_aa6671243ff94189dcf82eef4a3a0c468"><div class="ttname"><a href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a></div><div class="ttdeci">constexpr uint8_t OFF</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00099">utils_display.h:99</a></div></div>
+<div class="ttc" id="autils__display_8h_html_a7048fc75a5cff8a51368e3fbb53521db"><div class="ttname"><a href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a></div><div class="ttdeci">constexpr uint8_t ON</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00097">utils_display.h:97</a></div></div>
+<div class="ttc" id="autils__display_8h_html_aa6671243ff94189dcf82eef4a3a0c468"><div class="ttname"><a href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a></div><div class="ttdeci">constexpr uint8_t OFF</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00098">utils_display.h:98</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00114">114</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00113">113</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -852,7 +838,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00107">107</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00106">106</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -866,7 +852,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA { 50 }</td>
+          <td class="memname">constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA { 50U }</td>
         </tr>
       </table>
   </td>
@@ -876,7 +862,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00024">24</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00023">23</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>

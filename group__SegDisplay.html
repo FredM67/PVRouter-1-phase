@@ -90,9 +90,21 @@ Functions</h2></td></tr>
 <tr class="memitem:ga3533a6f04780d5ed82d704bf39cebb69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69">initializeDisplay</a> ()</td></tr>
 <tr class="memdesc:ga3533a6f04780d5ed82d704bf39cebb69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the display based on the type of display defined by TYPE_OF_DISPLAY.  <br /></td></tr>
 <tr class="separator:ga3533a6f04780d5ed82d704bf39cebb69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gada41f61abba371bab816bae257291f92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#gada41f61abba371bab816bae257291f92">initializeDisplayHW</a> ()</td></tr>
+<tr class="memdesc:gada41f61abba371bab816bae257291f92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the display for hardware-driven 7-segment displays.  <br /></td></tr>
+<tr class="separator:gada41f61abba371bab816bae257291f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga41e6969691858ccbfcc03d15d9008c63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#ga41e6969691858ccbfcc03d15d9008c63">initializeDisplaySW</a> ()</td></tr>
+<tr class="memdesc:ga41e6969691858ccbfcc03d15d9008c63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the display for software-driven 7-segment displays.  <br /></td></tr>
+<tr class="separator:ga41e6969691858ccbfcc03d15d9008c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa93cf18ded17c52a21fa1bd80ac95ac2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2">refreshDisplay</a> ()</td></tr>
 <tr class="memdesc:gaa93cf18ded17c52a21fa1bd80ac95ac2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refreshes the display by updating the active digit and its segments.  <br /></td></tr>
 <tr class="separator:gaa93cf18ded17c52a21fa1bd80ac95ac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadb2a22aeca7b926144982ff2278f3c92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92">update7SegmentHWDisplay</a> ()</td></tr>
+<tr class="memdesc:gadb2a22aeca7b926144982ff2278f3c92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the 7-segment display for the next digit (hardware-driven).  <br /></td></tr>
+<tr class="separator:gadb2a22aeca7b926144982ff2278f3c92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa7c3b04920d5065ca6b6b7d9c261bc93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93">update7SegmentSWDisplay</a> ()</td></tr>
+<tr class="memdesc:gaa7c3b04920d5065ca6b6b7d9c261bc93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the 7-segment display for the next digit (software-driven).  <br /></td></tr>
+<tr class="separator:gaa7c3b04920d5065ca6b6b7d9c261bc93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Functions used for the 7-segments display </p>
@@ -136,14 +148,15 @@ Functions</h2></td></tr>
 <p>When the energy display is not active, the function displays a "walking dots" pattern by cycling a dot through the display positions.</p>
 <p>7 </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00234">234</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00265">265</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__SegDisplay_ga955fe37f3ba164eb42378ba17ed90f42_cgraph.png" border="0" usemap="#agroup__SegDisplay_ga955fe37f3ba164eb42378ba17ed90f42_cgraph" alt=""/></div>
 <map name="agroup__SegDisplay_ga955fe37f3ba164eb42378ba17ed90f42_cgraph" id="agroup__SegDisplay_ga955fe37f3ba164eb42378ba17ed90f42_cgraph">
-<area shape="rect" title="Configures the value for display on a 7&#45;segment display." alt="" coords="5,5,192,31"/>
-<area shape="rect" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977" title=" " alt="" coords="240,5,307,31"/>
+<area shape="rect" title="Configures the value for display on a 7&#45;segment display." alt="" coords="5,31,192,56"/>
+<area shape="rect" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe" title=" " alt="" coords="240,5,327,31"/>
+<area shape="rect" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977" title=" " alt="" coords="250,55,317,80"/>
 </map>
 </div>
 <div class="dynheader">
@@ -174,38 +187,23 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Initializes the display based on the type of display defined by TYPE_OF_DISPLAY. </p>
-<p>This function sets up the necessary pin modes and initial states for the display. It supports two types of displays: SEG_HW and SEG.</p>
-<ul>
-<li>For <a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0">DisplayType::SEG_HW</a> (hardware-driven 7-segment display):<ul>
-<li>Configures the IO drivers for the 4-digit display.</li>
-<li>Sets the pin mode for the decimal point line.</li>
-<li>Sets up the control lines for the 74HC4543 7-seg display driver.</li>
-<li>Sets up the enable line for the 74HC4543 7-seg display driver.</li>
-<li>Sets up the control lines for the 74HC138 2-&gt;4 demux.</li>
-</ul>
-</li>
-<li>For <a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ae0bd48751b29b4132b70ded3310b718a">DisplayType::SEG</a> (software-driven 7-segment display):<ul>
-<li>Sets the pin mode for each segment drive pin.</li>
-<li>Sets the pin mode for each digit selector pin.</li>
-<li>Disables all digit selector pins initially.</li>
-<li>Turns off all segment drive pins initially.</li>
-</ul>
-</li>
-</ul>
+<p>This function determines the type of display (hardware-driven or software-driven) and calls the appropriate initialization function.</p>
 <p>7 </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00165">165</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00233">233</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__SegDisplay_ga3533a6f04780d5ed82d704bf39cebb69_cgraph.png" border="0" usemap="#agroup__SegDisplay_ga3533a6f04780d5ed82d704bf39cebb69_cgraph" alt=""/></div>
 <map name="agroup__SegDisplay_ga3533a6f04780d5ed82d704bf39cebb69_cgraph" id="agroup__SegDisplay_ga3533a6f04780d5ed82d704bf39cebb69_cgraph">
 <area shape="rect" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="5,31,132,56"/>
-<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="180,31,276,56"/>
-<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="324,5,412,31"/>
-<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="327,55,409,80"/>
-<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="460,5,539,31"/>
-<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="466,55,533,80"/>
+<area shape="rect" href="group__SegDisplay.html#gada41f61abba371bab816bae257291f92" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="180,5,331,31"/>
+<area shape="rect" href="group__SegDisplay.html#ga41e6969691858ccbfcc03d15d9008c63" title="Initializes the display for software&#45;driven 7&#45;segment displays." alt="" coords="181,55,329,80"/>
+<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="379,31,475,56"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="523,5,611,31"/>
+<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="525,55,608,80"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="659,5,737,31"/>
+<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="665,55,731,80"/>
 </map>
 </div>
 <div class="dynheader">
@@ -214,6 +212,111 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="group__SegDisplay_ga3533a6f04780d5ed82d704bf39cebb69_icgraph.png" border="0" usemap="#agroup__SegDisplay_ga3533a6f04780d5ed82d704bf39cebb69_icgraph" alt=""/></div>
 <map name="agroup__SegDisplay_ga3533a6f04780d5ed82d704bf39cebb69_icgraph" id="agroup__SegDisplay_ga3533a6f04780d5ed82d704bf39cebb69_icgraph">
 <area shape="rect" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="112,5,239,31"/>
+<area shape="rect" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="gada41f61abba371bab816bae257291f92" name="gada41f61abba371bab816bae257291f92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gada41f61abba371bab816bae257291f92">&#9670;&#160;</a></span>initializeDisplayHW()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void initializeDisplayHW </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the display for hardware-driven 7-segment displays. </p>
+<p>This function configures the necessary pin modes and initial states for hardware-driven 7-segment displays. It sets up the decimal point line, control lines for the 74HC4543 7-segment display driver, the enable line, and the control lines for the 74HC138 2-to-4 demultiplexer.</p>
+<p>Key operations include:</p><ul>
+<li>Configuring the IO drivers for the 4-digit display.</li>
+<li>Setting the pin mode for the decimal point line.</li>
+<li>Setting up the control lines for the 74HC4543 7-segment display driver.</li>
+<li>Setting up the enable line for the 74HC4543 7-segment display driver.</li>
+<li>Setting up the control lines for the 74HC138 2-to-4 demultiplexer.</li>
+</ul>
+<p>7 </p>
+
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00160">160</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__SegDisplay_gada41f61abba371bab816bae257291f92_cgraph.png" border="0" usemap="#agroup__SegDisplay_gada41f61abba371bab816bae257291f92_cgraph" alt=""/></div>
+<map name="agroup__SegDisplay_gada41f61abba371bab816bae257291f92_cgraph" id="agroup__SegDisplay_gada41f61abba371bab816bae257291f92_cgraph">
+<area shape="rect" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="5,31,156,56"/>
+<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="204,31,300,56"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="348,5,436,31"/>
+<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="351,55,433,80"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="484,5,563,31"/>
+<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="490,55,557,80"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__SegDisplay_gada41f61abba371bab816bae257291f92_icgraph.png" border="0" usemap="#agroup__SegDisplay_gada41f61abba371bab816bae257291f92_icgraph" alt=""/></div>
+<map name="agroup__SegDisplay_gada41f61abba371bab816bae257291f92_icgraph" id="agroup__SegDisplay_gada41f61abba371bab816bae257291f92_icgraph">
+<area shape="rect" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="287,5,437,31"/>
+<area shape="rect" href="group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="112,5,239,31"/>
+<area shape="rect" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ga41e6969691858ccbfcc03d15d9008c63" name="ga41e6969691858ccbfcc03d15d9008c63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga41e6969691858ccbfcc03d15d9008c63">&#9670;&#160;</a></span>initializeDisplaySW()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void initializeDisplaySW </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the display for software-driven 7-segment displays. </p>
+<p>Configures the necessary pin modes and initial states for software-driven 7-segment displays. This includes setting up the segment drive pins and digit selector pins, disabling all digit selector pins, and turning off all segment drive pins initially.</p>
+<p>Key operations include:</p><ul>
+<li>Configuring the pin modes for segment drive pins.</li>
+<li>Configuring the pin modes for digit selector pins.</li>
+<li>Disabling all digit selector pins.</li>
+<li>Turning off all segment drive pins.</li>
+</ul>
+<p>7 </p>
+
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00198">198</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__SegDisplay_ga41e6969691858ccbfcc03d15d9008c63_cgraph.png" border="0" usemap="#agroup__SegDisplay_ga41e6969691858ccbfcc03d15d9008c63_cgraph" alt=""/></div>
+<map name="agroup__SegDisplay_ga41e6969691858ccbfcc03d15d9008c63_cgraph" id="agroup__SegDisplay_ga41e6969691858ccbfcc03d15d9008c63_cgraph">
+<area shape="rect" title="Initializes the display for software&#45;driven 7&#45;segment displays." alt="" coords="5,31,153,56"/>
+<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="201,31,297,56"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="345,5,433,31"/>
+<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="348,55,431,80"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="481,5,560,31"/>
+<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="487,55,554,80"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__SegDisplay_ga41e6969691858ccbfcc03d15d9008c63_icgraph.png" border="0" usemap="#agroup__SegDisplay_ga41e6969691858ccbfcc03d15d9008c63_icgraph" alt=""/></div>
+<map name="agroup__SegDisplay_ga41e6969691858ccbfcc03d15d9008c63_icgraph" id="agroup__SegDisplay_ga41e6969691858ccbfcc03d15d9008c63_icgraph">
+<area shape="rect" title="Initializes the display for software&#45;driven 7&#45;segment displays." alt="" coords="287,5,435,31"/>
+<area shape="rect" href="group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="112,5,239,31"/>
 <area shape="rect" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
 </map>
 </div>
@@ -236,39 +339,29 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Refreshes the display by updating the active digit and its segments. </p>
-<p>This routine manages the display of digits on a 7-segment display. It keeps track of which digit is currently being displayed and updates the display when the current digit's display time has expired. The logic differs based on the type of display hardware.</p>
-<p>For <a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0">DisplayType::SEG_HW</a>:</p><ol type="1">
-<li>Sets the decimal point line to 'off'.</li>
-<li>Disables the 7-segment driver chip.</li>
-<li>Determines the next digit location to be active.</li>
-<li>Sets up the location lines for the new active location.</li>
-<li>Determines the relevant character for the new active location.</li>
-<li>Configures the driver chip for the new character to be displayed.</li>
-<li>Sets up the decimal point line for the new active location.</li>
-<li>Enables the 7-segment driver chip.</li>
-</ol>
-<p>For <a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ae0bd48751b29b4132b70ded3310b718a">DisplayType::SEG</a>:</p><ol type="1">
-<li>Deactivates the digit-enable line that was previously active.</li>
-<li>Determines the next digit location to be active.</li>
-<li>Determines the relevant character for the new active location.</li>
-<li>Sets up the segment drivers for the character to be displayed (includes the DP).</li>
-<li>Activates the digit-enable line for the new active location.</li>
-</ol>
-<p>The function uses static variables to keep track of the display time count and the currently active digit location. When the display time count exceeds a predefined maximum value, the function updates the display to show the next digit.</p>
+<p>This function manages the display of digits on a 7-segment display. It determines which digit is currently active and updates the display to show the next digit when the current digit's display time has expired. The logic differs based on the type of display hardware.</p>
+<p>For <a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0">DisplayType::SEG_HW</a>:</p><ul>
+<li>Updates the hardware-driven 7-segment display by disabling the driver chip, setting up the next digit, and enabling the driver chip.</li>
+</ul>
+<p>For <a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ae0bd48751b29b4132b70ded3310b718a">DisplayType::SEG</a>:</p><ul>
+<li>Updates the software-driven 7-segment display by deactivating the current digit, setting up the next digit, and activating the corresponding digit-enable line.</li>
+</ul>
 <p>7 </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00327">327</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00445">445</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__SegDisplay_gaa93cf18ded17c52a21fa1bd80ac95ac2_cgraph.png" border="0" usemap="#agroup__SegDisplay_gaa93cf18ded17c52a21fa1bd80ac95ac2_cgraph" alt=""/></div>
 <map name="agroup__SegDisplay_gaa93cf18ded17c52a21fa1bd80ac95ac2_cgraph" id="agroup__SegDisplay_gaa93cf18ded17c52a21fa1bd80ac95ac2_cgraph">
 <area shape="rect" title="Refreshes the display by updating the active digit and its segments." alt="" coords="5,31,123,56"/>
-<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="171,31,267,56"/>
-<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="315,5,403,31"/>
-<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="317,55,400,80"/>
-<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="451,5,529,31"/>
-<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="457,55,523,80"/>
+<area shape="rect" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92" title="Updates the 7&#45;segment display for the next digit (hardware&#45;driven)." alt="" coords="171,5,376,31"/>
+<area shape="rect" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="172,55,375,80"/>
+<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="424,31,520,56"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="568,5,656,31"/>
+<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="571,55,653,80"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="704,5,783,31"/>
+<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="710,55,777,80"/>
 </map>
 </div>
 <div class="dynheader">
@@ -277,6 +370,113 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="group__SegDisplay_gaa93cf18ded17c52a21fa1bd80ac95ac2_icgraph.png" border="0" usemap="#agroup__SegDisplay_gaa93cf18ded17c52a21fa1bd80ac95ac2_icgraph" alt=""/></div>
 <map name="agroup__SegDisplay_gaa93cf18ded17c52a21fa1bd80ac95ac2_icgraph" id="agroup__SegDisplay_gaa93cf18ded17c52a21fa1bd80ac95ac2_icgraph">
 <area shape="rect" title="Refreshes the display by updating the active digit and its segments." alt="" coords="323,5,440,31"/>
+<area shape="rect" href="main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761" title="Handles tasks that need to be executed every second." alt="" coords="104,5,275,31"/>
+<area shape="rect" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,5,56,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="gadb2a22aeca7b926144982ff2278f3c92" name="gadb2a22aeca7b926144982ff2278f3c92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadb2a22aeca7b926144982ff2278f3c92">&#9670;&#160;</a></span>update7SegmentHWDisplay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void update7SegmentHWDisplay </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates the 7-segment display for the next digit (hardware-driven). </p>
+<p>This function handles the process of updating the 7-segment display by:</p><ul>
+<li>Disabling the driver chip and decimal point line.</li>
+<li>Determining the next digit location to activate.</li>
+<li>Setting up the digit location and character to display.</li>
+<li>Enabling the driver chip for the new digit.</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>This function assumes the use of hardware-driven 7-segment displays (<a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0">DisplayType::SEG_HW</a>).</dd></dl>
+<p>7 </p>
+
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00340">340</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__SegDisplay_gadb2a22aeca7b926144982ff2278f3c92_cgraph.png" border="0" usemap="#agroup__SegDisplay_gadb2a22aeca7b926144982ff2278f3c92_cgraph" alt=""/></div>
+<map name="agroup__SegDisplay_gadb2a22aeca7b926144982ff2278f3c92_cgraph" id="agroup__SegDisplay_gadb2a22aeca7b926144982ff2278f3c92_cgraph">
+<area shape="rect" title="Updates the 7&#45;segment display for the next digit (hardware&#45;driven)." alt="" coords="5,31,211,56"/>
+<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="259,31,355,56"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="403,5,491,31"/>
+<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="405,55,488,80"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="539,5,617,31"/>
+<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="545,55,611,80"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__SegDisplay_gadb2a22aeca7b926144982ff2278f3c92_icgraph.png" border="0" usemap="#agroup__SegDisplay_gadb2a22aeca7b926144982ff2278f3c92_icgraph" alt=""/></div>
+<map name="agroup__SegDisplay_gadb2a22aeca7b926144982ff2278f3c92_icgraph" id="agroup__SegDisplay_gadb2a22aeca7b926144982ff2278f3c92_icgraph">
+<area shape="rect" title="Updates the 7&#45;segment display for the next digit (hardware&#45;driven)." alt="" coords="488,5,693,31"/>
+<area shape="rect" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="323,5,440,31"/>
+<area shape="rect" href="main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761" title="Handles tasks that need to be executed every second." alt="" coords="104,5,275,31"/>
+<area shape="rect" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,5,56,31"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="gaa7c3b04920d5065ca6b6b7d9c261bc93" name="gaa7c3b04920d5065ca6b6b7d9c261bc93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa7c3b04920d5065ca6b6b7d9c261bc93">&#9670;&#160;</a></span>update7SegmentSWDisplay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void update7SegmentSWDisplay </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Updates the 7-segment display for the next digit (software-driven). </p>
+<p>This function handles the process of updating the 7-segment display for configurations without additional driver chips. It deactivates the current digit, determines the next digit to activate, sets up the segment drivers for the new digit, and activates the corresponding digit-enable line.</p>
+<p>Key operations include:</p><ul>
+<li>Deactivating the currently active digit.</li>
+<li>Determining the next digit location to activate.</li>
+<li>Setting up the segment drivers for the character to be displayed.</li>
+<li>Activating the digit-enable line for the new active location.</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>This function assumes the use of software-driven 7-segment displays (<a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ae0bd48751b29b4132b70ded3310b718a">DisplayType::SEG</a>).</dd></dl>
+<p>7 </p>
+
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00399">399</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__SegDisplay_gaa7c3b04920d5065ca6b6b7d9c261bc93_cgraph.png" border="0" usemap="#agroup__SegDisplay_gaa7c3b04920d5065ca6b6b7d9c261bc93_cgraph" alt=""/></div>
+<map name="agroup__SegDisplay_gaa7c3b04920d5065ca6b6b7d9c261bc93_cgraph" id="agroup__SegDisplay_gaa7c3b04920d5065ca6b6b7d9c261bc93_cgraph">
+<area shape="rect" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="5,31,208,56"/>
+<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="256,31,352,56"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="400,5,488,31"/>
+<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="403,55,485,80"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="536,5,615,31"/>
+<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="542,55,609,80"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__SegDisplay_gaa7c3b04920d5065ca6b6b7d9c261bc93_icgraph.png" border="0" usemap="#agroup__SegDisplay_gaa7c3b04920d5065ca6b6b7d9c261bc93_icgraph" alt=""/></div>
+<map name="agroup__SegDisplay_gaa7c3b04920d5065ca6b6b7d9c261bc93_icgraph" id="agroup__SegDisplay_gaa7c3b04920d5065ca6b6b7d9c261bc93_icgraph">
+<area shape="rect" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="488,5,691,31"/>
+<area shape="rect" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="323,5,440,31"/>
 <area shape="rect" href="main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761" title="Handles tasks that need to be executed every second." alt="" coords="104,5,275,31"/>
 <area shape="rect" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,5,56,31"/>
 </map>

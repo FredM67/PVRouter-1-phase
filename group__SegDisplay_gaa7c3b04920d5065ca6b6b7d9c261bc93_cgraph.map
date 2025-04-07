@@ -1,0 +1,8 @@
+<map id="update7SegmentSWDisplay" name="update7SegmentSWDisplay">
+<area shape="rect" id="node1" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="5,31,208,56"/>
+<area shape="rect" id="node2" href="$utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="256,31,352,56"/>
+<area shape="rect" id="node3" href="$utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="400,5,488,31"/>
+<area shape="rect" id="node5" href="$utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="403,55,485,80"/>
+<area shape="rect" id="node4" href="$utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="536,5,615,31"/>
+<area shape="rect" id="node6" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="542,55,609,80"/>
+</map>

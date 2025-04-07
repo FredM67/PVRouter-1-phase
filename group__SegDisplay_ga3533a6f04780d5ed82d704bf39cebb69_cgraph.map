@@ -1,8 +1,10 @@
 <map id="initializeDisplay" name="initializeDisplay">
 <area shape="rect" id="node1" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="5,31,132,56"/>
-<area shape="rect" id="node2" href="$utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="180,31,276,56"/>
-<area shape="rect" id="node3" href="$utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="324,5,412,31"/>
-<area shape="rect" id="node5" href="$utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="327,55,409,80"/>
-<area shape="rect" id="node4" href="$utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="460,5,539,31"/>
-<area shape="rect" id="node6" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="466,55,533,80"/>
+<area shape="rect" id="node2" href="$group__SegDisplay.html#gada41f61abba371bab816bae257291f92" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="180,5,331,31"/>
+<area shape="rect" id="node8" href="$group__SegDisplay.html#ga41e6969691858ccbfcc03d15d9008c63" title="Initializes the display for software&#45;driven 7&#45;segment displays." alt="" coords="181,55,329,80"/>
+<area shape="rect" id="node3" href="$utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="379,31,475,56"/>
+<area shape="rect" id="node4" href="$utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="523,5,611,31"/>
+<area shape="rect" id="node6" href="$utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="525,55,608,80"/>
+<area shape="rect" id="node5" href="$utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="659,5,737,31"/>
+<area shape="rect" id="node7" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="665,55,731,80"/>
 </map>

@@ -1,22 +1,24 @@
 <map id="handlePerSecondTasks" name="handlePerSecondTasks">
-<area shape="rect" id="node1" title="Handles tasks that need to be executed every second." alt="" coords="5,193,176,219"/>
-<area shape="rect" id="node2" href="$main_8cpp.html#a31f3d562faae6b598324b56299d74f7d" title="Checks and updates the diversion state." alt="" coords="477,5,636,31"/>
-<area shape="rect" id="node5" href="$main_8cpp.html#a5157f7f79cf8c75c2d7b41d8ed47a7ef" title="Forces all loads to full power." alt="" coords="497,56,616,81"/>
-<area shape="rect" id="node6" href="$classRelayEngine.html#a4f831b566b2da140a17333ab6a39e5dc" title="Increment the duration&#39;s state of each relay." alt="" coords="224,104,415,129"/>
-<area shape="rect" id="node7" href="$classRelayEngine.html#a2891986bc989d9c35301711f674bc523" title="Proceed all relays in increasing order (surplus) or decreasing order (import)" alt="" coords="238,154,401,194"/>
-<area shape="rect" id="node8" href="$main_8cpp.html#aa0f1d282805a9e6027f2a84720d60d0b" title="Handles load priority rotation and overriding logic." alt="" coords="225,218,413,258"/>
-<area shape="rect" id="node12" href="$group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="261,283,378,308"/>
-<area shape="rect" id="node18" href="$utils__pins_8h.html#aaec5db9d46ba784c4f16046e6deb6977" title="Toggle the specified pin." alt="" coords="722,333,805,359"/>
-<area shape="rect" id="node19" href="$group__OLEDDisplay.html#ga1c38ae281a8a132599b5619660e7d306" title="Update the watchdog on the display." alt="" coords="254,384,385,409"/>
-<area shape="rect" id="node3" href="$utils__pins_8h.html#a410a7bdd300104398ce91797bd936cdb" title="Get the Pin State." alt="" coords="715,83,812,108"/>
-<area shape="rect" id="node4" href="$utils__pins_8h.html#abaa54130a12679d0dcc0e7578e0e4d37" title="Read the specified bit." alt="" coords="904,83,979,108"/>
-<area shape="rect" id="node9" href="$main_8cpp.html#a518d4266a5d9285d29e65616eccd2277" title="Handles load priority in combination with dual tariff." alt="" coords="463,161,651,201"/>
-<area shape="rect" id="node10" href="$main_8cpp.html#a9b9428fd01019319970f27b88bb1cf33" title="Rotates the load priorities." alt="" coords="699,176,828,201"/>
-<area shape="rect" id="node11" href="$utils_8h.html#ae473b1c0d80fe056d1fab9bdee38aca1" title="Prints the load priorities to the Serial output." alt="" coords="876,176,1007,201"/>
-<area shape="rect" id="node13" href="$utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="509,283,605,308"/>
-<area shape="rect" id="node14" href="$utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="719,235,807,260"/>
-<area shape="rect" id="node16" href="$utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="722,284,805,309"/>
-<area shape="rect" id="node15" href="$utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="902,235,981,260"/>
-<area shape="rect" id="node17" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="908,308,975,333"/>
-<area shape="rect" id="node20" href="$utils__oled_8h.html#a3a5f8feefdddd371b3c454e2e2925f7f" title=" " alt="" coords="529,384,584,409"/>
+<area shape="rect" id="node1" title="Handles tasks that need to be executed every second." alt="" coords="5,196,176,221"/>
+<area shape="rect" id="node2" href="$main_8cpp.html#a31f3d562faae6b598324b56299d74f7d" title="Checks and updates the diversion state." alt="" coords="486,5,645,31"/>
+<area shape="rect" id="node5" href="$main_8cpp.html#a5157f7f79cf8c75c2d7b41d8ed47a7ef" title="Forces all loads to full power." alt="" coords="506,56,625,81"/>
+<area shape="rect" id="node6" href="$classRelayEngine.html#a4f831b566b2da140a17333ab6a39e5dc" title="Increment the duration&#39;s state of each relay." alt="" coords="224,107,415,132"/>
+<area shape="rect" id="node7" href="$classRelayEngine.html#a2891986bc989d9c35301711f674bc523" title="Proceed all relays in increasing order (surplus) or decreasing order (import)" alt="" coords="238,157,401,197"/>
+<area shape="rect" id="node8" href="$main_8cpp.html#aa0f1d282805a9e6027f2a84720d60d0b" title="Handles load priority rotation and overriding logic." alt="" coords="225,221,413,261"/>
+<area shape="rect" id="node12" href="$group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="261,285,378,311"/>
+<area shape="rect" id="node20" href="$utils__pins_8h.html#aaec5db9d46ba784c4f16046e6deb6977" title="Toggle the specified pin." alt="" coords="739,372,822,397"/>
+<area shape="rect" id="node21" href="$group__OLEDDisplay.html#ga1c38ae281a8a132599b5619660e7d306" title="Update the watchdog on the display." alt="" coords="254,423,385,448"/>
+<area shape="rect" id="node3" href="$utils__pins_8h.html#a410a7bdd300104398ce91797bd936cdb" title="Get the Pin State." alt="" coords="732,81,829,107"/>
+<area shape="rect" id="node4" href="$utils__pins_8h.html#abaa54130a12679d0dcc0e7578e0e4d37" title="Read the specified bit." alt="" coords="921,81,996,107"/>
+<area shape="rect" id="node9" href="$main_8cpp.html#a518d4266a5d9285d29e65616eccd2277" title="Handles load priority in combination with dual tariff." alt="" coords="471,157,659,197"/>
+<area shape="rect" id="node10" href="$main_8cpp.html#a9b9428fd01019319970f27b88bb1cf33" title="Rotates the load priorities." alt="" coords="716,193,845,219"/>
+<area shape="rect" id="node11" href="$utils_8h.html#ae473b1c0d80fe056d1fab9bdee38aca1" title="Prints the load priorities to the Serial output." alt="" coords="893,193,1024,219"/>
+<area shape="rect" id="node13" href="$group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92" title="Updates the 7&#45;segment display for the next digit (hardware&#45;driven)." alt="" coords="463,272,668,297"/>
+<area shape="rect" id="node19" href="$group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="464,321,667,347"/>
+<area shape="rect" id="node14" href="$utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="733,297,829,323"/>
+<area shape="rect" id="node15" href="$utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="915,272,1003,297"/>
+<area shape="rect" id="node17" href="$utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="917,321,1000,347"/>
+<area shape="rect" id="node16" href="$utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="1072,272,1151,297"/>
+<area shape="rect" id="node18" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="1078,347,1145,372"/>
+<area shape="rect" id="node22" href="$utils__oled_8h.html#a3a5f8feefdddd371b3c454e2e2925f7f" title=" " alt="" coords="538,423,593,448"/>
 </map>
