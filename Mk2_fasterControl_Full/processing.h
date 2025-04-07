@@ -70,8 +70,6 @@ void processDivertedCurrentRawSample(int16_t rawSample);
 void processVoltageRawSample(int16_t rawSample);
 void processRawSamples();
 
-void processVoltage();
-
 #if defined(__DOXYGEN__)
 inline void processStartUp();
 inline void processStartNewCycle();
@@ -85,6 +83,7 @@ inline void proceedHighEnergyLevel();
 inline uint8_t nextLogicalLoadToBeAdded();
 inline uint8_t nextLogicalLoadToBeRemoved();
 inline void processLatestContribution();
+inline void processDataLogging();
 #else
 inline void processStartUp() __attribute__((always_inline));
 inline void processStartNewCycle() __attribute__((always_inline));
@@ -95,13 +94,12 @@ inline void processPolarity(int16_t rawSample) __attribute__((always_inline));
 inline void confirmPolarity() __attribute__((always_inline));
 inline void proceedLowEnergyLevel() __attribute__((always_inline));
 inline void proceedHighEnergyLevel() __attribute__((always_inline));
-inline uint8_t nextLogicalLoadToBeAdded() __attribute__((always_inline));
-inline uint8_t nextLogicalLoadToBeRemoved() __attribute__((always_inline));
+inline uint8_t nextLogicalLoadToBeAdded() __attribute__((always_inline, optimize("-O3")));
+inline uint8_t nextLogicalLoadToBeRemoved() __attribute__((always_inline, optimize("-O3")));
 inline void processLatestContribution() __attribute__((always_inline));
+inline void processDataLogging() __attribute__((always_inline, optimize("-O3")));
 
 void handlePerSecondTasks(bool& bOffPeak, int16_t iTemperature_x100) __attribute__((always_inline));
 #endif
 
-void processDataLogging();
-
-#endif  // PROCESSING_H
+#endif /* PROCESSING_H */
