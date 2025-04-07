@@ -269,28 +269,15 @@ void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToD
     return;
   }
 
-  static uint8_t locationOfDot = 0;
+  static uint8_t locationOfDot{ 0 };
 
   if (_EDD_isActive)
   {
-    uint16_t val = _ValueToDisplay;
-    bool energyValueExceeds10kWh;
+    const bool energyValueExceeds10kWh{ _ValueToDisplay > 9999U };
 
-    if (val < 10000)
-    {
-      // no need to re-scale (display to 3 DPs)
-      energyValueExceeds10kWh = false;
-    }
-    else
-    {
-      // re-scale is needed (display to 2 DPs)
-      energyValueExceeds10kWh = true;
-      val = divu10(val);
-    }
+    uint32_t tmpVal{ energyValueExceeds10kWh ? divu10(_ValueToDisplay) : _ValueToDisplay };
 
-    uint32_t tmpVal;
-
-    divmod10(val, tmpVal, charsForDisplay[3]);
+    divmod10(tmpVal, tmpVal, charsForDisplay[3]);
 
     divmod10(tmpVal, tmpVal, charsForDisplay[2]);
 
@@ -314,8 +301,7 @@ void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToD
     // "walking dots" display
     charsForDisplay[locationOfDot] = 20;  // blank
 
-    ++locationOfDot;
-    if (locationOfDot >= noOfDigitLocations)
+    if (++locationOfDot >= noOfDigitLocations)
     {
       locationOfDot = 0;
     }
