@@ -108,11 +108,6 @@ void initializeProcessing()
 
   updatePortsStates();  // updates output pin states
 
-  for (auto &bOverrideLoad : b_overrideLoadOn)
-  {
-    bOverrideLoad = false;
-  }
-
   // First stop the ADC
   bit_clear(ADCSRA, ADEN);
 
@@ -318,6 +313,11 @@ void processGridCurrentRawSample(const int16_t rawSample)
  */
 void processDivertedCurrentRawSample(const int16_t rawSample)
 {
+  if(b_overrideLoadOn[0])
+  {
+    return;  // no diverted power when the load is overridden
+  }
+
   // Now deal with the diverted power (as measured via CT2)
   // remove most of the DC offset from the current sample (the precise value does not matter)
   int32_t sampleIminusDC_diverted = ((int32_t)(rawSample - DCoffset_I)) << 8;
@@ -906,4 +906,70 @@ void printParamsForSelectedOutputMode()
 
   DBUG("\tcapacityOfEnergyBucket_long = ");
   DBUGLN(capacityOfEnergyBucket_long);
+}
+
+/**
+ * @brief Interrupt Service Routine - Interrupt-Driven Analog Conversion.
+ * 
+ * @details An Interrupt Service Routine is now defined which instructs the ADC to perform a conversion
+ *          for each of the voltage and current sensors in turn.
+ *
+ *          This Interrupt Service Routine is for use when the ADC is in the free-running mode.
+ *          It is executed whenever an ADC conversion has finished, approx every 104 µs. In
+ *          free-running mode, the ADC has already started its next conversion by the time that
+ *          the ISR is executed. The ISR therefore needs to "look ahead".
+ *
+ *          At the end of conversion Type N, conversion Type N+1 will start automatically. The ISR
+ *          which runs at this point therefore needs to capture the results of conversion Type N,
+ *          and set up the conditions for conversion Type N+2, and so on.
+ *
+ *          By means of various helper functions, all of the time-critical activities are processed
+ *          within the ISR.
+ *
+ *          The main code is notified by means of a flag when fresh copies of loggable data are available.
+ *
+ *          Keep in mind, when writing an Interrupt Service Routine (ISR):
+ *            - Keep it short
+ *            - Don't use delay()
+ *            - Don't do serial prints
+ *            - Make variables shared with the main code volatile
+ *            - Variables shared with main code may need to be protected by "critical sections"
+ *            - Don't try to turn interrupts off or on
+ *
+ * @ingroup TimeCritical
+ */
+ISR(ADC_vect)
+{
+  static uint8_t sample_index{ 0 };
+  int16_t rawSample;
+
+  switch (sample_index)
+  {
+    case 0:
+      rawSample = ADC;  // store the ADC value (this one is for Voltage)
+      //sampleV = ADC;                                // store the ADC value (this one is for Voltage)
+      ADMUX = bit(REFS0) + currentSensor_diverted;  // set up the next conversion, which is for Diverted Current
+      ++sample_index;                               // increment the control flag
+      //
+      processVoltageRawSample(rawSample);
+      break;
+    case 1:
+      rawSample = ADC;  // store the ADC value (this one is for current at CT1)
+      //sampleI_diverted_raw = ADC;               // store the ADC value (this one is for Diverted Current)
+      ADMUX = bit(REFS0) + voltageSensor;  // set up the next conversion, which is for Grid Current
+      ++sample_index;                      // increment the control flag
+      //
+      processGridCurrentRawSample(rawSample);
+      break;
+    case 2:
+      rawSample = ADC;  // store the ADC value (this one is for current at CT2)
+      //sampleI_grid_raw = ADC;              // store the ADC value (this one is for Grid Current)
+      ADMUX = bit(REFS0) + currentSensor_grid;  // set up the next conversion, which is for Voltage
+      sample_index = 0;                         // reset the control flag
+      //
+      processDivertedCurrentRawSample(rawSample);
+      break;
+    default:
+      sample_index = 0;  // to prevent lockup (should never get here)
+  }
 }
