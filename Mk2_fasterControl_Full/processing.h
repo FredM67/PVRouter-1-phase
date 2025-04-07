@@ -33,7 +33,7 @@ inline constexpr uint16_t startUpPeriod{ 3000 };            // in milli-seconds,
 inline volatile uint16_t absenceOfDivertedEnergyCount{ 0 }; /**< number of main cycles without diverted energy */
 inline volatile bool b_datalogEventPending{ false };        /**< async trigger to signal datalog is available */
 inline volatile bool b_newCycle{ false };                   /**< async trigger to signal start of new main cycle based on first phase */
-inline volatile bool b_overrideLoadOn[NO_OF_DUMPLOADS];     /**< async trigger to force specific load(s) to ON */
+inline volatile bool b_overrideLoadOn[NO_OF_DUMPLOADS]{};   /**< async trigger to force specific load(s) to ON */
 inline volatile bool b_reOrderLoads{ false };               /**< async trigger for loads re-ordering */
 inline volatile bool b_diversionOff{ false };               /**< async trigger to stop diversion */
 inline volatile bool EDD_isActive{ false };                 /**< energy diversion detection */
@@ -65,19 +65,18 @@ void updatePhysicalLoadStates();
 void updatePortsStates();
 void printParamsForSelectedOutputMode();
 
-void processGridCurrentRawSample(int16_t rawSample);
-void processDivertedCurrentRawSample(int16_t rawSample);
-void processVoltageRawSample(int16_t rawSample);
-void processRawSamples();
-
 #if defined(__DOXYGEN__)
 inline void processStartUp();
 inline void processStartNewCycle();
 inline void processPlusHalfCycle();
 inline void processMinusHalfCycle();
+inline void processVoltageRawSample(int16_t rawSample);
+inline void processRawSamples();
 inline void processVoltage();
 inline void processPolarity(int16_t rawSample);
 inline void confirmPolarity();
+inline void processGridCurrentRawSample(int16_t rawSample);
+inline void processDivertedCurrentRawSample(int16_t rawSample);
 inline void proceedLowEnergyLevel();
 inline void proceedHighEnergyLevel();
 inline uint8_t nextLogicalLoadToBeAdded();
@@ -89,9 +88,13 @@ inline void processStartUp() __attribute__((always_inline));
 inline void processStartNewCycle() __attribute__((always_inline));
 inline void processPlusHalfCycle() __attribute__((always_inline));
 inline void processMinusHalfCycle() __attribute__((always_inline));
+inline void processVoltageRawSample(int16_t rawSample) __attribute__((always_inline));
+inline void processRawSamples() __attribute__((always_inline));
 inline void processVoltage() __attribute__((always_inline));
 inline void processPolarity(int16_t rawSample) __attribute__((always_inline));
 inline void confirmPolarity() __attribute__((always_inline));
+inline void processGridCurrentRawSample(int16_t rawSample) __attribute__((always_inline));
+inline void processDivertedCurrentRawSample(int16_t rawSample) __attribute__((always_inline));
 inline void proceedLowEnergyLevel() __attribute__((always_inline));
 inline void proceedHighEnergyLevel() __attribute__((always_inline));
 inline uint8_t nextLogicalLoadToBeAdded() __attribute__((always_inline, optimize("-O3")));
