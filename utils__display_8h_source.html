@@ -266,148 +266,134 @@ $(function() {
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>  }</div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> </div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>  <span class="keyword">static</span> uint8_t locationOfDot = 0;</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>  <span class="keyword">static</span> uint8_t locationOfDot{ 0 };</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>  <span class="keywordflow">if</span> (_EDD_isActive)</div>
 <div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>  {</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    <a class="code hl_variable" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a> val = _ValueToDisplay;</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    <span class="keywordtype">bool</span> energyValueExceeds10kWh;</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span> </div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="keywordflow">if</span> (val &lt; 10000)</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    {</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>      <span class="comment">// no need to re-scale (display to 3 DPs)</span></div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>      energyValueExceeds10kWh = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    }</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    {</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>      <span class="comment">// re-scale is needed (display to 2 DPs)</span></div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>      energyValueExceeds10kWh = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>      val = <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(val);</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    }</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    uint32_t tmpVal;</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span> </div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(val, tmpVal, <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[3]);</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span> </div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(tmpVal, tmpVal, <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[2]);</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(tmpVal, tmpVal, <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[1]);</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span> </div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    <span class="comment">// Extract the thousands place</span></div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[0] = tmpVal;</div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    <span class="comment">// assign the decimal point location</span></div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    <span class="keywordflow">if</span> (energyValueExceeds10kWh)</div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    {</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>      <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[1] += 10;</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    }  <span class="comment">// dec point after 2nd digit</span></div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    {</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>      <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[0] += 10;</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    }  <span class="comment">// dec point after 1st digit</span></div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>  }</div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>  <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>  {</div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>    <span class="comment">// &quot;walking dots&quot; display</span></div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[locationOfDot] = 20;  <span class="comment">// blank</span></div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    ++locationOfDot;</div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    <span class="keywordflow">if</span> (locationOfDot &gt;= <a class="code hl_variable" href="utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654">noOfDigitLocations</a>)</div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    {</div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>      locationOfDot = 0;</div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>    }</div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span> </div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>    <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[locationOfDot] = 21;  <span class="comment">// dot</span></div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>  }</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>}</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> </div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno"><a class="line" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92">  340</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92">update7SegmentHWDisplay</a>()</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>{</div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>  <span class="keyword">static</span> uint8_t digitLocationThatIsActive = 0;</div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>  <span class="comment">// 1. Disable the Decimal Point driver line</span></div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a2885ce760d6f2ec6e60722856088d390">decimalPointLine</a>, LOW);</div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span> </div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>  <span class="comment">// 2. Disable the driver chip while changes are taking place</span></div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a2e18b2597ce4e271d3b0740c843932f3">enableDisableLine</a>, <a class="code hl_variable" href="utils__display_8h.html#a4a1dd60295a4db8fcd41954d77d4219a">DRIVER_CHIP_DISABLED</a>);</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    <span class="keyword">const</span> <span class="keywordtype">bool</span> energyValueExceeds10kWh{ _ValueToDisplay &gt; 9999U };</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span> </div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    uint32_t tmpVal{ energyValueExceeds10kWh ? <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(_ValueToDisplay) : _ValueToDisplay };</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span> </div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(tmpVal, tmpVal, <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[3]);</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(tmpVal, tmpVal, <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[2]);</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span> </div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(tmpVal, tmpVal, <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[1]);</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span> </div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    <span class="comment">// Extract the thousands place</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[0] = tmpVal;</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span> </div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    <span class="comment">// assign the decimal point location</span></div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="keywordflow">if</span> (energyValueExceeds10kWh)</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    {</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>      <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[1] += 10;</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    }  <span class="comment">// dec point after 2nd digit</span></div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    {</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>      <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[0] += 10;</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    }  <span class="comment">// dec point after 1st digit</span></div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>  }</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>  <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>  {</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    <span class="comment">// &quot;walking dots&quot; display</span></div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[locationOfDot] = 20;  <span class="comment">// blank</span></div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span> </div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    <span class="keywordflow">if</span> (++locationOfDot &gt;= <a class="code hl_variable" href="utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654">noOfDigitLocations</a>)</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>    {</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>      locationOfDot = 0;</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    }</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[locationOfDot] = 21;  <span class="comment">// dot</span></div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>  }</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>}</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span> </div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno"><a class="line" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92">  326</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92">update7SegmentHWDisplay</a>()</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>{</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>  <span class="keyword">static</span> uint8_t digitLocationThatIsActive = 0;</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span> </div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>  <span class="comment">// 1. Disable the Decimal Point driver line</span></div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a2885ce760d6f2ec6e60722856088d390">decimalPointLine</a>, LOW);</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span> </div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>  <span class="comment">// 2. Disable the driver chip while changes are taking place</span></div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a2e18b2597ce4e271d3b0740c843932f3">enableDisableLine</a>, <a class="code hl_variable" href="utils__display_8h.html#a4a1dd60295a4db8fcd41954d77d4219a">DRIVER_CHIP_DISABLED</a>);</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span> </div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>  <span class="comment">// 3. Determine the next digit location to be active</span></div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>  ++digitLocationThatIsActive;</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>  <span class="keywordflow">if</span> (digitLocationThatIsActive &gt;= <a class="code hl_variable" href="utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654">noOfDigitLocations</a>)</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>  {</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    digitLocationThatIsActive = 0;</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>  }</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>  <span class="comment">// 4. Set up the digit location drivers for the new active location</span></div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>  <span class="keywordflow">for</span> (uint8_t line = 0; line &lt; <a class="code hl_variable" href="utils__display_8h.html#a62d0c9099af6d401b59b3a4bcaea73bb">noOfDigitLocationLines</a>; ++line)</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>  {</div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>    <span class="keyword">const</span> <span class="keyword">auto</span> lineState{ <a class="code hl_variable" href="utils__display_8h.html#ab491eb2908098ddf620d107fc18b8f31">digitLocationMap</a>[digitLocationThatIsActive][line] };</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>    <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a52e012125495e35eac86440a42660f9e">digitLocationLine</a>[line], lineState);</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>  }</div>
 <div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span> </div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>  <span class="comment">// 3. Determine the next digit location to be active</span></div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>  ++digitLocationThatIsActive;</div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>  <span class="keywordflow">if</span> (digitLocationThatIsActive &gt;= <a class="code hl_variable" href="utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654">noOfDigitLocations</a>)</div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>  {</div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    digitLocationThatIsActive = 0;</div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>  }</div>
-<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>  <span class="comment">// 4. Set up the digit location drivers for the new active location</span></div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>  <span class="keywordflow">for</span> (uint8_t line = 0; line &lt; <a class="code hl_variable" href="utils__display_8h.html#a62d0c9099af6d401b59b3a4bcaea73bb">noOfDigitLocationLines</a>; ++line)</div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>  {</div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keyword">const</span> <span class="keyword">auto</span> lineState{ <a class="code hl_variable" href="utils__display_8h.html#ab491eb2908098ddf620d107fc18b8f31">digitLocationMap</a>[digitLocationThatIsActive][line] };</div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a52e012125495e35eac86440a42660f9e">digitLocationLine</a>[line], lineState);</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>  }</div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span> </div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>  <span class="comment">// 5. Determine the character to be displayed at this new location</span></div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>  <span class="keyword">const</span> <span class="keyword">auto</span> digitVal{ <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[digitLocationThatIsActive] };</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>  <span class="comment">// 5. Determine the character to be displayed at this new location</span></div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>  <span class="keyword">const</span> <span class="keyword">auto</span> digitVal{ <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[digitLocationThatIsActive] };</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span> </div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>  <span class="comment">// 6. Configure the 7-segment driver for the character to be displayed</span></div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>  <span class="keywordflow">for</span> (uint8_t line = 0; line &lt; <a class="code hl_variable" href="utils__display_8h.html#a50d1645f3f220eaddf4dc01e9ce3778e">noOfDigitSelectionLines</a>; ++line)</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>  {</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>    <span class="keyword">const</span> <span class="keyword">auto</span> lineState{ <a class="code hl_variable" href="utils__display_8h.html#a9f66d634c5fbf097ac1e170caf0dcd95">digitValueMap</a>[digitVal][line] };</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a569c2245deafc9a43b04a6bc85667798">digitSelectionLine</a>[line], lineState);</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>  }</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span> </div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>  <span class="comment">// 7. Set up the Decimal Point driver line</span></div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a2885ce760d6f2ec6e60722856088d390">decimalPointLine</a>, <a class="code hl_variable" href="utils__display_8h.html#a9f66d634c5fbf097ac1e170caf0dcd95">digitValueMap</a>[digitVal][<a class="code hl_variable" href="utils__display_8h.html#a94a209cc49723ce156cf651e8ee35a89">DPstatus_columnID</a>]);</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span> </div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>  <span class="comment">// 8. Enable the 7-segment driver chip</span></div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a2e18b2597ce4e271d3b0740c843932f3">enableDisableLine</a>, <a class="code hl_variable" href="utils__display_8h.html#ac5981a648014ccfc5ecf9d350be2af58">DRIVER_CHIP_ENABLED</a>);</div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>}</div>
 <div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span> </div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>  <span class="comment">// 6. Configure the 7-segment driver for the character to be displayed</span></div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>  <span class="keywordflow">for</span> (uint8_t line = 0; line &lt; <a class="code hl_variable" href="utils__display_8h.html#a50d1645f3f220eaddf4dc01e9ce3778e">noOfDigitSelectionLines</a>; ++line)</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>  {</div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>    <span class="keyword">const</span> <span class="keyword">auto</span> lineState{ <a class="code hl_variable" href="utils__display_8h.html#a9f66d634c5fbf097ac1e170caf0dcd95">digitValueMap</a>[digitVal][line] };</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>    <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a569c2245deafc9a43b04a6bc85667798">digitSelectionLine</a>[line], lineState);</div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>  }</div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span> </div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>  <span class="comment">// 7. Set up the Decimal Point driver line</span></div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a2885ce760d6f2ec6e60722856088d390">decimalPointLine</a>, <a class="code hl_variable" href="utils__display_8h.html#a9f66d634c5fbf097ac1e170caf0dcd95">digitValueMap</a>[digitVal][<a class="code hl_variable" href="utils__display_8h.html#a94a209cc49723ce156cf651e8ee35a89">DPstatus_columnID</a>]);</div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span> </div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>  <span class="comment">// 8. Enable the 7-segment driver chip</span></div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a2e18b2597ce4e271d3b0740c843932f3">enableDisableLine</a>, <a class="code hl_variable" href="utils__display_8h.html#ac5981a648014ccfc5ecf9d350be2af58">DRIVER_CHIP_ENABLED</a>);</div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>}</div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span> </div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno"><a class="line" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93">  399</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93">update7SegmentSWDisplay</a>()</div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>{</div>
-<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>  <span class="keyword">static</span> uint8_t digitLocationThatIsActive{ 0 };</div>
-<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span> </div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>  <span class="comment">// 1. Deactivate the location which is currently being displayed</span></div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a7bff10ac4da623f3745574c8450ee1c0">digitSelectorPin</a>[digitLocationThatIsActive], <a class="code hl_variable" href="utils__display_8h.html#a8e1332410623ba745a7e7c6e4cc4f78e">DIGIT_DISABLED</a>);</div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span> </div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>  <span class="comment">// 2. Determine the next digit location to be displayed</span></div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>  ++digitLocationThatIsActive;</div>
-<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>  <span class="keywordflow">if</span> (digitLocationThatIsActive &gt;= <a class="code hl_variable" href="utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654">noOfDigitLocations</a>)</div>
-<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>  {</div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>    digitLocationThatIsActive = 0;</div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>  }</div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno"><a class="line" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93">  385</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93">update7SegmentSWDisplay</a>()</div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>{</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>  <span class="keyword">static</span> uint8_t digitLocationThatIsActive{ 0 };</div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span> </div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>  <span class="comment">// 1. Deactivate the location which is currently being displayed</span></div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a7bff10ac4da623f3745574c8450ee1c0">digitSelectorPin</a>[digitLocationThatIsActive], <a class="code hl_variable" href="utils__display_8h.html#a8e1332410623ba745a7e7c6e4cc4f78e">DIGIT_DISABLED</a>);</div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span> </div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>  <span class="comment">// 2. Determine the next digit location to be displayed</span></div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>  ++digitLocationThatIsActive;</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>  <span class="keywordflow">if</span> (digitLocationThatIsActive &gt;= <a class="code hl_variable" href="utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654">noOfDigitLocations</a>)</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>  {</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>    digitLocationThatIsActive = 0;</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>  }</div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span> </div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>  <span class="comment">// 3. Determine the relevant character for the new active location</span></div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>  <span class="keyword">const</span> <span class="keyword">auto</span> digitVal{ <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[digitLocationThatIsActive] };</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span> </div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>  <span class="comment">// 4. Set up the segment drivers for the character to be displayed (includes the DP)</span></div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>  <span class="keywordflow">for</span> (uint8_t segment = 0; segment &lt; <a class="code hl_variable" href="utils__display_8h.html#a0158e223e6e79ce639b843d9134f8965">noOfSegmentsPerDigit</a>; ++segment)</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>  {</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>    uint8_t segmentState = <a class="code hl_variable" href="utils__display_8h.html#afb7660090abe4e5ccdcc89cb62e4f4a1">segMap</a>[digitVal][segment];</div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>    <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#af88b8bf554461890b80aa663a44e9fdc">segmentDrivePin</a>[segment], segmentState);</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>  }</div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span> </div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>  <span class="comment">// 5. Activate the digit-enable line for the new active location</span></div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a7bff10ac4da623f3745574c8450ee1c0">digitSelectorPin</a>[digitLocationThatIsActive], <a class="code hl_variable" href="utils__display_8h.html#a0d259ebcd49576e2935645cf1609cd45">DIGIT_ENABLED</a>);</div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>}</div>
 <div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span> </div>
-<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>  <span class="comment">// 3. Determine the relevant character for the new active location</span></div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>  <span class="keyword">const</span> <span class="keyword">auto</span> digitVal{ <a class="code hl_variable" href="utils__display_8h.html#a9350918dee6b514307944180c1a57a11">charsForDisplay</a>[digitLocationThatIsActive] };</div>
-<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span> </div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>  <span class="comment">// 4. Set up the segment drivers for the character to be displayed (includes the DP)</span></div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>  <span class="keywordflow">for</span> (uint8_t segment = 0; segment &lt; <a class="code hl_variable" href="utils__display_8h.html#a0158e223e6e79ce639b843d9134f8965">noOfSegmentsPerDigit</a>; ++segment)</div>
-<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>  {</div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>    uint8_t segmentState = <a class="code hl_variable" href="utils__display_8h.html#afb7660090abe4e5ccdcc89cb62e4f4a1">segMap</a>[digitVal][segment];</div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>    <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#af88b8bf554461890b80aa663a44e9fdc">segmentDrivePin</a>[segment], segmentState);</div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>  }</div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span> </div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>  <span class="comment">// 5. Activate the digit-enable line for the new active location</span></div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>  <a class="code hl_function" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7">setPinState</a>(<a class="code hl_variable" href="utils__display_8h.html#a7bff10ac4da623f3745574c8450ee1c0">digitSelectorPin</a>[digitLocationThatIsActive], <a class="code hl_variable" href="utils__display_8h.html#a0d259ebcd49576e2935645cf1609cd45">DIGIT_ENABLED</a>);</div>
-<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>}</div>
-<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span> </div>
-<div class="line"><a id="l00445" name="l00445"></a><span class="lineno"><a class="line" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2">  445</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2">refreshDisplay</a>()</div>
-<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>{</div>
-<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>  <span class="comment">// This routine keeps track of which digit is being displayed and checks when its</span></div>
-<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span>  <span class="comment">// display time has expired.  It then makes the necessary adjustments for displaying</span></div>
-<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span>  <span class="comment">// the next digit.</span></div>
-<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>  <span class="comment">//   The two versions of the hardware require different logic.</span></div>
-<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span> </div>
-<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_variable" href="config_8h.html#aafcac713aa3c8d41ebacbf9cd1acc35b">TYPE_OF_DISPLAY</a> == <a class="code hl_enumvalue" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0">DisplayType::SEG_HW</a>)</div>
-<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>  {</div>
-<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>    <a class="code hl_function" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92">update7SegmentHWDisplay</a>();</div>
-<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>  }</div>
-<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>  <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_variable" href="config_8h.html#aafcac713aa3c8d41ebacbf9cd1acc35b">TYPE_OF_DISPLAY</a> == <a class="code hl_enumvalue" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ae0bd48751b29b4132b70ded3310b718a">DisplayType::SEG</a>)</div>
-<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>  {</div>
-<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>    <a class="code hl_function" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93">update7SegmentSWDisplay</a>();</div>
-<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>  }</div>
-<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>}  <span class="comment">// end of refreshDisplay()</span></div>
-<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span> </div>
-<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span><span class="preprocessor">#endif </span><span class="comment">/* UTILS_DISPLAY_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno"><a class="line" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2">  431</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2">refreshDisplay</a>()</div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>{</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>  <span class="comment">// This routine keeps track of which digit is being displayed and checks when its</span></div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>  <span class="comment">// display time has expired.  It then makes the necessary adjustments for displaying</span></div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>  <span class="comment">// the next digit.</span></div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>  <span class="comment">//   The two versions of the hardware require different logic.</span></div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span> </div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_variable" href="config_8h.html#aafcac713aa3c8d41ebacbf9cd1acc35b">TYPE_OF_DISPLAY</a> == <a class="code hl_enumvalue" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0">DisplayType::SEG_HW</a>)</div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>  {</div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>    <a class="code hl_function" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92">update7SegmentHWDisplay</a>();</div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>  }</div>
+<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>  <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_variable" href="config_8h.html#aafcac713aa3c8d41ebacbf9cd1acc35b">TYPE_OF_DISPLAY</a> == <a class="code hl_enumvalue" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ae0bd48751b29b4132b70ded3310b718a">DisplayType::SEG</a>)</div>
+<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span>  {</div>
+<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>    <a class="code hl_function" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93">update7SegmentSWDisplay</a>();</div>
+<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>  }</div>
+<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>}  <span class="comment">// end of refreshDisplay()</span></div>
+<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span> </div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span><span class="preprocessor">#endif </span><span class="comment">/* UTILS_DISPLAY_H */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aFastDivision_8h_html"><div class="ttname"><a href="FastDivision_8h.html">FastDivision.h</a></div></div>
 <div class="ttc" id="aFastDivision_8h_html_a59251ab6913244a85145f233677cf977"><div class="ttname"><a href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a></div><div class="ttdeci">unsigned int divu10(unsigned int n) __attribute__((noinline))</div><div class="ttdef"><b>Definition:</b> <a href="FastDivision_8h_source.html#l00015">FastDivision.h:15</a></div></div>
 <div class="ttc" id="aFastDivision_8h_html_a9d8e8674f8953bda0cf3dfd481d298fe"><div class="ttname"><a href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a></div><div class="ttdeci">void divmod10(uint32_t in, uint32_t &amp;div, uint8_t &amp;mod) __attribute__((noinline))</div><div class="ttdef"><b>Definition:</b> <a href="FastDivision_8h_source.html#l00053">FastDivision.h:53</a></div></div>
@@ -417,10 +403,10 @@ $(function() {
 <div class="ttc" id="agroup__SegDisplay_html_ga3533a6f04780d5ed82d704bf39cebb69"><div class="ttname"><a href="group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69">initializeDisplay</a></div><div class="ttdeci">void initializeDisplay()</div><div class="ttdoc">Initializes the display based on the type of display defined by TYPE_OF_DISPLAY.</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00233">utils_display.h:233</a></div></div>
 <div class="ttc" id="agroup__SegDisplay_html_ga41e6969691858ccbfcc03d15d9008c63"><div class="ttname"><a href="group__SegDisplay.html#ga41e6969691858ccbfcc03d15d9008c63">initializeDisplaySW</a></div><div class="ttdeci">void initializeDisplaySW()</div><div class="ttdoc">Initializes the display for software-driven 7-segment displays.</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00198">utils_display.h:198</a></div></div>
 <div class="ttc" id="agroup__SegDisplay_html_ga955fe37f3ba164eb42378ba17ed90f42"><div class="ttname"><a href="group__SegDisplay.html#ga955fe37f3ba164eb42378ba17ed90f42">configureValueForDisplay</a></div><div class="ttdeci">void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToDisplay)</div><div class="ttdoc">Configures the value for display on a 7-segment display.</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00265">utils_display.h:265</a></div></div>
-<div class="ttc" id="agroup__SegDisplay_html_gaa7c3b04920d5065ca6b6b7d9c261bc93"><div class="ttname"><a href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93">update7SegmentSWDisplay</a></div><div class="ttdeci">void update7SegmentSWDisplay()</div><div class="ttdoc">Updates the 7-segment display for the next digit (software-driven).</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00399">utils_display.h:399</a></div></div>
-<div class="ttc" id="agroup__SegDisplay_html_gaa93cf18ded17c52a21fa1bd80ac95ac2"><div class="ttname"><a href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2">refreshDisplay</a></div><div class="ttdeci">void refreshDisplay()</div><div class="ttdoc">Refreshes the display by updating the active digit and its segments.</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00445">utils_display.h:445</a></div></div>
+<div class="ttc" id="agroup__SegDisplay_html_gaa7c3b04920d5065ca6b6b7d9c261bc93"><div class="ttname"><a href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93">update7SegmentSWDisplay</a></div><div class="ttdeci">void update7SegmentSWDisplay()</div><div class="ttdoc">Updates the 7-segment display for the next digit (software-driven).</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00385">utils_display.h:385</a></div></div>
+<div class="ttc" id="agroup__SegDisplay_html_gaa93cf18ded17c52a21fa1bd80ac95ac2"><div class="ttname"><a href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2">refreshDisplay</a></div><div class="ttdeci">void refreshDisplay()</div><div class="ttdoc">Refreshes the display by updating the active digit and its segments.</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00431">utils_display.h:431</a></div></div>
 <div class="ttc" id="agroup__SegDisplay_html_gada41f61abba371bab816bae257291f92"><div class="ttname"><a href="group__SegDisplay.html#gada41f61abba371bab816bae257291f92">initializeDisplayHW</a></div><div class="ttdeci">void initializeDisplayHW()</div><div class="ttdoc">Initializes the display for hardware-driven 7-segment displays.</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00160">utils_display.h:160</a></div></div>
-<div class="ttc" id="agroup__SegDisplay_html_gadb2a22aeca7b926144982ff2278f3c92"><div class="ttname"><a href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92">update7SegmentHWDisplay</a></div><div class="ttdeci">void update7SegmentHWDisplay()</div><div class="ttdoc">Updates the 7-segment display for the next digit (hardware-driven).</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00340">utils_display.h:340</a></div></div>
+<div class="ttc" id="agroup__SegDisplay_html_gadb2a22aeca7b926144982ff2278f3c92"><div class="ttname"><a href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92">update7SegmentHWDisplay</a></div><div class="ttdeci">void update7SegmentHWDisplay()</div><div class="ttdoc">Updates the 7-segment display for the next digit (hardware-driven).</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00326">utils_display.h:326</a></div></div>
 <div class="ttc" id="atest__fastdivision_2test__main_8cpp_html_af27e3188294c2df66d975b74a09c001d"><div class="ttname"><a href="test__fastdivision_2test__main_8cpp.html#af27e3188294c2df66d975b74a09c001d">i</a></div><div class="ttdeci">uint8_t i</div><div class="ttdef"><b>Definition:</b> <a href="test__fastdivision_2test__main_8cpp_source.html#l00119">test_main.cpp:119</a></div></div>
 <div class="ttc" id="atypes_8h_html_abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0"><div class="ttname"><a href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0">DisplayType::SEG_HW</a></div><div class="ttdeci">@ SEG_HW</div></div>
 <div class="ttc" id="atypes_8h_html_abae0c89d2fddaf30f9be86f76ba671c9ae0bd48751b29b4132b70ded3310b718a"><div class="ttname"><a href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ae0bd48751b29b4132b70ded3310b718a">DisplayType::SEG</a></div><div class="ttdeci">@ SEG</div></div>
