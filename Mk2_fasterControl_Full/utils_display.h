@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Various settings for the 4-digit display, which needs to be refreshed every few mS
 inline constexpr uint8_t noOfDigitLocations{ 4U };
-inline constexpr uint8_t noOfPossibleCharacters{ 22U };
+inline constexpr uint8_t noOfPossibleCharacters{ TYPE_OF_DISPLAY == DisplayType::SEG_HW ? 22U : 23U };
 inline constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50U };  // mains cycles
 inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8U };          // auto-reset after this period of inactivity
 
@@ -99,8 +99,11 @@ inline constexpr uint8_t OFF{ LOW };
 
 inline constexpr uint8_t noOfSegmentsPerDigit{ 8 };  // includes one for the decimal point
 
-inline constexpr bool DIGIT_ENABLED{ false };
-inline constexpr bool DIGIT_DISABLED{ true };
+enum class DigitEnableStates : uint8_t
+{
+  DIGIT_ENABLED,
+  DIGIT_DISABLED
+};
 
 inline constexpr uint8_t digitSelectorPin[noOfDigitLocations]{ 16, 10, 13, 11 };
 inline constexpr uint8_t segmentDrivePin[noOfSegmentsPerDigit]{ 2, 5, 12, 6, 7, 9, 8, 14 };
@@ -132,7 +135,8 @@ inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit]{
   ON, ON, ON, ON, ON, ON, ON, ON,          // '8.' <- element 18
   ON, ON, ON, ON, OFF, ON, ON, ON,         // '9.' <- element 19
   OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 20
-  OFF, OFF, OFF, OFF, OFF, OFF, OFF, ON    // '.' <- element 11
+  OFF, OFF, OFF, OFF, OFF, OFF, OFF, ON,   // '.' <- element 21
+  ON, ON, OFF, OFF, OFF, ON, ON, OFF       // '°' <- element 22
 };
 
 // End of config for the version without the extra logic chips
@@ -210,9 +214,9 @@ void initializeDisplaySW()
   }
 
   // Disable all digit selector pins initially
-  for (int16_t i = 0; i < noOfDigitLocations; ++i)
+  for (uint8_t i = 0; i < noOfDigitLocations; ++i)
   {
-    setPinState(digitSelectorPin[i], DIGIT_DISABLED);
+    setPinState(digitSelectorPin[i], (uint8_t)DigitEnableStates::DIGIT_DISABLED);
   }
 
   // Turn off all segment drive pins initially
@@ -271,32 +275,7 @@ void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToD
 
   static uint8_t locationOfDot{ 0 };
 
-  if (_EDD_isActive)
-  {
-    const bool energyValueExceeds10kWh{ _ValueToDisplay > 9999U };
-
-    uint32_t tmpVal{ energyValueExceeds10kWh ? divu10(_ValueToDisplay) : _ValueToDisplay };
-
-    divmod10(tmpVal, tmpVal, charsForDisplay[3]);
-
-    divmod10(tmpVal, tmpVal, charsForDisplay[2]);
-
-    divmod10(tmpVal, tmpVal, charsForDisplay[1]);
-
-    // Extract the thousands place
-    charsForDisplay[0] = tmpVal;
-
-    // assign the decimal point location
-    if (energyValueExceeds10kWh)
-    {
-      charsForDisplay[1] += 10;
-    }  // dec point after 2nd digit
-    else
-    {
-      charsForDisplay[0] += 10;
-    }  // dec point after 1st digit
-  }
-  else
+  if (!_EDD_isActive)
   {
     // "walking dots" display
     charsForDisplay[locationOfDot] = 20;  // blank
@@ -307,7 +286,32 @@ void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToD
     }
 
     charsForDisplay[locationOfDot] = 21;  // dot
+
+    return;
   }
+
+  const auto energyValueExceeds10kWh{ _ValueToDisplay > 9999U };
+
+  uint32_t tmpVal{ energyValueExceeds10kWh ? divu10(_ValueToDisplay) : _ValueToDisplay };
+
+  divmod10(tmpVal, tmpVal, charsForDisplay[3]);
+
+  divmod10(tmpVal, tmpVal, charsForDisplay[2]);
+
+  divmod10(tmpVal, tmpVal, charsForDisplay[1]);
+
+  // Extract the thousands place
+  charsForDisplay[0] = tmpVal;
+
+  // assign the decimal point location
+  if (energyValueExceeds10kWh)
+  {
+    charsForDisplay[1] += 10;
+  }  // dec point after 2nd digit
+  else
+  {
+    charsForDisplay[0] += 10;
+  }  // dec point after 1st digit
 }
 
 /**
@@ -334,8 +338,7 @@ void update7SegmentHWDisplay()
   setPinState(enableDisableLine, DRIVER_CHIP_DISABLED);
 
   // 3. Determine the next digit location to be active
-  ++digitLocationThatIsActive;
-  if (digitLocationThatIsActive >= noOfDigitLocations)
+  if (++digitLocationThatIsActive == noOfDigitLocations)
   {
     digitLocationThatIsActive = 0;
   }
@@ -387,11 +390,10 @@ void update7SegmentSWDisplay()
   static uint8_t digitLocationThatIsActive{ 0 };
 
   // 1. Deactivate the location which is currently being displayed
-  setPinState(digitSelectorPin[digitLocationThatIsActive], DIGIT_DISABLED);
+  setPinState(digitSelectorPin[digitLocationThatIsActive], (uint8_t)DigitEnableStates::DIGIT_DISABLED);
 
   // 2. Determine the next digit location to be displayed
-  ++digitLocationThatIsActive;
-  if (digitLocationThatIsActive >= noOfDigitLocations)
+  if (++digitLocationThatIsActive == noOfDigitLocations)
   {
     digitLocationThatIsActive = 0;
   }
@@ -402,12 +404,12 @@ void update7SegmentSWDisplay()
   // 4. Set up the segment drivers for the character to be displayed (includes the DP)
   for (uint8_t segment = 0; segment < noOfSegmentsPerDigit; ++segment)
   {
-    uint8_t segmentState = segMap[digitVal][segment];
+    const auto segmentState{ segMap[digitVal][segment] };
     setPinState(segmentDrivePin[segment], segmentState);
   }
 
   // 5. Activate the digit-enable line for the new active location
-  setPinState(digitSelectorPin[digitLocationThatIsActive], DIGIT_ENABLED);
+  setPinState(digitSelectorPin[digitLocationThatIsActive], (uint8_t)DigitEnableStates::DIGIT_ENABLED);
 }
 
 /**
