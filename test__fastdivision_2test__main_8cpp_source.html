@@ -95,25 +95,25 @@ $(function() {
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="test__fastdivision_2test__main_8cpp.html#add26b4937d71129bbf3385d311ef28be">   17</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="test__fastdivision_2test__main_8cpp.html#add26b4937d71129bbf3385d311ef28be">test_divu10</a>(<span class="keywordtype">void</span>)</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>{</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  <span class="comment">// Basic cases</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  TEST_ASSERT_EQUAL(1, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(10));  <span class="comment">// 10 / 10 = 1</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  TEST_ASSERT_EQUAL(2, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(20));  <span class="comment">// 20 / 10 = 2</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  TEST_ASSERT_EQUAL(0, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(0));   <span class="comment">// 0 / 10 = 0</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  TEST_ASSERT_EQUAL(9, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(99));  <span class="comment">// 99 / 10 = 9</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  TEST_ASSERT_EQUAL(1, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(10));  <span class="comment">// 10 / 10 = 1</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  TEST_ASSERT_EQUAL(2, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(20));  <span class="comment">// 20 / 10 = 2</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  TEST_ASSERT_EQUAL(0, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(0));   <span class="comment">// 0 / 10 = 0</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  TEST_ASSERT_EQUAL(9, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(99));  <span class="comment">// 99 / 10 = 9</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  <span class="comment">// Edge cases</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  TEST_ASSERT_EQUAL(0, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(1));     <span class="comment">// 1 / 10 = 0</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  TEST_ASSERT_EQUAL(0, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(9));     <span class="comment">// 9 / 10 = 0</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  TEST_ASSERT_EQUAL(10, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(100));  <span class="comment">// 100 / 10 = 10</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>  TEST_ASSERT_EQUAL(11, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(110));  <span class="comment">// 110 / 10 = 11</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  TEST_ASSERT_EQUAL(0, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(1));     <span class="comment">// 1 / 10 = 0</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  TEST_ASSERT_EQUAL(0, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(9));     <span class="comment">// 9 / 10 = 0</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  TEST_ASSERT_EQUAL(10, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(100));  <span class="comment">// 100 / 10 = 10</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>  TEST_ASSERT_EQUAL(11, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(110));  <span class="comment">// 110 / 10 = 11</span></div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  <span class="comment">// Large values</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  TEST_ASSERT_EQUAL(100, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(1000));    <span class="comment">// 1000 / 10 = 100</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  TEST_ASSERT_EQUAL(6553, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(65535));  <span class="comment">// 65535 / 10 = 6553 (max 16-bit unsigned value)</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  TEST_ASSERT_EQUAL(100, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(1000));    <span class="comment">// 1000 / 10 = 100</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  TEST_ASSERT_EQUAL(6553, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(65535));  <span class="comment">// 65535 / 10 = 6553 (max 16-bit unsigned value)</span></div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  <span class="comment">// Random values</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  TEST_ASSERT_EQUAL(25, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(250));    <span class="comment">// 250 / 10 = 25</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  TEST_ASSERT_EQUAL(123, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(1234));  <span class="comment">// 1234 / 10 = 123</span></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  TEST_ASSERT_EQUAL(42, <a class="code hl_function" href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a>(425));    <span class="comment">// 425 / 10 = 42</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  TEST_ASSERT_EQUAL(25, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(250));    <span class="comment">// 250 / 10 = 25</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  TEST_ASSERT_EQUAL(123, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(1234));  <span class="comment">// 1234 / 10 = 123</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  TEST_ASSERT_EQUAL(42, <a class="code hl_function" href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a>(425));    <span class="comment">// 425 / 10 = 42</span></div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>}</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">// Test for divmod10</span></div>
@@ -123,67 +123,67 @@ $(function() {
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  uint8_t remainder;</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="comment">// Basic cases</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(10, quotient, remainder);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(10, quotient, remainder);</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  TEST_ASSERT_EQUAL(1, quotient);   <span class="comment">// 10 / 10 = 1</span></div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  TEST_ASSERT_EQUAL(0, remainder);  <span class="comment">// 10 % 10 = 0</span></div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(20, quotient, remainder);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(20, quotient, remainder);</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  TEST_ASSERT_EQUAL(2, quotient);   <span class="comment">// 20 / 10 = 2</span></div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  TEST_ASSERT_EQUAL(0, remainder);  <span class="comment">// 20 % 10 = 0</span></div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(0, quotient, remainder);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(0, quotient, remainder);</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  TEST_ASSERT_EQUAL(0, quotient);   <span class="comment">// 0 / 10 = 0</span></div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  TEST_ASSERT_EQUAL(0, remainder);  <span class="comment">// 0 % 10 = 0</span></div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(99, quotient, remainder);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(99, quotient, remainder);</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>  TEST_ASSERT_EQUAL(9, quotient);   <span class="comment">// 99 / 10 = 9</span></div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  TEST_ASSERT_EQUAL(9, remainder);  <span class="comment">// 99 % 10 = 9</span></div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  <span class="comment">// Edge cases</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(1, quotient, remainder);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(1, quotient, remainder);</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  TEST_ASSERT_EQUAL(0, quotient);   <span class="comment">// 1 / 10 = 0</span></div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  TEST_ASSERT_EQUAL(1, remainder);  <span class="comment">// 1 % 10 = 1</span></div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(9, quotient, remainder);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(9, quotient, remainder);</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  TEST_ASSERT_EQUAL(0, quotient);   <span class="comment">// 9 / 10 = 0</span></div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  TEST_ASSERT_EQUAL(9, remainder);  <span class="comment">// 9 % 10 = 9</span></div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(100, quotient, remainder);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(100, quotient, remainder);</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  TEST_ASSERT_EQUAL(10, quotient);  <span class="comment">// 100 / 10 = 10</span></div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  TEST_ASSERT_EQUAL(0, remainder);  <span class="comment">// 100 % 10 = 0</span></div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(101, quotient, remainder);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(101, quotient, remainder);</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  TEST_ASSERT_EQUAL(10, quotient);  <span class="comment">// 101 / 10 = 10</span></div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  TEST_ASSERT_EQUAL(1, remainder);  <span class="comment">// 101 % 10 = 1</span></div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  <span class="comment">// Large values</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(65535, quotient, remainder);</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(65535, quotient, remainder);</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  TEST_ASSERT_EQUAL(6553, quotient);  <span class="comment">// 65535 / 10 = 6553</span></div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  TEST_ASSERT_EQUAL(5, remainder);    <span class="comment">// 65535 % 10 = 5</span></div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  <span class="comment">// Random values</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(250, quotient, remainder);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(250, quotient, remainder);</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  TEST_ASSERT_EQUAL(25, quotient);  <span class="comment">// 250 / 10 = 25</span></div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>  TEST_ASSERT_EQUAL(0, remainder);  <span class="comment">// 250 % 10 = 0</span></div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(1234, quotient, remainder);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(1234, quotient, remainder);</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  TEST_ASSERT_EQUAL(123, quotient);  <span class="comment">// 1234 / 10 = 123</span></div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  TEST_ASSERT_EQUAL(4, remainder);   <span class="comment">// 1234 % 10 = 4</span></div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(425, quotient, remainder);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(425, quotient, remainder);</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  TEST_ASSERT_EQUAL(42, quotient);  <span class="comment">// 425 / 10 = 42</span></div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  TEST_ASSERT_EQUAL(5, remainder);  <span class="comment">// 425 % 10 = 5</span></div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  uint32_t tmpVal;</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  uint8_t digit;</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(2345, tmpVal, digit);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(2345, tmpVal, digit);</div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  TEST_ASSERT_EQUAL(5, digit);</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(tmpVal, tmpVal, digit);</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(tmpVal, tmpVal, digit);</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  TEST_ASSERT_EQUAL(4, digit);</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  <a class="code hl_function" href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a>(tmpVal, tmpVal, digit);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  <a class="code hl_function" href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a>(tmpVal, tmpVal, digit);</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  TEST_ASSERT_EQUAL(3, digit);</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  TEST_ASSERT_EQUAL(2, tmpVal);</div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>}</div>
@@ -212,9 +212,9 @@ $(function() {
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    UNITY_END();  <span class="comment">// End Unity test framework</span></div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  }</div>
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>}</div>
+<div class="ttc" id="aFastDivision_8cpp_html_a14cd442deafa15661a264ec968edad00"><div class="ttname"><a href="FastDivision_8cpp.html#a14cd442deafa15661a264ec968edad00">divu10</a></div><div class="ttdeci">unsigned int divu10(unsigned int n)</div><div class="ttdef"><b>Definition:</b> <a href="FastDivision_8cpp_source.html#l00003">FastDivision.cpp:3</a></div></div>
+<div class="ttc" id="aFastDivision_8cpp_html_a23623280f6a9bc988eea84e057769267"><div class="ttname"><a href="FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267">divmod10</a></div><div class="ttdeci">void divmod10(uint32_t in, uint32_t &amp;div, uint8_t &amp;mod)</div><div class="ttdef"><b>Definition:</b> <a href="FastDivision_8cpp_source.html#l00041">FastDivision.cpp:41</a></div></div>
 <div class="ttc" id="aFastDivision_8h_html"><div class="ttname"><a href="FastDivision_8h.html">FastDivision.h</a></div></div>
-<div class="ttc" id="aFastDivision_8h_html_a59251ab6913244a85145f233677cf977"><div class="ttname"><a href="FastDivision_8h.html#a59251ab6913244a85145f233677cf977">divu10</a></div><div class="ttdeci">unsigned int divu10(unsigned int n) __attribute__((noinline))</div><div class="ttdef"><b>Definition:</b> <a href="FastDivision_8h_source.html#l00015">FastDivision.h:15</a></div></div>
-<div class="ttc" id="aFastDivision_8h_html_a9d8e8674f8953bda0cf3dfd481d298fe"><div class="ttname"><a href="FastDivision_8h.html#a9d8e8674f8953bda0cf3dfd481d298fe">divmod10</a></div><div class="ttdeci">void divmod10(uint32_t in, uint32_t &amp;div, uint8_t &amp;mod) __attribute__((noinline))</div><div class="ttdef"><b>Definition:</b> <a href="FastDivision_8h_source.html#l00053">FastDivision.h:53</a></div></div>
 <div class="ttc" id="atest__fastdivision_2test__main_8cpp_html_a4fc01d736fe50cf5b977f755b675f11d"><div class="ttname"><a href="test__fastdivision_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d">setup</a></div><div class="ttdeci">void setup()</div><div class="ttdef"><b>Definition:</b> <a href="test__fastdivision_2test__main_8cpp_source.html#l00113">test_main.cpp:113</a></div></div>
 <div class="ttc" id="atest__fastdivision_2test__main_8cpp_html_a7a73978df916cacd1d18bb2cd811e56c"><div class="ttname"><a href="test__fastdivision_2test__main_8cpp.html#a7a73978df916cacd1d18bb2cd811e56c">max_blinks</a></div><div class="ttdeci">uint8_t max_blinks</div><div class="ttdef"><b>Definition:</b> <a href="test__fastdivision_2test__main_8cpp_source.html#l00120">test_main.cpp:120</a></div></div>
 <div class="ttc" id="atest__fastdivision_2test__main_8cpp_html_a95c834d6178047ce9e1bce7cbfea2836"><div class="ttname"><a href="test__fastdivision_2test__main_8cpp.html#a95c834d6178047ce9e1bce7cbfea2836">setUp</a></div><div class="ttdeci">void setUp(void)</div><div class="ttdef"><b>Definition:</b> <a href="test__fastdivision_2test__main_8cpp_source.html#l00006">test_main.cpp:6</a></div></div>

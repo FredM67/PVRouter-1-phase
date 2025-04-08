@@ -125,8 +125,9 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__display_8h__dep__incl.png" border="0" usemap="#aMk2__fasterControl__Full_2utils__display_8hdep" alt=""/></div>
 <map name="aMk2__fasterControl__Full_2utils__display_8hdep" id="aMk2__fasterControl__Full_2utils__display_8hdep">
-<area shape="rect" title="7&#45;segments display functions" alt="" coords="5,5,177,45"/>
+<area shape="rect" title="7&#45;segments display functions" alt="" coords="103,5,275,45"/>
 <area shape="rect" href="main_8cpp.html" title="Main code." alt="" coords="5,93,177,133"/>
+<area shape="rect" href="processing_8cpp.html" title=" " alt="" coords="201,93,373,133"/>
 </map>
 </div>
 </div>
@@ -191,13 +192,15 @@ Variables</h2></td></tr>
 <tr class="separator:ac5981a648014ccfc5ecf9d350be2af58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e18b2597ce4e271d3b0740c843932f3"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a2e18b2597ce4e271d3b0740c843932f3">enableDisableLine</a> { 5 }</td></tr>
 <tr class="separator:a2e18b2597ce4e271d3b0740c843932f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdac89f5f7235d6b1b407c43486997bb"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#afdac89f5f7235d6b1b407c43486997bb">MAX_DISPLAY_TIME_COUNT</a> { 10 }</td></tr>
+<tr class="separator:afdac89f5f7235d6b1b407c43486997bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62d0c9099af6d401b59b3a4bcaea73bb"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a62d0c9099af6d401b59b3a4bcaea73bb">noOfDigitLocationLines</a> { 2 }</td></tr>
 <tr class="separator:a62d0c9099af6d401b59b3a4bcaea73bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96a7273b2984378dd24913d76bc3b654"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654">noOfDigitLocations</a> { 4U }</td></tr>
 <tr class="separator:a96a7273b2984378dd24913d76bc3b654"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50d1645f3f220eaddf4dc01e9ce3778e"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a50d1645f3f220eaddf4dc01e9ce3778e">noOfDigitSelectionLines</a> { 4 }</td></tr>
 <tr class="separator:a50d1645f3f220eaddf4dc01e9ce3778e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa74f2c2474570fdadf3b439848514b5f"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#aa74f2c2474570fdadf3b439848514b5f">noOfPossibleCharacters</a> { <a class="el" href="config_8h.html#aafcac713aa3c8d41ebacbf9cd1acc35b">TYPE_OF_DISPLAY</a> == <a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0">DisplayType::SEG_HW</a> ? 22U : 23U }</td></tr>
+<tr class="memitem:aa74f2c2474570fdadf3b439848514b5f"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#aa74f2c2474570fdadf3b439848514b5f">noOfPossibleCharacters</a> { 22 }</td></tr>
 <tr class="separator:aa74f2c2474570fdadf3b439848514b5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0158e223e6e79ce639b843d9134f8965"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__display_8h.html#a0158e223e6e79ce639b843d9134f8965">noOfSegmentsPerDigit</a> { 8 }</td></tr>
 <tr class="separator:a0158e223e6e79ce639b843d9134f8965"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -246,7 +249,7 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="ac1332b70405bdb21b1b83ded1316e51eae51a3e5da4f0ad2b95accbaa5f4295c9" name="ac1332b70405bdb21b1b83ded1316e51eae51a3e5da4f0ad2b95accbaa5f4295c9"></a>DIGIT_DISABLED&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00102">102</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00103">103</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -256,11 +259,19 @@ Variables</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">uint8_t charsForDisplay[<a class="el" href="utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654">noOfDigitLocations</a>] { 20, 20, 20, 20 }</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00145">145</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
@@ -287,7 +298,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00046">46</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00047">47</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -311,7 +322,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00048">48</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00049">49</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -341,7 +352,7 @@ Variables</h2></td></tr>
 <div class="line">  HIGH, HIGH,  </div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00084">84</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00085">85</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -365,7 +376,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00049">49</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00050">50</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -389,7 +400,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00108">108</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00109">109</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -437,7 +448,7 @@ Variables</h2></td></tr>
 <div class="line">  HIGH, HIGH, HIGH, HIGH, HIGH  </div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00056">56</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00057">57</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -509,7 +520,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00082">82</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00083">83</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -533,7 +544,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00038">38</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00039">39</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -557,7 +568,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00039">39</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00040">40</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -581,7 +592,31 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00045">45</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00046">46</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+
+</div>
+</div>
+<a id="afdac89f5f7235d6b1b407c43486997bb" name="afdac89f5f7235d6b1b407c43486997bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdac89f5f7235d6b1b407c43486997bb">&#9670;&#160;</a></span>MAX_DISPLAY_TIME_COUNT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t MAX_DISPLAY_TIME_COUNT { 10 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00027">27</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -605,7 +640,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00043">43</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00044">44</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -653,7 +688,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00042">42</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00043">43</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -667,7 +702,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr uint8_t noOfPossibleCharacters { <a class="el" href="config_8h.html#aafcac713aa3c8d41ebacbf9cd1acc35b">TYPE_OF_DISPLAY</a> == <a class="el" href="types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ad0ac0c73506992d1fe46a77987f64ae0">DisplayType::SEG_HW</a> ? 22U : 23U }</td>
+          <td class="memname">constexpr uint8_t noOfPossibleCharacters { 22 }</td>
         </tr>
       </table>
   </td>
@@ -701,7 +736,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00100">100</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00101">101</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -725,7 +760,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00098">98</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00099">99</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -749,7 +784,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00097">97</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00098">98</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -794,13 +829,12 @@ Variables</h2></td></tr>
 <div class="line">  <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>,          </div>
 <div class="line">  <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>,         </div>
 <div class="line">  <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>,  </div>
-<div class="line">  <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>,   </div>
-<div class="line">  <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>       </div>
+<div class="line">  <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a>, <a class="code hl_variable" href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a>    </div>
 <div class="line">}</div>
-<div class="ttc" id="autils__display_8h_html_a7048fc75a5cff8a51368e3fbb53521db"><div class="ttname"><a href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a></div><div class="ttdeci">constexpr uint8_t ON</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00097">utils_display.h:97</a></div></div>
-<div class="ttc" id="autils__display_8h_html_aa6671243ff94189dcf82eef4a3a0c468"><div class="ttname"><a href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a></div><div class="ttdeci">constexpr uint8_t OFF</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00098">utils_display.h:98</a></div></div>
+<div class="ttc" id="autils__display_8h_html_a7048fc75a5cff8a51368e3fbb53521db"><div class="ttname"><a href="utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db">ON</a></div><div class="ttdeci">constexpr uint8_t ON</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00098">utils_display.h:98</a></div></div>
+<div class="ttc" id="autils__display_8h_html_aa6671243ff94189dcf82eef4a3a0c468"><div class="ttname"><a href="utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468">OFF</a></div><div class="ttdeci">constexpr uint8_t OFF</div><div class="ttdef"><b>Definition:</b> <a href="utils__display_8h_source.html#l00099">utils_display.h:99</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00116">116</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00117">117</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>
@@ -824,7 +858,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00109">109</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__display_8h_source.html#l00110">110</a> of file <a class="el" href="utils__display_8h_source.html">utils_display.h</a>.</p>
 
 </div>
 </div>

@@ -163,7 +163,7 @@ Functions</h2></td></tr>
 
 <p>This routine prevents a zero-crossing point from being declared until a certain number of consecutive samples in the 'other' half of the waveform have been encountered. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00340">340</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00341">341</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -208,34 +208,42 @@ Here is the caller graph for this function:</div>
 <li>Don't try to turn interrupts off or on </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00941">941</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00943">943</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__TimeCritical_ga05c2e5b588ced1cd7312f5b0edc5b295_cgraph.png" border="0" usemap="#agroup__TimeCritical_ga05c2e5b588ced1cd7312f5b0edc5b295_cgraph" alt=""/></div>
 <map name="agroup__TimeCritical_ga05c2e5b588ced1cd7312f5b0edc5b295_cgraph" id="agroup__TimeCritical_ga05c2e5b588ced1cd7312f5b0edc5b295_cgraph">
-<area shape="rect" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,105,48,131"/>
-<area shape="rect" href="group__TimeCritical.html#ga200d938da53f9e12f5a174d109944e64" title="Process the calculation for the actual current raw sample for the diverted power." alt="" coords="106,41,310,81"/>
-<area shape="rect" href="group__TimeCritical.html#ga022d99b2096ea8d30d401959ac464301" title="Process the calculation for the actual current raw sample for the grid." alt="" coords="96,105,320,131"/>
-<area shape="rect" href="group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="109,155,307,180"/>
-<area shape="rect" href="group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672" title="This routine prevents a zero&#45;crossing point from being declared until a certain number of consecutive..." alt="" coords="385,80,507,105"/>
-<area shape="rect" href="group__TimeCritical.html#ga600ddbf70fa2468f097466638126fbed" title="Process with the polarity for the actual voltage sample." alt="" coords="385,129,507,155"/>
-<area shape="rect" href="group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I sample becomes available." alt="" coords="368,179,524,204"/>
-<area shape="rect" href="group__TimeCritical.html#ga9747b6178245c423a864bff088cfa453" title="Process the calculation for the current voltage sample." alt="" coords="385,228,507,253"/>
+<area shape="rect" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,129,48,155"/>
+<area shape="rect" href="group__TimeCritical.html#ga200d938da53f9e12f5a174d109944e64" title="Process the calculation for the actual current raw sample for the diverted power." alt="" coords="106,65,310,105"/>
+<area shape="rect" href="group__TimeCritical.html#ga022d99b2096ea8d30d401959ac464301" title="Process the calculation for the actual current raw sample for the grid." alt="" coords="96,129,320,155"/>
+<area shape="rect" href="group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="109,179,307,204"/>
+<area shape="rect" href="group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672" title="This routine prevents a zero&#45;crossing point from being declared until a certain number of consecutive..." alt="" coords="385,104,507,129"/>
+<area shape="rect" href="group__TimeCritical.html#ga600ddbf70fa2468f097466638126fbed" title="Process with the polarity for the actual voltage sample." alt="" coords="385,153,507,179"/>
+<area shape="rect" href="group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I sample becomes available." alt="" coords="368,203,524,228"/>
+<area shape="rect" href="group__TimeCritical.html#ga9747b6178245c423a864bff088cfa453" title="Process the calculation for the current voltage sample." alt="" coords="385,252,507,277"/>
 <area shape="rect" href="group__TimeCritical.html#gaef29df3a6c44ea8477b816cbdf3005f3" title="Process the case of high energy level, some action may be required." alt="" coords="577,5,761,31"/>
 <area shape="rect" href="group__TimeCritical.html#ga7ecb8f04a958d86156a6c95581f242d3" title="Process the case of low energy level, some action may be required." alt="" coords="579,55,759,80"/>
 <area shape="rect" href="group__TimeCritical.html#ga4e9b38eebfc1c509d74dd4614209f3e7" title="Process the start of a new &#45;ve half cycle, just after the zero&#45;crossing point." alt="" coords="581,104,756,129"/>
 <area shape="rect" href="group__TimeCritical.html#gab3316018d6752ecf79ce8be7f2ee800d" title="Process the start of a new +ve half cycle, just after the zero&#45;crossing point." alt="" coords="587,153,750,179"/>
 <area shape="rect" href="group__TimeCritical.html#ga5a8b9dce34e44a69a46344e8ee1c0dd6" title="This code is executed once per 20mS, shortly after the start of each new mains cycle on phase 0." alt="" coords="585,203,753,228"/>
 <area shape="rect" href="group__TimeCritical.html#gaeae271d1c55664c3424b634191a0996b" title="Process the startup period for the router." alt="" coords="608,252,729,277"/>
-<area shape="rect" href="group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="This function provides the link between the logical and physical loads." alt="" coords="572,301,765,327"/>
-<area shape="rect" href="processing_8cpp.html#a44ac46a7ff4e0717bd668d5907b38249" title="update the control ports for each of the physical loads" alt="" coords="598,351,739,376"/>
+<area shape="rect" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="610,301,727,327"/>
+<area shape="rect" href="group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="This function provides the link between the logical and physical loads." alt="" coords="572,351,765,376"/>
+<area shape="rect" href="processing_8cpp.html#a44ac46a7ff4e0717bd668d5907b38249" title="update the control ports for each of the physical loads" alt="" coords="598,400,739,425"/>
 <area shape="rect" href="group__TimeCritical.html#ga8e7b88bb4b21554d23b57676a45e034e" title="Retrieve the next load that could be added (be aware of the order)" alt="" coords="824,5,1024,31"/>
 <area shape="rect" href="group__TimeCritical.html#gabfb25288a79335282af6922e833d3c35" title="Retrieve the next load that could be removed (be aware of the reverse&#45;order)" alt="" coords="813,55,1035,80"/>
-<area shape="rect" href="group__TimeCritical.html#gaabf10592d01250ef862370d26c5a382b" title="Process with data logging." alt="" coords="847,129,1001,155"/>
-<area shape="rect" href="group__TimeCritical.html#gac31343a7bf773ef82723f61a0c0b6856" title="Process the latest contribution after each new cycle additional processing is performed after each ma..." alt="" coords="828,179,1020,204"/>
-<area shape="rect" href="utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd" title="Set the Pins state to OFF." alt="" coords="877,325,971,351"/>
-<area shape="rect" href="utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3" title="Set the Pins state to ON." alt="" coords="879,375,969,400"/>
+<area shape="rect" href="group__TimeCritical.html#gaabf10592d01250ef862370d26c5a382b" title="Process with data logging." alt="" coords="847,128,1001,153"/>
+<area shape="rect" href="group__TimeCritical.html#gac31343a7bf773ef82723f61a0c0b6856" title="Process the latest contribution after each new cycle additional processing is performed after each ma..." alt="" coords="828,177,1020,203"/>
+<area shape="rect" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92" title="Updates the 7&#45;segment display for the next digit (hardware&#45;driven)." alt="" coords="821,264,1027,289"/>
+<area shape="rect" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="823,313,1025,339"/>
+<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="1083,289,1179,315"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="1227,264,1315,289"/>
+<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="1229,313,1312,339"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="1363,264,1441,289"/>
+<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="1369,313,1435,339"/>
+<area shape="rect" href="utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd" title="Set the Pins state to OFF." alt="" coords="877,387,971,412"/>
+<area shape="rect" href="utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3" title="Set the Pins state to ON." alt="" coords="879,436,969,461"/>
 </map>
 </div>
 
@@ -267,7 +275,7 @@ Here is the call graph for this function:</div>
 <p>Retrieve the next load that could be added (be aware of the order) </p>
 <dl class="section return"><dt>Returns</dt><dd>The load number if successful, NO_OF_DUMPLOADS in case of failure </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00811">811</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00813">813</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -309,7 +317,7 @@ Here is the caller graph for this function:</div>
 <p>Retrieve the next load that could be removed (be aware of the reverse-order) </p>
 <dl class="section return"><dt>Returns</dt><dd>The load number if successful, NO_OF_DUMPLOADS in case of failure </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00834">834</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00836">836</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -350,7 +358,7 @@ Here is the caller graph for this function:</div>
 
 <p>Process the case of high energy level, some action may be required. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00723">723</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00725">725</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -399,7 +407,7 @@ Here is the caller graph for this function:</div>
 
 <p>Process the case of low energy level, some action may be required. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00764">764</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00766">766</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -449,7 +457,7 @@ Here is the caller graph for this function:</div>
 <p>Process with data logging. </p>
 <p>At the end of each datalogging period, copies are made of the relevant variables for use by the main code. These variable are then reset for use during the next datalogging period. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00860">860</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00862">862</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -497,7 +505,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00314">314</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00315">315</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -542,7 +550,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00284">284</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00285">285</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -580,7 +588,7 @@ Here is the caller graph for this function:</div>
 
 <p>Process the latest contribution after each new cycle additional processing is performed after each main cycle based on phase 0. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00671">671</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00673">673</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -621,7 +629,7 @@ Here is the caller graph for this function:</div>
 
 <p>Process the start of a new -ve half cycle, just after the zero-crossing point. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00624">624</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00626">626</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -661,7 +669,7 @@ Here is the caller graph for this function:</div>
 
 <p>Process the start of a new +ve half cycle, just after the zero-crossing point. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00600">600</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00602">602</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -718,7 +726,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00268">268</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00269">269</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -757,27 +765,35 @@ Here is the caller graph for this function:</div>
 
 <p>This routine is called by the ISR when a pair of V &amp; I sample becomes available. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00365">365</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00366">366</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__TimeCritical_ga18d241dba2cc74c17026ee33d2442478_cgraph.png" border="0" usemap="#agroup__TimeCritical_ga18d241dba2cc74c17026ee33d2442478_cgraph" alt=""/></div>
 <map name="agroup__TimeCritical_ga18d241dba2cc74c17026ee33d2442478_cgraph" id="agroup__TimeCritical_ga18d241dba2cc74c17026ee33d2442478_cgraph">
-<area shape="rect" title="This routine is called by the ISR when a pair of V &amp; I sample becomes available." alt="" coords="5,179,161,204"/>
+<area shape="rect" title="This routine is called by the ISR when a pair of V &amp; I sample becomes available." alt="" coords="5,203,161,228"/>
 <area shape="rect" href="group__TimeCritical.html#gaef29df3a6c44ea8477b816cbdf3005f3" title="Process the case of high energy level, some action may be required." alt="" coords="214,5,398,31"/>
 <area shape="rect" href="group__TimeCritical.html#ga7ecb8f04a958d86156a6c95581f242d3" title="Process the case of low energy level, some action may be required." alt="" coords="216,55,396,80"/>
 <area shape="rect" href="group__TimeCritical.html#ga4e9b38eebfc1c509d74dd4614209f3e7" title="Process the start of a new &#45;ve half cycle, just after the zero&#45;crossing point." alt="" coords="219,104,393,129"/>
 <area shape="rect" href="group__TimeCritical.html#gab3316018d6752ecf79ce8be7f2ee800d" title="Process the start of a new +ve half cycle, just after the zero&#45;crossing point." alt="" coords="225,153,387,179"/>
 <area shape="rect" href="group__TimeCritical.html#ga5a8b9dce34e44a69a46344e8ee1c0dd6" title="This code is executed once per 20mS, shortly after the start of each new mains cycle on phase 0." alt="" coords="222,203,390,228"/>
 <area shape="rect" href="group__TimeCritical.html#gaeae271d1c55664c3424b634191a0996b" title="Process the startup period for the router." alt="" coords="245,252,367,277"/>
-<area shape="rect" href="group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="This function provides the link between the logical and physical loads." alt="" coords="209,301,403,327"/>
-<area shape="rect" href="processing_8cpp.html#a44ac46a7ff4e0717bd668d5907b38249" title="update the control ports for each of the physical loads" alt="" coords="235,351,377,376"/>
+<area shape="rect" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="247,301,365,327"/>
+<area shape="rect" href="group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="This function provides the link between the logical and physical loads." alt="" coords="209,351,403,376"/>
+<area shape="rect" href="processing_8cpp.html#a44ac46a7ff4e0717bd668d5907b38249" title="update the control ports for each of the physical loads" alt="" coords="235,400,377,425"/>
 <area shape="rect" href="group__TimeCritical.html#ga8e7b88bb4b21554d23b57676a45e034e" title="Retrieve the next load that could be added (be aware of the order)" alt="" coords="461,5,661,31"/>
 <area shape="rect" href="group__TimeCritical.html#gabfb25288a79335282af6922e833d3c35" title="Retrieve the next load that could be removed (be aware of the reverse&#45;order)" alt="" coords="451,55,672,80"/>
 <area shape="rect" href="group__TimeCritical.html#gaabf10592d01250ef862370d26c5a382b" title="Process with data logging." alt="" coords="484,128,639,153"/>
 <area shape="rect" href="group__TimeCritical.html#gac31343a7bf773ef82723f61a0c0b6856" title="Process the latest contribution after each new cycle additional processing is performed after each ma..." alt="" coords="465,177,657,203"/>
-<area shape="rect" href="utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd" title="Set the Pins state to OFF." alt="" coords="514,325,609,351"/>
-<area shape="rect" href="utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3" title="Set the Pins state to ON." alt="" coords="517,375,606,400"/>
+<area shape="rect" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92" title="Updates the 7&#45;segment display for the next digit (hardware&#45;driven)." alt="" coords="459,264,664,289"/>
+<area shape="rect" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="460,313,663,339"/>
+<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="720,289,816,315"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="864,264,952,289"/>
+<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="867,313,949,339"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="1000,264,1079,289"/>
+<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="1006,313,1073,339"/>
+<area shape="rect" href="utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd" title="Set the Pins state to OFF." alt="" coords="514,375,609,400"/>
+<area shape="rect" href="utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3" title="Set the Pins state to ON." alt="" coords="517,424,606,449"/>
 </map>
 </div>
 <div class="dynheader">
@@ -823,7 +839,7 @@ Here is the caller graph for this function:</div>
 <li>update the driver lines for each of the loads. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00579">579</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00581">581</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -863,7 +879,7 @@ Here is the caller graph for this function:</div>
 
 <p>Process the startup period for the router. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00551">551</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00553">553</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -903,7 +919,7 @@ Here is the caller graph for this function:</div>
 
 <p>Process the calculation for the current voltage sample. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00502">502</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00504">504</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -949,31 +965,39 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00532">532</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00534">534</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__TimeCritical_gae9c9eca31752ead2923dd75b9ff9fd57_cgraph.png" border="0" usemap="#agroup__TimeCritical_gae9c9eca31752ead2923dd75b9ff9fd57_cgraph" alt=""/></div>
 <map name="agroup__TimeCritical_gae9c9eca31752ead2923dd75b9ff9fd57_cgraph" id="agroup__TimeCritical_gae9c9eca31752ead2923dd75b9ff9fd57_cgraph">
-<area shape="rect" title="Process the current voltage raw sample." alt="" coords="5,155,204,180"/>
-<area shape="rect" href="group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672" title="This routine prevents a zero&#45;crossing point from being declared until a certain number of consecutive..." alt="" coords="269,80,391,105"/>
-<area shape="rect" href="group__TimeCritical.html#ga600ddbf70fa2468f097466638126fbed" title="Process with the polarity for the actual voltage sample." alt="" coords="269,129,391,155"/>
-<area shape="rect" href="group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I sample becomes available." alt="" coords="252,179,408,204"/>
-<area shape="rect" href="group__TimeCritical.html#ga9747b6178245c423a864bff088cfa453" title="Process the calculation for the current voltage sample." alt="" coords="269,228,391,253"/>
+<area shape="rect" title="Process the current voltage raw sample." alt="" coords="5,179,204,204"/>
+<area shape="rect" href="group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672" title="This routine prevents a zero&#45;crossing point from being declared until a certain number of consecutive..." alt="" coords="269,104,391,129"/>
+<area shape="rect" href="group__TimeCritical.html#ga600ddbf70fa2468f097466638126fbed" title="Process with the polarity for the actual voltage sample." alt="" coords="269,153,391,179"/>
+<area shape="rect" href="group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I sample becomes available." alt="" coords="252,203,408,228"/>
+<area shape="rect" href="group__TimeCritical.html#ga9747b6178245c423a864bff088cfa453" title="Process the calculation for the current voltage sample." alt="" coords="269,252,391,277"/>
 <area shape="rect" href="group__TimeCritical.html#gaef29df3a6c44ea8477b816cbdf3005f3" title="Process the case of high energy level, some action may be required." alt="" coords="461,5,645,31"/>
 <area shape="rect" href="group__TimeCritical.html#ga7ecb8f04a958d86156a6c95581f242d3" title="Process the case of low energy level, some action may be required." alt="" coords="463,55,643,80"/>
 <area shape="rect" href="group__TimeCritical.html#ga4e9b38eebfc1c509d74dd4614209f3e7" title="Process the start of a new &#45;ve half cycle, just after the zero&#45;crossing point." alt="" coords="465,104,640,129"/>
 <area shape="rect" href="group__TimeCritical.html#gab3316018d6752ecf79ce8be7f2ee800d" title="Process the start of a new +ve half cycle, just after the zero&#45;crossing point." alt="" coords="471,153,634,179"/>
 <area shape="rect" href="group__TimeCritical.html#ga5a8b9dce34e44a69a46344e8ee1c0dd6" title="This code is executed once per 20mS, shortly after the start of each new mains cycle on phase 0." alt="" coords="469,203,637,228"/>
 <area shape="rect" href="group__TimeCritical.html#gaeae271d1c55664c3424b634191a0996b" title="Process the startup period for the router." alt="" coords="492,252,613,277"/>
-<area shape="rect" href="group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="This function provides the link between the logical and physical loads." alt="" coords="456,301,649,327"/>
-<area shape="rect" href="processing_8cpp.html#a44ac46a7ff4e0717bd668d5907b38249" title="update the control ports for each of the physical loads" alt="" coords="482,351,623,376"/>
+<area shape="rect" href="group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="494,301,611,327"/>
+<area shape="rect" href="group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="This function provides the link between the logical and physical loads." alt="" coords="456,351,649,376"/>
+<area shape="rect" href="processing_8cpp.html#a44ac46a7ff4e0717bd668d5907b38249" title="update the control ports for each of the physical loads" alt="" coords="482,400,623,425"/>
 <area shape="rect" href="group__TimeCritical.html#ga8e7b88bb4b21554d23b57676a45e034e" title="Retrieve the next load that could be added (be aware of the order)" alt="" coords="708,5,908,31"/>
 <area shape="rect" href="group__TimeCritical.html#gabfb25288a79335282af6922e833d3c35" title="Retrieve the next load that could be removed (be aware of the reverse&#45;order)" alt="" coords="697,55,919,80"/>
 <area shape="rect" href="group__TimeCritical.html#gaabf10592d01250ef862370d26c5a382b" title="Process with data logging." alt="" coords="731,128,885,153"/>
 <area shape="rect" href="group__TimeCritical.html#gac31343a7bf773ef82723f61a0c0b6856" title="Process the latest contribution after each new cycle additional processing is performed after each ma..." alt="" coords="712,177,904,203"/>
-<area shape="rect" href="utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd" title="Set the Pins state to OFF." alt="" coords="761,325,855,351"/>
-<area shape="rect" href="utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3" title="Set the Pins state to ON." alt="" coords="763,375,853,400"/>
+<area shape="rect" href="group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92" title="Updates the 7&#45;segment display for the next digit (hardware&#45;driven)." alt="" coords="705,264,911,289"/>
+<area shape="rect" href="group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="707,313,909,339"/>
+<area shape="rect" href="utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="967,289,1063,315"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="1111,264,1199,289"/>
+<area shape="rect" href="utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="1113,313,1196,339"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="1247,264,1325,289"/>
+<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="1253,313,1319,339"/>
+<area shape="rect" href="utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd" title="Set the Pins state to OFF." alt="" coords="761,375,855,400"/>
+<area shape="rect" href="utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3" title="Set the Pins state to ON." alt="" coords="763,424,853,449"/>
 </map>
 </div>
 <div class="dynheader">
@@ -1008,7 +1032,7 @@ Here is the caller graph for this function:</div>
 <p>The lowest 7 bits of element is the load number as defined in 'physicalLoadState'. The highest bit of each 'loadPrioritiesAndState' determines if the load is ON or OFF. The order of each element in 'loadPrioritiesAndState' determines the load priority. 'loadPrioritiesAndState[i] &amp; loadStateMask' will extract the load number at position 'i' 'loadPrioritiesAndState[i] &amp; loadStateOnBit' will extract the load state at position 'i'</p>
 <p>Any other mapping relationships could be configured here. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00232">232</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00233">233</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
