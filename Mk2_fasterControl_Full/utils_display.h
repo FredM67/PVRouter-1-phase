@@ -19,11 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Various settings for the 4-digit display, which needs to be refreshed every few mS
 inline constexpr uint8_t noOfDigitLocations{ 4U };
-inline constexpr uint8_t noOfPossibleCharacters{ TYPE_OF_DISPLAY == DisplayType::SEG_HW ? 22U : 23U };
+inline constexpr uint8_t noOfPossibleCharacters{ 22 };
 inline constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50U };  // mains cycles
 inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8U };          // auto-reset after this period of inactivity
 
 inline constexpr uint16_t displayShutdown_inSeconds{ DISPLAY_SHUTDOWN_IN_HOURS * 3600U };
+inline constexpr uint8_t MAX_DISPLAY_TIME_COUNT{ 10 };  // no of processing loops between display updates
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The 7-segment display can be driven in two ways:
@@ -135,14 +136,13 @@ inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit]{
   ON, ON, ON, ON, ON, ON, ON, ON,          // '8.' <- element 18
   ON, ON, ON, ON, OFF, ON, ON, ON,         // '9.' <- element 19
   OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 20
-  OFF, OFF, OFF, OFF, OFF, OFF, OFF, ON,   // '.' <- element 21
-  ON, ON, OFF, OFF, OFF, ON, ON, OFF       // '°' <- element 22
+  OFF, OFF, OFF, OFF, OFF, OFF, OFF, ON    // '.' <- element 11
 };
 
 // End of config for the version without the extra logic chips
 ////////////////////////////////////////////////////////////////////////////////////////
 
-uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
+inline uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
 
 /**
  * @brief Initializes the display for hardware-driven 7-segment displays.
@@ -161,13 +161,13 @@ uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
  * 
  * @ingroup 7SegDisplay
  */
-void initializeDisplayHW()
+inline void initializeDisplayHW()
 {
   // Configure the IO drivers for the 4-digit display
   pinMode(decimalPointLine, OUTPUT);  // The 'decimal point' line
 
   // Set up the control lines for the 74HC4543 7-segment display driver
-  for (int16_t i = 0; i < noOfDigitSelectionLines; ++i)
+  for (uint8_t i = 0; i < noOfDigitSelectionLines; ++i)
   {
     pinMode(digitSelectionLine[i], OUTPUT);
   }
@@ -177,7 +177,7 @@ void initializeDisplayHW()
   setPinState(enableDisableLine, DRIVER_CHIP_DISABLED);
 
   // Set up the control lines for the 74HC138 2->4 demultiplexer
-  for (int16_t i = 0; i < noOfDigitLocationLines; ++i)
+  for (uint8_t i = 0; i < noOfDigitLocationLines; ++i)
   {
     pinMode(digitLocationLine[i], OUTPUT);
   }
@@ -199,16 +199,16 @@ void initializeDisplayHW()
  * 
  * @ingroup 7SegDisplay
  */
-void initializeDisplaySW()
+inline void initializeDisplaySW()
 {
   // Set the pin mode for each segment drive pin
-  for (int16_t i = 0; i < noOfSegmentsPerDigit; ++i)
+  for (uint8_t i = 0; i < noOfSegmentsPerDigit; ++i)
   {
     pinMode(segmentDrivePin[i], OUTPUT);
   }
 
   // Set the pin mode for each digit selector pin
-  for (int16_t i = 0; i < noOfDigitLocations; ++i)
+  for (uint8_t i = 0; i < noOfDigitLocations; ++i)
   {
     pinMode(digitSelectorPin[i], OUTPUT);
   }
@@ -220,7 +220,7 @@ void initializeDisplaySW()
   }
 
   // Turn off all segment drive pins initially
-  for (int16_t i = 0; i < noOfSegmentsPerDigit; ++i)
+  for (uint8_t i = 0; i < noOfSegmentsPerDigit; ++i)
   {
     setPinState(segmentDrivePin[i], OFF);
   }
@@ -234,7 +234,7 @@ void initializeDisplaySW()
  * 
  * @ingroup 7SegDisplay
  */
-void initializeDisplay()
+inline void initializeDisplay()
 {
   if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG_HW)
   {
@@ -266,7 +266,7 @@ void initializeDisplay()
  * 
  * @ingroup 7SegDisplay
  */
-void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToDisplay)
+inline void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToDisplay)
 {
   if constexpr (!(TYPE_OF_DISPLAY == DisplayType::SEG || TYPE_OF_DISPLAY == DisplayType::SEG_HW))
   {
@@ -327,7 +327,7 @@ void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToD
  * 
  * @ingroup 7SegDisplay
  */
-void update7SegmentHWDisplay()
+inline void update7SegmentHWDisplay()
 {
   static uint8_t digitLocationThatIsActive = 0;
 
@@ -385,7 +385,7 @@ void update7SegmentHWDisplay()
  * 
  * @ingroup 7SegDisplay
  */
-void update7SegmentSWDisplay()
+inline void update7SegmentSWDisplay()
 {
   static uint8_t digitLocationThatIsActive{ 0 };
 
@@ -430,18 +430,28 @@ void update7SegmentSWDisplay()
  *
  * @ingroup 7SegDisplay
  */
-void refreshDisplay()
+inline void refreshDisplay()
 {
   // This routine keeps track of which digit is being displayed and checks when its
   // display time has expired.  It then makes the necessary adjustments for displaying
   // the next digit.
   //   The two versions of the hardware require different logic.
 
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG_HW || TYPE_OF_DISPLAY == DisplayType::SEG)
+  {
+    static uint8_t displayTime_count{ 0 };
+    if (++displayTime_count != MAX_DISPLAY_TIME_COUNT)
+    {
+      return;
+    }
+    displayTime_count = 0;
+  }
+
   if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG_HW)
   {
     update7SegmentHWDisplay();
   }
-  else if (TYPE_OF_DISPLAY == DisplayType::SEG)
+  else if constexpr (TYPE_OF_DISPLAY == DisplayType::SEG)
   {
     update7SegmentSWDisplay();
   }

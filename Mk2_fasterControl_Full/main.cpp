@@ -442,7 +442,7 @@ void setup()
  * @see checkDiversionOnOff
  * @see refreshDisplay
  */
-void handlePerSecondTasks(bool& bOffPeak, int16_t iTemperature_x100)
+void handlePerSecondTasks(bool &bOffPeak, int16_t iTemperature_x100)
 {
   if (EDD_isIdle)
   {
@@ -467,8 +467,6 @@ void handlePerSecondTasks(bool& bOffPeak, int16_t iTemperature_x100)
     relays.inc_duration();
     relays.proceed_relays();
   }
-
-  refreshDisplay();
 }
 
 /**

@@ -5,6 +5,7 @@
 #include "dualtariff.h"
 #include "processing.h"
 #include "utils_pins.h"
+#include "utils_display.h"
 
 // Define operating limits for the LP filters which identify DC offset in the voltage
 // sample streams. By limiting the output range, these filters always should start up
@@ -315,7 +316,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
  */
 void processDivertedCurrentRawSample(const int16_t rawSample)
 {
-  if(b_overrideLoadOn[0])
+  if (b_overrideLoadOn[0])
   {
     return;  // no diverted power when the load is overridden
   }
@@ -494,6 +495,7 @@ void processRawSamples()
 
     ++sampleSetsDuringNegativeHalfOfMainsCycle;
   }  // end of processing that is specific to samples where the voltage is negative
+  refreshDisplay();
 }
 
 /**
