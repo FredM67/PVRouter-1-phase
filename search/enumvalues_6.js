@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['off_0',['OFF',['../types_8h.html#a06b890c4a964752df814257dc1f13073a88559a0cfd8250c9d65970cc145c92d4',1,'types.h']]],
-  ['oled_1',['OLED',['../types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9a0c9b2f3f3530345ea5cd8c586478d2b7',1,'types.h']]]
+  ['negative_0',['NEGATIVE',['../types_8h.html#a297c9a15e28f6c3824b7a33453238136a50546bf973283065b6ccf09faf7a580a',1,'types.h']]],
+  ['none_1',['NONE',['../types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ab50339a10e1de285ac99d4c3990b8693',1,'types.h']]],
+  ['normal_2',['NORMAL',['../types_8h.html#aae913bd32d3b848f4a5ba5b9d32e9a1fa1e23852820b9154316c7c06e2b7ba051',1,'types.h']]]
 ];
