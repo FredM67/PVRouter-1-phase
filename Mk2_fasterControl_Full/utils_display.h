@@ -301,7 +301,7 @@ void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToD
     // "walking dots" display
     charsForDisplay[locationOfDot] = 20;  // blank
 
-    if (++locationOfDot >= noOfDigitLocations)
+    if (++locationOfDot == noOfDigitLocations)
     {
       locationOfDot = 0;
     }
