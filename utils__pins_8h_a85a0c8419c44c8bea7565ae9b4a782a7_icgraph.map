@@ -5,7 +5,7 @@
 <area shape="rect" id="node6" href="$test__utils__pins_2test__main_8cpp.html#abd1c12218f5c492bdeb765dfc01a1965" title=" " alt="" coords="760,104,888,129"/>
 <area shape="rect" id="node8" href="$group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92" title="Updates the 7&#45;segment display for the next digit (hardware&#45;driven)." alt="" coords="721,153,927,179"/>
 <area shape="rect" id="node13" href="$group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="723,203,925,228"/>
-<area shape="rect" id="node3" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="547,31,673,56"/>
+<area shape="rect" id="node3" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="547,31,673,56"/>
 <area shape="rect" id="node4" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="391,31,450,56"/>
 <area shape="rect" id="node7" href="$test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="585,104,635,129"/>
 <area shape="rect" id="node9" href="$group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="551,177,669,203"/>

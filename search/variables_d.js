@@ -8,8 +8,6 @@ var searchData=
   ['polarityofmostrecentvsample_5',['polarityOfMostRecentVsample',['../processing_8cpp.html#aded2f3ad7507b7a153baa58edc329f03',1,'processing.cpp']]],
   ['post_5ftransition_5fmax_5fcount_6',['POST_TRANSITION_MAX_COUNT',['../processing_8cpp.html#a555d557c5b47a027b823b11a814f8693',1,'processing.cpp']]],
   ['posttransitioncount_7',['postTransitionCount',['../processing_8cpp.html#aefaf5733efee19a73b7cbcb1159ff61f',1,'processing.cpp']]],
-  ['powercal_5fdiverted_8',['powerCal_diverted',['../calibration_8h.html#ae63e797dc6e09e314af00a47c0784c11',1,'calibration.h']]],
-  ['powercal_5fgrid_9',['powerCal_grid',['../calibration_8h.html#aa79c0e0815a2819ac9ce16cc3a93fd2d',1,'calibration.h']]],
-  ['powerdiverted_10',['powerDiverted',['../classPayloadTx__struct.html#a46ada94b2b6830a0becabcc2106384c1',1,'PayloadTx_struct']]],
-  ['powergrid_11',['powerGrid',['../classPayloadTx__struct.html#ac9a5b0c7e1f4927ce571d5f46cbdcf85',1,'PayloadTx_struct']]]
+  ['powerdiverted_8',['powerDiverted',['../classPayloadTx__struct.html#a46ada94b2b6830a0becabcc2106384c1',1,'PayloadTx_struct']]],
+  ['powergrid_9',['powerGrid',['../classPayloadTx__struct.html#ac9a5b0c7e1f4927ce571d5f46cbdcf85',1,'PayloadTx_struct']]]
 ];

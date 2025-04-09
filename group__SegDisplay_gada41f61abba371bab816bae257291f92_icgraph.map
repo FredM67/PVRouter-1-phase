@@ -1,5 +1,5 @@
 <map id="initializeDisplayHW" name="initializeDisplayHW">
 <area shape="rect" id="node1" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="287,5,437,31"/>
-<area shape="rect" id="node2" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="112,5,239,31"/>
+<area shape="rect" id="node2" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="112,5,239,31"/>
 <area shape="rect" id="node3" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
 </map>

@@ -1,5 +1,5 @@
 <map id="initializeDisplay" name="initializeDisplay">
-<area shape="rect" id="node1" title="Initializes the display based on the type of display defined by TYPE_OF_DISPLAY." alt="" coords="5,31,132,56"/>
+<area shape="rect" id="node1" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="5,31,132,56"/>
 <area shape="rect" id="node2" href="$group__SegDisplay.html#gada41f61abba371bab816bae257291f92" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="180,5,331,31"/>
 <area shape="rect" id="node8" href="$group__SegDisplay.html#ga41e6969691858ccbfcc03d15d9008c63" title="Initializes the display for software&#45;driven 7&#45;segment displays." alt="" coords="181,55,329,80"/>
 <area shape="rect" id="node3" href="$utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="379,31,475,56"/>

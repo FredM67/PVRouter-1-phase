@@ -16,6 +16,5 @@ var searchData=
   ['loop_13',['loop',['../main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../test__fastdivision_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;test_main.cpp'],['../test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;test_main.cpp'],['../test__utils__relay_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;test_main.cpp']]],
   ['lowerenergythreshold_14',['lowerEnergyThreshold',['../processing_8cpp.html#ab90abf1e4f398064d5151def545f0e8c',1,'processing.cpp']]],
   ['lowerthreshold_5fdefault_15',['lowerThreshold_default',['../processing_8cpp.html#a9d2aaccd1924b13d9324b1091831661f',1,'processing.cpp']]],
-  ['lowestnoofsamplesetspermainscycle_16',['lowestNoOfSampleSetsPerMainsCycle',['../processing_8cpp.html#ab935f4f3c343be21384a6ed896561b61',1,'processing.cpp']]],
-  ['lpf_5fgain_17',['lpf_gain',['../calibration_8h.html#a74d2e520152cb559bdb6e18153dcb5e4',1,'calibration.h']]]
+  ['lowestnoofsamplesetspermainscycle_16',['lowestNoOfSampleSetsPerMainsCycle',['../processing_8cpp.html#ab935f4f3c343be21384a6ed896561b61',1,'processing.cpp']]]
 ];

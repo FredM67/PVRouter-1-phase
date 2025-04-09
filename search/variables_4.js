@@ -14,7 +14,7 @@ var searchData=
   ['digitlocationmap_11',['digitLocationMap',['../utils__display_8h.html#ab491eb2908098ddf620d107fc18b8f31',1,'utils_display.h']]],
   ['digitselectionline_12',['digitSelectionLine',['../utils__display_8h.html#a569c2245deafc9a43b04a6bc85667798',1,'utils_display.h']]],
   ['digitselectorpin_13',['digitSelectorPin',['../utils__display_8h.html#a7bff10ac4da623f3745574c8450ee1c0',1,'utils_display.h']]],
-  ['digitvaluemap_14',['digitValueMap',['../utils__display_8h.html#a9f66d634c5fbf097ac1e170caf0dcd95',1,'utils_display.h']]],
+  ['digitvaluemap_14',['digitValueMap',['../utils__display_8h.html#a11b342808d215b6468134187cd22ab21',1,'utils_display.h']]],
   ['display_5fshutdown_5fin_5fhours_15',['DISPLAY_SHUTDOWN_IN_HOURS',['../utils__display_8h.html#ad5dee3d18ada0c321e30d000e453dd8b',1,'utils_display.h']]],
   ['displayshutdown_5finseconds_16',['displayShutdown_inSeconds',['../utils__display_8h.html#ae2658f0418fe4445abbe322dd7ce7067',1,'utils_display.h']]],
   ['diversion_5fpin_5fpresent_17',['DIVERSION_PIN_PRESENT',['../config_8h.html#af4fafac7a898d0c42cf814b9ab893d8c',1,'config.h']]],
