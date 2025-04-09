@@ -14,17 +14,22 @@
 #define UTILS_DISPLAY_H
 
 #include "config_system.h"
+#include "config.h"
 #include "FastDivision.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// Various settings for the 4-digit display, which needs to be refreshed every few mS
+// General Configuration (Shared by SEG_HW and SEG)
+////////////////////////////////////////////////////////////////////////////////////////
+
 inline constexpr uint8_t noOfDigitLocations{ 4U };
-inline constexpr uint8_t noOfPossibleCharacters{ 22 };
+inline constexpr uint8_t noOfPossibleCharacters{ 11 };
 inline constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50U };  // mains cycles
 inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8U };          // auto-reset after this period of inactivity
 
 inline constexpr uint16_t displayShutdown_inSeconds{ DISPLAY_SHUTDOWN_IN_HOURS * 3600U };
 inline constexpr uint8_t MAX_DISPLAY_TIME_COUNT{ 10 };  // no of processing loops between display updates
+
+inline uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The 7-segment display can be driven in two ways:
@@ -34,8 +39,9 @@ inline constexpr uint8_t MAX_DISPLAY_TIME_COUNT{ 10 };  // no of processing loop
 ////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// This is for a config with the extra logic chips
-//
+// Hardware-Driven Display (SEG_HW)
+////////////////////////////////////////////////////////////////////////////////////////
+
 inline constexpr uint8_t DRIVER_CHIP_DISABLED{ HIGH };
 inline constexpr uint8_t DRIVER_CHIP_ENABLED{ LOW };
 
@@ -51,36 +57,24 @@ inline constexpr uint8_t digitSelectionLine[noOfDigitSelectionLines]{ 7, 9, 8, 6
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The final column of digitValueMap[] is for the decimal point status.  In this version,
-// the decimal point has to be treated differently than the other seven segments, so
-// a convenient means of accessing this column is provided.
+// the decimal point has to be treated differently than the other seven segments.
 //
-inline constexpr uint8_t digitValueMap[noOfPossibleCharacters][noOfDigitSelectionLines + 1]{
-  LOW, LOW, LOW, LOW, LOW,      // '0' <- element 0
-  LOW, LOW, LOW, HIGH, LOW,     // '1' <- element 1
-  LOW, LOW, HIGH, LOW, LOW,     // '2' <- element 2
-  LOW, LOW, HIGH, HIGH, LOW,    // '3' <- element 3
-  LOW, HIGH, LOW, LOW, LOW,     // '4' <- element 4
-  LOW, HIGH, LOW, HIGH, LOW,    // '5' <- element 5
-  LOW, HIGH, HIGH, LOW, LOW,    // '6' <- element 6
-  LOW, HIGH, HIGH, HIGH, LOW,   // '7' <- element 7
-  HIGH, LOW, LOW, LOW, LOW,     // '8' <- element 8
-  HIGH, LOW, LOW, HIGH, LOW,    // '9' <- element 9
-  LOW, LOW, LOW, LOW, HIGH,     // '0.' <- element 10
-  LOW, LOW, LOW, HIGH, HIGH,    // '1.' <- element 11
-  LOW, LOW, HIGH, LOW, HIGH,    // '2.' <- element 12
-  LOW, LOW, HIGH, HIGH, HIGH,   // '3.' <- element 13
-  LOW, HIGH, LOW, LOW, HIGH,    // '4.' <- element 14
-  LOW, HIGH, LOW, HIGH, HIGH,   // '5.' <- element 15
-  LOW, HIGH, HIGH, LOW, HIGH,   // '6.' <- element 16
-  LOW, HIGH, HIGH, HIGH, HIGH,  // '7.' <- element 17
-  HIGH, LOW, LOW, LOW, HIGH,    // '8.' <- element 18
-  HIGH, LOW, LOW, HIGH, HIGH,   // '9.' <- element 19
-  HIGH, HIGH, HIGH, HIGH, LOW,  // ' '  <- element 20
-  HIGH, HIGH, HIGH, HIGH, HIGH  // '.'  <- element 21
+inline constexpr uint8_t digitValueMap[noOfPossibleCharacters][noOfDigitSelectionLines]{
+  LOW, LOW, LOW, LOW,      // '0' <- element 0
+  LOW, LOW, LOW, HIGH,     // '1' <- element 1
+  LOW, LOW, HIGH, LOW,     // '2' <- element 2
+  LOW, LOW, HIGH, HIGH,    // '3' <- element 3
+  LOW, HIGH, LOW, LOW,     // '4' <- element 4
+  LOW, HIGH, LOW, HIGH,    // '5' <- element 5
+  LOW, HIGH, HIGH, LOW,    // '6' <- element 6
+  LOW, HIGH, HIGH, HIGH,   // '7' <- element 7
+  HIGH, LOW, LOW, LOW,     // '8' <- element 8
+  HIGH, LOW, LOW, HIGH,    // '9' <- element 9
+  HIGH, HIGH, HIGH, HIGH,  // ' ' <- element 10
 };
 
 // a tidy means of identifying the DP status data when accessing the above table
-inline constexpr uint8_t DPstatus_columnID = noOfDigitSelectionLines;
+inline constexpr uint8_t DPstatus_columnID{ noOfDigitSelectionLines };
 
 inline constexpr uint8_t digitLocationMap[noOfDigitLocations][noOfDigitLocationLines]{
   LOW, LOW,    // Digit 1
@@ -88,61 +82,6 @@ inline constexpr uint8_t digitLocationMap[noOfDigitLocations][noOfDigitLocationL
   HIGH, LOW,   // Digit 3
   HIGH, HIGH,  // Digit 4
 };
-
-// End of config for the version with the extra logic chips
-////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////
-// This is for a config without the extra logic chips
-//
-inline constexpr uint8_t ON{ HIGH };
-inline constexpr uint8_t OFF{ LOW };
-
-inline constexpr uint8_t noOfSegmentsPerDigit{ 8 };  // includes one for the decimal point
-
-enum class DigitEnableStates : uint8_t
-{
-  DIGIT_ENABLED,
-  DIGIT_DISABLED
-};
-
-inline constexpr uint8_t digitSelectorPin[noOfDigitLocations]{ 16, 10, 13, 11 };
-inline constexpr uint8_t segmentDrivePin[noOfSegmentsPerDigit]{ 2, 5, 12, 6, 7, 9, 8, 14 };
-
-////////////////////////////////////////////////////////////////////////////////////////
-// The final column of segMap[] is for the decimal point status.  In this version,
-// the decimal point is treated just like all the other segments, so there is
-// no need to access this column specifically.
-//
-inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit]{
-  ON, ON, ON, ON, ON, ON, OFF, OFF,        // '0' <- element 0
-  OFF, ON, ON, OFF, OFF, OFF, OFF, OFF,    // '1' <- element 1
-  ON, ON, OFF, ON, ON, OFF, ON, OFF,       // '2' <- element 2
-  ON, ON, ON, ON, OFF, OFF, ON, OFF,       // '3' <- element 3
-  OFF, ON, ON, OFF, OFF, ON, ON, OFF,      // '4' <- element 4
-  ON, OFF, ON, ON, OFF, ON, ON, OFF,       // '5' <- element 5
-  ON, OFF, ON, ON, ON, ON, ON, OFF,        // '6' <- element 6
-  ON, ON, ON, OFF, OFF, OFF, OFF, OFF,     // '7' <- element 7
-  ON, ON, ON, ON, ON, ON, ON, OFF,         // '8' <- element 8
-  ON, ON, ON, ON, OFF, ON, ON, OFF,        // '9' <- element 9
-  ON, ON, ON, ON, ON, ON, OFF, ON,         // '0.' <- element 10
-  OFF, ON, ON, OFF, OFF, OFF, OFF, ON,     // '1.' <- element 11
-  ON, ON, OFF, ON, ON, OFF, ON, ON,        // '2.' <- element 12
-  ON, ON, ON, ON, OFF, OFF, ON, ON,        // '3.' <- element 13
-  OFF, ON, ON, OFF, OFF, ON, ON, ON,       // '4.' <- element 14
-  ON, OFF, ON, ON, OFF, ON, ON, ON,        // '5.' <- element 15
-  ON, OFF, ON, ON, ON, ON, ON, ON,         // '6.' <- element 16
-  ON, ON, ON, OFF, OFF, OFF, OFF, ON,      // '7.' <- element 17
-  ON, ON, ON, ON, ON, ON, ON, ON,          // '8.' <- element 18
-  ON, ON, ON, ON, OFF, ON, ON, ON,         // '9.' <- element 19
-  OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 20
-  OFF, OFF, OFF, OFF, OFF, OFF, OFF, ON    // '.' <- element 11
-};
-
-// End of config for the version without the extra logic chips
-////////////////////////////////////////////////////////////////////////////////////////
-
-inline uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
 
 /**
  * @brief Initializes the display for hardware-driven 7-segment displays.
@@ -182,6 +121,99 @@ inline void initializeDisplayHW()
     pinMode(digitLocationLine[i], OUTPUT);
   }
 }
+
+/**
+ * @brief Updates the 7-segment display for the next digit (hardware-driven).
+ * 
+ * @details This function handles the process of updating the 7-segment display by:
+ *          - Disabling the driver chip and decimal point line.
+ *          - Determining the next digit location to activate.
+ *          - Setting up the digit location and character to display.
+ *          - Enabling the driver chip for the new digit.
+ * 
+ * @note This function assumes the use of hardware-driven 7-segment displays (DisplayType::SEG_HW).
+ * 
+ * @ingroup 7SegDisplay
+ */
+inline void update7SegmentHWDisplay()
+{
+  static uint8_t digitLocationThatIsActive = 0;
+
+  // 1. Disable the Decimal Point driver line
+  setPinState(decimalPointLine, LOW);
+
+  // 2. Disable the driver chip while changes are taking place
+  setPinState(enableDisableLine, DRIVER_CHIP_DISABLED);
+
+  // 3. Determine the next digit location to be active
+  if (++digitLocationThatIsActive == noOfDigitLocations)
+  {
+    digitLocationThatIsActive = 0;
+  }
+
+  // 4. Set up the digit location drivers for the new active location
+  for (uint8_t line = 0; line < noOfDigitLocationLines; ++line)
+  {
+    const auto& lineState{ digitLocationMap[digitLocationThatIsActive][line] };
+    setPinState(digitLocationLine[line], lineState);
+  }
+
+  // 5. Determine the character to be displayed at this new location
+  const auto& digitVal{ charsForDisplay[digitLocationThatIsActive] };
+
+  // 6. Configure the 7-segment driver for the character to be displayed
+  for (uint8_t line = 0; line < noOfDigitSelectionLines; ++line)
+  {
+    const auto& lineState{ digitValueMap[digitVal & 0x7F][line] };
+    setPinState(digitSelectionLine[line], lineState);
+  }
+
+  // 7. Set up the Decimal Point driver line
+  setPinState(decimalPointLine, digitVal & 0x80);  // DP
+
+
+  // 8. Enable the 7-segment driver chip
+  setPinState(enableDisableLine, DRIVER_CHIP_ENABLED);
+}
+
+// End of config for the version with the extra logic chips
+////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Software-Driven Display (SEG)
+////////////////////////////////////////////////////////////////////////////////////////
+
+inline constexpr uint8_t ON{ HIGH };
+inline constexpr uint8_t OFF{ LOW };
+
+inline constexpr uint8_t noOfSegmentsPerDigit{ 8 };  // includes one for the decimal point
+
+enum class DigitEnableStates : uint8_t
+{
+  DIGIT_ENABLED,
+  DIGIT_DISABLED
+};
+
+inline constexpr uint8_t digitSelectorPin[noOfDigitLocations]{ 16, 10, 13, 11 };
+inline constexpr uint8_t segmentDrivePin[noOfSegmentsPerDigit]{ 2, 5, 12, 6, 7, 9, 8, 14 };
+
+////////////////////////////////////////////////////////////////////////////////////////
+// The final column of segMap[] is for the decimal point status.  In this version,
+// the decimal point is treated separately from the other seven segments.
+//
+inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit - 1]{
+  ON, ON, ON, ON, ON, ON, OFF,        // '0' <- element 0
+  OFF, ON, ON, OFF, OFF, OFF, OFF,    // '1' <- element 1
+  ON, ON, OFF, ON, ON, OFF, ON,       // '2' <- element 2
+  ON, ON, ON, ON, OFF, OFF, ON,       // '3' <- element 3
+  OFF, ON, ON, OFF, OFF, ON, ON,      // '4' <- element 4
+  ON, OFF, ON, ON, OFF, ON, ON,       // '5' <- element 5
+  ON, OFF, ON, ON, ON, ON, ON,        // '6' <- element 6
+  ON, ON, ON, OFF, OFF, OFF, OFF,     // '7' <- element 7
+  ON, ON, ON, ON, ON, ON, ON,         // '8' <- element 8
+  ON, ON, ON, ON, OFF, ON, ON,        // '9' <- element 9
+  OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 10
+};
 
 /**
  * @brief Initializes the display for software-driven 7-segment displays.
@@ -227,7 +259,61 @@ inline void initializeDisplaySW()
 }
 
 /**
- * @brief Initializes the display based on the type of display defined by TYPE_OF_DISPLAY.
+ * @brief Updates the 7-segment display for the next digit (software-driven).
+ * 
+ * @details This function handles the process of updating the 7-segment display for configurations 
+ *          without additional driver chips. It deactivates the current digit, determines the next 
+ *          digit to activate, sets up the segment drivers for the new digit, and activates the 
+ *          corresponding digit-enable line.
+ * 
+ * Key operations include:
+ * - Deactivating the currently active digit.
+ * - Determining the next digit location to activate.
+ * - Setting up the segment drivers for the character to be displayed.
+ * - Activating the digit-enable line for the new active location.
+ * 
+ * @note This function assumes the use of software-driven 7-segment displays (DisplayType::SEG).
+ * 
+ * @ingroup 7SegDisplay
+ */
+inline void update7SegmentSWDisplay()
+{
+  static uint8_t digitLocationThatIsActive{ 0 };
+
+  // 1. Deactivate the location which is currently being displayed
+  setPinState(digitSelectorPin[digitLocationThatIsActive], (uint8_t)DigitEnableStates::DIGIT_DISABLED);
+
+  // 2. Determine the next digit location to be displayed
+  if (++digitLocationThatIsActive == noOfDigitLocations)
+  {
+    digitLocationThatIsActive = 0;
+  }
+
+  // 3. Determine the relevant character for the new active location
+  const auto& digitVal{ charsForDisplay[digitLocationThatIsActive] };
+
+  // 4. Set up the segment drivers for the character to be displayed (includes the DP)
+  for (uint8_t segment = 0; segment < noOfSegmentsPerDigit - 1; ++segment)
+  {
+    const auto& segmentState{ segMap[digitVal & 0x7F][segment] };
+    setPinState(segmentDrivePin[segment], segmentState);
+  }
+  setPinState(segmentDrivePin[noOfSegmentsPerDigit - 1], digitVal & 0x80);  // DP
+
+
+  // 5. Activate the digit-enable line for the new active location
+  setPinState(digitSelectorPin[digitLocationThatIsActive], (uint8_t)DigitEnableStates::DIGIT_ENABLED);
+}
+
+// End of config for the version without the extra logic chips
+////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Shared Functions
+////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @brief Initializes the display for hardware-driven 7-segment displays.
  * 
  * @details This function determines the type of display (hardware-driven or software-driven) 
  *          and calls the appropriate initialization function.
@@ -266,26 +352,29 @@ inline void initializeDisplay()
  * 
  * @ingroup 7SegDisplay
  */
-inline void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToDisplay)
+inline void configureValueForDisplay(bool _EDD_isActive, const uint16_t _ValueToDisplay)
 {
   if constexpr (!(TYPE_OF_DISPLAY == DisplayType::SEG || TYPE_OF_DISPLAY == DisplayType::SEG_HW))
   {
     return;
   }
 
-  static uint8_t locationOfDot{ 0 };
-
   if (!_EDD_isActive)
   {
+    static uint8_t locationOfDot{ 0 };
+
     // "walking dots" display
-    charsForDisplay[locationOfDot] = 20;  // blank
+    charsForDisplay[0] = 10;
+    charsForDisplay[1] = 10;
+    charsForDisplay[2] = 10;
+    charsForDisplay[3] = 10;
 
     if (++locationOfDot == noOfDigitLocations)
     {
       locationOfDot = 0;
     }
 
-    charsForDisplay[locationOfDot] = 21;  // dot
+    charsForDisplay[locationOfDot] |= 0x80;  // dot
 
     return;
   }
@@ -294,122 +383,20 @@ inline void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _V
 
   uint32_t tmpVal{ energyValueExceeds10kWh ? divu10(_ValueToDisplay) : _ValueToDisplay };
 
-  divmod10(tmpVal, tmpVal, charsForDisplay[3]);
-
-  divmod10(tmpVal, tmpVal, charsForDisplay[2]);
-
-  divmod10(tmpVal, tmpVal, charsForDisplay[1]);
-
-  // Extract the thousands place
-  charsForDisplay[0] = tmpVal;
+  divmod10(tmpVal, tmpVal, charsForDisplay[3]);  // Extract units place
+  divmod10(tmpVal, tmpVal, charsForDisplay[2]);  // Extract tens place
+  divmod10(tmpVal, tmpVal, charsForDisplay[1]);  // Extract hundreds place
+  charsForDisplay[0] = tmpVal;                   // Remaining value is the thousands place
 
   // assign the decimal point location
   if (energyValueExceeds10kWh)
   {
-    charsForDisplay[1] += 10;
+    charsForDisplay[1] |= 0x80;
   }  // dec point after 2nd digit
   else
   {
-    charsForDisplay[0] += 10;
+    charsForDisplay[0] |= 0x80;
   }  // dec point after 1st digit
-}
-
-/**
- * @brief Updates the 7-segment display for the next digit (hardware-driven).
- * 
- * @details This function handles the process of updating the 7-segment display by:
- *          - Disabling the driver chip and decimal point line.
- *          - Determining the next digit location to activate.
- *          - Setting up the digit location and character to display.
- *          - Enabling the driver chip for the new digit.
- * 
- * @note This function assumes the use of hardware-driven 7-segment displays (DisplayType::SEG_HW).
- * 
- * @ingroup 7SegDisplay
- */
-inline void update7SegmentHWDisplay()
-{
-  static uint8_t digitLocationThatIsActive = 0;
-
-  // 1. Disable the Decimal Point driver line
-  setPinState(decimalPointLine, LOW);
-
-  // 2. Disable the driver chip while changes are taking place
-  setPinState(enableDisableLine, DRIVER_CHIP_DISABLED);
-
-  // 3. Determine the next digit location to be active
-  if (++digitLocationThatIsActive == noOfDigitLocations)
-  {
-    digitLocationThatIsActive = 0;
-  }
-
-  // 4. Set up the digit location drivers for the new active location
-  for (uint8_t line = 0; line < noOfDigitLocationLines; ++line)
-  {
-    const auto lineState{ digitLocationMap[digitLocationThatIsActive][line] };
-    setPinState(digitLocationLine[line], lineState);
-  }
-
-  // 5. Determine the character to be displayed at this new location
-  const auto digitVal{ charsForDisplay[digitLocationThatIsActive] };
-
-  // 6. Configure the 7-segment driver for the character to be displayed
-  for (uint8_t line = 0; line < noOfDigitSelectionLines; ++line)
-  {
-    const auto lineState{ digitValueMap[digitVal][line] };
-    setPinState(digitSelectionLine[line], lineState);
-  }
-
-  // 7. Set up the Decimal Point driver line
-  setPinState(decimalPointLine, digitValueMap[digitVal][DPstatus_columnID]);
-
-  // 8. Enable the 7-segment driver chip
-  setPinState(enableDisableLine, DRIVER_CHIP_ENABLED);
-}
-
-/**
- * @brief Updates the 7-segment display for the next digit (software-driven).
- * 
- * @details This function handles the process of updating the 7-segment display for configurations 
- *          without additional driver chips. It deactivates the current digit, determines the next 
- *          digit to activate, sets up the segment drivers for the new digit, and activates the 
- *          corresponding digit-enable line.
- * 
- * Key operations include:
- * - Deactivating the currently active digit.
- * - Determining the next digit location to activate.
- * - Setting up the segment drivers for the character to be displayed.
- * - Activating the digit-enable line for the new active location.
- * 
- * @note This function assumes the use of software-driven 7-segment displays (DisplayType::SEG).
- * 
- * @ingroup 7SegDisplay
- */
-inline void update7SegmentSWDisplay()
-{
-  static uint8_t digitLocationThatIsActive{ 0 };
-
-  // 1. Deactivate the location which is currently being displayed
-  setPinState(digitSelectorPin[digitLocationThatIsActive], (uint8_t)DigitEnableStates::DIGIT_DISABLED);
-
-  // 2. Determine the next digit location to be displayed
-  if (++digitLocationThatIsActive == noOfDigitLocations)
-  {
-    digitLocationThatIsActive = 0;
-  }
-
-  // 3. Determine the relevant character for the new active location
-  const auto digitVal{ charsForDisplay[digitLocationThatIsActive] };
-
-  // 4. Set up the segment drivers for the character to be displayed (includes the DP)
-  for (uint8_t segment = 0; segment < noOfSegmentsPerDigit; ++segment)
-  {
-    const auto segmentState{ segMap[digitVal][segment] };
-    setPinState(segmentDrivePin[segment], segmentState);
-  }
-
-  // 5. Activate the digit-enable line for the new active location
-  setPinState(digitSelectorPin[digitLocationThatIsActive], (uint8_t)DigitEnableStates::DIGIT_ENABLED);
 }
 
 /**
