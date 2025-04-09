@@ -22,7 +22,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 inline constexpr uint8_t noOfDigitLocations{ 4U };
-inline constexpr uint8_t noOfPossibleCharacters{ 22 };
+inline constexpr uint8_t noOfPossibleCharacters{ 11 };
 inline constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50U };  // mains cycles
 inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8U };          // auto-reset after this period of inactivity
 
@@ -57,32 +57,20 @@ inline constexpr uint8_t digitSelectionLine[noOfDigitSelectionLines]{ 7, 9, 8, 6
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The final column of digitValueMap[] is for the decimal point status.  In this version,
-// the decimal point has to be treated differently than the other seven segments, so
-// a convenient means of accessing this column is provided.
+// the decimal point has to be treated differently than the other seven segments.
 //
-inline constexpr uint8_t digitValueMap[noOfPossibleCharacters][noOfDigitSelectionLines + 1]{
-  LOW, LOW, LOW, LOW, LOW,      // '0' <- element 0
-  LOW, LOW, LOW, HIGH, LOW,     // '1' <- element 1
-  LOW, LOW, HIGH, LOW, LOW,     // '2' <- element 2
-  LOW, LOW, HIGH, HIGH, LOW,    // '3' <- element 3
-  LOW, HIGH, LOW, LOW, LOW,     // '4' <- element 4
-  LOW, HIGH, LOW, HIGH, LOW,    // '5' <- element 5
-  LOW, HIGH, HIGH, LOW, LOW,    // '6' <- element 6
-  LOW, HIGH, HIGH, HIGH, LOW,   // '7' <- element 7
-  HIGH, LOW, LOW, LOW, LOW,     // '8' <- element 8
-  HIGH, LOW, LOW, HIGH, LOW,    // '9' <- element 9
-  LOW, LOW, LOW, LOW, HIGH,     // '0.' <- element 10
-  LOW, LOW, LOW, HIGH, HIGH,    // '1.' <- element 11
-  LOW, LOW, HIGH, LOW, HIGH,    // '2.' <- element 12
-  LOW, LOW, HIGH, HIGH, HIGH,   // '3.' <- element 13
-  LOW, HIGH, LOW, LOW, HIGH,    // '4.' <- element 14
-  LOW, HIGH, LOW, HIGH, HIGH,   // '5.' <- element 15
-  LOW, HIGH, HIGH, LOW, HIGH,   // '6.' <- element 16
-  LOW, HIGH, HIGH, HIGH, HIGH,  // '7.' <- element 17
-  HIGH, LOW, LOW, LOW, HIGH,    // '8.' <- element 18
-  HIGH, LOW, LOW, HIGH, HIGH,   // '9.' <- element 19
-  HIGH, HIGH, HIGH, HIGH, LOW,  // ' '  <- element 20
-  HIGH, HIGH, HIGH, HIGH, HIGH  // '.'  <- element 21
+inline constexpr uint8_t digitValueMap[noOfPossibleCharacters][noOfDigitSelectionLines]{
+  LOW, LOW, LOW, LOW,      // '0' <- element 0
+  LOW, LOW, LOW, HIGH,     // '1' <- element 1
+  LOW, LOW, HIGH, LOW,     // '2' <- element 2
+  LOW, LOW, HIGH, HIGH,    // '3' <- element 3
+  LOW, HIGH, LOW, LOW,     // '4' <- element 4
+  LOW, HIGH, LOW, HIGH,    // '5' <- element 5
+  LOW, HIGH, HIGH, LOW,    // '6' <- element 6
+  LOW, HIGH, HIGH, HIGH,   // '7' <- element 7
+  HIGH, LOW, LOW, LOW,     // '8' <- element 8
+  HIGH, LOW, LOW, HIGH,    // '9' <- element 9
+  HIGH, HIGH, HIGH, HIGH,  // ' ' <- element 10
 };
 
 // a tidy means of identifying the DP status data when accessing the above table
@@ -166,7 +154,7 @@ inline void update7SegmentHWDisplay()
   // 4. Set up the digit location drivers for the new active location
   for (uint8_t line = 0; line < noOfDigitLocationLines; ++line)
   {
-    const auto lineState{ digitLocationMap[digitLocationThatIsActive][line] };
+    const auto& lineState{ digitLocationMap[digitLocationThatIsActive][line] };
     setPinState(digitLocationLine[line], lineState);
   }
 
@@ -176,12 +164,13 @@ inline void update7SegmentHWDisplay()
   // 6. Configure the 7-segment driver for the character to be displayed
   for (uint8_t line = 0; line < noOfDigitSelectionLines; ++line)
   {
-    const auto lineState{ digitValueMap[digitVal][line] };
+    const auto& lineState{ digitValueMap[digitVal & 0x7F][line] };
     setPinState(digitSelectionLine[line], lineState);
   }
 
   // 7. Set up the Decimal Point driver line
-  setPinState(decimalPointLine, digitValueMap[digitVal][DPstatus_columnID]);
+  setPinState(decimalPointLine, digitVal & 0x80);  // DP
+
 
   // 8. Enable the 7-segment driver chip
   setPinState(enableDisableLine, DRIVER_CHIP_ENABLED);
@@ -210,32 +199,20 @@ inline constexpr uint8_t segmentDrivePin[noOfSegmentsPerDigit]{ 2, 5, 12, 6, 7, 
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // The final column of segMap[] is for the decimal point status.  In this version,
-// the decimal point is treated just like all the other segments, so there is
-// no need to access this column specifically.
+// the decimal point is treated separately from the other seven segments.
 //
-inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit]{
-  ON, ON, ON, ON, ON, ON, OFF, OFF,        // '0' <- element 0
-  OFF, ON, ON, OFF, OFF, OFF, OFF, OFF,    // '1' <- element 1
-  ON, ON, OFF, ON, ON, OFF, ON, OFF,       // '2' <- element 2
-  ON, ON, ON, ON, OFF, OFF, ON, OFF,       // '3' <- element 3
-  OFF, ON, ON, OFF, OFF, ON, ON, OFF,      // '4' <- element 4
-  ON, OFF, ON, ON, OFF, ON, ON, OFF,       // '5' <- element 5
-  ON, OFF, ON, ON, ON, ON, ON, OFF,        // '6' <- element 6
-  ON, ON, ON, OFF, OFF, OFF, OFF, OFF,     // '7' <- element 7
-  ON, ON, ON, ON, ON, ON, ON, OFF,         // '8' <- element 8
-  ON, ON, ON, ON, OFF, ON, ON, OFF,        // '9' <- element 9
-  ON, ON, ON, ON, ON, ON, OFF, ON,         // '0.' <- element 10
-  OFF, ON, ON, OFF, OFF, OFF, OFF, ON,     // '1.' <- element 11
-  ON, ON, OFF, ON, ON, OFF, ON, ON,        // '2.' <- element 12
-  ON, ON, ON, ON, OFF, OFF, ON, ON,        // '3.' <- element 13
-  OFF, ON, ON, OFF, OFF, ON, ON, ON,       // '4.' <- element 14
-  ON, OFF, ON, ON, OFF, ON, ON, ON,        // '5.' <- element 15
-  ON, OFF, ON, ON, ON, ON, ON, ON,         // '6.' <- element 16
-  ON, ON, ON, OFF, OFF, OFF, OFF, ON,      // '7.' <- element 17
-  ON, ON, ON, ON, ON, ON, ON, ON,          // '8.' <- element 18
-  ON, ON, ON, ON, OFF, ON, ON, ON,         // '9.' <- element 19
-  OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 20
-  OFF, OFF, OFF, OFF, OFF, OFF, OFF, ON    // '.' <- element 11
+inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit - 1]{
+  ON, ON, ON, ON, ON, ON, OFF,        // '0' <- element 0
+  OFF, ON, ON, OFF, OFF, OFF, OFF,    // '1' <- element 1
+  ON, ON, OFF, ON, ON, OFF, ON,       // '2' <- element 2
+  ON, ON, ON, ON, OFF, OFF, ON,       // '3' <- element 3
+  OFF, ON, ON, OFF, OFF, ON, ON,      // '4' <- element 4
+  ON, OFF, ON, ON, OFF, ON, ON,       // '5' <- element 5
+  ON, OFF, ON, ON, ON, ON, ON,        // '6' <- element 6
+  ON, ON, ON, OFF, OFF, OFF, OFF,     // '7' <- element 7
+  ON, ON, ON, ON, ON, ON, ON,         // '8' <- element 8
+  ON, ON, ON, ON, OFF, ON, ON,        // '9' <- element 9
+  OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 10
 };
 
 /**
@@ -316,11 +293,13 @@ inline void update7SegmentSWDisplay()
   const auto& digitVal{ charsForDisplay[digitLocationThatIsActive] };
 
   // 4. Set up the segment drivers for the character to be displayed (includes the DP)
-  for (uint8_t segment = 0; segment < noOfSegmentsPerDigit; ++segment)
+  for (uint8_t segment = 0; segment < noOfSegmentsPerDigit - 1; ++segment)
   {
-    const auto& segmentState{ segMap[digitVal][segment] };
+    const auto& segmentState{ segMap[digitVal & 0x7F][segment] };
     setPinState(segmentDrivePin[segment], segmentState);
   }
+  setPinState(segmentDrivePin[noOfSegmentsPerDigit - 1], digitVal & 0x80);  // DP
+
 
   // 5. Activate the digit-enable line for the new active location
   setPinState(digitSelectorPin[digitLocationThatIsActive], (uint8_t)DigitEnableStates::DIGIT_ENABLED);
@@ -385,17 +364,17 @@ inline void configureValueForDisplay(bool _EDD_isActive, const uint16_t _ValueTo
     static uint8_t locationOfDot{ 0 };
 
     // "walking dots" display
-    charsForDisplay[0] = 20;
-    charsForDisplay[1] = 20;
-    charsForDisplay[2] = 20;
-    charsForDisplay[3] = 20;
+    charsForDisplay[0] = 10;
+    charsForDisplay[1] = 10;
+    charsForDisplay[2] = 10;
+    charsForDisplay[3] = 10;
 
     if (++locationOfDot == noOfDigitLocations)
     {
       locationOfDot = 0;
     }
 
-    charsForDisplay[locationOfDot] = 21;  // dot
+    charsForDisplay[locationOfDot] |= 0x80;  // dot
 
     return;
   }
@@ -412,11 +391,11 @@ inline void configureValueForDisplay(bool _EDD_isActive, const uint16_t _ValueTo
   // assign the decimal point location
   if (energyValueExceeds10kWh)
   {
-    charsForDisplay[1] += 10;
+    charsForDisplay[1] |= 0x80;
   }  // dec point after 2nd digit
   else
   {
-    charsForDisplay[0] += 10;
+    charsForDisplay[0] |= 0x80;
   }  // dec point after 1st digit
 }
 

@@ -51,6 +51,18 @@ inline constexpr bool OLD_PCB{ true }; /**< set it to 'true' if the old PCB is u
 inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::SEG }; /**< set it to installed display including optional additional logic chips */
 
 ////////////////////////////////////////////////////////////////////////////////////////
+// WARNING: the 7-seg display uses a lot of pins
+//
+// For SEG_HW (Hardware-Driven Display)
+// Pins: 5, 6, 7, 8, 9, 14, 15, 16
+// Pins 2, 3, 4, 10, 11, 12, 13 are available for other uses (e.g. triac, relay control, diversion pin, etc.)
+//
+// For SEG (Software-Driven Display)
+// Pins: 2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16
+// Only 3 pins, 3, 4 and 15, are available for other uses (e.g. triac, relay control, diversion pin, etc.)
+//
+
+////////////////////////////////////////////////////////////////////////////////////////
 // allocation of digital pins which are not dependent on the display type that is in use
 //
 inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 4 };         /**< for 1-phase PCB - "trigger" port is pin 4, "mode" port is pin 3 */
