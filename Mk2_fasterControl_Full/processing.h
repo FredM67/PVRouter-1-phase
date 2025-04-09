@@ -53,7 +53,7 @@ inline volatile uint8_t copyOf_lowestNoOfSampleSetsPerMainsCycle;  /**<  */
 inline volatile uint16_t copyOf_sampleSetsDuringThisDatalogPeriod; /**< copy of for counting the sample sets during each datalogging period */
 inline volatile uint16_t copyOf_countLoadON[NO_OF_DUMPLOADS];      /**< copy of number of cycle the load was ON (over 1 datalog period) */
 
-#ifdef TEMP_ENABLED
+#if TEMP_SENSOR_PRESENT
 inline PayloadTx_struct< temperatureSensing.get_size() > tx_data; /**< logging data */
 #else
 inline PayloadTx_struct<> tx_data; /**< logging data */
