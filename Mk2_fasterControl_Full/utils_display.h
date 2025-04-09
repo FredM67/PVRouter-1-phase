@@ -86,7 +86,7 @@ inline constexpr uint8_t digitValueMap[noOfPossibleCharacters][noOfDigitSelectio
 };
 
 // a tidy means of identifying the DP status data when accessing the above table
-inline constexpr uint8_t DPstatus_columnID = noOfDigitSelectionLines;
+inline constexpr uint8_t DPstatus_columnID{ noOfDigitSelectionLines };
 
 inline constexpr uint8_t digitLocationMap[noOfDigitLocations][noOfDigitLocationLines]{
   LOW, LOW,    // Digit 1
@@ -171,7 +171,7 @@ inline void update7SegmentHWDisplay()
   }
 
   // 5. Determine the character to be displayed at this new location
-  const auto digitVal{ charsForDisplay[digitLocationThatIsActive] };
+  const auto& digitVal{ charsForDisplay[digitLocationThatIsActive] };
 
   // 6. Configure the 7-segment driver for the character to be displayed
   for (uint8_t line = 0; line < noOfDigitSelectionLines; ++line)
@@ -313,12 +313,12 @@ inline void update7SegmentSWDisplay()
   }
 
   // 3. Determine the relevant character for the new active location
-  const auto digitVal{ charsForDisplay[digitLocationThatIsActive] };
+  const auto& digitVal{ charsForDisplay[digitLocationThatIsActive] };
 
   // 4. Set up the segment drivers for the character to be displayed (includes the DP)
   for (uint8_t segment = 0; segment < noOfSegmentsPerDigit; ++segment)
   {
-    const auto segmentState{ segMap[digitVal][segment] };
+    const auto& segmentState{ segMap[digitVal][segment] };
     setPinState(segmentDrivePin[segment], segmentState);
   }
 
@@ -373,19 +373,22 @@ inline void initializeDisplay()
  * 
  * @ingroup 7SegDisplay
  */
-inline void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToDisplay)
+inline void configureValueForDisplay(bool _EDD_isActive, const uint16_t _ValueToDisplay)
 {
   if constexpr (!(TYPE_OF_DISPLAY == DisplayType::SEG || TYPE_OF_DISPLAY == DisplayType::SEG_HW))
   {
     return;
   }
 
-  static uint8_t locationOfDot{ 0 };
-
   if (!_EDD_isActive)
   {
+    static uint8_t locationOfDot{ 0 };
+
     // "walking dots" display
-    charsForDisplay[locationOfDot] = 20;  // blank
+    charsForDisplay[0] = 20;
+    charsForDisplay[1] = 20;
+    charsForDisplay[2] = 20;
+    charsForDisplay[3] = 20;
 
     if (++locationOfDot == noOfDigitLocations)
     {
