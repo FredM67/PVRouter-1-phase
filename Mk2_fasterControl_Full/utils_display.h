@@ -313,7 +313,7 @@ inline void update7SegmentSWDisplay()
 ////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief Initializes the display based on the type of display defined by TYPE_OF_DISPLAY.
+ * @brief Initializes the display for hardware-driven 7-segment displays.
  * 
  * @details This function determines the type of display (hardware-driven or software-driven) 
  *          and calls the appropriate initialization function.
