@@ -1,6 +1,6 @@
 /**
  * @file utils.h
- * @author Fredéric Metrich (frederic.metrich@live.fr)
+ * @author Frédéric Metrich (frederic.metrich@live.fr)
  * @brief Some utility functions
  * @version 0.1
  * @date 2023-02-09
@@ -23,9 +23,22 @@
 #include "processing.h"
 #include "teleinfo.h"
 
+#include "utils_temp.h"
+
 /**
- * @brief Print the configuration during start
+ * @brief Print the configuration during startup.
  *
+ * This function outputs the system configuration to the Serial output during startup.
+ * It includes details about the sketch, build information, electrical settings, and
+ * enabled features.
+ *
+ * @details
+ * - Prints the sketch ID, branch name, commit hash, and build date/time.
+ * - Outputs electrical settings such as power calibration, voltage calibration, and phase calibration.
+ * - Displays enabled features like temperature sensing, dual tariff, load rotation, relay diversion, and RF communication.
+ * - Logs the selected datalogging format (Human-readable, IoT, or EmonCMS).
+ *
+ * @ingroup Initialization
  */
 inline void printConfiguration()
 {
@@ -99,6 +112,15 @@ inline void printConfiguration()
 /**
  * @brief Prints the load priorities to the Serial output.
  *
+ * This function logs the current load priorities and states to the Serial output
+ * for debugging purposes. It provides a detailed view of the load configuration
+ * and their respective priorities.
+ *
+ * @details
+ * - Each load's priority and state are printed in a human-readable format.
+ * - This function is only active when debugging is enabled (`ENABLE_DEBUG`).
+ *
+ * @ingroup GeneralProcessing
  */
 inline void logLoadPriorities()
 {
@@ -115,8 +137,17 @@ inline void logLoadPriorities()
 }
 
 /**
- * @brief Prints data logs to the Serial output in text format
+ * @brief Prints data logs to the Serial output in text format.
  *
+ * This function outputs telemetry data in a human-readable text format to the Serial output.
+ * It includes information about power, voltage, temperature, and system performance metrics.
+ *
+ * @details
+ * - Prints total power, phase-specific power, and RMS voltage for each phase.
+ * - Includes temperature data if temperature sensing is enabled.
+ * - Outputs additional system metrics like the number of sample sets and absence of diverted energy count.
+ *
+ * @ingroup Telemetry
  */
 inline void printForSerialText()
 {
@@ -174,9 +205,20 @@ inline void printForSerialText()
 }
 
 /**
- * @brief Write on Serial in EmonESP format
- * 
- * @param bOffPeak state of on/off-peak period
+ * @brief Write telemetry data to Serial in EmonCMS format.
+ *
+ * This function outputs telemetry data in a format compatible with EmonCMS, including
+ * power, voltage, load states, temperature, and tariff information.
+ *
+ * @param bOffPeak Indicates whether the system is in an off-peak tariff period.
+ *
+ * @details
+ * - Outputs total power and phase-specific power.
+ * - Includes load ON percentages for each load.
+ * - Outputs temperature data if temperature sensing is enabled.
+ * - Includes tariff information if dual tariff is enabled.
+ *
+ * @ingroup Telemetry
  */
 inline void printForEmonCMS(const bool bOffPeak)
 {
@@ -224,25 +266,25 @@ inline void printForEmonCMS(const bool bOffPeak)
 /**
  * @brief Sends telemetry data using the TeleInfo class.
  *
- * This function collects various telemetry data points, such as power grid data, 
- * relay averages, diverted power, energy, voltage, and temperature readings, 
- * and sends them in a structured telemetry frame using the `TeleInfo` class.
+ * This function collects various telemetry data (e.g., power, voltage, temperature, etc.)
+ * and sends it in a structured format using the `TeleInfo` class. The data is sent as a
+ * telemetry frame, which starts with a frame initialization, includes multiple data points,
+ * and ends with a frame finalization.
  *
- * The telemetry frame includes:
- * - Power grid data ("P").
- * - Relay average ("R") if relay diversion is enabled (`RELAY_DIVERSION`).
- * - Diverted power ("D").
- * - Diverted energy in watt-hours ("E").
- * - Voltage in volts ("V").
- * - Temperature readings ("T1", "T2", ..., "Tn") if temperature sensors are present (`TEMP_SENSOR_PRESENT`).
- * - Absence of diverted energy count ("NoED") for 50Hz or 60Hz supply frequency.
+ * The function supports conditional features such as relay diversion, temperature sensing,
+ * and different supply frequencies (50 Hz or 60 Hz).
  *
- * The function skips invalid temperature readings (e.g., out-of-range or disconnected sensors).
+ * @details
+ * - **Power Data**: Sends the total power grid data.
+ * - **Relay Data**: If relay diversion is enabled (`RELAY_DIVERSION`), sends the average relay data.
+ * - **Voltage Data**: Sends the voltage data for each phase.
+ * - **Temperature Data**: If temperature sensing is enabled (`TEMP_SENSOR_PRESENT`), sends valid temperature readings.
+ * - **Absence of Diverted Energy Count**: The amount of seconds without diverting energy.
  *
- * @note The function uses compile-time constants (`constexpr`) to include or exclude
- *       specific telemetry data points based on the configuration.
+ * @note The function uses compile-time constants (`constexpr`) to include or exclude specific features.
+ *       Invalid temperature readings (e.g., `OUTOFRANGE_TEMPERATURE` or `DEVICE_DISCONNECTED_RAW`) are skipped.
  *
- * @see TeleInfo
+ * @throws static_assert If `SUPPLY_FREQUENCY` is not 50 or 60 Hz.
  */
 void sendTelemetryData()
 {
@@ -289,9 +331,21 @@ void sendTelemetryData()
 }
 
 /**
- * @brief Prints data logs to the Serial output in text or json format
+ * @brief Prints or sends telemetry data logs based on the selected output format.
  *
- * @param bOffPeak true if off-peak tariff is active
+ * This function handles the transmission of telemetry data in various formats, such as
+ * human-readable text, IoT telemetry, or EmonCMS format. It also ensures that the first
+ * incomplete datalogging event is skipped during startup.
+ *
+ * @param bOffPeak Indicates whether the system is in an off-peak tariff period.
+ *
+ * @details
+ * - If RF communication is enabled, it sends RF data.
+ * - Depending on the `SERIAL_OUTPUT_TYPE`, it prints data in text format, sends telemetry
+ *   data, or outputs data in EmonCMS format.
+ * - Skips the first datalogging event during startup to avoid incomplete data.
+ *
+ * @ingroup GeneralProcessing
  */
 inline void sendResults(bool bOffPeak)
 {
@@ -323,8 +377,16 @@ inline void sendResults(bool bOffPeak)
 
 /**
  * @brief Get the available RAM during setup
+/**
+ * @brief Get the available RAM during setup.
  *
- * @return int The amount of free RAM
+ * This function calculates the amount of free RAM available in the system.
+ * It is useful for debugging and ensuring that the system has sufficient memory
+ * for proper operation.
+ *
+ * @return int The amount of free RAM in bytes.
+ *
+ * @ingroup Debugging
  */
 inline int freeRam()
 {

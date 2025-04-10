@@ -385,7 +385,6 @@ void processCalculationsForLogging()
  * @see setupOLED
  * @see initializeDisplay
  * @see initializeProcessing
- * @see initializeOptionalPins
  * @see logLoadPriorities
  */
 void setup()
@@ -406,8 +405,6 @@ void setup()
 
   // initializes all loads to OFF at startup
   initializeProcessing();
-
-  initializeOptionalPins();
 
   logLoadPriorities();
 

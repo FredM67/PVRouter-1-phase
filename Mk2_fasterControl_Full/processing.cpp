@@ -93,21 +93,123 @@ remove_cv< remove_reference< decltype(DATALOG_PERIOD_IN_MAINS_CYCLES) >::type >:
 bool beyondStartUpPeriod{ false }; /**< start-up delay, allows things to settle */
 
 /**
+ * @brief Retrieves the output pins configuration.
+ *
+ * This function determines which pins are configured as output pins
+ * based on the current hardware setup. It ensures that no pin is
+ * configured multiple times and handles special cases like the watchdog pin.
+ *
+ * @return A 16-bit value representing the configured output pins.
+ *         Returns 0 if an invalid configuration is detected.
+ *
+ * @note This function is marked as `constexpr` and can be evaluated at compile time.
+ *
+ * @ingroup Initialization
+ */
+constexpr uint16_t getOutputPins()
+{
+  uint16_t output_pins{ 0 };
+
+  if (watchDogPin != 0xff)
+  {
+    if (bit_read(output_pins, watchDogPin))
+      return 0;
+
+    bit_set(output_pins, watchDogPin);
+  }
+
+  for (const auto &loadPin : physicalLoadPin)
+  {
+    if (loadPin == 0xff)
+      return 0;
+
+    if (bit_read(output_pins, loadPin))
+      return 0;
+
+    bit_set(output_pins, loadPin);
+  }
+
+  if constexpr (RELAY_DIVERSION)
+  {
+    for (uint8_t idx = 0; idx < relays.get_size(); ++idx)
+    {
+      const auto relayPin = relays.get_relay(idx).get_pin();
+
+      if (relayPin != 0xff)
+      {
+        if (bit_read(output_pins, relayPin))
+          return 0;
+
+        bit_set(output_pins, relayPin);
+      }
+    }
+  }
+
+  return output_pins;
+}
+
+/**
+ * @brief Retrieves the input pins configuration.
+ *
+ * This function determines which pins are configured as input pins
+ * based on the current hardware setup. It ensures that no pin is
+ * configured multiple times and handles special cases like the dual tariff,
+ * diversion, rotation, and force pins.
+ *
+ * @return A 16-bit value representing the configured input pins.
+ *         Returns 0 if an invalid configuration is detected.
+ *
+ * @note This function is marked as `constexpr` and can be evaluated at compile time.
+ *
+ * @ingroup Initialization
+ */
+constexpr uint16_t getInputPins()
+{
+  uint16_t input_pins{ 0 };
+
+  if (dualTariffPin != 0xff)
+  {
+    if (bit_read(input_pins, dualTariffPin))
+      return 0;
+
+    bit_set(input_pins, dualTariffPin);
+  }
+
+  if (diversionPin != 0xff)
+  {
+    if (bit_read(input_pins, diversionPin))
+      return 0;
+
+    bit_set(input_pins, diversionPin);
+  }
+
+  if (rotationPin != 0xff)
+  {
+    if (bit_read(input_pins, rotationPin))
+      return 0;
+
+    bit_set(input_pins, rotationPin);
+  }
+
+  if (forcePin != 0xff)
+  {
+    if (bit_read(input_pins, forcePin))
+      return 0;
+
+    bit_set(input_pins, forcePin);
+  }
+
+  return input_pins;
+}
+
+/**
  * @brief Initializes the ports and load states for processing
  *
  */
 void initializeProcessing()
 {
-  for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i)
-  {
-    loadPrioritiesAndState[i] = loadPrioritiesAtStartup[i];
-    pinMode(physicalLoadPin[i], OUTPUT);  // driver pin for Load #n
-    loadPrioritiesAndState[i] &= loadStateMask;
-  }
-
-  updatePhysicalLoadStates();  // allows the logical-to-physical mapping to be changed
-
-  updatePortsStates();  // updates output pin states
+  setPinsAsOutput(getOutputPins());      // set the output pins as OUTPUT
+  setPinsAsInputPullup(getInputPins());  // set the input pins as INPUT_PULLUP
 
   // First stop the ADC
   bit_clear(ADCSRA, ADEN);
@@ -133,50 +235,6 @@ void initializeProcessing()
   bit_set(ADCSRA, ADSC);  // start ADC manually first time
 
   sei();  // Enable Global Interrupts
-}
-
-/**
- * @brief Initializes the optional pins
- *
- */
-void initializeOptionalPins()
-{
-  if constexpr (DUAL_TARIFF)
-  {
-    pinMode(dualTariffPin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
-    delay(100);                            // allow time to settle
-
-    //ul_TimeOffPeak = millis();
-  }
-
-  if constexpr (OVERRIDE_PIN_PRESENT)
-  {
-    pinMode(forcePin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
-    delay(100);                       // allow time to settle
-  }
-
-  if constexpr (PRIORITY_ROTATION == RotationModes::PIN)
-  {
-    pinMode(rotationPin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
-    delay(100);                          // allow time to settle
-  }
-
-  if constexpr (DIVERSION_PIN_PRESENT)
-  {
-    pinMode(diversionPin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
-    delay(100);                           // allow time to settle
-  }
-
-  if constexpr (RELAY_DIVERSION)
-  {
-    relays.initializePins();
-  }
-
-  if constexpr (WATCHDOG_PIN_PRESENT)
-  {
-    pinMode(watchDogPin, OUTPUT);  // set as output
-    setPinOFF(watchDogPin);        // set to off
-  }
 }
 
 #if !defined(__DOXYGEN__)

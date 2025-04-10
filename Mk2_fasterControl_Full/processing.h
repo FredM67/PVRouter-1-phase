@@ -60,7 +60,6 @@ inline PayloadTx_struct<> tx_data; /**< logging data */
 #endif
 
 void initializeProcessing();
-void initializeOptionalPins();
 void updatePhysicalLoadStates();
 void updatePortsStates();
 void printParamsForSelectedOutputMode();
