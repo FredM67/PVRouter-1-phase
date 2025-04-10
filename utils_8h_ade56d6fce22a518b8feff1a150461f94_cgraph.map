@@ -1,6 +1,6 @@
 <map id="sendResults" name="sendResults">
-<area shape="rect" id="node1" title="Prints data logs to the Serial output in text or json format." alt="" coords="5,55,107,80"/>
-<area shape="rect" id="node2" href="$utils_8h.html#a988b25d4a6361b7cc751a212af170665" title="Write on Serial in EmonESP format." alt="" coords="160,5,299,31"/>
+<area shape="rect" id="node1" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="5,55,107,80"/>
+<area shape="rect" id="node2" href="$utils_8h.html#a988b25d4a6361b7cc751a212af170665" title="Write telemetry data to Serial in EmonCMS format." alt="" coords="160,5,299,31"/>
 <area shape="rect" id="node4" href="$utils_8h.html#ae46d07fd4694c49e10360b5d79163443" title="Prints data logs to the Serial output in text format." alt="" coords="161,55,297,80"/>
 <area shape="rect" id="node5" href="$utils_8h.html#a5072aae7cb8a3f575605b65c6be56329" title="Sends telemetry data using the TeleInfo class." alt="" coords="155,104,304,129"/>
 <area shape="rect" id="node3" href="$classRelayEngine.html#a2c586921b020480449159786461195aa" title="Get the current average." alt="" coords="352,5,544,31"/>

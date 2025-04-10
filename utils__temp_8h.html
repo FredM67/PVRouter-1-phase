@@ -79,7 +79,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Some utility functions for temperature sensor(s)  
+<p>Provides utilities for managing temperature sensors.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;Arduino.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="constants_8h_source.html">constants.h</a>&quot;</code><br />
@@ -89,7 +89,7 @@ Include dependency graph for utils_temp.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__temp_8h__incl.png" border="0" usemap="#aMk2__fasterControl__Full_2utils__temp_8h" alt=""/></div>
 <map name="aMk2__fasterControl__Full_2utils__temp_8h" id="aMk2__fasterControl__Full_2utils__temp_8h">
-<area shape="rect" title="Some utility functions for temperature sensor(s)" alt="" coords="688,5,860,45"/>
+<area shape="rect" title="Provides utilities for managing temperature sensors." alt="" coords="688,5,860,45"/>
 <area shape="rect" title=" " alt="" coords="863,313,947,339"/>
 <area shape="rect" href="constants_8h.html" title="Some constants." alt="" coords="657,313,755,339"/>
 <area shape="rect" href="config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="839,93,912,119"/>
@@ -132,17 +132,17 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__temp_8h__dep__incl.png" border="0" usemap="#aMk2__fasterControl__Full_2utils__temp_8hdep" alt=""/></div>
 <map name="aMk2__fasterControl__Full_2utils__temp_8hdep" id="aMk2__fasterControl__Full_2utils__temp_8hdep">
-<area shape="rect" title="Some utility functions for temperature sensor(s)" alt="" coords="692,5,864,45"/>
-<area shape="rect" href="config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="692,93,864,133"/>
-<area shape="rect" href="main_8cpp.html" title="Main code." alt="" coords="716,357,888,397"/>
-<area shape="rect" href="calibration_8h.html" title="Calibration values definition." alt="" coords="201,181,373,221"/>
-<area shape="rect" href="dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="397,181,569,221"/>
-<area shape="rect" href="processing_8h.html" title="Public functions/variables of processing engine." alt="" coords="593,181,765,221"/>
-<area shape="rect" href="teleinfo_8h.html" title=" " alt="" coords="5,181,177,221"/>
-<area shape="rect" href="utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="789,181,961,221"/>
-<area shape="rect" href="validation_8h.html" title=" " alt="" coords="840,269,1012,309"/>
-<area shape="rect" href="processing_8cpp.html" title=" " alt="" coords="541,269,713,309"/>
-<area shape="rect" href="utils_8h.html" title="Some utility functions." alt="" coords="345,269,517,309"/>
+<area shape="rect" title="Provides utilities for managing temperature sensors." alt="" coords="516,5,688,45"/>
+<area shape="rect" href="config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="516,93,688,133"/>
+<area shape="rect" href="utils_8h.html" title="Some utility functions." alt="" coords="382,269,554,309"/>
+<area shape="rect" href="calibration_8h.html" title="Calibration values definition." alt="" coords="810,181,982,221"/>
+<area shape="rect" href="main_8cpp.html" title="Main code." alt="" coords="569,357,741,397"/>
+<area shape="rect" href="dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="418,181,590,221"/>
+<area shape="rect" href="processing_8h.html" title="Public functions/variables of processing engine." alt="" coords="222,181,394,221"/>
+<area shape="rect" href="teleinfo_8h.html" title="Manages telemetry data and frame formatting." alt="" coords="26,181,198,221"/>
+<area shape="rect" href="utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="1006,181,1178,221"/>
+<area shape="rect" href="validation_8h.html" title=" " alt="" coords="614,181,786,221"/>
+<area shape="rect" href="processing_8cpp.html" title=" " alt="" coords="606,269,778,309"/>
 </map>
 </div>
 </div>
@@ -155,8 +155,14 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Some utility functions for temperature sensor(s) </p>
+<div class="textblock"><p>Provides utilities for managing temperature sensors. </p>
 <dl class="section author"><dt>Author</dt><dd>Frédéric Metrich (<a href="#" onclick="location.href='mai'+'lto:'+'fre'+'de'+'ric'+'.m'+'etr'+'ic'+'h@l'+'iv'+'e.f'+'r'; return false;">frede<span class="obfuscator">.nosp@m.</span>ric.<span class="obfuscator">.nosp@m.</span>metri<span class="obfuscator">.nosp@m.</span>ch@l<span class="obfuscator">.nosp@m.</span>ive.f<span class="obfuscator">.nosp@m.</span>r</a>) </dd></dl>
+<p>This file defines the <code>TemperatureSensing</code> class, which handles temperature sensing using DS18B20 sensors. It includes functions for initializing sensors, reading temperatures, and managing sensor addresses.</p>
+<ul>
+<li><b>Sensor Initialization</b>: Initializes the OneWire bus and requests temperature readings.</li>
+<li><b>Temperature Reading</b>: Reads and validates temperature data from sensors.</li>
+<li><b>Error Handling</b>: Handles disconnected or out-of-range sensors.</li>
+</ul>
 <dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2023-02-09</dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2024 </dd></dl>

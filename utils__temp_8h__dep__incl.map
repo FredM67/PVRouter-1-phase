@@ -1,13 +1,13 @@
 <map id="Mk2_fasterControl_Full/utils_temp.h" name="Mk2_fasterControl_Full/utils_temp.h">
-<area shape="rect" id="node1" title="Some utility functions for temperature sensor(s)" alt="" coords="692,5,864,45"/>
-<area shape="rect" id="node2" href="$config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="692,93,864,133"/>
-<area shape="rect" id="node4" href="$main_8cpp.html" title="Main code." alt="" coords="716,357,888,397"/>
-<area shape="rect" id="node3" href="$calibration_8h.html" title="Calibration values definition." alt="" coords="201,181,373,221"/>
-<area shape="rect" id="node7" href="$dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="397,181,569,221"/>
-<area shape="rect" id="node8" href="$processing_8h.html" title="Public functions/variables of processing engine." alt="" coords="593,181,765,221"/>
-<area shape="rect" id="node9" href="$teleinfo_8h.html" title=" " alt="" coords="5,181,177,221"/>
-<area shape="rect" id="node10" href="$utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="789,181,961,221"/>
-<area shape="rect" id="node11" href="$validation_8h.html" title=" " alt="" coords="840,269,1012,309"/>
-<area shape="rect" id="node5" href="$processing_8cpp.html" title=" " alt="" coords="541,269,713,309"/>
-<area shape="rect" id="node6" href="$utils_8h.html" title="Some utility functions." alt="" coords="345,269,517,309"/>
+<area shape="rect" id="node1" title="Provides utilities for managing temperature sensors." alt="" coords="516,5,688,45"/>
+<area shape="rect" id="node2" href="$config_8h.html" title="Configuration values to be set by the end&#45;user." alt="" coords="516,93,688,133"/>
+<area shape="rect" id="node6" href="$utils_8h.html" title="Some utility functions." alt="" coords="382,269,554,309"/>
+<area shape="rect" id="node3" href="$calibration_8h.html" title="Calibration values definition." alt="" coords="810,181,982,221"/>
+<area shape="rect" id="node4" href="$main_8cpp.html" title="Main code." alt="" coords="569,357,741,397"/>
+<area shape="rect" id="node7" href="$dualtariff_8h.html" title="Classes/types needed for dual&#45;tariff support." alt="" coords="418,181,590,221"/>
+<area shape="rect" id="node8" href="$processing_8h.html" title="Public functions/variables of processing engine." alt="" coords="222,181,394,221"/>
+<area shape="rect" id="node9" href="$teleinfo_8h.html" title="Manages telemetry data and frame formatting." alt="" coords="26,181,198,221"/>
+<area shape="rect" id="node10" href="$utils__display_8h.html" title="7&#45;segments display functions" alt="" coords="1006,181,1178,221"/>
+<area shape="rect" id="node11" href="$validation_8h.html" title=" " alt="" coords="614,181,786,221"/>
+<area shape="rect" id="node5" href="$processing_8cpp.html" title=" " alt="" coords="606,269,778,309"/>
 </map>

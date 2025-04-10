@@ -79,7 +79,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>This class implements the relay management engine.  
+<p>Manages a collection of relays and their behavior based on surplus and import thresholds.  
  <a href="classRelayEngine.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>&gt;</code></p>
@@ -88,10 +88,10 @@ Collaboration diagram for RelayEngine&lt; N, D &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classRelayEngine__coll__graph.png" border="0" usemap="#aRelayEngine_3_01N_00_01D_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="aRelayEngine_3_01N_00_01D_01_4_coll__map" id="aRelayEngine_3_01N_00_01D_01_4_coll__map">
-<area shape="rect" title="This class implements the relay management engine." alt="" coords="7,211,169,236"/>
-<area shape="rect" href="classrelayOutput.html" title="Relay diversion config and engine." alt="" coords="5,115,104,141"/>
+<area shape="rect" title="Manages a collection of relays and their behavior based on surplus and import thresholds." alt="" coords="7,211,169,236"/>
+<area shape="rect" href="classrelayOutput.html" title="Represents a single relay configuration and its behavior." alt="" coords="5,115,104,141"/>
 <area shape="rect" href="classEWMA__average.html" title=" " alt="" coords="129,108,378,148"/>
-<area shape="rect" href="classEWMA__average.html" title="Exponentially Weighted Moving Average." alt="" coords="172,5,335,31"/>
+<area shape="rect" href="classEWMA__average.html" title="Implements an Exponentially Weighted Moving Average (EWMA)." alt="" coords="172,5,335,31"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -112,14 +112,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4f831b566b2da140a17333ab6a39e5dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRelayEngine.html#a4f831b566b2da140a17333ab6a39e5dc">inc_duration</a> () const</td></tr>
 <tr class="memdesc:a4f831b566b2da140a17333ab6a39e5dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increment the duration's state of each relay.  <br /></td></tr>
 <tr class="separator:a4f831b566b2da140a17333ab6a39e5dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeaaf86d2721af907f0fc38ba5b833339"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRelayEngine.html#aeaaf86d2721af907f0fc38ba5b833339">initializePins</a> () const</td></tr>
-<tr class="memdesc:aeaaf86d2721af907f0fc38ba5b833339"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the pins used by the relays.  <br /></td></tr>
-<tr class="separator:aeaaf86d2721af907f0fc38ba5b833339"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3ff0ac83bf3a665174f0ea373974e3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRelayEngine.html#ab3ff0ac83bf3a665174f0ea373974e3a">printConfiguration</a> () const</td></tr>
 <tr class="memdesc:ab3ff0ac83bf3a665174f0ea373974e3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the configuration of each relay.  <br /></td></tr>
 <tr class="separator:ab3ff0ac83bf3a665174f0ea373974e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2891986bc989d9c35301711f674bc523"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRelayEngine.html#a2891986bc989d9c35301711f674bc523">proceed_relays</a> () const</td></tr>
-<tr class="memdesc:a2891986bc989d9c35301711f674bc523"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proceed all relays in increasing order (surplus) or decreasing order (import)  <br /></td></tr>
+<tr class="memdesc:a2891986bc989d9c35301711f674bc523"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proceed all relays in increasing order (surplus) or decreasing order (import).  <br /></td></tr>
 <tr class="separator:a2891986bc989d9c35301711f674bc523"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
@@ -145,16 +142,23 @@ Static Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;uint8_t N, uint8_t D = 10&gt;<br />
-class RelayEngine&lt; N, D &gt;</div><p>This class implements the relay management engine. </p>
+class RelayEngine&lt; N, D &gt;</div><p>Manages a collection of relays and their behavior based on surplus and import thresholds. </p>
+<p>The <code><a class="el" href="classRelayEngine.html" title="Manages a collection of relays and their behavior based on surplus and import thresholds.">RelayEngine</a></code> class provides functionality to manage multiple relays, including their initialization, state transitions, and configuration. It uses a sliding average to determine the current power state and adjusts the relays accordingly.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">D</td><td>The duration in minutes of the sliding average </td></tr>
-    <tr><td class="paramname">N</td><td>The number of relays to be used. This parameter is deduced automatically. </td></tr>
+    <tr><td class="paramname">N</td><td>The number of relays to be managed. </td></tr>
+    <tr><td class="paramname">D</td><td>The duration in minutes for the sliding average (default is 10 minutes).</td></tr>
   </table>
   </dd>
 </dl>
+<ul>
+<li><b>Relay Management</b>: Handles the state of multiple relays, turning them ON or OFF based on surplus and import thresholds.</li>
+<li><b>Sliding Average</b>: Uses an Exponentially Weighted Moving Average (EWMA) to calculate the average power over a configurable duration.</li>
+<li><b>State Transitions</b>: Ensures stable operation by enforcing minimum ON/OFF durations and a delay between state changes.</li>
+<li><b>Initialization</b>: Provides methods to initialize relay pins and print their configuration. </li>
+</ul>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00252">252</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00278">278</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa834d2148c13bbf4c63f949033746ecd" name="aa834d2148c13bbf4c63f949033746ecd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa834d2148c13bbf4c63f949033746ecd">&#9670;&#160;</a></span>RelayEngine() <span class="overload">[1/2]</span></h2>
@@ -184,7 +188,7 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 
 <p>Construct a list of relays. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00259">259</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00285">285</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 
 </div>
 </div>
@@ -225,8 +229,15 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 </div><div class="memdoc">
 
 <p>Construct a list of relays with a custom sliding average. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ic</td><td>Integral constant representing the sliding average duration. </td></tr>
+    <tr><td class="paramname">ref</td><td>Array of relay configurations. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00268">268</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00296">296</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 
 </div>
 </div>
@@ -259,17 +270,17 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 <p>Get the current average. </p>
 <dl class="section return"><dt>Returns</dt><dd>auto The current average </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00299">299</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00327">327</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classRelayEngine_a2c586921b020480449159786461195aa_icgraph.png" border="0" usemap="#aclassRelayEngine_a2c586921b020480449159786461195aa_icgraph" alt=""/></div>
 <map name="aclassRelayEngine_a2c586921b020480449159786461195aa_icgraph" id="aclassRelayEngine_a2c586921b020480449159786461195aa_icgraph">
 <area shape="rect" title="Get the current average." alt="" coords="451,55,643,80"/>
-<area shape="rect" href="utils_8h.html#a988b25d4a6361b7cc751a212af170665" title="Write on Serial in EmonESP format." alt="" coords="259,5,397,31"/>
+<area shape="rect" href="utils_8h.html#a988b25d4a6361b7cc751a212af170665" title="Write telemetry data to Serial in EmonCMS format." alt="" coords="259,5,397,31"/>
 <area shape="rect" href="utils_8h.html#ae46d07fd4694c49e10360b5d79163443" title="Prints data logs to the Serial output in text format." alt="" coords="260,55,396,80"/>
 <area shape="rect" href="utils_8h.html#a5072aae7cb8a3f575605b65c6be56329" title="Sends telemetry data using the TeleInfo class." alt="" coords="253,104,403,129"/>
-<area shape="rect" href="utils_8h.html#ade56d6fce22a518b8feff1a150461f94" title="Prints data logs to the Serial output in text or json format." alt="" coords="104,55,205,80"/>
+<area shape="rect" href="utils_8h.html#ade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="104,55,205,80"/>
 <area shape="rect" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,55,56,80"/>
 </map>
 </div>
@@ -311,28 +322,31 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>constexpr const auto&amp; The relay object </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00289">289</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00317">317</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classRelayEngine_a981b20422ed19d2aa87d042c583173ee_icgraph.png" border="0" usemap="#aclassRelayEngine_a981b20422ed19d2aa87d042c583173ee_icgraph" alt=""/></div>
 <map name="aclassRelayEngine_a981b20422ed19d2aa87d042c583173ee_icgraph" id="aclassRelayEngine_a981b20422ed19d2aa87d042c583173ee_icgraph">
-<area shape="rect" title="Get the relay object." alt="" coords="543,256,715,281"/>
-<area shape="rect" href="validation_8h.html#a07d77671cb50e935bf9015eb1bef3bcc" title=" " alt="" coords="373,5,467,31"/>
-<area shape="rect" href="validation_8h.html#a60096a6d3a2fc387b51a01b6ff8c53d2" title=" " alt="" coords="353,55,487,80"/>
-<area shape="rect" href="utils_8h.html#a5072aae7cb8a3f575605b65c6be56329" title="Sends telemetry data using the TeleInfo class." alt="" coords="345,104,495,129"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#ac3626c3c3160b7747b4498dc2a89a2c2" title=" " alt="" coords="106,155,295,180"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a2ca6f0e1c608f826ebb390448a05359f" title=" " alt="" coords="134,205,267,231"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a81c99a4a3d744813957238f89817677d" title=" " alt="" coords="137,256,264,281"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a24abc86405ef4b56feae244413cc774b" title=" " alt="" coords="149,307,252,332"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#aa71e6d7e93c3e3d1e39f3af24bdec669" title=" " alt="" coords="104,356,297,381"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a547e6803dac1c47448c5352ea4d4d709" title=" " alt="" coords="359,408,481,433"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a776e2d19e503b9fb8284ad2dc612d8bd" title=" " alt="" coords="347,457,493,483"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#ae6db4852c231fa9a5eb8396264c55486" title=" " alt="" coords="350,507,490,532"/>
-<area shape="rect" href="utils_8h.html#ade56d6fce22a518b8feff1a150461f94" title="Prints data logs to the Serial output in text or json format." alt="" coords="150,104,251,129"/>
-<area shape="rect" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,104,56,129"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="5,307,56,332"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a3a66d68362fb0728716ed1357b2793db" title=" " alt="" coords="127,457,274,483"/>
+<area shape="rect" title="Get the relay object." alt="" coords="551,280,723,305"/>
+<area shape="rect" href="validation_8h.html#a07d77671cb50e935bf9015eb1bef3bcc" title=" " alt="" coords="381,5,475,31"/>
+<area shape="rect" href="validation_8h.html#a60096a6d3a2fc387b51a01b6ff8c53d2" title=" " alt="" coords="361,55,495,80"/>
+<area shape="rect" href="processing_8cpp.html#ac599ad38730b3cb0276687ba6cbfaf1e" title="Retrieves the output pins configuration." alt="" coords="371,104,485,129"/>
+<area shape="rect" href="utils_8h.html#a5072aae7cb8a3f575605b65c6be56329" title="Sends telemetry data using the TeleInfo class." alt="" coords="353,153,503,179"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#ac3626c3c3160b7747b4498dc2a89a2c2" title=" " alt="" coords="114,204,303,229"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a2ca6f0e1c608f826ebb390448a05359f" title=" " alt="" coords="142,255,275,280"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a81c99a4a3d744813957238f89817677d" title=" " alt="" coords="145,305,272,331"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a24abc86405ef4b56feae244413cc774b" title=" " alt="" coords="157,356,260,381"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#aa71e6d7e93c3e3d1e39f3af24bdec669" title=" " alt="" coords="112,405,305,431"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a547e6803dac1c47448c5352ea4d4d709" title=" " alt="" coords="367,457,489,483"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a776e2d19e503b9fb8284ad2dc612d8bd" title=" " alt="" coords="355,507,501,532"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#ae6db4852c231fa9a5eb8396264c55486" title=" " alt="" coords="358,556,498,581"/>
+<area shape="rect" href="processing_8cpp.html#adeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the ports and load states for processing." alt="" coords="135,104,283,129"/>
+<area shape="rect" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,104,64,129"/>
+<area shape="rect" href="utils_8h.html#ade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="158,153,259,179"/>
+<area shape="rect" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="9,153,60,179"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="9,356,60,381"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a3a66d68362fb0728716ed1357b2793db" title=" " alt="" coords="135,507,282,532"/>
 </map>
 </div>
 
@@ -366,21 +380,24 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 <p>Get the number of relays. </p>
 <dl class="section return"><dt>Returns</dt><dd>constexpr auto The number of relays </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00278">278</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00306">306</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classRelayEngine_a1ed9500ebf4f6d7afb519c377fab42d3_icgraph.png" border="0" usemap="#aclassRelayEngine_a1ed9500ebf4f6d7afb519c377fab42d3_icgraph" alt=""/></div>
 <map name="aclassRelayEngine_a1ed9500ebf4f6d7afb519c377fab42d3_icgraph" id="aclassRelayEngine_a1ed9500ebf4f6d7afb519c377fab42d3_icgraph">
-<area shape="rect" title="Get the number of relays." alt="" coords="451,104,616,129"/>
-<area shape="rect" href="teleinfo_8h.html#a820a2f759b537f10c0543d9612390e8c" title="Calculates the total buffer size required for the telemetry frame." alt="" coords="271,5,385,31"/>
-<area shape="rect" href="validation_8h.html#a07d77671cb50e935bf9015eb1bef3bcc" title=" " alt="" coords="281,55,375,80"/>
-<area shape="rect" href="validation_8h.html#a60096a6d3a2fc387b51a01b6ff8c53d2" title=" " alt="" coords="261,104,395,129"/>
-<area shape="rect" href="utils_8h.html#a5072aae7cb8a3f575605b65c6be56329" title="Sends telemetry data using the TeleInfo class." alt="" coords="253,153,403,179"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a7d6176baab9bdbb57c4734c5b2a2a796" title=" " alt="" coords="274,203,382,228"/>
-<area shape="rect" href="utils_8h.html#ade56d6fce22a518b8feff1a150461f94" title="Prints data logs to the Serial output in text or json format." alt="" coords="104,153,205,179"/>
-<area shape="rect" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,153,56,179"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="129,203,180,228"/>
+<area shape="rect" title="Get the number of relays." alt="" coords="505,129,671,155"/>
+<area shape="rect" href="teleinfo_8h.html#a820a2f759b537f10c0543d9612390e8c" title="Calculates the total buffer size required for the telemetry frame." alt="" coords="325,5,440,31"/>
+<area shape="rect" href="validation_8h.html#a07d77671cb50e935bf9015eb1bef3bcc" title=" " alt="" coords="335,55,430,80"/>
+<area shape="rect" href="validation_8h.html#a60096a6d3a2fc387b51a01b6ff8c53d2" title=" " alt="" coords="315,104,450,129"/>
+<area shape="rect" href="processing_8cpp.html#ac599ad38730b3cb0276687ba6cbfaf1e" title="Retrieves the output pins configuration." alt="" coords="325,153,440,179"/>
+<area shape="rect" href="utils_8h.html#a5072aae7cb8a3f575605b65c6be56329" title="Sends telemetry data using the TeleInfo class." alt="" coords="308,203,457,228"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a7d6176baab9bdbb57c4734c5b2a2a796" title=" " alt="" coords="329,252,437,277"/>
+<area shape="rect" href="processing_8cpp.html#adeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the ports and load states for processing." alt="" coords="112,153,260,179"/>
+<area shape="rect" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,153,64,179"/>
+<area shape="rect" href="utils_8h.html#ade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="135,203,237,228"/>
+<area shape="rect" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="9,203,60,228"/>
+<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="161,252,211,277"/>
 </map>
 </div>
 
@@ -401,8 +418,9 @@ template&lt;uint8_t N, uint8_t D&gt; </div>
 </div><div class="memdoc">
 
 <p>Increment the duration's state of each relay. </p>
+<p>This method updates the duration of the current state for each relay and decreases the delay (<code>settle_change</code>) until the next state change is allowed. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00402">402</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00423">423</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -411,48 +429,6 @@ Here is the caller graph for this function:</div>
 <area shape="rect" title="Increment the duration&#39;s state of each relay." alt="" coords="323,5,513,31"/>
 <area shape="rect" href="main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761" title="Handles tasks that need to be executed every second." alt="" coords="104,5,275,31"/>
 <area shape="rect" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,5,56,31"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="aeaaf86d2721af907f0fc38ba5b833339" name="aeaaf86d2721af907f0fc38ba5b833339"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeaaf86d2721af907f0fc38ba5b833339">&#9670;&#160;</a></span>initializePins()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;uint8_t N, uint8_t D = 10&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classRelayEngine.html">RelayEngine</a>&lt; N, D &gt;::initializePins </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Initialize the pins used by the relays. </p>
-
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00368">368</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classRelayEngine_aeaaf86d2721af907f0fc38ba5b833339_icgraph.png" border="0" usemap="#aclassRelayEngine_aeaaf86d2721af907f0fc38ba5b833339_icgraph" alt=""/></div>
-<map name="aclassRelayEngine_aeaaf86d2721af907f0fc38ba5b833339_icgraph" id="aclassRelayEngine_aeaaf86d2721af907f0fc38ba5b833339_icgraph">
-<area shape="rect" title="Initialize the pins used by the relays." alt="" coords="320,31,515,56"/>
-<area shape="rect" href="processing_8cpp.html#a65d7d37eebe737ce9985aafedb2cb061" title="Initializes the optional pins." alt="" coords="112,5,272,31"/>
-<area shape="rect" href="test__utils__relay_2test__main_8cpp.html#a95c834d6178047ce9e1bce7cbfea2836" title=" " alt="" coords="162,55,222,80"/>
-<area shape="rect" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
 </map>
 </div>
 
@@ -484,8 +460,9 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 </div><div class="memdoc">
 
 <p>Print the configuration of each relay. </p>
+<p>This method outputs the configuration of all relays, including their pin assignments, thresholds, and minimum ON/OFF durations, to the Serial interface. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00382">382</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00403">403</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -528,15 +505,16 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Proceed all relays in increasing order (surplus) or decreasing order (import) </p>
+<p>Proceed all relays in increasing order (surplus) or decreasing order (import). </p>
+<p>This method adjusts the state of the relays based on the current average power. If surplus power is available, it tries to turn ON relays in increasing order. If power is being imported, it tries to turn OFF relays in decreasing order. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00328">328</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00361">361</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classRelayEngine_a2891986bc989d9c35301711f674bc523_icgraph.png" border="0" usemap="#aclassRelayEngine_a2891986bc989d9c35301711f674bc523_icgraph" alt=""/></div>
 <map name="aclassRelayEngine_a2891986bc989d9c35301711f674bc523_icgraph" id="aclassRelayEngine_a2891986bc989d9c35301711f674bc523_icgraph">
-<area shape="rect" title="Proceed all relays in increasing order (surplus) or decreasing order (import)" alt="" coords="323,5,485,45"/>
+<area shape="rect" title="Proceed all relays in increasing order (surplus) or decreasing order (import)." alt="" coords="323,5,485,45"/>
 <area shape="rect" href="main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761" title="Handles tasks that need to be executed every second." alt="" coords="104,13,275,38"/>
 <area shape="rect" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,13,56,38"/>
 </map>
@@ -578,7 +556,7 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00309">309</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00337">337</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -615,7 +593,7 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 </div><div class="memdoc">
 <p>EWMA average </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00399">399</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00420">420</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 
 </div>
 </div>
@@ -642,7 +620,7 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 </div><div class="memdoc">
 <p>Array of relays </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00395">395</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00416">416</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 
 </div>
 </div>
@@ -669,7 +647,7 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 </div><div class="memdoc">
 <p>Delay in seconds until next change occurs </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00397">397</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00418">418</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 
 </div>
 </div>

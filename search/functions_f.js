@@ -6,13 +6,14 @@ var searchData=
   ['setfont_3',['setFont',['../classu8x8__fake.html#a41d8ed26868e1485899bddaf6a26127d',1,'u8x8_fake']]],
   ['setpinoff_4',['setPinOFF',['../utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d',1,'utils_pins.h']]],
   ['setpinon_5',['setPinON',['../utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6',1,'utils_pins.h']]],
-  ['setpinsoff_6',['setPinsOFF',['../utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd',1,'utils_pins.h']]],
-  ['setpinson_7',['setPinsON',['../utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3',1,'utils_pins.h']]],
-  ['setpinstate_8',['setPinState',['../utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7',1,'utils_pins.h']]],
-  ['setup_9',['setUp',['../test__fastdivision_2test__main_8cpp.html#a95c834d6178047ce9e1bce7cbfea2836',1,'test_main.cpp']]],
-  ['setup_10',['setup',['../test__utils__relay_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;test_main.cpp'],['../test__utils__pins_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;test_main.cpp'],['../test__fastdivision_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;test_main.cpp'],['../main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;main.cpp']]],
-  ['setup_11',['setUp',['../test__utils__relay_2test__main_8cpp.html#a95c834d6178047ce9e1bce7cbfea2836',1,'setUp(void):&#160;test_main.cpp'],['../test__utils__pins_2test__main_8cpp.html#a95c834d6178047ce9e1bce7cbfea2836',1,'setUp(void):&#160;test_main.cpp']]],
-  ['setupoled_12',['setupOLED',['../group__OLEDDisplay.html#ga513f8a3bd4cc3304364bb4e550d576b9',1,'utils_oled.h']]],
-  ['size_13',['size',['../types_8h.html#a694147b7171ec0b06bc8880dc100e756',1,'size(const _Tp(&amp;)[_Nm]) noexcept:&#160;types.h'],['../types_8h.html#a598e71b269336fef3370d0420348332d',1,'size(const _Tp(&amp;)[0]) noexcept:&#160;types.h']]],
-  ['startframe_14',['startFrame',['../classTeleInfo.html#ac3c9628b79d8f92c3d80dfdda4078e66',1,'TeleInfo']]]
+  ['setpinsasinputpullup_6',['setPinsAsInputPullup',['../utils__pins_8h.html#ac106ac6266d5d7a5328ea0c63778a873',1,'utils_pins.h']]],
+  ['setpinsasoutput_7',['setPinsAsOutput',['../utils__pins_8h.html#ad448cf4026a22a8190ea178a02702b2e',1,'utils_pins.h']]],
+  ['setpinsoff_8',['setPinsOFF',['../utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd',1,'utils_pins.h']]],
+  ['setpinson_9',['setPinsON',['../utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3',1,'utils_pins.h']]],
+  ['setpinstate_10',['setPinState',['../utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7',1,'utils_pins.h']]],
+  ['setup_11',['setUp',['../test__fastdivision_2test__main_8cpp.html#a95c834d6178047ce9e1bce7cbfea2836',1,'setUp(void):&#160;test_main.cpp'],['../test__utils__pins_2test__main_8cpp.html#a95c834d6178047ce9e1bce7cbfea2836',1,'setUp(void):&#160;test_main.cpp'],['../test__utils__relay_2test__main_8cpp.html#a95c834d6178047ce9e1bce7cbfea2836',1,'setUp(void):&#160;test_main.cpp']]],
+  ['setup_12',['setup',['../main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;main.cpp'],['../test__fastdivision_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;test_main.cpp'],['../test__utils__pins_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;test_main.cpp'],['../test__utils__relay_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'setup():&#160;test_main.cpp']]],
+  ['setupoled_13',['setupOLED',['../group__OLEDDisplay.html#ga513f8a3bd4cc3304364bb4e550d576b9',1,'utils_oled.h']]],
+  ['size_14',['size',['../types_8h.html#a694147b7171ec0b06bc8880dc100e756',1,'size(const _Tp(&amp;)[_Nm]) noexcept:&#160;types.h'],['../types_8h.html#a598e71b269336fef3370d0420348332d',1,'size(const _Tp(&amp;)[0]) noexcept:&#160;types.h']]],
+  ['startframe_15',['startFrame',['../classTeleInfo.html#ac3c9628b79d8f92c3d80dfdda4078e66',1,'TeleInfo']]]
 ];
