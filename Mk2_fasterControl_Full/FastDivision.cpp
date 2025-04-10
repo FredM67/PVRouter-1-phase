@@ -1,8 +1,8 @@
 #include "FastDivision.h"
 
-unsigned int divu10(unsigned int n)
+uint16_t divu10(uint16_t n)
 {
-  unsigned long working;
+  uint16_t working;
   asm volatile(
     "ldi  %A1, %3   \n\t"
     "ldi  %C1, 0x00 \n\t"
