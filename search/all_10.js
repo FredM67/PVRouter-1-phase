@@ -15,10 +15,10 @@ var searchData=
   ['posttransitioncount_12',['postTransitionCount',['../processing_8cpp.html#aefaf5733efee19a73b7cbcb1159ff61f',1,'processing.cpp']]],
   ['powerdiverted_13',['powerDiverted',['../classPayloadTx__struct.html#a46ada94b2b6830a0becabcc2106384c1',1,'PayloadTx_struct']]],
   ['powergrid_14',['powerGrid',['../classPayloadTx__struct.html#ac9a5b0c7e1f4927ce571d5f46cbdcf85',1,'PayloadTx_struct']]],
-  ['printconfiguration_15',['printConfiguration',['../utils_8h.html#aa45f069fe76674a03f3dd560dd00b1ee',1,'printConfiguration():&#160;utils.h'],['../classRelayEngine.html#ab3ff0ac83bf3a665174f0ea373974e3a',1,'RelayEngine::printConfiguration()']]],
+  ['printconfiguration_15',['printConfiguration',['../group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee',1,'printConfiguration():&#160;utils.h'],['../classRelayEngine.html#ab3ff0ac83bf3a665174f0ea373974e3a',1,'RelayEngine::printConfiguration()']]],
   ['printdualtariffconfiguration_16',['printDualTariffConfiguration',['../group__DualTariff.html#ga4378fe99f16f9f2a6990ac70c27783a2',1,'dualtariff.h']]],
-  ['printforemoncms_17',['printForEmonCMS',['../utils_8h.html#a988b25d4a6361b7cc751a212af170665',1,'utils.h']]],
-  ['printforserialtext_18',['printForSerialText',['../utils_8h.html#ae46d07fd4694c49e10360b5d79163443',1,'utils.h']]],
+  ['printforemoncms_17',['printForEmonCMS',['../group__Telemetry.html#ga988b25d4a6361b7cc751a212af170665',1,'utils.h']]],
+  ['printforserialtext_18',['printForSerialText',['../group__Telemetry.html#gae46d07fd4694c49e10360b5d79163443',1,'utils.h']]],
   ['printparamsforselectedoutputmode_19',['printParamsForSelectedOutputMode',['../processing_8h.html#aa2b3b1d496e37e5f29af6a766743dc8b',1,'printParamsForSelectedOutputMode():&#160;processing.cpp'],['../processing_8cpp.html#aa2b3b1d496e37e5f29af6a766743dc8b',1,'printParamsForSelectedOutputMode():&#160;processing.cpp']]],
   ['printrelayconfiguration_20',['printRelayConfiguration',['../classrelayOutput.html#aa900099d8298cde7d15e3e2dd804df4a',1,'relayOutput']]],
   ['probe_21',['probe',['../structis__convertible.html#a4b67fbbf807af90352d6b38f46f2ee81',1,'is_convertible::probe(...)'],['../structis__convertible.html#a827d7bb4bc19958bb60b7837af5e177e',1,'is_convertible::probe(To)'],['../structis__class.html#ab9ff7dbb1a002cd36c23fbfecca435ee',1,'is_class::probe(...)'],['../structis__class.html#a0ee38e4888cf2c1d5381da554c1b6e32',1,'is_class::probe(void(U::*)(void))'],['../classis__base__of.html#aef38e5fe99248c8e7cb3a8126ea7102c',1,'is_base_of::probe(...)'],['../classis__base__of.html#adab6b4c853b8211344b11836e36a6ceb',1,'is_base_of::probe(const TBase *)']]],
@@ -44,5 +44,5 @@ var searchData=
   ['processstartup_41',['processStartUp',['../group__TimeCritical.html#gaeae271d1c55664c3424b634191a0996b',1,'processStartUp():&#160;processing.cpp'],['../group__TimeCritical.html#gaeae271d1c55664c3424b634191a0996b',1,'processStartUp():&#160;processing.cpp']]],
   ['processvoltage_42',['processVoltage',['../group__TimeCritical.html#ga9747b6178245c423a864bff088cfa453',1,'processVoltage():&#160;processing.cpp'],['../group__TimeCritical.html#ga9747b6178245c423a864bff088cfa453',1,'processVoltage():&#160;processing.cpp']]],
   ['processvoltagerawsample_43',['processVoltageRawSample',['../group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57',1,'processVoltageRawSample(const int16_t rawSample):&#160;processing.cpp'],['../group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57',1,'processVoltageRawSample(int16_t rawSample):&#160;processing.cpp']]],
-  ['project_5fpath_44',['PROJECT_PATH',['../utils_8h.html#a799965f801bbe1f540c3100566f78d81',1,'utils.h']]]
+  ['project_5fpath_44',['PROJECT_PATH',['../version_8h.html#a799965f801bbe1f540c3100566f78d81',1,'version.h']]]
 ];

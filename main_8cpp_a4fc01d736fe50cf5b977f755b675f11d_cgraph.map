@@ -3,8 +3,8 @@
 <area shape="rect" id="node2" href="$utils_8h.html#aac7b29dc45caaaca67299571f6a2dcc0" title="Get the available RAM during setup /**." alt="" coords="142,55,221,80"/>
 <area shape="rect" id="node3" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="118,104,245,129"/>
 <area shape="rect" id="node11" href="$processing_8cpp.html#adeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the ports and load states for processing." alt="" coords="603,207,751,232"/>
-<area shape="rect" id="node19" href="$utils_8h.html#ae473b1c0d80fe056d1fab9bdee38aca1" title="Prints the load priorities to the Serial output." alt="" coords="116,205,247,231"/>
-<area shape="rect" id="node20" href="$utils_8h.html#aa45f069fe76674a03f3dd560dd00b1ee" title="Print the configuration during startup." alt="" coords="112,255,251,280"/>
+<area shape="rect" id="node19" href="$group__GeneralProcessing.html#gae473b1c0d80fe056d1fab9bdee38aca1" title="Prints the load priorities to the Serial output." alt="" coords="116,205,247,231"/>
+<area shape="rect" id="node20" href="$group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee" title="Print the configuration during startup." alt="" coords="112,255,251,280"/>
 <area shape="rect" id="node22" href="$group__OLEDDisplay.html#ga513f8a3bd4cc3304364bb4e550d576b9" title="Setup the OLED display." alt="" coords="135,304,228,329"/>
 <area shape="rect" id="node4" href="$group__SegDisplay.html#gada41f61abba371bab816bae257291f92" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="351,55,502,80"/>
 <area shape="rect" id="node10" href="$group__SegDisplay.html#ga41e6969691858ccbfcc03d15d9008c63" title="Initializes the display for software&#45;driven 7&#45;segment displays." alt="" coords="353,104,501,129"/>
@@ -13,8 +13,8 @@
 <area shape="rect" id="node8" href="$utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="837,55,919,80"/>
 <area shape="rect" id="node7" href="$utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="1052,56,1131,81"/>
 <area shape="rect" id="node9" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="1058,183,1125,208"/>
-<area shape="rect" id="node12" href="$processing_8cpp.html#a8995e5745b217d64477574abf086acc7" title="Retrieves the input pins configuration." alt="" coords="827,207,929,232"/>
-<area shape="rect" id="node14" href="$processing_8cpp.html#ac599ad38730b3cb0276687ba6cbfaf1e" title="Retrieves the output pins configuration." alt="" coords="821,305,935,331"/>
+<area shape="rect" id="node12" href="$group__Initialization.html#ga8995e5745b217d64477574abf086acc7" title="Retrieves the input pins configuration." alt="" coords="827,207,929,232"/>
+<area shape="rect" id="node14" href="$group__Initialization.html#gac599ad38730b3cb0276687ba6cbfaf1e" title="Retrieves the output pins configuration." alt="" coords="821,305,935,331"/>
 <area shape="rect" id="node17" href="$utils__pins_8h.html#ac106ac6266d5d7a5328ea0c63778a873" title="Set the pins as INPUT_PULLUP." alt="" coords="799,256,957,281"/>
 <area shape="rect" id="node18" href="$utils__pins_8h.html#ad448cf4026a22a8190ea178a02702b2e" title="Set the pins as OUTPUT." alt="" coords="813,355,943,380"/>
 <area shape="rect" id="node13" href="$utils__pins_8h.html#abaa54130a12679d0dcc0e7578e0e4d37" title="Read the specified bit." alt="" coords="1054,232,1129,257"/>

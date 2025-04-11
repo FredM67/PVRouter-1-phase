@@ -10,7 +10,7 @@ var searchData=
   ['loadstatemask_7',['loadStateMask',['../types_8h.html#a9679e65b07cf301abc92aadaef35b3a8',1,'types.h']]],
   ['loadstateonbit_8',['loadStateOnBit',['../types_8h.html#a9e72b6e05ef972b4929a13596b0ceec6',1,'types.h']]],
   ['loadstates_9',['LoadStates',['../types_8h.html#aa689e963b2305ff62d412abb6ebf7244',1,'types.h']]],
-  ['logloadpriorities_10',['logLoadPriorities',['../utils_8h.html#ae473b1c0d80fe056d1fab9bdee38aca1',1,'utils.h']]],
+  ['logloadpriorities_10',['logLoadPriorities',['../group__GeneralProcessing.html#gae473b1c0d80fe056d1fab9bdee38aca1',1,'utils.h']]],
   ['logo_5fheight_11',['LOGO_HEIGHT',['../utils__oled_8h.html#ad2ca40462c15f86859ed5b126db6cf28',1,'utils_oled.h']]],
   ['logo_5fwidth_12',['LOGO_WIDTH',['../utils__oled_8h.html#a38f32d0c115e8616b381cb8bac2eb15d',1,'utils_oled.h']]],
   ['loop_13',['loop',['../main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;main.cpp'],['../test__fastdivision_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;test_main.cpp'],['../test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;test_main.cpp'],['../test__utils__relay_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'loop():&#160;test_main.cpp']]],

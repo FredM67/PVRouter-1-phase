@@ -11,7 +11,7 @@ var searchData=
   ['checkdiversiononoff_8',['checkDiversionOnOff',['../main_8cpp.html#a31f3d562faae6b598324b56299d74f7d',1,'main.cpp']]],
   ['clear_9',['clear',['../classmovingAvg.html#adc157cfdb883805b88f3979cebb72de7',1,'movingAvg']]],
   ['cleardisplay_10',['clearDisplay',['../classu8x8__fake.html#ae52ea4436df7b4d975c4e075e86db1d3',1,'u8x8_fake::clearDisplay()'],['../group__OLEDDisplay.html#gafaa5f070126ac5184a648b484e7cf276',1,'clearDisplay():&#160;utils_oled.h']]],
-  ['commit_5fhash_11',['COMMIT_HASH',['../utils_8h.html#a2c55f8693f5917de9217fba7c72ce663',1,'utils.h']]],
+  ['commit_5fhash_11',['COMMIT_HASH',['../version_8h.html#a2c55f8693f5917de9217fba7c72ce663',1,'version.h']]],
   ['conditional_12',['conditional',['../structconditional.html',1,'']]],
   ['conditional_2ehpp_13',['conditional.hpp',['../conditional_8hpp.html',1,'']]],
   ['conditional_3c_20datalog_5fperiod_5fin_5fseconds_20_2asupply_5ffrequency_20_3e_14',['conditional&lt; DATALOG_PERIOD_IN_SECONDS *SUPPLY_FREQUENCY &gt;',['../config__system_8h.html#a64974d8fd16329af198c01ac535e2d9f',1,'config_system.h']]],
@@ -33,6 +33,7 @@ var searchData=
   ['countloadon_30',['countLoadON',['../processing_8cpp.html#a2f61fd181a2806e678e5473eaad03891',1,'processing.cpp']]],
   ['cr_31',['CR',['../classTeleInfo.html#a710390df1d82afc54addcd2edb3405ae',1,'TeleInfo']]],
   ['cumvdeltasthiscycle_5flong_32',['cumVdeltasThisCycle_long',['../processing_8cpp.html#a237efa864aaf231398b703d968fb3cc3',1,'processing.cpp']]],
-  ['currentsensor_5fdiverted_33',['currentSensor_diverted',['../processing_8h.html#acc81dd6395f3e81e9017503274f6baef',1,'processing.h']]],
-  ['currentsensor_5fgrid_34',['currentSensor_grid',['../processing_8h.html#a2ee19cf2edef14f00c131bd773dbb76a',1,'processing.h']]]
+  ['current_5ftime_33',['CURRENT_TIME',['../version_8h.html#a61eabc8e73414cfe55910effa8bcc4ef',1,'version.h']]],
+  ['currentsensor_5fdiverted_34',['currentSensor_diverted',['../processing_8h.html#acc81dd6395f3e81e9017503274f6baef',1,'processing.h']]],
+  ['currentsensor_5fgrid_35',['currentSensor_grid',['../processing_8h.html#a2ee19cf2edef14f00c131bd773dbb76a',1,'processing.h']]]
 ];

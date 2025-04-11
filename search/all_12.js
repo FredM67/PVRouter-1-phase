@@ -11,7 +11,7 @@ var searchData=
   ['segmap_8',['segMap',['../utils__display_8h.html#a1754ff1b4b434b2daa46c858ae37d2f0',1,'utils_display.h']]],
   ['segmentdrivepin_9',['segmentDrivePin',['../utils__display_8h.html#af88b8bf554461890b80aa663a44e9fdc',1,'utils_display.h']]],
   ['send_10',['send',['../classTeleInfo.html#a4f418a8ad0164f7b10956c9186cdb345',1,'TeleInfo']]],
-  ['sendresults_11',['sendResults',['../utils_8h.html#ade56d6fce22a518b8feff1a150461f94',1,'utils.h']]],
+  ['sendresults_11',['sendResults',['../group__GeneralProcessing.html#gade56d6fce22a518b8feff1a150461f94',1,'utils.h']]],
   ['sendtelemetrydata_12',['sendTelemetryData',['../utils_8h.html#a5072aae7cb8a3f575605b65c6be56329',1,'utils.h']]],
   ['serial_5foutput_5ftype_13',['SERIAL_OUTPUT_TYPE',['../config_8h.html#a8647e43a79ff20a858c1e3e3a76deadc',1,'config.h']]],
   ['serialout_14',['SERIALOUT',['../config_8h.html#ad7346ce5b913655d3f18ecbfb791a332',1,'config.h']]],

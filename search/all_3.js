@@ -10,7 +10,7 @@ var searchData=
   ['bit_5fclear_7',['bit_clear',['../utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e',1,'utils_pins.h']]],
   ['bit_5fread_8',['bit_read',['../utils__pins_8h.html#abaa54130a12679d0dcc0e7578e0e4d37',1,'utils_pins.h']]],
   ['bit_5fset_9',['bit_set',['../utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc',1,'utils_pins.h']]],
-  ['branch_5fname_10',['BRANCH_NAME',['../utils_8h.html#a2372128ceadf4346a0a2fe0995e719aa',1,'utils.h']]],
+  ['branch_5fname_10',['BRANCH_NAME',['../version_8h.html#a2372128ceadf4346a0a2fe0995e719aa',1,'version.h']]],
   ['buffer_11',['buffer',['../classTeleInfo.html#a78162488f195d2bcaeab241c03e35f21',1,'TeleInfo']]],
   ['bufferpos_12',['bufferPos',['../classTeleInfo.html#a2a0247ece933354556a11d540fbd6d43',1,'TeleInfo']]]
 ];

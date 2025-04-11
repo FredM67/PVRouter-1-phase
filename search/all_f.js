@@ -3,7 +3,7 @@ var searchData=
   ['off_0',['OFF',['../utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468',1,'OFF():&#160;utils_display.h'],['../types_8h.html#a06b890c4a964752df814257dc1f13073a88559a0cfd8250c9d65970cc145c92d4',1,'OFF():&#160;types.h']]],
   ['old_5fpcb_1',['OLD_PCB',['../config_8h.html#a8b5ec5ad0f115c9bd4e6a1beb4d1b185',1,'config.h']]],
   ['oled_2',['OLED',['../types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9a0c9b2f3f3530345ea5cd8c586478d2b7',1,'types.h']]],
-  ['oled_20display_20feature_3',['OLED display feature',['../group__OLEDDisplay.html',1,'']]],
+  ['oled_20display_20feature_3',['OLED Display Feature',['../group__OLEDDisplay.html',1,'']]],
   ['oled_5freset_4',['OLED_RESET',['../utils__oled_8h.html#a619e07239fb3b9b14d40646ab41d5b4f',1,'utils_oled.h']]],
   ['on_5',['ON',['../utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db',1,'utils_display.h']]],
   ['operator_20value_5ftype_6',['operator value_type',['../structintegral__constant.html#a37151c95f5c13a5cdd5198491d896047',1,'integral_constant']]],

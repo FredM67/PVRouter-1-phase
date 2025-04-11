@@ -4,7 +4,7 @@
 <area shape="rect" id="node4" href="$group__SegDisplay.html#ga01d09f2f19407b01775ed4b2a24b562a" title="Configures the value for display on a 7&#45;segment display." alt="" coords="122,459,309,484"/>
 <area shape="rect" id="node7" href="$main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761" title="Handles tasks that need to be executed every second." alt="" coords="130,267,301,292"/>
 <area shape="rect" id="node21" href="$main_8cpp.html#a288869292fd78ce525e6cb97a430ed02" title="Performs calculations on data for logging purposes." alt="" coords="104,508,327,533"/>
-<area shape="rect" id="node22" href="$utils_8h.html#ade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="165,557,266,583"/>
+<area shape="rect" id="node22" href="$group__GeneralProcessing.html#gade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="165,557,266,583"/>
 <area shape="rect" id="node34" href="$classRelayEngine.html#a2c8796258ac6cd4006a55c236c383287" title="Update the sliding average." alt="" coords="137,607,293,647"/>
 <area shape="rect" id="node35" href="$group__OLEDDisplay.html#gaf39aee6f9a448b67c84a828071a39f71" title="Update the OLED display with the given value." alt="" coords="164,109,267,135"/>
 <area shape="rect" id="node36" href="$main_8cpp.html#aac4a0e0b4ad49cbbab8b2626204f9492" title="Updates the temperature readings and sends a new request for the next cycle." alt="" coords="141,672,290,697"/>
@@ -22,10 +22,10 @@
 <area shape="rect" id="node10" href="$utils__pins_8h.html#abaa54130a12679d0dcc0e7578e0e4d37" title="Read the specified bit." alt="" coords="1137,204,1212,229"/>
 <area shape="rect" id="node15" href="$main_8cpp.html#a518d4266a5d9285d29e65616eccd2277" title="Handles load priority in combination with dual tariff." alt="" coords="615,279,803,319"/>
 <area shape="rect" id="node16" href="$main_8cpp.html#a9b9428fd01019319970f27b88bb1cf33" title="Rotates the load priorities." alt="" coords="893,315,1022,340"/>
-<area shape="rect" id="node17" href="$utils_8h.html#ae473b1c0d80fe056d1fab9bdee38aca1" title="Prints the load priorities to the Serial output." alt="" coords="1109,315,1240,340"/>
+<area shape="rect" id="node17" href="$group__GeneralProcessing.html#gae473b1c0d80fe056d1fab9bdee38aca1" title="Prints the load priorities to the Serial output." alt="" coords="1109,315,1240,340"/>
 <area shape="rect" id="node19" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="676,409,743,435"/>
-<area shape="rect" id="node23" href="$utils_8h.html#a988b25d4a6361b7cc751a212af170665" title="Write telemetry data to Serial in EmonCMS format." alt="" coords="401,557,539,583"/>
-<area shape="rect" id="node25" href="$utils_8h.html#ae46d07fd4694c49e10360b5d79163443" title="Prints data logs to the Serial output in text format." alt="" coords="402,607,538,632"/>
+<area shape="rect" id="node23" href="$group__Telemetry.html#ga988b25d4a6361b7cc751a212af170665" title="Write telemetry data to Serial in EmonCMS format." alt="" coords="401,557,539,583"/>
+<area shape="rect" id="node25" href="$group__Telemetry.html#gae46d07fd4694c49e10360b5d79163443" title="Prints data logs to the Serial output in text format." alt="" coords="402,607,538,632"/>
 <area shape="rect" id="node26" href="$utils_8h.html#a5072aae7cb8a3f575605b65c6be56329" title="Sends telemetry data using the TeleInfo class." alt="" coords="395,656,545,681"/>
 <area shape="rect" id="node24" href="$classRelayEngine.html#a2c586921b020480449159786461195aa" title="Get the current average." alt="" coords="613,557,805,583"/>
 <area shape="rect" id="node27" href="$classTeleInfo.html#a37b1447161869bf3ecc2faed134b7eee" title="Finalizes the frame by adding the end character and sending the buffer over Serial." alt="" coords="636,607,783,632"/>

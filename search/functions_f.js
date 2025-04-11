@@ -1,7 +1,7 @@
 var searchData=
 [
   ['send_0',['send',['../classTeleInfo.html#a4f418a8ad0164f7b10956c9186cdb345',1,'TeleInfo']]],
-  ['sendresults_1',['sendResults',['../utils_8h.html#ade56d6fce22a518b8feff1a150461f94',1,'utils.h']]],
+  ['sendresults_1',['sendResults',['../group__GeneralProcessing.html#gade56d6fce22a518b8feff1a150461f94',1,'utils.h']]],
   ['sendtelemetrydata_2',['sendTelemetryData',['../utils_8h.html#a5072aae7cb8a3f575605b65c6be56329',1,'utils.h']]],
   ['setfont_3',['setFont',['../classu8x8__fake.html#a41d8ed26868e1485899bddaf6a26127d',1,'u8x8_fake']]],
   ['setpinoff_4',['setPinOFF',['../utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d',1,'utils_pins.h']]],
