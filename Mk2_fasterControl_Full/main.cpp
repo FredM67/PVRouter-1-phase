@@ -394,8 +394,6 @@ void setup()
   DEBUG_PORT.begin(9600);
   Serial.begin(9600);  // initialize Serial interface, Do NOT set greater than 9600
 
-  pinMode(4, OUTPUT);
-
   // On start, always display config info in the serial monitor
   printConfiguration();
 
