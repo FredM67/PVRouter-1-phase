@@ -348,14 +348,14 @@ $(function() {
 <div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>  }</div>
 <div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>}</div>
 <div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span> </div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno"><a class="line" href="utils_8h.html#aac7b29dc45caaaca67299571f6a2dcc0">  393</a></span><span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code hl_function" href="utils_8h.html#aac7b29dc45caaaca67299571f6a2dcc0">freeRam</a>()</div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>{</div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>  <span class="keyword">extern</span> <span class="keywordtype">int</span> __heap_start, *__brkval;</div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>  <span class="keywordtype">int</span> v;</div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>  <span class="keywordflow">return</span> (<span class="keywordtype">int</span>)&amp;v - (__brkval == 0 ? (int)&amp;__heap_start : (<span class="keywordtype">int</span>)__brkval);</div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>}</div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span> </div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span><span class="preprocessor">#endif  </span><span class="comment">// UTILS_H</span></div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno"><a class="line" href="utils_8h.html#aac7b29dc45caaaca67299571f6a2dcc0">  391</a></span><span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code hl_function" href="utils_8h.html#aac7b29dc45caaaca67299571f6a2dcc0">freeRam</a>()</div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>{</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>  <span class="keyword">extern</span> <span class="keywordtype">int</span> __heap_start, *__brkval;</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>  <span class="keywordtype">int</span> v;</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>  <span class="keywordflow">return</span> (<span class="keywordtype">int</span>)&amp;v - (__brkval == 0 ? (int)&amp;__heap_start : (<span class="keywordtype">int</span>)__brkval);</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>}</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span> </div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span><span class="preprocessor">#endif  </span><span class="comment">// UTILS_H</span></div>
 <div class="ttc" id="aFastDivision_8h_html"><div class="ttname"><a href="FastDivision_8h.html">FastDivision.h</a></div></div>
 <div class="ttc" id="acalibration_8h_html"><div class="ttname"><a href="calibration_8h.html">calibration.h</a></div><div class="ttdoc">Calibration values definition.</div></div>
 <div class="ttc" id="aclassPayloadTx__struct_html_a46ada94b2b6830a0becabcc2106384c1"><div class="ttname"><a href="classPayloadTx__struct.html#a46ada94b2b6830a0becabcc2106384c1">PayloadTx_struct::powerDiverted</a></div><div class="ttdeci">int16_t powerDiverted</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00083">types.h:83</a></div></div>
@@ -404,7 +404,7 @@ $(function() {
 <div class="ttc" id="atypes_8h_html_a79eb4203772befbcfd761524de448ac7a589f8ced60a13f2f4c7e11c7b0875efa"><div class="ttname"><a href="types_8h.html#a79eb4203772befbcfd761524de448ac7a589f8ced60a13f2f4c7e11c7b0875efa">SerialOutputType::IoT</a></div><div class="ttdeci">@ IoT</div></div>
 <div class="ttc" id="atypes_8h_html_a79eb4203772befbcfd761524de448ac7ae04f919664e727f5d94594a506d9e8b3"><div class="ttname"><a href="types_8h.html#a79eb4203772befbcfd761524de448ac7ae04f919664e727f5d94594a506d9e8b3">SerialOutputType::HumanReadable</a></div><div class="ttdeci">@ HumanReadable</div></div>
 <div class="ttc" id="autils_8h_html_a5072aae7cb8a3f575605b65c6be56329"><div class="ttname"><a href="utils_8h.html#a5072aae7cb8a3f575605b65c6be56329">sendTelemetryData</a></div><div class="ttdeci">void sendTelemetryData()</div><div class="ttdoc">Sends telemetry data using the TeleInfo class.</div><div class="ttdef"><b>Definition:</b> <a href="utils_8h_source.html#l00291">utils.h:291</a></div></div>
-<div class="ttc" id="autils_8h_html_aac7b29dc45caaaca67299571f6a2dcc0"><div class="ttname"><a href="utils_8h.html#aac7b29dc45caaaca67299571f6a2dcc0">freeRam</a></div><div class="ttdeci">int freeRam()</div><div class="ttdoc">Get the available RAM during setup /**.</div><div class="ttdef"><b>Definition:</b> <a href="utils_8h_source.html#l00393">utils.h:393</a></div></div>
+<div class="ttc" id="autils_8h_html_aac7b29dc45caaaca67299571f6a2dcc0"><div class="ttname"><a href="utils_8h.html#aac7b29dc45caaaca67299571f6a2dcc0">freeRam</a></div><div class="ttdeci">int freeRam()</div><div class="ttdoc">Get the available RAM during setup.</div><div class="ttdef"><b>Definition:</b> <a href="utils_8h_source.html#l00391">utils.h:391</a></div></div>
 <div class="ttc" id="autils__temp_8h_html"><div class="ttname"><a href="utils__temp_8h.html">utils_temp.h</a></div><div class="ttdoc">Provides utilities for managing temperature sensors.</div></div>
 <div class="ttc" id="aversion_8h_html"><div class="ttname"><a href="version_8h.html">version.h</a></div></div>
 <div class="ttc" id="aversion_8h_html_a2372128ceadf4346a0a2fe0995e719aa"><div class="ttname"><a href="version_8h.html#a2372128ceadf4346a0a2fe0995e719aa">BRANCH_NAME</a></div><div class="ttdeci">#define BRANCH_NAME</div><div class="ttdef"><b>Definition:</b> <a href="version_8h_source.html#l00006">version.h:6</a></div></div>

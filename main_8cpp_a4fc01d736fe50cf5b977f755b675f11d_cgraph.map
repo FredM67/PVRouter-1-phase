@@ -1,6 +1,6 @@
 <map id="setup" name="setup">
 <area shape="rect" id="node1" title="Called once during startup." alt="" coords="5,180,64,205"/>
-<area shape="rect" id="node2" href="$utils_8h.html#aac7b29dc45caaaca67299571f6a2dcc0" title="Get the available RAM during setup /**." alt="" coords="142,55,221,80"/>
+<area shape="rect" id="node2" href="$utils_8h.html#aac7b29dc45caaaca67299571f6a2dcc0" title="Get the available RAM during setup." alt="" coords="142,55,221,80"/>
 <area shape="rect" id="node3" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="118,104,245,129"/>
 <area shape="rect" id="node11" href="$processing_8cpp.html#adeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the ports and load states for processing." alt="" coords="603,207,751,232"/>
 <area shape="rect" id="node19" href="$group__GeneralProcessing.html#gae473b1c0d80fe056d1fab9bdee38aca1" title="Prints the load priorities to the Serial output." alt="" coords="116,205,247,231"/>
