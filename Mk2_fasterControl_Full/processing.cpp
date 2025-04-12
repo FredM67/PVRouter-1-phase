@@ -251,13 +251,11 @@ void updatePortsStates()
 
   uint8_t i{ NO_OF_DUMPLOADS };
 
-  // On this particular PCB, the trigger has been soldered active high.  This means that the
-  // trigger line must be set to LOW to turn the load ON.
   do
   {
     --i;
     // update the local load's state.
-    if (LoadStates::LOAD_ON == physicalLoadState[i])
+    if (LoadStates::LOAD_OFF == physicalLoadState[i])
     {
       // setPinOFF(physicalLoadPin[i]);
       pinsOFF |= bit(physicalLoadPin[i]);
