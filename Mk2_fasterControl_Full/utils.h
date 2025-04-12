@@ -378,8 +378,6 @@ inline void sendResults(bool bOffPeak)
 }
 
 /**
- * @brief Get the available RAM during setup
-/**
  * @brief Get the available RAM during setup.
  *
  * This function calculates the amount of free RAM available in the system.
