@@ -197,8 +197,17 @@ constexpr uint16_t getInputPins()
 }
 
 /**
- * @brief Initializes the ports and load states for processing
+ * @brief Initializes the processing engine, including ports, load states, and ADC setup.
  *
+ * This function performs the following tasks:
+ * - Initializes the DC offset array for voltage samples.
+ * - Configures the input and output pins based on the hardware setup.
+ * - Sets up the ADC in free-running mode with interrupts enabled.
+ * - Prepares the system for processing energy and load states.
+ *
+ * @note This function must be called during system initialization to ensure proper operation.
+ *
+ * @ingroup Initialization
  */
 void initializeProcessing()
 {
@@ -232,8 +241,18 @@ void initializeProcessing()
 }
 
 /**
- * @brief update the control ports for each of the physical loads
+ * @brief Updates the control ports for each of the physical loads.
  *
+ * This function determines the ON/OFF state of each physical load and updates
+ * the corresponding control ports. It ensures that the correct pins are set
+ * to their respective states based on the load's current status.
+ *
+ * @details
+ * - If a load is OFF, its corresponding pin is added to the `pinsOFF` mask.
+ * - If a load is ON, its corresponding pin is added to the `pinsON` mask.
+ * - Finally, the pins are updated using `setPinsOFF` and `setPinsON` functions.
+ *
+ * @ingroup TimeCritical
  */
 void updatePortsStates()
 {
@@ -265,6 +284,11 @@ void updatePortsStates()
 
 /**
  * @brief This function provides the link between the logical and physical loads.
+ *
+ * This function maps the logical load states to the physical load states. It ensures
+ * that the physical loads are updated according to the logical priorities and states.
+ * The function also handles priority rotation if enabled.
+ *
  * @details The array, logicalLoadState[], contains the on/off state of all logical loads, with
  *          element 0 being for the one with the highest priority. The array,
  *          physicalLoadState[], contains the on/off state of all physical loads.
@@ -309,9 +333,18 @@ void updatePhysicalLoadStates()
 }
 
 /**
- * @brief Process with the polarity for the actual voltage sample
+ * @brief Processes the polarity of the current voltage sample.
  *
- * @param rawSample the current sample
+ * This function determines the polarity of the voltage sample by removing the DC offset
+ * and comparing the adjusted value to zero. The polarity is then stored for use in
+ * zero-crossing detection and other processing steps.
+ *
+ * @details
+ * - Removes the DC offset from the raw voltage sample using a low-pass filter (LPF).
+ * - Determines the polarity of the adjusted voltage sample (positive or negative).
+ * - Updates the `polarityOfMostRecentVsample` variable with the determined polarity.
+ *
+ * @param rawSample The raw voltage sample from the ADC.
  *
  * @ingroup TimeCritical
  */
@@ -325,9 +358,20 @@ void processPolarity(const int16_t rawSample)
 }
 
 /**
- * @brief Process the calculation for the actual current raw sample for the grid
+ * @brief Processes the raw current sample for the grid connection point.
  *
- * @param rawSample the current sample
+ * This function calculates the real power at the grid connection point using the raw
+ * current sample from the ADC. It applies a low-pass filter (LPF) to offset the high-pass
+ * filter (HPF) effect of the current transformer (CT). The filtered current sample is
+ * then used to compute the instantaneous power, which is accumulated for further processing.
+ *
+ * @details
+ * - Removes the DC offset from the raw current sample.
+ * - Applies an LPF to counteract the HPF effect of the CT.
+ * - Calculates the instantaneous power using the filtered voltage and current samples.
+ * - Accumulates the power for the current mains cycle and the datalogging period.
+ *
+ * @param rawSample The raw current sample from the ADC.
  *
  * @ingroup TimeCritical
  */
@@ -355,9 +399,20 @@ void processGridCurrentRawSample(const int16_t rawSample)
 }
 
 /**
- * @brief Process the calculation for the actual current raw sample for the diverted power
+ * @brief Processes the raw current sample for the diverted connection point.
  *
- * @param rawSample the current sample
+ * This function calculates the real power at the diverted connection point using the raw
+ * current sample from the ADC. It applies a low-pass filter (LPF) to offset the high-pass
+ * filter (HPF) effect of the current transformer (CT). The filtered current sample is
+ * then used to compute the instantaneous power, which is accumulated for further processing.
+ *
+ * @details
+ * - Removes the DC offset from the raw current sample.
+ * - Calculates the instantaneous power using the filtered voltage and current samples.
+ * - Accumulates the power for the current mains cycle and the datalogging period.
+ * - Skips processing if the load is overridden.
+ *
+ * @param rawSample The raw current sample from the ADC.
  *
  * @ingroup TimeCritical
  */
@@ -382,8 +437,18 @@ void processDivertedCurrentRawSample(const int16_t rawSample)
 }
 
 /**
- * @brief This routine prevents a zero-crossing point from being declared until a certain number
- *        of consecutive samples in the 'other' half of the waveform have been encountered.
+ * @brief Confirms the polarity of the current voltage sample.
+ *
+ * This function ensures that a zero-crossing point is not declared until a specified
+ * number of consecutive samples in the opposite half of the waveform have been encountered.
+ * It helps to stabilize polarity detection and avoid false zero-crossing detections.
+ *
+ * @details
+ * - Compares the polarity of the most recent voltage sample with the last confirmed polarity.
+ * - If the polarities match, the counter is reset.
+ * - If the polarities differ, the counter is incremented.
+ * - Once the counter exceeds the persistence threshold (`PERSISTENCE_FOR_POLARITY_CHANGE`),
+ *   the polarity is confirmed and updated.
  *
  * @ingroup TimeCritical
  */
@@ -408,7 +473,19 @@ void confirmPolarity()
 }
 
 /**
- * @brief This routine is called by the ISR when a pair of V & I sample becomes available.
+ * @brief This routine is called by the ISR when a pair of V & I samples becomes available.
+ *
+ * This function processes raw voltage and current samples to determine the energy state
+ * and manage load control. It handles zero-crossing detection, energy bucket updates,
+ * and load state adjustments based on the energy level.
+ *
+ * @details
+ * - Detects the start of a new positive or negative half-cycle based on polarity.
+ * - Processes energy contributions for each half-cycle.
+ * - Updates the energy bucket and predicts the energy state at the end of the cycle.
+ * - Adjusts logical and physical load states to maintain energy levels within thresholds.
+ * - Updates the control ports for physical loads.
+ * - Handles energy diversion display updates and ensures stability during startup.
  *
  * @ingroup TimeCritical
  */
@@ -544,7 +621,17 @@ void processRawSamples()
 }
 
 /**
- * @brief Process the calculation for the current voltage sample
+ * @brief Process the calculation for the current voltage sample.
+ *
+ * This function calculates the squared voltage value for the current sample
+ * and accumulates it for further processing. It also updates the DC offset
+ * and polarity information for the next cycle.
+ *
+ * @details
+ * - The voltage squared (V²) is calculated and accumulated for RMS calculations.
+ * - The low-pass filter is updated to remove the DC offset from the voltage signal.
+ * - The polarity of the last confirmed sample is stored for zero-crossing detection.
+ * - The number of samples during the current mains cycle is incremented.
  *
  * @ingroup TimeCritical
  */
@@ -572,9 +659,18 @@ void processVoltage()
 }
 
 /**
- * @brief Process the current voltage raw sample
+ * @brief Process the current voltage raw sample.
  *
- * @param rawSample the current sample
+ * This function processes the raw voltage sample by performing the following steps:
+ *
+ * @details
+ * - Determines the polarity of the raw voltage sample using `processPolarity()`.
+ * - Confirms the polarity using `confirmPolarity()` to ensure stability in zero-crossing detection.
+ * - Processes raw samples for energy state and load control using `processRawSamples()`.
+ * - Calculates the squared voltage value and accumulates it for RMS calculations using `processVoltage()`.
+ * - Increments the sample set counter for the current datalogging period.
+ *
+ * @param rawSample The raw voltage sample from the ADC.
  *
  * @ingroup TimeCritical
  */
@@ -594,6 +690,17 @@ void processVoltageRawSample(const int16_t rawSample)
 
 /**
  * @brief Process the startup period for the router.
+ *
+ * This function ensures that the system remains in a stable state during the startup period.
+ * It waits for the DC-blocking filters to settle and initializes key variables for energy
+ * and load management. Once the startup period is complete, the system transitions to normal
+ * operation.
+ *
+ * @details
+ * - Waits until the startup delay has elapsed, allowing filters to stabilize.
+ * - Resets energy and power accumulators for grid and diverted power.
+ * - Initializes counters for sample sets and load states.
+ * - Marks the end of the startup period by setting `beyondStartUpPeriod` to true.
  *
  * @ingroup TimeCritical
  */
@@ -616,12 +723,16 @@ void processStartUp()
 }
 
 /**
- * @brief This code is executed once per 20mS, shortly after the start of each new
+ * @brief This code is executed once per 20ms, shortly after the start of each new
  *        mains cycle on phase 0.
- * @details Changing the state of the loads  is a 3-part process:
- *          - change the LOGICAL load states as necessary to maintain the energy level
- *          - update the PHYSICAL load states according to the logical -> physical mapping
- *          - update the driver lines for each of the loads.
+ *
+ * This function manages the energy bucket and ensures that its level remains within
+ * the defined limits. It is responsible for maintaining system stability when conditions
+ * change, such as when energy import switches to export or vice versa.
+ *
+ * @details
+ * - Applies maximum and minimum limits to the energy bucket's level.
+ * - Ensures correct operation during transitions between energy import and export states.
  *
  * @ingroup TimeCritical
  */
@@ -643,9 +754,18 @@ void processStartNewCycle()
 /**
  * @brief Process the start of a new +ve half cycle, just after the zero-crossing point.
  *
+ * This function handles the processing required at the start of a new positive half-cycle
+ * of the mains waveform. It updates performance metrics, processes the latest energy
+ * contributions, and resets accumulators for the new cycle.
+ *
+ * @details
+ * - Updates the lowest number of sample sets per mains cycle for performance monitoring.
+ * - Processes the latest energy contributions using `processLatestContribution()`.
+ * - Handles data logging for the current cycle using `processDataLogging()`.
+ * - Resets per-cycle accumulators for energy and sample sets.
+ *
  * @ingroup TimeCritical
  */
-
 void processPlusHalfCycle()
 {
   // a simple routine for checking the performance of this new ISR structure
@@ -667,6 +787,17 @@ void processPlusHalfCycle()
 
 /**
  * @brief Process the start of a new -ve half cycle, just after the zero-crossing point.
+ *
+ * This function handles the processing required at the start of a new negative half-cycle
+ * of the mains waveform. It updates the low-pass filter (LPF) for DC offset removal,
+ * ensures the LPF output remains within valid limits, and predicts the energy state
+ * at the end of the mains cycle.
+ *
+ * @details
+ * - Updates the low-pass filter (LPF) for DC offset removal using the cumulative voltage deltas.
+ * - Ensures the LPF output remains within the valid range to avoid signal drift.
+ * - Calculates the average power during the first half of the mains cycle.
+ * - Predicts the energy state at the end of the mains cycle based on the average power.
  *
  * @ingroup TimeCritical
  */
@@ -712,8 +843,16 @@ void processMinusHalfCycle()
 }
 
 /**
- * @brief Process the latest contribution after each new cycle additional
- *        processing is performed after each main cycle based on phase 0.
+ * @brief Process the latest contribution after each new cycle.
+ *
+ * This function calculates the real power and energy during the last whole mains cycle.
+ * It updates the energy bucket and prepares the system for the next cycle.
+ *
+ * @details
+ * - Calculates the average real power for the grid and diverted connections.
+ * - Adjusts the grid power to account for required export (useful for PV simulation).
+ * - Converts power to energy and updates the energy bucket.
+ * - Marks the start of a new cycle for the main code.
  *
  * @ingroup TimeCritical
  */
@@ -767,6 +906,16 @@ void processLatestContribution()
 /**
  * @brief Process the case of high energy level, some action may be required.
  *
+ * This function determines whether additional loads can be switched ON when the energy
+ * level in the bucket exceeds the upper threshold. It ensures that the energy thresholds
+ * remain within valid limits and handles load activation during the post-transition period.
+ *
+ * @details
+ * - Identifies the next logical load to be added.
+ * - Updates the upper energy threshold during the post-transition period.
+ * - Ensures only the active load can be switched during the post-transition period.
+ * - Activates the identified load and updates the transition state.
+ *
  * @ingroup TimeCritical
  */
 void proceedHighEnergyLevel()
@@ -808,6 +957,17 @@ void proceedHighEnergyLevel()
 /**
  * @brief Process the case of low energy level, some action may be required.
  *
+ * This function determines whether loads can be switched OFF when the energy
+ * level in the bucket falls below the lower threshold. It ensures that the energy
+ * thresholds remain within valid limits and handles load deactivation during the
+ * post-transition period.
+ *
+ * @details
+ * - Identifies the next logical load to be removed.
+ * - Updates the lower energy threshold during the post-transition period.
+ * - Ensures only the active load can be switched during the post-transition period.
+ * - Deactivates the identified load and updates the transition state.
+ *
  * @ingroup TimeCritical
  */
 void proceedLowEnergyLevel()
@@ -847,9 +1007,19 @@ void proceedLowEnergyLevel()
 }
 
 /**
- * @brief Retrieve the next load that could be added (be aware of the order)
+ * @brief Retrieve the next load that could be removed (be aware of the reverse-order).
  *
- * @return The load number if successful, NO_OF_DUMPLOADS in case of failure
+ * This function identifies the next logical load that can be switched OFF based on
+ * the reverse order of load priorities. It ensures that the highest-priority load
+ * remains active while deactivating lower-priority loads as needed.
+ *
+ * @return The load number if successful, NO_OF_DUMPLOADS in case of failure.
+ *
+ * @details
+ * - Iterates through the load priorities in reverse order.
+ * - Checks if a load is currently ON and eligible for deactivation.
+ * - Returns the load number if a suitable load is found.
+ * - Returns NO_OF_DUMPLOADS if no load can be deactivated.
  *
  * @ingroup TimeCritical
  */
@@ -867,9 +1037,16 @@ uint8_t nextLogicalLoadToBeAdded()
 }
 
 /**
- * @brief Retrieve the next load that could be removed (be aware of the reverse-order)
+ * @brief Process with data logging.
  *
- * @return The load number if successful, NO_OF_DUMPLOADS in case of failure
+ * At the end of each datalogging period, this function copies the relevant variables
+ * for use by the main code. These variables are then reset for the next datalogging period.
+ *
+ * @details
+ * - Checks if the datalogging period has elapsed.
+ * - Copies accumulated power, energy, and sample data for the current period.
+ * - Resets the accumulators for the next datalogging period.
+ * - Signals the main processor that new logging data are available.
  *
  * @ingroup TimeCritical
  */
@@ -890,9 +1067,15 @@ uint8_t nextLogicalLoadToBeRemoved()
 
 /**
  * @brief Process with data logging.
- * @details At the end of each datalogging period, copies are made of the relevant variables
- *          for use by the main code. These variable are then reset for use during the next
- *          datalogging period.
+ *
+ * At the end of each datalogging period, this function copies the relevant variables
+ * for use by the main code. These variables are then reset for the next datalogging period.
+ *
+ * @details
+ * - Checks if the datalogging period has elapsed.
+ * - Copies accumulated power, energy, and sample data for the current period.
+ * - Resets the accumulators for the next datalogging period.
+ * - Signals the main processor that new logging data are available.
  *
  * @ingroup TimeCritical
  */
@@ -937,6 +1120,14 @@ void processDataLogging()
 /**
  * @brief Print the settings used for the selected output mode.
  *
+ * This function outputs the configuration parameters related to the selected output mode.
+ * It is primarily used for debugging and verifying the system's configuration.
+ *
+ * @details
+ * - Prints the zero-crossing persistence value in sample sets.
+ * - Prints the capacity of the energy bucket in integer energy units.
+ *
+ * @ingroup Debugging
  */
 void printParamsForSelectedOutputMode()
 {
@@ -949,31 +1140,37 @@ void printParamsForSelectedOutputMode()
 
 /**
  * @brief Interrupt Service Routine - Interrupt-Driven Analog Conversion.
- * 
- * @details An Interrupt Service Routine is now defined which instructs the ADC to perform a conversion
- *          for each of the voltage and current sensors in turn.
  *
- *          This Interrupt Service Routine is for use when the ADC is in the free-running mode.
- *          It is executed whenever an ADC conversion has finished, approx every 104 µs. In
- *          free-running mode, the ADC has already started its next conversion by the time that
- *          the ISR is executed. The ISR therefore needs to "look ahead".
+ * This ISR is triggered whenever an ADC conversion is completed, approximately every 104 µs
+ * in free-running mode. It processes the results of the completed conversion and sets up
+ * the next conversion in sequence. The ISR handles voltage and current samples for the grid
+ * and diverted connections, ensuring real-time processing of energy data.
  *
- *          At the end of conversion Type N, conversion Type N+1 will start automatically. The ISR
- *          which runs at this point therefore needs to capture the results of conversion Type N,
- *          and set up the conditions for conversion Type N+2, and so on.
+ * @details 
+ * An Interrupt Service Routine is now defined which instructs the ADC to perform a conversion
+ * for each of the voltage and current sensors in turn.
  *
- *          By means of various helper functions, all of the time-critical activities are processed
- *          within the ISR.
+ * This Interrupt Service Routine is for use when the ADC is in the free-running mode.
+ * It is executed whenever an ADC conversion has finished, approx every 104 µs. In
+ * free-running mode, the ADC has already started its next conversion by the time that
+ * the ISR is executed. The ISR therefore needs to "look ahead".
  *
- *          The main code is notified by means of a flag when fresh copies of loggable data are available.
+ * At the end of conversion Type N, conversion Type N+1 will start automatically. The ISR
+ * which runs at this point therefore needs to capture the results of conversion Type N,
+ * and set up the conditions for conversion Type N+2, and so on.
  *
- *          Keep in mind, when writing an Interrupt Service Routine (ISR):
- *            - Keep it short
- *            - Don't use delay()
- *            - Don't do serial prints
- *            - Make variables shared with the main code volatile
- *            - Variables shared with main code may need to be protected by "critical sections"
- *            - Don't try to turn interrupts off or on
+ * By means of various helper functions, all of the time-critical activities are processed
+ * within the ISR.
+ *
+ * The main code is notified by means of a flag when fresh copies of loggable data are available.
+ *
+ * @note
+ * Guidelines for writing an ISR:
+ * - Keep it short and efficient.
+ * - Avoid using delay() or serial prints.
+ * - Use `volatile` for shared variables.
+ * - Protect shared variables with critical sections if necessary.
+ * - Avoid enabling or disabling interrupts within the ISR.
  *
  * @ingroup TimeCritical
  */
