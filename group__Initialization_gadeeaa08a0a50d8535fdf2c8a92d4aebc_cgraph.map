@@ -1,5 +1,5 @@
 <map id="initializeProcessing" name="initializeProcessing">
-<area shape="rect" id="node1" title="Initializes the ports and load states for processing." alt="" coords="5,132,153,157"/>
+<area shape="rect" id="node1" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="5,132,153,157"/>
 <area shape="rect" id="node2" href="$utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="241,5,320,31"/>
 <area shape="rect" id="node3" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="461,57,527,83"/>
 <area shape="rect" id="node4" href="$group__Initialization.html#ga8995e5745b217d64477574abf086acc7" title="Retrieves the input pins configuration." alt="" coords="229,107,332,132"/>

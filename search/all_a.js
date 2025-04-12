@@ -8,7 +8,7 @@ var searchData=
   ['initializedisplay_5',['initializeDisplay',['../group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69',1,'utils_display.h']]],
   ['initializedisplayhw_6',['initializeDisplayHW',['../group__SegDisplay.html#gada41f61abba371bab816bae257291f92',1,'utils_display.h']]],
   ['initializedisplaysw_7',['initializeDisplaySW',['../group__SegDisplay.html#ga41e6969691858ccbfcc03d15d9008c63',1,'utils_display.h']]],
-  ['initializeprocessing_8',['initializeProcessing',['../processing_8h.html#adeeaa08a0a50d8535fdf2c8a92d4aebc',1,'initializeProcessing():&#160;processing.cpp'],['../processing_8cpp.html#adeeaa08a0a50d8535fdf2c8a92d4aebc',1,'initializeProcessing():&#160;processing.cpp']]],
+  ['initializeprocessing_8',['initializeProcessing',['../group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc',1,'initializeProcessing():&#160;processing.cpp'],['../group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc',1,'initializeProcessing():&#160;processing.cpp']]],
   ['integral_5fconstant_9',['integral_constant',['../structintegral__constant.html',1,'']]],
   ['integral_5fconstant_2ehpp_10',['integral_constant.hpp',['../integral__constant_8hpp.html',1,'']]],
   ['integral_5fconstant_3c_20bool_2c_20is_5fsame_3c_20float_2c_20remove_5fcv_3c_20t_20_3e_3a_3atype_20_3e_3a_3avalue_7c_7cis_5fsame_3c_20double_2c_20remove_5fcv_3c_20t_20_3e_3a_3atype_20_3e_3a_3avalue_20_3e_11',['integral_constant&lt; bool, is_same&lt; float, remove_cv&lt; T &gt;::type &gt;::value||is_same&lt; double, remove_cv&lt; T &gt;::type &gt;::value &gt;',['../structintegral__constant.html',1,'']]],

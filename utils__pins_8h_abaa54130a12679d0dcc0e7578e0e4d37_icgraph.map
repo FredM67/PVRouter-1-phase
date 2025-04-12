@@ -5,7 +5,7 @@
 <area shape="rect" id="node4" href="$group__Initialization.html#ga8995e5745b217d64477574abf086acc7" title="Retrieves the input pins configuration." alt="" coords="823,104,926,129"/>
 <area shape="rect" id="node7" href="$group__Initialization.html#gac599ad38730b3cb0276687ba6cbfaf1e" title="Retrieves the output pins configuration." alt="" coords="817,153,932,179"/>
 <area shape="rect" id="node8" href="$utils__pins_8h.html#a410a7bdd300104398ce91797bd936cdb" title="Get the Pin State." alt="" coords="826,205,923,231"/>
-<area shape="rect" id="node5" href="$processing_8cpp.html#adeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the ports and load states for processing." alt="" coords="579,104,727,129"/>
+<area shape="rect" id="node5" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="579,104,727,129"/>
 <area shape="rect" id="node6" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="387,104,446,129"/>
 <area shape="rect" id="node9" href="$main_8cpp.html#a31f3d562faae6b598324b56299d74f7d" title="Checks and updates the diversion state." alt="" coords="337,155,496,180"/>
 <area shape="rect" id="node12" href="$main_8cpp.html#a5157f7f79cf8c75c2d7b41d8ed47a7ef" title="Forces all loads to full power." alt="" coords="593,205,712,231"/>

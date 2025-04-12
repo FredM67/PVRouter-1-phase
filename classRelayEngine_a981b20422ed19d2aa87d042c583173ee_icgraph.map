@@ -12,7 +12,7 @@
 <area shape="rect" id="node16" href="$test__utils__relay_2test__main_8cpp.html#a547e6803dac1c47448c5352ea4d4d709" title=" " alt="" coords="367,457,489,483"/>
 <area shape="rect" id="node17" href="$test__utils__relay_2test__main_8cpp.html#a776e2d19e503b9fb8284ad2dc612d8bd" title=" " alt="" coords="355,507,501,532"/>
 <area shape="rect" id="node19" href="$test__utils__relay_2test__main_8cpp.html#ae6db4852c231fa9a5eb8396264c55486" title=" " alt="" coords="358,556,498,581"/>
-<area shape="rect" id="node5" href="$processing_8cpp.html#adeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the ports and load states for processing." alt="" coords="135,104,283,129"/>
+<area shape="rect" id="node5" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="135,104,283,129"/>
 <area shape="rect" id="node6" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,104,64,129"/>
 <area shape="rect" id="node8" href="$group__GeneralProcessing.html#gade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="158,153,259,179"/>
 <area shape="rect" id="node9" href="$main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="9,153,60,179"/>

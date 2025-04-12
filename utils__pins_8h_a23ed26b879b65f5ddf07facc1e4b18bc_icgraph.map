@@ -3,7 +3,7 @@
 <area shape="rect" id="node2" href="$validation_8h.html#a97da13005cbcf80e3bb29f69a46139ac" title=" " alt="" coords="1201,53,1361,78"/>
 <area shape="rect" id="node3" href="$validation_8h.html#a07d77671cb50e935bf9015eb1bef3bcc" title=" " alt="" coords="1234,102,1329,127"/>
 <area shape="rect" id="node4" href="$group__Initialization.html#ga8995e5745b217d64477574abf086acc7" title="Retrieves the input pins configuration." alt="" coords="1230,151,1333,177"/>
-<area shape="rect" id="node5" href="$processing_8cpp.html#adeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the ports and load states for processing." alt="" coords="990,151,1138,177"/>
+<area shape="rect" id="node5" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="990,151,1138,177"/>
 <area shape="rect" id="node7" href="$group__Initialization.html#gac599ad38730b3cb0276687ba6cbfaf1e" title="Retrieves the output pins configuration." alt="" coords="1224,253,1339,278"/>
 <area shape="rect" id="node8" href="$utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="1240,302,1323,327"/>
 <area shape="rect" id="node24" href="$utils__pins_8h.html#aaec5db9d46ba784c4f16046e6deb6977" title="Toggle the specified pin." alt="" coords="1240,417,1323,442"/>
@@ -19,7 +19,7 @@
 <area shape="rect" id="node11" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="547,54,673,79"/>
 <area shape="rect" id="node14" href="$test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="585,302,635,327"/>
 <area shape="rect" id="node16" href="$group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="551,178,669,203"/>
-<area shape="rect" id="node17" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I sample becomes available." alt="" coords="343,178,499,203"/>
+<area shape="rect" id="node17" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="343,178,499,203"/>
 <area shape="rect" id="node18" href="$group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="96,178,295,203"/>
 <area shape="rect" id="node19" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,178,48,203"/>
 <area shape="rect" id="node23" href="$classrelayOutput.html#a5e22ca8a5617edf8219898f2c1ba22bf" title="Proceed with the relay." alt="" coords="745,352,903,392"/>

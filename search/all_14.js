@@ -14,7 +14,7 @@ var searchData=
   ['update_5fperiod_5ffor_5fdisplayed_5fdata_11',['UPDATE_PERIOD_FOR_DISPLAYED_DATA',['../utils__display_8h.html#a379ab6d628249a17d8dbf41886fb9159',1,'utils_display.h']]],
   ['updateoled_12',['updateOLED',['../group__OLEDDisplay.html#gaf39aee6f9a448b67c84a828071a39f71',1,'utils_oled.h']]],
   ['updatephysicalloadstates_13',['updatePhysicalLoadStates',['../group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88',1,'updatePhysicalLoadStates():&#160;processing.cpp'],['../group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88',1,'updatePhysicalLoadStates():&#160;processing.cpp']]],
-  ['updateportsstates_14',['updatePortsStates',['../processing_8cpp.html#a44ac46a7ff4e0717bd668d5907b38249',1,'updatePortsStates():&#160;processing.cpp'],['../processing_8h.html#a44ac46a7ff4e0717bd668d5907b38249',1,'updatePortsStates():&#160;processing.cpp']]],
+  ['updateportsstates_14',['updatePortsStates',['../group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249',1,'updatePortsStates():&#160;processing.cpp'],['../group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249',1,'updatePortsStates():&#160;processing.cpp']]],
   ['updatetemperature_15',['updateTemperature',['../main_8cpp.html#aac4a0e0b4ad49cbbab8b2626204f9492',1,'main.cpp']]],
   ['updatewatchdog_16',['updateWatchdog',['../group__OLEDDisplay.html#ga1c38ae281a8a132599b5619660e7d306',1,'utils_oled.h']]],
   ['upperenergythreshold_17',['upperEnergyThreshold',['../processing_8cpp.html#aa0ffc2df0a3a6a925cccb81093ae92f2',1,'processing.cpp']]],
