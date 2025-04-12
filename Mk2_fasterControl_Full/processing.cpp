@@ -352,7 +352,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
   const int32_t filtV_div4 = sampleVminusDC_long >> 2;  // reduce to 16-bits (now x64, or 2^6)
   const int32_t filtI_div4 = sampleIminusDC_grid >> 2;  // reduce to 16-bits (now x64, or 2^6)
   int32_t instP = filtV_div4 * filtI_div4;              // 32-bits (now x4096, or 2^12)
-  instP = instP >> 12;                                  // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
+  instP >>= 12;                                         // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
   sumP_grid += instP;                                   // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
   sumP_grid_overDL_Period += instP;
 }
@@ -379,7 +379,7 @@ void processDivertedCurrentRawSample(const int16_t rawSample)
   const int32_t filtV_div4 = sampleVminusDC_long >> 2;      // reduce to 16-bits (now x64, or 2^6)
   const int32_t filtI_div4 = sampleIminusDC_diverted >> 2;  // reduce to 16-bits (now x64, or 2^6)
   int32_t instP = filtV_div4 * filtI_div4;                  // 32-bits (now x4096, or 2^12)
-  instP = instP >> 12;                                      // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
+  instP >>= 12;                                             // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
   sumP_diverted += instP;                                   // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
   sumP_diverted_overDL_Period += instP;
 }
@@ -459,8 +459,7 @@ void processRawSamples()
     // still processing samples where the voltage is Polarities::POSITIVE ...
     // (in this go-faster code, the action from here has moved to the negative half of the cycle)
 
-  }  // end of processing that is specific to samples where the voltage is positive
-
+  }     // end of processing that is specific to samples where the voltage is positive
   else  // the polarity of this sample is negative
   {
     if (polarityConfirmedOfLastSampleV != Polarities::NEGATIVE)
@@ -484,8 +483,7 @@ void processRawSamples()
         // Here the recentTransition flag is checked and updated as necessary.
         if (recentTransition)
         {
-          ++postTransitionCount;
-          if (postTransitionCount >= POST_TRANSITION_MAX_COUNT)
+          if (++postTransitionCount == POST_TRANSITION_MAX_COUNT)
           {
             recentTransition = false;
           }
@@ -653,13 +651,13 @@ void processStartNewCycle()
 
 void processPlusHalfCycle()
 {
-  processLatestContribution();
-
   // a simple routine for checking the performance of this new ISR structure
   if (sampleSetsDuringThisMainsCycle < lowestNoOfSampleSetsPerMainsCycle)
   {
     lowestNoOfSampleSetsPerMainsCycle = sampleSetsDuringThisMainsCycle;
   }
+
+  processLatestContribution();
 
   processDataLogging();
 
@@ -779,7 +777,7 @@ void proceedHighEnergyLevel()
   bool bOK_toAddLoad{ true };
   const auto tempLoad{ nextLogicalLoadToBeAdded() };
 
-  if (tempLoad >= NO_OF_DUMPLOADS)
+  if (tempLoad == NO_OF_DUMPLOADS)
   {
     return;
   }
@@ -825,7 +823,6 @@ void proceedLowEnergyLevel()
     return;
   }
 
-
   // a load which is now ON has been identified for potentially being switched OFF
   if (recentTransition)
   {
@@ -852,9 +849,6 @@ void proceedLowEnergyLevel()
   }
 }
 
-#if !defined(__DOXYGEN__)
-uint8_t nextLogicalLoadToBeAdded() __attribute__((optimize("-O3")));
-#endif
 /**
  * @brief Retrieve the next load that could be added (be aware of the order)
  *
@@ -875,9 +869,6 @@ uint8_t nextLogicalLoadToBeAdded()
   return (NO_OF_DUMPLOADS);
 }
 
-#if !defined(__DOXYGEN__)
-uint8_t nextLogicalLoadToBeRemoved() __attribute__((optimize("-O3")));
-#endif
 /**
  * @brief Retrieve the next load that could be removed (be aware of the reverse-order)
  *
@@ -900,9 +891,6 @@ uint8_t nextLogicalLoadToBeRemoved()
   return (NO_OF_DUMPLOADS);
 }
 
-#if !defined(__DOXYGEN__)
-void processDataLogging() __attribute__((optimize("-O3")));
-#endif
 /**
  * @brief Process with data logging.
  * @details At the end of each datalogging period, copies are made of the relevant variables
