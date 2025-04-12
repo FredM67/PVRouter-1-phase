@@ -231,9 +231,6 @@ void initializeProcessing()
   sei();  // Enable Global Interrupts
 }
 
-#if !defined(__DOXYGEN__)
-void updatePortsStates() __attribute__((optimize("-O3")));
-#endif
 /**
  * @brief update the control ports for each of the physical loads
  *
