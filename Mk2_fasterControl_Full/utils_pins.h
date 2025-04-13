@@ -24,6 +24,9 @@ inline constexpr void setPinOFF(const uint8_t pin);
 inline void setPinsOFF(const uint16_t pins);
 
 inline constexpr bool getPinState(const uint8_t pin);
+
+inline void setPinsAsOutput(const uint16_t pins);
+inline void setPinsAsInputPullup(const uint16_t pins);
 #else
 inline constexpr void togglePin(const uint8_t pin) __attribute__((always_inline));
 
@@ -34,6 +37,9 @@ inline constexpr void setPinOFF(const uint8_t pin) __attribute__((always_inline)
 inline void setPinsOFF(const uint16_t pins) __attribute__((always_inline));
 
 inline constexpr bool getPinState(const uint8_t pin) __attribute__((always_inline));
+
+inline void setPinsAsOutput(const uint16_t pins) __attribute__((always_inline));
+inline void setPinsAsInputPullup(const uint16_t pins) __attribute__((always_inline));
 #endif
 
 /**
@@ -185,8 +191,43 @@ inline void setPinsOFF(const uint16_t pins)
  */
 inline constexpr bool getPinState(const uint8_t pin)
 {
-  return (pin < 8) ? bit_read(PIND, pin) : (pin < 14) ? bit_read(PINB, pin - 8)
-                                                      : bit_read(PINC, pin - 14);
+  if (pin < 8)
+  {
+    return bit_read(PIND, pin);
+  }
+  else if (pin < 14)
+  {
+    return bit_read(PINB, pin - 8);
+  }
+  else
+  {
+    return bit_read(PINC, pin - 14);
+  }
 }
 
-#endif  // UTILS_PINS_H
+/**
+ * @brief Set the pins as OUTPUT
+ *
+ * @param pins The pins to set as OUTPUT
+ */
+inline void setPinsAsOutput(const uint16_t pins)
+{
+  DDRD |= lowByte(pins);
+  DDRB |= highByte(pins);
+}
+
+/**
+ * @brief Set the pins as INPUT_PULLUP
+ *
+ * @param pins The pins to set as INPUT_PULLUP
+ */
+inline void setPinsAsInputPullup(const uint16_t pins)
+{
+  DDRD &= ~lowByte(pins);  // Set pins as input
+  PORTD |= lowByte(pins);  // Enable pull-up resistors
+
+  DDRB &= ~highByte(pins);  // Set pins as input
+  PORTB |= highByte(pins);  // Enable pull-up resistors
+}
+
+#endif /* UTILS_PINS_H */

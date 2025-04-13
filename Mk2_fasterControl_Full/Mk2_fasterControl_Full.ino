@@ -115,38 +115,131 @@
  */
 
 /*!
- *  @defgroup TimeCritical Time critical functions
- *  Functions used by the ISR
+ *  @defgroup TimeCritical Time-critical functions
+ *  @brief Functions used by the ISR.
+ *  
+ *  @details This group contains functions that are executed within the Interrupt Service Routine (ISR) 
+ *           or are closely tied to time-sensitive operations. These functions are optimized for speed 
+ *           and efficiency to ensure the system operates without delays or interruptions.
+ *  
+ *  @note These functions handle tasks such as ADC sampling, zero-crossing detection, and real-time data processing.
  */
 
 /*!
  *  @defgroup RelayDiversion Relay diversion feature
- *  Functions used for the relay diversion
+ *  @brief Functions used for managing relay-based energy diversion.
+ *  
+ *  @details This group includes functions that control the diversion of surplus photovoltaic energy 
+ *           to resistive loads using relays. It supports multiple loads, load prioritization, and 
+ *           features like forced full-power operation and load rotation.
+ *  
+ *  @note These functions ensure efficient energy usage by dynamically adjusting relay states based on 
+ *        surplus energy availability and user-defined priorities.
  */
 
 /*!
  *  @defgroup TemperatureSensing Temperature sensing feature
- *  Functions used for the temperature sensing
+ *  @brief Functions used for temperature monitoring and processing.
+ *  
+ *  @details This group contains functions that handle temperature sensing using DS18B20 sensors. 
+ *           It includes reading temperature data, filtering invalid readings, and updating telemetry 
+ *           with valid temperature values. The temperature data can also influence load diversion decisions.
+ *  
+ *  @note The system supports multiple sensors and stores temperature values as integers multiplied by 100 for precision.
  */
 
 /*!
  *  @defgroup DualTariff Dual tariff feature
- *  Functions used for the dual tariff feature
+ *  @brief Functions used for managing dual tariff periods.
+ *  
+ *  @details This group includes functions that detect and handle changes between off-peak and on-peak tariff periods. 
+ *           It adjusts load priorities and diversion strategies based on the current tariff state. 
+ *           Features like forced load operation during off-peak periods are also supported.
+ *  
+ *  @note The dual tariff feature helps optimize energy usage and cost savings by prioritizing energy diversion 
+ *        during off-peak periods.
  */
 
 /*!
  *  @defgroup RF RF feature
- *  Functions used for the RF feature
+ *  @brief Functions used for RF communication.
+ *  
+ *  @details This group contains functions that enable wireless communication using RF modules (e.g., RFM12B or RF69). 
+ *           It supports telemetry transmission, remote control commands, and runtime configuration of RF settings. 
+ *           The system can operate with or without an RF module.
+ *  
+ *  @note RF communication is optional and can be disabled at compile time if not required.
  */
 
 /*!
- *  @defgroup OLEDDisplay OLED display feature
- *  Functions used for the OLED display
+ *  @defgroup Telemetry Telemetry feature
+ *  @brief Functions used for data logging and external system communication.
+ *  
+ *  @details This group includes functions that manage telemetry data collection and transmission. 
+ *           It supports integration with external systems like HomeAssistant, providing real-time data 
+ *           on power, voltage, temperature, and system status. Telemetry also includes diagnostic information.
+ *  
+ *  @note The telemetry feature ensures that the system's performance and status can be monitored remotely.
+ */
+
+ /**
+ * @defgroup GeneralProcessing General Processing
+ * @brief Functions and routines that handle general system processing tasks.
+ *
+ * This group includes functions that are not time-critical but are essential
+ * for the overall operation of the system. These tasks include monitoring
+ * system states, managing load priorities, and handling diversion logic.
+ *
+ * @details
+ * - Functions in this group are typically called from the main loop or other
+ *   non-interrupt contexts.
+ * - They ensure the system operates correctly and adapts to changing conditions.
+ */
+
+/**
+ * @defgroup Initialization Initialization
+ * @brief Functions and classes responsible for system setup and configuration.
+ *
+ * This group includes functions and classes that handle the initialization of
+ * hardware components, system parameters, and other configurations required
+ * for the proper operation of the system.
+ *
+ * @details
+ * - Ensures that all components are properly configured before the system starts.
+ * - Includes setup routines for relays, pins, ADCs, and other peripherals.
+ * - Provides default configurations and validations to ensure system stability.
  */
 
 /*!
- *  @defgroup 7SegDisplay 7-segments display feature
- *  Functions used for the 7-segments display
+ *  @defgroup OLEDDisplay OLED Display Feature
+ *  @brief Functions for managing the OLED display.
+ *  
+ *  @details
+ *  This group handles the initialization and updates of the OLED display. It is used to show
+ *  real-time system data such as power, temperature, and system status.
+ *  
+ *  ### Features:
+ *  - Display real-time metrics (e.g., power, temperature).
+ *  - Show system status and error messages.
+ *  - Support for graphical and textual elements.
+ *  
+ *  @note The OLED display uses the U8g2 library for rendering.
+ */
+
+/*!
+ *  @defgroup 7SegDisplay 7-Segment Display Feature
+ *  @brief Functions for managing the 7-segment display.
+ *  
+ *  @details
+ *  This group handles the initialization and updates of the 7-segment display. It is used to show
+ *  numeric data such as power levels, energy consumption, or system status in a simple and clear format.
+ *  
+ *  ### Features:
+ *  - Display numeric metrics (e.g., power, energy).
+ *  - Support for multiple digits with persistence-based display logic.
+ *  - Configurable for different hardware setups (e.g., pin-saving or standard configurations).
+ *  
+ *  @note The 7-segment display is an alternative to the OLED display for simpler visual feedback.
  */
 
 static_assert(__cplusplus >= 201703L, "**** Please define 'gnu++17' in 'platform.txt' ! ****");

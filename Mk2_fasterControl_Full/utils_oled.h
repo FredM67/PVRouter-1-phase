@@ -34,6 +34,7 @@
  * This is to avoid the use of "#ifdef" in the code to activate/deactivate
  * portions of code.
  * 
+ * @ingroup OLEDDisplay
  */
 class u8x8_fake
 {

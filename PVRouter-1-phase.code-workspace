@@ -24,7 +24,9 @@
 			"format": "cpp",
 			"utility": "cpp",
 			"xstring": "cpp",
-			"xutility": "cpp"
+			"xutility": "cpp",
+			"xlocale": "cpp",
+			"algorithm": "cpp"
 		}
 	}
 }

@@ -22,7 +22,19 @@
 #include "utils_pins.h"
 
 /**
- * @brief Relay diversion config and engine
+ * @class relayOutput
+ * @brief Represents a single relay configuration and its behavior.
+ *
+ * The `relayOutput` class encapsulates the configuration and state management
+ * of a single relay. It provides methods to control the relay based on surplus
+ * and import thresholds, as well as minimum ON/OFF durations.
+ *
+ * @details
+ * - **Relay Control**: The relay is turned ON when the surplus threshold is exceeded
+ *   and turned OFF when the import threshold is crossed.
+ * - **Time Constraints**: Minimum ON and OFF durations ensure stable operation.
+ * - **State Management**: The class tracks the relay's current state and the duration
+ *   of its current state.
  * 
  * @ingroup RelayDiversion
  */
@@ -241,10 +253,24 @@ private:
 };
 
 /**
- * @brief This class implements the relay management engine
+ * @class RelayEngine
+ * @brief Manages a collection of relays and their behavior based on surplus and import thresholds.
  * 
- * @tparam D The duration in minutes of the sliding average
- * @tparam N The number of relays to be used. This parameter is deduced automatically.
+ * The `RelayEngine` class provides functionality to manage multiple relays, including their
+ * initialization, state transitions, and configuration. It uses a sliding average to determine
+ * the current power state and adjusts the relays accordingly.
+ *
+ * @tparam N The number of relays to be managed.
+ * @tparam D The duration in minutes for the sliding average (default is 10 minutes).
+ *
+ * @details
+ * - **Relay Management**: Handles the state of multiple relays, turning them ON or OFF based
+ *   on surplus and import thresholds.
+ * - **Sliding Average**: Uses an Exponentially Weighted Moving Average (EWMA) to calculate
+ *   the average power over a configurable duration.
+ * - **State Transitions**: Ensures stable operation by enforcing minimum ON/OFF durations
+ *   and a delay between state changes.
+ * - **Initialization**: Provides methods to initialize relay pins and print their configuration.
  * 
  * @ingroup RelayDiversion
  */
@@ -262,8 +288,10 @@ public:
   }
 
   /**
-   * @brief Construct a list of relays with a custom sliding average
+   * @brief Construct a list of relays with a custom sliding average.
    * 
+   * @param ic Integral constant representing the sliding average duration.
+   * @param ref Array of relay configurations.
    */
   constexpr RelayEngine(integral_constant< uint8_t, D > ic, const relayOutput (&ref)[N])
     : relay(ref)
@@ -312,8 +340,10 @@ public:
   }
 
 /**
-   * @brief Increment the duration's state of each relay
+   * @brief Increment the duration's state of each relay.
    * 
+   * @details This method updates the duration of the current state for each relay and decreases
+   * the delay (`settle_change`) until the next state change is allowed.
    */
 #if defined(__DOXYGEN__)
   void inc_duration() const;
@@ -322,8 +352,11 @@ public:
 #endif
 
   /**
-   * @brief Proceed all relays in increasing order (surplus) or decreasing order (import)
+   * @brief Proceed all relays in increasing order (surplus) or decreasing order (import).
    * 
+   * @details This method adjusts the state of the relays based on the current average power.
+   * If surplus power is available, it tries to turn ON relays in increasing order. If power
+   * is being imported, it tries to turn OFF relays in decreasing order.
    */
   void proceed_relays() const
   {
@@ -362,22 +395,10 @@ public:
   }
 
   /**
-   * @brief Initialize the pins used by the relays
+   * @brief Print the configuration of each relay.
    * 
-   */
-  void initializePins() const
-  {
-    uint8_t idx{ N };
-    do
-    {
-      pinMode(relay[--idx].get_pin(), OUTPUT);
-      delay(100);
-    } while (idx);
-  }
-
-  /**
-   * @brief Print the configuration of each relay
-   * 
+   * @details This method outputs the configuration of all relays, including their pin assignments,
+   * thresholds, and minimum ON/OFF durations, to the Serial interface.
    */
   void printConfiguration() const
   {
