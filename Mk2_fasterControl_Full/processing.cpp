@@ -43,9 +43,9 @@ constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQU
 // bucket of a PV Router should match this value.  The sweet-zone value is therefore
 // included in the calculation below.
 //
-int32_t energyInBucket_long{ 0 }; /**< in Integer Energy Units */
-int32_t lowerEnergyThreshold;     /**< dynamic lower threshold */
-int32_t upperEnergyThreshold;     /**< dynamic upper threshold */
+int32_t energyInBucket_long{ 0 };  /**< in Integer Energy Units */
+int32_t lowerEnergyThreshold{ 0 }; /**< dynamic lower threshold */
+int32_t upperEnergyThreshold{ 0 }; /**< dynamic upper threshold */
 
 // For recording the accumulated amount of diverted energy data (using CT2), a similar
 // calibration mechanism is required.  Rather than a bucket with a fixed capacity, the
@@ -57,16 +57,16 @@ int32_t upperEnergyThreshold;     /**< dynamic upper threshold */
 constexpr int32_t IEU_per_Wh{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1 / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
 
 bool recentTransition{ false };                   /**< a load state has been recently toggled */
-uint8_t postTransitionCount;                      /**< counts the number of cycle since last transition */
+uint8_t postTransitionCount{ 0 };                 /**< counts the number of cycle since last transition */
 constexpr uint8_t POST_TRANSITION_MAX_COUNT{ 3 }; /**< allows each transition to take effect */
-uint8_t activeLoad{ 0 };                          /**< current active load */
+uint8_t activeLoad{ NO_OF_DUMPLOADS };            /**< current active load */
 
-int32_t sumP_grid;                   /**< for per-cycle summation of 'real power' */
-int32_t sumP_grid_overDL_Period;     /**< for per-cycle summation of 'real power' during datalog period */
-int32_t sumP_diverted;               /**< for per-cycle summation of 'real power' */
-int32_t sumP_diverted_overDL_Period; /**< for per-cycle summation of 'real power' during datalog period */
-int32_t cumVdeltasThisCycle_long;    /**< for the LPF which determines DC offset (voltage) */
-int32_t l_sum_Vsquared;              /**< for summation of V^2 values during datalog period */
+int32_t sumP_grid{ 0 };                   /**< for per-cycle summation of 'real power' */
+int32_t sumP_grid_overDL_Period{ 0 };     /**< for per-cycle summation of 'real power' during datalog period */
+int32_t sumP_diverted{ 0 };               /**< for per-cycle summation of 'real power' */
+int32_t sumP_diverted_overDL_Period{ 0 }; /**< for per-cycle summation of 'real power' during datalog period */
+int32_t cumVdeltasThisCycle_long{ 0 };    /**< for the LPF which determines DC offset (voltage) */
+int32_t l_sum_Vsquared{ 0 };              /**< for summation of V^2 values during datalog period */
 
 int32_t realEnergy_grid{ 0 };
 int32_t realEnergy_diverted{ 0 };
@@ -78,15 +78,15 @@ Polarities polarityConfirmed;              /**< for zero-crossing detection */
 Polarities polarityConfirmedOfLastSampleV; /**< for zero-crossing detection */
 
 // For a mechanism to check the continuity of the sampling sequence
-uint8_t sampleSetsDuringThisMainsCycle;     /**< number of sample sets during each mains cycle */
-uint16_t sampleSetsDuringThisDatalogPeriod; /**< number of sample sets during each datalogging period */
+uint8_t sampleSetsDuringThisMainsCycle{ 0 };     /**< number of sample sets during each mains cycle */
+uint16_t sampleSetsDuringThisDatalogPeriod{ 0 }; /**< number of sample sets during each datalogging period */
 
-uint8_t lowestNoOfSampleSetsPerMainsCycle; /**< For a mechanism to check the integrity of this code structure */
+uint8_t lowestNoOfSampleSetsPerMainsCycle{ 0 }; /**< For a mechanism to check the integrity of this code structure */
 
 uint16_t sampleSetsDuringNegativeHalfOfMainsCycle{ 0 }; /**< for arming the triac/trigger */
 
 LoadStates physicalLoadState[NO_OF_DUMPLOADS]; /**< Physical state of the loads */
-uint16_t countLoadON[NO_OF_DUMPLOADS];         /**< Number of cycle the load was ON (over 1 datalog period) */
+uint16_t countLoadON[NO_OF_DUMPLOADS]{};       /**< Number of cycle the load was ON (over 1 datalog period) */
 
 remove_cv< remove_reference< decltype(DATALOG_PERIOD_IN_MAINS_CYCLES) >::type >::type n_cycleCountForDatalogging{ 0 }; /**< for counting how often datalog is updated */
 
@@ -213,6 +213,12 @@ void initializeProcessing()
 {
   setPinsAsOutput(getOutputPins());      // set the output pins as OUTPUT
   setPinsAsInputPullup(getInputPins());  // set the input pins as INPUT_PULLUP
+
+  for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
+  {
+    loadPrioritiesAndState[i] = loadPrioritiesAtStartup[i];
+    loadPrioritiesAndState[i] &= loadStateMask;
+  }
 
   // First stop the ADC
   bit_clear(ADCSRA, ADEN);
@@ -1027,7 +1033,7 @@ uint8_t nextLogicalLoadToBeAdded()
 {
   for (uint8_t index = 0; index < NO_OF_DUMPLOADS; ++index)
   {
-    if (0x00 == (loadPrioritiesAndState[index] & loadStateOnBit))
+    if (!(loadPrioritiesAndState[index] & loadStateOnBit))
     {
       return (index);
     }

@@ -191,8 +191,18 @@ inline void setPinsOFF(const uint16_t pins)
  */
 inline constexpr bool getPinState(const uint8_t pin)
 {
-  return (pin < 8) ? bit_read(PIND, pin) : (pin < 14) ? bit_read(PINB, pin - 8)
-                                                      : bit_read(PINC, pin - 14);
+  if (pin < 8)
+  {
+    return bit_read(PIND, pin);
+  }
+  else if (pin < 14)
+  {
+    return bit_read(PINB, pin - 8);
+  }
+  else
+  {
+    return bit_read(PINC, pin - 14);
+  }
 }
 
 /**
@@ -213,13 +223,11 @@ inline void setPinsAsOutput(const uint16_t pins)
  */
 inline void setPinsAsInputPullup(const uint16_t pins)
 {
-  // Set pins as input
-  DDRD &= ~lowByte(pins);
-  DDRB &= ~highByte(pins);
+  DDRD &= ~lowByte(pins);  // Set pins as input
+  PORTD |= lowByte(pins);  // Enable pull-up resistors
 
-  // Enable pull-up resistors
-  PORTD |= lowByte(pins);
-  PORTB |= highByte(pins);
+  DDRB &= ~highByte(pins);  // Set pins as input
+  PORTB |= highByte(pins);  // Enable pull-up resistors
 }
 
 #endif /* UTILS_PINS_H */

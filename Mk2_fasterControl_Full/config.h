@@ -32,7 +32,7 @@
 
 inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::IoT; /**< constexpr variable to set the serial output type */
 
-inline constexpr uint8_t NO_OF_DUMPLOADS{ 1 }; /**< number of dump loads connected to the diverter */
+inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 }; /**< number of dump loads connected to the diverter */
 
 inline constexpr bool EMONESP_CONTROL{ false };
 inline constexpr bool DIVERSION_PIN_PRESENT{ true };                    /**< set it to 'true' if you want to control diversion ON/OFF */
@@ -48,7 +48,7 @@ inline constexpr bool TEMP_SENSOR_PRESENT{ false };  /**< set it to 'true' if te
 
 inline constexpr bool OLD_PCB{ true }; /**< set it to 'true' if the old PCB is used */
 
-inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::SEG }; /**< set it to installed display including optional additional logic chips */
+inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED }; /**< set it to installed display including optional additional logic chips */
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // WARNING: the 7-seg display uses a lot of pins
@@ -65,8 +65,8 @@ inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::SEG }; /**< set it to
 ////////////////////////////////////////////////////////////////////////////////////////
 // allocation of digital pins which are not dependent on the display type that is in use
 //
-inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 4 };         /**< for 1-phase PCB - "trigger" port is pin 4, "mode" port is pin 3 */
-inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0 }; /**< load priorities and states at startup */
+inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 2, 4 };         /**< for 1-phase PCB - "trigger" port is pin 4, "mode" port is pin 3 */
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1 }; /**< load priorities and states at startup */
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Set the value to 0xff when the pin is not needed (feature deactivated)
