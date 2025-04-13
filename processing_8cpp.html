@@ -214,7 +214,7 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ae3ad049e6ee90e4eacc823d1387f02e0"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#ae3ad049e6ee90e4eacc823d1387f02e0">activeLoad</a> { 0 }</td></tr>
+<tr class="memitem:ae3ad049e6ee90e4eacc823d1387f02e0"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#ae3ad049e6ee90e4eacc823d1387f02e0">activeLoad</a> { <a class="el" href="config_8h.html#aa2458020f21db854d8f2fe0e500dcd05">NO_OF_DUMPLOADS</a> }</td></tr>
 <tr class="separator:ae3ad049e6ee90e4eacc823d1387f02e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a560d64f936f459063fd3aabb327f3696"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a560d64f936f459063fd3aabb327f3696">antiCreepLimit_inIEUperMainsCycle</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#aa3b33e12ca9d02da59889eb87948e62b">ANTI_CREEP_LIMIT</a> * (1 / powerCal_grid)) }</td></tr>
 <tr class="separator:a560d64f936f459063fd3aabb327f3696"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,9 +222,9 @@ Variables</h2></td></tr>
 <tr class="separator:aaecb72fa3ab0755ac124b5fa6ffa1c6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a845d0be1ce120105c02f3e2e44f9c26d"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a845d0be1ce120105c02f3e2e44f9c26d">capacityOfEnergyBucket_long</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a6934c64e6f6dd1c9ce2a993cc73fa70c">WORKING_ZONE_IN_JOULES</a> * <a class="el" href="config__system_8h.html#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> * (1 / powerCal_grid)) }</td></tr>
 <tr class="separator:a845d0be1ce120105c02f3e2e44f9c26d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f61fd181a2806e678e5473eaad03891"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a2f61fd181a2806e678e5473eaad03891">countLoadON</a> [<a class="el" href="config_8h.html#aa2458020f21db854d8f2fe0e500dcd05">NO_OF_DUMPLOADS</a>]</td></tr>
+<tr class="memitem:a2f61fd181a2806e678e5473eaad03891"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a2f61fd181a2806e678e5473eaad03891">countLoadON</a> [<a class="el" href="config_8h.html#aa2458020f21db854d8f2fe0e500dcd05">NO_OF_DUMPLOADS</a>] {}</td></tr>
 <tr class="separator:a2f61fd181a2806e678e5473eaad03891"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a237efa864aaf231398b703d968fb3cc3"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a237efa864aaf231398b703d968fb3cc3">cumVdeltasThisCycle_long</a></td></tr>
+<tr class="memitem:a237efa864aaf231398b703d968fb3cc3"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a237efa864aaf231398b703d968fb3cc3">cumVdeltasThisCycle_long</a> { 0 }</td></tr>
 <tr class="separator:a237efa864aaf231398b703d968fb3cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1271d2d5ade96090b55290b40ed72b31"><td class="memItemLeft" align="right" valign="top">constexpr int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a1271d2d5ade96090b55290b40ed72b31">DCoffset_I</a> { 512 }</td></tr>
 <tr class="separator:a1271d2d5ade96090b55290b40ed72b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -240,13 +240,13 @@ Variables</h2></td></tr>
 <tr class="separator:afb26a8ad4b5d9d5a7fae093c80efd6f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adad6336333bc5baf7199e8314f19400a"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#adad6336333bc5baf7199e8314f19400a">IEU_per_Wh</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a1758323644e0aded21187740a3c473fa">JOULES_PER_WATT_HOUR</a> * <a class="el" href="config__system_8h.html#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> * (1 / powerCal_diverted)) }</td></tr>
 <tr class="separator:adad6336333bc5baf7199e8314f19400a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98ec9049e0076bcf6a00afa7e66f1eaa"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a98ec9049e0076bcf6a00afa7e66f1eaa">l_sum_Vsquared</a></td></tr>
+<tr class="memitem:a98ec9049e0076bcf6a00afa7e66f1eaa"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a98ec9049e0076bcf6a00afa7e66f1eaa">l_sum_Vsquared</a> { 0 }</td></tr>
 <tr class="separator:a98ec9049e0076bcf6a00afa7e66f1eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab90abf1e4f398064d5151def545f0e8c"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#ab90abf1e4f398064d5151def545f0e8c">lowerEnergyThreshold</a></td></tr>
+<tr class="memitem:ab90abf1e4f398064d5151def545f0e8c"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#ab90abf1e4f398064d5151def545f0e8c">lowerEnergyThreshold</a> { 0 }</td></tr>
 <tr class="separator:ab90abf1e4f398064d5151def545f0e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d2aaccd1924b13d9324b1091831661f"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a9d2aaccd1924b13d9324b1091831661f">lowerThreshold_default</a> { <a class="el" href="processing_8cpp.html#a845d0be1ce120105c02f3e2e44f9c26d">capacityOfEnergyBucket_long</a> &gt;&gt; 1 }</td></tr>
 <tr class="separator:a9d2aaccd1924b13d9324b1091831661f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab935f4f3c343be21384a6ed896561b61"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#ab935f4f3c343be21384a6ed896561b61">lowestNoOfSampleSetsPerMainsCycle</a></td></tr>
+<tr class="memitem:ab935f4f3c343be21384a6ed896561b61"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#ab935f4f3c343be21384a6ed896561b61">lowestNoOfSampleSetsPerMainsCycle</a> { 0 }</td></tr>
 <tr class="separator:ab935f4f3c343be21384a6ed896561b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac90428d5d90323d5eaa4a41efaea23b9"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#ac90428d5d90323d5eaa4a41efaea23b9">midPointOfEnergyBucket_long</a> { <a class="el" href="processing_8cpp.html#a845d0be1ce120105c02f3e2e44f9c26d">capacityOfEnergyBucket_long</a> &gt;&gt; 1 }</td></tr>
 <tr class="separator:ac90428d5d90323d5eaa4a41efaea23b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -262,7 +262,7 @@ Variables</h2></td></tr>
 <tr class="separator:aded2f3ad7507b7a153baa58edc329f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a555d557c5b47a027b823b11a814f8693"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a555d557c5b47a027b823b11a814f8693">POST_TRANSITION_MAX_COUNT</a> { 3 }</td></tr>
 <tr class="separator:a555d557c5b47a027b823b11a814f8693"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefaf5733efee19a73b7cbcb1159ff61f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#aefaf5733efee19a73b7cbcb1159ff61f">postTransitionCount</a></td></tr>
+<tr class="memitem:aefaf5733efee19a73b7cbcb1159ff61f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#aefaf5733efee19a73b7cbcb1159ff61f">postTransitionCount</a> { 0 }</td></tr>
 <tr class="separator:aefaf5733efee19a73b7cbcb1159ff61f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7bba643100d679d1dcf1a8aff81d2f3"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#ab7bba643100d679d1dcf1a8aff81d2f3">realEnergy_diverted</a> { 0 }</td></tr>
 <tr class="separator:ab7bba643100d679d1dcf1a8aff81d2f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -274,21 +274,21 @@ Variables</h2></td></tr>
 <tr class="separator:a22ac107a8fe19694803bd2b1b597bc0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2882e1102e86830ce96c21c7604836a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#aa2882e1102e86830ce96c21c7604836a">sampleSetsDuringNegativeHalfOfMainsCycle</a> { 0 }</td></tr>
 <tr class="separator:aa2882e1102e86830ce96c21c7604836a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0589901874c0ad331733e74da92f6a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#ac0589901874c0ad331733e74da92f6a3">sampleSetsDuringThisDatalogPeriod</a></td></tr>
+<tr class="memitem:ac0589901874c0ad331733e74da92f6a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#ac0589901874c0ad331733e74da92f6a3">sampleSetsDuringThisDatalogPeriod</a> { 0 }</td></tr>
 <tr class="separator:ac0589901874c0ad331733e74da92f6a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb62f14378bf4278bf9855b4304b361a"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#acb62f14378bf4278bf9855b4304b361a">sampleSetsDuringThisMainsCycle</a></td></tr>
+<tr class="memitem:acb62f14378bf4278bf9855b4304b361a"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#acb62f14378bf4278bf9855b4304b361a">sampleSetsDuringThisMainsCycle</a> { 0 }</td></tr>
 <tr class="separator:acb62f14378bf4278bf9855b4304b361a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3576f9692a173c1c8c3cd5868885a6a3"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a3576f9692a173c1c8c3cd5868885a6a3">sampleVminusDC_long</a> { 0 }</td></tr>
 <tr class="separator:a3576f9692a173c1c8c3cd5868885a6a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a0380b1befbb8b2256fa68e7e346cbb"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a7a0380b1befbb8b2256fa68e7e346cbb">sumP_diverted</a></td></tr>
+<tr class="memitem:a7a0380b1befbb8b2256fa68e7e346cbb"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a7a0380b1befbb8b2256fa68e7e346cbb">sumP_diverted</a> { 0 }</td></tr>
 <tr class="separator:a7a0380b1befbb8b2256fa68e7e346cbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3b9f17b9befc98ef91faf22fec2eb68"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#aa3b9f17b9befc98ef91faf22fec2eb68">sumP_diverted_overDL_Period</a></td></tr>
+<tr class="memitem:aa3b9f17b9befc98ef91faf22fec2eb68"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#aa3b9f17b9befc98ef91faf22fec2eb68">sumP_diverted_overDL_Period</a> { 0 }</td></tr>
 <tr class="separator:aa3b9f17b9befc98ef91faf22fec2eb68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b86ceba6e6600f083a9c3950a7465cd"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a7b86ceba6e6600f083a9c3950a7465cd">sumP_grid</a></td></tr>
+<tr class="memitem:a7b86ceba6e6600f083a9c3950a7465cd"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a7b86ceba6e6600f083a9c3950a7465cd">sumP_grid</a> { 0 }</td></tr>
 <tr class="separator:a7b86ceba6e6600f083a9c3950a7465cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e48fa33e3d3d0d403d3825f3c2482ed"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a1e48fa33e3d3d0d403d3825f3c2482ed">sumP_grid_overDL_Period</a></td></tr>
+<tr class="memitem:a1e48fa33e3d3d0d403d3825f3c2482ed"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a1e48fa33e3d3d0d403d3825f3c2482ed">sumP_grid_overDL_Period</a> { 0 }</td></tr>
 <tr class="separator:a1e48fa33e3d3d0d403d3825f3c2482ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0ffc2df0a3a6a925cccb81093ae92f2"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#aa0ffc2df0a3a6a925cccb81093ae92f2">upperEnergyThreshold</a></td></tr>
+<tr class="memitem:aa0ffc2df0a3a6a925cccb81093ae92f2"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#aa0ffc2df0a3a6a925cccb81093ae92f2">upperEnergyThreshold</a> { 0 }</td></tr>
 <tr class="separator:aa0ffc2df0a3a6a925cccb81093ae92f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a817a4dab9d78694fd475def89899747f"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8cpp.html#a817a4dab9d78694fd475def89899747f">upperThreshold_default</a> { <a class="el" href="processing_8cpp.html#a845d0be1ce120105c02f3e2e44f9c26d">capacityOfEnergyBucket_long</a> &gt;&gt; 1 }</td></tr>
 <tr class="separator:a817a4dab9d78694fd475def89899747f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -316,7 +316,7 @@ Variables</h2></td></tr>
 <li>Prints the capacity of the energy bucket in integer energy units. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01132">1132</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01138">1138</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -338,7 +338,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t activeLoad { 0 }</td>
+          <td class="memname">uint8_t activeLoad { <a class="el" href="config_8h.html#aa2458020f21db854d8f2fe0e500dcd05">NO_OF_DUMPLOADS</a> }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -420,7 +420,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a> countLoadON[<a class="el" href="config_8h.html#aa2458020f21db854d8f2fe0e500dcd05">NO_OF_DUMPLOADS</a>]</td>
+          <td class="memname"><a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a> countLoadON[<a class="el" href="config_8h.html#aa2458020f21db854d8f2fe0e500dcd05">NO_OF_DUMPLOADS</a>] {}</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -437,7 +437,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t cumVdeltasThisCycle_long</td>
+          <td class="memname">int32_t cumVdeltasThisCycle_long { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -603,7 +603,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t l_sum_Vsquared</td>
+          <td class="memname">int32_t l_sum_Vsquared { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -620,7 +620,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t lowerEnergyThreshold</td>
+          <td class="memname">int32_t lowerEnergyThreshold { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -661,7 +661,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t lowestNoOfSampleSetsPerMainsCycle</td>
+          <td class="memname">uint8_t lowestNoOfSampleSetsPerMainsCycle { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -813,7 +813,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t postTransitionCount</td>
+          <td class="memname">uint8_t postTransitionCount { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -920,7 +920,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a> sampleSetsDuringThisDatalogPeriod</td>
+          <td class="memname"><a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a> sampleSetsDuringThisDatalogPeriod { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -937,7 +937,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t sampleSetsDuringThisMainsCycle</td>
+          <td class="memname">uint8_t sampleSetsDuringThisMainsCycle { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -970,7 +970,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t sumP_diverted</td>
+          <td class="memname">int32_t sumP_diverted { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -987,7 +987,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t sumP_diverted_overDL_Period</td>
+          <td class="memname">int32_t sumP_diverted_overDL_Period { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1004,7 +1004,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t sumP_grid</td>
+          <td class="memname">int32_t sumP_grid { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1021,7 +1021,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t sumP_grid_overDL_Period</td>
+          <td class="memname">int32_t sumP_grid_overDL_Period { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1038,7 +1038,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t upperEnergyThreshold</td>
+          <td class="memname">int32_t upperEnergyThreshold { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">
