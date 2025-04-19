@@ -51,7 +51,7 @@ inline constexpr bool OLD_PCB{ true }; /**< set it to 'true' if the old PCB is u
 inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::SEG }; /**< set it to installed display including optional additional logic chips */
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// WARNING: the 7-seg display uses a lot of pins
+// WARNING: the 7-seg display uses a lot of pins (Old PCB only !)
 //
 // For SEG_HW (Hardware-Driven Display)
 // Pins: 5, 6, 7, 8, 9, 14, 15, 16
