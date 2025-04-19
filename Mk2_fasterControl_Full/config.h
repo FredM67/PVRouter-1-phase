@@ -35,9 +35,9 @@ inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::IoT; /*
 inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 }; /**< number of dump loads connected to the diverter */
 
 inline constexpr bool EMONESP_CONTROL{ false };
-inline constexpr bool DIVERSION_PIN_PRESENT{ true };                    /**< set it to 'true' if you want to control diversion ON/OFF */
+inline constexpr bool DIVERSION_PIN_PRESENT{ false };                   /**< set it to 'true' if you want to control diversion ON/OFF */
 inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::OFF }; /**< set it to 'OFF/AUTO/PIN' if you want manual/automatic rotation of priorities */
-inline constexpr bool OVERRIDE_PIN_PRESENT{ true };                     /**< set it to 'true' if there's a override pin */
+inline constexpr bool OVERRIDE_PIN_PRESENT{ false };                    /**< set it to 'true' if there's a override pin */
 
 inline constexpr bool WATCHDOG_PIN_PRESENT{ false }; /**< set it to 'true' if there's a watch led */
 inline constexpr bool RELAY_DIVERSION{ false };      /**< set it to 'true' if a relay is used for diversion */
@@ -51,7 +51,7 @@ inline constexpr bool OLD_PCB{ true }; /**< set it to 'true' if the old PCB is u
 inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED }; /**< set it to installed display including optional additional logic chips */
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// WARNING: the 7-seg display uses a lot of pins
+// WARNING: the 7-seg display uses a lot of pins (Old PCB only !)
 //
 // For SEG_HW (Hardware-Driven Display)
 // Pins: 5, 6, 7, 8, 9, 14, 15, 16
@@ -65,15 +65,15 @@ inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED }; /**< set it t
 ////////////////////////////////////////////////////////////////////////////////////////
 // allocation of digital pins which are not dependent on the display type that is in use
 //
-inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 2, 4 };         /**< for 1-phase PCB - "trigger" port is pin 4, "mode" port is pin 3 */
+inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ 4, 3 };         /**< for 1-phase PCB - "trigger" port is pin 4, "mode" port is pin 3 */
 inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1 }; /**< load priorities and states at startup */
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Set the value to 0xff when the pin is not needed (feature deactivated)
 inline constexpr uint8_t dualTariffPin{ 0xff }; /**< for 3-phase PCB, off-peak trigger */
-inline constexpr uint8_t diversionPin{ 15 };    /**< if LOW, set diversion on standby */
+inline constexpr uint8_t diversionPin{ 0xff };  /**< if LOW, set diversion on standby */
 inline constexpr uint8_t rotationPin{ 0xff };   /**< if LOW, trigger a load priority rotation */
-inline constexpr uint8_t forcePin{ 3 };         /**< for 3-phase PCB, force pin */
+inline constexpr uint8_t forcePin{ 0xff };      /**< for 3-phase PCB, force pin */
 inline constexpr uint8_t watchDogPin{ 0xff };   /**< watch dog LED */
 
 inline constexpr RelayEngine relays{ { { 0xff, 1000, 200, 1, 1 } } }; /**< config for relay diversion, see class definition for defaults and advanced options */
