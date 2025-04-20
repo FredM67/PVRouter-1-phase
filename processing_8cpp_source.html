@@ -361,7 +361,7 @@ $(function() {
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span> </div>
 <div class="line"><a id="l00427" name="l00427"></a><span class="lineno"><a class="line" href="group__TimeCritical.html#ga200d938da53f9e12f5a174d109944e64">  427</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="group__TimeCritical.html#ga200d938da53f9e12f5a174d109944e64">processDivertedCurrentRawSample</a>(<span class="keyword">const</span> int16_t rawSample)</div>
 <div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>{</div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="processing_8h.html#aa1d0d82b79554d3f491238534b2dc4c3">b_overrideLoadOn</a>[0])</div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="processing_8h.html#abbcd9c205506eb70e668fc430b531d4d">b_diversionOff</a> || <a class="code hl_variable" href="processing_8h.html#aa1d0d82b79554d3f491238534b2dc4c3">b_overrideLoadOn</a>[0])</div>
 <div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>  {</div>
 <div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>    <span class="keywordflow">return</span>;  <span class="comment">// no diverted power when the load is overridden</span></div>
 <div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>  }</div>
@@ -427,7 +427,7 @@ $(function() {
 <div class="line"><a id="l00525" name="l00525"></a><span class="lineno">  525</span>          <span class="keywordflow">if</span> (<a class="code hl_variable" href="processing_8h.html#a1e974854de2c5bd51630066ae8f27207">divertedEnergyRecent_IEU</a> &gt; <a class="code hl_variable" href="processing_8cpp.html#adad6336333bc5baf7199e8314f19400a">IEU_per_Wh</a>)</div>
 <div class="line"><a id="l00526" name="l00526"></a><span class="lineno">  526</span>          {</div>
 <div class="line"><a id="l00527" name="l00527"></a><span class="lineno">  527</span>            <a class="code hl_variable" href="processing_8h.html#a1e974854de2c5bd51630066ae8f27207">divertedEnergyRecent_IEU</a> -= <a class="code hl_variable" href="processing_8cpp.html#adad6336333bc5baf7199e8314f19400a">IEU_per_Wh</a>;</div>
-<div class="line"><a id="l00528" name="l00528"></a><span class="lineno">  528</span>            <span class="keywordflow">if</span> (!<a class="code hl_variable" href="processing_8h.html#aa1d0d82b79554d3f491238534b2dc4c3">b_overrideLoadOn</a>[0])</div>
+<div class="line"><a id="l00528" name="l00528"></a><span class="lineno">  528</span>            <span class="keywordflow">if</span> (!<a class="code hl_variable" href="processing_8h.html#abbcd9c205506eb70e668fc430b531d4d">b_diversionOff</a> &amp;&amp; !<a class="code hl_variable" href="processing_8h.html#aa1d0d82b79554d3f491238534b2dc4c3">b_overrideLoadOn</a>[0])</div>
 <div class="line"><a id="l00529" name="l00529"></a><span class="lineno">  529</span>            {</div>
 <div class="line"><a id="l00530" name="l00530"></a><span class="lineno">  530</span>              ++<a class="code hl_variable" href="processing_8h.html#ae1f48ee7cb7b3a48c5818ce8714a2812">divertedEnergyTotal_Wh</a>;</div>
 <div class="line"><a id="l00531" name="l00531"></a><span class="lineno">  531</span>            }</div>
