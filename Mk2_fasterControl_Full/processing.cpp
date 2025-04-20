@@ -170,11 +170,12 @@ constexpr uint16_t getInputPins()
   }
 
   if constexpr (DIVERSION_PIN_PRESENT)
-  {
-    if (bit_read(input_pins, diversionPin))
-      return 0;
-
-    bit_set(input_pins, diversionPin);
+  {  // This is an old PCB with IC3/4. We've to set this pin by hand since
+    // it's in the 'C' port range
+    //if (bit_read(input_pins, diversionPin))
+    //  return 0;
+    //
+    //bit_set(input_pins, diversionPin);
   }
 
   if constexpr (PRIORITY_ROTATION == RotationModes::PIN)
@@ -213,6 +214,12 @@ void initializeProcessing()
 {
   setPinsAsOutput(getOutputPins());      // set the output pins as OUTPUT
   setPinsAsInputPullup(getInputPins());  // set the input pins as INPUT_PULLUP
+
+  if constexpr (DIVERSION_PIN_PRESENT)
+  {  // This is an old PCB with IC3/4. We've to set this pin by hand since
+    // it's in the 'C' port range
+    pinMode(diversionPin, INPUT_PULLUP);  // set the diversion pin as INPUT_PULLUP
+  }
 
   for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
   {
@@ -426,7 +433,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
  */
 void processDivertedCurrentRawSample(const int16_t rawSample)
 {
-  if (b_overrideLoadOn[0])
+  if (b_diversionOff || b_overrideLoadOn[0])
   {
     return;  // no diverted power when the load is overridden
   }
@@ -525,7 +532,7 @@ void processRawSamples()
           if (divertedEnergyRecent_IEU > IEU_per_Wh)
           {
             divertedEnergyRecent_IEU -= IEU_per_Wh;
-            if (!b_overrideLoadOn[0])
+            if (!b_diversionOff && !b_overrideLoadOn[0])
             {
               ++divertedEnergyTotal_Wh;
             }
