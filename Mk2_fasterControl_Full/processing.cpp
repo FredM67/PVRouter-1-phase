@@ -426,7 +426,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
  */
 void processDivertedCurrentRawSample(const int16_t rawSample)
 {
-  if (b_overrideLoadOn[0])
+  if (b_diversionOff || b_overrideLoadOn[0])
   {
     return;  // no diverted power when the load is overridden
   }
@@ -525,7 +525,7 @@ void processRawSamples()
           if (divertedEnergyRecent_IEU > IEU_per_Wh)
           {
             divertedEnergyRecent_IEU -= IEU_per_Wh;
-            if (!b_overrideLoadOn[0])
+            if (!b_diversionOff && !b_overrideLoadOn[0])
             {
               ++divertedEnergyTotal_Wh;
             }
