@@ -30,7 +30,7 @@
 #include "utils_dualtariff.h"
 #include "utils_relay.h"
 
-inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::IoT; /**< constexpr variable to set the serial output type */
+inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable; /**< constexpr variable to set the serial output type */
 
 inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 }; /**< number of dump loads connected to the diverter */
 
@@ -46,7 +46,7 @@ inline constexpr bool TEMP_SENSOR_PRESENT{ false };  /**< set it to 'true' if te
 
 #include "utils_temp.h"
 
-inline constexpr bool OLD_PCB{ true }; /**< set it to 'true' if the old PCB is used */
+inline constexpr bool OLD_PCB{ false }; /**< set it to 'true' if the old PCB is used */
 
 inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED }; /**< set it to installed display including optional additional logic chips */
 
