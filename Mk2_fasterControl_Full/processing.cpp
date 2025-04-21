@@ -211,13 +211,18 @@ constexpr uint16_t getInputPins()
  */
 void initializeProcessing()
 {
-  setPinsAsOutput(getOutputPins());      // set the output pins as OUTPUT
-  setPinsAsInputPullup(getInputPins());  // set the input pins as INPUT_PULLUP
-
-  for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
+  if constexpr (OLD_PCB)
+    initializeOldPCBPins();
+  else
   {
-    loadPrioritiesAndState[i] = loadPrioritiesAtStartup[i];
-    loadPrioritiesAndState[i] &= loadStateMask;
+    setPinsAsOutput(getOutputPins());      // set the output pins as OUTPUT
+    setPinsAsInputPullup(getInputPins());  // set the input pins as INPUT_PULLUP
+
+    for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
+    {
+      loadPrioritiesAndState[i] = loadPrioritiesAtStartup[i];
+      loadPrioritiesAndState[i] &= loadStateMask;
+    }
   }
 
   // First stop the ADC
@@ -1215,5 +1220,80 @@ ISR(ADC_vect)
       break;
     default:
       sample_index = 0;  // to prevent lockup (should never get here)
+  }
+}
+
+/**
+ * @brief Initializes optional pins for the old PCB configuration.
+ *
+ * This function configures various optional pins based on the hardware setup and
+ * feature flags. It ensures that the pins are properly initialized for their respective
+ * purposes, such as dual tariff, override, priority rotation, diversion, relay diversion,
+ * and watchdog functionality.
+ *
+ * @warning Ensure that the pin assignments are valid for the selected PCB configuration.
+ *
+ * @details
+ * - Configures the dual tariff pin as an input with an internal pull-up resistor.
+ * - Configures the override pin as an input with an internal pull-up resistor.
+ * - Configures the priority rotation pin as an input with an internal pull-up resistor.
+ * - Configures the diversion pin as an input with an internal pull-up resistor.
+ * - Initializes relay diversion pins if enabled.
+ * - Configures the watchdog pin as an output and sets it to OFF.
+ *
+ * @ingroup Initialization
+ */
+void initializeOldPCBPins()
+{
+  for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i)
+  {
+    loadPrioritiesAndState[i] = loadPrioritiesAtStartup[i];
+    pinMode(physicalLoadPin[i], OUTPUT);  // driver pin for Load #n
+    loadPrioritiesAndState[i] &= loadStateMask;
+  }
+
+  updatePhysicalLoadStates();  // allows the logical-to-physical mapping to be changed
+
+  updatePortsStates();  // updates output pin states
+
+  if constexpr (DUAL_TARIFF)
+  {
+    pinMode(dualTariffPin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
+    delay(100);                            // allow time to settle
+  }
+
+  if constexpr (OVERRIDE_PIN_PRESENT)
+  {
+    pinMode(forcePin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
+    delay(100);                       // allow time to settle
+  }
+
+  if constexpr (PRIORITY_ROTATION == RotationModes::PIN)
+  {
+    pinMode(rotationPin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
+    delay(100);                          // allow time to settle
+  }
+
+  if constexpr (DIVERSION_PIN_PRESENT)
+  {
+    pinMode(diversionPin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
+    delay(100);                           // allow time to settle
+  }
+
+  if constexpr (RELAY_DIVERSION)
+  {
+    for (uint8_t idx = 0; idx < relays.get_size(); ++idx)
+    {
+      const auto relayPin = relays.get_relay(idx).get_pin();
+
+      pinMode(relayPin, OUTPUT);
+      setPinOFF(relayPin);  // set to off
+    }
+  }
+
+  if constexpr (WATCHDOG_PIN_PRESENT)
+  {
+    pinMode(watchDogPin, OUTPUT);  // set as output
+    setPinOFF(watchDogPin);        // set to off
   }
 }
