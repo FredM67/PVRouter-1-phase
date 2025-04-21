@@ -86,6 +86,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gac599ad38730b3cb0276687ba6cbfaf1e"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Initialization.html#gac599ad38730b3cb0276687ba6cbfaf1e">getOutputPins</a> ()</td></tr>
 <tr class="memdesc:gac599ad38730b3cb0276687ba6cbfaf1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the output pins configuration.  <br /></td></tr>
 <tr class="separator:gac599ad38730b3cb0276687ba6cbfaf1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaee63eefc2be5271dc281e6554798a0ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Initialization.html#gaee63eefc2be5271dc281e6554798a0ba">initializeOldPCBPins</a> ()</td></tr>
+<tr class="memdesc:gaee63eefc2be5271dc281e6554798a0ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes optional pins for the old PCB configuration.  <br /></td></tr>
+<tr class="separator:gaee63eefc2be5271dc281e6554798a0ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gadeeaa08a0a50d8535fdf2c8a92d4aebc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc">initializeProcessing</a> ()</td></tr>
 <tr class="memdesc:gadeeaa08a0a50d8535fdf2c8a92d4aebc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the processing engine, including ports, load states, and ADC setup.  <br /></td></tr>
 <tr class="separator:gadeeaa08a0a50d8535fdf2c8a92d4aebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -208,6 +211,63 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="gaee63eefc2be5271dc281e6554798a0ba" name="gaee63eefc2be5271dc281e6554798a0ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaee63eefc2be5271dc281e6554798a0ba">&#9670;&#160;</a></span>initializeOldPCBPins()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void initializeOldPCBPins </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes optional pins for the old PCB configuration. </p>
+<p>This function configures various optional pins based on the hardware setup and feature flags. It ensures that the pins are properly initialized for their respective purposes, such as dual tariff, override, priority rotation, diversion, relay diversion, and watchdog functionality.</p>
+<dl class="section warning"><dt>Warning</dt><dd>Ensure that the pin assignments are valid for the selected PCB configuration.</dd></dl>
+<ul>
+<li>Configures the dual tariff pin as an input with an internal pull-up resistor.</li>
+<li>Configures the override pin as an input with an internal pull-up resistor.</li>
+<li>Configures the priority rotation pin as an input with an internal pull-up resistor.</li>
+<li>Configures the diversion pin as an input with an internal pull-up resistor.</li>
+<li>Initializes relay diversion pins if enabled.</li>
+<li>Configures the watchdog pin as an output and sets it to OFF. </li>
+</ul>
+
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01246">1246</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__Initialization_gaee63eefc2be5271dc281e6554798a0ba_cgraph.png" border="0" usemap="#agroup__Initialization_gaee63eefc2be5271dc281e6554798a0ba_cgraph" alt=""/></div>
+<map name="agroup__Initialization_gaee63eefc2be5271dc281e6554798a0ba_cgraph" id="agroup__Initialization_gaee63eefc2be5271dc281e6554798a0ba_cgraph">
+<area shape="rect" title="Initializes optional pins for the old PCB configuration." alt="" coords="5,104,159,129"/>
+<area shape="rect" href="classRelayEngine.html#a981b20422ed19d2aa87d042c583173ee" title="Get the relay object." alt="" coords="217,5,389,31"/>
+<area shape="rect" href="classRelayEngine.html#a1ed9500ebf4f6d7afb519c377fab42d3" title="Get the number of relays." alt="" coords="221,55,386,80"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="259,104,347,129"/>
+<area shape="rect" href="group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="This function provides the link between the logical and physical loads." alt="" coords="207,153,400,179"/>
+<area shape="rect" href="group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249" title="Updates the control ports for each of the physical loads." alt="" coords="233,203,374,228"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="456,104,535,129"/>
+<area shape="rect" href="utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd" title="Set the Pins state to OFF." alt="" coords="448,177,543,203"/>
+<area shape="rect" href="utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3" title="Set the Pins state to ON." alt="" coords="451,227,540,252"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="group__Initialization_gaee63eefc2be5271dc281e6554798a0ba_icgraph.png" border="0" usemap="#agroup__Initialization_gaee63eefc2be5271dc281e6554798a0ba_icgraph" alt=""/></div>
+<map name="agroup__Initialization_gaee63eefc2be5271dc281e6554798a0ba_icgraph" id="agroup__Initialization_gaee63eefc2be5271dc281e6554798a0ba_icgraph">
+<area shape="rect" title="Initializes optional pins for the old PCB configuration." alt="" coords="308,5,461,31"/>
+<area shape="rect" href="group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="112,5,260,31"/>
+<area shape="rect" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="gadeeaa08a0a50d8535fdf2c8a92d4aebc" name="gadeeaa08a0a50d8535fdf2c8a92d4aebc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gadeeaa08a0a50d8535fdf2c8a92d4aebc">&#9670;&#160;</a></span>initializeProcessing()</h2>
 
@@ -238,16 +298,22 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__Initialization_gadeeaa08a0a50d8535fdf2c8a92d4aebc_cgraph.png" border="0" usemap="#agroup__Initialization_gadeeaa08a0a50d8535fdf2c8a92d4aebc_cgraph" alt=""/></div>
 <map name="agroup__Initialization_gadeeaa08a0a50d8535fdf2c8a92d4aebc_cgraph" id="agroup__Initialization_gadeeaa08a0a50d8535fdf2c8a92d4aebc_cgraph">
-<area shape="rect" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="5,132,153,157"/>
-<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="241,5,320,31"/>
-<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="461,57,527,83"/>
-<area shape="rect" href="group__Initialization.html#ga8995e5745b217d64477574abf086acc7" title="Retrieves the input pins configuration." alt="" coords="229,107,332,132"/>
-<area shape="rect" href="group__Initialization.html#gac599ad38730b3cb0276687ba6cbfaf1e" title="Retrieves the output pins configuration." alt="" coords="223,156,338,181"/>
-<area shape="rect" href="utils__pins_8h.html#ac106ac6266d5d7a5328ea0c63778a873" title="Set the pins as INPUT_PULLUP." alt="" coords="201,205,360,231"/>
-<area shape="rect" href="utils__pins_8h.html#ad448cf4026a22a8190ea178a02702b2e" title="Set the pins as OUTPUT." alt="" coords="216,255,345,280"/>
-<area shape="rect" href="utils__pins_8h.html#abaa54130a12679d0dcc0e7578e0e4d37" title="Read the specified bit." alt="" coords="457,107,531,132"/>
-<area shape="rect" href="classRelayEngine.html#a981b20422ed19d2aa87d042c583173ee" title="Get the relay object." alt="" coords="408,156,580,181"/>
-<area shape="rect" href="classRelayEngine.html#a1ed9500ebf4f6d7afb519c377fab42d3" title="Get the number of relays." alt="" coords="411,205,577,231"/>
+<area shape="rect" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="5,280,153,305"/>
+<area shape="rect" href="utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="657,8,736,33"/>
+<area shape="rect" href="utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="471,329,538,354"/>
+<area shape="rect" href="group__Initialization.html#ga8995e5745b217d64477574abf086acc7" title="Retrieves the input pins configuration." alt="" coords="229,280,332,305"/>
+<area shape="rect" href="group__Initialization.html#gac599ad38730b3cb0276687ba6cbfaf1e" title="Retrieves the output pins configuration." alt="" coords="223,230,338,256"/>
+<area shape="rect" href="group__Initialization.html#gaee63eefc2be5271dc281e6554798a0ba" title="Initializes optional pins for the old PCB configuration." alt="" coords="204,156,357,181"/>
+<area shape="rect" href="utils__pins_8h.html#ac106ac6266d5d7a5328ea0c63778a873" title="Set the pins as INPUT_PULLUP." alt="" coords="201,381,360,406"/>
+<area shape="rect" href="utils__pins_8h.html#ad448cf4026a22a8190ea178a02702b2e" title="Set the pins as OUTPUT." alt="" coords="216,430,345,456"/>
+<area shape="rect" href="utils__pins_8h.html#abaa54130a12679d0dcc0e7578e0e4d37" title="Read the specified bit." alt="" coords="467,280,542,305"/>
+<area shape="rect" href="classRelayEngine.html#a981b20422ed19d2aa87d042c583173ee" title="Get the relay object." alt="" coords="419,181,591,206"/>
+<area shape="rect" href="classRelayEngine.html#a1ed9500ebf4f6d7afb519c377fab42d3" title="Get the number of relays." alt="" coords="422,230,587,256"/>
+<area shape="rect" href="utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="461,33,549,58"/>
+<area shape="rect" href="group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="This function provides the link between the logical and physical loads." alt="" coords="408,132,601,157"/>
+<area shape="rect" href="group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249" title="Updates the control ports for each of the physical loads." alt="" coords="434,82,575,108"/>
+<area shape="rect" href="utils__pins_8h.html#a7195575c2ba8a186bd9758e4e2a141fd" title="Set the Pins state to OFF." alt="" coords="649,82,744,108"/>
+<area shape="rect" href="utils__pins_8h.html#ae60db4342d45f22fa3bf5b297cf95bf3" title="Set the Pins state to ON." alt="" coords="652,132,741,157"/>
 </map>
 </div>
 <div class="dynheader">

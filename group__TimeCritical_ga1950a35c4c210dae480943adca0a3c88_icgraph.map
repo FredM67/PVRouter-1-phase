@@ -1,6 +1,9 @@
 <map id="updatePhysicalLoadStates" name="updatePhysicalLoadStates">
-<area shape="rect" id="node1" title="This function provides the link between the logical and physical loads." alt="" coords="547,5,740,31"/>
-<area shape="rect" id="node2" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="343,5,499,31"/>
-<area shape="rect" id="node3" href="$group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="96,5,295,31"/>
-<area shape="rect" id="node4" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,5,48,31"/>
+<area shape="rect" id="node1" title="This function provides the link between the logical and physical loads." alt="" coords="563,31,756,56"/>
+<area shape="rect" id="node2" href="$group__Initialization.html#gaee63eefc2be5271dc281e6554798a0ba" title="Initializes optional pins for the old PCB configuration." alt="" coords="360,5,513,31"/>
+<area shape="rect" id="node5" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="359,55,515,80"/>
+<area shape="rect" id="node3" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="137,5,285,31"/>
+<area shape="rect" id="node4" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
+<area shape="rect" id="node6" href="$group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="112,55,311,80"/>
+<area shape="rect" id="node7" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="13,55,56,80"/>
 </map>

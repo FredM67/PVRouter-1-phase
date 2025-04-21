@@ -1,9 +1,12 @@
 <map id="setPinsOFF" name="setPinsOFF">
-<area shape="rect" id="node1" title="Set the Pins state to OFF." alt="" coords="736,31,831,56"/>
-<area shape="rect" id="node2" href="$test__utils__pins_2test__main_8cpp.html#a7478e236a47b20e4bd8950e6ac92350a" title=" " alt="" coords="554,5,681,31"/>
-<area shape="rect" id="node4" href="$group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249" title="Updates the control ports for each of the physical loads." alt="" coords="547,55,688,80"/>
-<area shape="rect" id="node3" href="$test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="395,5,446,31"/>
-<area shape="rect" id="node5" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="343,55,499,80"/>
-<area shape="rect" id="node6" href="$group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="96,55,295,80"/>
-<area shape="rect" id="node7" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,55,48,80"/>
+<area shape="rect" id="node1" title="Set the Pins state to OFF." alt="" coords="752,31,847,56"/>
+<area shape="rect" id="node2" href="$test__utils__pins_2test__main_8cpp.html#a7478e236a47b20e4bd8950e6ac92350a" title=" " alt="" coords="570,5,697,31"/>
+<area shape="rect" id="node4" href="$group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249" title="Updates the control ports for each of the physical loads." alt="" coords="563,55,704,80"/>
+<area shape="rect" id="node3" href="$test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="411,5,462,31"/>
+<area shape="rect" id="node5" href="$group__Initialization.html#gaee63eefc2be5271dc281e6554798a0ba" title="Initializes optional pins for the old PCB configuration." alt="" coords="360,55,513,80"/>
+<area shape="rect" id="node8" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="359,104,515,129"/>
+<area shape="rect" id="node6" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="137,55,285,80"/>
+<area shape="rect" id="node7" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,55,64,80"/>
+<area shape="rect" id="node9" href="$group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="112,104,311,129"/>
+<area shape="rect" id="node10" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="13,104,56,129"/>
 </map>
