@@ -277,7 +277,8 @@ void checkDiversionOnOff()
     static auto previousState{ HIGH };
     if (previousState != pinState)
     {
-      DBUGLN(!pinState ? F("Trigger diversion OFF!") : F("End diversion OFF!"));
+      DBUG(F("Trigger - diversion turned "));
+      DBUGLN(!pinState ? F("'OFF'!") : F("'ON'!"));
     }
 
     previousState = pinState;

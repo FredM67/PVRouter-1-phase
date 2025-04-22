@@ -63,6 +63,7 @@ void initializeProcessing();
 void updatePhysicalLoadStates();
 void updatePortsStates();
 void printParamsForSelectedOutputMode();
+void initializeOldPCBPins();
 
 #if defined(__DOXYGEN__)
 inline void processStartUp();
