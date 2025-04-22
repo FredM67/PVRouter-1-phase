@@ -38,7 +38,7 @@
  * - Prints the sketch ID, branch name, commit hash, and build date/time.
  * - Outputs electrical settings such as power calibration, voltage calibration, and phase calibration.
  * - Displays enabled features like temperature sensing, dual tariff, load rotation, relay diversion, and RF communication.
- * - Logs the selected datalogging format (Human-readable, IoT, or EmonCMS).
+ * - Logs the selected datalogging format (Human-readable, IoT, or JSON).
  *
  * @ingroup Initialization
  */
@@ -101,9 +101,9 @@ inline void printConfiguration()
   {
     DBUGLN(F("in IoT format"));
   }
-  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::EmonCMS)
+  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::JSON)
   {
-    DBUGLN(F("in EmonCMS format"));
+    DBUGLN(F("in JSON format"));
   }
   else
   {
@@ -207,9 +207,9 @@ inline void printForSerialText()
 }
 
 /**
- * @brief Write telemetry data to Serial in EmonCMS format.
+ * @brief Write telemetry data to Serial in JSON format.
  *
- * This function outputs telemetry data in a format compatible with EmonCMS, including
+ * This function outputs telemetry data in a format compatible with JSON, including
  * power, voltage, load states, temperature, and tariff information.
  *
  * @param bOffPeak Indicates whether the system is in an off-peak tariff period.
@@ -222,7 +222,7 @@ inline void printForSerialText()
  *
  * @ingroup Telemetry
  */
-inline void printForEmonCMS(const bool bOffPeak)
+inline void printForJSON(const bool bOffPeak)
 {
   ArduinoJson::StaticJsonDocument< 256 > doc;
 
@@ -250,16 +250,7 @@ inline void printForEmonCMS(const bool bOffPeak)
     }
   }
 
-  if constexpr (SUPPLY_FREQUENCY == 50)
-  {
-    doc["NoED"] = absenceOfDivertedEnergyCount;
-  }
-  else if constexpr (SUPPLY_FREQUENCY == 60)
-  {
-    doc["NoED"] = absenceOfDivertedEnergyCount;
-  }
-  else
-    static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "SUPPLY_FREQUENCY must be either 50 or 60");
+  doc["NoED"] = absenceOfDivertedEnergyCount;
 
   serializeJson(doc, Serial);
   Serial.println();
@@ -336,7 +327,7 @@ void sendTelemetryData()
  * @brief Prints or sends telemetry data logs based on the selected output format.
  *
  * This function handles the transmission of telemetry data in various formats, such as
- * human-readable text, IoT telemetry, or EmonCMS format. It also ensures that the first
+ * human-readable text, IoT telemetry, or JSON format. It also ensures that the first
  * incomplete datalogging event is skipped during startup.
  *
  * @param bOffPeak Indicates whether the system is in an off-peak tariff period.
@@ -344,7 +335,7 @@ void sendTelemetryData()
  * @details
  * - If RF communication is enabled, it sends RF data.
  * - Depending on the `SERIAL_OUTPUT_TYPE`, it prints data in text format, sends telemetry
- *   data, or outputs data in EmonCMS format.
+ *   data, or outputs data in JSON format.
  * - Skips the first datalogging event during startup to avoid incomplete data.
  *
  * @ingroup GeneralProcessing
@@ -371,9 +362,9 @@ inline void sendResults(bool bOffPeak)
   {
     sendTelemetryData();
   }
-  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::EmonCMS)
+  else if constexpr (SERIAL_OUTPUT_TYPE == SerialOutputType::JSON)
   {
-    printForEmonCMS(bOffPeak);
+    printForJSON(bOffPeak);
   }
 }
 
