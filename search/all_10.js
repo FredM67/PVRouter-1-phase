@@ -17,7 +17,7 @@ var searchData=
   ['powergrid_14',['powerGrid',['../classPayloadTx__struct.html#ac9a5b0c7e1f4927ce571d5f46cbdcf85',1,'PayloadTx_struct']]],
   ['printconfiguration_15',['printConfiguration',['../group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee',1,'printConfiguration():&#160;utils.h'],['../classRelayEngine.html#ab3ff0ac83bf3a665174f0ea373974e3a',1,'RelayEngine::printConfiguration()']]],
   ['printdualtariffconfiguration_16',['printDualTariffConfiguration',['../group__DualTariff.html#ga4378fe99f16f9f2a6990ac70c27783a2',1,'dualtariff.h']]],
-  ['printforemoncms_17',['printForEmonCMS',['../group__Telemetry.html#ga988b25d4a6361b7cc751a212af170665',1,'utils.h']]],
+  ['printforjson_17',['printForJSON',['../group__Telemetry.html#ga85be36240113e579b00e944d4dbcd91a',1,'utils.h']]],
   ['printforserialtext_18',['printForSerialText',['../group__Telemetry.html#gae46d07fd4694c49e10360b5d79163443',1,'utils.h']]],
   ['printparamsforselectedoutputmode_19',['printParamsForSelectedOutputMode',['../processing_8h.html#aa2b3b1d496e37e5f29af6a766743dc8b',1,'printParamsForSelectedOutputMode():&#160;processing.cpp'],['../processing_8cpp.html#aa2b3b1d496e37e5f29af6a766743dc8b',1,'printParamsForSelectedOutputMode():&#160;processing.cpp']]],
   ['printrelayconfiguration_20',['printRelayConfiguration',['../classrelayOutput.html#aa900099d8298cde7d15e3e2dd804df4a',1,'relayOutput']]],

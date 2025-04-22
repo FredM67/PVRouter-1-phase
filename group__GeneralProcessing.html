@@ -175,7 +175,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Prints or sends telemetry data logs based on the selected output format. </p>
-<p>This function handles the transmission of telemetry data in various formats, such as human-readable text, IoT telemetry, or EmonCMS format. It also ensures that the first incomplete datalogging event is skipped during startup.</p>
+<p>This function handles the transmission of telemetry data in various formats, such as human-readable text, IoT telemetry, or JSON format. It also ensures that the first incomplete datalogging event is skipped during startup.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bOffPeak</td><td>Indicates whether the system is in an off-peak tariff period.</td></tr>
@@ -184,18 +184,18 @@ Here is the caller graph for this function:</div>
 </dl>
 <ul>
 <li>If RF communication is enabled, it sends RF data.</li>
-<li>Depending on the <code>SERIAL_OUTPUT_TYPE</code>, it prints data in text format, sends telemetry data, or outputs data in EmonCMS format.</li>
+<li>Depending on the <code>SERIAL_OUTPUT_TYPE</code>, it prints data in text format, sends telemetry data, or outputs data in JSON format.</li>
 <li>Skips the first datalogging event during startup to avoid incomplete data. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00352">352</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00343">343</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__GeneralProcessing_gade56d6fce22a518b8feff1a150461f94_cgraph.png" border="0" usemap="#agroup__GeneralProcessing_gade56d6fce22a518b8feff1a150461f94_cgraph" alt=""/></div>
 <map name="agroup__GeneralProcessing_gade56d6fce22a518b8feff1a150461f94_cgraph" id="agroup__GeneralProcessing_gade56d6fce22a518b8feff1a150461f94_cgraph">
 <area shape="rect" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="5,55,107,80"/>
-<area shape="rect" href="group__Telemetry.html#ga988b25d4a6361b7cc751a212af170665" title="Write telemetry data to Serial in EmonCMS format." alt="" coords="160,5,299,31"/>
+<area shape="rect" href="group__Telemetry.html#ga85be36240113e579b00e944d4dbcd91a" title="Write telemetry data to Serial in JSON format." alt="" coords="177,5,281,31"/>
 <area shape="rect" href="group__Telemetry.html#gae46d07fd4694c49e10360b5d79163443" title="Prints data logs to the Serial output in text format." alt="" coords="161,55,297,80"/>
 <area shape="rect" href="utils_8h.html#a5072aae7cb8a3f575605b65c6be56329" title="Sends telemetry data using the TeleInfo class." alt="" coords="155,104,304,129"/>
 <area shape="rect" href="classRelayEngine.html#a2c586921b020480449159786461195aa" title="Get the current average." alt="" coords="352,5,544,31"/>

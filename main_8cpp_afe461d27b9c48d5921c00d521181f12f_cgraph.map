@@ -24,7 +24,7 @@
 <area shape="rect" id="node16" href="$main_8cpp.html#a9b9428fd01019319970f27b88bb1cf33" title="Rotates the load priorities." alt="" coords="893,315,1022,340"/>
 <area shape="rect" id="node17" href="$group__GeneralProcessing.html#gae473b1c0d80fe056d1fab9bdee38aca1" title="Prints the load priorities to the Serial output." alt="" coords="1109,315,1240,340"/>
 <area shape="rect" id="node19" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="676,409,743,435"/>
-<area shape="rect" id="node23" href="$group__Telemetry.html#ga988b25d4a6361b7cc751a212af170665" title="Write telemetry data to Serial in EmonCMS format." alt="" coords="401,557,539,583"/>
+<area shape="rect" id="node23" href="$group__Telemetry.html#ga85be36240113e579b00e944d4dbcd91a" title="Write telemetry data to Serial in JSON format." alt="" coords="418,557,522,583"/>
 <area shape="rect" id="node25" href="$group__Telemetry.html#gae46d07fd4694c49e10360b5d79163443" title="Prints data logs to the Serial output in text format." alt="" coords="402,607,538,632"/>
 <area shape="rect" id="node26" href="$utils_8h.html#a5072aae7cb8a3f575605b65c6be56329" title="Sends telemetry data using the TeleInfo class." alt="" coords="395,656,545,681"/>
 <area shape="rect" id="node24" href="$classRelayEngine.html#a2c586921b020480449159786461195aa" title="Get the current average." alt="" coords="613,557,805,583"/>
