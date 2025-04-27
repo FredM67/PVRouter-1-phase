@@ -509,18 +509,7 @@ void loop()
       // this action is performed every N times around this processing loop.
       timerForDisplayUpdate = 0;
 
-      // After a pre-defined period of inactivity, the 4-digit display needs to
-      // close down in readiness for the next's day's data.
-      //
-      if (absenceOfDivertedEnergyCount > displayShutdown_inSeconds)
-      {
-        // clear the accumulators for diverted energy
-        divertedEnergyTotal_Wh = 0;
-        divertedEnergyRecent_IEU = 0;
-        EDD_isActive = false;  // energy diversion detector is now inactive
-      }
-
-      configureValueForDisplay(EDD_isActive, divertedEnergyTotal_Wh);
+      configureValueForDisplay(EDD_isActive, copyOf_divertedEnergyTotal_Wh);
       //          Serial.println(energyInBucket_prediction);
     }
 
@@ -550,7 +539,7 @@ void loop()
 
     updateTemperature();
 
-    updateOLED(divertedEnergyTotal_Wh);
+    updateOLED(copyOf_divertedEnergyTotal_Wh);
 
     sendResults(bOffPeak);
   }
