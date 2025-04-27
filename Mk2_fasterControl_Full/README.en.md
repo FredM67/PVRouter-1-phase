@@ -1,5 +1,5 @@
-[![en](https://img.shields.io/badge/lang-en-red.svg)](Readme.en.md)
-[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](Readme.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](README.en.md)
+[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](README.md)
 
 This program is to be used with the Arduino IDE and/or other development IDE like VSCode + PlatformIO.
 
