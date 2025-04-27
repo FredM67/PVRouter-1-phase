@@ -167,7 +167,7 @@ inline void printForSerialText()
   Serial.print(tx_data.powerDiverted);
 
   Serial.print(F(", E:"));
-  Serial.print(divertedEnergyTotal_Wh);
+  Serial.print(copyOf_divertedEnergyTotal_Wh);
 
   Serial.print(F(", V"));
   Serial.print(F(":"));
@@ -234,7 +234,7 @@ inline void printForJSON(const bool bOffPeak)
   }
 
   doc["D"] = tx_data.powerDiverted;
-  doc["E"] = divertedEnergyTotal_Wh;
+  doc["E"] = copyOf_divertedEnergyTotal_Wh;
   doc["V"] = (float)tx_data.Vrms_L_x100 * 0.01F;
 
   if constexpr (TEMP_SENSOR_PRESENT)
@@ -298,9 +298,9 @@ void sendTelemetryData()
     } while (++idx < relays.get_size());
   }
 
-  teleInfo.send("D", tx_data.powerDiverted);                           // Send power diverted
-  teleInfo.send("E", static_cast< int16_t >(divertedEnergyTotal_Wh));  // Send diverted energy in Wh
-  teleInfo.send("V", tx_data.Vrms_L_x100);                             // Send voltage in volts
+  teleInfo.send("D", tx_data.powerDiverted);                                  // Send power diverted
+  teleInfo.send("E", static_cast< int16_t >(copyOf_divertedEnergyTotal_Wh));  // Send diverted energy in Wh
+  teleInfo.send("V", tx_data.Vrms_L_x100);                                    // Send voltage in volts
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {

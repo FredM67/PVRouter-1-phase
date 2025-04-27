@@ -546,7 +546,7 @@ void processRawSamples()
     // still processing samples where the voltage is Polarities::POSITIVE ...
     // (in this go-faster code, the action from here has moved to the negative half of the cycle)
 
-  }     // end of processing that is specific to samples where the voltage is positive
+  }  // end of processing that is specific to samples where the voltage is positive
   else  // the polarity of this sample is negative
   {
     if (polarityConfirmedOfLastSampleV != Polarities::NEGATIVE)
@@ -912,6 +912,18 @@ void processLatestContribution()
   //
   // The latest contribution can now be added to this energy bucket
   energyInBucket_long += realEnergy_grid;
+
+  // After a pre-defined period of inactivity, the 4-digit display needs to
+  // close down in readiness for the next's day's data.
+  //
+  if (absenceOfDivertedEnergyCount > displayShutdown_inSeconds)
+  {
+    // clear the accumulators for diverted energy
+    divertedEnergyTotal_Wh = 0;
+    divertedEnergyRecent_IEU = 0;
+    EDD_isActive = false;  // energy diversion detector is now inactive
+  }
+  copyOf_divertedEnergyTotal_Wh = divertedEnergyTotal_Wh;
 
   b_newCycle = true;  //  a 50 Hz 'tick' for use by the main code
 }
