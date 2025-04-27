@@ -319,11 +319,11 @@ Functions</h2></td></tr>
 Variables</h2></td></tr>
 <tr class="memitem:ae3ad049e6ee90e4eacc823d1387f02e0" id="r_ae3ad049e6ee90e4eacc823d1387f02e0"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3ad049e6ee90e4eacc823d1387f02e0">activeLoad</a> { <a class="el" href="config_8h.html#aa2458020f21db854d8f2fe0e500dcd05">NO_OF_DUMPLOADS</a> }</td></tr>
 <tr class="separator:ae3ad049e6ee90e4eacc823d1387f02e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a560d64f936f459063fd3aabb327f3696" id="r_a560d64f936f459063fd3aabb327f3696"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a560d64f936f459063fd3aabb327f3696">antiCreepLimit_inIEUperMainsCycle</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#aa3b33e12ca9d02da59889eb87948e62b">ANTI_CREEP_LIMIT</a> * (1 / powerCal_grid)) }</td></tr>
+<tr class="memitem:a560d64f936f459063fd3aabb327f3696" id="r_a560d64f936f459063fd3aabb327f3696"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a560d64f936f459063fd3aabb327f3696">antiCreepLimit_inIEUperMainsCycle</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#aa3b33e12ca9d02da59889eb87948e62b">ANTI_CREEP_LIMIT</a> * (1 / <a class="el" href="calibration_8h.html#aa79c0e0815a2819ac9ce16cc3a93fd2d">powerCal_grid</a>)) }</td></tr>
 <tr class="separator:a560d64f936f459063fd3aabb327f3696"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaecb72fa3ab0755ac124b5fa6ffa1c6f" id="r_aaecb72fa3ab0755ac124b5fa6ffa1c6f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaecb72fa3ab0755ac124b5fa6ffa1c6f">beyondStartUpPeriod</a> { false }</td></tr>
 <tr class="separator:aaecb72fa3ab0755ac124b5fa6ffa1c6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a845d0be1ce120105c02f3e2e44f9c26d" id="r_a845d0be1ce120105c02f3e2e44f9c26d"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a845d0be1ce120105c02f3e2e44f9c26d">capacityOfEnergyBucket_long</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a6934c64e6f6dd1c9ce2a993cc73fa70c">WORKING_ZONE_IN_JOULES</a> * <a class="el" href="config__system_8h.html#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> * (1 / powerCal_grid)) }</td></tr>
+<tr class="memitem:a845d0be1ce120105c02f3e2e44f9c26d" id="r_a845d0be1ce120105c02f3e2e44f9c26d"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a845d0be1ce120105c02f3e2e44f9c26d">capacityOfEnergyBucket_long</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a6934c64e6f6dd1c9ce2a993cc73fa70c">WORKING_ZONE_IN_JOULES</a> * <a class="el" href="config__system_8h.html#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> * (1 / <a class="el" href="calibration_8h.html#aa79c0e0815a2819ac9ce16cc3a93fd2d">powerCal_grid</a>)) }</td></tr>
 <tr class="separator:a845d0be1ce120105c02f3e2e44f9c26d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f61fd181a2806e678e5473eaad03891" id="r_a2f61fd181a2806e678e5473eaad03891"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f61fd181a2806e678e5473eaad03891">countLoadON</a> [<a class="el" href="config_8h.html#aa2458020f21db854d8f2fe0e500dcd05">NO_OF_DUMPLOADS</a>] {}</td></tr>
 <tr class="separator:a2f61fd181a2806e678e5473eaad03891"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -341,7 +341,7 @@ Variables</h2></td></tr>
 <tr class="separator:a5f04ed3c358e675114ee70e3552d6e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb26a8ad4b5d9d5a7fae093c80efd6f8" id="r_afb26a8ad4b5d9d5a7fae093c80efd6f8"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb26a8ad4b5d9d5a7fae093c80efd6f8">energyInBucket_prediction</a> { 0 }</td></tr>
 <tr class="separator:afb26a8ad4b5d9d5a7fae093c80efd6f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adad6336333bc5baf7199e8314f19400a" id="r_adad6336333bc5baf7199e8314f19400a"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adad6336333bc5baf7199e8314f19400a">IEU_per_Wh</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a1758323644e0aded21187740a3c473fa">JOULES_PER_WATT_HOUR</a> * <a class="el" href="config__system_8h.html#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> * (1 / powerCal_diverted)) }</td></tr>
+<tr class="memitem:adad6336333bc5baf7199e8314f19400a" id="r_adad6336333bc5baf7199e8314f19400a"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adad6336333bc5baf7199e8314f19400a">IEU_per_Wh</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a1758323644e0aded21187740a3c473fa">JOULES_PER_WATT_HOUR</a> * <a class="el" href="config__system_8h.html#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> * (1 / <a class="el" href="calibration_8h.html#ae63e797dc6e09e314af00a47c0784c11">powerCal_diverted</a>)) }</td></tr>
 <tr class="separator:adad6336333bc5baf7199e8314f19400a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98ec9049e0076bcf6a00afa7e66f1eaa" id="r_a98ec9049e0076bcf6a00afa7e66f1eaa"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98ec9049e0076bcf6a00afa7e66f1eaa">l_sum_Vsquared</a> { 0 }</td></tr>
 <tr class="separator:a98ec9049e0076bcf6a00afa7e66f1eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -373,7 +373,7 @@ Variables</h2></td></tr>
 <tr class="separator:a5cad71887d7425aba03f377a26224413"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21746c4720d63888ffd00929388d2236" id="r_a21746c4720d63888ffd00929388d2236"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21746c4720d63888ffd00929388d2236">recentTransition</a> { false }</td></tr>
 <tr class="separator:a21746c4720d63888ffd00929388d2236"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22ac107a8fe19694803bd2b1b597bc0c" id="r_a22ac107a8fe19694803bd2b1b597bc0c"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22ac107a8fe19694803bd2b1b597bc0c">requiredExportPerMainsCycle_inIEU</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a0d838172b50bebc493c09edb7b7606d5">REQUIRED_EXPORT_IN_WATTS</a> * (1 / powerCal_grid)) }</td></tr>
+<tr class="memitem:a22ac107a8fe19694803bd2b1b597bc0c" id="r_a22ac107a8fe19694803bd2b1b597bc0c"><td class="memItemLeft" align="right" valign="top">constexpr int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22ac107a8fe19694803bd2b1b597bc0c">requiredExportPerMainsCycle_inIEU</a> { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a0d838172b50bebc493c09edb7b7606d5">REQUIRED_EXPORT_IN_WATTS</a> * (1 / <a class="el" href="calibration_8h.html#aa79c0e0815a2819ac9ce16cc3a93fd2d">powerCal_grid</a>)) }</td></tr>
 <tr class="separator:a22ac107a8fe19694803bd2b1b597bc0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2882e1102e86830ce96c21c7604836a" id="r_aa2882e1102e86830ce96c21c7604836a"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2882e1102e86830ce96c21c7604836a">sampleSetsDuringNegativeHalfOfMainsCycle</a> { 0 }</td></tr>
 <tr class="separator:aa2882e1102e86830ce96c21c7604836a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -469,7 +469,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t antiCreepLimit_inIEUperMainsCycle { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#aa3b33e12ca9d02da59889eb87948e62b">ANTI_CREEP_LIMIT</a> * (1 / powerCal_grid)) }</td>
+          <td class="memname">int32_t antiCreepLimit_inIEUperMainsCycle { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#aa3b33e12ca9d02da59889eb87948e62b">ANTI_CREEP_LIMIT</a> * (1 / <a class="el" href="calibration_8h.html#aa79c0e0815a2819ac9ce16cc3a93fd2d">powerCal_grid</a>)) }</td>
         </tr>
       </table>
   </td>
@@ -514,7 +514,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t capacityOfEnergyBucket_long { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a6934c64e6f6dd1c9ce2a993cc73fa70c">WORKING_ZONE_IN_JOULES</a> * <a class="el" href="config__system_8h.html#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> * (1 / powerCal_grid)) }</td>
+          <td class="memname">int32_t capacityOfEnergyBucket_long { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a6934c64e6f6dd1c9ce2a993cc73fa70c">WORKING_ZONE_IN_JOULES</a> * <a class="el" href="config__system_8h.html#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> * (1 / <a class="el" href="calibration_8h.html#aa79c0e0815a2819ac9ce16cc3a93fd2d">powerCal_grid</a>)) }</td>
         </tr>
       </table>
   </td>
@@ -715,7 +715,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t IEU_per_Wh { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a1758323644e0aded21187740a3c473fa">JOULES_PER_WATT_HOUR</a> * <a class="el" href="config__system_8h.html#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> * (1 / powerCal_diverted)) }</td>
+          <td class="memname">int32_t IEU_per_Wh { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a1758323644e0aded21187740a3c473fa">JOULES_PER_WATT_HOUR</a> * <a class="el" href="config__system_8h.html#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> * (1 / <a class="el" href="calibration_8h.html#ae63e797dc6e09e314af00a47c0784c11">powerCal_diverted</a>)) }</td>
         </tr>
       </table>
   </td>
@@ -1047,7 +1047,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t requiredExportPerMainsCycle_inIEU { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a0d838172b50bebc493c09edb7b7606d5">REQUIRED_EXPORT_IN_WATTS</a> * (1 / powerCal_grid)) }</td>
+          <td class="memname">int32_t requiredExportPerMainsCycle_inIEU { static_cast&lt; int32_t &gt;(<a class="el" href="config__system_8h.html#a0d838172b50bebc493c09edb7b7606d5">REQUIRED_EXPORT_IN_WATTS</a> * (1 / <a class="el" href="calibration_8h.html#aa79c0e0815a2819ac9ce16cc3a93fd2d">powerCal_grid</a>)) }</td>
         </tr>
       </table>
   </td>

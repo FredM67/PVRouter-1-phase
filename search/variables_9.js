@@ -10,5 +10,6 @@ var searchData=
   ['logo_5fwidth_7',['LOGO_WIDTH',['../utils__oled_8h.html#a38f32d0c115e8616b381cb8bac2eb15d',1,'utils_oled.h']]],
   ['lowerenergythreshold_8',['lowerEnergyThreshold',['../processing_8cpp.html#ab90abf1e4f398064d5151def545f0e8c',1,'processing.cpp']]],
   ['lowerthreshold_5fdefault_9',['lowerThreshold_default',['../processing_8cpp.html#a9d2aaccd1924b13d9324b1091831661f',1,'processing.cpp']]],
-  ['lowestnoofsamplesetspermainscycle_10',['lowestNoOfSampleSetsPerMainsCycle',['../processing_8cpp.html#ab935f4f3c343be21384a6ed896561b61',1,'processing.cpp']]]
+  ['lowestnoofsamplesetspermainscycle_10',['lowestNoOfSampleSetsPerMainsCycle',['../processing_8cpp.html#ab935f4f3c343be21384a6ed896561b61',1,'processing.cpp']]],
+  ['lpf_5fgain_11',['lpf_gain',['../calibration_8h.html#a74d2e520152cb559bdb6e18153dcb5e4',1,'calibration.h']]]
 ];

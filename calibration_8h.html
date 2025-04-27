@@ -88,6 +88,8 @@ $(function(){ initResizable(false); });
 </div><!-- top -->
 <div id="doc-content">
 <div class="header">
+  <div class="summary">
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">calibration.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -229,6 +231,20 @@ This graph shows which files directly or indirectly include this file:</div>
 </div>
 </div>
 <p><a href="calibration_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a19b3d4f09bab83f43bd3a3ed5295bddb" id="r_a19b3d4f09bab83f43bd3a3ed5295bddb"><td class="memItemLeft" align="right" valign="top">constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19b3d4f09bab83f43bd3a3ed5295bddb">alpha</a> { 0.0011 }</td></tr>
+<tr class="separator:a19b3d4f09bab83f43bd3a3ed5295bddb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a8327dcf62ab819a2cfff87e7b08ca4" id="r_a7a8327dcf62ab819a2cfff87e7b08ca4"><td class="memItemLeft" align="right" valign="top">constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a8327dcf62ab819a2cfff87e7b08ca4">f_voltageCal</a> { 0.805653F }</td></tr>
+<tr class="separator:a7a8327dcf62ab819a2cfff87e7b08ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74d2e520152cb559bdb6e18153dcb5e4" id="r_a74d2e520152cb559bdb6e18153dcb5e4"><td class="memItemLeft" align="right" valign="top">constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74d2e520152cb559bdb6e18153dcb5e4">lpf_gain</a> { 9 }</td></tr>
+<tr class="separator:a74d2e520152cb559bdb6e18153dcb5e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae63e797dc6e09e314af00a47c0784c11" id="r_ae63e797dc6e09e314af00a47c0784c11"><td class="memItemLeft" align="right" valign="top">constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae63e797dc6e09e314af00a47c0784c11">powerCal_diverted</a> { 0.0447F }</td></tr>
+<tr class="separator:ae63e797dc6e09e314af00a47c0784c11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa79c0e0815a2819ac9ce16cc3a93fd2d" id="r_aa79c0e0815a2819ac9ce16cc3a93fd2d"><td class="memItemLeft" align="right" valign="top">constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa79c0e0815a2819ac9ce16cc3a93fd2d">powerCal_grid</a> { 0.0436F }</td></tr>
+<tr class="separator:aa79c0e0815a2819ac9ce16cc3a93fd2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Calibration values definition. </p>
 <dl class="section author"><dt>Author</dt><dd>Frédéric Metrich (<a href="#" onclick="location.href='mai'+'lto:'+'fre'+'de'+'ric'+'.m'+'etr'+'ic'+'h@l'+'iv'+'e.f'+'r'; return false;">frede<span class="obfuscator">.nosp@m.</span>ric.<span class="obfuscator">.nosp@m.</span>metri<span class="obfuscator">.nosp@m.</span>ch@l<span class="obfuscator">.nosp@m.</span>ive.f<span class="obfuscator">.nosp@m.</span>r</a>) </dd></dl>
@@ -237,7 +253,140 @@ This graph shows which files directly or indirectly include this file:</div>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2023 </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="calibration_8h_source.html">calibration.h</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Variable Documentation</h2>
+<a id="a19b3d4f09bab83f43bd3a3ed5295bddb" name="a19b3d4f09bab83f43bd3a3ed5295bddb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19b3d4f09bab83f43bd3a3ed5295bddb">&#9670;&#160;</a></span>alpha</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float alpha { 0.0011 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="calibration_8h_source.html#l00040">40</a> of file <a class="el" href="calibration_8h_source.html">calibration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00391">processGridCurrentRawSample()</a>.</p>
+
+</div>
+</div>
+<a id="a7a8327dcf62ab819a2cfff87e7b08ca4" name="a7a8327dcf62ab819a2cfff87e7b08ca4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a8327dcf62ab819a2cfff87e7b08ca4">&#9670;&#160;</a></span>f_voltageCal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float f_voltageCal { 0.805653F }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>compared with Sentron PAC 4200 </p>
+
+<p class="definition">Definition at line <a class="el" href="calibration_8h_source.html#l00037">37</a> of file <a class="el" href="calibration_8h_source.html">calibration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00350">processCalculationsForLogging()</a>.</p>
+
+</div>
+</div>
+<a id="a74d2e520152cb559bdb6e18153dcb5e4" name="a74d2e520152cb559bdb6e18153dcb5e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74d2e520152cb559bdb6e18153dcb5e4">&#9670;&#160;</a></span>lpf_gain</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float lpf_gain { 9 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>setting this to 0 disables this extra processing </p>
+
+<p class="definition">Definition at line <a class="el" href="calibration_8h_source.html#l00039">39</a> of file <a class="el" href="calibration_8h_source.html">calibration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00391">processGridCurrentRawSample()</a>.</p>
+
+</div>
+</div>
+<a id="ae63e797dc6e09e314af00a47c0784c11" name="ae63e797dc6e09e314af00a47c0784c11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae63e797dc6e09e314af00a47c0784c11">&#9670;&#160;</a></span>powerCal_diverted</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float powerCal_diverted { 0.0447F }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="calibration_8h_source.html#l00035">35</a> of file <a class="el" href="calibration_8h_source.html">calibration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00045">printConfiguration()</a>, and <a class="el" href="main_8cpp_source.html#l00350">processCalculationsForLogging()</a>.</p>
+
+</div>
+</div>
+<a id="aa79c0e0815a2819ac9ce16cc3a93fd2d" name="aa79c0e0815a2819ac9ce16cc3a93fd2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa79c0e0815a2819ac9ce16cc3a93fd2d">&#9670;&#160;</a></span>powerCal_grid</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float powerCal_grid { 0.0436F }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="calibration_8h_source.html#l00034">34</a> of file <a class="el" href="calibration_8h_source.html">calibration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00045">printConfiguration()</a>, and <a class="el" href="main_8cpp_source.html#l00350">processCalculationsForLogging()</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2
