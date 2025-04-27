@@ -1,12 +1,21 @@
 <map id="setPinsON" name="setPinsON">
-<area shape="rect" id="node1" title="Set the Pins state to ON." alt="" coords="752,31,841,56"/>
-<area shape="rect" id="node2" href="$test__utils__pins_2test__main_8cpp.html#a660695f67f59859460015d186d7a2587" title=" " alt="" coords="573,5,694,31"/>
-<area shape="rect" id="node4" href="$group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249" title="Updates the control ports for each of the physical loads." alt="" coords="563,55,704,80"/>
-<area shape="rect" id="node3" href="$test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="411,5,462,31"/>
-<area shape="rect" id="node5" href="$group__Initialization.html#gaee63eefc2be5271dc281e6554798a0ba" title="Initializes optional pins for the old PCB configuration." alt="" coords="360,55,513,80"/>
-<area shape="rect" id="node8" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="359,104,515,129"/>
-<area shape="rect" id="node6" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="137,55,285,80"/>
-<area shape="rect" id="node7" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,55,64,80"/>
-<area shape="rect" id="node9" href="$group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="112,104,311,129"/>
-<area shape="rect" id="node10" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="13,104,56,129"/>
+<area shape="rect" id="Node000001" title="Set the Pins state to ON." alt="" coords="752,31,841,56"/>
+<area shape="rect" id="Node000002" href="$test__utils__pins_2test__main_8cpp.html#a660695f67f59859460015d186d7a2587" title=" " alt="" coords="573,5,694,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="738,37,694,30,695,25,739,32"/>
+<area shape="rect" id="Node000004" href="$group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249" title="Updates the control ports for each of the physical loads." alt="" coords="563,55,704,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="739,54,705,60,704,54,738,49"/>
+<area shape="rect" id="Node000003" href="$test__utils__pins_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="411,5,462,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="558,21,462,21,462,15,558,15"/>
+<area shape="rect" id="Node000005" href="$group__Initialization.html#gaee63eefc2be5271dc281e6554798a0ba" title="Initializes optional pins for the old PCB configuration." alt="" coords="360,55,513,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="549,70,514,70,514,65,549,65"/>
+<area shape="rect" id="Node000008" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="359,104,515,129"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="570,86,489,107,487,101,568,81"/>
+<area shape="rect" id="Node000006" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="137,55,285,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="346,70,285,70,285,65,346,65"/>
+<area shape="rect" id="Node000007" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,55,64,80"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="124,70,64,70,64,65,124,65"/>
+<area shape="rect" id="Node000009" href="$group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="112,104,311,129"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="345,119,311,119,311,114,345,114"/>
+<area shape="rect" id="Node000010" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="13,104,56,129"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="98,119,57,119,57,114,98,114"/>
 </map>

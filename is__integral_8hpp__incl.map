@@ -1,6 +1,10 @@
 <map id="Mk2_fasterControl_Full/type_traits/is_integral.hpp" name="Mk2_fasterControl_Full/type_traits/is_integral.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="34,5,230,45"/>
-<area shape="rect" id="node2" href="$integral__constant_8hpp.html" title=" " alt="" coords="5,167,168,192"/>
-<area shape="rect" id="node3" href="$is__same_8hpp.html" title=" " alt="" coords="80,93,184,119"/>
-<area shape="rect" id="node4" href="$remove__cv_8hpp.html" title=" " alt="" coords="209,93,330,119"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="34,5,230,45"/>
+<area shape="rect" id="Node000002" href="$integral__constant_8hpp.html" title=" " alt="" coords="5,167,168,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,48,87,69,70,94,67,109,68,124,76,153,71,155,63,125,62,108,66,92,82,65,104,44"/>
+<area shape="rect" id="Node000003" href="$is__same_8hpp.html" title=" " alt="" coords="80,93,184,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="135,46,135,79,129,79,129,46"/>
+<area shape="rect" id="Node000004" href="$remove__cv_8hpp.html" title=" " alt="" coords="209,93,330,119"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="166,43,238,84,236,89,164,48"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="127,120,104,157,99,154,122,118"/>
 </map>

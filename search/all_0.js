@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['7_2dsegment_20display_20feature_0',['7-Segment Display Feature',['../group__SegDisplay.html',1,'']]]
+  ['1_20phase_20photovoltaic_20router_20diverter_0',['A 1-phase photovoltaic router/diverter',['../index.html',1,'']]]
 ];

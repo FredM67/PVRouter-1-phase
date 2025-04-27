@@ -1,5 +1,26 @@
 var searchData=
 [
-  ['handlepersecondtasks_0',['handlePerSecondTasks',['../main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761',1,'main.cpp']]],
-  ['humanreadable_1',['HumanReadable',['../types_8h.html#a79eb4203772befbcfd761524de448ac7ae04f919664e727f5d94594a506d9e8b3',1,'types.h']]]
+  ['general_20processing_0',['General Processing',['../group__GeneralProcessing.html',1,'']]],
+  ['get_5faverage_1',['get_average',['../classRelayEngine.html#a2c586921b020480449159786461195aa',1,'RelayEngine']]],
+  ['get_5fimportthreshold_2',['get_importThreshold',['../classrelayOutput.html#aa5e29e98a79b0a99ca429b2d3c80969e',1,'relayOutput']]],
+  ['get_5fminoff_3',['get_minOFF',['../classrelayOutput.html#a3b3ccb243e3e2c287249e0f0e079f554',1,'relayOutput']]],
+  ['get_5fminon_4',['get_minON',['../classrelayOutput.html#aefe2af3c49240ec8fc219a26f37c8bb8',1,'relayOutput']]],
+  ['get_5fpin_5',['get_pin',['../classrelayOutput.html#ac9bf2670034f07cc718b4a9b7c513155',1,'relayOutput']]],
+  ['get_5frelay_6',['get_relay',['../classRelayEngine.html#a981b20422ed19d2aa87d042c583173ee',1,'RelayEngine']]],
+  ['get_5fsize_7',['get_size',['../classRelayEngine.html#a1ed9500ebf4f6d7afb519c377fab42d3',1,'RelayEngine']]],
+  ['get_5fsurplusthreshold_8',['get_surplusThreshold',['../classrelayOutput.html#a53d146f5a123d31cae6146e8fb4c038a',1,'relayOutput']]],
+  ['get_5ftile_5ffrom_5fxbm_9',['get_tile_from_xbm',['../group__OLEDDisplay.html#gaa57d8826eabcc4fdd9ff420cf69038ce',1,'utils_oled.h']]],
+  ['getaverage_10',['getAverage',['../classmovingAvg.html#a1dcbea2038fad2497a67aecbf8605aae',1,'movingAvg']]],
+  ['getaveraged_11',['getAverageD',['../classEWMA__average.html#a8caa754acdd5f485f7cd2a183cee1286',1,'EWMA_average']]],
+  ['getaverages_12',['getAverageS',['../classEWMA__average.html#ad9343d2edcd78461e66118196e76fa2c',1,'EWMA_average']]],
+  ['getaveraget_13',['getAverageT',['../classEWMA__average.html#a8f68c3f411360bfd79ef732a313616be',1,'EWMA_average']]],
+  ['getcols_14',['getCols',['../classu8x8__fake.html#a502b9dade4cb3f784ee20238eed25bb6',1,'u8x8_fake']]],
+  ['getduration_15',['getDuration',['../classpairForceLoad.html#a0b4b18f7af62c643c8672d77c365b0d2',1,'pairForceLoad']]],
+  ['getelement_16',['getElement',['../classmovingAvg.html#afaea648c9898a00cdbf8991971279861',1,'movingAvg']]],
+  ['getinputpins_17',['getInputPins',['../group__Initialization.html#ga8995e5745b217d64477574abf086acc7',1,'processing.cpp']]],
+  ['getoutputpins_18',['getOutputPins',['../group__Initialization.html#gac599ad38730b3cb0276687ba6cbfaf1e',1,'processing.cpp']]],
+  ['getpinstate_19',['getPinState',['../utils__pins_8h.html#a410a7bdd300104398ce91797bd936cdb',1,'utils_pins.h']]],
+  ['getrows_20',['getRows',['../classu8x8__fake.html#aebad2702b4da6a0f52abd7380013b797',1,'u8x8_fake']]],
+  ['getsize_21',['getSize',['../classmovingAvg.html#a588664a30754acc54ac30962e5a5e303',1,'movingAvg']]],
+  ['getstartoffset_22',['getStartOffset',['../classpairForceLoad.html#a2f5ce15b46ef76b58c197106b37c097f',1,'pairForceLoad']]]
 ];

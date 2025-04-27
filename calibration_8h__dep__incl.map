@@ -1,6 +1,10 @@
 <map id="Mk2_fasterControl_Full/calibration.h" name="Mk2_fasterControl_Full/calibration.h">
-<area shape="rect" id="node1" title="Calibration values definition." alt="" coords="25,5,197,45"/>
-<area shape="rect" id="node2" href="$main_8cpp.html" title="Main code." alt="" coords="61,181,233,221"/>
-<area shape="rect" id="node3" href="$processing_8cpp.html" title=" " alt="" coords="25,93,197,133"/>
-<area shape="rect" id="node4" href="$utils_8h.html" title="Some utility functions." alt="" coords="221,93,393,133"/>
+<area shape="rect" id="Node000001" title="Calibration values definition." alt="" coords="25,5,197,45"/>
+<area shape="rect" id="Node000002" href="$main_8cpp.html" title="Main code." alt="" coords="61,181,233,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="55,54,32,72,14,95,8,114,14,132,26,147,41,160,76,179,73,184,38,164,22,151,10,135,3,114,10,92,28,68,52,50"/>
+<area shape="rect" id="Node000003" href="$processing_8cpp.html" title=" " alt="" coords="25,93,197,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="113,59,113,93,108,93,108,59"/>
+<area shape="rect" id="Node000004" href="$utils_8h.html" title="Some utility functions." alt="" coords="221,93,393,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="167,48,265,91,263,96,165,53"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="261,142,183,184,181,179,259,137"/>
 </map>

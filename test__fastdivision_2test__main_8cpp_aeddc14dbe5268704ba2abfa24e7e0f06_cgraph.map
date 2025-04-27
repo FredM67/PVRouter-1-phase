@@ -1,4 +1,5 @@
 <map id="test_divmod10" name="test_divmod10">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,124,31"/>
-<area shape="rect" id="node2" href="$FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267" title=" " alt="" coords="172,5,259,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,124,31"/>
+<area shape="rect" id="Node000002" href="$FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267" title=" " alt="" coords="172,5,259,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,15,158,15,158,21,124,21"/>
 </map>

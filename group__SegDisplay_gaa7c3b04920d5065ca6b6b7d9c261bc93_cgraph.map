@@ -1,8 +1,13 @@
 <map id="update7SegmentSWDisplay" name="update7SegmentSWDisplay">
-<area shape="rect" id="node1" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="5,31,208,56"/>
-<area shape="rect" id="node2" href="$utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="256,31,352,56"/>
-<area shape="rect" id="node3" href="$utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="400,5,488,31"/>
-<area shape="rect" id="node5" href="$utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="403,55,485,80"/>
-<area shape="rect" id="node4" href="$utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="536,5,615,31"/>
-<area shape="rect" id="node6" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="542,55,609,80"/>
+<area shape="rect" id="Node000001" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="5,31,208,56"/>
+<area shape="rect" id="Node000002" href="$utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="256,31,352,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,41,242,41,242,46,208,46"/>
+<area shape="rect" id="Node000003" href="$utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="400,5,488,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="352,32,386,26,387,31,353,37"/>
+<area shape="rect" id="Node000005" href="$utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="403,55,485,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="353,49,390,55,389,61,352,54"/>
+<area shape="rect" id="Node000004" href="$utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="536,5,615,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="488,15,522,15,522,21,488,21"/>
+<area shape="rect" id="Node000006" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="542,55,609,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="485,65,528,65,528,70,485,70"/>
 </map>

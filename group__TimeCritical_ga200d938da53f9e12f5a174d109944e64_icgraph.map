@@ -1,4 +1,5 @@
 <map id="processDivertedCurrentRawSample" name="processDivertedCurrentRawSample">
-<area shape="rect" id="node1" title="Processes the raw current sample for the diverted connection point." alt="" coords="96,5,300,45"/>
-<area shape="rect" id="node2" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,13,48,38"/>
+<area shape="rect" id="Node000001" title="Processes the raw current sample for the diverted connection point." alt="" coords="96,5,300,45"/>
+<area shape="rect" id="Node000002" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,13,48,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,28,48,28,48,23,82,23"/>
 </map>

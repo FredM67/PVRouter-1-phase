@@ -1,6 +1,10 @@
 <map id="Mk2_fasterControl_Full/test/embedded/test_fastdivision/test_main.cpp" name="Mk2_fasterControl_Full/test/embedded/test_fastdivision/test_main.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,241,60"/>
-<area shape="rect" id="node2" title=" " alt="" coords="103,181,187,207"/>
-<area shape="rect" id="node3" title=" " alt="" coords="91,108,156,133"/>
-<area shape="rect" id="node4" href="$FastDivision_8h.html" title=" " alt="" coords="180,108,293,133"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,241,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="103,181,187,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,61,81,96,77,114,80,132,95,154,115,171,111,175,91,157,76,134,72,114,76,94,96,59"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="91,108,156,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="126,60,126,94,121,94,121,60"/>
+<area shape="rect" id="Node000004" href="$FastDivision_8h.html" title=" " alt="" coords="180,108,293,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="160,58,212,97,209,102,156,62"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="224,135,172,175,169,171,220,131"/>
 </map>

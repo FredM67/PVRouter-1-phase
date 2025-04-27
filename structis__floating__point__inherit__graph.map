@@ -1,5 +1,7 @@
 <map id="is_floating_point&lt; T &gt;" name="is_floating_point&lt; T &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="721,51,888,77"/>
-<area shape="rect" id="node2" href="$structintegral__constant.html" title=" " alt="" coords="425,22,672,106"/>
-<area shape="rect" id="node3" href="$structintegral__constant.html" title=" " alt="" coords="5,44,152,84"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="721,51,888,77"/>
+<area shape="rect" id="Node000002" href="$structintegral__constant.html" title=" " alt="" coords="425,22,672,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="686,61,721,61,721,67,686,67"/>
+<area shape="rect" id="Node000003" href="$structintegral__constant.html" title=" " alt="" coords="5,44,152,84"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="166,61,425,61,425,67,166,67"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="initializeDisplaySW" name="initializeDisplaySW">
-<area shape="rect" id="node1" title="Initializes the display for software&#45;driven 7&#45;segment displays." alt="" coords="287,5,435,31"/>
-<area shape="rect" id="node2" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="112,5,239,31"/>
-<area shape="rect" id="node3" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
+<area shape="rect" id="Node000001" title="Initializes the display for software&#45;driven 7&#45;segment displays." alt="" coords="287,5,435,31"/>
+<area shape="rect" id="Node000002" href="$group__SegDisplay.html#ga3533a6f04780d5ed82d704bf39cebb69" title="Initializes the display for hardware&#45;driven 7&#45;segment displays." alt="" coords="112,5,239,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="273,21,239,21,239,15,273,15"/>
+<area shape="rect" id="Node000003" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="98,21,64,21,64,15,98,15"/>
 </map>

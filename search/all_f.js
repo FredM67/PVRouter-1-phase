@@ -1,16 +1,18 @@
 var searchData=
 [
-  ['off_0',['OFF',['../utils__display_8h.html#aa6671243ff94189dcf82eef4a3a0c468',1,'OFF():&#160;utils_display.h'],['../types_8h.html#a06b890c4a964752df814257dc1f13073a88559a0cfd8250c9d65970cc145c92d4',1,'OFF():&#160;types.h']]],
-  ['old_5fpcb_1',['OLD_PCB',['../config_8h.html#a8b5ec5ad0f115c9bd4e6a1beb4d1b185',1,'config.h']]],
-  ['oled_2',['OLED',['../types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9a0c9b2f3f3530345ea5cd8c586478d2b7',1,'types.h']]],
-  ['oled_20display_20feature_3',['OLED Display Feature',['../group__OLEDDisplay.html',1,'']]],
-  ['oled_5freset_4',['OLED_RESET',['../utils__oled_8h.html#a619e07239fb3b9b14d40646ab41d5b4f',1,'utils_oled.h']]],
-  ['on_5',['ON',['../utils__display_8h.html#a7048fc75a5cff8a51368e3fbb53521db',1,'utils_display.h']]],
-  ['operator_20value_5ftype_6',['operator value_type',['../structintegral__constant.html#a37151c95f5c13a5cdd5198491d896047',1,'integral_constant']]],
-  ['operator_22_22_5fi_7',['operator&quot;&quot;_i',['../types_8h.html#a0534976344c6645fff642acfbfdd4981',1,'types.h']]],
-  ['operator_28_29_8',['operator()',['../structintegral__constant.html#aa9dc116ee04f5c3860487179b041c355',1,'integral_constant']]],
-  ['operator_5b_5d_9',['operator[]',['../class__rg__OffsetForce.html#a3b0155bd2675cd0dccfa7ee5c9f11867',1,'_rg_OffsetForce']]],
-  ['outofrange_5ftemperature_10',['OUTOFRANGE_TEMPERATURE',['../constants_8h.html#a8b4582476cecd5c6149546816236ffa7',1,'constants.h']]],
-  ['outputmodes_11',['OutputModes',['../types_8h.html#aae913bd32d3b848f4a5ba5b9d32e9a1f',1,'types.h']]],
-  ['override_5fpin_5fpresent_12',['OVERRIDE_PIN_PRESENT',['../config_8h.html#a3113411238215d7011c4c5ac3680a973',1,'config.h']]]
+  ['n_5fcyclecountfordatalogging_0',['n_cycleCountForDatalogging',['../processing_8cpp.html#a553f28df1683f35eefa78b35ad0e2d13',1,'processing.cpp']]],
+  ['negative_1',['NEGATIVE',['../types_8h.html#a297c9a15e28f6c3824b7a33453238136a50546bf973283065b6ccf09faf7a580a',1,'types.h']]],
+  ['nextlogicalloadtobeadded_2',['nextLogicalLoadToBeAdded',['../group__TimeCritical.html#ga8e7b88bb4b21554d23b57676a45e034e',1,'nextLogicalLoadToBeAdded():&#160;processing.cpp'],['../group__TimeCritical.html#ga8e7b88bb4b21554d23b57676a45e034e',1,'nextLogicalLoadToBeAdded():&#160;processing.cpp']]],
+  ['nextlogicalloadtoberemoved_3',['nextLogicalLoadToBeRemoved',['../group__TimeCritical.html#gabfb25288a79335282af6922e833d3c35',1,'nextLogicalLoadToBeRemoved():&#160;processing.cpp'],['../group__TimeCritical.html#gabfb25288a79335282af6922e833d3c35',1,'nextLogicalLoadToBeRemoved():&#160;processing.cpp']]],
+  ['no_5fof_5fdumploads_4',['NO_OF_DUMPLOADS',['../config_8h.html#aa2458020f21db854d8f2fe0e500dcd05',1,'config.h']]],
+  ['no_5fof_5fphases_5',['NO_OF_PHASES',['../config__system_8h.html#ac17be2735ad17e6198cd2a24eb39eb91',1,'config_system.h']]],
+  ['noinverse_6',['noInverse',['../classu8x8__fake.html#a971822c969bce5a8425750e847d30e81',1,'u8x8_fake']]],
+  ['none_7',['NONE',['../types_8h.html#abae0c89d2fddaf30f9be86f76ba671c9ab50339a10e1de285ac99d4c3990b8693',1,'types.h']]],
+  ['noofdigitlocationlines_8',['noOfDigitLocationLines',['../utils__display_8h.html#a62d0c9099af6d401b59b3a4bcaea73bb',1,'utils_display.h']]],
+  ['noofdigitlocations_9',['noOfDigitLocations',['../utils__display_8h.html#a96a7273b2984378dd24913d76bc3b654',1,'utils_display.h']]],
+  ['noofdigitselectionlines_10',['noOfDigitSelectionLines',['../utils__display_8h.html#a50d1645f3f220eaddf4dc01e9ce3778e',1,'utils_display.h']]],
+  ['noofpossiblecharacters_11',['noOfPossibleCharacters',['../utils__display_8h.html#aa74f2c2474570fdadf3b439848514b5f',1,'utils_display.h']]],
+  ['noofsegmentsperdigit_12',['noOfSegmentsPerDigit',['../utils__display_8h.html#a0158e223e6e79ce639b843d9134f8965',1,'utils_display.h']]],
+  ['normal_13',['NORMAL',['../types_8h.html#aae913bd32d3b848f4a5ba5b9d32e9a1fa1e23852820b9154316c7c06e2b7ba051',1,'types.h']]],
+  ['note_14',['Note',['../ewma__avg_8hpp.html#note',1,'']]]
 ];

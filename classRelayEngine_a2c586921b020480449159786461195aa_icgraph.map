@@ -1,8 +1,0 @@
-<map id="RelayEngine::get_average" name="RelayEngine::get_average">
-<area shape="rect" id="node1" title="Get the current average." alt="" coords="451,55,643,80"/>
-<area shape="rect" id="node2" href="$group__Telemetry.html#ga85be36240113e579b00e944d4dbcd91a" title="Write telemetry data to Serial in JSON format." alt="" coords="276,5,380,31"/>
-<area shape="rect" id="node5" href="$group__Telemetry.html#gae46d07fd4694c49e10360b5d79163443" title="Prints data logs to the Serial output in text format." alt="" coords="260,55,396,80"/>
-<area shape="rect" id="node6" href="$utils_8h.html#a5072aae7cb8a3f575605b65c6be56329" title="Sends telemetry data using the TeleInfo class." alt="" coords="253,104,403,129"/>
-<area shape="rect" id="node3" href="$group__GeneralProcessing.html#gade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="104,55,205,80"/>
-<area shape="rect" id="node4" href="$main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,55,56,80"/>
-</map>

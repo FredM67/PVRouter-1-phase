@@ -1,7 +1,11 @@
 <map id="loop" name="loop">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,56,56"/>
-<area shape="rect" id="node2" href="$test__fastdivision_2test__main_8cpp.html#aeddc14dbe5268704ba2abfa24e7e0f06" title=" " alt="" coords="104,5,223,31"/>
-<area shape="rect" id="node4" href="$test__fastdivision_2test__main_8cpp.html#add26b4937d71129bbf3385d311ef28be" title=" " alt="" coords="114,55,213,80"/>
-<area shape="rect" id="node3" href="$FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267" title=" " alt="" coords="271,5,357,31"/>
-<area shape="rect" id="node5" href="$FastDivision_8cpp.html#a8533c8b2efd068df7dd1b2e4d65b7ced" title=" " alt="" coords="281,55,347,80"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,56,56"/>
+<area shape="rect" id="Node000002" href="$test__fastdivision_2test__main_8cpp.html#aeddc14dbe5268704ba2abfa24e7e0f06" title=" " alt="" coords="104,5,223,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="56,36,90,29,91,35,57,41"/>
+<area shape="rect" id="Node000004" href="$test__fastdivision_2test__main_8cpp.html#add26b4937d71129bbf3385d311ef28be" title=" " alt="" coords="114,55,213,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="57,45,101,53,100,59,56,50"/>
+<area shape="rect" id="Node000003" href="$FastDivision_8cpp.html#a23623280f6a9bc988eea84e057769267" title=" " alt="" coords="271,5,357,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="223,15,257,15,257,21,223,21"/>
+<area shape="rect" id="Node000005" href="$FastDivision_8cpp.html#a8533c8b2efd068df7dd1b2e4d65b7ced" title=" " alt="" coords="281,55,347,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="213,65,267,65,267,70,213,70"/>
 </map>

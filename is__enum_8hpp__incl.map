@@ -1,11 +1,25 @@
 <map id="Mk2_fasterControl_Full/type_traits/is_enum.hpp" name="Mk2_fasterControl_Full/type_traits/is_enum.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="265,5,447,45"/>
-<area shape="rect" id="node2" href="$is__class_8hpp.html" title=" " alt="" coords="171,93,272,119"/>
-<area shape="rect" id="node4" href="$is__convertible_8hpp.html" title=" " alt="" coords="5,93,147,119"/>
-<area shape="rect" id="node5" href="$is__floating__point_8hpp.html" title=" " alt="" coords="491,93,648,119"/>
-<area shape="rect" id="node7" href="$is__same_8hpp.html" title=" " alt="" coords="380,167,484,192"/>
-<area shape="rect" id="node9" href="$is__integral_8hpp.html" title=" " alt="" coords="297,93,415,119"/>
-<area shape="rect" id="node3" href="$declval_8hpp.html" title=" " alt="" coords="101,167,198,192"/>
-<area shape="rect" id="node6" href="$integral__constant_8hpp.html" title=" " alt="" coords="351,240,513,265"/>
-<area shape="rect" id="node8" href="$remove__cv_8hpp.html" title=" " alt="" coords="509,167,630,192"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="265,5,447,45"/>
+<area shape="rect" id="Node000002" href="$is__class_8hpp.html" title=" " alt="" coords="171,93,272,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="325,48,254,89,252,84,322,43"/>
+<area shape="rect" id="Node000004" href="$is__convertible_8hpp.html" title=" " alt="" coords="5,93,147,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="290,48,131,92,130,87,288,43"/>
+<area shape="rect" id="Node000005" href="$is__floating__point_8hpp.html" title=" " alt="" coords="491,93,648,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="408,43,526,86,524,91,406,48"/>
+<area shape="rect" id="Node000007" href="$is__same_8hpp.html" title=" " alt="" coords="380,167,484,192"/>
+<area shape="poly" id="edge14_Node000001_Node000007" title=" " alt="" coords="386,43,410,65,429,92,437,123,438,153,432,153,432,124,424,94,406,68,383,47"/>
+<area shape="rect" id="Node000009" href="$is__integral_8hpp.html" title=" " alt="" coords="297,93,415,119"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="359,46,359,79,353,79,353,46"/>
+<area shape="rect" id="Node000003" href="$declval_8hpp.html" title=" " alt="" coords="101,167,198,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="211,121,173,159,169,155,208,117"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="90,117,129,155,126,159,86,121"/>
+<area shape="rect" id="Node000006" href="$integral__constant_8hpp.html" title=" " alt="" coords="351,240,513,265"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="593,116,616,131,638,149,650,170,650,182,645,194,626,208,596,221,521,240,520,235,594,216,623,204,641,190,645,181,645,172,634,153,613,135,590,121"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="548,121,468,163,465,158,546,116"/>
+<area shape="rect" id="Node000008" href="$remove__cv_8hpp.html" title=" " alt="" coords="509,167,630,192"/>
+<area shape="poly" id="edge9_Node000005_Node000008" title=" " alt="" coords="572,119,572,153,567,153,567,119"/>
+<area shape="poly" id="edge8_Node000007_Node000006" title=" " alt="" coords="435,192,435,226,429,226,429,192"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="358,119,359,153,363,172,370,191,386,212,405,230,401,233,382,216,366,193,358,174,354,153,353,119"/>
+<area shape="poly" id="edge12_Node000009_Node000007" title=" " alt="" coords="370,117,411,155,408,159,366,121"/>
+<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="391,116,523,160,521,165,389,121"/>
 </map>

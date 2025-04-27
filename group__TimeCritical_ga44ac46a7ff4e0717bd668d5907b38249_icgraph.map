@@ -1,9 +1,15 @@
 <map id="updatePortsStates" name="updatePortsStates">
-<area shape="rect" id="node1" title="Updates the control ports for each of the physical loads." alt="" coords="563,31,704,56"/>
-<area shape="rect" id="node2" href="$group__Initialization.html#gaee63eefc2be5271dc281e6554798a0ba" title="Initializes optional pins for the old PCB configuration." alt="" coords="360,5,513,31"/>
-<area shape="rect" id="node5" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="359,55,515,80"/>
-<area shape="rect" id="node3" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="137,5,285,31"/>
-<area shape="rect" id="node4" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
-<area shape="rect" id="node6" href="$group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="112,55,311,80"/>
-<area shape="rect" id="node7" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="13,55,56,80"/>
+<area shape="rect" id="Node000001" title="Updates the control ports for each of the physical loads." alt="" coords="563,31,704,56"/>
+<area shape="rect" id="Node000002" href="$group__Initialization.html#gaee63eefc2be5271dc281e6554798a0ba" title="Initializes optional pins for the old PCB configuration." alt="" coords="360,5,513,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="549,35,513,31,514,25,550,30"/>
+<area shape="rect" id="Node000005" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="359,55,515,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="549,56,515,60,515,55,549,51"/>
+<area shape="rect" id="Node000003" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="137,5,285,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="346,21,285,21,285,15,346,15"/>
+<area shape="rect" id="Node000004" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="124,21,64,21,64,15,124,15"/>
+<area shape="rect" id="Node000006" href="$group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="112,55,311,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="345,70,311,70,311,65,345,65"/>
+<area shape="rect" id="Node000007" href="$group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="13,55,56,80"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="98,70,57,70,57,65,98,65"/>
 </map>

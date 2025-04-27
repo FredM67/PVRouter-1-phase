@@ -1,4 +1,9 @@
 <map id="is_pointer&lt; T &gt;" name="is_pointer&lt; T &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,79,129,104"/>
-<area shape="rect" id="node2" href="$structintegral__constant.html" title=" " alt="" coords="22,5,113,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,183,141,208"/>
+<area shape="rect" id="Node000004" href="$structis__pointer_3_01T_01_5_01_4.html" title=" " alt="" coords="11,271,146,296"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="81,222,81,270,76,270,76,222"/>
+<area shape="rect" id="Node000002" href="$structintegral__constant.html" title=" " alt="" coords="33,108,124,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,148,81,182,76,182,76,148"/>
+<area shape="rect" id="Node000003" href="$structintegral__constant.html" title=" " alt="" coords="5,5,152,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="81,59,81,108,76,108,76,59"/>
 </map>

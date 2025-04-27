@@ -8,7 +8,7 @@ var searchData=
   ['relay_5fdiversion_5',['RELAY_DIVERSION',['../config_8h.html#a200f51c8bd47e8b14cdc6522f2223742',1,'config.h']]],
   ['relay_5fpin_6',['relay_pin',['../classrelayOutput.html#a536df28c34f0ad3ca86b73bfc1505355',1,'relayOutput']]],
   ['relayison_7',['relayIsON',['../classrelayOutput.html#a74d185ffeecb49b68552e419748f5773',1,'relayOutput']]],
-  ['relays_8',['relays',['../config_8h.html#a4c7a62222eb839f193a1ea1b83b0acc6',1,'relays():&#160;config.h'],['../test__utils__relay_2test__main_8cpp.html#a4c7a62222eb839f193a1ea1b83b0acc6',1,'relays():&#160;test_main.cpp']]],
+  ['relays_8',['relays',['../config_8h.html#a4c7a62222eb839f193a1ea1b83b0acc6',1,'relays:&#160;config.h'],['../test__utils__relay_2test__main_8cpp.html#a4c7a62222eb839f193a1ea1b83b0acc6',1,'relays:&#160;test_main.cpp']]],
   ['required_5fexport_5fin_5fwatts_9',['REQUIRED_EXPORT_IN_WATTS',['../config__system_8h.html#a0d838172b50bebc493c09edb7b7606d5',1,'config_system.h']]],
   ['requiredexportpermainscycle_5finieu_10',['requiredExportPerMainsCycle_inIEU',['../processing_8cpp.html#a22ac107a8fe19694803bd2b1b597bc0c',1,'processing.cpp']]],
   ['rg_5fforceload_11',['rg_ForceLoad',['../config_8h.html#a281368464ae362f565124959a02d2888',1,'config.h']]],

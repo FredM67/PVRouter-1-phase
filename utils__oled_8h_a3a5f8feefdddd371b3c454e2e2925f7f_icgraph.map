@@ -1,11 +1,22 @@
 <map id="u8x8" name="u8x8">
-<area shape="rect" id="node1" title=" " alt="" coords="509,107,564,132"/>
-<area shape="rect" id="node2" href="$group__OLEDDisplay.html#gafaa5f070126ac5184a648b484e7cf276" title="Clear the display." alt="" coords="146,107,249,132"/>
-<area shape="rect" id="node4" href="$group__OLEDDisplay.html#ga513f8a3bd4cc3304364bb4e550d576b9" title="Setup the OLED display." alt="" coords="151,31,244,56"/>
-<area shape="rect" id="node6" href="$group__OLEDDisplay.html#ga2303391296efb5abb3f851b8bda64855" title="Draw the xbm on the OLED display." alt="" coords="331,5,461,31"/>
-<area shape="rect" id="node7" href="$group__OLEDDisplay.html#gaf39aee6f9a448b67c84a828071a39f71" title="Update the OLED display with the given value." alt="" coords="345,207,447,232"/>
-<area shape="rect" id="node8" href="$group__OLEDDisplay.html#ga1c38ae281a8a132599b5619660e7d306" title="Update the watchdog on the display." alt="" coords="331,157,461,183"/>
-<area shape="rect" id="node3" href="$main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="9,156,60,181"/>
-<area shape="rect" id="node5" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,31,64,56"/>
-<area shape="rect" id="node9" href="$main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761" title="Handles tasks that need to be executed every second." alt="" coords="112,156,283,181"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="509,107,564,132"/>
+<area shape="rect" id="Node000002" href="$group__OLEDDisplay.html#gafaa5f070126ac5184a648b484e7cf276" title="Clear the display." alt="" coords="146,107,249,132"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="495,122,249,122,249,117,495,117"/>
+<area shape="rect" id="Node000004" href="$group__OLEDDisplay.html#ga513f8a3bd4cc3304364bb4e550d576b9" title="Setup the OLED display." alt="" coords="151,31,244,56"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="495,112,461,103,244,55,245,50,462,98,497,107"/>
+<area shape="rect" id="Node000006" href="$group__OLEDDisplay.html#ga2303391296efb5abb3f851b8bda64855" title="Draw the xbm on the OLED display." alt="" coords="331,5,461,31"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="513,99,460,52,426,33,429,29,463,48,516,95"/>
+<area shape="rect" id="Node000007" href="$group__OLEDDisplay.html#gaf39aee6f9a448b67c84a828071a39f71" title="Update the OLED display with the given value." alt="" coords="345,207,447,232"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="519,145,494,172,463,198,440,209,438,204,460,193,490,168,515,141"/>
+<area shape="rect" id="Node000008" href="$group__OLEDDisplay.html#ga1c38ae281a8a132599b5619660e7d306" title="Update the watchdog on the display." alt="" coords="331,157,461,183"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="497,136,433,160,431,155,495,131"/>
+<area shape="rect" id="Node000003" href="$main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="9,156,60,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="138,138,113,146,61,163,59,158,111,141,136,133"/>
+<area shape="rect" id="Node000005" href="$main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,31,64,56"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="137,46,64,46,64,41,137,41"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="318,31,245,40,244,35,317,25"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="331,221,227,213,111,197,59,181,61,176,113,191,228,208,331,215"/>
+<area shape="rect" id="Node000009" href="$main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761" title="Handles tasks that need to be executed every second." alt="" coords="112,156,283,181"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="317,172,283,172,283,167,317,167"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="98,171,60,171,60,166,98,166"/>
 </map>

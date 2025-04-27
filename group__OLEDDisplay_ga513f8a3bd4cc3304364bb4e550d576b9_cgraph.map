@@ -1,6 +1,10 @@
 <map id="setupOLED" name="setupOLED">
-<area shape="rect" id="node1" title="Setup the OLED display." alt="" coords="5,29,99,55"/>
-<area shape="rect" id="node2" href="$utils__oled_8h.html#a3a5f8feefdddd371b3c454e2e2925f7f" title=" " alt="" coords="369,5,424,31"/>
-<area shape="rect" id="node3" href="$group__OLEDDisplay.html#ga2303391296efb5abb3f851b8bda64855" title="Draw the xbm on the OLED display." alt="" coords="147,55,276,80"/>
-<area shape="rect" id="node4" href="$group__OLEDDisplay.html#gaa57d8826eabcc4fdd9ff420cf69038ce" title="Get the tile from xbm object." alt="" coords="324,55,469,80"/>
+<area shape="rect" id="Node000001" title="Setup the OLED display." alt="" coords="5,29,99,55"/>
+<area shape="rect" id="Node000002" href="$utils__oled_8h.html#a3a5f8feefdddd371b3c454e2e2925f7f" title=" " alt="" coords="369,5,424,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,36,355,18,356,23,99,41"/>
+<area shape="rect" id="Node000003" href="$group__OLEDDisplay.html#ga2303391296efb5abb3f851b8bda64855" title="Draw the xbm on the OLED display." alt="" coords="147,55,276,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="99,47,133,52,133,58,99,52"/>
+<area shape="poly" id="edge4_Node000003_Node000002" title=" " alt="" coords="259,52,356,26,357,31,260,57"/>
+<area shape="rect" id="Node000004" href="$group__OLEDDisplay.html#gaa57d8826eabcc4fdd9ff420cf69038ce" title="Get the tile from xbm object." alt="" coords="324,55,469,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="276,65,310,65,310,70,276,70"/>
 </map>
