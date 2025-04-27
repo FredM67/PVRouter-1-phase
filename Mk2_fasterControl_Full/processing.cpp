@@ -16,19 +16,15 @@ constexpr int16_t DCoffset_I{ 512 };                    /**< nominal mid-point v
 
 int32_t DCoffset_V_long{ 512L * 256 }; /**< <--- for LPF */
 
-/**< main energy bucket for single-phase use, with units of Joules * SUPPLY_FREQUENCY */
-constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1 / powerCal_grid)) };  // depends on powerCal, frequency & the 'sweetzone' size.
-/**< for resetting flexible thresholds */
-constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 };  // used for 'normal' and single-threshold 'AF' logic
+constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1 / powerCal_grid)) }; /**< main energy bucket for single-phase use, with units of Joules * SUPPLY_FREQUENCY */
 
-constexpr int32_t lowerThreshold_default{ capacityOfEnergyBucket_long >> 1 };
-constexpr int32_t upperThreshold_default{ capacityOfEnergyBucket_long >> 1 };
+constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 }; /**< for resetting flexible thresholds */
 
-// to avoid the diverted energy accumulator 'creeping' when the load is not active
-constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1 / powerCal_grid)) };
+constexpr int32_t lowerThreshold_default{ capacityOfEnergyBucket_long >> 1 }; /**< default lower threshold for the energy bucket (50% of capacity) */
+constexpr int32_t upperThreshold_default{ capacityOfEnergyBucket_long >> 1 }; /**< default upper threshold for the energy bucket (50% of capacity) */
 
-constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1 / powerCal_grid)) };
-
+constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1 / powerCal_grid)) };         /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
+constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1 / powerCal_grid)) }; /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
 // When using integer maths, calibration values that have supplied in floating point
 // form need to be rescaled.
 
@@ -68,10 +64,10 @@ int32_t sumP_diverted_overDL_Period{ 0 }; /**< for per-cycle summation of 'real 
 int32_t cumVdeltasThisCycle_long{ 0 };    /**< for the LPF which determines DC offset (voltage) */
 int32_t l_sum_Vsquared{ 0 };              /**< for summation of V^2 values during datalog period */
 
-int32_t realEnergy_grid{ 0 };
-int32_t realEnergy_diverted{ 0 };
-int32_t energyInBucket_prediction{ 0 };
-int32_t sampleVminusDC_long{ 0 };
+int32_t realEnergy_grid{ 0 };           /**< stores the calculated real energy from the grid connection point (CT1) for the current mains cycle */
+int32_t realEnergy_diverted{ 0 };       /**< stores the calculated real energy diverted to controlled loads (CT2) for the current mains cycle */
+int32_t energyInBucket_prediction{ 0 }; /**< predicted energy level at the end of the current mains cycle */
+int32_t sampleVminusDC_long{ 0 };       /**< voltage sample with DC offset removed */
 
 Polarities polarityOfMostRecentVsample;    /**< for zero-crossing detection */
 Polarities polarityConfirmed;              /**< for zero-crossing detection */
