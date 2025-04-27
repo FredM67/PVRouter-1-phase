@@ -271,6 +271,10 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>auto The current average </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00327">327</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+
+<p class="reference">References <a class="el" href="utils__relay_8h_source.html#l00420">RelayEngine&lt; N, D &gt;::ewma_average</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00225">printForJSON()</a>, <a class="el" href="utils_8h_source.html#l00154">printForSerialText()</a>, and <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -323,6 +327,10 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>constexpr const auto&amp; The relay object </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00317">317</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+
+<p class="reference">References <a class="el" href="utils__relay_8h_source.html#l00416">RelayEngine&lt; N, D &gt;::relay</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="validation_8h_source.html#l00049">check_pins()</a>, <a class="el" href="validation_8h_source.html#l00169">check_relay_pins()</a>, <a class="el" href="processing_8cpp_source.html#l00109">getOutputPins()</a>, <a class="el" href="processing_8cpp_source.html#l01258">initializeOldPCBPins()</a>, <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>, <a class="el" href="test__utils__relay_2test__main_8cpp_source.html#l00093">test_get_importThreshold()</a>, <a class="el" href="test__utils__relay_2test__main_8cpp_source.html#l00111">test_get_minOFF()</a>, <a class="el" href="test__utils__relay_2test__main_8cpp_source.html#l00102">test_get_minON()</a>, <a class="el" href="test__utils__relay_2test__main_8cpp_source.html#l00075">test_get_pin()</a>, <a class="el" href="test__utils__relay_2test__main_8cpp_source.html#l00084">test_get_surplusThreshold()</a>, <a class="el" href="test__utils__relay_2test__main_8cpp_source.html#l00120">test_isRelayON()</a>, <a class="el" href="test__utils__relay_2test__main_8cpp_source.html#l00157">test_relay_turnOFF()</a>, and <a class="el" href="test__utils__relay_2test__main_8cpp_source.html#l00128">test_relay_turnON()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -382,6 +390,8 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>constexpr auto The number of relays </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00306">306</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00077">calcBufferSize()</a>, <a class="el" href="validation_8h_source.html#l00049">check_pins()</a>, <a class="el" href="validation_8h_source.html#l00169">check_relay_pins()</a>, <a class="el" href="processing_8cpp_source.html#l00109">getOutputPins()</a>, <a class="el" href="processing_8cpp_source.html#l01258">initializeOldPCBPins()</a>, <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>, and <a class="el" href="test__utils__relay_2test__main_8cpp_source.html#l00196">test_get_size()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -423,6 +433,8 @@ template&lt;uint8_t N, uint8_t D&gt; </div>
 <p>This method updates the duration of the current state for each relay and decreases the delay (<code>settle_change</code>) until the next state change is allowed. </p>
 
 <p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00423">423</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00442">handlePerSecondTasks()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -465,6 +477,8 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 <p>This method outputs the configuration of all relays, including their pin assignments, thresholds, and minimum ON/OFF durations, to the Serial interface. </p>
 
 <p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00403">403</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+
+<p class="reference">References <a class="el" href="test__fastdivision_2test__main_8cpp_source.html#l00119">i</a>, <a class="el" href="utils__relay_8h_source.html#l00178">relayOutput::printRelayConfiguration()</a>, and <a class="el" href="utils__relay_8h_source.html#l00416">RelayEngine&lt; N, D &gt;::relay</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -511,6 +525,10 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 <p>This method adjusts the state of the relays based on the current average power. If surplus power is available, it tries to turn ON relays in increasing order. If power is being imported, it tries to turn OFF relays in decreasing order. </p>
 
 <p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00361">361</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+
+<p class="reference">References <a class="el" href="utils__relay_8h_source.html#l00420">RelayEngine&lt; N, D &gt;::ewma_average</a>, <a class="el" href="utils__relay_8h_source.html#l00416">RelayEngine&lt; N, D &gt;::relay</a>, and <a class="el" href="utils__relay_8h_source.html#l00418">RelayEngine&lt; N, D &gt;::settle_change</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00442">handlePerSecondTasks()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -559,6 +577,10 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00337">337</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+
+<p class="reference">References <a class="el" href="utils__relay_8h_source.html#l00420">RelayEngine&lt; N, D &gt;::ewma_average</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00493">loop()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -597,6 +619,8 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00420">420</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="utils__relay_8h_source.html#l00327">RelayEngine&lt; N, D &gt;::get_average()</a>, <a class="el" href="utils__relay_8h_source.html#l00361">RelayEngine&lt; N, D &gt;::proceed_relays()</a>, and <a class="el" href="utils__relay_8h_source.html#l00337">RelayEngine&lt; N, D &gt;::update_average()</a>.</p>
+
 </div>
 </div>
 <a id="a4771d7ed435411f4fd06dc480c1b1508" name="a4771d7ed435411f4fd06dc480c1b1508"></a>
@@ -624,6 +648,8 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00416">416</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="utils__relay_8h_source.html#l00317">RelayEngine&lt; N, D &gt;::get_relay()</a>, <a class="el" href="utils__relay_8h_source.html#l00403">RelayEngine&lt; N, D &gt;::printConfiguration()</a>, and <a class="el" href="utils__relay_8h_source.html#l00361">RelayEngine&lt; N, D &gt;::proceed_relays()</a>.</p>
+
 </div>
 </div>
 <a id="a62a753c9ea9c15e35211398fb155a971" name="a62a753c9ea9c15e35211398fb155a971"></a>
@@ -650,6 +676,8 @@ template&lt;uint8_t N, uint8_t D = 10&gt; </div>
 <p>Delay in seconds until next change occurs </p>
 
 <p class="definition">Definition at line <a class="el" href="utils__relay_8h_source.html#l00418">418</a> of file <a class="el" href="utils__relay_8h_source.html">utils_relay.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils__relay_8h_source.html#l00361">RelayEngine&lt; N, D &gt;::proceed_relays()</a>.</p>
 
 </div>
 </div>

@@ -226,6 +226,8 @@ Variables</h2></td></tr>
 <tr class="separator:a4be9b67cfa7c4e48c63817d06f3d293c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe6a94d476e5100c87c30c68c87e7276"><td class="memItemLeft" align="right" valign="top">volatile <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#afe6a94d476e5100c87c30c68c87e7276">copyOf_countLoadON</a> [<a class="el" href="config_8h.html#aa2458020f21db854d8f2fe0e500dcd05">NO_OF_DUMPLOADS</a>]</td></tr>
 <tr class="separator:afe6a94d476e5100c87c30c68c87e7276"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49786e93b92d71b0b4e7aea11faba6d5"><td class="memItemLeft" align="right" valign="top">volatile <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#a49786e93b92d71b0b4e7aea11faba6d5">copyOf_divertedEnergyTotal_Wh</a></td></tr>
+<tr class="separator:a49786e93b92d71b0b4e7aea11faba6d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe766888e84074ce12e5137b918d7f15"><td class="memItemLeft" align="right" valign="top">volatile int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#abe766888e84074ce12e5137b918d7f15">copyOf_energyInBucket_long</a></td></tr>
 <tr class="separator:abe766888e84074ce12e5137b918d7f15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0350258a4eae426880cd73a6a754d4c3"><td class="memItemLeft" align="right" valign="top">volatile uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="processing_8h.html#a0350258a4eae426880cd73a6a754d4c3">copyOf_lowestNoOfSampleSetsPerMainsCycle</a></td></tr>
@@ -294,7 +296,11 @@ Variables</h2></td></tr>
 <li>Prints the capacity of the energy bucket in integer energy units. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01145">1145</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01157">1157</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00020">capacityOfEnergyBucket_long</a>, <a class="el" href="debug_8h_source.html#l00096">DBUG</a>, <a class="el" href="debug_8h_source.html#l00097">DBUGLN</a>, and <a class="el" href="processing_8h_source.html#l00027">PERSISTENCE_FOR_POLARITY_CHANGE</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00045">printConfiguration()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -332,6 +338,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00033">33</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00442">handlePerSecondTasks()</a>, <a class="el" href="utils_8h_source.html#l00225">printForJSON()</a>, <a class="el" href="utils_8h_source.html#l00154">printForSerialText()</a>, <a class="el" href="main_8cpp_source.html#l00216">proceedLoadPrioritiesAndOverriding()</a>, <a class="el" href="processing_8cpp_source.html#l00872">processLatestContribution()</a>, <a class="el" href="processing_8cpp_source.html#l00505">processRawSamples()</a>, and <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>.</p>
+
 </div>
 </div>
 <a id="ab76a3cdd049ea024d204d62770405dc9" name="ab76a3cdd049ea024d204d62770405dc9"></a>
@@ -356,6 +364,8 @@ Here is the caller graph for this function:</div>
 <p>async trigger to signal datalog is available </p>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00034">34</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00493">loop()</a>, and <a class="el" href="processing_8cpp_source.html#l01107">processDataLogging()</a>.</p>
 
 </div>
 </div>
@@ -382,6 +392,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00038">38</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00270">checkDiversionOnOff()</a>, <a class="el" href="processing_8cpp_source.html#l00432">processDivertedCurrentRawSample()</a>, <a class="el" href="processing_8cpp_source.html#l00505">processRawSamples()</a>, and <a class="el" href="processing_8cpp_source.html#l00319">updatePhysicalLoadStates()</a>.</p>
+
 </div>
 </div>
 <a id="a2c332cbc3524bdfcff5efae84749ad58" name="a2c332cbc3524bdfcff5efae84749ad58"></a>
@@ -406,6 +418,8 @@ Here is the caller graph for this function:</div>
 <p>async trigger to signal start of new main cycle based on first phase </p>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00035">35</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00493">loop()</a>, and <a class="el" href="processing_8cpp_source.html#l00872">processLatestContribution()</a>.</p>
 
 </div>
 </div>
@@ -432,6 +446,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00036">36</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00055">forceFullPower()</a>, <a class="el" href="main_8cpp_source.html#l00216">proceedLoadPrioritiesAndOverriding()</a>, <a class="el" href="main_8cpp_source.html#l00142">proceedLoadPrioritiesAndOverridingDualTariff()</a>, <a class="el" href="processing_8cpp_source.html#l00432">processDivertedCurrentRawSample()</a>, <a class="el" href="processing_8cpp_source.html#l00505">processRawSamples()</a>, and <a class="el" href="processing_8cpp_source.html#l00319">updatePhysicalLoadStates()</a>.</p>
+
 </div>
 </div>
 <a id="a4be9b67cfa7c4e48c63817d06f3d293c" name="a4be9b67cfa7c4e48c63817d06f3d293c"></a>
@@ -457,6 +473,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00037">37</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00102">proceedRotation()</a>, and <a class="el" href="processing_8cpp_source.html#l00319">updatePhysicalLoadStates()</a>.</p>
+
 </div>
 </div>
 <a id="afe6a94d476e5100c87c30c68c87e7276" name="afe6a94d476e5100c87c30c68c87e7276"></a>
@@ -480,7 +498,36 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p>copy of number of cycle the load was ON (over 1 datalog period) </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00054">54</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00055">55</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01107">processDataLogging()</a>.</p>
+
+</div>
+</div>
+<a id="a49786e93b92d71b0b4e7aea11faba6d5" name="a49786e93b92d71b0b4e7aea11faba6d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49786e93b92d71b0b4e7aea11faba6d5">&#9670;&#160;</a></span>copyOf_divertedEnergyTotal_Wh</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile <a class="el" href="config__system_8h.html#a3180c835bce68b1c59f64f4055088cca">uint16_t</a> copyOf_divertedEnergyTotal_Wh</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>copy of WattHour register of 63K range </p>
+
+<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00050">50</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00493">loop()</a>, <a class="el" href="utils_8h_source.html#l00225">printForJSON()</a>, <a class="el" href="utils_8h_source.html#l00154">printForSerialText()</a>, <a class="el" href="processing_8cpp_source.html#l00872">processLatestContribution()</a>, and <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>.</p>
 
 </div>
 </div>
@@ -505,7 +552,9 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p>copy of main energy bucket (over all phases) </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00051">51</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00052">52</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00154">printForSerialText()</a>, and <a class="el" href="processing_8cpp_source.html#l01107">processDataLogging()</a>.</p>
 
 </div>
 </div>
@@ -529,7 +578,9 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00052">52</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00053">53</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00154">printForSerialText()</a>, <a class="el" href="processing_8cpp_source.html#l01107">processDataLogging()</a>, and <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>.</p>
 
 </div>
 </div>
@@ -554,7 +605,9 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p>copy of for counting the sample sets during each datalogging period </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00053">53</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00054">54</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00154">printForSerialText()</a>, <a class="el" href="main_8cpp_source.html#l00350">processCalculationsForLogging()</a>, <a class="el" href="processing_8cpp_source.html#l01107">processDataLogging()</a>, and <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>.</p>
 
 </div>
 </div>
@@ -579,7 +632,9 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p>copy of for summation of V^2 values during datalog period </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00050">50</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00051">51</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00350">processCalculationsForLogging()</a>, and <a class="el" href="processing_8cpp_source.html#l01107">processDataLogging()</a>.</p>
 
 </div>
 </div>
@@ -606,6 +661,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00049">49</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00350">processCalculationsForLogging()</a>, and <a class="el" href="processing_8cpp_source.html#l01107">processDataLogging()</a>.</p>
+
 </div>
 </div>
 <a id="a4bcbf95314adb8b4f7e12c1bbffb3182" name="a4bcbf95314adb8b4f7e12c1bbffb3182"></a>
@@ -631,6 +688,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00048">48</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00350">processCalculationsForLogging()</a>, and <a class="el" href="processing_8cpp_source.html#l01107">processDataLogging()</a>.</p>
+
 </div>
 </div>
 <a id="acc81dd6395f3e81e9017503274f6baef" name="acc81dd6395f3e81e9017503274f6baef"></a>
@@ -654,6 +713,8 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00021">21</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01202">ISR()</a>.</p>
 
 </div>
 </div>
@@ -679,6 +740,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00020">20</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01202">ISR()</a>.</p>
+
 </div>
 </div>
 <a id="ad3c1c911bda4daa550c3d3ca7287f41f" name="ad3c1c911bda4daa550c3d3ca7287f41f"></a>
@@ -702,6 +765,8 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00029">29</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00720">processStartUp()</a>, and <a class="el" href="main_8cpp_source.html#l00391">setup()</a>.</p>
 
 </div>
 </div>
@@ -727,6 +792,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00042">42</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00872">processLatestContribution()</a>, and <a class="el" href="processing_8cpp_source.html#l00505">processRawSamples()</a>.</p>
+
 </div>
 </div>
 <a id="ae1f48ee7cb7b3a48c5818ce8714a2812" name="ae1f48ee7cb7b3a48c5818ce8714a2812"></a>
@@ -750,6 +817,8 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00043">43</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00872">processLatestContribution()</a>, and <a class="el" href="processing_8cpp_source.html#l00505">processRawSamples()</a>.</p>
 
 </div>
 </div>
@@ -776,6 +845,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00039">39</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00493">loop()</a>, <a class="el" href="processing_8cpp_source.html#l00872">processLatestContribution()</a>, and <a class="el" href="processing_8cpp_source.html#l00505">processRawSamples()</a>.</p>
+
 </div>
 </div>
 <a id="ab7440586f7eaa4fc369f0def8b523ea0" name="ab7440586f7eaa4fc369f0def8b523ea0"></a>
@@ -800,6 +871,8 @@ Here is the caller graph for this function:</div>
 <p>energy diversion detection </p>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00040">40</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00442">handlePerSecondTasks()</a>, and <a class="el" href="processing_8cpp_source.html#l00505">processRawSamples()</a>.</p>
 
 </div>
 </div>
@@ -826,6 +899,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00024">24</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01258">initializeOldPCBPins()</a>, <a class="el" href="processing_8cpp_source.html#l00212">initializeProcessing()</a>, <a class="el" href="utils_8h_source.html#l00127">logLoadPriorities()</a>, <a class="el" href="processing_8cpp_source.html#l01051">nextLogicalLoadToBeAdded()</a>, <a class="el" href="processing_8cpp_source.html#l01078">nextLogicalLoadToBeRemoved()</a>, <a class="el" href="processing_8cpp_source.html#l00946">proceedHighEnergyLevel()</a>, <a class="el" href="processing_8cpp_source.html#l00998">proceedLowEnergyLevel()</a>, <a class="el" href="processing_8cpp_source.html#l00505">processRawSamples()</a>, and <a class="el" href="processing_8cpp_source.html#l00319">updatePhysicalLoadStates()</a>.</p>
+
 </div>
 </div>
 <a id="a2a52b2459c1ca802c59cfa96e71885ba" name="a2a52b2459c1ca802c59cfa96e71885ba"></a>
@@ -851,6 +926,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00027">27</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00468">confirmPolarity()</a>, and <a class="el" href="processing_8cpp_source.html#l01157">printParamsForSelectedOutputMode()</a>.</p>
+
 </div>
 </div>
 <a id="a0d30025137b8f9bfe6d4e9c832db76b4" name="a0d30025137b8f9bfe6d4e9c832db76b4"></a>
@@ -875,6 +952,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00030">30</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00720">processStartUp()</a>.</p>
+
 </div>
 </div>
 <a id="a673a8bde5c8cb0ac65947604cd88f6a8" name="a673a8bde5c8cb0ac65947604cd88f6a8"></a>
@@ -898,7 +977,9 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p>logging data </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00059">59</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00060">60</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00493">loop()</a>, <a class="el" href="utils_8h_source.html#l00225">printForJSON()</a>, <a class="el" href="utils_8h_source.html#l00154">printForSerialText()</a>, <a class="el" href="main_8cpp_source.html#l00350">processCalculationsForLogging()</a>, <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>, and <a class="el" href="main_8cpp_source.html#l00312">updateTemperature()</a>.</p>
 
 </div>
 </div>
@@ -923,6 +1004,8 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="processing_8h_source.html#l00019">19</a> of file <a class="el" href="processing_8h_source.html">processing.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01202">ISR()</a>.</p>
 
 </div>
 </div>

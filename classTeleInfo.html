@@ -175,6 +175,10 @@ Static Private Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The calculated checksum as a single byte. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00139">139</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
+
+<p class="reference">References <a class="el" href="teleinfo_8h_source.html#l00130">buffer</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00186">send()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -216,6 +220,10 @@ Here is the caller graph for this function:</div>
 <p>Finalizes the frame by adding the end character and sending the buffer over Serial. </p>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00206">206</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
+
+<p class="reference">References <a class="el" href="teleinfo_8h_source.html#l00130">buffer</a>, <a class="el" href="teleinfo_8h_source.html#l00131">bufferPos</a>, and <a class="el" href="teleinfo_8h_source.html#l00125">ETX</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -280,6 +288,10 @@ Here is the caller graph for this function:</div>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00186">186</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
+
+<p class="reference">References <a class="el" href="teleinfo_8h_source.html#l00130">buffer</a>, <a class="el" href="teleinfo_8h_source.html#l00131">bufferPos</a>, <a class="el" href="teleinfo_8h_source.html#l00139">calculateChecksum()</a>, <a class="el" href="teleinfo_8h_source.html#l00127">CR</a>, <a class="el" href="teleinfo_8h_source.html#l00126">LF</a>, <a class="el" href="teleinfo_8h_source.html#l00128">TAB</a>, and <a class="el" href="teleinfo_8h_source.html#l00157">writeTag()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -330,6 +342,10 @@ Here is the caller graph for this function:</div>
 <p>Initializes a new frame by resetting the buffer and adding the start character. </p>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00175">175</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
+
+<p class="reference">References <a class="el" href="teleinfo_8h_source.html#l00130">buffer</a>, <a class="el" href="teleinfo_8h_source.html#l00131">bufferPos</a>, and <a class="el" href="teleinfo_8h_source.html#l00124">STX</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00282">sendTelemetryData()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -387,6 +403,10 @@ Here is the caller graph for this function:</div>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00157">157</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
+
+<p class="reference">References <a class="el" href="teleinfo_8h_source.html#l00130">buffer</a>, <a class="el" href="teleinfo_8h_source.html#l00131">bufferPos</a>, and <a class="el" href="teleinfo_8h_source.html#l00128">TAB</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00186">send()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -426,6 +446,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00130">130</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00139">calculateChecksum()</a>, <a class="el" href="teleinfo_8h_source.html#l00206">endFrame()</a>, <a class="el" href="teleinfo_8h_source.html#l00186">send()</a>, <a class="el" href="teleinfo_8h_source.html#l00175">startFrame()</a>, and <a class="el" href="teleinfo_8h_source.html#l00157">writeTag()</a>.</p>
+
 </div>
 </div>
 <a id="a2a0247ece933354556a11d540fbd6d43" name="a2a0247ece933354556a11d540fbd6d43"></a>
@@ -450,6 +472,8 @@ Here is the caller graph for this function:</div>
 <p>Current position in the buffer. </p>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00131">131</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00206">endFrame()</a>, <a class="el" href="teleinfo_8h_source.html#l00186">send()</a>, <a class="el" href="teleinfo_8h_source.html#l00175">startFrame()</a>, and <a class="el" href="teleinfo_8h_source.html#l00157">writeTag()</a>.</p>
 
 </div>
 </div>
@@ -476,6 +500,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00127">127</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00186">send()</a>.</p>
+
 </div>
 </div>
 <a id="aa03518019927460cd7735213630004d9" name="aa03518019927460cd7735213630004d9"></a>
@@ -500,6 +526,8 @@ Here is the caller graph for this function:</div>
 <p>End of Frame character. </p>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00125">125</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00206">endFrame()</a>.</p>
 
 </div>
 </div>
@@ -526,6 +554,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00126">126</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00186">send()</a>.</p>
+
 </div>
 </div>
 <a id="a526fdfd73a773da14b949e6bfac72a6e" name="a526fdfd73a773da14b949e6bfac72a6e"></a>
@@ -551,6 +581,8 @@ Here is the caller graph for this function:</div>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00124">124</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00175">startFrame()</a>.</p>
+
 </div>
 </div>
 <a id="a2c8ee1a70a66831c451104fde3e76301" name="a2c8ee1a70a66831c451104fde3e76301"></a>
@@ -575,6 +607,8 @@ Here is the caller graph for this function:</div>
 <p>Tab character. </p>
 
 <p class="definition">Definition at line <a class="el" href="teleinfo_8h_source.html#l00128">128</a> of file <a class="el" href="teleinfo_8h_source.html">teleinfo.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00186">send()</a>, and <a class="el" href="teleinfo_8h_source.html#l00157">writeTag()</a>.</p>
 
 </div>
 </div>
