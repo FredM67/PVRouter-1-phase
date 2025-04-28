@@ -7,6 +7,16 @@
 #include "utils_pins.h"
 #include "utils_display.h"
 
+// allocation of analogue pins which are not dependent on the display type that is in use
+// **************************************************************************************
+inline constexpr uint8_t voltageSensor{ OLD_PCB ? 3 : 0 };          /**< A0 is for the voltage sensor (A3 for the old PCB) */
+inline constexpr uint8_t currentSensor_grid{ OLD_PCB ? 5 : 1 };     /**< A1 is for CT1 which measures grid current (A5 for the old PCB) */
+inline constexpr uint8_t currentSensor_diverted{ OLD_PCB ? 4 : 3 }; /**< A3 is for CT2 which measures diverted current (A4 for the old PCB) */
+// ------------------------------------------
+
+// For an enhanced polarity detection mechanism, which includes a persistence check
+inline constexpr uint8_t PERSISTENCE_FOR_POLARITY_CHANGE{ 1 }; /**< allows polarity changes to be confirmed */
+
 // Define operating limits for the LP filters which identify DC offset in the voltage
 // sample streams. By limiting the output range, these filters always should start up
 // correctly.
@@ -17,9 +27,9 @@ constexpr int16_t DCoffset_I{ 512 };                    /**< nominal mid-point v
 int32_t DCoffset_V_long{ 512L * 256 }; /**< <--- for LPF */
 
 /**< main energy bucket for single-phase use, with units of Joules * SUPPLY_FREQUENCY */
-constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1 / powerCal_grid)) };  // depends on powerCal, frequency & the 'sweetzone' size.
-/**< for resetting flexible thresholds */
-constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 };  // used for 'normal' and single-threshold 'AF' logic
+constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1 / powerCal_grid)) };
+
+constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 }; /**< for resetting flexible thresholds */
 
 constexpr int32_t lowerThreshold_default{ capacityOfEnergyBucket_long >> 1 };
 constexpr int32_t upperThreshold_default{ capacityOfEnergyBucket_long >> 1 };

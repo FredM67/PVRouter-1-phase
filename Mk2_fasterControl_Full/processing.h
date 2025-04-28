@@ -14,17 +14,7 @@
 
 #include "config.h"
 
-// allocation of analogue pins which are not dependent on the display type that is in use
-// **************************************************************************************
-inline constexpr uint8_t voltageSensor{ OLD_PCB ? 3 : 0 };           // A0 is for the voltage sensor (A3 for the old PCB)
-inline constexpr uint8_t currentSensor_grid{ OLD_PCB ? 5 : 1 };      // A1 is for CT1 which measures grid current (A5 for the old PCB)
-inline constexpr uint8_t currentSensor_diverted{ OLD_PCB ? 4 : 3 };  // A3 is for CT2 which measures diverted current (A4 for the old PCB)
-// ------------------------------------------
-
 inline uint8_t loadPrioritiesAndState[NO_OF_DUMPLOADS]; /**< load priorities */
-
-// For an enhanced polarity detection mechanism, which includes a persistence check
-inline constexpr uint8_t PERSISTENCE_FOR_POLARITY_CHANGE{ 1 }; /**< allows polarity changes to be confirmed */
 
 inline constexpr uint16_t delayBeforeSerialStarts{ 1000 };  // in milli-seconds, to allow Serial window to be opened
 inline constexpr uint16_t startUpPeriod{ 3000 };            // in milli-seconds, to allow LP filter to settle
