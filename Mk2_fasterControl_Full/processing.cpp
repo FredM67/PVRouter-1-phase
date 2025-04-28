@@ -101,6 +101,8 @@ uint32_t absenceOfDivertedEnergyCountInMC{ 0 }; /**< number of main cycles witho
 
 remove_cv< remove_reference< decltype(DATALOG_PERIOD_IN_MAINS_CYCLES) >::type >::type n_cycleCountForDatalogging{ 0 }; /**< for counting how often datalog is updated */
 
+uint8_t perSecondCounter{ 0 }; /**< for counting  every second inside the ISR */
+
 bool beyondStartUpPeriod{ false }; /**< start-up delay, allows things to settle */
 
 /**
@@ -934,15 +936,20 @@ void processLatestContribution()
     EDD_isActive = false;  // energy diversion detector is now inactive
   }
 
-  // The diverted energy total is copied to a variable before it is used.
-  // This is done to avoid the possibility of a race-condition whereby the
-  // diverted energy total is updated while the display is being updated.
-  copyOf_divertedEnergyTotal_Wh = divertedEnergyTotal_Wh;
-
   if (absenceOfDivertedEnergyCountInMC > SUPPLY_FREQUENCY)
     ++absenceOfDivertedEnergyCountInSeconds;
   else
     absenceOfDivertedEnergyCountInSeconds = 0;
+
+  if (++perSecondCounter == SUPPLY_FREQUENCY)
+  {
+    perSecondCounter = 0;
+
+    // The diverted energy total is copied to a variable before it is used.
+    // This is done to avoid the possibility of a race-condition whereby the
+    // diverted energy total is updated while the display is being updated.
+    copyOf_divertedEnergyTotal_Wh = divertedEnergyTotal_Wh;
+  }
 
   b_newCycle = true;  //  a 50 Hz 'tick' for use by the main code
 }
