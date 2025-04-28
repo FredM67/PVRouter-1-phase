@@ -68,7 +68,7 @@ bool forceFullPower()
     previousState = pinState;
 #endif
 
-    for (auto &bOverrideLoad : b_overrideLoadOn)
+    for (auto &bOverrideLoad : Shared::b_overrideLoadOn)
     {
       bOverrideLoad = !pinState;
     }
@@ -101,13 +101,13 @@ bool forceFullPower()
  */
 void proceedRotation()
 {
-  b_reOrderLoads = true;
+  Shared::b_reOrderLoads = true;
 
   // waits till the priorities have been rotated from inside the ISR
   do
   {
     delay(10);
-  } while (b_reOrderLoads);
+  } while (Shared::b_reOrderLoads);
 
   // prints the (new) load priorities
   logLoadPriorities();
@@ -167,11 +167,11 @@ bool proceedLoadPrioritiesAndOverridingDualTariff(const int16_t currentTemperatu
       // for each load, if we're inside off-peak period and within the 'force period', trigger the ISR to turn the load ON
       if (!pinOffPeakState && !pinNewState && (ulElapsedTime >= rg_OffsetForce[i][0]) && (ulElapsedTime < rg_OffsetForce[i][1]))
       {
-        b_overrideLoadOn[i] = !pinState || (currentTemperature_x100 <= iTemperatureThreshold_x100);
+        Shared::b_overrideLoadOn[i] = !pinState || (currentTemperature_x100 <= iTemperatureThreshold_x100);
       }
       else
       {
-        b_overrideLoadOn[i] = !pinState;
+        Shared::b_overrideLoadOn[i] = !pinState;
       }
     }
   }
@@ -233,19 +233,19 @@ bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
     }
     pinRotationState = pinNewState;
   }
-  else if (ROTATION_AFTER_SECONDS < absenceOfDivertedEnergyCountInSeconds)
+  else if (ROTATION_AFTER_SECONDS < Shared::absenceOfDivertedEnergyCountInSeconds)
   {
     if constexpr (PRIORITY_ROTATION == RotationModes::AUTO)
     {
       proceedRotation();
     }
-    absenceOfDivertedEnergyCountInSeconds = 0;
+    Shared::absenceOfDivertedEnergyCountInSeconds = 0;
   }
   if constexpr (OVERRIDE_PIN_PRESENT)
   {
     const auto pinState{ getPinState(forcePin) };
 
-    for (auto &bOverrideLoad : b_overrideLoadOn)
+    for (auto &bOverrideLoad : Shared::b_overrideLoadOn)
     {
       bOverrideLoad = !pinState;
     }
@@ -284,7 +284,7 @@ void checkDiversionOnOff()
     previousState = pinState;
 #endif
 
-    b_diversionOff = !pinState;
+    Shared::b_diversionOff = !pinState;
   }
 }
 
@@ -341,26 +341,26 @@ void updateTemperature()
  *          The function also adjusts the calculated voltage based on the logging period duration 
  *          (e.g., for periods longer than 10 seconds, a scaling factor is applied).
  * 
- * @note This function relies on global variables such as `copyOf_sumP_grid_overDL_Period`, 
- *       `copyOf_sampleSetsDuringThisDatalogPeriod`, and `f_voltageCal`.
+ * @note This function relies on global variables such as `Shared::Shared::copyOf_sumP_grid_overDL_Period`, 
+ *       `Shared::copyOf_sampleSetsDuringThisDatalogPeriod`, and `f_voltageCal`.
  * 
  * @see sendResults
  * @see updateTemperature
  */
 void processCalculationsForLogging()
 {
-  tx_data.powerGrid = copyOf_sumP_grid_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_grid;
+  tx_data.powerGrid = Shared::copyOf_sumP_grid_overDL_Period / Shared::copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_grid;
   tx_data.powerGrid *= -1;
 
-  tx_data.powerDiverted = copyOf_sumP_diverted_overDL_Period / copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_diverted;
+  tx_data.powerDiverted = Shared::copyOf_sumP_diverted_overDL_Period / Shared::copyOf_sampleSetsDuringThisDatalogPeriod * powerCal_diverted;
 
   if constexpr (DATALOG_PERIOD_IN_SECONDS > 10)
   {
-    tx_data.Vrms_L_x100 = static_cast< int32_t >((100 << 2) * f_voltageCal * sqrt(copyOf_sum_Vsquared / copyOf_sampleSetsDuringThisDatalogPeriod));
+    tx_data.Vrms_L_x100 = static_cast< int32_t >((100 << 2) * f_voltageCal * sqrt(Shared::copyOf_sum_Vsquared / Shared::copyOf_sampleSetsDuringThisDatalogPeriod));
   }
   else
   {
-    tx_data.Vrms_L_x100 = static_cast< int32_t >(100 * f_voltageCal * sqrt(copyOf_sum_Vsquared / copyOf_sampleSetsDuringThisDatalogPeriod));
+    tx_data.Vrms_L_x100 = static_cast< int32_t >(100 * f_voltageCal * sqrt(Shared::copyOf_sum_Vsquared / Shared::copyOf_sampleSetsDuringThisDatalogPeriod));
   }
 }
 
@@ -492,16 +492,16 @@ void loop()
   static uint8_t timerForDisplayUpdate{ 0 };
   static int16_t iTemperature_x100{ 0 };
 
-  if (b_newCycle)  // flag is set after each main cycle
+  if (Shared::b_newCycle)  // flag is set after each main cycle
   {
-    b_newCycle = false;  // reset the flag
+    Shared::b_newCycle = false;  // reset the flag
 
     if (++timerForDisplayUpdate >= UPDATE_PERIOD_FOR_DISPLAYED_DATA)
     {  // the 4-digit display needs to be refreshed every few mS. For convenience,
       // this action is performed every N times around this processing loop.
       timerForDisplayUpdate = 0;
 
-      configureValueForDisplay(EDD_isActive, copyOf_divertedEnergyTotal_Wh);
+      configureValueForDisplay(Shared::EDD_isActive, Shared::copyOf_divertedEnergyTotal_Wh);
     }
 
     if (++perSecondTimer >= SUPPLY_FREQUENCY)
@@ -511,7 +511,7 @@ void loop()
     }
   }
 
-  if (b_datalogEventPending)
+  if (Shared::b_datalogEventPending)
   {
     if (initLoop)
     {
@@ -519,7 +519,7 @@ void loop()
       clearDisplay();
     }
 
-    b_datalogEventPending = false;
+    Shared::b_datalogEventPending = false;
 
     processCalculationsForLogging();
 
@@ -530,7 +530,7 @@ void loop()
 
     updateTemperature();
 
-    updateOLED(copyOf_divertedEnergyTotal_Wh);
+    updateOLED(Shared::copyOf_divertedEnergyTotal_Wh);
 
     sendResults(bOffPeak);
   }

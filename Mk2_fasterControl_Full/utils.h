@@ -32,6 +32,12 @@
 
 #include "version.h"
 
+#if TEMP_SENSOR_PRESENT
+inline PayloadTx_struct< temperatureSensing.get_size() > tx_data; /**< logging data */
+#else
+inline PayloadTx_struct<> tx_data; /**< logging data */
+#endif
+
 /**
  * @brief Print the configuration during startup.
  *
@@ -117,33 +123,6 @@ inline void printConfiguration()
 }
 
 /**
- * @brief Prints the load priorities to the Serial output.
- *
- * This function logs the current load priorities and states to the Serial output
- * for debugging purposes. It provides a detailed view of the load configuration
- * and their respective priorities.
- *
- * @details
- * - Each load's priority and state are printed in a human-readable format.
- * - This function is only active when debugging is enabled (`ENABLE_DEBUG`).
- *
- * @ingroup GeneralProcessing
- */
-inline void logLoadPriorities()
-{
-#ifdef ENABLE_DEBUG
-
-  DBUGLN(F("Load Priorities: "));
-  for (const auto& loadPrioAndState : loadPrioritiesAndState)
-  {
-    DBUG(F("\tload "));
-    DBUGLN(loadPrioAndState);
-  }
-
-#endif
-}
-
-/**
  * @brief Prints data logs to the Serial output in text format.
  *
  * This function outputs telemetry data in a human-readable text format to the Serial output.
@@ -158,7 +137,7 @@ inline void logLoadPriorities()
  */
 inline void printForSerialText()
 {
-  Serial.print(copyOf_energyInBucket_long * invSUPPLY_FREQUENCY);
+  Serial.print(Shared::copyOf_energyInBucket_long * invSUPPLY_FREQUENCY);
   Serial.print(F(", P:"));
   Serial.print(tx_data.powerGrid);
 
@@ -172,7 +151,7 @@ inline void printForSerialText()
   Serial.print(tx_data.powerDiverted);
 
   Serial.print(F(", E:"));
-  Serial.print(copyOf_divertedEnergyTotal_Wh);
+  Serial.print(Shared::copyOf_divertedEnergyTotal_Wh);
 
   Serial.print(F(", V"));
   Serial.print(F(":"));
@@ -196,15 +175,15 @@ inline void printForSerialText()
   }
 
   Serial.print(F(", (minSampleSets/MC "));
-  Serial.print(copyOf_lowestNoOfSampleSetsPerMainsCycle);
+  Serial.print(Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle);
   Serial.print(F(", #ofSampleSets "));
-  Serial.print(copyOf_sampleSetsDuringThisDatalogPeriod);
+  Serial.print(Shared::copyOf_sampleSetsDuringThisDatalogPeriod);
 
 #ifndef DUAL_TARIFF
   if constexpr (PRIORITY_ROTATION != RotationModes::OFF)
   {
     Serial.print(F(", NoED "));
-    Serial.print(absenceOfDivertedEnergyCountInSeconds);
+    Serial.print(Shared::absenceOfDivertedEnergyCountInSeconds);
   }
 #endif  // DUAL_TARIFF
 
@@ -239,7 +218,7 @@ inline void printForJSON(const bool bOffPeak)
   }
 
   doc["D"] = tx_data.powerDiverted;
-  doc["E"] = copyOf_divertedEnergyTotal_Wh;
+  doc["E"] = Shared::copyOf_divertedEnergyTotal_Wh;
   doc["V"] = (float)tx_data.Vrms_L_x100 * 0.01F;
 
   if constexpr (TEMP_SENSOR_PRESENT)
@@ -255,7 +234,7 @@ inline void printForJSON(const bool bOffPeak)
     }
   }
 
-  doc["NoED"] = absenceOfDivertedEnergyCountInSeconds;
+  doc["NoED"] = Shared::absenceOfDivertedEnergyCountInSeconds;
 
   serializeJson(doc, Serial);
   Serial.println();
@@ -304,7 +283,7 @@ void sendTelemetryData()
   }
 
   teleInfo.send("D", tx_data.powerDiverted);                                  // Send power diverted
-  teleInfo.send("E", static_cast< int16_t >(copyOf_divertedEnergyTotal_Wh));  // Send diverted energy in Wh
+  teleInfo.send("E", static_cast< int16_t >(Shared::copyOf_divertedEnergyTotal_Wh));  // Send diverted energy in Wh
   teleInfo.send("V", tx_data.Vrms_L_x100);                                    // Send voltage in volts
 
   if constexpr (TEMP_SENSOR_PRESENT)
@@ -320,10 +299,10 @@ void sendTelemetryData()
     }
   }
 
-  teleInfo.send("N", static_cast< int16_t >(absenceOfDivertedEnergyCountInSeconds));  // Send absence of diverted energy count for 50Hz
+  teleInfo.send("N", static_cast< int16_t >(Shared::absenceOfDivertedEnergyCountInSeconds));  // Send absence of diverted energy count for 50Hz
 
-  teleInfo.send("S", copyOf_sampleSetsDuringThisDatalogPeriod);
-  teleInfo.send("S_MC", copyOf_lowestNoOfSampleSetsPerMainsCycle);
+  teleInfo.send("S", Shared::copyOf_sampleSetsDuringThisDatalogPeriod);
+  teleInfo.send("S_MC", Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle);
 
   teleInfo.endFrame();  // Finalize and send the telemetry frame
 }
