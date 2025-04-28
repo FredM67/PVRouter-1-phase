@@ -106,7 +106,7 @@
  * - heavy refactoring to make the code more readable and maintainable.
  * - added comments to explain the code.
  * - added assertions to ensure the code is compiled with the correct C++ version.
- * - added a link to the Readme.md file in the comments.
+ * - added a link to the README.md file in the comments.
  * - refactoring of the ISR to enhance the performance.
  * 
  * @author Fred Metrich
@@ -243,6 +243,6 @@
  */
 
 static_assert(__cplusplus >= 201703L, "**** Please define 'gnu++17' in 'platform.txt' ! ****");
-static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVRouter-3-phase/blob/main/Mk2_fasterControl_Full/Readme.md");
+static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVRouter-3-phase/blob/main/Mk2_fasterControl_Full/README.md");
 
 // The active code can be found in the other cpp/h files

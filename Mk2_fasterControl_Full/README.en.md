@@ -1,5 +1,5 @@
-[![en](https://img.shields.io/badge/lang-en-red.svg)](Readme.en.md)
-[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](Readme.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](README.en.md)
+[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](README.md)
 
 This program is to be used with the Arduino IDE and/or other development IDE like VSCode + PlatformIO.
 
@@ -44,7 +44,7 @@ You'll need to install additional extension(s). The most popular and used extens
 - **movingAvg.h** : source code for sliding-window average
 - **processing.cpp** : source code for the processing engine
 - **processing.h** : functions prototype of the processing engine
-- **Readme.en.md** : this file
+- **README.en.md** : this file
 - **types.h** : definitions of types, ...
 - **type_traits.h** : some STL stuff not yet available in the avr-package
 - **type_traits** : folder containing some missing STL helpers

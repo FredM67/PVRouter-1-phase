@@ -82,6 +82,7 @@ public:
     return 0x00;
   }
 };
+/// @endcond
 
 /**
  * @class TemperatureSensing

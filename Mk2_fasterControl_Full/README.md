@@ -1,4 +1,4 @@
-[![en](https://img.shields.io/badge/lang-en-red.svg)](Readme.en.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](README.en.md)
 
 Ce programme est conçu pour être utilisé avec l'IDE Arduino et/ou d'autres IDE de développement comme VSCode + PlatformIO.
 
@@ -73,7 +73,7 @@ L'ensemble du projet a été conçu pour être utilisé de façon optimale avec 
 - **movingAvg.h** : code source pour la moyenne glissante
 - **processing.cpp** : code source du moteur de traitement
 - **processing.h** : prototypes de fonctions du moteur de traitement
-- **Readme.md** : ce fichier
+- **README.md** : ce fichier
 - **teleinfo.h**: code source de la fonctionnalité *Télémétrie IoT*
 - **types.h** : définitions des types …
 - **type_traits.h** : quelques trucs STL qui ne sont pas encore disponibles dans le paquet avr
@@ -120,15 +120,15 @@ La cohérence de la configuration est vérifiée lors de la compilation. Par exe
 
 Le type de sortie série peut être configuré pour s'adapter à différents besoins. Trois options sont disponibles :
 
-- **HumanReadable** : Sortie lisible par un humain, idéale pour le débogage ou la mise en service.
-- **IoT** : Sortie formatée pour des plateformes IoT comme HomeAssistant.
-- **EmonCMS** : Sortie compatible avec le format attendu par EmonCMS.
+- **HumanReadable** : Sortie lisible par un humain, idéale pour le débogage ou la mise en service.
+- **IoT** : Sortie formatée pour des plateformes IoT comme HomeAssistant.
+- **JSON** : Sortie formatée pour les plateformes comme EmonCMS (JSON).
 
 Pour configurer le type de sortie série, modifiez la constante suivante dans le fichier **config.h** :
 ```cpp
 inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable;
 ```
-Remplacez `HumanReadable` par `IoT` ou `EmonCMS` selon vos besoins.
+Remplacez `HumanReadable` par `IoT` ou `JSON` selon vos besoins.
 
 ## Configuration de l'affichage
 
