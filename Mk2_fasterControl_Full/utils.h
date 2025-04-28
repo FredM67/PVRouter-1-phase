@@ -199,7 +199,7 @@ inline void printForSerialText()
   if constexpr (PRIORITY_ROTATION != RotationModes::OFF)
   {
     Serial.print(F(", NoED "));
-    Serial.print(absenceOfDivertedEnergyCount);
+    Serial.print(absenceOfDivertedEnergyCountInSeconds);
   }
 #endif  // DUAL_TARIFF
 
@@ -250,16 +250,7 @@ inline void printForEmonCMS(const bool bOffPeak)
     }
   }
 
-  if constexpr (SUPPLY_FREQUENCY == 50)
-  {
-    doc["NoED"] = absenceOfDivertedEnergyCount;
-  }
-  else if constexpr (SUPPLY_FREQUENCY == 60)
-  {
-    doc["NoED"] = absenceOfDivertedEnergyCount;
-  }
-  else
-    static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "SUPPLY_FREQUENCY must be either 50 or 60");
+  doc["NoED"] = absenceOfDivertedEnergyCountInSeconds;
 
   serializeJson(doc, Serial);
   Serial.println();
@@ -307,9 +298,9 @@ void sendTelemetryData()
     } while (++idx < relays.get_size());
   }
 
-  teleInfo.send("D", tx_data.powerDiverted);                           // Send power diverted
+  teleInfo.send("D", tx_data.powerDiverted);                                  // Send power diverted
   teleInfo.send("E", static_cast< int16_t >(copyOf_divertedEnergyTotal_Wh));  // Send diverted energy in Wh
-  teleInfo.send("V", tx_data.Vrms_L_x100);                             // Send voltage in volts
+  teleInfo.send("V", tx_data.Vrms_L_x100);                                    // Send voltage in volts
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
@@ -324,7 +315,7 @@ void sendTelemetryData()
     }
   }
 
-  teleInfo.send("N", static_cast< int16_t >(absenceOfDivertedEnergyCount));  // Send absence of diverted energy count for 50Hz
+  teleInfo.send("N", static_cast< int16_t >(absenceOfDivertedEnergyCountInSeconds));  // Send absence of diverted energy count for 50Hz
 
   teleInfo.send("S", copyOf_sampleSetsDuringThisDatalogPeriod);
   teleInfo.send("S_MC", copyOf_lowestNoOfSampleSetsPerMainsCycle);

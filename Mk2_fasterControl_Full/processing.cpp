@@ -47,6 +47,9 @@ int32_t energyInBucket_long{ 0 };  /**< in Integer Energy Units */
 int32_t lowerEnergyThreshold{ 0 }; /**< dynamic lower threshold */
 int32_t upperEnergyThreshold{ 0 }; /**< dynamic upper threshold */
 
+int32_t divertedEnergyRecent_IEU{ 0 };  // Hi-res accumulator of limited range
+uint16_t divertedEnergyTotal_Wh{ 0 };   // WattHour register of 63K range
+
 // For recording the accumulated amount of diverted energy data (using CT2), a similar
 // calibration mechanism is required.  Rather than a bucket with a fixed capacity, the
 // accumulator for diverted energy just needs to be scaled correctly.  As soon as its
@@ -87,6 +90,8 @@ uint16_t sampleSetsDuringNegativeHalfOfMainsCycle{ 0 }; /**< for arming the tria
 
 LoadStates physicalLoadState[NO_OF_DUMPLOADS]; /**< Physical state of the loads */
 uint16_t countLoadON[NO_OF_DUMPLOADS]{};       /**< Number of cycle the load was ON (over 1 datalog period) */
+
+uint32_t absenceOfDivertedEnergyCountInMC{ 0 }; /**< number of main cycles without diverted energy */
 
 remove_cv< remove_reference< decltype(DATALOG_PERIOD_IN_MAINS_CYCLES) >::type >::type n_cycleCountForDatalogging{ 0 }; /**< for counting how often datalog is updated */
 
@@ -604,13 +609,12 @@ void processRawSamples()
         // update the Energy Diversion Detector
         if (loadPrioritiesAndState[0] & loadStateOnBit)
         {
-          absenceOfDivertedEnergyCount = 0;
-          EDD_isIdle = false;
+          absenceOfDivertedEnergyCountInMC = 0;
           EDD_isActive = true;
         }
         else
         {
-          EDD_isIdle = true;
+          ++absenceOfDivertedEnergyCountInMC;
         }
 
         // Now that the energy-related decisions have been taken, min and max limits can now
@@ -630,7 +634,7 @@ void processRawSamples()
 
     ++sampleSetsDuringNegativeHalfOfMainsCycle;
   }  // end of processing that is specific to samples where the voltage is negative
-  refreshDisplay();
+  refresh7SegDisplay();
 }
 
 /**
@@ -916,14 +920,23 @@ void processLatestContribution()
   // After a pre-defined period of inactivity, the 4-digit display needs to
   // close down in readiness for the next's day's data.
   //
-  if (absenceOfDivertedEnergyCount > displayShutdown_inSeconds)
+  if (absenceOfDivertedEnergyCountInMC > displayShutdown_inMainsCycles)
   {
     // clear the accumulators for diverted energy
     divertedEnergyTotal_Wh = 0;
     divertedEnergyRecent_IEU = 0;
     EDD_isActive = false;  // energy diversion detector is now inactive
   }
+
+  // The diverted energy total is copied to a variable before it is used.
+  // This is done to avoid the possibility of a race-condition whereby the
+  // diverted energy total is updated while the display is being updated.
   copyOf_divertedEnergyTotal_Wh = divertedEnergyTotal_Wh;
+
+  if (absenceOfDivertedEnergyCountInMC > SUPPLY_FREQUENCY)
+    ++absenceOfDivertedEnergyCountInSeconds;
+  else
+    absenceOfDivertedEnergyCountInSeconds = 0;
 
   b_newCycle = true;  //  a 50 Hz 'tick' for use by the main code
 }

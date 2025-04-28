@@ -31,7 +31,7 @@ inline constexpr int16_t REQUIRED_EXPORT_IN_WATTS{ 0 };   // when set to a negat
 // to prevent the diverted energy total from 'creeping'
 inline constexpr uint8_t ANTI_CREEP_LIMIT{ 5 };  // in Joules per mains cycle (has no effect when set to 0)
 
-constexpr int32_t mainsCyclesPerHour{ SUPPLY_FREQUENCY * SECONDS_PER_MINUTE * MINUTES_PER_HOUR };
+inline constexpr uint32_t mainsCyclesPerHour{ SUPPLY_FREQUENCY * SECONDS_PER_MINUTE * MINUTES_PER_HOUR };
 
 inline constexpr uint8_t DATALOG_PERIOD_IN_SECONDS{ 5 }; /**< Period of datalogging in seconds */
 

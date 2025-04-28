@@ -233,13 +233,13 @@ bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
     }
     pinRotationState = pinNewState;
   }
-  else if (ROTATION_AFTER_SECONDS < absenceOfDivertedEnergyCount)
+  else if (ROTATION_AFTER_SECONDS < absenceOfDivertedEnergyCountInSeconds)
   {
     if constexpr (PRIORITY_ROTATION == RotationModes::AUTO)
     {
       proceedRotation();
     }
-    absenceOfDivertedEnergyCount = 0;
+    absenceOfDivertedEnergyCountInSeconds = 0;
   }
   if constexpr (OVERRIDE_PIN_PRESENT)
   {
@@ -437,15 +437,9 @@ void setup()
  * @see proceedLoadPrioritiesAndOverriding
  * @see forceFullPower
  * @see checkDiversionOnOff
- * @see refreshDisplay
  */
 void handlePerSecondTasks(bool &bOffPeak, int16_t iTemperature_x100)
 {
-  if (EDD_isIdle)
-  {
-    ++absenceOfDivertedEnergyCount;
-  }
-
   if constexpr (WATCHDOG_PIN_PRESENT)
   {
     togglePin(watchDogPin);
@@ -498,22 +492,19 @@ void loop()
   static uint8_t timerForDisplayUpdate{ 0 };
   static int16_t iTemperature_x100{ 0 };
 
-  if (b_newCycle)  // flag is set after every pair of ADC conversions
+  if (b_newCycle)  // flag is set after each main cycle
   {
     b_newCycle = false;  // reset the flag
-    ++perSecondTimer;
-    ++timerForDisplayUpdate;
 
-    if (timerForDisplayUpdate >= UPDATE_PERIOD_FOR_DISPLAYED_DATA)
+    if (++timerForDisplayUpdate >= UPDATE_PERIOD_FOR_DISPLAYED_DATA)
     {  // the 4-digit display needs to be refreshed every few mS. For convenience,
       // this action is performed every N times around this processing loop.
       timerForDisplayUpdate = 0;
 
       configureValueForDisplay(EDD_isActive, copyOf_divertedEnergyTotal_Wh);
-      //          Serial.println(energyInBucket_prediction);
     }
 
-    if (perSecondTimer >= SUPPLY_FREQUENCY)
+    if (++perSecondTimer >= SUPPLY_FREQUENCY)
     {
       perSecondTimer = 0;
       handlePerSecondTasks(bOffPeak, iTemperature_x100);
