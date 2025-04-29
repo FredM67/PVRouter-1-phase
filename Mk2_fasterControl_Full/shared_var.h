@@ -22,6 +22,7 @@ inline volatile uint32_t absenceOfDivertedEnergyCountInSeconds{ 0 }; /**< number
 inline volatile int32_t copyOf_sumP_grid_overDL_Period;            /**< copy of cumulative grid power */
 inline volatile int32_t copyOf_sumP_diverted_overDL_Period;        /**< copy of cumulative diverted power */
 inline volatile uint16_t copyOf_divertedEnergyTotal_Wh;            /**< copy of WattHour register of 63K range */
+inline volatile uint16_t copyOf_divertedEnergyTotal_Wh_forDL;      /**< copy of WattHour register of 63K range */
 inline volatile int32_t copyOf_sum_Vsquared;                       /**< copy of for summation of V^2 values during datalog period */
 inline volatile int32_t copyOf_energyInBucket_long;                /**< copy of main energy bucket (over all phases) */
 inline volatile uint8_t copyOf_lowestNoOfSampleSetsPerMainsCycle;  /**<  */

@@ -530,7 +530,7 @@ void loop()
 
     updateTemperature();
 
-    updateOLED(Shared::copyOf_divertedEnergyTotal_Wh);
+    updateOLED(Shared::copyOf_divertedEnergyTotal_Wh_forDL);
 
     sendResults(bOffPeak);
   }

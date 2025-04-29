@@ -1147,6 +1147,8 @@ void processDataLogging()
   Shared::copyOf_sumP_diverted_overDL_Period = sumP_diverted_overDL_Period;
   sumP_diverted_overDL_Period = 0;
 
+  Shared::copyOf_divertedEnergyTotal_Wh_forDL = divertedEnergyTotal_Wh;
+
   Shared::copyOf_sum_Vsquared = l_sum_Vsquared;
   l_sum_Vsquared = 0;
 

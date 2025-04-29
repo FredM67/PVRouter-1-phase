@@ -151,7 +151,7 @@ inline void printForSerialText()
   Serial.print(tx_data.powerDiverted);
 
   Serial.print(F(", E:"));
-  Serial.print(Shared::copyOf_divertedEnergyTotal_Wh);
+  Serial.print(Shared::copyOf_divertedEnergyTotal_Wh_forDL);
 
   Serial.print(F(", V"));
   Serial.print(F(":"));
@@ -218,7 +218,7 @@ inline void printForJSON(const bool bOffPeak)
   }
 
   doc["D"] = tx_data.powerDiverted;
-  doc["E"] = Shared::copyOf_divertedEnergyTotal_Wh;
+  doc["E"] = Shared::copyOf_divertedEnergyTotal_Wh_forDL;
   doc["V"] = (float)tx_data.Vrms_L_x100 * 0.01F;
 
   if constexpr (TEMP_SENSOR_PRESENT)
@@ -282,9 +282,12 @@ void sendTelemetryData()
     } while (++idx < relays.get_size());
   }
 
-  teleInfo.send("D", tx_data.powerDiverted);                                  // Send power diverted
-  teleInfo.send("E", static_cast< int16_t >(Shared::copyOf_divertedEnergyTotal_Wh));  // Send diverted energy in Wh
   teleInfo.send("V", tx_data.Vrms_L_x100);                                    // Send voltage in volts
+  teleInfo.send("S", Shared::copyOf_sampleSetsDuringThisDatalogPeriod);
+  teleInfo.send("S_MC", Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle);
+
+  teleInfo.send("D", tx_data.powerDiverted);                                  // Send power diverted
+  teleInfo.send("E", static_cast< int16_t >(Shared::copyOf_divertedEnergyTotal_Wh_forDL));  // Send diverted energy in Wh
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
@@ -300,9 +303,6 @@ void sendTelemetryData()
   }
 
   teleInfo.send("N", static_cast< int16_t >(Shared::absenceOfDivertedEnergyCountInSeconds));  // Send absence of diverted energy count for 50Hz
-
-  teleInfo.send("S", Shared::copyOf_sampleSetsDuringThisDatalogPeriod);
-  teleInfo.send("S_MC", Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle);
 
   teleInfo.endFrame();  // Finalize and send the telemetry frame
 }
