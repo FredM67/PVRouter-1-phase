@@ -14,7 +14,7 @@ inline volatile bool b_reOrderLoads{ false };             /**< async trigger for
 inline volatile bool b_diversionOff{ false };             /**< async trigger to stop diversion */
 
 inline volatile bool EDD_isActive{ false };                          /**< energy diversion detection */
-inline volatile uint32_t absenceOfDivertedEnergyCountInSeconds{ 0 }; /**< number of seconds without diverted energy */
+inline volatile uint16_t absenceOfDivertedEnergyCountInSeconds{ 0 }; /**< number of seconds without diverted energy */
 
 // since there's no real locking feature for shared variables, a couple of data
 // generated from inside the ISR are copied from time to time to be passed to the

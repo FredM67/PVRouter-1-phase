@@ -519,7 +519,7 @@ void loop()
       clearDisplay();
     }
 
-    Shared::b_datalogEventPending = false;
+    Shared::b_datalogEventPending = false;  // Reset the flag
 
     processCalculationsForLogging();
 
@@ -528,10 +528,10 @@ void loop()
       relays.update_average(tx_data.powerGrid);
     }
 
-    updateTemperature();
-
     updateOLED(Shared::copyOf_divertedEnergyTotal_Wh_forDL);
 
     sendResults(bOffPeak);
+
+    updateTemperature();
   }
 }  // end of loop()

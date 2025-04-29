@@ -561,7 +561,7 @@ void processRawSamples()
     // still processing samples where the voltage is Polarities::POSITIVE ...
     // (in this go-faster code, the action from here has moved to the negative half of the cycle)
 
-  }  // end of processing that is specific to samples where the voltage is positive
+  }     // end of processing that is specific to samples where the voltage is positive
   else  // the polarity of this sample is negative
   {
     if (polarityConfirmedOfLastSampleV != Polarities::NEGATIVE)
@@ -938,14 +938,14 @@ void processLatestContribution()
     Shared::EDD_isActive = false;  // energy diversion detector is now inactive
   }
 
-  if (absenceOfDivertedEnergyCountInMC > SUPPLY_FREQUENCY)
-    ++Shared::absenceOfDivertedEnergyCountInSeconds;
-  else
-    Shared::absenceOfDivertedEnergyCountInSeconds = 0;
-
   if (++perSecondCounter == SUPPLY_FREQUENCY)
   {
     perSecondCounter = 0;
+
+    if (absenceOfDivertedEnergyCountInMC > SUPPLY_FREQUENCY)
+      ++Shared::absenceOfDivertedEnergyCountInSeconds;
+    else
+      Shared::absenceOfDivertedEnergyCountInSeconds = 0;
 
     // The diverted energy total is copied to a variable before it is used.
     // This is done to avoid the possibility of a race-condition whereby the
@@ -1358,7 +1358,7 @@ void logLoadPriorities()
 #ifdef ENABLE_DEBUG
 
   DBUGLN(F("Load Priorities: "));
-  for (const auto& loadPrioAndState : loadPrioritiesAndState)
+  for (const auto &loadPrioAndState : loadPrioritiesAndState)
   {
     DBUG(F("\tload "));
     DBUGLN(loadPrioAndState);
