@@ -287,7 +287,7 @@ void sendTelemetryData()
   teleInfo.send("S_MC", Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle);
 
   teleInfo.send("D", tx_data.powerDiverted);                                  // Send power diverted
-  teleInfo.send("E", static_cast< int16_t >(Shared::copyOf_divertedEnergyTotal_Wh_forDL));  // Send diverted energy in Wh
+  teleInfo.send("E", Shared::copyOf_divertedEnergyTotal_Wh_forDL);  // Send diverted energy in Wh
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {

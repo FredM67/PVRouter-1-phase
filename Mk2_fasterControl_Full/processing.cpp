@@ -55,8 +55,8 @@ int32_t energyInBucket_long{ 0 };  /**< in Integer Energy Units */
 int32_t lowerEnergyThreshold{ 0 }; /**< dynamic lower threshold */
 int32_t upperEnergyThreshold{ 0 }; /**< dynamic upper threshold */
 
-int32_t divertedEnergyRecent_IEU{ 0 };  // Hi-res accumulator of limited range
-uint16_t divertedEnergyTotal_Wh{ 0 };   // WattHour register of 63K range
+int32_t divertedEnergyRecent_IEU{ 0 }; /**< Hi-res accumulator of limited range */
+uint16_t divertedEnergyTotal_Wh{ 0 };   /**< WattHour register of 63K range */
 
 // For recording the accumulated amount of diverted energy data (using CT2), a similar
 // calibration mechanism is required.  Rather than a bucket with a fixed capacity, the
@@ -561,7 +561,7 @@ void processRawSamples()
     // still processing samples where the voltage is Polarities::POSITIVE ...
     // (in this go-faster code, the action from here has moved to the negative half of the cycle)
 
-  }     // end of processing that is specific to samples where the voltage is positive
+  }  // end of processing that is specific to samples where the voltage is positive
   else  // the polarity of this sample is negative
   {
     if (polarityConfirmedOfLastSampleV != Polarities::NEGATIVE)
