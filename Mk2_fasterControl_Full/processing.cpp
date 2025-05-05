@@ -486,7 +486,7 @@ void confirmPolarity()
    * a certain number of consecutive samples in the 'other' half of the 
    * waveform have been encountered.  
    */
-  static uint8_t count = 0;
+  static uint8_t count{ 0 };
   if (polarityOfMostRecentVsample == polarityConfirmedOfLastSampleV)
   {
     count = 0;
@@ -529,28 +529,6 @@ void processRawSamples()
         processPlusHalfCycle();
 
         processStartNewCycle();
-
-        if (Shared::EDD_isActive)  // Energy Diversion Display
-        {
-          // For diverted energy, the latest contribution needs to be added to an
-          // accumulator which operates with maximum precision.
-
-          if (realEnergy_diverted < antiCreepLimit_inIEUperMainsCycle)
-          {
-            realEnergy_diverted = 0;
-          }
-          divertedEnergyRecent_IEU += realEnergy_diverted;
-
-          // Whole kWh are then recorded separately
-          if (divertedEnergyRecent_IEU > IEU_per_Wh)
-          {
-            divertedEnergyRecent_IEU -= IEU_per_Wh;
-            if (!Shared::b_diversionOff && !Shared::b_overrideLoadOn[0])
-            {
-              ++divertedEnergyTotal_Wh;
-            }
-          }
-        }
       }
       else
       {
@@ -926,6 +904,28 @@ void processLatestContribution()
   //
   // The latest contribution can now be added to this energy bucket
   energyInBucket_long += realEnergy_grid;
+
+  if (Shared::EDD_isActive)  // Energy Diversion Display
+  {
+    // For diverted energy, the latest contribution needs to be added to an
+    // accumulator which operates with maximum precision.
+
+    if (realEnergy_diverted < antiCreepLimit_inIEUperMainsCycle)
+    {
+      realEnergy_diverted = 0;
+    }
+    divertedEnergyRecent_IEU += realEnergy_diverted;
+
+    // Whole kWh are then recorded separately
+    if (divertedEnergyRecent_IEU > IEU_per_Wh)
+    {
+      divertedEnergyRecent_IEU -= IEU_per_Wh;
+      if (!Shared::b_diversionOff && !Shared::b_overrideLoadOn[0])
+      {
+        ++divertedEnergyTotal_Wh;
+      }
+    }
+  }
 
   // After a pre-defined period of inactivity, the 4-digit display needs to
   // close down in readiness for the next's day's data.

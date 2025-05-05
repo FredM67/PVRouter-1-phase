@@ -41,4 +41,4 @@ inline constexpr float alpha{ 0.0011 };
 
 //--------------------------------------------------------------------------------------------------
 
-#endif  // CALIBRATION_H
+#endif /* CALIBRATION_H */
