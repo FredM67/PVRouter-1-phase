@@ -48,7 +48,7 @@ class OneWire;
  */
 struct DeviceAddress
 {
-  uint8_t addr[8]; /**< The address of the device as an array of 8 bytes. */
+  uint8_t addr[8]{}; /**< The address of the device as an array of 8 bytes. */
 };
 
 // Mock class for OneWire
@@ -57,7 +57,7 @@ class MockOneWire
 {
 public:
   // Mock constructor
-  MockOneWire() {}
+  MockOneWire() = default;
 
   void begin(uint8_t) {}
 
@@ -87,7 +87,7 @@ public:
 /**
  * @class TemperatureSensing
  * @brief Implements temperature sensing functionality for multiple sensors.
- * 
+ *
  * The `TemperatureSensing` class manages temperature sensors connected via the OneWire bus.
  * It supports initialization, temperature reading, and error handling for multiple sensors.
  *
@@ -98,7 +98,7 @@ public:
  * - **Temperature Reading**: Reads and validates temperature data from individual sensors.
  * - **Error Handling**: Handles disconnected or out-of-range sensors.
  * - **Compile-Time Configuration**: Uses `TEMP_ENABLED` to include or exclude temperature sensing features.
- * 
+ *
  * @ingroup TemperatureSensing
  */
 template< uint8_t N >
@@ -124,7 +124,7 @@ public:
 
   /**
    * @brief Construct a new Temperature Sensing object.
-   * 
+   *
    * This constructor initializes the `TemperatureSensing` object with the specified pin
    * and a list of device addresses for the connected temperature sensors.
    *
@@ -194,7 +194,7 @@ public:
 
   /**
    * @brief Get the pin of the sensor(s).
-   * 
+   *
    * This method returns the pin number where the temperature sensors are connected.
    *
    * @return constexpr auto The pin number.
@@ -220,7 +220,7 @@ public:
    * - Reads the scratchpad memory of the sensor to retrieve temperature data.
    * - Validates the data using CRC and checks for out-of-range values.
    */
-  int16_t readTemperature(const uint8_t idx) const
+  [[nodiscard]] int16_t readTemperature(const uint8_t idx) const
   {
     static ScratchPad buf;
 
@@ -260,7 +260,7 @@ public:
   }
 
 private:
-  const uint8_t sensorPin; /**< The pin of the sensor(s) */
+  const uint8_t sensorPin{ unused_pin }; /**< The pin of the sensor(s) */
 
   const DeviceAddress sensorAddrs[N]; /**< Array of sensors */
 
