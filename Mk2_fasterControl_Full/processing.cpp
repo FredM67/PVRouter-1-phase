@@ -19,23 +19,25 @@ uint8_t loadPrioritiesAndState[NO_OF_DUMPLOADS]; /**< load priorities */
 // For an enhanced polarity detection mechanism, which includes a persistence check
 inline constexpr uint8_t PERSISTENCE_FOR_POLARITY_CHANGE{ 1 }; /**< allows polarity changes to be confirmed */
 
+inline constexpr uint8_t POST_ZERO_CROSSING_MAX_COUNT{ 3 }; /**< allows trigger device to be reliably armed */
+
 // Define operating limits for the LP filters which identify DC offset in the voltage
 // sample streams. By limiting the output range, these filters always should start up
 // correctly.
+int32_t DCoffset_V_long{ 512L * 256 };                  /**< <--- for LPF */
 constexpr int32_t DCoffset_V_min{ (512L - 100) * 256 }; /**< mid-point of ADC minus a working margin */
 constexpr int32_t DCoffset_V_max{ (512L + 100) * 256 }; /**< mid-point of ADC plus a working margin */
-constexpr int16_t DCoffset_I{ 512 };                    /**< nominal mid-point value of ADC @ x1 scale */
 
-int32_t DCoffset_V_long{ 512L * 256 }; /**< <--- for LPF */
+constexpr int16_t DCoffset_I{ 512 }; /**< nominal mid-point value of ADC @ x1 scale */
 
 constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1 / powerCal_grid)) }; /**< main energy bucket for single-phase use, with units of Joules * SUPPLY_FREQUENCY */
 
 constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 }; /**< for resetting flexible thresholds */
 
-constexpr int32_t lowerThreshold_default{ capacityOfEnergyBucket_long >> 1 }; /**< default lower threshold for the energy bucket (50% of capacity) */
-constexpr int32_t upperThreshold_default{ capacityOfEnergyBucket_long >> 1 }; /**< default upper threshold for the energy bucket (50% of capacity) */
+constexpr int32_t lowerThreshold_default{ midPointOfEnergyBucket_long }; /**< default lower threshold for the energy bucket (50% of capacity) */
+constexpr int32_t upperThreshold_default{ midPointOfEnergyBucket_long }; /**< default upper threshold for the energy bucket (50% of capacity) */
 
-constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1 / powerCal_grid)) };         /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
+constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1 / powerCal_diverted)) };     /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
 constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1 / powerCal_grid)) }; /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
 // When using integer maths, calibration values that have supplied in floating point
 // form need to be rescaled.
@@ -56,7 +58,7 @@ int32_t lowerEnergyThreshold{ 0 }; /**< dynamic lower threshold */
 int32_t upperEnergyThreshold{ 0 }; /**< dynamic upper threshold */
 
 int32_t divertedEnergyRecent_IEU{ 0 }; /**< Hi-res accumulator of limited range */
-uint16_t divertedEnergyTotal_Wh{ 0 };   /**< WattHour register of 63K range */
+uint16_t divertedEnergyTotal_Wh{ 0 };  /**< WattHour register of 63K range */
 
 // For recording the accumulated amount of diverted energy data (using CT2), a similar
 // calibration mechanism is required.  Rather than a bucket with a fixed capacity, the
@@ -65,7 +67,7 @@ uint16_t divertedEnergyTotal_Wh{ 0 };   /**< WattHour register of 63K range */
 // accumulator's value is decremented accordingly. The calculation below is to determine
 // the scaling for this accumulator.
 
-constexpr int32_t IEU_per_Wh{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1 / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
+constexpr int32_t IEU_per_Wh_diverted{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1 / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
 
 bool recentTransition{ false };                   /**< a load state has been recently toggled */
 uint8_t postTransitionCount{ 0 };                 /**< counts the number of cycle since last transition */
@@ -549,7 +551,7 @@ void processRawSamples()
     }
 
     // check to see whether the trigger device can now be reliably armed
-    if (sampleSetsDuringNegativeHalfOfMainsCycle == 3)
+    if (sampleSetsDuringNegativeHalfOfMainsCycle == POST_ZERO_CROSSING_MAX_COUNT)
     {
       if (beyondStartUpPeriod)
       {
@@ -645,14 +647,7 @@ void processVoltage()
   long filtV_div4 = sampleVminusDC_long >> 2;        // reduce to 16-bits (now x64, or 2^6)
   int32_t inst_Vsquared{ filtV_div4 * filtV_div4 };  // 32-bits (now x4096, or 2^12)
 
-  if constexpr (DATALOG_PERIOD_IN_SECONDS > 10)
-  {
-    inst_Vsquared >>= 16;  // scaling is now x1/16 (V_ADC x I_ADC)
-  }
-  else
-  {
-    inst_Vsquared >>= 12;  // scaling is now x1 (V_ADC x I_ADC)
-  }
+  inst_Vsquared >>= 12;  // scaling is now x1 (V_ADC x I_ADC)
 
   l_sum_Vsquared += inst_Vsquared;  // cumulative V^2 (V_ADC x I_ADC)
 
@@ -754,6 +749,12 @@ void processStartNewCycle()
   {
     energyInBucket_long = 0;
   }
+
+  // clear the per-cycle accumulators for use in this new mains cycle.
+  sampleSetsDuringThisMainsCycle = 0;
+  sumP_grid = 0;
+  sumP_diverted = 0;
+  sampleSetsDuringNegativeHalfOfMainsCycle = 0;
 }
 
 /**
@@ -782,12 +783,6 @@ void processPlusHalfCycle()
   processLatestContribution();
 
   processDataLogging();
-
-  // clear the per-cycle accumulators for use in this new mains cycle.
-  sampleSetsDuringThisMainsCycle = 0;
-  sumP_grid = 0;
-  sumP_diverted = 0;
-  sampleSetsDuringNegativeHalfOfMainsCycle = 0;
 }
 
 /**
@@ -813,7 +808,7 @@ void processMinusHalfCycle()
   //  The portion which is fed back into the integrator is approximately one percent
   // of the average offset of all the Vsamples in the previous mains cycle.
   //
-  long previousOffset = DCoffset_V_long;
+  const auto previousOffset{ DCoffset_V_long };
   DCoffset_V_long = previousOffset + (cumVdeltasThisCycle_long >> 12);
   cumVdeltasThisCycle_long = 0;
 
@@ -917,9 +912,9 @@ void processLatestContribution()
     divertedEnergyRecent_IEU += realEnergy_diverted;
 
     // Whole kWh are then recorded separately
-    if (divertedEnergyRecent_IEU > IEU_per_Wh)
+    if (divertedEnergyRecent_IEU > IEU_per_Wh_diverted)
     {
-      divertedEnergyRecent_IEU -= IEU_per_Wh;
+      divertedEnergyRecent_IEU -= IEU_per_Wh_diverted;
       if (!Shared::b_diversionOff && !Shared::b_overrideLoadOn[0])
       {
         ++divertedEnergyTotal_Wh;
