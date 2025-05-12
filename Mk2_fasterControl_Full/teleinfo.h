@@ -86,32 +86,34 @@ inline static constexpr size_t calcBufferSize()
 
   if constexpr (NO_OF_PHASES > 1)
   {
-    size += NO_OF_PHASES * lineSize(2, 6);  // R (signed 6 digits)
-    size += NO_OF_PHASES * lineSize(1, 5);  // V1 (unsigned 5 digits)
+    size += NO_OF_PHASES * lineSize(2, 5);  // V1-Vn (unsigned 5 digits) - voltage
 
-    size += NO_OF_DUMPLOADS * lineSize(2, 3);  // L1-Ln (unsigned 3 digits)
+    size += NO_OF_DUMPLOADS * lineSize(2, 3);  // L1-Ln (unsigned 3 digits) - diversion rate
   }
   else
   {
-    size += lineSize(1, 4);  // D (unsigned 4 digits)
-    size += lineSize(1, 5);  // E (unsigned 5 digits)
+    size += lineSize(1, 5);  // V (unsigned 5 digits) - voltage
+    
+    size += lineSize(1, 4);  // D (unsigned 4 digits) - diverted power
+    size += lineSize(1, 4);  // M (unsigned 4 digits) - diverted power
+    size += lineSize(1, 5);  // E (unsigned 5 digits) - diverted energy
   }
 
   if constexpr (RELAY_DIVERSION)
   {
-    size += lineSize(1, 6);                      // R (signed 6 digits)
-    size += relays.get_size() * lineSize(2, 1);  // R1-Rn (1 (ON), 0 (OFF))
+    size += lineSize(1, 6);                      // R (signed 6 digits) - mean power for relay diversion
+    size += relays.get_size() * lineSize(2, 1);  // R1-Rn (1 (ON), 0 (OFF)) - relay state
   }
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
-    size += temperatureSensing.get_size() * lineSize(2, 4);  // T1-Tn (4 digits)
+    size += temperatureSensing.get_size() * lineSize(2, 4);  // T1-Tn (4 digits) - temperature
   }
 
-  size += lineSize(1, 5);  // N (unsigned 5 digits)
+  size += lineSize(1, 5);  // N (unsigned 5 digits) - absence of diverted energy count
 
-  size += lineSize(4, 2);
-  size += lineSize(1, 5);
+  size += lineSize(4, 2); // S_MC (unsigned 2 digits) - sample sets per mains cycle
+  size += lineSize(1, 5); // S (unsigned 5 digits) - sample count
 
   size += 1;  // ETX
 

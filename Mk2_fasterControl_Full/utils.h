@@ -284,8 +284,6 @@ void sendTelemetryData()
   }
 
   teleInfo.send("V", tx_data.Vrms_L_x100);  // Send voltage in volts
-  teleInfo.send("S", Shared::copyOf_sampleSetsDuringThisDatalogPeriod);
-  teleInfo.send("S_MC", Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle);
 
   teleInfo.send("D", tx_data.powerDiverted);                                                // Send power diverted
   teleInfo.send("E", static_cast< int16_t >(Shared::copyOf_divertedEnergyTotal_Wh_forDL));  // Send diverted energy in Wh
@@ -309,6 +307,9 @@ void sendTelemetryData()
   }
 
   teleInfo.send("N", static_cast< int16_t >(Shared::absenceOfDivertedEnergyCountInSeconds));  // Send absence of diverted energy count for 50Hz
+  
+  teleInfo.send("S_MC", Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle);
+  teleInfo.send("S", Shared::copyOf_sampleSetsDuringThisDatalogPeriod);
 
   teleInfo.endFrame();  // Finalize and send the telemetry frame
 }
