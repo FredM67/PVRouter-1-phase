@@ -7,24 +7,38 @@
 #include "utils_pins.h"
 #include "utils_display.h"
 
+// allocation of analogue pins which are not dependent on the display type that is in use
+// **************************************************************************************
+inline constexpr uint8_t voltageSensor{ OLD_PCB ? 3 : 0 };          /**< A0 is for the voltage sensor (A3 for the old PCB) */
+inline constexpr uint8_t currentSensor_grid{ OLD_PCB ? 5 : 1 };     /**< A1 is for CT1 which measures grid current (A5 for the old PCB) */
+inline constexpr uint8_t currentSensor_diverted{ OLD_PCB ? 4 : 3 }; /**< A3 is for CT2 which measures diverted current (A4 for the old PCB) */
+// ------------------------------------------
+
+uint8_t loadPrioritiesAndState[NO_OF_DUMPLOADS]; /**< load priorities */
+
+// For an enhanced polarity detection mechanism, which includes a persistence check
+inline constexpr uint8_t PERSISTENCE_FOR_POLARITY_CHANGE{ 1 }; /**< allows polarity changes to be confirmed */
+
+inline constexpr uint8_t POST_ZERO_CROSSING_MAX_COUNT{ 3 }; /**< allows trigger device to be reliably armed */
+
 // Define operating limits for the LP filters which identify DC offset in the voltage
 // sample streams. By limiting the output range, these filters always should start up
 // correctly.
+int32_t DCoffset_V_long{ 512L * 256 };                  /**< <--- for LPF */
 constexpr int32_t DCoffset_V_min{ (512L - 100) * 256 }; /**< mid-point of ADC minus a working margin */
 constexpr int32_t DCoffset_V_max{ (512L + 100) * 256 }; /**< mid-point of ADC plus a working margin */
-constexpr int16_t DCoffset_I{ 512 };                    /**< nominal mid-point value of ADC @ x1 scale */
 
-int32_t DCoffset_V_long{ 512L * 256 }; /**< <--- for LPF */
+constexpr int16_t DCoffset_I{ 512 }; /**< nominal mid-point value of ADC @ x1 scale */
 
-constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1 / powerCal_grid)) }; /**< main energy bucket for single-phase use, with units of Joules * SUPPLY_FREQUENCY */
+constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1.0F / powerCal_grid)) }; /**< main energy bucket for single-phase use, with units of Joules * SUPPLY_FREQUENCY */
 
 constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 }; /**< for resetting flexible thresholds */
 
-constexpr int32_t lowerThreshold_default{ capacityOfEnergyBucket_long >> 1 }; /**< default lower threshold for the energy bucket (50% of capacity) */
-constexpr int32_t upperThreshold_default{ capacityOfEnergyBucket_long >> 1 }; /**< default upper threshold for the energy bucket (50% of capacity) */
+constexpr int32_t lowerThreshold_default{ midPointOfEnergyBucket_long }; /**< default lower threshold for the energy bucket (50% of capacity) */
+constexpr int32_t upperThreshold_default{ midPointOfEnergyBucket_long }; /**< default upper threshold for the energy bucket (50% of capacity) */
 
-constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1 / powerCal_grid)) };         /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
-constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1 / powerCal_grid)) }; /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
+constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1.0F / powerCal_diverted)) };     /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
+constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1.0F / powerCal_grid)) }; /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
 // When using integer maths, calibration values that have supplied in floating point
 // form need to be rescaled.
 
@@ -43,6 +57,9 @@ int32_t energyInBucket_long{ 0 };  /**< in Integer Energy Units */
 int32_t lowerEnergyThreshold{ 0 }; /**< dynamic lower threshold */
 int32_t upperEnergyThreshold{ 0 }; /**< dynamic upper threshold */
 
+int32_t divertedEnergyRecent_IEU{ 0 }; /**< Hi-res accumulator of limited range */
+uint16_t divertedEnergyTotal_Wh{ 0 };  /**< WattHour register of 63K range */
+
 // For recording the accumulated amount of diverted energy data (using CT2), a similar
 // calibration mechanism is required.  Rather than a bucket with a fixed capacity, the
 // accumulator for diverted energy just needs to be scaled correctly.  As soon as its
@@ -50,7 +67,7 @@ int32_t upperEnergyThreshold{ 0 }; /**< dynamic upper threshold */
 // accumulator's value is decremented accordingly. The calculation below is to determine
 // the scaling for this accumulator.
 
-constexpr int32_t IEU_per_Wh{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1 / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
+constexpr int32_t IEU_per_Wh_diverted{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1.0F / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
 
 bool recentTransition{ false };                   /**< a load state has been recently toggled */
 uint8_t postTransitionCount{ 0 };                 /**< counts the number of cycle since last transition */
@@ -84,7 +101,11 @@ uint16_t sampleSetsDuringNegativeHalfOfMainsCycle{ 0 }; /**< for arming the tria
 LoadStates physicalLoadState[NO_OF_DUMPLOADS]; /**< Physical state of the loads */
 uint16_t countLoadON[NO_OF_DUMPLOADS]{};       /**< Number of cycle the load was ON (over 1 datalog period) */
 
+uint32_t absenceOfDivertedEnergyCountInMC{ 0 }; /**< number of main cycles without diverted energy */
+
 remove_cv< remove_reference< decltype(DATALOG_PERIOD_IN_MAINS_CYCLES) >::type >::type n_cycleCountForDatalogging{ 0 }; /**< for counting how often datalog is updated */
+
+uint8_t perSecondCounter{ 0 }; /**< for counting  every second inside the ISR */
 
 bool beyondStartUpPeriod{ false }; /**< start-up delay, allows things to settle */
 
@@ -316,7 +337,7 @@ void updatePhysicalLoadStates()
 {
   if constexpr (PRIORITY_ROTATION != RotationModes::OFF)
   {
-    if (b_reOrderLoads)
+    if (Shared::b_reOrderLoads)
     {
       uint8_t i{ NO_OF_DUMPLOADS - 1 };
       const auto temp{ loadPrioritiesAndState[i] };
@@ -327,17 +348,17 @@ void updatePhysicalLoadStates()
       } while (i);
       loadPrioritiesAndState[0] = temp;
 
-      b_reOrderLoads = false;
+      Shared::b_reOrderLoads = false;
     }
   }
 
-  const bool bDiversionOff{ b_diversionOff };
+  const bool bDiversionOff{ Shared::b_diversionOff };
   uint8_t idx{ NO_OF_DUMPLOADS };
   do
   {
     --idx;
     const auto iLoad{ loadPrioritiesAndState[idx] & loadStateMask };
-    physicalLoadState[iLoad] = !bDiversionOff && (b_overrideLoadOn[iLoad] || (loadPrioritiesAndState[idx] & loadStateOnBit)) ? LoadStates::LOAD_ON : LoadStates::LOAD_OFF;
+    physicalLoadState[iLoad] = !bDiversionOff && (Shared::b_overrideLoadOn[iLoad] || (loadPrioritiesAndState[idx] & loadStateOnBit)) ? LoadStates::LOAD_ON : LoadStates::LOAD_OFF;
   } while (idx);
 }
 
@@ -427,7 +448,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
  */
 void processDivertedCurrentRawSample(const int16_t rawSample)
 {
-  if (b_diversionOff || b_overrideLoadOn[0])
+  if (Shared::b_diversionOff || Shared::b_overrideLoadOn[0])
   {
     return;  // no diverted power when the load is overridden
   }
@@ -467,7 +488,7 @@ void confirmPolarity()
    * a certain number of consecutive samples in the 'other' half of the 
    * waveform have been encountered.  
    */
-  static uint8_t count = 0;
+  static uint8_t count{ 0 };
   if (polarityOfMostRecentVsample == polarityConfirmedOfLastSampleV)
   {
     count = 0;
@@ -510,28 +531,6 @@ void processRawSamples()
         processPlusHalfCycle();
 
         processStartNewCycle();
-
-        if (EDD_isActive)  // Energy Diversion Display
-        {
-          // For diverted energy, the latest contribution needs to be added to an
-          // accumulator which operates with maximum precision.
-
-          if (realEnergy_diverted < antiCreepLimit_inIEUperMainsCycle)
-          {
-            realEnergy_diverted = 0;
-          }
-          divertedEnergyRecent_IEU += realEnergy_diverted;
-
-          // Whole kWh are then recorded separately
-          if (divertedEnergyRecent_IEU > IEU_per_Wh)
-          {
-            divertedEnergyRecent_IEU -= IEU_per_Wh;
-            if (!b_diversionOff && !b_overrideLoadOn[0])
-            {
-              ++divertedEnergyTotal_Wh;
-            }
-          }
-        }
       }
       else
       {
@@ -552,7 +551,7 @@ void processRawSamples()
     }
 
     // check to see whether the trigger device can now be reliably armed
-    if (sampleSetsDuringNegativeHalfOfMainsCycle == 3)
+    if (sampleSetsDuringNegativeHalfOfMainsCycle == POST_ZERO_CROSSING_MAX_COUNT)
     {
       if (beyondStartUpPeriod)
       {
@@ -600,13 +599,12 @@ void processRawSamples()
         // update the Energy Diversion Detector
         if (loadPrioritiesAndState[0] & loadStateOnBit)
         {
-          absenceOfDivertedEnergyCount = 0;
-          EDD_isIdle = false;
-          EDD_isActive = true;
+          absenceOfDivertedEnergyCountInMC = 0;
+          Shared::EDD_isActive = true;
         }
         else
         {
-          EDD_isIdle = true;
+          ++absenceOfDivertedEnergyCountInMC;
         }
 
         // Now that the energy-related decisions have been taken, min and max limits can now
@@ -626,7 +624,7 @@ void processRawSamples()
 
     ++sampleSetsDuringNegativeHalfOfMainsCycle;
   }  // end of processing that is specific to samples where the voltage is negative
-  refreshDisplay();
+  refresh7SegDisplay();
 }
 
 /**
@@ -649,22 +647,13 @@ void processVoltage()
   long filtV_div4 = sampleVminusDC_long >> 2;        // reduce to 16-bits (now x64, or 2^6)
   int32_t inst_Vsquared{ filtV_div4 * filtV_div4 };  // 32-bits (now x4096, or 2^12)
 
-  if constexpr (DATALOG_PERIOD_IN_SECONDS > 10)
-  {
-    inst_Vsquared >>= 16;  // scaling is now x1/16 (V_ADC x I_ADC)
-  }
-  else
-  {
-    inst_Vsquared >>= 12;  // scaling is now x1 (V_ADC x I_ADC)
-  }
+  inst_Vsquared >>= 12;  // scaling is now x1 (V_ADC x I_ADC)
 
   l_sum_Vsquared += inst_Vsquared;  // cumulative V^2 (V_ADC x I_ADC)
 
   // store items for use during next loop
   cumVdeltasThisCycle_long += sampleVminusDC_long;     // for use with LP filter
   polarityConfirmedOfLastSampleV = polarityConfirmed;  // for identification of half cycle boundaries
-
-  ++sampleSetsDuringThisMainsCycle;
 }
 
 /**
@@ -694,6 +683,7 @@ void processVoltageRawSample(const int16_t rawSample)
   //
   processVoltage();
 
+  ++sampleSetsDuringThisMainsCycle;
   ++sampleSetsDuringThisDatalogPeriod;
 }
 
@@ -758,6 +748,12 @@ void processStartNewCycle()
   {
     energyInBucket_long = 0;
   }
+
+  // clear the per-cycle accumulators for use in this new mains cycle.
+  sampleSetsDuringThisMainsCycle = 0;
+  sumP_grid = 0;
+  sumP_diverted = 0;
+  sampleSetsDuringNegativeHalfOfMainsCycle = 0;
 }
 
 /**
@@ -786,12 +782,6 @@ void processPlusHalfCycle()
   processLatestContribution();
 
   processDataLogging();
-
-  // clear the per-cycle accumulators for use in this new mains cycle.
-  sampleSetsDuringThisMainsCycle = 0;
-  sumP_grid = 0;
-  sumP_diverted = 0;
-  sampleSetsDuringNegativeHalfOfMainsCycle = 0;
 }
 
 /**
@@ -817,7 +807,7 @@ void processMinusHalfCycle()
   //  The portion which is fed back into the integrator is approximately one percent
   // of the average offset of all the Vsamples in the previous mains cycle.
   //
-  long previousOffset = DCoffset_V_long;
+  const auto previousOffset{ DCoffset_V_long };
   DCoffset_V_long = previousOffset + (cumVdeltasThisCycle_long >> 12);
   cumVdeltasThisCycle_long = 0;
 
@@ -909,19 +899,52 @@ void processLatestContribution()
   // The latest contribution can now be added to this energy bucket
   energyInBucket_long += realEnergy_grid;
 
+  if (Shared::EDD_isActive)  // Energy Diversion Display
+  {
+    // For diverted energy, the latest contribution needs to be added to an
+    // accumulator which operates with maximum precision.
+
+    if (realEnergy_diverted < antiCreepLimit_inIEUperMainsCycle)
+    {
+      realEnergy_diverted = 0;
+    }
+    divertedEnergyRecent_IEU += realEnergy_diverted;
+
+    // Whole kWh are then recorded separately
+    if (divertedEnergyRecent_IEU > IEU_per_Wh_diverted)
+    {
+      divertedEnergyRecent_IEU -= IEU_per_Wh_diverted;
+      ++divertedEnergyTotal_Wh;
+    }
+  }
+
   // After a pre-defined period of inactivity, the 4-digit display needs to
   // close down in readiness for the next's day's data.
   //
-  if (absenceOfDivertedEnergyCount > displayShutdown_inSeconds)
+  if (absenceOfDivertedEnergyCountInMC > displayShutdown_inMainsCycles)
   {
     // clear the accumulators for diverted energy
     divertedEnergyTotal_Wh = 0;
     divertedEnergyRecent_IEU = 0;
-    EDD_isActive = false;  // energy diversion detector is now inactive
+    Shared::EDD_isActive = false;  // energy diversion detector is now inactive
   }
-  copyOf_divertedEnergyTotal_Wh = divertedEnergyTotal_Wh;
 
-  b_newCycle = true;  //  a 50 Hz 'tick' for use by the main code
+  if (++perSecondCounter == SUPPLY_FREQUENCY)
+  {
+    perSecondCounter = 0;
+
+    if (absenceOfDivertedEnergyCountInMC > SUPPLY_FREQUENCY)
+      ++Shared::absenceOfDivertedEnergyCountInSeconds;
+    else
+      Shared::absenceOfDivertedEnergyCountInSeconds = 0;
+
+    // The diverted energy total is copied to a variable before it is used.
+    // This is done to avoid the possibility of a race-condition whereby the
+    // diverted energy total is updated while the display is being updated.
+    Shared::copyOf_divertedEnergyTotal_Wh = divertedEnergyTotal_Wh;
+  }
+
+  Shared::b_newCycle = true;  //  a 50 Hz 'tick' for use by the main code
 }
 
 /**
@@ -1109,33 +1132,35 @@ void processDataLogging()
 
   n_cycleCountForDatalogging = 0;
 
-  copyOf_sumP_grid_overDL_Period = sumP_grid_overDL_Period;
+  Shared::copyOf_sumP_grid_overDL_Period = sumP_grid_overDL_Period;
   sumP_grid_overDL_Period = 0;
 
-  copyOf_sumP_diverted_overDL_Period = sumP_diverted_overDL_Period;
+  Shared::copyOf_sumP_diverted_overDL_Period = sumP_diverted_overDL_Period;
   sumP_diverted_overDL_Period = 0;
 
-  copyOf_sum_Vsquared = l_sum_Vsquared;
+  Shared::copyOf_divertedEnergyTotal_Wh_forDL = divertedEnergyTotal_Wh;
+
+  Shared::copyOf_sum_Vsquared = l_sum_Vsquared;
   l_sum_Vsquared = 0;
 
   uint8_t i{ NO_OF_DUMPLOADS };
   do
   {
     --i;
-    copyOf_countLoadON[i] = countLoadON[i];
+    Shared::copyOf_countLoadON[i] = countLoadON[i];
     countLoadON[i] = 0;
   } while (i);
 
-  copyOf_sampleSetsDuringThisDatalogPeriod = sampleSetsDuringThisDatalogPeriod;  // (for diags only)
-  copyOf_lowestNoOfSampleSetsPerMainsCycle = lowestNoOfSampleSetsPerMainsCycle;  // (for diags only)
-  copyOf_energyInBucket_long = energyInBucket_long;                              // (for diags only)
+  Shared::copyOf_sampleSetsDuringThisDatalogPeriod = sampleSetsDuringThisDatalogPeriod;  // (for diags only)
+  Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle = lowestNoOfSampleSetsPerMainsCycle;  // (for diags only)
+  Shared::copyOf_energyInBucket_long = energyInBucket_long;                              // (for diags only)
 
   lowestNoOfSampleSetsPerMainsCycle = UINT8_MAX;
   sampleSetsDuringThisDatalogPeriod = 0;
 
   // signal the main processor that logging data are available
   // we skip the period from start to running stable
-  b_datalogEventPending = beyondStartUpPeriod;
+  Shared::b_datalogEventPending = beyondStartUpPeriod;
 }
 
 /**
@@ -1305,3 +1330,32 @@ void initializeOldPCBPins()
     setPinOFF(watchDogPin);        // set to off
   }
 }
+
+/**
+ * @brief Prints the load priorities to the Serial output.
+ *
+ * This function logs the current load priorities and states to the Serial output
+ * for debugging purposes. It provides a detailed view of the load configuration
+ * and their respective priorities.
+ *
+ * @details
+ * - Each load's priority and state are printed in a human-readable format.
+ * - This function is only active when debugging is enabled (`ENABLE_DEBUG`).
+ *
+ * @ingroup GeneralProcessing
+ */
+void logLoadPriorities()
+{
+#ifdef ENABLE_DEBUG
+
+  DBUGLN(F("Load Priorities: "));
+  for (const auto &loadPrioAndState : loadPrioritiesAndState)
+  {
+    DBUG(F("\tload "));
+    DBUGLN(loadPrioAndState);
+  }
+
+#endif
+}
+
+static_assert(IEU_per_Wh_diverted > 4000000, "IEU_per_Wh_diverted calculation is incorrect");

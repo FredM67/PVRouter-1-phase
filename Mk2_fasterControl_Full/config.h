@@ -13,7 +13,6 @@
 #define CONFIG_H
 
 //--------------------------------------------------------------------------------------------------
-//#define TEMP_ENABLED  /**< this line must be commented out if the temperature sensor is not present */
 //#define RF_PRESENT  /**< this line must be commented out if the RFM12B module is not present */
 
 // Output messages

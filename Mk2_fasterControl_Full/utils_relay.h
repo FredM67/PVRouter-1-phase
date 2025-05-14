@@ -35,7 +35,7 @@
  * - **Time Constraints**: Minimum ON and OFF durations ensure stable operation.
  * - **State Management**: The class tracks the relay's current state and the duration
  *   of its current state.
- * 
+ *
  * @ingroup RelayDiversion
  */
 class relayOutput
@@ -242,7 +242,7 @@ private:
   }
 
 private:
-  const uint8_t relay_pin{ 0xff };         /**< Pin associated with the relay */
+  const uint8_t relay_pin{ unused_pin };   /**< Pin associated with the relay */
   const int16_t surplusThreshold{ -1000 }; /**< Surplus threshold to turn relay ON */
   const int16_t importThreshold{ 200 };    /**< Import threshold to turn relay OFF */
   const uint16_t minON{ 5 * 60 };          /**< Minimum duration in seconds the relay is turned ON */
@@ -255,7 +255,7 @@ private:
 /**
  * @class RelayEngine
  * @brief Manages a collection of relays and their behavior based on surplus and import thresholds.
- * 
+ *
  * The `RelayEngine` class provides functionality to manage multiple relays, including their
  * initialization, state transitions, and configuration. It uses a sliding average to determine
  * the current power state and adjusts the relays accordingly.
@@ -271,7 +271,7 @@ private:
  * - **State Transitions**: Ensures stable operation by enforcing minimum ON/OFF durations
  *   and a delay between state changes.
  * - **Initialization**: Provides methods to initialize relay pins and print their configuration.
- * 
+ *
  * @ingroup RelayDiversion
  */
 template< uint8_t N, uint8_t D = 10 >
@@ -339,7 +339,7 @@ public:
     ewma_average.addValue(currentPower);
   }
 
-/**
+  /**
    * @brief Increment the duration's state of each relay.
    * 
    * @details This method updates the duration of the current state for each relay and decreases

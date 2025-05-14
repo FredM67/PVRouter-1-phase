@@ -34,8 +34,6 @@
 #ifndef EWMA_AVG_H
 #define EWMA_AVG_H
 
-#include <Arduino.h>
-
 #include "type_traits.hpp"
 
 /**
@@ -62,7 +60,7 @@ constexpr uint8_t round_up_to_power_of_2(uint16_t v)
 /**
  * @class EWMA_average
  * @brief Implements an Exponentially Weighted Moving Average (EWMA).
- * 
+ *
  * The `EWMA_average` class calculates the Exponentially Weighted Moving Average (EMA),
  * Double EMA (DEMA), and Triple EMA (TEMA) for a given input series. It uses integer
  * math for efficiency, making it suitable for systems with limited computational power.
@@ -83,7 +81,7 @@ class EWMA_average
 public:
   /**
    * @brief Add a new value and update the EMA, DEMA, and TEMA.
-   * 
+   *
    * This method processes a new input value and updates the Exponentially Weighted
    * Moving Average (EMA), Double EMA (DEMA), and Triple EMA (TEMA).
    *
@@ -103,7 +101,7 @@ public:
 
   /**
    * @brief Get the Exponentially Weighted Moving Average (EMA).
-   * 
+   *
    * @return auto The EMA value.
    */
   auto getAverageS() const
@@ -113,7 +111,7 @@ public:
 
   /**
    * @brief Get the Double Exponentially Weighted Moving Average (DEMA).
-   * 
+   *
    * @return auto The DEMA value.
    */
   auto getAverageD() const
@@ -123,7 +121,7 @@ public:
 
   /**
    * @brief Get the Triple Exponentially Weighted Moving Average (TEMA).
-   * 
+   *
    * @return auto The TEMA value.
    */
   auto getAverageT() const

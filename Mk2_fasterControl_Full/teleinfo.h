@@ -43,6 +43,8 @@
  * @param tagLen The length of the tag in bytes.
  * @param valueLen The length of the value in bytes.
  * @return The total size of the line in bytes.
+ * 
+ * @ingroup Telemetry
  */
 inline static constexpr size_t lineSize(size_t tagLen, size_t valueLen)
 {
@@ -73,6 +75,8 @@ inline static constexpr size_t lineSize(size_t tagLen, size_t valueLen)
  *   - `temperatureSensing.get_size()` lines for temperature tags ("T1" to "Tn", 4 digits each).
  * - 1 line for the "N" tag (unsigned 5 digits).
  * - 1 byte for the end-of-text (ETX) character.
+ * 
+ * @ingroup Telemetry
  */
 inline static constexpr size_t calcBufferSize()
 {
@@ -82,32 +86,33 @@ inline static constexpr size_t calcBufferSize()
 
   if constexpr (NO_OF_PHASES > 1)
   {
-    size += NO_OF_PHASES * lineSize(2, 6);  // R (signed 6 digits)
-    size += NO_OF_PHASES * lineSize(1, 5);  // V1 (unsigned 5 digits)
+    size += NO_OF_PHASES * lineSize(2, 5);  // V1-Vn (unsigned 5 digits) - voltage
 
-    size += NO_OF_DUMPLOADS * lineSize(2, 3);  // L1-Ln (unsigned 3 digits)
+    size += NO_OF_DUMPLOADS * lineSize(2, 3);  // L1-Ln (unsigned 3 digits) - diversion rate
   }
   else
   {
-    size += lineSize(1, 4);  // D (unsigned 4 digits)
-    size += lineSize(1, 5);  // E (unsigned 5 digits)
+    size += lineSize(1, 5);  // V (unsigned 5 digits) - voltage
+
+    size += lineSize(1, 4);  // D (unsigned 4 digits) - diverted power
+    size += lineSize(1, 5);  // E (unsigned 5 digits) - diverted energy
   }
 
   if constexpr (RELAY_DIVERSION)
   {
-    size += lineSize(1, 6);                      // R (signed 6 digits)
-    size += relays.get_size() * lineSize(2, 1);  // R1-Rn (1 (ON), 0 (OFF))
+    size += lineSize(1, 6);                      // R (signed 6 digits) - mean power for relay diversion
+    size += relays.get_size() * lineSize(2, 1);  // R1-Rn (1 (ON), 0 (OFF)) - relay state
   }
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
-    size += temperatureSensing.get_size() * lineSize(2, 4);  // T1-Tn (4 digits)
+    size += temperatureSensing.get_size() * lineSize(2, 4);  // T1-Tn (4 digits) - temperature
   }
 
-  size += lineSize(1, 5);  // N (unsigned 5 digits)
+  size += lineSize(1, 5);  // N (unsigned 5 digits) - absence of diverted energy count
 
-  size += lineSize(4, 2);
-  size += lineSize(1, 5);
+  size += lineSize(4, 2);  // S_MC (unsigned 2 digits) - sample sets per mains cycle
+  size += lineSize(1, 5);  // S (unsigned 5 digits) - sample count
 
   size += 1;  // ETX
 
@@ -116,7 +121,24 @@ inline static constexpr size_t calcBufferSize()
 
 /**
  * @class TeleInfo
- * @brief A class for managing and sending telemetry information in a specific frame format.
+ * @brief A class for managing and sending telemetry information in a structured frame format.
+ *
+ * The `TeleInfo` class is responsible for creating and sending telemetry frames that include
+ * various data points such as power, voltage, temperature, and relay states. The frames are
+ * formatted with tags, values, and checksums to ensure data integrity.
+ *
+ * @details
+ * - **Frame Structure**: Each frame starts with a Start-of-Text (STX) character and ends with
+ *   an End-of-Text (ETX) character. Data points are added as lines, each containing a tag,
+ *   value, and checksum.
+ * - **Checksum Calculation**: A checksum is calculated for each line to ensure data integrity.
+ * - **Conditional Features**: The class supports optional features such as relay diversion
+ *   and temperature sensing, which are included or excluded at compile time based on
+ *   configuration constants.
+ * - **Buffer Management**: A buffer is used to store the frame data before sending it over
+ *   the Serial interface.
+ *
+ * @ingroup Telemetry
  */
 class TeleInfo
 {
@@ -127,8 +149,8 @@ private:
   static const char CR{ 0x0D };  /**< Carriage Return character. */
   static const char TAB{ 0x09 }; /**< Tab character. */
 
-  char buffer[calcBufferSize()]; /**< Buffer to store the frame data. Adjust size as needed. */
-  uint8_t bufferPos;             /**< Current position in the buffer. */
+  char buffer[calcBufferSize()]{}; /**< Buffer to store the frame data. Adjust size as needed. */
+  uint8_t bufferPos{ 0 };          /**< Current position in the buffer. */
 
   /**
    * @brief Calculates the checksum for a portion of the buffer.
@@ -136,7 +158,7 @@ private:
    * @param endPos The ending position in the buffer.
    * @return The calculated checksum as a single byte.
    */
-  uint8_t calculateChecksum(uint8_t startPos, uint8_t endPos) const
+  [[nodiscard]] uint8_t calculateChecksum(uint8_t startPos, uint8_t endPos) const
   {
     uint8_t sum{ 0 };
     auto* ptr = buffer + startPos;
@@ -160,7 +182,7 @@ private:
     while (*ptr) buffer[bufferPos++] = *ptr++;
 
     // If an index is provided, append it to the tag
-    if (index > 0)
+    if (index != 0)
     {
       buffer[bufferPos++] = '0' + index;  // Convert index to a character
     }

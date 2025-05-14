@@ -21,12 +21,12 @@
 // General Configuration (Shared by SEG_HW and SEG)
 ////////////////////////////////////////////////////////////////////////////////////////
 
-inline constexpr uint8_t noOfDigitLocations{ 4U };
+inline constexpr uint8_t noOfDigitLocations{ 4 };
 inline constexpr uint8_t noOfPossibleCharacters{ 11 };
-inline constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50U };  // mains cycles
-inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8U };          // auto-reset after this period of inactivity
+inline constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50 };  // mains cycles
+inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 };          // auto-reset after this period of inactivity
 
-inline constexpr uint16_t displayShutdown_inSeconds{ DISPLAY_SHUTDOWN_IN_HOURS * 3600U };
+inline constexpr uint32_t displayShutdown_inMainsCycles{DISPLAY_SHUTDOWN_IN_HOURS * mainsCyclesPerHour };
 inline constexpr uint8_t MAX_DISPLAY_TIME_COUNT{ 10 };  // no of processing loops between display updates
 
 inline uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
@@ -352,7 +352,7 @@ inline void initializeDisplay()
  * 
  * @ingroup 7SegDisplay
  */
-inline void configureValueForDisplay(bool _EDD_isActive, const uint16_t _ValueToDisplay)
+inline void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToDisplay)
 {
   if constexpr (!(TYPE_OF_DISPLAY == DisplayType::SEG || TYPE_OF_DISPLAY == DisplayType::SEG_HW))
   {
@@ -417,7 +417,7 @@ inline void configureValueForDisplay(bool _EDD_isActive, const uint16_t _ValueTo
  *
  * @ingroup 7SegDisplay
  */
-inline void refreshDisplay()
+inline void refresh7SegDisplay()
 {
   // This routine keeps track of which digit is being displayed and checks when its
   // display time has expired.  It then makes the necessary adjustments for displaying
@@ -442,6 +442,6 @@ inline void refreshDisplay()
   {
     update7SegmentSWDisplay();
   }
-}  // end of refreshDisplay()
+}
 
 #endif /* UTILS_DISPLAY_H */
