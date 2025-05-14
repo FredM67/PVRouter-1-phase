@@ -12,6 +12,8 @@
  *   End-of-Text (ETX) character.
  * - **Checksum**: Ensures data integrity for each line in the frame.
  * - **Conditional Features**: Supports optional features like relay diversion and temperature sensing.
+ * - **Serial Configuration**: Telemetry data is sent via Serial with 9600 baud, 7 data bits,
+ *   1 stop bit, and even parity.
  *
  * @version 0.1
  * @date 2025-04-04
@@ -21,8 +23,6 @@
  */
 #ifndef TELEINFO_H
 #define TELEINFO_H
-
-#include <Arduino.h>
 
 #include "config_system.h"
 #include "config.h"
@@ -137,6 +137,7 @@ inline static constexpr size_t calcBufferSize()
  *   configuration constants.
  * - **Buffer Management**: A buffer is used to store the frame data before sending it over
  *   the Serial interface.
+ * - **Serial Configuration**: Uses Serial with 9600 baud, 7 data bits, 1 stop bit, and even parity.
  *
  * @ingroup Telemetry
  */
