@@ -1,6 +1,6 @@
 <map id="divu10" name="divu10">
 <area shape="rect" id="Node000001" title=" " alt="" coords="339,31,405,56"/>
-<area shape="rect" id="Node000002" href="$group__SegDisplay.html#ga01d09f2f19407b01775ed4b2a24b562a" title="Configures the value for display on a 7&#45;segment display." alt="" coords="104,5,291,31"/>
+<area shape="rect" id="Node000002" href="$group__SegDisplay.html#ga955fe37f3ba164eb42378ba17ed90f42" title="Configures the value for display on a 7&#45;segment display." alt="" coords="104,5,291,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="325,39,285,33,285,28,325,34"/>
 <area shape="rect" id="Node000004" href="$test__fastdivision_2test__main_8cpp.html#add26b4937d71129bbf3385d311ef28be" title=" " alt="" coords="148,55,247,80"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="325,52,248,63,247,58,325,47"/>

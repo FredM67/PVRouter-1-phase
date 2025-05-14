@@ -20,8 +20,8 @@
 <area shape="poly" id="edge12_Node000004_Node000013" title=" " alt="" coords="408,213,455,213,455,218,408,218"/>
 <area shape="rect" id="Node000014" href="$group__TimeCritical.html#gaeae271d1c55664c3424b634191a0996b" title="Process the startup period for the router." alt="" coords="492,252,613,277"/>
 <area shape="poly" id="edge13_Node000004_Node000014" title=" " alt="" coords="389,225,482,246,481,252,387,231"/>
-<area shape="rect" id="Node000015" href="$group__SegDisplay.html#gaa93cf18ded17c52a21fa1bd80ac95ac2" title="Refreshes the display by updating the active digit and its segments." alt="" coords="494,301,611,327"/>
-<area shape="poly" id="edge14_Node000004_Node000015" title=" " alt="" coords="386,226,409,237,425,250,434,263,443,275,457,286,482,298,480,302,455,291,439,279,430,266,421,253,407,242,383,231"/>
+<area shape="rect" id="Node000015" href="$group__SegDisplay.html#gaed06615518cbba771fb3417bab39db02" title="Refreshes the display by updating the active digit and its segments." alt="" coords="478,301,627,327"/>
+<area shape="poly" id="edge14_Node000004_Node000015" title=" " alt="" coords="386,226,409,237,425,250,434,263,443,275,457,286,473,294,471,299,455,291,439,279,430,266,421,253,407,242,383,231"/>
 <area shape="rect" id="Node000023" href="$group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="This function provides the link between the logical and physical loads." alt="" coords="456,351,649,376"/>
 <area shape="poly" id="edge23_Node000004_Node000023" title=" " alt="" coords="392,226,410,237,421,250,428,263,434,289,440,314,447,326,458,337,464,342,461,346,454,341,442,329,435,316,429,290,423,265,417,253,406,241,389,230"/>
 <area shape="rect" id="Node000024" href="$group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249" title="Updates the control ports for each of the physical loads." alt="" coords="482,400,623,425"/>
@@ -35,9 +35,9 @@
 <area shape="rect" id="Node000012" href="$group__TimeCritical.html#gac31343a7bf773ef82723f61a0c0b6856" title="Process the latest contribution after each new cycle." alt="" coords="712,177,904,203"/>
 <area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="635,171,698,177,697,182,634,176"/>
 <area shape="rect" id="Node000016" href="$group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92" title="Updates the 7&#45;segment display for the next digit (hardware&#45;driven)." alt="" coords="705,264,911,289"/>
-<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="611,303,707,289,708,294,612,308"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="627,301,707,289,708,294,628,306"/>
 <area shape="rect" id="Node000022" href="$group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="707,313,909,339"/>
-<area shape="poly" id="edge21_Node000015_Node000022" title=" " alt="" coords="611,314,693,318,693,323,611,319"/>
+<area shape="poly" id="edge21_Node000015_Node000022" title=" " alt="" coords="628,315,693,318,692,323,627,320"/>
 <area shape="rect" id="Node000017" href="$utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="967,289,1063,315"/>
 <area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="911,287,953,292,953,297,910,292"/>
 <area shape="rect" id="Node000018" href="$utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="1111,264,1199,289"/>

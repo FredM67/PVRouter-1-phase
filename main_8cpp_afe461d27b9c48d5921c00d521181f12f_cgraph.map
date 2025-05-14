@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000001" title="Main processor loop." alt="" coords="5,373,56,399"/>
 <area shape="rect" id="Node000002" href="$group__OLEDDisplay.html#gafaa5f070126ac5184a648b484e7cf276" title="Clear the display." alt="" coords="164,324,267,349"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="56,374,103,358,150,347,151,352,105,363,57,379"/>
-<area shape="rect" id="Node000004" href="$group__SegDisplay.html#ga01d09f2f19407b01775ed4b2a24b562a" title="Configures the value for display on a 7&#45;segment display." alt="" coords="122,55,309,80"/>
+<area shape="rect" id="Node000004" href="$group__SegDisplay.html#ga955fe37f3ba164eb42378ba17ed90f42" title="Configures the value for display on a 7&#45;segment display." alt="" coords="122,55,309,80"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="35,372,62,310,102,231,150,153,194,90,199,93,155,156,106,234,67,313,40,374"/>
 <area shape="rect" id="Node000007" href="$main_8cpp.html#a1d65183fd2d4da02833f68fd000b4761" title="Handles tasks that need to be executed every second." alt="" coords="130,245,301,271"/>
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="40,371,67,341,102,309,134,290,166,274,168,279,137,294,106,313,70,345,44,375"/>

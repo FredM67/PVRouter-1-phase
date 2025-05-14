@@ -1,0 +1,18 @@
+<map id="refresh7SegDisplay" name="refresh7SegDisplay">
+<area shape="rect" id="Node000001" title="Refreshes the display by updating the active digit and its segments." alt="" coords="5,31,155,56"/>
+<area shape="rect" id="Node000002" href="$group__SegDisplay.html#gadb2a22aeca7b926144982ff2278f3c92" title="Updates the 7&#45;segment display for the next digit (hardware&#45;driven)." alt="" coords="203,5,408,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,32,188,28,189,34,155,38"/>
+<area shape="rect" id="Node000008" href="$group__SegDisplay.html#gaa7c3b04920d5065ca6b6b7d9c261bc93" title="Updates the 7&#45;segment display for the next digit (software&#45;driven)." alt="" coords="204,55,407,80"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="155,49,191,52,190,58,155,54"/>
+<area shape="rect" id="Node000003" href="$utils__pins_8h.html#a85a0c8419c44c8bea7565ae9b4a782a7" title="Set the Pin state for the specified pin." alt="" coords="456,31,552,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="406,28,443,33,442,38,405,33"/>
+<area shape="rect" id="Node000004" href="$utils__pins_8h.html#ada7e18750d04838130ee63030dcf185d" title="Set the Pin state to OFF for the specified pin." alt="" coords="600,5,688,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="552,32,586,26,587,31,553,37"/>
+<area shape="rect" id="Node000006" href="$utils__pins_8h.html#ac55bbc1bc996c72b6c33525fd84b45e6" title="Set the Pin state to ON for the specified pin." alt="" coords="603,55,685,80"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="553,49,590,55,589,61,552,54"/>
+<area shape="rect" id="Node000005" href="$utils__pins_8h.html#aeae4199ba44e9e5de9d228a6b6a8133e" title="Clear the specified bit." alt="" coords="736,5,815,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="688,15,722,15,722,21,688,21"/>
+<area shape="rect" id="Node000007" href="$utils__pins_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="742,55,809,80"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="685,65,728,65,728,70,685,70"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="407,52,442,48,443,53,407,58"/>
+</map>
