@@ -27,7 +27,7 @@
  * This comes with some restrictions on the alpha parameter, but the benefit of full integer math wins
  * on the side-drawback.
  *
- * @copyright Copyright (c) 2024
+ * @copyright Copyright (c) 2025
  * 
  */
 

@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2024-11-15
  * 
- * @copyright Copyright (c) 2024
+ * @copyright Copyright (c) 2025
  * 
  * @mainpage A 1-phase photovoltaic router/diverter
  *
@@ -119,7 +119,7 @@
  * - added support for new OLED display. Old display is still supported.
  *
  * @author Fred Metrich
- * @copyright Copyright (c) 2024
+ * @copyright Copyright (c) 2025
  * 
  */
 
