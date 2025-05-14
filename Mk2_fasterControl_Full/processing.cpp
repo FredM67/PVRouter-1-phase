@@ -30,15 +30,15 @@ constexpr int32_t DCoffset_V_max{ (512L + 100) * 256 }; /**< mid-point of ADC pl
 
 constexpr int16_t DCoffset_I{ 512 }; /**< nominal mid-point value of ADC @ x1 scale */
 
-constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1 / powerCal_grid)) }; /**< main energy bucket for single-phase use, with units of Joules * SUPPLY_FREQUENCY */
+constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1.0F / powerCal_grid)) }; /**< main energy bucket for single-phase use, with units of Joules * SUPPLY_FREQUENCY */
 
 constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 }; /**< for resetting flexible thresholds */
 
 constexpr int32_t lowerThreshold_default{ midPointOfEnergyBucket_long }; /**< default lower threshold for the energy bucket (50% of capacity) */
 constexpr int32_t upperThreshold_default{ midPointOfEnergyBucket_long }; /**< default upper threshold for the energy bucket (50% of capacity) */
 
-constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1 / powerCal_diverted)) };     /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
-constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1 / powerCal_grid)) }; /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
+constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1.0F / powerCal_diverted)) };     /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
+constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1.0F / powerCal_grid)) }; /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
 // When using integer maths, calibration values that have supplied in floating point
 // form need to be rescaled.
 
@@ -67,7 +67,7 @@ uint16_t divertedEnergyTotal_Wh{ 0 };  /**< WattHour register of 63K range */
 // accumulator's value is decremented accordingly. The calculation below is to determine
 // the scaling for this accumulator.
 
-constexpr int32_t IEU_per_Wh_diverted{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1 / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
+constexpr int32_t IEU_per_Wh_diverted{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1.0F / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
 
 bool recentTransition{ false };                   /**< a load state has been recently toggled */
 uint8_t postTransitionCount{ 0 };                 /**< counts the number of cycle since last transition */
@@ -289,13 +289,11 @@ void updatePortsStates()
 
   uint8_t i{ NO_OF_DUMPLOADS };
 
-  // On this particular PCB, the trigger has been soldered active high.  This means that the
-  // trigger line must be set to LOW to turn the load ON.
   do
   {
     --i;
     // update the local load's state.
-    if (LoadStates::LOAD_ON == physicalLoadState[i])
+    if (LoadStates::LOAD_OFF == physicalLoadState[i])
     {
       // setPinOFF(physicalLoadPin[i]);
       pinsOFF |= bit(physicalLoadPin[i]);
@@ -308,8 +306,10 @@ void updatePortsStates()
     }
   } while (i);
 
-  setPinsOFF(pinsOFF);
-  setPinsON(pinsON);
+  // On this particular PCB, the trigger has been soldered active high.  This means that the
+  // trigger line must be set to LOW to turn the load ON.
+  setPinsON(pinsOFF);
+  setPinsOFF(pinsON);
 }
 
 /**
@@ -541,7 +541,7 @@ void processRawSamples()
     // still processing samples where the voltage is Polarities::POSITIVE ...
     // (in this go-faster code, the action from here has moved to the negative half of the cycle)
 
-  }  // end of processing that is specific to samples where the voltage is positive
+  }     // end of processing that is specific to samples where the voltage is positive
   else  // the polarity of this sample is negative
   {
     if (polarityConfirmedOfLastSampleV != Polarities::NEGATIVE)
@@ -656,6 +656,7 @@ void processVoltage()
   polarityConfirmedOfLastSampleV = polarityConfirmed;  // for identification of half cycle boundaries
 
   ++sampleSetsDuringThisMainsCycle;
+  ++sampleSetsDuringThisDatalogPeriod;
 }
 
 /**
@@ -684,8 +685,6 @@ void processVoltageRawSample(const int16_t rawSample)
   // processing for EVERY set of samples
   //
   processVoltage();
-
-  ++sampleSetsDuringThisDatalogPeriod;
 }
 
 /**
@@ -915,10 +914,7 @@ void processLatestContribution()
     if (divertedEnergyRecent_IEU > IEU_per_Wh_diverted)
     {
       divertedEnergyRecent_IEU -= IEU_per_Wh_diverted;
-      if (!Shared::b_diversionOff && !Shared::b_overrideLoadOn[0])
-      {
-        ++divertedEnergyTotal_Wh;
-      }
+      ++divertedEnergyTotal_Wh;
     }
   }
 
@@ -1361,3 +1357,5 @@ void logLoadPriorities()
 
 #endif
 }
+
+static_assert(IEU_per_Wh_diverted > 4000000, "IEU_per_Wh_diverted calculation is incorrect");

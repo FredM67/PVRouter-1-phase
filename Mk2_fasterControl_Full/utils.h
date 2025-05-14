@@ -266,7 +266,6 @@ inline void printForJSON(const bool bOffPeak)
 void sendTelemetryData()
 {
   static TeleInfo teleInfo;
-  static uint16_t previous_divertedEnergyTotal_Wh{ 0 };
 
   teleInfo.startFrame();  // Start a new telemetry frame
 
@@ -287,11 +286,6 @@ void sendTelemetryData()
 
   teleInfo.send("D", tx_data.powerDiverted);                                                // Send power diverted
   teleInfo.send("E", static_cast< int16_t >(Shared::copyOf_divertedEnergyTotal_Wh_forDL));  // Send diverted energy in Wh
-
-  const auto divertedPower{(Shared::copyOf_divertedEnergyTotal_Wh_forDL - previous_divertedEnergyTotal_Wh) * (3600 / DATALOG_PERIOD_IN_SECONDS)};
-  teleInfo.send("M", divertedPower);
-
-  previous_divertedEnergyTotal_Wh = Shared::copyOf_divertedEnergyTotal_Wh_forDL;
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {

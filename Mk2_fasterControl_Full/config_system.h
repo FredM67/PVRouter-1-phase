@@ -21,11 +21,11 @@ inline constexpr uint8_t NO_OF_PHASES{ 1 }; /**< number of phases of the main su
 // Physical constants, please do not change!
 inline constexpr uint16_t SECONDS_PER_MINUTE{ 60 };
 inline constexpr uint16_t MINUTES_PER_HOUR{ 60 };
-inline constexpr uint16_t JOULES_PER_WATT_HOUR{ 3600 };  /**< (0.001 kWh = 3600 Joules) */
+inline constexpr uint32_t JOULES_PER_WATT_HOUR{ 3600 };  /**< (0.001 kWh = 3600 Joules) */
 
 // Change these values to suit the local mains frequency and supply meter
 inline constexpr uint8_t SUPPLY_FREQUENCY{ 50 };
-inline constexpr uint16_t WORKING_ZONE_IN_JOULES{ 360 };  /**< 0.1 Wh, reduced for faster start-up */
+inline constexpr uint32_t WORKING_ZONE_IN_JOULES{ 360 };  /**< 0.1 Wh, reduced for faster start-up */
 inline constexpr int16_t REQUIRED_EXPORT_IN_WATTS{ 0 };   /**< when set to a negative value, this acts as a PV generator */
 
 // to prevent the diverted energy total from 'creeping'

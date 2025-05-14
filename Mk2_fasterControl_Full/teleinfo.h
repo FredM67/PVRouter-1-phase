@@ -93,9 +93,8 @@ inline static constexpr size_t calcBufferSize()
   else
   {
     size += lineSize(1, 5);  // V (unsigned 5 digits) - voltage
-    
+
     size += lineSize(1, 4);  // D (unsigned 4 digits) - diverted power
-    size += lineSize(1, 4);  // M (unsigned 4 digits) - diverted power
     size += lineSize(1, 5);  // E (unsigned 5 digits) - diverted energy
   }
 
@@ -112,8 +111,8 @@ inline static constexpr size_t calcBufferSize()
 
   size += lineSize(1, 5);  // N (unsigned 5 digits) - absence of diverted energy count
 
-  size += lineSize(4, 2); // S_MC (unsigned 2 digits) - sample sets per mains cycle
-  size += lineSize(1, 5); // S (unsigned 5 digits) - sample count
+  size += lineSize(4, 2);  // S_MC (unsigned 2 digits) - sample sets per mains cycle
+  size += lineSize(1, 5);  // S (unsigned 5 digits) - sample count
 
   size += 1;  // ETX
 
