@@ -109,6 +109,15 @@
  * - added a link to the README.md file in the comments.
  * - refactoring of the ISR to enhance the performance.
  * 
+ * __May 2025, updated Mk2_fasterControl_Full with these changes:__
+ * - heavy refactoring to make the code more readable and maintainable.
+ * - added even more comments to explain the code.
+ * - added telemetry for use with Home Assistant (with additional ESPHome module) or similar.
+ * - disable diverted energy counting when load is overridden.
+ * - better Doxygen documentation.
+ * - added support for new PCB-based hardware. Old hardware is still supported.
+ * - added support for new OLED display. Old display is still supported.
+ *
  * @author Fred Metrich
  * @copyright Copyright (c) 2024
  * 
