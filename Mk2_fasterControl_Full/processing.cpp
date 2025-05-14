@@ -541,7 +541,7 @@ void processRawSamples()
     // still processing samples where the voltage is Polarities::POSITIVE ...
     // (in this go-faster code, the action from here has moved to the negative half of the cycle)
 
-  }     // end of processing that is specific to samples where the voltage is positive
+  }  // end of processing that is specific to samples where the voltage is positive
   else  // the polarity of this sample is negative
   {
     if (polarityConfirmedOfLastSampleV != Polarities::NEGATIVE)
@@ -654,9 +654,6 @@ void processVoltage()
   // store items for use during next loop
   cumVdeltasThisCycle_long += sampleVminusDC_long;     // for use with LP filter
   polarityConfirmedOfLastSampleV = polarityConfirmed;  // for identification of half cycle boundaries
-
-  ++sampleSetsDuringThisMainsCycle;
-  ++sampleSetsDuringThisDatalogPeriod;
 }
 
 /**
@@ -685,6 +682,9 @@ void processVoltageRawSample(const int16_t rawSample)
   // processing for EVERY set of samples
   //
   processVoltage();
+
+  ++sampleSetsDuringThisMainsCycle;
+  ++sampleSetsDuringThisDatalogPeriod;
 }
 
 /**
