@@ -216,7 +216,7 @@ inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit - 1
   ON, ON, ON, ON, ON, ON, ON,         // '8' <- element 8
   ON, ON, ON, ON, OFF, ON, ON,        // '9' <- element 9
   OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 10
-  ON, OFF, OFF, OFF, ON, ON, ON,       // 'F' <- element 11
+  ON, OFF, OFF, OFF, ON, ON, ON,      // 'F' <- element 11
   OFF, OFF, OFF, OFF, ON, OFF, ON,    // 'r' <- element 12
   ON, OFF, OFF, ON, ON, ON, OFF,      // 'C' <- element 13
 };
