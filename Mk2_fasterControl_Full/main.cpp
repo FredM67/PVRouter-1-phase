@@ -258,7 +258,7 @@ bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
  * @brief Checks and updates the diversion state.
  * 
  * @details This function monitors the state of the diversion pin to determine whether the diversion 
- *          is active or not. If the diversion pin state changes, it updates the `b_diversionOff` 
+ *          is active or not. If the diversion pin state changes, it updates the `b_diversionEnabled` 
  *          flag accordingly. Additionally, if debugging is enabled, it logs the state transitions 
  *          (e.g., "Trigger diversion OFF!" or "End diversion OFF!") to the debug output.
  * 
@@ -284,7 +284,7 @@ void checkDiversionOnOff()
     previousState = pinState;
 #endif
 
-    Shared::b_diversionOff = !pinState;
+    Shared::b_diversionEnabled = pinState;
   }
 }
 
@@ -501,7 +501,7 @@ void loop()
       // this action is performed every N times around this processing loop.
       timerForDisplayUpdate = 0;
 
-      configureValueForDisplay(Shared::EDD_isActive, Shared::copyOf_divertedEnergyTotal_Wh);
+      configureValueForDisplay(Shared::EDD_isActive, Shared::copyOf_divertedEnergyTotal_Wh, Shared::b_diversionEnabled, Shared::b_overrideLoadOn[0]);
     }
 
     if (++perSecondTimer >= SUPPLY_FREQUENCY)
