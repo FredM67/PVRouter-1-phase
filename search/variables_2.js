@@ -7,5 +7,5 @@ var searchData=
   ['b_5freorderloads_4',['b_reOrderLoads',['../namespaceShared.html#a7f67189a95af3a6a995c5abf8e246285',1,'Shared']]],
   ['beyondstartupperiod_5',['beyondStartUpPeriod',['../processing_8cpp.html#aaecb72fa3ab0755ac124b5fa6ffa1c6f',1,'processing.cpp']]],
   ['buffer_6',['buffer',['../classTeleInfo.html#a78162488f195d2bcaeab241c03e35f21',1,'TeleInfo']]],
-  ['bufferpos_7',['bufferPos',['../classTeleInfo.html#a2a0247ece933354556a11d540fbd6d43',1,'TeleInfo']]]
+  ['bufferpos_7',['bufferPos',['../classTeleInfo.html#a5f170f38af512a75cd3fd08146465d9f',1,'TeleInfo']]]
 ];

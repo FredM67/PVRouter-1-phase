@@ -101,7 +101,7 @@ $(function(){ initResizable(false); });
 <div class="foldopen" id="foldopen00045" data-start="{" data-end="}">
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="ewma__avg_8hpp.html#ab2d65d6104cd09368e1b72bb4342cae5">   45</a></span><span class="keyword">constexpr</span> uint8_t <a class="code hl_function" href="ewma__avg_8hpp.html#ab2d65d6104cd09368e1b72bb4342cae5">round_up_to_power_of_2</a>(uint16_t v)</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>{</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="keywordflow">if</span> (__builtin_popcount(v) == 1) { <span class="keywordflow">return</span> __builtin_ctz(v) - 1; }</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="keywordflow">if</span> (__builtin_popcount(v) == 1) { <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>uint8_t<span class="keyword">&gt;</span>(__builtin_ctz(v) - 1u); }</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  uint8_t next_pow_of_2{ 0 };</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['calcbuffersize_0',['calcBufferSize',['../group__Telemetry.html#ga820a2f759b537f10c0543d9612390e8c',1,'teleinfo.h']]],
-  ['calculatechecksum_1',['calculateChecksum',['../classTeleInfo.html#a1f42b9e6aa9c3169b3ec469149e693a1',1,'TeleInfo']]],
+  ['calculatechecksum_1',['calculateChecksum',['../classTeleInfo.html#a5db3eab02a4cc17cc5dc12bc081e3d58',1,'TeleInfo']]],
   ['calibration_2eh_2',['calibration.h',['../calibration_8h.html',1,'']]],
   ['capacityofenergybucket_5flong_3',['capacityOfEnergyBucket_long',['../processing_8cpp.html#a845d0be1ce120105c02f3e2e44f9c26d',1,'processing.cpp']]],
   ['charsfordisplay_4',['charsForDisplay',['../utils__display_8h.html#a9350918dee6b514307944180c1a57a11',1,'utils_display.h']]],

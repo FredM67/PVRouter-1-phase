@@ -59,7 +59,7 @@
 <area shape="poly" id="edge29_Node000023_Node000025" title=" " alt="" coords="531,595,636,617,635,622,530,600"/>
 <area shape="rect" id="Node000028" href="$classTeleInfo.html#ac3c9628b79d8f92c3d80dfdda4078e66" title="Initializes a new frame by resetting the buffer and adding the start character." alt="" coords="629,523,781,548"/>
 <area shape="poly" id="edge32_Node000023_Node000028" title=" " alt="" coords="530,569,629,548,630,554,531,575"/>
-<area shape="rect" id="Node000026" href="$classTeleInfo.html#a1f42b9e6aa9c3169b3ec469149e693a1" title="Calculates the checksum for a portion of the buffer." alt="" coords="847,596,1055,621"/>
+<area shape="rect" id="Node000026" href="$classTeleInfo.html#a5db3eab02a4cc17cc5dc12bc081e3d58" title="Calculates the checksum for a portion of the buffer." alt="" coords="847,596,1055,621"/>
 <area shape="poly" id="edge30_Node000025_Node000026" title=" " alt="" coords="761,626,833,618,833,623,761,631"/>
 <area shape="rect" id="Node000027" href="$classTeleInfo.html#aa3553828cf429c6a22eec47c1b4e0458" title="Writes a tag to the buffer." alt="" coords="883,645,1019,671"/>
 <area shape="poly" id="edge31_Node000025_Node000027" title=" " alt="" coords="761,637,870,647,869,653,761,642"/>

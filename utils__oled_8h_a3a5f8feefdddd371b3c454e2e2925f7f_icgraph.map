@@ -4,7 +4,7 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="495,122,249,122,249,117,495,117"/>
 <area shape="rect" id="Node000004" href="$group__OLEDDisplay.html#ga513f8a3bd4cc3304364bb4e550d576b9" title="Setup the OLED display." alt="" coords="151,31,244,56"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="495,112,461,103,244,55,245,50,462,98,497,107"/>
-<area shape="rect" id="Node000006" href="$group__OLEDDisplay.html#ga2303391296efb5abb3f851b8bda64855" title="Draw the xbm on the OLED display." alt="" coords="331,5,461,31"/>
+<area shape="rect" id="Node000006" href="$group__OLEDDisplay.html#gaf69ae4d19d4208b4251600c01284a14f" title="Draw the xbm on the OLED display." alt="" coords="331,5,461,31"/>
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="513,99,460,52,426,33,429,29,463,48,516,95"/>
 <area shape="rect" id="Node000007" href="$group__OLEDDisplay.html#gaf39aee6f9a448b67c84a828071a39f71" title="Update the OLED display with the given value." alt="" coords="345,207,447,232"/>
 <area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="519,145,494,172,463,198,440,209,438,204,460,193,490,168,515,141"/>

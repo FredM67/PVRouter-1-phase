@@ -57,7 +57,7 @@
 <area shape="poly" id="edge30_Node000023_Node000024" title=" " alt="" coords="251,293,285,293,285,298,251,298"/>
 <area shape="rect" id="Node000026" href="$utils__oled_8h.html#a3a5f8feefdddd371b3c454e2e2925f7f" title=" " alt="" coords="649,333,704,358"/>
 <area shape="poly" id="edge32_Node000025_Node000026" title=" " alt="" coords="228,343,636,343,636,348,228,348"/>
-<area shape="rect" id="Node000027" href="$group__OLEDDisplay.html#ga2303391296efb5abb3f851b8bda64855" title="Draw the xbm on the OLED display." alt="" coords="362,383,491,409"/>
+<area shape="rect" id="Node000027" href="$group__OLEDDisplay.html#gaf69ae4d19d4208b4251600c01284a14f" title="Draw the xbm on the OLED display." alt="" coords="362,383,491,409"/>
 <area shape="poly" id="edge33_Node000025_Node000027" title=" " alt="" coords="229,352,352,378,351,383,228,358"/>
 <area shape="poly" id="edge35_Node000027_Node000026" title=" " alt="" coords="490,381,635,351,636,356,491,386"/>
 <area shape="rect" id="Node000028" href="$group__OLEDDisplay.html#gaa57d8826eabcc4fdd9ff420cf69038ce" title="Get the tile from xbm object." alt="" coords="604,383,749,409"/>
