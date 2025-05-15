@@ -216,7 +216,7 @@ inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit - 1
   ON, ON, ON, ON, ON, ON, ON,         // '8' <- element 8
   ON, ON, ON, ON, OFF, ON, ON,        // '9' <- element 9
   OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 10
-  ON, OFF, OFF, ON, ON, ON, ON,       // 'F' <- element 11
+  ON, OFF, OFF, OFF, ON, ON, ON,       // 'F' <- element 11
   OFF, OFF, OFF, OFF, ON, OFF, ON,    // 'r' <- element 12
   ON, OFF, OFF, ON, ON, ON, OFF,      // 'C' <- element 13
 };
@@ -357,8 +357,8 @@ inline void displayOff()
   // Set display to " OFF" (right-aligned)
   charsForDisplay[0] = 10;  // Blank
   charsForDisplay[1] = 0;   // 'O' (reusing '0' character)
-  charsForDisplay[2] = 12;  // 'F'
-  charsForDisplay[3] = 12;  // 'F'
+  charsForDisplay[2] = 11;  // 'F'
+  charsForDisplay[3] = 11;  // 'F'
 }
 
 /**
@@ -418,13 +418,13 @@ inline void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _V
     return;
   }
 
-    // Check for forced load first
+  // Check for forced load first
   if (_loadForced)
   {
     displayForced();
     return;
   }
-  
+
   // If diversion is disabled, show "OFF"
   if (!_diversionEnabled)
   {
