@@ -151,7 +151,7 @@ private:
   static const char TAB{ 0x09 }; /**< Tab character. */
 
   char buffer[calcBufferSize()]{}; /**< Buffer to store the frame data. Adjust size as needed. */
-  uint8_t bufferPos{ 0 };          /**< Current position in the buffer. */
+  size_t bufferPos{ 0 };          /**< Current position in the buffer. */
 
   /**
    * @brief Calculates the checksum for a portion of the buffer.
@@ -159,7 +159,7 @@ private:
    * @param endPos The ending position in the buffer.
    * @return The calculated checksum as a single byte.
    */
-  [[nodiscard]] uint8_t calculateChecksum(uint8_t startPos, uint8_t endPos) const
+  [[nodiscard]] uint8_t calculateChecksum(size_t startPos, size_t endPos) const
   {
     uint8_t sum{ 0 };
     auto* ptr = buffer + startPos;
@@ -170,7 +170,7 @@ private:
       sum += *ptr++;
     }
 
-    return (sum & 0x3F) + 0x20;
+    return static_cast<uint8_t>((sum & 0x3F) + 0x20);
   }
 
   /**
@@ -185,7 +185,7 @@ private:
     // If an index is provided, append it to the tag
     if (index != 0)
     {
-      buffer[bufferPos++] = '0' + index;  // Convert index to a character
+      buffer[bufferPos++] = static_cast<char>('0' + index);  // Convert index to a character
     }
 
     buffer[bufferPos++] = TAB;
@@ -210,7 +210,7 @@ public:
   {
     buffer[bufferPos++] = LF;
 
-    const uint8_t startPos{ bufferPos };
+    const auto startPos{ bufferPos };
 
     writeTag(tag, index);
     auto str = itoa(value, buffer + bufferPos, 10);

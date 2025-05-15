@@ -379,7 +379,7 @@ inline void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _V
     return;
   }
 
-  const auto energyValueExceeds10kWh{ _ValueToDisplay > 9999U };
+  const auto energyValueExceeds10kWh{ _ValueToDisplay > 9999u };
 
   uint32_t tmpVal{ energyValueExceeds10kWh ? divu10(_ValueToDisplay) : _ValueToDisplay };
 

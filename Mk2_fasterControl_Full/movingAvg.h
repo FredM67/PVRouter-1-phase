@@ -50,7 +50,7 @@ public:
 
     if constexpr (is_floating_point< T >::value)
     {
-      _sum = 0.0F;
+      _sum = 0.0f;
     }
     else
     {
@@ -62,7 +62,7 @@ public:
       --i;
       if constexpr (is_floating_point< T >::value)
       {
-        _ar[i] = 0.0F;
+        _ar[i] = 0.0f;
       }
       else
       {
@@ -135,7 +135,7 @@ public:
     if (idx >= DURATION_IN_MINUTES)
     {
       if constexpr (is_floating_point< T >::value)
-        return 0.0F;
+        return 0.0f;
       else
         return (T)0;
     }
@@ -154,7 +154,7 @@ private:
     _sub_idx = 0;
 
     if constexpr (is_floating_point< T >::value)
-      _sub_sum = 0.0F;
+      _sub_sum = 0.0f;
     else
       _sub_sum = 0;
 
@@ -162,7 +162,7 @@ private:
     do {
       --i;
       if constexpr (is_floating_point< T >::value)
-        _sub_ar[i] = 0.0F;
+        _sub_ar[i] = 0.0f;
       else
         _sub_ar[i] = 0;
     } while (i);

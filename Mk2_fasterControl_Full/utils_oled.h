@@ -160,22 +160,22 @@ uint8_t *get_tile_from_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_byte_width, const
 /**
  * @brief Draw the xbm on the OLED display
  * 
- * @param tx x position for drawing the xbm
- * @param ty y position for drawing the xbm
+ * @param _tx x position for drawing the xbm
+ * @param _ty y position for drawing the xbm
  * @param xbm_width Width of the xbm
  * @param xbm_height Height of the xbm
  * @param xbm The xbm object
  * 
  * @ingroup OLEDDisplay
  */
-void u8x8_draw_xbm(uint8_t tx, uint8_t ty, uint8_t xbm_width, uint8_t xbm_height, const unsigned char *xbm)
+void u8x8_draw_xbm(uint8_t _tx, uint8_t _ty, uint8_t xbm_width, uint8_t xbm_height, const unsigned char *xbm)
 {
   for (uint8_t y = 0; y < (xbm_height >> 3); ++y)
   {
     for (uint8_t x = 0; x < (xbm_width >> 3); ++x)
     {
       const auto tile{ get_tile_from_xbm(x, y, xbm_width >> 3, xbm) };
-      u8x8.drawTile(tx + x, ty + y, 1, tile);
+      u8x8.drawTile(_tx + x, _ty + y, 1, tile);
     }
   }
 }
@@ -254,7 +254,7 @@ void updateOLED(uint16_t value)
 
     // Set the font and format the value as a float with max 3 decimal places and 4 digits wide
     u8x8.setFont(u8x8_font_inb33_3x6_n);
-    dtostrf(value * 0.001F, 4, 3, buffer);
+    dtostrf(value * 0.001f, 4, 3, buffer);
     u8x8.drawString(0, 0, buffer);
 
     // Set the font and draw the unit

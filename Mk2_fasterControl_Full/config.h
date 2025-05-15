@@ -89,6 +89,6 @@ inline constexpr int16_t iTemperatureThreshold{ 100 }; /**< the temperature thre
 inline constexpr TemperatureSensing temperatureSensing{ 0xff,
                                                         { { 0x28, 0x1B, 0xD7, 0x6A, 0x09, 0x00, 0x00, 0xB7 } } }; /**< list of temperature sensor Addresses */
 
-inline constexpr uint16_t ROTATION_AFTER_SECONDS{ 8U * 3600U }; /**< rotates load priorities after this period of inactivity */
+inline constexpr uint16_t ROTATION_AFTER_SECONDS{ 8u * 3600u }; /**< rotates load priorities after this period of inactivity */
 
 #endif /* CONFIG_H */

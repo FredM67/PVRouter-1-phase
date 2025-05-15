@@ -106,9 +106,9 @@ inline void printDualTariffConfiguration()
       Serial.println(F(" hour/minute(s)."));
     }
     Serial.print(F("\t\tCalculated offset in seconds: "));
-    Serial.println(rg_OffsetForce[i][0] * 0.001F);
+    Serial.println(rg_OffsetForce[i][0] * 0.001f);
     Serial.print(F("\t\tCalculated duration in seconds: "));
-    Serial.println(rg_OffsetForce[i][1] * 0.001F);
+    Serial.println(rg_OffsetForce[i][1] * 0.001f);
   }
 }
 

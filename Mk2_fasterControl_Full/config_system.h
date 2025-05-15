@@ -39,8 +39,8 @@ inline constexpr typename conditional< DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUE
   DATALOG_PERIOD_IN_MAINS_CYCLES{ DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUENCY }; /**< Period of datalogging in cycles */
 
 // Computes inverse value at compile time to use '*' instead of '/'
-inline constexpr float invSUPPLY_FREQUENCY{ 1.0F / SUPPLY_FREQUENCY };
-inline constexpr float invDATALOG_PERIOD_IN_MAINS_CYCLES{ 1.0F / DATALOG_PERIOD_IN_MAINS_CYCLES };
+inline constexpr float invSUPPLY_FREQUENCY{ 1.0f / SUPPLY_FREQUENCY };
+inline constexpr float invDATALOG_PERIOD_IN_MAINS_CYCLES{ 1.0f / DATALOG_PERIOD_IN_MAINS_CYCLES };
 
 inline constexpr uint16_t delayBeforeSerialStarts{ 1000 };  /**< in milli-seconds, to allow Serial window to be opened */
 inline constexpr uint16_t startUpPeriod{ 3000 };            /**< in milli-seconds, to allow LP filter to settle */

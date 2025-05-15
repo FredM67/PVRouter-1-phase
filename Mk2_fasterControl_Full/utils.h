@@ -154,7 +154,7 @@ inline void printForSerialText()
 
   Serial.print(F(", V"));
   Serial.print(F(":"));
-  Serial.print((float)tx_data.Vrms_L_x100 * 0.01F);
+  Serial.print((float)tx_data.Vrms_L_x100 * 0.01f);
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
@@ -169,7 +169,7 @@ inline void printForSerialText()
       Serial.print(F(", T"));
       Serial.print(idx + 1);
       Serial.print(F(":"));
-      Serial.print((float)tx_data.temperature_x100[idx] * 0.01F);
+      Serial.print((float)tx_data.temperature_x100[idx] * 0.01f);
     }
   }
 
@@ -218,7 +218,7 @@ inline void printForJSON(const bool bOffPeak)
 
   doc["D"] = tx_data.powerDiverted;
   doc["E"] = Shared::copyOf_divertedEnergyTotal_Wh_forDL;
-  doc["V"] = (float)tx_data.Vrms_L_x100 * 0.01F;
+  doc["V"] = (float)tx_data.Vrms_L_x100 * 0.01f;
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
@@ -229,7 +229,7 @@ inline void printForJSON(const bool bOffPeak)
       {
         continue;
       }
-      doc[String("T") + (idx + 1)] = (float)tx_data.temperature_x100[idx] * 0.01F;
+      doc[String("T") + (idx + 1)] = (float)tx_data.temperature_x100[idx] * 0.01f;
     }
   }
 

@@ -88,17 +88,17 @@ template< typename T > constexpr uint8_t bit_clear(T& _dest, const uint8_t bit)
  */
 void constexpr togglePin(const uint8_t pin)
 {
-  if (pin < 8)
+  if (pin < 8u)
   {
     bit_set(PIND, pin);
   }
-  else if (pin < 14)
+  else if (pin < 14u)
   {
-    bit_set(PINB, pin - 8);
+    bit_set(PINB, pin - 8u);
   }
   else
   {
-    bit_set(PINC, pin - 14);
+    bit_set(PINC, pin - 14u);
   }
 }
 
@@ -127,17 +127,17 @@ inline constexpr void setPinState(const uint8_t pin, const bool bState)
  */
 inline constexpr void setPinON(const uint8_t pin)
 {
-  if (pin < 8)
+  if (pin < 8u)
   {
     bit_set(PORTD, pin);
   }
-  else if (pin < 14)
+  else if (pin < 14u)
   {
-    bit_set(PORTB, pin - 8);
+    bit_set(PORTB, pin - 8u);
   }
   else
   {
-    bit_set(PORTC, pin - 14);
+    bit_set(PORTC, pin - 14u);
   }
 }
 
@@ -159,17 +159,17 @@ inline void setPinsON(const uint16_t pins)
  */
 inline constexpr void setPinOFF(const uint8_t pin)
 {
-  if (pin < 8)
+  if (pin < 8u)
   {
     bit_clear(PORTD, pin);
   }
-  else if (pin < 14)
+  else if (pin < 14u)
   {
-    bit_clear(PORTB, pin - 8);
+    bit_clear(PORTB, pin - 8u);
   }
   else
   {
-    bit_clear(PORTC, pin - 14);
+    bit_clear(PORTC, pin - 14u);
   }
 }
 
@@ -193,17 +193,17 @@ inline void setPinsOFF(const uint16_t pins)
  */
 inline constexpr bool getPinState(const uint8_t pin)
 {
-  if (pin < 8)
+  if (pin < 8u)
   {
     return bit_read(PIND, pin);
   }
-  else if (pin < 14)
+  else if (pin < 14u)
   {
-    return bit_read(PINB, pin - 8);
+    return bit_read(PINB, pin - 8u);
   }
   else
   {
-    return bit_read(PINC, pin - 14);
+    return bit_read(PINC, pin - 14u);
   }
 }
 

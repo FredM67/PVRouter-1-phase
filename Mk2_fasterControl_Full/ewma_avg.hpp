@@ -44,7 +44,7 @@
  */
 constexpr uint8_t round_up_to_power_of_2(uint16_t v)
 {
-  if (__builtin_popcount(v) == 1) { return __builtin_ctz(v) - 1; }
+  if (__builtin_popcount(v) == 1) { return static_cast<uint8_t>(__builtin_ctz(v) - 1u); }
 
   uint8_t next_pow_of_2{ 0 };
 
