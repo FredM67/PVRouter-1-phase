@@ -1,6 +1,6 @@
 <map id="divmod10" name="divmod10">
 <area shape="rect" id="Node000001" title=" " alt="" coords="339,31,425,56"/>
-<area shape="rect" id="Node000002" href="$group__SegDisplay.html#ga955fe37f3ba164eb42378ba17ed90f42" title="Configures the value for display on a 7&#45;segment display." alt="" coords="104,5,291,31"/>
+<area shape="rect" id="Node000002" href="$group__SegDisplay.html#ga7653644b7c6edc52f73c9ea7836d616a" title="Configures the value for display on a 7&#45;segment display." alt="" coords="104,5,291,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="325,38,290,33,290,28,325,33"/>
 <area shape="rect" id="Node000004" href="$test__fastdivision_2test__main_8cpp.html#aeddc14dbe5268704ba2abfa24e7e0f06" title=" " alt="" coords="138,55,257,80"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="325,53,257,62,256,57,324,48"/>

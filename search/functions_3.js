@@ -8,6 +8,6 @@ var searchData=
   ['checkdiversiononoff_5',['checkDiversionOnOff',['../main_8cpp.html#a31f3d562faae6b598324b56299d74f7d',1,'main.cpp']]],
   ['clear_6',['clear',['../classmovingAvg.html#adc157cfdb883805b88f3979cebb72de7',1,'movingAvg']]],
   ['cleardisplay_7',['clearDisplay',['../classu8x8__fake.html#ae52ea4436df7b4d975c4e075e86db1d3',1,'u8x8_fake::clearDisplay()'],['../group__OLEDDisplay.html#gafaa5f070126ac5184a648b484e7cf276',1,'clearDisplay():&#160;utils_oled.h']]],
-  ['configurevaluefordisplay_8',['configureValueForDisplay',['../group__SegDisplay.html#ga955fe37f3ba164eb42378ba17ed90f42',1,'utils_display.h']]],
+  ['configurevaluefordisplay_8',['configureValueForDisplay',['../group__SegDisplay.html#ga7653644b7c6edc52f73c9ea7836d616a',1,'utils_display.h']]],
   ['confirmpolarity_9',['confirmPolarity',['../group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672',1,'confirmPolarity():&#160;processing.cpp'],['../group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672',1,'confirmPolarity():&#160;processing.cpp']]]
 ];

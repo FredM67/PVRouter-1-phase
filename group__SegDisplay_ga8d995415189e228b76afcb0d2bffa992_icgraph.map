@@ -1,0 +1,7 @@
+<map id="displayForced" name="displayForced">
+<area shape="rect" id="Node000001" title="Displays &quot;FORC&quot; on the 7&#45;segment display for forced load override." alt="" coords="339,5,451,31"/>
+<area shape="rect" id="Node000002" href="$group__SegDisplay.html#ga7653644b7c6edc52f73c9ea7836d616a" title="Configures the value for display on a 7&#45;segment display." alt="" coords="104,5,291,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="325,21,291,21,291,15,325,15"/>
+<area shape="rect" id="Node000003" href="$main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,5,56,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,21,56,21,56,15,91,15"/>
+</map>
