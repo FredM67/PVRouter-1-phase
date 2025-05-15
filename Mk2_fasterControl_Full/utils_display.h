@@ -22,11 +22,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 inline constexpr uint8_t noOfDigitLocations{ 4 };
-inline constexpr uint8_t noOfPossibleCharacters{ 11 };
+inline constexpr uint8_t noOfPossibleCharacters{ 14 };
 inline constexpr uint8_t UPDATE_PERIOD_FOR_DISPLAYED_DATA{ 50 };  // mains cycles
 inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 };          // auto-reset after this period of inactivity
 
-inline constexpr uint32_t displayShutdown_inMainsCycles{DISPLAY_SHUTDOWN_IN_HOURS * mainsCyclesPerHour };
+inline constexpr uint32_t displayShutdown_inMainsCycles{ DISPLAY_SHUTDOWN_IN_HOURS * mainsCyclesPerHour };
 inline constexpr uint8_t MAX_DISPLAY_TIME_COUNT{ 10 };  // no of processing loops between display updates
 
 inline uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 };  // all blank
@@ -71,6 +71,9 @@ inline constexpr uint8_t digitValueMap[noOfPossibleCharacters][noOfDigitSelectio
   HIGH, LOW, LOW, LOW,     // '8' <- element 8
   HIGH, LOW, LOW, HIGH,    // '9' <- element 9
   HIGH, HIGH, HIGH, HIGH,  // ' ' <- element 10
+  LOW, HIGH, HIGH, HIGH,   // 'F' <- element 11
+  HIGH, LOW, HIGH, LOW,    // 'r' <- element 12
+  LOW, LOW, HIGH, LOW,     // 'C' <- element 13
 };
 
 // a tidy means of identifying the DP status data when accessing the above table
@@ -213,6 +216,9 @@ inline constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit - 1
   ON, ON, ON, ON, ON, ON, ON,         // '8' <- element 8
   ON, ON, ON, ON, OFF, ON, ON,        // '9' <- element 9
   OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 10
+  ON, OFF, OFF, OFF, ON, ON, ON,      // 'F' <- element 11
+  OFF, OFF, OFF, OFF, ON, OFF, ON,    // 'r' <- element 12
+  ON, OFF, OFF, ON, ON, ON, OFF,      // 'C' <- element 13
 };
 
 /**
@@ -333,29 +339,96 @@ inline void initializeDisplay()
 }
 
 /**
- * @brief Configures the value for display on a 7-segment display.
- *
- * This function configures the value to be displayed on a 7-segment display.
- * It handles both active energy display and a "walking dots" display when the
- * energy display is not active.
- *
- * @param _EDD_isActive A boolean indicating whether the energy display is active.
- * @param _ValueToDisplay The value to be displayed, represented as a 16-bit unsigned integer.
- *
- * When the energy display is active, the function scales the value appropriately
- * and assigns digits to the display characters. If the value exceeds 10,000, it
- * is rescaled to fit within the display's constraints. The decimal point is placed
- * after the first or second digit based on the value.
- *
- * When the energy display is not active, the function displays a "walking dots"
- * pattern by cycling a dot through the display positions.
+ * @brief Displays "OFF" on the 7-segment display.
+ * 
+ * @details This function configures the display to show "OFF" when diversion is disabled.
+ *          It displays the text right-aligned on the 4-digit display.
+ *          Uses the existing '0' character definition for 'O' to save memory.
  * 
  * @ingroup 7SegDisplay
  */
-inline void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToDisplay)
+inline void displayOff()
 {
   if constexpr (!(TYPE_OF_DISPLAY == DisplayType::SEG || TYPE_OF_DISPLAY == DisplayType::SEG_HW))
   {
+    return;
+  }
+
+  // Set display to " OFF" (right-aligned)
+  charsForDisplay[0] = 10;  // Blank
+  charsForDisplay[1] = 0;   // 'O' (reusing '0' character)
+  charsForDisplay[2] = 11;  // 'F'
+  charsForDisplay[3] = 11;  // 'F'
+}
+
+/**
+ * @brief Displays "FORC" on the 7-segment display for forced load override.
+ * 
+ * @details This function configures the display to show "FORC" when a load is overridden.
+ *          Uses the existing '0' character definition for 'O' to save memory.
+ * 
+ * @ingroup 7SegDisplay
+ */
+inline void displayForced()
+{
+  if constexpr (!(TYPE_OF_DISPLAY == DisplayType::SEG || TYPE_OF_DISPLAY == DisplayType::SEG_HW))
+  {
+    return;
+  }
+
+  // Set display to "FORC"
+  charsForDisplay[0] = 11;  // 'F'
+  charsForDisplay[1] = 0;   // 'O' (reusing '0' character)
+  charsForDisplay[2] = 12;  // 'r'
+  charsForDisplay[3] = 13;  // 'C'
+}
+
+/**
+ * @brief Configures the value for display on a 7-segment display.
+ *
+ * @details This function controls what is shown on the 7-segment display based on 
+ *          the system state. It handles multiple display modes:
+ *          - "FORC" when a load is in forced override mode
+ *          - "OFF" when diversion is disabled
+ *          - "Walking dots" when energy display is not active
+ *          - Energy values with appropriate decimal point placement
+ *
+ * @param _EDD_isActive A boolean indicating whether the energy display is active.
+ * @param _ValueToDisplay The energy value to be displayed (16-bit unsigned integer).
+ * @param _diversionEnabled A boolean indicating if diversion is enabled (default=true).
+ * @param _loadForced A boolean indicating if a load is in forced override mode (default=false).
+ *
+ * Display precedence order:
+ * 1. Forced load status (shows "FOrC")
+ * 2. Diversion enabled status (shows "OFF")
+ * 3. Energy display inactive (shows walking dots)
+ * 4. Energy value display
+ *
+ * For energy value display:
+ * - Values up to 9999 show with decimal point after first digit (e.g., 1.234)
+ * - Values above 9999 are divided by 10 and shown with decimal point after second digit (e.g., 12.34)
+ * 
+ * @ingroup 7SegDisplay
+ */
+inline void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _ValueToDisplay, const bool _diversionEnabled = false,
+                                     const bool _loadForced = false)
+{
+  if constexpr (!(TYPE_OF_DISPLAY == DisplayType::SEG || TYPE_OF_DISPLAY == DisplayType::SEG_HW))
+  {
+    return;
+  }
+
+  // Check for forced load first
+  if (_loadForced)
+  {
+    displayForced();
+    return;
+  }
+
+  // If diversion is disabled, show "OFF"
+  if (!_diversionEnabled)
+  {
+    displayOff();
     return;
   }
 

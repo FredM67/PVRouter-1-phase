@@ -350,13 +350,13 @@ void updatePhysicalLoadStates()
     }
   }
 
-  const bool bDiversionOff{ Shared::b_diversionOff };
+  const bool bDiversionEnabled{ Shared::b_diversionEnabled };
   uint8_t idx{ NO_OF_DUMPLOADS };
   do
   {
     --idx;
     const auto iLoad{ loadPrioritiesAndState[idx] & loadStateMask };
-    physicalLoadState[iLoad] = !bDiversionOff && (Shared::b_overrideLoadOn[iLoad] || (loadPrioritiesAndState[idx] & loadStateOnBit)) ? LoadStates::LOAD_ON : LoadStates::LOAD_OFF;
+    physicalLoadState[iLoad] = bDiversionEnabled && (Shared::b_overrideLoadOn[iLoad] || (loadPrioritiesAndState[idx] & loadStateOnBit)) ? LoadStates::LOAD_ON : LoadStates::LOAD_OFF;
   } while (idx);
 }
 
@@ -446,7 +446,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
  */
 void processDivertedCurrentRawSample(const int16_t rawSample)
 {
-  if (Shared::b_diversionOff || Shared::b_overrideLoadOn[0])
+  if (!Shared::b_diversionEnabled || Shared::b_overrideLoadOn[0])
   {
     return;  // no diverted power when the load is overridden
   }
