@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2024-10-29
  * 
- * @copyright Copyright (c) 2024
+ * @copyright Copyright (c) 2025
  * 
  * @ingroup 7SegDisplay
  */
@@ -379,7 +379,7 @@ inline void configureValueForDisplay(const bool _EDD_isActive, const uint16_t _V
     return;
   }
 
-  const auto energyValueExceeds10kWh{ _ValueToDisplay > 9999U };
+  const auto energyValueExceeds10kWh{ _ValueToDisplay > 9999u };
 
   uint32_t tmpVal{ energyValueExceeds10kWh ? divu10(_ValueToDisplay) : _ValueToDisplay };
 

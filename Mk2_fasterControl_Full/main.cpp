@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2024-10-03
  * 
- * @copyright Copyright (c) 2024
+ * @copyright Copyright (c) 2025
  * 
  */
 
@@ -356,11 +356,11 @@ void processCalculationsForLogging()
 
   if constexpr (DATALOG_PERIOD_IN_SECONDS > 10)
   {
-    tx_data.Vrms_L_x100 = static_cast< int32_t >((100 << 2) * f_voltageCal * sqrt(Shared::copyOf_sum_Vsquared / Shared::copyOf_sampleSetsDuringThisDatalogPeriod));
+    tx_data.Vrms_L_x100 = static_cast< int32_t >((100 << 2) * f_voltageCal * sqrtf(Shared::copyOf_sum_Vsquared / Shared::copyOf_sampleSetsDuringThisDatalogPeriod));
   }
   else
   {
-    tx_data.Vrms_L_x100 = static_cast< int32_t >(100 * f_voltageCal * sqrt(Shared::copyOf_sum_Vsquared / Shared::copyOf_sampleSetsDuringThisDatalogPeriod));
+    tx_data.Vrms_L_x100 = static_cast< int32_t >(100 * f_voltageCal * sqrtf(Shared::copyOf_sum_Vsquared / Shared::copyOf_sampleSetsDuringThisDatalogPeriod));
   }
 }
 

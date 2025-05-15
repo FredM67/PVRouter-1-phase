@@ -31,10 +31,10 @@
 // powerCal is the RECIPROCAL of the power conversion rate. A good value
 // to start with is therefore 1/20 = 0.05 (Watts per ADC-step squared)
 //
-inline constexpr float powerCal_grid{ 0.0436F };      // for CT1
-inline constexpr float powerCal_diverted{ 0.04446F };  // for CT2
+inline constexpr float powerCal_grid{ 0.0436f };      // for CT1
+inline constexpr float powerCal_diverted{ 0.04446f };  // for CT2
 
-inline constexpr float f_voltageCal{ 0.805653F }; /**< compared with Sentron PAC 4200 */
+inline constexpr float f_voltageCal{ 0.805653f }; /**< compared with Sentron PAC 4200 */
 
 inline constexpr float lpf_gain{ 9 }; /**< setting this to 0 disables this extra processing */
 inline constexpr float alpha{ 0.0011 };

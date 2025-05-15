@@ -100,8 +100,8 @@ Vous pouvez commencer à lire la documentation ici [1-phase routeur](https://fre
 Les valeurs d'étalonnage se trouvent dans le fichier **calibration.h**.
 Il s'agit des lignes :
 ```cpp
-inline constexpr float powerCal_grid{ 0.0435F };
-inline constexpr float powerCal_diverted{ 0.0435F };
+inline constexpr float powerCal_grid{ 0.0435f };
+inline constexpr float powerCal_diverted{ 0.0435f };
 ```
 
 Ces valeurs par défaut n'entrent pas en jeux dans le fonctionnement du routeur.

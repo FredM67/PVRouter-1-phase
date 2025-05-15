@@ -30,15 +30,15 @@ constexpr int32_t DCoffset_V_max{ (512L + 100) * 256 }; /**< mid-point of ADC pl
 
 constexpr int16_t DCoffset_I{ 512 }; /**< nominal mid-point value of ADC @ x1 scale */
 
-constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1.0F / powerCal_grid)) }; /**< main energy bucket for single-phase use, with units of Joules * SUPPLY_FREQUENCY */
+constexpr int32_t capacityOfEnergyBucket_long{ static_cast< int32_t >(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY * (1.0f / powerCal_grid)) }; /**< main energy bucket for single-phase use, with units of Joules * SUPPLY_FREQUENCY */
 
 constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 }; /**< for resetting flexible thresholds */
 
 constexpr int32_t lowerThreshold_default{ midPointOfEnergyBucket_long }; /**< default lower threshold for the energy bucket (50% of capacity) */
 constexpr int32_t upperThreshold_default{ midPointOfEnergyBucket_long }; /**< default upper threshold for the energy bucket (50% of capacity) */
 
-constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1.0F / powerCal_diverted)) };     /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
-constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1.0F / powerCal_grid)) }; /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
+constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1.0f / powerCal_diverted)) };     /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
+constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1.0f / powerCal_grid)) }; /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
 // When using integer maths, calibration values that have supplied in floating point
 // form need to be rescaled.
 
@@ -67,7 +67,7 @@ uint16_t divertedEnergyTotal_Wh{ 0 };  /**< WattHour register of 63K range */
 // accumulator's value is decremented accordingly. The calculation below is to determine
 // the scaling for this accumulator.
 
-constexpr int32_t IEU_per_Wh_diverted{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1.0F / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
+constexpr int32_t IEU_per_Wh_diverted{ static_cast< int32_t >(JOULES_PER_WATT_HOUR * SUPPLY_FREQUENCY * (1.0f / powerCal_diverted)) };  // depends on powerCal, frequency & the 'sweetzone' size.
 
 bool recentTransition{ false };                   /**< a load state has been recently toggled */
 uint8_t postTransitionCount{ 0 };                 /**< counts the number of cycle since last transition */
