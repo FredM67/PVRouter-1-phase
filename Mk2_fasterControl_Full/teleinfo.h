@@ -151,7 +151,7 @@ private:
   static const char TAB{ 0x09 }; /**< Tab character. */
 
   char buffer[calcBufferSize()]{}; /**< Buffer to store the frame data. Adjust size as needed. */
-  size_t bufferPos{ 0 };          /**< Current position in the buffer. */
+  size_t bufferPos{ 0 };           /**< Current position in the buffer. */
 
   /**
    * @brief Calculates the checksum for a portion of the buffer.
@@ -163,21 +163,31 @@ private:
   {
     uint8_t sum{ 0 };
     auto* ptr = buffer + startPos;
+    const auto* end = buffer + endPos;
 
-    // Process 4 bytes at a time
-    while (ptr < buffer + endPos)
+    // Process 4 bytes at once for longer segments
+    while (ptr + 4 <= end)
+    {
+      sum += *ptr++;
+      sum += *ptr++;
+      sum += *ptr++;
+      sum += *ptr++;
+    }
+
+    // Handle remaining bytes
+    while (ptr < end)
     {
       sum += *ptr++;
     }
 
-    return static_cast<uint8_t>((sum & 0x3F) + 0x20);
+    return (sum & 0x3F) + 0x20;
   }
 
   /**
    * @brief Writes a tag to the buffer.
    * @param tag The tag to write.
    */
-  void writeTag(const char* tag, uint8_t index)
+  __attribute__((always_inline)) void writeTag(const char* tag, uint8_t index)
   {
     auto* ptr{ tag };
     while (*ptr) buffer[bufferPos++] = *ptr++;
@@ -185,7 +195,7 @@ private:
     // If an index is provided, append it to the tag
     if (index != 0)
     {
-      buffer[bufferPos++] = static_cast<char>('0' + index);  // Convert index to a character
+      buffer[bufferPos++] = static_cast< char >('0' + index);  // Convert index to a character
     }
 
     buffer[bufferPos++] = TAB;
@@ -195,7 +205,7 @@ public:
   /**
    * @brief Initializes a new frame by resetting the buffer and adding the start character.
    */
-  void startFrame()
+  __attribute__((always_inline)) void startFrame()
   {
     bufferPos = 0;
     buffer[bufferPos++] = STX;
@@ -226,7 +236,7 @@ public:
   /**
    * @brief Finalizes the frame by adding the end character and sending the buffer over Serial.
    */
-  void endFrame()
+  __attribute__((always_inline)) void endFrame()
   {
     buffer[bufferPos++] = ETX;
     Serial.write(buffer, bufferPos);
