@@ -14,13 +14,12 @@ var searchData=
   ['enable_5fif_3c_20true_2c_20t_20_3e_11',['enable_if&lt; true, T &gt;',['../structenable__if_3_01true_00_01T_01_4.html',1,'']]],
   ['enable_5fif_5ft_12',['enable_if_t',['../enable__if_8hpp.html#ad200422dfbdeb88f7af4779a72cdcf67',1,'enable_if.hpp']]],
   ['enabledisableline_13',['enableDisableLine',['../utils__display_8h.html#a2e18b2597ce4e271d3b0740c843932f3',1,'utils_display.h']]],
-  ['endframe_14',['endFrame',['../classTeleInfo.html#a37b1447161869bf3ecc2faed134b7eee',1,'TeleInfo']]],
-  ['energyinbucket_5flong_15',['energyInBucket_long',['../processing_8cpp.html#a5f04ed3c358e675114ee70e3552d6e59',1,'processing.cpp']]],
-  ['energyinbucket_5fprediction_16',['energyInBucket_prediction',['../processing_8cpp.html#afb26a8ad4b5d9d5a7fae093c80efd6f8',1,'processing.cpp']]],
-  ['escapequote_17',['ESCAPEQUOTE',['../debug_8h.html#a7b7a44cc02c6f75a1755e473ba0fd12a',1,'debug.h']]],
-  ['etx_18',['ETX',['../classTeleInfo.html#aa03518019927460cd7735213630004d9',1,'TeleInfo']]],
-  ['ewma_5faverage_19',['EWMA_average',['../classEWMA__average.html',1,'']]],
-  ['ewma_5faverage_20',['ewma_average',['../classRelayEngine.html#a03a84f65f56f7e8bce137c967dfe7ebf',1,'RelayEngine']]],
-  ['ewma_5faverage_3c_2010_20_2a60_2fdatalog_5fperiod_5fin_5fseconds_20_3e_21',['EWMA_average&lt; 10 *60/DATALOG_PERIOD_IN_SECONDS &gt;',['../classEWMA__average.html',1,'']]],
-  ['ewma_5favg_2ehpp_22',['ewma_avg.hpp',['../ewma__avg_8hpp.html',1,'']]]
+  ['energyinbucket_5flong_14',['energyInBucket_long',['../processing_8cpp.html#a5f04ed3c358e675114ee70e3552d6e59',1,'processing.cpp']]],
+  ['energyinbucket_5fprediction_15',['energyInBucket_prediction',['../processing_8cpp.html#afb26a8ad4b5d9d5a7fae093c80efd6f8',1,'processing.cpp']]],
+  ['escapequote_16',['ESCAPEQUOTE',['../debug_8h.html#a7b7a44cc02c6f75a1755e473ba0fd12a',1,'debug.h']]],
+  ['etx_17',['ETX',['../classTeleInfo.html#aa03518019927460cd7735213630004d9',1,'TeleInfo']]],
+  ['ewma_5faverage_18',['EWMA_average',['../classEWMA__average.html',1,'']]],
+  ['ewma_5faverage_19',['ewma_average',['../classRelayEngine.html#a03a84f65f56f7e8bce137c967dfe7ebf',1,'RelayEngine']]],
+  ['ewma_5faverage_3c_2010_20_2a60_2fdatalog_5fperiod_5fin_5fseconds_20_3e_20',['EWMA_average&lt; 10 *60/DATALOG_PERIOD_IN_SECONDS &gt;',['../classEWMA__average.html',1,'']]],
+  ['ewma_5favg_2ehpp_21',['ewma_avg.hpp',['../ewma__avg_8hpp.html',1,'']]]
 ];

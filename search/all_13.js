@@ -37,13 +37,12 @@ var searchData=
   ['shared_34',['Shared',['../namespaceShared.html',1,'']]],
   ['shared_5fvar_2eh_35',['shared_var.h',['../shared__var_8h.html',1,'']]],
   ['size_36',['size',['../types_8h.html#a694147b7171ec0b06bc8880dc100e756',1,'size(const _Tp(&amp;)[_Nm]) noexcept:&#160;types.h'],['../types_8h.html#a598e71b269336fef3370d0420348332d',1,'size(const _Tp(&amp;)[0]) noexcept:&#160;types.h']]],
-  ['startframe_37',['startFrame',['../classTeleInfo.html#ac3c9628b79d8f92c3d80dfdda4078e66',1,'TeleInfo']]],
-  ['startupperiod_38',['startUpPeriod',['../config__system_8h.html#a0d30025137b8f9bfe6d4e9c832db76b4',1,'config_system.h']]],
-  ['stx_39',['STX',['../classTeleInfo.html#a526fdfd73a773da14b949e6bfac72a6e',1,'TeleInfo']]],
-  ['sump_5fdiverted_40',['sumP_diverted',['../processing_8cpp.html#a7a0380b1befbb8b2256fa68e7e346cbb',1,'processing.cpp']]],
-  ['sump_5fdiverted_5foverdl_5fperiod_41',['sumP_diverted_overDL_Period',['../processing_8cpp.html#aa3b9f17b9befc98ef91faf22fec2eb68',1,'processing.cpp']]],
-  ['sump_5fgrid_42',['sumP_grid',['../processing_8cpp.html#a7b86ceba6e6600f083a9c3950a7465cd',1,'processing.cpp']]],
-  ['sump_5fgrid_5foverdl_5fperiod_43',['sumP_grid_overDL_Period',['../processing_8cpp.html#a1e48fa33e3d3d0d403d3825f3c2482ed',1,'processing.cpp']]],
-  ['supply_5ffrequency_44',['SUPPLY_FREQUENCY',['../config__system_8h.html#ad62846ca1d96695a32041f6dd809401e',1,'config_system.h']]],
-  ['surplusthreshold_45',['surplusThreshold',['../classrelayOutput.html#a5149cd72bf3d2ad09b5c8cf217db3e08',1,'relayOutput']]]
+  ['startupperiod_37',['startUpPeriod',['../config__system_8h.html#a0d30025137b8f9bfe6d4e9c832db76b4',1,'config_system.h']]],
+  ['stx_38',['STX',['../classTeleInfo.html#a526fdfd73a773da14b949e6bfac72a6e',1,'TeleInfo']]],
+  ['sump_5fdiverted_39',['sumP_diverted',['../processing_8cpp.html#a7a0380b1befbb8b2256fa68e7e346cbb',1,'processing.cpp']]],
+  ['sump_5fdiverted_5foverdl_5fperiod_40',['sumP_diverted_overDL_Period',['../processing_8cpp.html#aa3b9f17b9befc98ef91faf22fec2eb68',1,'processing.cpp']]],
+  ['sump_5fgrid_41',['sumP_grid',['../processing_8cpp.html#a7b86ceba6e6600f083a9c3950a7465cd',1,'processing.cpp']]],
+  ['sump_5fgrid_5foverdl_5fperiod_42',['sumP_grid_overDL_Period',['../processing_8cpp.html#a1e48fa33e3d3d0d403d3825f3c2482ed',1,'processing.cpp']]],
+  ['supply_5ffrequency_43',['SUPPLY_FREQUENCY',['../config__system_8h.html#ad62846ca1d96695a32041f6dd809401e',1,'config_system.h']]],
+  ['surplusthreshold_44',['surplusThreshold',['../classrelayOutput.html#a5149cd72bf3d2ad09b5c8cf217db3e08',1,'relayOutput']]]
 ];
