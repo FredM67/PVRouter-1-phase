@@ -27,7 +27,8 @@
 			"xutility": "cpp",
 			"xlocale": "cpp",
 			"algorithm": "cpp",
-			"cmath": "cpp"
+			"cmath": "cpp",
+			"cstdint": "cpp"
 		}
 	}
 }

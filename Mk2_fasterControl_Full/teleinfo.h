@@ -56,24 +56,34 @@ inline static constexpr size_t lineSize(size_t tagLen, size_t valueLen)
  *
  * This function computes the size of the buffer needed to store the entire telemetry frame,
  * including all tags, values, and formatting characters. The calculation takes into account
- * the presence of optional features such as relay diversion and temperature sensing.
+ * the presence of optional features and system configuration.
  *
  * @return The total buffer size as a compile-time constant.
  *
  * The buffer size is calculated as follows:
  * - 1 byte for the start-of-text (STX) character.
- * - 1 line for the "P" tag (signed 6 digits).
- * - For multi-phase systems (`NO_OF_PHASES > 1`):
- *   - `NO_OF_PHASES` lines for the "R" tag (signed 6 digits each).
- *   - `NO_OF_PHASES` lines for the "V1" tag (unsigned 5 digits each).
- * - For single-phase systems:
- *   - 1 line for the "D" tag (unsigned 4 digits).
- *   - 1 line for the "E" tag (unsigned 5 digits).
- * - If relay diversion is enabled (`RELAY_DIVERSION`):
- *   - 1 line for the "R" tag (signed 6 digits).
- * - If temperature sensors are present (`TEMP_SENSOR_PRESENT`):
- *   - `temperatureSensing.get_size()` lines for temperature tags ("T1" to "Tn", 4 digits each).
- * - 1 line for the "N" tag (unsigned 5 digits).
+ * - 1 line for the "P" tag (signed 6 digits) - power measurement.
+ * 
+ * For multi-phase systems (`NO_OF_PHASES > 1`):
+ * - `NO_OF_PHASES` lines for the "V1" to "Vn" tags (unsigned 5 digits each) - voltage measurements.
+ * - `NO_OF_DUMPLOADS` lines for the "D1" to "Dn" tags (unsigned 3 digits each) - diversion rates.
+ * 
+ * For single-phase systems:
+ * - 1 line for the "V" tag (unsigned 5 digits) - voltage measurement.
+ * - 1 line for the "D" tag (unsigned 4 digits) - diverted power.
+ * - 1 line for the "E" tag (unsigned 5 digits) - diverted energy.
+ * 
+ * If relay diversion is enabled (`RELAY_DIVERSION`):
+ * - 1 line for the "R" tag (signed 6 digits) - mean power for relay diversion.
+ * - `relays.get_size()` lines for the "R1" to "Rn" tags (1 digit each) - relay states.
+ * 
+ * If temperature sensors are present (`TEMP_SENSOR_PRESENT`):
+ * - `temperatureSensing.get_size()` lines for the "T1" to "Tn" tags (4 digits each) - temperature readings.
+ * 
+ * Common for all configurations:
+ * - 1 line for the "N" tag (unsigned 5 digits) - absence of diverted energy count.
+ * - 1 line for the "S_MC" tag (unsigned 2 digits) - sample sets per mains cycle.
+ * - 1 line for the "S" tag (unsigned 5 digits) - sample count.
  * - 1 byte for the end-of-text (ETX) character.
  * 
  * @ingroup Telemetry
@@ -88,7 +98,7 @@ inline static constexpr size_t calcBufferSize()
   {
     size += NO_OF_PHASES * lineSize(2, 5);  // V1-Vn (unsigned 5 digits) - voltage
 
-    size += NO_OF_DUMPLOADS * lineSize(2, 3);  // L1-Ln (unsigned 3 digits) - diversion rate
+    size += NO_OF_DUMPLOADS * lineSize(2, 3);  // D1-Dn (unsigned 3 digits) - diversion rate
   }
   else
   {
