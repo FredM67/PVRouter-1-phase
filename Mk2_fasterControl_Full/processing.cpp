@@ -367,26 +367,79 @@ void updatePhysicalLoadStates()
 }
 
 /**
- * @brief Processes the polarity of the current voltage sample.
- *
- * This function determines the polarity of the voltage sample by removing the DC offset
- * and comparing the adjusted value to zero. The polarity is then stored for use in
- * zero-crossing detection and other processing steps.
- *
- * @details
- * - Removes the DC offset from the raw voltage sample using a low-pass filter (LPF).
- * - Determines the polarity of the adjusted voltage sample (positive or negative).
- * - Updates the `polarityOfMostRecentVsample` variable with the determined polarity.
- *
- * @param rawSample The raw voltage sample from the ADC.
- *
- * @ingroup TimeCritical
+ * @brief Processes a voltage sample to determine polarity and apply phase correction
+ * 
+ * @details This function performs several operations on the raw voltage sample:
+ * 1. Removes DC offset from the raw sample
+ * 2. Applies phase correction to compensate for sampling delay
+ * 3. Determines the polarity (positive/negative) of the corrected sample
+ * 
+ * @note Phase Correction Explanation
+ * The phase correction compensates for the 104μs delay in the sampling system.
+ * 
+ * For 50Hz systems:
+ * - One cycle (360°) = 20ms, so 1° = 55.6μs
+ * - 104μs delay corresponds to 1.87° phase shift
+ * - Sampling interval is 312μs
+ * - Ratio of delay to sampling interval: 104μs/312μs ≈ 1/3
+ * - Using 8-bit fixed-point math: 1/3 ≈ 85/256 ≈ 0.332
+ * 
+ * For 60Hz systems:
+ * - One cycle (360°) = 16.67ms, so 1° = 46.3μs
+ * - 104μs delay corresponds to 2.24° phase shift
+ * - Same 312μs sampling interval
+ * - Corrected for 60Hz rate of change: 1/3 × 50/60 = 71/256 ≈ 0.277
+ * 
+ * The correction projects forward the voltage by calculating the rate of change (deltaV)
+ * and adding a fraction of this change to the current sample:
+ *   correctedSample = currentSample + (deltaV × correctionFactor)
+ * 
+ * @param rawSample The raw ADC sample of voltage
  */
 void processPolarity(const int16_t rawSample)
 {
+  // Store previous DC-removed voltage sample
+  static int32_t prevVoltage{ 0 };
+
   // remove DC offset from the raw voltage sample by subtracting the accurate value
   // as determined by a LP filter.
   sampleVminusDC_long = ((long)rawSample << 8) - DCoffset_V_long;
+
+  // Get previous scaled voltage value
+  const auto prevV{ prevVoltage };
+
+  // Store current value for next cycle
+  prevVoltage = sampleVminusDC_long;
+
+  // Calculate voltage change (already scaled by 256)
+  const int32_t deltaV{ sampleVminusDC_long - prevV };
+
+  // For a 50Hz sine wave, 104μs represents ~1.87° phase shift (104μs/5.33ms × 360°)
+  // At 60Hz, it's ~2.24° phase shift
+
+  // For a sinusoidal waveform, we can use the small-angle approximation:
+  // V(t-Δt) ≈ V(t) - V'(t)·Δt
+  // Where V'(t) is proportional to the rate of change
+
+  // Phase correction for 104μs/312μs timing (exactly 1/3)
+  // To represent 1/3 with integer math: 85/256 ≈ 0.332 (very close to 1/3)
+
+  // Phase correction based on mains frequency
+  if constexpr (SUPPLY_FREQUENCY == 50)
+  {
+    // 85/256 ≈ 0.332 (for 50Hz with 104μs/312μs timing)
+    sampleVminusDC_long += (deltaV * 85) >> 8;
+  }
+  else if constexpr (SUPPLY_FREQUENCY == 60)
+  {
+    // 71/256 ≈ 0.277 (for 60Hz with 104μs/312μs timing)
+    sampleVminusDC_long += (deltaV * 71) >> 8;
+  }
+  else
+  {
+    // Unsupported frequency, return early
+    static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "Unsupported supply frequency. Only 50Hz and 60Hz are supported.");
+  }
   // determine the polarity of the latest voltage sample
   polarityOfMostRecentVsample = (sampleVminusDC_long > 0) ? Polarities::POSITIVE : Polarities::NEGATIVE;
 }
