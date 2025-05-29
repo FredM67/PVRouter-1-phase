@@ -428,12 +428,12 @@ void processPolarity(const int16_t rawSample)
   if constexpr (SUPPLY_FREQUENCY == 50)
   {
     // 85/256 ≈ 0.332 (for 50Hz with 104μs/312μs timing)
-    sampleVminusDC_long += (deltaV * 85) >> 8;
+    sampleVminusDC_long += (deltaV * 85L) >> 8;
   }
   else if constexpr (SUPPLY_FREQUENCY == 60)
   {
     // 71/256 ≈ 0.277 (for 60Hz with 104μs/312μs timing)
-    sampleVminusDC_long += (deltaV * 71) >> 8;
+    sampleVminusDC_long += (deltaV * 71L) >> 8;
   }
   else
   {
