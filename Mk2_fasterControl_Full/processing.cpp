@@ -37,8 +37,10 @@ constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 
 constexpr int32_t lowerThreshold_default{ midPointOfEnergyBucket_long }; /**< default lower threshold for the energy bucket (50% of capacity) */
 constexpr int32_t upperThreshold_default{ midPointOfEnergyBucket_long }; /**< default upper threshold for the energy bucket (50% of capacity) */
 
-constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1.0f / powerCal_diverted)) };     /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
-constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1.0f / powerCal_grid)) }; /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
+constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1.0f / powerCal_diverted)) };        /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
+constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1.0f / powerCal_grid)) };    /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
+constexpr int32_t diversionStartThreshold_inIEU{ static_cast< int32_t >(DIVERSION_START_THRESHOLD_WATTS * (1.0f / powerCal_grid)) }; /**< threshold value in Integer Energy Units (IEU) that must be exceeded before diversion starts */
+
 // When using integer maths, calibration values that have supplied in floating point
 // form need to be rescaled.
 
@@ -108,6 +110,8 @@ remove_cv< remove_reference< decltype(DATALOG_PERIOD_IN_MAINS_CYCLES) >::type >:
 uint8_t perSecondCounter{ 0 }; /**< for counting  every second inside the ISR */
 
 bool beyondStartUpPeriod{ false }; /**< start-up delay, allows things to settle */
+
+bool b_diversionStarted{ false }; /**< Tracks whether diversion has started */
 
 /**
  * @brief Retrieves the output pins configuration.
@@ -306,8 +310,10 @@ void updatePortsStates()
     }
   } while (i);
 
-  setPinsOFF(pinsOFF);
-  setPinsON(pinsON);
+  // On this particular PCB, the trigger has been soldered active high.  This means that the
+  // trigger line must be set to LOW to turn the load ON.
+  setPinsON(pinsOFF);
+  setPinsOFF(pinsON);
 }
 
 /**
@@ -361,26 +367,79 @@ void updatePhysicalLoadStates()
 }
 
 /**
- * @brief Processes the polarity of the current voltage sample.
- *
- * This function determines the polarity of the voltage sample by removing the DC offset
- * and comparing the adjusted value to zero. The polarity is then stored for use in
- * zero-crossing detection and other processing steps.
- *
- * @details
- * - Removes the DC offset from the raw voltage sample using a low-pass filter (LPF).
- * - Determines the polarity of the adjusted voltage sample (positive or negative).
- * - Updates the `polarityOfMostRecentVsample` variable with the determined polarity.
- *
- * @param rawSample The raw voltage sample from the ADC.
- *
- * @ingroup TimeCritical
+ * @brief Processes a voltage sample to determine polarity and apply phase correction
+ * 
+ * @details This function performs several operations on the raw voltage sample:
+ * 1. Removes DC offset from the raw sample
+ * 2. Applies phase correction to compensate for sampling delay
+ * 3. Determines the polarity (positive/negative) of the corrected sample
+ * 
+ * @note Phase Correction Explanation
+ * The phase correction compensates for the 104μs delay in the sampling system.
+ * 
+ * For 50Hz systems:
+ * - One cycle (360°) = 20ms, so 1° = 55.6μs
+ * - 104μs delay corresponds to 1.87° phase shift
+ * - Sampling interval is 312μs
+ * - Ratio of delay to sampling interval: 104μs/312μs ≈ 1/3
+ * - Using 8-bit fixed-point math: 1/3 ≈ 85/256 ≈ 0.332
+ * 
+ * For 60Hz systems:
+ * - One cycle (360°) = 16.67ms, so 1° = 46.3μs
+ * - 104μs delay corresponds to 2.24° phase shift
+ * - Same 312μs sampling interval
+ * - Corrected for 60Hz rate of change: 1/3 × 50/60 = 71/256 ≈ 0.277
+ * 
+ * The correction projects forward the voltage by calculating the rate of change (deltaV)
+ * and adding a fraction of this change to the current sample:
+ *   correctedSample = currentSample + (deltaV × correctionFactor)
+ * 
+ * @param rawSample The raw ADC sample of voltage
  */
 void processPolarity(const int16_t rawSample)
 {
+  // Store previous DC-removed voltage sample
+  static int32_t prevVoltage{ 0 };
+
   // remove DC offset from the raw voltage sample by subtracting the accurate value
   // as determined by a LP filter.
   sampleVminusDC_long = ((long)rawSample << 8) - DCoffset_V_long;
+
+  // Get previous scaled voltage value
+  const auto prevV{ prevVoltage };
+
+  // Store current value for next cycle
+  prevVoltage = sampleVminusDC_long;
+
+  // Calculate voltage change (already scaled by 256)
+  const int32_t deltaV{ sampleVminusDC_long - prevV };
+
+  // For a 50Hz sine wave, 104μs represents ~1.87° phase shift (104μs/5.33ms × 360°)
+  // At 60Hz, it's ~2.24° phase shift
+
+  // For a sinusoidal waveform, we can use the small-angle approximation:
+  // V(t-Δt) ≈ V(t) - V'(t)·Δt
+  // Where V'(t) is proportional to the rate of change
+
+  // Phase correction for 104μs/312μs timing (exactly 1/3)
+  // To represent 1/3 with integer math: 85/256 ≈ 0.332 (very close to 1/3)
+
+  // Phase correction based on mains frequency
+  if constexpr (SUPPLY_FREQUENCY == 50)
+  {
+    // 85/256 ≈ 0.332 (for 50Hz with 104μs/312μs timing)
+    sampleVminusDC_long += (deltaV * 85L) >> 8;
+  }
+  else if constexpr (SUPPLY_FREQUENCY == 60)
+  {
+    // 71/256 ≈ 0.277 (for 60Hz with 104μs/312μs timing)
+    sampleVminusDC_long += (deltaV * 71L) >> 8;
+  }
+  else
+  {
+    // Unsupported frequency, return early
+    static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "Unsupported supply frequency. Only 50Hz and 60Hz are supported.");
+  }
   // determine the polarity of the latest voltage sample
   polarityOfMostRecentVsample = (sampleVminusDC_long > 0) ? Polarities::POSITIVE : Polarities::NEGATIVE;
 }
@@ -575,6 +634,9 @@ void processRawSamples()
           lowerEnergyThreshold = lowerThreshold_default;  // reset the "opposite" threshold
           if (energyInBucket_prediction > upperEnergyThreshold)
           {
+            b_diversionStarted = true;
+            // Once started, we divert all surplus according to the configured fixed offset
+
             // Because the energy level is high, some action may be required
             proceedHighEnergyLevel();
           }
@@ -870,7 +932,10 @@ void processLatestContribution()
   int32_t realPower_grid = sumP_grid / sampleSetsDuringThisMainsCycle;          // proportional to Watts
   int32_t realPower_diverted = sumP_diverted / sampleSetsDuringThisMainsCycle;  // proportional to Watts
 
-  realPower_grid -= requiredExportPerMainsCycle_inIEU;  // <- useful for PV simulation
+  if (!b_diversionStarted)
+    realPower_grid -= diversionStartThreshold_inIEU;
+  else
+    realPower_grid -= requiredExportPerMainsCycle_inIEU;  // <- useful for PV simulation
 
   // Next, the energy content of this power rating needs to be determined.  Energy is
   // power multiplied by time, so the next step would normally be to multiply the measured
@@ -932,7 +997,11 @@ void processLatestContribution()
     perSecondCounter = 0;
 
     if (absenceOfDivertedEnergyCountInMC > SUPPLY_FREQUENCY)
+    {
       ++Shared::absenceOfDivertedEnergyCountInSeconds;
+      // Reset diversion state if we've had no diversion for a full second
+      b_diversionStarted = false;
+    }
     else
       Shared::absenceOfDivertedEnergyCountInSeconds = 0;
 

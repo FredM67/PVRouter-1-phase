@@ -46,9 +46,9 @@ inline constexpr bool TEMP_SENSOR_PRESENT{ false };  /**< set it to 'true' if te
 
 #include "utils_temp.h"
 
-inline constexpr bool OLD_PCB{ false }; /**< set it to 'true' if the old PCB is used */
+inline constexpr bool OLD_PCB{ true }; /**< set it to 'true' if the old PCB is used */
 
-inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED }; /**< set it to installed display including optional additional logic chips */
+inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::SEG }; /**< set it to installed display including optional additional logic chips */
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // WARNING: the 7-seg display uses a lot of pins (Old PCB only !)
