@@ -131,9 +131,6 @@ Functions</h2></td></tr>
 <tr class="memitem:gab3316018d6752ecf79ce8be7f2ee800d" id="r_gab3316018d6752ecf79ce8be7f2ee800d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gab3316018d6752ecf79ce8be7f2ee800d">processPlusHalfCycle</a> ()</td></tr>
 <tr class="memdesc:gab3316018d6752ecf79ce8be7f2ee800d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the start of a new +ve half cycle, just after the zero-crossing point.  <br /></td></tr>
 <tr class="separator:gab3316018d6752ecf79ce8be7f2ee800d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga600ddbf70fa2468f097466638126fbed" id="r_ga600ddbf70fa2468f097466638126fbed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga600ddbf70fa2468f097466638126fbed">processPolarity</a> (const int16_t rawSample)</td></tr>
-<tr class="memdesc:ga600ddbf70fa2468f097466638126fbed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes the polarity of the current voltage sample.  <br /></td></tr>
-<tr class="separator:ga600ddbf70fa2468f097466638126fbed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga18d241dba2cc74c17026ee33d2442478" id="r_ga18d241dba2cc74c17026ee33d2442478"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga18d241dba2cc74c17026ee33d2442478">processRawSamples</a> ()</td></tr>
 <tr class="memdesc:ga18d241dba2cc74c17026ee33d2442478"><td class="mdescLeft">&#160;</td><td class="mdescRight">This routine is called by the ISR when a pair of V &amp; I samples becomes available.  <br /></td></tr>
 <tr class="separator:ga18d241dba2cc74c17026ee33d2442478"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,11 +190,11 @@ Functions</h2></td></tr>
 <li>Once the counter exceeds the persistence threshold (<code>PERSISTENCE_FOR_POLARITY_CHANGE</code>), the polarity is confirmed and updated. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00483">483</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00542">542</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00020">PERSISTENCE_FOR_POLARITY_CHANGE</a>, <a class="el" href="processing_8cpp_source.html#l00090">polarityConfirmed</a>, <a class="el" href="processing_8cpp_source.html#l00091">polarityConfirmedOfLastSampleV</a>, and <a class="el" href="processing_8cpp_source.html#l00089">polarityOfMostRecentVsample</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00020">PERSISTENCE_FOR_POLARITY_CHANGE</a>, <a class="el" href="processing_8cpp_source.html#l00092">polarityConfirmed</a>, <a class="el" href="processing_8cpp_source.html#l00093">polarityConfirmedOfLastSampleV</a>, and <a class="el" href="processing_8cpp_source.html#l00091">polarityOfMostRecentVsample</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00673">processVoltageRawSample()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00735">processVoltageRawSample()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -244,9 +241,9 @@ Here is the caller graph for this function:</div>
 </ul>
 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01221">1221</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01290">1290</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00014">currentSensor_diverted</a>, <a class="el" href="processing_8cpp_source.html#l00013">currentSensor_grid</a>, <a class="el" href="processing_8cpp_source.html#l00447">processDivertedCurrentRawSample()</a>, <a class="el" href="processing_8cpp_source.html#l00406">processGridCurrentRawSample()</a>, <a class="el" href="processing_8cpp_source.html#l00673">processVoltageRawSample()</a>, and <a class="el" href="processing_8cpp_source.html#l00012">voltageSensor</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00014">currentSensor_diverted</a>, <a class="el" href="processing_8cpp_source.html#l00013">currentSensor_grid</a>, <a class="el" href="processing_8cpp_source.html#l00506">processDivertedCurrentRawSample()</a>, <a class="el" href="processing_8cpp_source.html#l00465">processGridCurrentRawSample()</a>, <a class="el" href="processing_8cpp_source.html#l00735">processVoltageRawSample()</a>, and <a class="el" href="processing_8cpp_source.html#l00012">voltageSensor</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -261,7 +258,7 @@ Here is the call graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="49,147,97,163,133,173,132,178,95,169,47,152"/>
 <area shape="rect" href="group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672" title="Confirms the polarity of the current voltage sample." alt="" coords="385,104,507,129"/>
 <area shape="poly" title=" " alt="" coords="277,176,319,164,343,151,367,138,385,131,387,136,369,143,345,156,321,168,279,181"/>
-<area shape="rect" href="group__TimeCritical.html#ga600ddbf70fa2468f097466638126fbed" title="Processes the polarity of the current voltage sample." alt="" coords="385,153,507,179"/>
+<area shape="rect" href="processing_8cpp.html#a600ddbf70fa2468f097466638126fbed" title="Processes a voltage sample to determine polarity and apply phase correction." alt="" coords="385,153,507,179"/>
 <area shape="poly" title=" " alt="" coords="307,178,371,171,371,177,308,183"/>
 <area shape="rect" href="group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="368,203,524,228"/>
 <area shape="poly" title=" " alt="" coords="308,199,355,203,354,209,307,204"/>
@@ -350,11 +347,11 @@ Here is the call graph for this function:</div>
 <li>Returns NO_OF_DUMPLOADS if no load can be deactivated. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01068">1068</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01137">1137</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="processing_8cpp_source.html#l00017">loadPrioritiesAndState</a>, <a class="el" href="types_8h_source.html#l00055">loadStateOnBit</a>, and <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00963">proceedHighEnergyLevel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01032">proceedHighEnergyLevel()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -406,11 +403,11 @@ Here is the caller graph for this function:</div>
 <li>Signals the main processor that new logging data are available. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01095">1095</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01164">1164</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="processing_8cpp_source.html#l00017">loadPrioritiesAndState</a>, <a class="el" href="types_8h_source.html#l00055">loadStateOnBit</a>, and <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01015">proceedLowEnergyLevel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01084">proceedLowEnergyLevel()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -462,11 +459,11 @@ Here is the caller graph for this function:</div>
 <li>Activates the identified load and updates the transition state. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00963">963</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01032">1032</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00075">activeLoad</a>, <a class="el" href="processing_8cpp_source.html#l00033">capacityOfEnergyBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00086">energyInBucket_prediction</a>, <a class="el" href="processing_8cpp_source.html#l00017">loadPrioritiesAndState</a>, <a class="el" href="types_8h_source.html#l00055">loadStateOnBit</a>, <a class="el" href="processing_8cpp_source.html#l01068">nextLogicalLoadToBeAdded()</a>, <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>, <a class="el" href="processing_8cpp_source.html#l00073">postTransitionCount</a>, <a class="el" href="processing_8cpp_source.html#l00072">recentTransition</a>, and <a class="el" href="processing_8cpp_source.html#l00058">upperEnergyThreshold</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00077">activeLoad</a>, <a class="el" href="processing_8cpp_source.html#l00033">capacityOfEnergyBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00088">energyInBucket_prediction</a>, <a class="el" href="processing_8cpp_source.html#l00017">loadPrioritiesAndState</a>, <a class="el" href="types_8h_source.html#l00055">loadStateOnBit</a>, <a class="el" href="processing_8cpp_source.html#l01137">nextLogicalLoadToBeAdded()</a>, <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>, <a class="el" href="processing_8cpp_source.html#l00075">postTransitionCount</a>, <a class="el" href="processing_8cpp_source.html#l00074">recentTransition</a>, and <a class="el" href="processing_8cpp_source.html#l00060">upperEnergyThreshold</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00520">processRawSamples()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00579">processRawSamples()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -526,11 +523,11 @@ Here is the caller graph for this function:</div>
 <li>Deactivates the identified load and updates the transition state. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01015">1015</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01084">1084</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00075">activeLoad</a>, <a class="el" href="processing_8cpp_source.html#l00086">energyInBucket_prediction</a>, <a class="el" href="processing_8cpp_source.html#l00017">loadPrioritiesAndState</a>, <a class="el" href="types_8h_source.html#l00054">loadStateMask</a>, <a class="el" href="processing_8cpp_source.html#l00057">lowerEnergyThreshold</a>, <a class="el" href="processing_8cpp_source.html#l01095">nextLogicalLoadToBeRemoved()</a>, <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>, <a class="el" href="processing_8cpp_source.html#l00073">postTransitionCount</a>, and <a class="el" href="processing_8cpp_source.html#l00072">recentTransition</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00077">activeLoad</a>, <a class="el" href="processing_8cpp_source.html#l00088">energyInBucket_prediction</a>, <a class="el" href="processing_8cpp_source.html#l00017">loadPrioritiesAndState</a>, <a class="el" href="types_8h_source.html#l00054">loadStateMask</a>, <a class="el" href="processing_8cpp_source.html#l00059">lowerEnergyThreshold</a>, <a class="el" href="processing_8cpp_source.html#l01164">nextLogicalLoadToBeRemoved()</a>, <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>, <a class="el" href="processing_8cpp_source.html#l00075">postTransitionCount</a>, and <a class="el" href="processing_8cpp_source.html#l00074">recentTransition</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00520">processRawSamples()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00579">processRawSamples()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -590,11 +587,11 @@ Here is the caller graph for this function:</div>
 <li>Signals the main processor that new logging data are available. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01124">1124</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01193">1193</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="shared__var_8h_source.html#l00010">Shared::b_datalogEventPending</a>, <a class="el" href="processing_8cpp_source.html#l00110">beyondStartUpPeriod</a>, <a class="el" href="shared__var_8h_source.html#l00030">Shared::copyOf_countLoadON</a>, <a class="el" href="shared__var_8h_source.html#l00025">Shared::copyOf_divertedEnergyTotal_Wh_forDL</a>, <a class="el" href="shared__var_8h_source.html#l00027">Shared::copyOf_energyInBucket_long</a>, <a class="el" href="shared__var_8h_source.html#l00028">Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle</a>, <a class="el" href="shared__var_8h_source.html#l00029">Shared::copyOf_sampleSetsDuringThisDatalogPeriod</a>, <a class="el" href="shared__var_8h_source.html#l00026">Shared::copyOf_sum_Vsquared</a>, <a class="el" href="shared__var_8h_source.html#l00023">Shared::copyOf_sumP_diverted_overDL_Period</a>, <a class="el" href="shared__var_8h_source.html#l00022">Shared::copyOf_sumP_grid_overDL_Period</a>, <a class="el" href="processing_8cpp_source.html#l00102">countLoadON</a>, <a class="el" href="config__system_8h_source.html#l00039">DATALOG_PERIOD_IN_MAINS_CYCLES</a>, <a class="el" href="processing_8cpp_source.html#l00061">divertedEnergyTotal_Wh</a>, <a class="el" href="processing_8cpp_source.html#l00056">energyInBucket_long</a>, <a class="el" href="test__fastdivision_2test__main_8cpp_source.html#l00119">i</a>, <a class="el" href="processing_8cpp_source.html#l00082">l_sum_Vsquared</a>, <a class="el" href="processing_8cpp_source.html#l00097">lowestNoOfSampleSetsPerMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00106">n_cycleCountForDatalogging</a>, <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>, <a class="el" href="processing_8cpp_source.html#l00095">sampleSetsDuringThisDatalogPeriod</a>, <a class="el" href="processing_8cpp_source.html#l00080">sumP_diverted_overDL_Period</a>, and <a class="el" href="processing_8cpp_source.html#l00078">sumP_grid_overDL_Period</a>.</p>
+<p class="reference">References <a class="el" href="shared__var_8h_source.html#l00010">Shared::b_datalogEventPending</a>, <a class="el" href="processing_8cpp_source.html#l00112">beyondStartUpPeriod</a>, <a class="el" href="shared__var_8h_source.html#l00030">Shared::copyOf_countLoadON</a>, <a class="el" href="shared__var_8h_source.html#l00025">Shared::copyOf_divertedEnergyTotal_Wh_forDL</a>, <a class="el" href="shared__var_8h_source.html#l00027">Shared::copyOf_energyInBucket_long</a>, <a class="el" href="shared__var_8h_source.html#l00028">Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle</a>, <a class="el" href="shared__var_8h_source.html#l00029">Shared::copyOf_sampleSetsDuringThisDatalogPeriod</a>, <a class="el" href="shared__var_8h_source.html#l00026">Shared::copyOf_sum_Vsquared</a>, <a class="el" href="shared__var_8h_source.html#l00023">Shared::copyOf_sumP_diverted_overDL_Period</a>, <a class="el" href="shared__var_8h_source.html#l00022">Shared::copyOf_sumP_grid_overDL_Period</a>, <a class="el" href="processing_8cpp_source.html#l00104">countLoadON</a>, <a class="el" href="config__system_8h_source.html#l00041">DATALOG_PERIOD_IN_MAINS_CYCLES</a>, <a class="el" href="processing_8cpp_source.html#l00063">divertedEnergyTotal_Wh</a>, <a class="el" href="processing_8cpp_source.html#l00058">energyInBucket_long</a>, <a class="el" href="test__fastdivision_2test__main_8cpp_source.html#l00119">i</a>, <a class="el" href="processing_8cpp_source.html#l00084">l_sum_Vsquared</a>, <a class="el" href="processing_8cpp_source.html#l00099">lowestNoOfSampleSetsPerMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00108">n_cycleCountForDatalogging</a>, <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>, <a class="el" href="processing_8cpp_source.html#l00097">sampleSetsDuringThisDatalogPeriod</a>, <a class="el" href="processing_8cpp_source.html#l00082">sumP_diverted_overDL_Period</a>, and <a class="el" href="processing_8cpp_source.html#l00080">sumP_grid_overDL_Period</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00772">processPlusHalfCycle()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00834">processPlusHalfCycle()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -652,11 +649,11 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00447">447</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00506">506</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="shared__var_8h_source.html#l00014">Shared::b_diversionEnabled</a>, <a class="el" href="shared__var_8h_source.html#l00012">Shared::b_overrideLoadOn</a>, <a class="el" href="processing_8cpp_source.html#l00031">DCoffset_I</a>, <a class="el" href="processing_8cpp_source.html#l00087">sampleVminusDC_long</a>, <a class="el" href="processing_8cpp_source.html#l00079">sumP_diverted</a>, and <a class="el" href="processing_8cpp_source.html#l00080">sumP_diverted_overDL_Period</a>.</p>
+<p class="reference">References <a class="el" href="shared__var_8h_source.html#l00014">Shared::b_diversionEnabled</a>, <a class="el" href="shared__var_8h_source.html#l00012">Shared::b_overrideLoadOn</a>, <a class="el" href="processing_8cpp_source.html#l00031">DCoffset_I</a>, <a class="el" href="processing_8cpp_source.html#l00089">sampleVminusDC_long</a>, <a class="el" href="processing_8cpp_source.html#l00081">sumP_diverted</a>, and <a class="el" href="processing_8cpp_source.html#l00082">sumP_diverted_overDL_Period</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01221">ISR()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01290">ISR()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -708,11 +705,11 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00406">406</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00465">465</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="calibration_8h_source.html#l00040">alpha</a>, <a class="el" href="processing_8cpp_source.html#l00031">DCoffset_I</a>, <a class="el" href="calibration_8h_source.html#l00039">lpf_gain</a>, <a class="el" href="processing_8cpp_source.html#l00087">sampleVminusDC_long</a>, <a class="el" href="processing_8cpp_source.html#l00077">sumP_grid</a>, and <a class="el" href="processing_8cpp_source.html#l00078">sumP_grid_overDL_Period</a>.</p>
+<p class="reference">References <a class="el" href="calibration_8h_source.html#l00040">alpha</a>, <a class="el" href="processing_8cpp_source.html#l00031">DCoffset_I</a>, <a class="el" href="calibration_8h_source.html#l00039">lpf_gain</a>, <a class="el" href="processing_8cpp_source.html#l00089">sampleVminusDC_long</a>, <a class="el" href="processing_8cpp_source.html#l00079">sumP_grid</a>, and <a class="el" href="processing_8cpp_source.html#l00080">sumP_grid_overDL_Period</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01221">ISR()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01290">ISR()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -758,11 +755,11 @@ Here is the caller graph for this function:</div>
 <li>Marks the start of a new cycle for the main code. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00856">856</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00918">918</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00104">absenceOfDivertedEnergyCountInMC</a>, <a class="el" href="shared__var_8h_source.html#l00017">Shared::absenceOfDivertedEnergyCountInSeconds</a>, <a class="el" href="processing_8cpp_source.html#l00040">antiCreepLimit_inIEUperMainsCycle</a>, <a class="el" href="shared__var_8h_source.html#l00011">Shared::b_newCycle</a>, <a class="el" href="shared__var_8h_source.html#l00024">Shared::copyOf_divertedEnergyTotal_Wh</a>, <a class="el" href="utils__display_8h_source.html#l00029">displayShutdown_inMainsCycles</a>, <a class="el" href="processing_8cpp_source.html#l00060">divertedEnergyRecent_IEU</a>, <a class="el" href="processing_8cpp_source.html#l00061">divertedEnergyTotal_Wh</a>, <a class="el" href="shared__var_8h_source.html#l00016">Shared::EDD_isActive</a>, <a class="el" href="processing_8cpp_source.html#l00056">energyInBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00070">IEU_per_Wh_diverted</a>, <a class="el" href="processing_8cpp_source.html#l00108">perSecondCounter</a>, <a class="el" href="processing_8cpp_source.html#l00085">realEnergy_diverted</a>, <a class="el" href="processing_8cpp_source.html#l00084">realEnergy_grid</a>, <a class="el" href="processing_8cpp_source.html#l00041">requiredExportPerMainsCycle_inIEU</a>, <a class="el" href="processing_8cpp_source.html#l00094">sampleSetsDuringThisMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00079">sumP_diverted</a>, <a class="el" href="processing_8cpp_source.html#l00077">sumP_grid</a>, and <a class="el" href="config__system_8h_source.html#l00027">SUPPLY_FREQUENCY</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00106">absenceOfDivertedEnergyCountInMC</a>, <a class="el" href="shared__var_8h_source.html#l00017">Shared::absenceOfDivertedEnergyCountInSeconds</a>, <a class="el" href="processing_8cpp_source.html#l00040">antiCreepLimit_inIEUperMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00114">b_diversionStarted</a>, <a class="el" href="shared__var_8h_source.html#l00011">Shared::b_newCycle</a>, <a class="el" href="shared__var_8h_source.html#l00024">Shared::copyOf_divertedEnergyTotal_Wh</a>, <a class="el" href="utils__display_8h_source.html#l00029">displayShutdown_inMainsCycles</a>, <a class="el" href="processing_8cpp_source.html#l00042">diversionStartThreshold_inIEU</a>, <a class="el" href="processing_8cpp_source.html#l00062">divertedEnergyRecent_IEU</a>, <a class="el" href="processing_8cpp_source.html#l00063">divertedEnergyTotal_Wh</a>, <a class="el" href="shared__var_8h_source.html#l00016">Shared::EDD_isActive</a>, <a class="el" href="processing_8cpp_source.html#l00058">energyInBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00072">IEU_per_Wh_diverted</a>, <a class="el" href="processing_8cpp_source.html#l00110">perSecondCounter</a>, <a class="el" href="processing_8cpp_source.html#l00087">realEnergy_diverted</a>, <a class="el" href="processing_8cpp_source.html#l00086">realEnergy_grid</a>, <a class="el" href="processing_8cpp_source.html#l00041">requiredExportPerMainsCycle_inIEU</a>, <a class="el" href="processing_8cpp_source.html#l00096">sampleSetsDuringThisMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00081">sumP_diverted</a>, <a class="el" href="processing_8cpp_source.html#l00079">sumP_grid</a>, and <a class="el" href="config__system_8h_source.html#l00030">SUPPLY_FREQUENCY</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00772">processPlusHalfCycle()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00834">processPlusHalfCycle()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -814,11 +811,11 @@ Here is the caller graph for this function:</div>
 <li>Predicts the energy state at the end of the mains cycle based on the average power. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00801">801</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00863">863</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00081">cumVdeltasThisCycle_long</a>, <a class="el" href="processing_8cpp_source.html#l00027">DCoffset_V_long</a>, <a class="el" href="processing_8cpp_source.html#l00029">DCoffset_V_max</a>, <a class="el" href="processing_8cpp_source.html#l00028">DCoffset_V_min</a>, <a class="el" href="processing_8cpp_source.html#l00056">energyInBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00086">energyInBucket_prediction</a>, <a class="el" href="processing_8cpp_source.html#l00094">sampleSetsDuringThisMainsCycle</a>, and <a class="el" href="processing_8cpp_source.html#l00077">sumP_grid</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00083">cumVdeltasThisCycle_long</a>, <a class="el" href="processing_8cpp_source.html#l00027">DCoffset_V_long</a>, <a class="el" href="processing_8cpp_source.html#l00029">DCoffset_V_max</a>, <a class="el" href="processing_8cpp_source.html#l00028">DCoffset_V_min</a>, <a class="el" href="processing_8cpp_source.html#l00058">energyInBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00088">energyInBucket_prediction</a>, <a class="el" href="processing_8cpp_source.html#l00096">sampleSetsDuringThisMainsCycle</a>, and <a class="el" href="processing_8cpp_source.html#l00079">sumP_grid</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00520">processRawSamples()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00579">processRawSamples()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -868,11 +865,11 @@ Here is the caller graph for this function:</div>
 <li>Resets per-cycle accumulators for energy and sample sets. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00772">772</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00834">834</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00097">lowestNoOfSampleSetsPerMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l01124">processDataLogging()</a>, <a class="el" href="processing_8cpp_source.html#l00856">processLatestContribution()</a>, and <a class="el" href="processing_8cpp_source.html#l00094">sampleSetsDuringThisMainsCycle</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00099">lowestNoOfSampleSetsPerMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l01193">processDataLogging()</a>, <a class="el" href="processing_8cpp_source.html#l00918">processLatestContribution()</a>, and <a class="el" href="processing_8cpp_source.html#l00096">sampleSetsDuringThisMainsCycle</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00520">processRawSamples()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00579">processRawSamples()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -893,63 +890,6 @@ Here is the caller graph for this function:</div>
 <area shape="rect" title="Process the start of a new +ve half cycle, just after the zero&#45;crossing point." alt="" coords="547,5,709,31"/>
 <area shape="rect" href="group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="343,5,499,31"/>
 <area shape="poly" title=" " alt="" coords="533,21,499,21,499,15,533,15"/>
-<area shape="rect" href="group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="96,5,295,31"/>
-<area shape="poly" title=" " alt="" coords="329,21,295,21,295,15,329,15"/>
-<area shape="rect" href="group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,5,48,31"/>
-<area shape="poly" title=" " alt="" coords="82,21,49,21,49,15,82,15"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="ga600ddbf70fa2468f097466638126fbed" name="ga600ddbf70fa2468f097466638126fbed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga600ddbf70fa2468f097466638126fbed">&#9670;&#160;</a></span>processPolarity()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void processPolarity </td>
-          <td>(</td>
-          <td class="paramtype">const int16_t</td>          <td class="paramname"><span class="paramname"><em>rawSample</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Processes the polarity of the current voltage sample. </p>
-<p>This function determines the polarity of the voltage sample by removing the DC offset and comparing the adjusted value to zero. The polarity is then stored for use in zero-crossing detection and other processing steps.</p>
-<ul>
-<li>Removes the DC offset from the raw voltage sample using a low-pass filter (LPF).</li>
-<li>Determines the polarity of the adjusted voltage sample (positive or negative).</li>
-<li>Updates the <code>polarityOfMostRecentVsample</code> variable with the determined polarity.</li>
-</ul>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">rawSample</td><td>The raw voltage sample from the ADC. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00379">379</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00027">DCoffset_V_long</a>, <a class="el" href="types_8h_source.html#l00035">NEGATIVE</a>, <a class="el" href="processing_8cpp_source.html#l00089">polarityOfMostRecentVsample</a>, <a class="el" href="types_8h_source.html#l00036">POSITIVE</a>, and <a class="el" href="processing_8cpp_source.html#l00087">sampleVminusDC_long</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00673">processVoltageRawSample()</a>.</p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="group__TimeCritical_ga600ddbf70fa2468f097466638126fbed_icgraph.png" border="0" usemap="#agroup__TimeCritical_ga600ddbf70fa2468f097466638126fbed_icgraph" alt=""/></div>
-<map name="agroup__TimeCritical_ga600ddbf70fa2468f097466638126fbed_icgraph" id="agroup__TimeCritical_ga600ddbf70fa2468f097466638126fbed_icgraph">
-<area shape="rect" title="Processes the polarity of the current voltage sample." alt="" coords="343,5,465,31"/>
 <area shape="rect" href="group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="96,5,295,31"/>
 <area shape="poly" title=" " alt="" coords="329,21,295,21,295,15,329,15"/>
 <area shape="rect" href="group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,5,48,31"/>
@@ -993,11 +933,11 @@ Here is the caller graph for this function:</div>
 <li>Handles energy diversion display updates and ensures stability during startup. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00520">520</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00579">579</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00104">absenceOfDivertedEnergyCountInMC</a>, <a class="el" href="processing_8cpp_source.html#l00110">beyondStartUpPeriod</a>, <a class="el" href="processing_8cpp_source.html#l00033">capacityOfEnergyBucket_long</a>, <a class="el" href="shared__var_8h_source.html#l00016">Shared::EDD_isActive</a>, <a class="el" href="processing_8cpp_source.html#l00056">energyInBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00086">energyInBucket_prediction</a>, <a class="el" href="processing_8cpp_source.html#l00017">loadPrioritiesAndState</a>, <a class="el" href="types_8h_source.html#l00055">loadStateOnBit</a>, <a class="el" href="processing_8cpp_source.html#l00057">lowerEnergyThreshold</a>, <a class="el" href="processing_8cpp_source.html#l00037">lowerThreshold_default</a>, <a class="el" href="processing_8cpp_source.html#l00035">midPointOfEnergyBucket_long</a>, <a class="el" href="types_8h_source.html#l00035">NEGATIVE</a>, <a class="el" href="processing_8cpp_source.html#l00090">polarityConfirmed</a>, <a class="el" href="processing_8cpp_source.html#l00091">polarityConfirmedOfLastSampleV</a>, <a class="el" href="types_8h_source.html#l00036">POSITIVE</a>, <a class="el" href="processing_8cpp_source.html#l00074">POST_TRANSITION_MAX_COUNT</a>, <a class="el" href="processing_8cpp_source.html#l00022">POST_ZERO_CROSSING_MAX_COUNT</a>, <a class="el" href="processing_8cpp_source.html#l00073">postTransitionCount</a>, <a class="el" href="processing_8cpp_source.html#l00963">proceedHighEnergyLevel()</a>, <a class="el" href="processing_8cpp_source.html#l01015">proceedLowEnergyLevel()</a>, <a class="el" href="processing_8cpp_source.html#l00801">processMinusHalfCycle()</a>, <a class="el" href="processing_8cpp_source.html#l00772">processPlusHalfCycle()</a>, <a class="el" href="processing_8cpp_source.html#l00736">processStartNewCycle()</a>, <a class="el" href="processing_8cpp_source.html#l00704">processStartUp()</a>, <a class="el" href="processing_8cpp_source.html#l00072">recentTransition</a>, <a class="el" href="utils__display_8h_source.html#l00493">refresh7SegDisplay()</a>, <a class="el" href="processing_8cpp_source.html#l00099">sampleSetsDuringNegativeHalfOfMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00334">updatePhysicalLoadStates()</a>, <a class="el" href="processing_8cpp_source.html#l00285">updatePortsStates()</a>, <a class="el" href="processing_8cpp_source.html#l00058">upperEnergyThreshold</a>, and <a class="el" href="processing_8cpp_source.html#l00038">upperThreshold_default</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00106">absenceOfDivertedEnergyCountInMC</a>, <a class="el" href="processing_8cpp_source.html#l00114">b_diversionStarted</a>, <a class="el" href="processing_8cpp_source.html#l00112">beyondStartUpPeriod</a>, <a class="el" href="processing_8cpp_source.html#l00033">capacityOfEnergyBucket_long</a>, <a class="el" href="shared__var_8h_source.html#l00016">Shared::EDD_isActive</a>, <a class="el" href="processing_8cpp_source.html#l00058">energyInBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00088">energyInBucket_prediction</a>, <a class="el" href="processing_8cpp_source.html#l00017">loadPrioritiesAndState</a>, <a class="el" href="types_8h_source.html#l00055">loadStateOnBit</a>, <a class="el" href="processing_8cpp_source.html#l00059">lowerEnergyThreshold</a>, <a class="el" href="processing_8cpp_source.html#l00037">lowerThreshold_default</a>, <a class="el" href="processing_8cpp_source.html#l00035">midPointOfEnergyBucket_long</a>, <a class="el" href="types_8h_source.html#l00035">NEGATIVE</a>, <a class="el" href="processing_8cpp_source.html#l00092">polarityConfirmed</a>, <a class="el" href="processing_8cpp_source.html#l00093">polarityConfirmedOfLastSampleV</a>, <a class="el" href="types_8h_source.html#l00036">POSITIVE</a>, <a class="el" href="processing_8cpp_source.html#l00076">POST_TRANSITION_MAX_COUNT</a>, <a class="el" href="processing_8cpp_source.html#l00022">POST_ZERO_CROSSING_MAX_COUNT</a>, <a class="el" href="processing_8cpp_source.html#l00075">postTransitionCount</a>, <a class="el" href="processing_8cpp_source.html#l01032">proceedHighEnergyLevel()</a>, <a class="el" href="processing_8cpp_source.html#l01084">proceedLowEnergyLevel()</a>, <a class="el" href="processing_8cpp_source.html#l00863">processMinusHalfCycle()</a>, <a class="el" href="processing_8cpp_source.html#l00834">processPlusHalfCycle()</a>, <a class="el" href="processing_8cpp_source.html#l00798">processStartNewCycle()</a>, <a class="el" href="processing_8cpp_source.html#l00766">processStartUp()</a>, <a class="el" href="processing_8cpp_source.html#l00074">recentTransition</a>, <a class="el" href="utils__display_8h_source.html#l00493">refresh7SegDisplay()</a>, <a class="el" href="processing_8cpp_source.html#l00101">sampleSetsDuringNegativeHalfOfMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00340">updatePhysicalLoadStates()</a>, <a class="el" href="processing_8cpp_source.html#l00289">updatePortsStates()</a>, <a class="el" href="processing_8cpp_source.html#l00060">upperEnergyThreshold</a>, and <a class="el" href="processing_8cpp_source.html#l00038">upperThreshold_default</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00673">processVoltageRawSample()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00735">processVoltageRawSample()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1096,11 +1036,11 @@ Here is the caller graph for this function:</div>
 <li>Ensures correct operation during transitions between energy import and export states. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00736">736</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00798">798</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00033">capacityOfEnergyBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00056">energyInBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00099">sampleSetsDuringNegativeHalfOfMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00094">sampleSetsDuringThisMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00079">sumP_diverted</a>, and <a class="el" href="processing_8cpp_source.html#l00077">sumP_grid</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00033">capacityOfEnergyBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00058">energyInBucket_long</a>, <a class="el" href="processing_8cpp_source.html#l00101">sampleSetsDuringNegativeHalfOfMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00096">sampleSetsDuringThisMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00081">sumP_diverted</a>, and <a class="el" href="processing_8cpp_source.html#l00079">sumP_grid</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00520">processRawSamples()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00579">processRawSamples()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1150,11 +1090,11 @@ Here is the caller graph for this function:</div>
 <li>Marks the end of the startup period by setting <code>beyondStartUpPeriod</code> to true. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00704">704</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00766">766</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00110">beyondStartUpPeriod</a>, <a class="el" href="config__system_8h_source.html#l00045">delayBeforeSerialStarts</a>, <a class="el" href="processing_8cpp_source.html#l00097">lowestNoOfSampleSetsPerMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00094">sampleSetsDuringThisMainsCycle</a>, <a class="el" href="config__system_8h_source.html#l00046">startUpPeriod</a>, <a class="el" href="processing_8cpp_source.html#l00079">sumP_diverted</a>, <a class="el" href="processing_8cpp_source.html#l00080">sumP_diverted_overDL_Period</a>, <a class="el" href="processing_8cpp_source.html#l00077">sumP_grid</a>, and <a class="el" href="processing_8cpp_source.html#l00078">sumP_grid_overDL_Period</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00112">beyondStartUpPeriod</a>, <a class="el" href="config__system_8h_source.html#l00047">delayBeforeSerialStarts</a>, <a class="el" href="processing_8cpp_source.html#l00099">lowestNoOfSampleSetsPerMainsCycle</a>, <a class="el" href="processing_8cpp_source.html#l00096">sampleSetsDuringThisMainsCycle</a>, <a class="el" href="config__system_8h_source.html#l00048">startUpPeriod</a>, <a class="el" href="processing_8cpp_source.html#l00081">sumP_diverted</a>, <a class="el" href="processing_8cpp_source.html#l00082">sumP_diverted_overDL_Period</a>, <a class="el" href="processing_8cpp_source.html#l00079">sumP_grid</a>, and <a class="el" href="processing_8cpp_source.html#l00080">sumP_grid_overDL_Period</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00520">processRawSamples()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00579">processRawSamples()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1204,11 +1144,11 @@ Here is the caller graph for this function:</div>
 <li>The number of samples during the current mains cycle is incremented. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00643">643</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00705">705</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00081">cumVdeltasThisCycle_long</a>, <a class="el" href="processing_8cpp_source.html#l00082">l_sum_Vsquared</a>, <a class="el" href="processing_8cpp_source.html#l00090">polarityConfirmed</a>, <a class="el" href="processing_8cpp_source.html#l00091">polarityConfirmedOfLastSampleV</a>, and <a class="el" href="processing_8cpp_source.html#l00087">sampleVminusDC_long</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00083">cumVdeltasThisCycle_long</a>, <a class="el" href="processing_8cpp_source.html#l00084">l_sum_Vsquared</a>, <a class="el" href="processing_8cpp_source.html#l00092">polarityConfirmed</a>, <a class="el" href="processing_8cpp_source.html#l00093">polarityConfirmedOfLastSampleV</a>, and <a class="el" href="processing_8cpp_source.html#l00089">sampleVminusDC_long</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00673">processVoltageRawSample()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00735">processVoltageRawSample()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1250,7 +1190,7 @@ Here is the caller graph for this function:</div>
 <p>Process the current voltage raw sample. </p>
 <p>This function processes the raw voltage sample by performing the following steps:</p>
 <ul>
-<li>Determines the polarity of the raw voltage sample using <code><a class="el" href="#ga600ddbf70fa2468f097466638126fbed" title="Processes the polarity of the current voltage sample.">processPolarity()</a></code>.</li>
+<li>Determines the polarity of the raw voltage sample using <code><a class="el" href="processing_8cpp.html#a600ddbf70fa2468f097466638126fbed" title="Processes a voltage sample to determine polarity and apply phase correction.">processPolarity()</a></code>.</li>
 <li>Confirms the polarity using <code><a class="el" href="#ga14d76dfa98d7245ea8d1d4eb18c78672" title="Confirms the polarity of the current voltage sample.">confirmPolarity()</a></code> to ensure stability in zero-crossing detection.</li>
 <li>Processes raw samples for energy state and load control using <code><a class="el" href="#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available.">processRawSamples()</a></code>.</li>
 <li>Calculates the squared voltage value and accumulates it for RMS calculations using <code><a class="el" href="#ga9747b6178245c423a864bff088cfa453" title="Process the calculation for the current voltage sample.">processVoltage()</a></code>.</li>
@@ -1263,11 +1203,11 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00673">673</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00735">735</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00483">confirmPolarity()</a>, <a class="el" href="processing_8cpp_source.html#l00379">processPolarity()</a>, <a class="el" href="processing_8cpp_source.html#l00520">processRawSamples()</a>, <a class="el" href="processing_8cpp_source.html#l00643">processVoltage()</a>, <a class="el" href="processing_8cpp_source.html#l00095">sampleSetsDuringThisDatalogPeriod</a>, and <a class="el" href="processing_8cpp_source.html#l00094">sampleSetsDuringThisMainsCycle</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00542">confirmPolarity()</a>, <a class="el" href="processing_8cpp_source.html#l00399">processPolarity()</a>, <a class="el" href="processing_8cpp_source.html#l00579">processRawSamples()</a>, <a class="el" href="processing_8cpp_source.html#l00705">processVoltage()</a>, <a class="el" href="processing_8cpp_source.html#l00097">sampleSetsDuringThisDatalogPeriod</a>, and <a class="el" href="processing_8cpp_source.html#l00096">sampleSetsDuringThisMainsCycle</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01221">ISR()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01290">ISR()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1276,7 +1216,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" title="Process the current voltage raw sample." alt="" coords="5,179,204,204"/>
 <area shape="rect" href="group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672" title="Confirms the polarity of the current voltage sample." alt="" coords="269,104,391,129"/>
 <area shape="poly" title=" " alt="" coords="141,176,251,138,273,131,275,136,253,143,143,181"/>
-<area shape="rect" href="group__TimeCritical.html#ga600ddbf70fa2468f097466638126fbed" title="Processes the polarity of the current voltage sample." alt="" coords="269,153,391,179"/>
+<area shape="rect" href="processing_8cpp.html#a600ddbf70fa2468f097466638126fbed" title="Processes a voltage sample to determine polarity and apply phase correction." alt="" coords="269,153,391,179"/>
 <area shape="poly" title=" " alt="" coords="204,177,255,172,256,177,205,183"/>
 <area shape="rect" href="group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="252,203,408,228"/>
 <area shape="poly" title=" " alt="" coords="205,199,239,203,238,208,204,205"/>
@@ -1363,11 +1303,11 @@ Here is the caller graph for this function:</div>
 <p>The lowest 7 bits of element is the load number as defined in 'physicalLoadState'. The highest bit of each 'loadPrioritiesAndState' determines if the load is ON or OFF. The order of each element in 'loadPrioritiesAndState' determines the load priority. 'loadPrioritiesAndState[i] &amp; loadStateMask' will extract the load number at position 'i' 'loadPrioritiesAndState[i] &amp; loadStateOnBit' will extract the load state at position 'i'</p>
 <p>Any other mapping relationships could be configured here. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00334">334</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00340">340</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="shared__var_8h_source.html#l00014">Shared::b_diversionEnabled</a>, <a class="el" href="shared__var_8h_source.html#l00012">Shared::b_overrideLoadOn</a>, <a class="el" href="shared__var_8h_source.html#l00013">Shared::b_reOrderLoads</a>, <a class="el" href="test__fastdivision_2test__main_8cpp_source.html#l00119">i</a>, <a class="el" href="types_8h_source.html#l00049">LOAD_OFF</a>, <a class="el" href="types_8h_source.html#l00050">LOAD_ON</a>, <a class="el" href="processing_8cpp_source.html#l00017">loadPrioritiesAndState</a>, <a class="el" href="types_8h_source.html#l00054">loadStateMask</a>, <a class="el" href="types_8h_source.html#l00055">loadStateOnBit</a>, <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>, <a class="el" href="types_8h_source.html#l00060">OFF</a>, and <a class="el" href="processing_8cpp_source.html#l00101">physicalLoadState</a>.</p>
+<p class="reference">References <a class="el" href="shared__var_8h_source.html#l00014">Shared::b_diversionEnabled</a>, <a class="el" href="shared__var_8h_source.html#l00012">Shared::b_overrideLoadOn</a>, <a class="el" href="shared__var_8h_source.html#l00013">Shared::b_reOrderLoads</a>, <a class="el" href="test__fastdivision_2test__main_8cpp_source.html#l00119">i</a>, <a class="el" href="types_8h_source.html#l00049">LOAD_OFF</a>, <a class="el" href="types_8h_source.html#l00050">LOAD_ON</a>, <a class="el" href="processing_8cpp_source.html#l00017">loadPrioritiesAndState</a>, <a class="el" href="types_8h_source.html#l00054">loadStateMask</a>, <a class="el" href="types_8h_source.html#l00055">loadStateOnBit</a>, <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>, <a class="el" href="types_8h_source.html#l00060">OFF</a>, and <a class="el" href="processing_8cpp_source.html#l00103">physicalLoadState</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01277">initializeOldPCBPins()</a>, and <a class="el" href="processing_8cpp_source.html#l00520">processRawSamples()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01346">initializeOldPCBPins()</a>, and <a class="el" href="processing_8cpp_source.html#l00579">processRawSamples()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1414,11 +1354,11 @@ Here is the caller graph for this function:</div>
 <li>Finally, the pins are updated using <code>setPinsOFF</code> and <code>setPinsON</code> functions. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00285">285</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00289">289</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00102">countLoadON</a>, <a class="el" href="test__fastdivision_2test__main_8cpp_source.html#l00119">i</a>, <a class="el" href="types_8h_source.html#l00049">LOAD_OFF</a>, <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>, <a class="el" href="config_8h_source.html#l00068">physicalLoadPin</a>, <a class="el" href="processing_8cpp_source.html#l00101">physicalLoadState</a>, <a class="el" href="utils__pins_8h_source.html#l00181">setPinsOFF()</a>, and <a class="el" href="utils__pins_8h_source.html#l00149">setPinsON()</a>.</p>
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00104">countLoadON</a>, <a class="el" href="test__fastdivision_2test__main_8cpp_source.html#l00119">i</a>, <a class="el" href="types_8h_source.html#l00049">LOAD_OFF</a>, <a class="el" href="config_8h_source.html#l00035">NO_OF_DUMPLOADS</a>, <a class="el" href="config_8h_source.html#l00068">physicalLoadPin</a>, <a class="el" href="processing_8cpp_source.html#l00103">physicalLoadState</a>, <a class="el" href="utils__pins_8h_source.html#l00181">setPinsOFF()</a>, and <a class="el" href="utils__pins_8h_source.html#l00149">setPinsON()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01277">initializeOldPCBPins()</a>, and <a class="el" href="processing_8cpp_source.html#l00520">processRawSamples()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01346">initializeOldPCBPins()</a>, and <a class="el" href="processing_8cpp_source.html#l00579">processRawSamples()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">

@@ -244,6 +244,8 @@ Variables</h2></td></tr>
 <tr class="separator:aa1ffffd0033bb88a0611cc09daef8d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3c1c911bda4daa550c3d3ca7287f41f" id="r_ad3c1c911bda4daa550c3d3ca7287f41f"><td class="memItemLeft" align="right" valign="top">constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3c1c911bda4daa550c3d3ca7287f41f">delayBeforeSerialStarts</a> { 1000 }</td></tr>
 <tr class="separator:ad3c1c911bda4daa550c3d3ca7287f41f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f06eff3ac0554f92ab6f977dac4ede" id="r_ae4f06eff3ac0554f92ab6f977dac4ede"><td class="memItemLeft" align="right" valign="top">constexpr int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4f06eff3ac0554f92ab6f977dac4ede">DIVERSION_START_THRESHOLD_WATTS</a> { 0 }</td></tr>
+<tr class="separator:ae4f06eff3ac0554f92ab6f977dac4ede"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a5d5712de1dbf5858d70eece9831150" id="r_a4a5d5712de1dbf5858d70eece9831150"><td class="memItemLeft" align="right" valign="top">constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a5d5712de1dbf5858d70eece9831150">invDATALOG_PERIOD_IN_MAINS_CYCLES</a> { 1.0f / <a class="el" href="#a7c1cf10ab9159ed3521c644de82a8508">DATALOG_PERIOD_IN_MAINS_CYCLES</a> }</td></tr>
 <tr class="separator:a4a5d5712de1dbf5858d70eece9831150"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67f74c9ab3b5742314d978837b857777" id="r_a67f74c9ab3b5742314d978837b857777"><td class="memItemLeft" align="right" valign="top">constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67f74c9ab3b5742314d978837b857777">invSUPPLY_FREQUENCY</a> { 1.0f / <a class="el" href="#ad62846ca1d96695a32041f6dd809401e">SUPPLY_FREQUENCY</a> }</td></tr>
@@ -297,7 +299,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>in Joules per mains cycle (has no effect when set to 0) </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00032">32</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00034">34</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00055">printConfiguration()</a>.</p>
 
@@ -324,9 +326,9 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>Period of datalogging in cycles </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00039">39</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00041">41</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01124">processDataLogging()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l01193">processDataLogging()</a>.</p>
 
 </div>
 </div>
@@ -351,7 +353,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>Period of datalogging in seconds </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00036">36</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00038">38</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00350">processCalculationsForLogging()</a>.</p>
 
@@ -378,9 +380,34 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>in milli-seconds, to allow Serial window to be opened </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00045">45</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00047">47</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00704">processStartUp()</a>, and <a class="el" href="main_8cpp_source.html#l00391">setup()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00766">processStartUp()</a>, and <a class="el" href="main_8cpp_source.html#l00391">setup()</a>.</p>
+
+</div>
+</div>
+<a id="ae4f06eff3ac0554f92ab6f977dac4ede" name="ae4f06eff3ac0554f92ab6f977dac4ede"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4f06eff3ac0554f92ab6f977dac4ede">&#9670;&#160;</a></span>DIVERSION_START_THRESHOLD_WATTS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t DIVERSION_START_THRESHOLD_WATTS { 0 }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Adjust value as needed - this means 50W surplus is needed to start diversion </p>
+
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00020">20</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -404,7 +431,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00043">43</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00045">45</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -428,7 +455,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00042">42</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00044">44</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00137">printForSerialText()</a>.</p>
 
@@ -455,7 +482,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>(0.001 kWh = 3600 Joules) </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00024">24</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00027">27</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -479,7 +506,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00034">34</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00036">36</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -503,7 +530,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00023">23</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00026">26</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -528,9 +555,9 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>number of phases of the main supply. </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00019">19</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00022">22</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00081">calcBufferSize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="teleinfo_8h_source.html#l00091">calcBufferSize()</a>.</p>
 
 </div>
 </div>
@@ -555,7 +582,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>when set to a negative value, this acts as a PV generator </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00029">29</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00019">19</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="utils_8h_source.html#l00055">printConfiguration()</a>.</p>
 
@@ -581,7 +608,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00022">22</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00025">25</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>
@@ -606,9 +633,9 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>in milli-seconds, to allow LP filter to settle </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00046">46</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00048">48</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00704">processStartUp()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00766">processStartUp()</a>.</p>
 
 </div>
 </div>
@@ -632,9 +659,9 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00027">27</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00030">30</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00487">loop()</a>, and <a class="el" href="processing_8cpp_source.html#l00856">processLatestContribution()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="main_8cpp_source.html#l00487">loop()</a>, <a class="el" href="processing_8cpp_source.html#l00918">processLatestContribution()</a>, and <a class="el" href="processing_8cpp_source.html#l00399">processPolarity()</a>.</p>
 
 </div>
 </div>
@@ -659,7 +686,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>0.1 Wh, reduced for faster start-up </p>
 
-<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00028">28</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config__system_8h_source.html#l00031">31</a> of file <a class="el" href="config__system_8h_source.html">config_system.h</a>.</p>
 
 </div>
 </div>

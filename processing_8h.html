@@ -174,9 +174,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gab3316018d6752ecf79ce8be7f2ee800d" id="r_gab3316018d6752ecf79ce8be7f2ee800d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__TimeCritical.html#gab3316018d6752ecf79ce8be7f2ee800d">processPlusHalfCycle</a> ()</td></tr>
 <tr class="memdesc:gab3316018d6752ecf79ce8be7f2ee800d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the start of a new +ve half cycle, just after the zero-crossing point.  <br /></td></tr>
 <tr class="separator:gab3316018d6752ecf79ce8be7f2ee800d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga600ddbf70fa2468f097466638126fbed" id="r_ga600ddbf70fa2468f097466638126fbed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__TimeCritical.html#ga600ddbf70fa2468f097466638126fbed">processPolarity</a> (int16_t rawSample)</td></tr>
-<tr class="memdesc:ga600ddbf70fa2468f097466638126fbed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes the polarity of the current voltage sample.  <br /></td></tr>
-<tr class="separator:ga600ddbf70fa2468f097466638126fbed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8fbd98f3225b72a66154ea2a2b2910a" id="r_ab8fbd98f3225b72a66154ea2a2b2910a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8fbd98f3225b72a66154ea2a2b2910a">processPolarity</a> (int16_t rawSample)</td></tr>
+<tr class="memdesc:ab8fbd98f3225b72a66154ea2a2b2910a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes a voltage sample to determine polarity and apply phase correction.  <br /></td></tr>
+<tr class="separator:ab8fbd98f3225b72a66154ea2a2b2910a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga18d241dba2cc74c17026ee33d2442478" id="r_ga18d241dba2cc74c17026ee33d2442478"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478">processRawSamples</a> ()</td></tr>
 <tr class="memdesc:ga18d241dba2cc74c17026ee33d2442478"><td class="mdescLeft">&#160;</td><td class="mdescRight">This routine is called by the ISR when a pair of V &amp; I samples becomes available.  <br /></td></tr>
 <tr class="separator:ga18d241dba2cc74c17026ee33d2442478"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -230,7 +230,7 @@ Functions</h2></td></tr>
 <li>Prints the capacity of the energy bucket in integer energy units. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01176">1176</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01245">1245</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="processing_8cpp_source.html#l00033">capacityOfEnergyBucket_long</a>, <a class="el" href="debug_8h_source.html#l00096">DBUG</a>, <a class="el" href="debug_8h_source.html#l00097">DBUGLN</a>, and <a class="el" href="processing_8cpp_source.html#l00020">PERSISTENCE_FOR_POLARITY_CHANGE</a>.</p>
 
@@ -245,6 +245,77 @@ Here is the caller graph for this function:</div>
 <area shape="poly" title=" " alt="" coords="285,21,251,21,251,15,285,15"/>
 <area shape="rect" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,64,31"/>
 <area shape="poly" title=" " alt="" coords="98,21,64,21,64,15,98,15"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab8fbd98f3225b72a66154ea2a2b2910a" name="ab8fbd98f3225b72a66154ea2a2b2910a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8fbd98f3225b72a66154ea2a2b2910a">&#9670;&#160;</a></span>processPolarity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void processPolarity </td>
+          <td>(</td>
+          <td class="paramtype">const int16_t</td>          <td class="paramname"><span class="paramname"><em>rawSample</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Processes a voltage sample to determine polarity and apply phase correction. </p>
+<p>This function performs several operations on the raw voltage sample:</p><ol type="1">
+<li>Removes DC offset from the raw sample</li>
+<li>Applies phase correction to compensate for sampling delay</li>
+<li>Determines the polarity (positive/negative) of the corrected sample</li>
+</ol>
+<dl class="section note"><dt>Note</dt><dd>Phase Correction Explanation The phase correction compensates for the 104μs delay in the sampling system.</dd></dl>
+<p>For 50Hz systems:</p><ul>
+<li>One cycle (360°) = 20ms, so 1° = 55.6μs</li>
+<li>104μs delay corresponds to 1.87° phase shift</li>
+<li>Sampling interval is 312μs</li>
+<li>Ratio of delay to sampling interval: 104μs/312μs ≈ 1/3</li>
+<li>Using 8-bit fixed-point math: 1/3 ≈ 85/256 ≈ 0.332</li>
+</ul>
+<p>For 60Hz systems:</p><ul>
+<li>One cycle (360°) = 16.67ms, so 1° = 46.3μs</li>
+<li>104μs delay corresponds to 2.24° phase shift</li>
+<li>Same 312μs sampling interval</li>
+<li>Corrected for 60Hz rate of change: 1/3 × 50/60 = 71/256 ≈ 0.277</li>
+</ul>
+<p>The correction projects forward the voltage by calculating the rate of change (deltaV) and adding a fraction of this change to the current sample: correctedSample = currentSample + (deltaV × correctionFactor)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rawSample</td><td>The raw ADC sample of voltage </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00399">399</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="processing_8cpp_source.html#l00027">DCoffset_V_long</a>, <a class="el" href="types_8h_source.html#l00035">NEGATIVE</a>, <a class="el" href="processing_8cpp_source.html#l00091">polarityOfMostRecentVsample</a>, <a class="el" href="types_8h_source.html#l00036">POSITIVE</a>, <a class="el" href="processing_8cpp_source.html#l00089">sampleVminusDC_long</a>, and <a class="el" href="config__system_8h_source.html#l00030">SUPPLY_FREQUENCY</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="processing_8cpp_source.html#l00735">processVoltageRawSample()</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="processing_8h_ab8fbd98f3225b72a66154ea2a2b2910a_icgraph.png" border="0" usemap="#aprocessing_8h_ab8fbd98f3225b72a66154ea2a2b2910a_icgraph" alt=""/></div>
+<map name="aprocessing_8h_ab8fbd98f3225b72a66154ea2a2b2910a_icgraph" id="aprocessing_8h_ab8fbd98f3225b72a66154ea2a2b2910a_icgraph">
+<area shape="rect" title="Processes a voltage sample to determine polarity and apply phase correction." alt="" coords="343,5,465,31"/>
+<area shape="rect" href="group__TimeCritical.html#gae9c9eca31752ead2923dd75b9ff9fd57" title="Process the current voltage raw sample." alt="" coords="96,5,295,31"/>
+<area shape="poly" title=" " alt="" coords="329,21,295,21,295,15,329,15"/>
+<area shape="rect" href="group__TimeCritical.html#ga05c2e5b588ced1cd7312f5b0edc5b295" title="Interrupt Service Routine &#45; Interrupt&#45;Driven Analog Conversion." alt="" coords="5,5,48,31"/>
+<area shape="poly" title=" " alt="" coords="82,21,49,21,49,15,82,15"/>
 </map>
 </div>
 
