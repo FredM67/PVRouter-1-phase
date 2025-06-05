@@ -8,7 +8,7 @@
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="49,147,97,163,133,173,132,178,95,169,47,152"/>
 <area shape="rect" id="Node000005" href="$group__TimeCritical.html#ga14d76dfa98d7245ea8d1d4eb18c78672" title="Confirms the polarity of the current voltage sample." alt="" coords="385,104,507,129"/>
 <area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="277,176,319,164,343,151,367,138,385,131,387,136,369,143,345,156,321,168,279,181"/>
-<area shape="rect" id="Node000006" href="$processing_8cpp.html#a600ddbf70fa2468f097466638126fbed" title="Processes a voltage sample to determine polarity and apply phase correction." alt="" coords="385,153,507,179"/>
+<area shape="rect" id="Node000006" href="$group__TimeCritical.html#ga600ddbf70fa2468f097466638126fbed" title="Processes the polarity of the current voltage sample." alt="" coords="385,153,507,179"/>
 <area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="307,178,371,171,371,177,308,183"/>
 <area shape="rect" id="Node000007" href="$group__TimeCritical.html#ga18d241dba2cc74c17026ee33d2442478" title="This routine is called by the ISR when a pair of V &amp; I samples becomes available." alt="" coords="368,203,524,228"/>
 <area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="308,199,355,203,354,209,307,204"/>
