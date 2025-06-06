@@ -117,6 +117,7 @@
  * - better Doxygen documentation.
  * - added support for new PCB-based hardware. Old hardware is still supported.
  * - added support for new OLED display. Old display is still supported.
+ * - delayed start of diversion
  *
  * @author Fred Metrich
  * @copyright Copyright (c) 2025
@@ -191,7 +192,7 @@
  *  @note The telemetry feature ensures that the system's performance and status can be monitored remotely.
  */
 
- /**
+/**
  * @defgroup GeneralProcessing General Processing
  * @brief Functions and routines that handle general system processing tasks.
  *
