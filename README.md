@@ -19,10 +19,14 @@ Main changes in this version:
 - Time-critical work is now in the ISR.
 - Serial data logging has been added
 - Temperature sensor has been added.
+- Support for relays
+- Code documentation
+- Telemetry for Home Assistant
+- Support of universal PCB
+- Delayed diversion start
 
 On this version, the display will alternatively shows the diverted energy or the temperature of the water heater (Dallas temperature sensor needed).
 
 ## Coming soon
 - wiring diagram for mechanical thermostat
 - wiring diagram for electronic thermostat (ACI)
-- code documentation
