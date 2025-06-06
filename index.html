@@ -92,66 +92,6 @@ Description</h1>
 <p><a class="el" href="Mk2__fasterControl__Full_8ino.html" title="A photovoltaic energy diverter.">Mk2_fasterControl_Full.ino</a> - Arduino program that maximizes the use of home photovoltaic production by monitoring energy consumption and diverting power to one or more resistive charge(s) when needed. In the absence of such a system, surplus energy flows away to the grid and is of no benefit to the PV-owner.</p>
 <h1><a class="anchor" id="history"></a>
 History</h1>
-<p><b>Issue 1 was released as Mk2_bothDisplays_1 in March 2014.</b></p>
-<p>This sketch is for diverting surplus PV power to a dump load using a triac or <br  />
- Solid State Relay. It is based on the Mk2i PV Router code that I have posted in on <br  />
- the OpenEnergyMonitor forum. The original version, and other related material, can be found on my Summary Page at www.openenergymonitor.org/emon/node/1757</p>
-<p>In this latest version, the pin-allocations have been changed to suit my PCB-based hardware for the Mk2 PV Router. The integral voltage sensor is fed from one of the secondary coils of the transformer. Current is measured via Current Transformers at the CT1 and CT1 ports. <br  />
-</p>
-<p>CT1 is for 'grid' current, to be measured at the grid supply point. CT2 is for the load current, so that diverted energy can be recorded</p>
-<p>A persistence-based 4-digit display is supported. This can be driven in two different ways, one with an extra pair of logic chips, and one without. The appropriate version of the sketch must be selected by including or commenting out the "#define PIN_SAVING_HARDWARE" statement near the top of the code.</p>
-<p><b>September 2014: renamed as Mk2_bothDisplays_2, with these changes:</b></p><ul>
-<li>cycleCount removed (was not actually used in this sketch, but could have overflowed);</li>
-<li>removal of unhelpful comments in the IO pin section;</li>
-<li>tidier initialisation of display logic in <a class="el" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup.">setup()</a>;</li>
-<li>addition of REQUIRED_EXPORT_IN_WATTS logic (useful as a built-in PV simulation facility);</li>
-</ul>
-<p><b>December 2014: renamed as Mk2_bothDisplays_3, with these changes:</b></p><ul>
-<li>persistence check added for zero-crossing detection (polarityConfirmed)</li>
-<li>lowestNoOfSampleSetsPerMainsCycle added, to check for any disturbances</li>
-</ul>
-<p><b>December 2014: renamed as Mk2_bothDisplays_3a, with some typographical errors fixed.</b></p>
-<p><b>January 2016: renamed as Mk2_bothDisplays_3b, with this change:</b></p><ul>
-<li>a minor change in the ISR to remove a timing uncertainty.</li>
-</ul>
-<p><b>January 2016: updated to Mk2_bothDisplays_3c:</b> The variables to store the ADC results are now declared as "volatile" to remove any possibility of incorrect operation due to optimisation by the compiler.</p>
-<p><b>February 2016: updated to Mk2_bothDisplays_4, with these changes:</b></p><ul>
-<li>improvements to the start-up logic. The start of normal operation is now synchronized with the start of a new mains cycle.</li>
-<li>reduce the amount of feedback in the Low Pass Filter for removing the DC content from the Vsample stream. This resolves an anomaly which has been present since the start of this project. Although the amount of feedback has previously been excessive, this anomaly has had minimal effect on the system's overall behaviour.</li>
-<li>removal of the unhelpful "triggerNeedsToBeArmed" mechanism</li>
-<li>tidying of the "confirmPolarity" logic to make its behaviour more clear</li>
-<li>SWEETZONE_IN_JOULES changed to WORKING_ZONE_IN_JOULES</li>
-<li>change "triac" to "load" wherever appropriate</li>
-</ul>
-<p><b>November 2019: updated to Mk2_fasterControl_1 with these changes:</b></p><ul>
-<li>Half way through each mains cycle, a prediction is made of the likely energy level at the end of the cycle. That predicted value allows the triac to be switched at the +ve going zero-crossing point rather than waiting for a further 10 ms. These changes allow for faster switching of the load.</li>
-<li>The range of the energy bucket has been reduced to one tenth of its former value. This allows the unit's operation to commence more rapidly whenever surplus power is available.</li>
-<li>controlMode is no longer selectable, the unit's operation being effectively hard-coded as "Normal" rather than Anti-flicker.</li>
-<li>Port D3 now supports an indicator which shows when the level in the energy bucket reaches either end of its range. While the unit is actively diverting surplus power, it is vital that the level in the reduced capacity energy bucket remains within its permitted range, hence the addition of this indicator.</li>
-</ul>
-<p><b>February 2020: updated to Mk2_fasterControl_1a with these changes:</b></p><ul>
-<li>removal of some redundant code in the logic for determining the next load state.</li>
-</ul>
-<p><b>March 2021: updated to Mk2_fasterControl_2 with these changes:</b></p><ul>
-<li>extra filtering added to offset the HPF effect of CT1. This allows the energy state in 10 ms time to be predicted with more confidence. Specifically, it is no longer necessary to include a 30% boost factor after each change of load state.</li>
-</ul>
-<p><b>June 2021: updated to Mk2_fasterControl_3 with these changes:</b></p><ul>
-<li>to reflect the performance of recently manufactured YHDC SCT_013_000 CTs, the value of the parameter lpf_gain has been reduced from 12 to 8.</li>
-</ul>
-<p><b>July 2023: updated to Mk2_fasterControl_twoLoads_5 with these changes:</b></p><ul>
-<li><p class="startli">the ability to control two loads has been transferred from the latest version of my standard multiLoad sketch, Mk2_multiLoad_wired_7a. The faster control algorithm <br  />
- has been retained. <br  />
- The previous 2-load "faster control" sketch (version 4) has been archived as its behaviour was found to be problematic.</p>
-<p class="startli">Robin Emley www.Mk2PVrouter.co.uk</p>
-</li>
-</ul>
-<p><b>November 2024, renamed as Mk2_fasterControl_Full with these changes:</b></p><ul>
-<li>heavy refactoring to make the code more readable and maintainable.</li>
-<li>added comments to explain the code.</li>
-<li>added assertions to ensure the code is compiled with the correct C++ version.</li>
-<li>added a link to the README.md file in the comments.</li>
-<li>refactoring of the ISR to enhance the performance.</li>
-</ul>
 <p><b>May 2025, updated Mk2_fasterControl_Full with these changes:</b></p><ul>
 <li>heavy refactoring to make the code more readable and maintainable.</li>
 <li>added even more comments to explain the code.</li>
@@ -162,8 +102,67 @@ History</h1>
 <li>added support for new OLED display. Old display is still supported.</li>
 <li>delayed start of diversion</li>
 </ul>
+<p><b>November 2024, renamed as Mk2_fasterControl_Full with these changes:</b></p><ul>
+<li>heavy refactoring to make the code more readable and maintainable.</li>
+<li>added comments to explain the code.</li>
+<li>added assertions to ensure the code is compiled with the correct C++ version.</li>
+<li>added a link to the README.md file in the comments.</li>
+<li>refactoring of the ISR to enhance the performance.</li>
+</ul>
+<p><b>July 2023: updated to Mk2_fasterControl_twoLoads_5 with these changes:</b></p><ul>
+<li>the ability to control two loads has been transferred from the latest version of my standard multiLoad sketch, Mk2_multiLoad_wired_7a. The faster control algorithm <br  />
+ has been retained. <br  />
+ The previous 2-load "faster control" sketch (version 4) has been archived as its behaviour was found to be problematic.</li>
+</ul>
 <dl class="section author"><dt>Author</dt><dd>Fred Metrich </dd></dl>
-<dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2025 </dd></dl>
+<dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2025</dd></dl>
+<p><b>June 2021: updated to Mk2_fasterControl_3 with these changes:</b></p><ul>
+<li>to reflect the performance of recently manufactured YHDC SCT_013_000 CTs, the value of the parameter lpf_gain has been reduced from 12 to 8.</li>
+</ul>
+<p><b>March 2021: updated to Mk2_fasterControl_2 with these changes:</b></p><ul>
+<li>extra filtering added to offset the HPF effect of CT1. This allows the energy state in 10 ms time to be predicted with more confidence. Specifically, it is no longer necessary to include a 30% boost factor after each change of load state.</li>
+</ul>
+<p><b>February 2020: updated to Mk2_fasterControl_1a with these changes:</b></p><ul>
+<li>removal of some redundant code in the logic for determining the next load state.</li>
+</ul>
+<p><b>November 2019: updated to Mk2_fasterControl_1 with these changes:</b></p><ul>
+<li>Half way through each mains cycle, a prediction is made of the likely energy level at the end of the cycle. That predicted value allows the triac to be switched at the +ve going zero-crossing point rather than waiting for a further 10 ms. These changes allow for faster switching of the load.</li>
+<li>The range of the energy bucket has been reduced to one tenth of its former value. This allows the unit's operation to commence more rapidly whenever surplus power is available.</li>
+<li>controlMode is no longer selectable, the unit's operation being effectively hard-coded as "Normal" rather than Anti-flicker.</li>
+<li>Port D3 now supports an indicator which shows when the level in the energy bucket reaches either end of its range. While the unit is actively diverting surplus power, it is vital that the level in the reduced capacity energy bucket remains within its permitted range, hence the addition of this indicator.</li>
+</ul>
+<p><b>February 2016: updated to Mk2_bothDisplays_4, with these changes:</b></p><ul>
+<li>improvements to the start-up logic. The start of normal operation is now synchronized with the start of a new mains cycle.</li>
+<li>reduce the amount of feedback in the Low Pass Filter for removing the DC content from the Vsample stream. This resolves an anomaly which has been present since the start of this project. Although the amount of feedback has previously been excessive, this anomaly has had minimal effect on the system's overall behaviour.</li>
+<li>removal of the unhelpful "triggerNeedsToBeArmed" mechanism</li>
+<li>tidying of the "confirmPolarity" logic to make its behaviour more clear</li>
+<li>SWEETZONE_IN_JOULES changed to WORKING_ZONE_IN_JOULES</li>
+<li>change "triac" to "load" wherever appropriate</li>
+</ul>
+<p><b>January 2016: updated to Mk2_bothDisplays_3c:</b> The variables to store the ADC results are now declared as "volatile" to remove any possibility of incorrect operation due to optimisation by the compiler.</p>
+<p><b>January 2016: renamed as Mk2_bothDisplays_3b, with this change:</b></p><ul>
+<li>a minor change in the ISR to remove a timing uncertainty.</li>
+</ul>
+<p><b>December 2014: renamed as Mk2_bothDisplays_3a, with some typographical errors fixed.</b></p>
+<p><b>December 2014: renamed as Mk2_bothDisplays_3, with these changes:</b></p><ul>
+<li>persistence check added for zero-crossing detection (polarityConfirmed)</li>
+<li>lowestNoOfSampleSetsPerMainsCycle added, to check for any disturbances</li>
+</ul>
+<p><b>September 2014: renamed as Mk2_bothDisplays_2, with these changes:</b></p><ul>
+<li>cycleCount removed (was not actually used in this sketch, but could have overflowed);</li>
+<li>removal of unhelpful comments in the IO pin section;</li>
+<li>tidier initialisation of display logic in <a class="el" href="main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup.">setup()</a>;</li>
+<li>addition of REQUIRED_EXPORT_IN_WATTS logic (useful as a built-in PV simulation facility);</li>
+</ul>
+<p><b>Issue 1 was released as Mk2_bothDisplays_1 in March 2014.</b></p>
+<p>This sketch is for diverting surplus PV power to a dump load using a triac or <br  />
+ Solid State Relay. It is based on the Mk2i PV Router code that I have posted in on <br  />
+ the OpenEnergyMonitor forum. The original version, and other related material, can be found on my Summary Page at www.openenergymonitor.org/emon/node/1757</p>
+<p>In this latest version, the pin-allocations have been changed to suit my PCB-based hardware for the Mk2 PV Router. The integral voltage sensor is fed from one of the secondary coils of the transformer. Current is measured via Current Transformers at the CT1 and CT1 ports. <br  />
+</p>
+<p>CT1 is for 'grid' current, to be measured at the grid supply point. CT2 is for the load current, so that diverted energy can be recorded</p>
+<p>A persistence-based 4-digit display is supported. This can be driven in two different ways, one with an extra pair of logic chips, and one without. The appropriate version of the sketch must be selected by including or commenting out the "#define PIN_SAVING_HARDWARE" statement near the top of the code.</p>
+<dl class="section author"><dt>Author</dt><dd>Robin Emley www.Mk2PVrouter.co.uk </dd></dl>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->
