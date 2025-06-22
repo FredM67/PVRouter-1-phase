@@ -310,10 +310,8 @@ void updatePortsStates()
     }
   } while (i);
 
-  // On this particular PCB, the trigger has been soldered active high.  This means that the
-  // trigger line must be set to LOW to turn the load ON.
-  setPinsON(pinsOFF);
-  setPinsOFF(pinsON);
+  setPinsOFF(pinsOFF);
+  setPinsON(pinsON);
 }
 
 /**
