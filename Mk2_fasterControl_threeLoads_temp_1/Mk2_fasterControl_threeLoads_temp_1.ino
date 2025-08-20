@@ -124,29 +124,29 @@
 
 //#define TEMP_SENSOR ///< this line must be commented out if the temperature sensor is not present
 
-#define DATALOG_OUTPUT ///< this line can be commented if no datalogging is needed
+#define DATALOG_OUTPUT  ///< this line can be commented if no datalogging is needed
 
 #ifdef TEMP_SENSOR
-#include <OneWire.h> // for temperature sensing
+#include <OneWire.h>  // for temperature sensing
 #endif
 
 //In this sketch, the ADC is free-running with a cycle time of ~104uS.
 
 // Change these values to suit the local mains frequency and supply meter
-constexpr int32_t CYCLES_PER_SECOND{50};         /**< number of cycles/s of the grid power supply */
-constexpr uint32_t WORKING_RANGE_IN_JOULES{360}; /**< 0.1 Wh, reduced for faster start-up */
-constexpr int32_t REQUIRED_EXPORT_IN_WATTS{0};   /**< when set to a NEGATIVE value, this acts as a PV generator */
+constexpr int32_t CYCLES_PER_SECOND{ 50 };         /**< number of cycles/s of the grid power supply */
+constexpr uint32_t WORKING_RANGE_IN_JOULES{ 360 }; /**< 0.1 Wh, reduced for faster start-up */
+constexpr int32_t REQUIRED_EXPORT_IN_WATTS{ 0 };   /**< when set to a NEGATIVE value, this acts as a PV generator */
 
 // Physical constants, please do not change!
-constexpr int32_t JOULES_PER_WATT_HOUR{3600}; /**< (0.001 kWh = 3600 Joules) */
+constexpr int32_t JOULES_PER_WATT_HOUR{ 3600 }; /**< (0.001 kWh = 3600 Joules) */
 
 // to prevent the diverted energy total from 'creeping'
-constexpr uint32_t ANTI_CREEP_LIMIT{5}; /**< in Joules per mains cycle (has no effect when set to 0) */
+constexpr uint32_t ANTI_CREEP_LIMIT{ 5 }; /**< in Joules per mains cycle (has no effect when set to 0) */
 
-constexpr int32_t DATALOG_PERIOD_IN_MAINS_CYCLES{250}; /**< Period of datalogging in cycles */
+constexpr int32_t DATALOG_PERIOD_IN_MAINS_CYCLES{ 250 }; /**< Period of datalogging in cycles */
 
-constexpr uint8_t MAX_DISPLAY_TIME_COUNT{10};   /**< no of processing loops between display updates */
-constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{8}; /**< auto-reset after this period of inactivity */
+constexpr uint8_t MAX_DISPLAY_TIME_COUNT{ 10 };   /**< no of processing loops between display updates */
+constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 }; /**< auto-reset after this period of inactivity */
 // #define DISPLAY_SHUTDOWN_IN_HOURS 0.01 // for testing that the display clears after 36 seconds
 
 //  The two versions of the hardware require different logic. The following line should
@@ -155,15 +155,15 @@ constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{8}; /**< auto-reset after this perio
 //
 #define PIN_SAVING_HARDWARE
 
-constexpr uint8_t NO_OF_DUMPLOADS{3}; /**< number of dump loads connected to the diverter */
+constexpr uint8_t NO_OF_DUMPLOADS{ 3 }; /**< number of dump loads connected to the diverter */
 
 #ifdef TEMP_SENSOR
 // --------------------------
 // Dallas DS18B20 commands
-constexpr uint8_t SKIP_ROM{0xcc};
-constexpr uint8_t CONVERT_TEMPERATURE{0x44};
-constexpr uint8_t READ_SCRATCHPAD{0xbe};
-constexpr uint16_t BAD_TEMPERATURE{30000}; /**< this value (300C) is sent if no sensor is present */
+constexpr uint8_t SKIP_ROM{ 0xcc };
+constexpr uint8_t CONVERT_TEMPERATURE{ 0x44 };
+constexpr uint8_t READ_SCRATCHPAD{ 0xbe };
+constexpr uint16_t BAD_TEMPERATURE{ 30000 }; /**< this value (300C) is sent if no sensor is present */
 #endif
 
 // -------------------------------
@@ -208,32 +208,32 @@ Tx_struct tx_data; /**< logging data */
 // allocation of digital pins which are not dependent on the display type that is in use
 // *************************************************************************************
 // constexpr uint8_t outOfRangeIndication{3}; /**< <-- this output port is active-high */
-constexpr uint8_t physicalLoad_1_pin{3};  /**< <-- the "mode" port is active-high */
-constexpr uint8_t physicalLoad_0_pin{4};  /**< <-- the "trigger" port is active-low */
-constexpr uint8_t physicalLoad_2_pin{12}; /**< <-- the "d12" port is active-high */
+constexpr uint8_t physicalLoad_1_pin{ 3 };  /**< <-- the "mode" port is active-high */
+constexpr uint8_t physicalLoad_0_pin{ 4 };  /**< <-- the "trigger" port is active-low */
+constexpr uint8_t physicalLoad_2_pin{ 12 }; /**< <-- the "d12" port is active-high */
 
 // allocation of analogue pins which are not dependent on the display type that is in use
 // **************************************************************************************
-constexpr uint8_t voltageSensor{3};          /**< A3 is for the voltage sensor */
-constexpr uint8_t currentSensor_diverted{4}; /**< A4 is for CT2 which measures diverted current */
-constexpr uint8_t currentSensor_grid{5};     /**< A5 is for CT1 which measures grid current */
+constexpr uint8_t voltageSensor{ 3 };          /**< A3 is for the voltage sensor */
+constexpr uint8_t currentSensor_diverted{ 4 }; /**< A4 is for CT2 which measures diverted current */
+constexpr uint8_t currentSensor_grid{ 5 };     /**< A5 is for CT1 which measures grid current */
 
-constexpr uint8_t delayBeforeSerialStarts{1000}; /**< in milli-seconds, to allow Serial window to be opened */
-constexpr uint8_t startUpPeriod{3000};           /**< in milli-seconds, to allow LP filter to settle */
-constexpr int16_t DCoffset_I{512};               /**< nominal mid-point value of ADC @ x1 scale */
+constexpr uint8_t delayBeforeSerialStarts{ 1000 }; /**< in milli-seconds, to allow Serial window to be opened */
+constexpr uint8_t startUpPeriod{ 3000 };           /**< in milli-seconds, to allow LP filter to settle */
+constexpr int16_t DCoffset_I{ 512 };               /**< nominal mid-point value of ADC @ x1 scale */
 
 // General global variables that are used in multiple blocks so cannot be static.
 // For integer maths, many variables need to be 'int32_t'
 //
-bool beyondStartUpPhase{false}; /**< start-up delay, allows things to settle */
-int32_t energyInBucket_long{0}; /**< in Integer Energy Units */
+bool beyondStartUpPhase{ false }; /**< start-up delay, allows things to settle */
+int32_t energyInBucket_long{ 0 }; /**< in Integer Energy Units */
 
 // for improved control of multiple loads
-bool b_recentTransition{false};                 /**< a load state has been recently toggled */
-uint8_t postTransitionCount;                    /**< counts the number of cycle since last transition */
-constexpr uint8_t POST_TRANSITION_MAX_COUNT{3}; /**< allows each transition to take effect */
+bool b_recentTransition{ false };                 /**< a load state has been recently toggled */
+uint8_t postTransitionCount;                      /**< counts the number of cycle since last transition */
+constexpr uint8_t POST_TRANSITION_MAX_COUNT{ 3 }; /**< allows each transition to take effect */
 //constexpr uint8_t POST_TRANSITION_MAX_COUNT{50}; /**< for testing only */
-uint8_t activeLoad{NO_OF_DUMPLOADS};   /**< current active load */
+uint8_t activeLoad{ NO_OF_DUMPLOADS }; /**< current active load */
 uint16_t countLoadON[NO_OF_DUMPLOADS]; /**< Number of cycle the load was ON (over 1 datalog period) */
 
 int32_t sumP_forEnergyBucket;                   /**< for per-cycle summation of 'real power' */
@@ -243,36 +243,36 @@ int32_t sum_Vsquared;                           /**< for summation of V^2 values
 int32_t cumVdeltasThisCycle_long;               /**< for the LPF which determines DC offset (voltage) */
 int32_t sampleVminusDC_long;                    /**< for the phaseCal algorithm */
 int32_t sampleSetsDuringThisDatalogPeriod_long; /**< number of sample sets during each datalogging period */
-int32_t cycleCountForDatalogging_long{0};       /**< for counting how often datalog is updated */
+int32_t cycleCountForDatalogging_long{ 0 };     /**< for counting how often datalog is updated */
 
-int32_t DCoffset_V_long{512L * 256}; /**< <--- for LPF nominal mid-point value of ADC @ x256 scale */
+int32_t DCoffset_V_long{ 512L * 256 }; /**< <--- for LPF nominal mid-point value of ADC @ x256 scale */
 
-constexpr int32_t DCoffset_V_min{(512L - 100L) * 256L}; /**< mid-point of ADC minus a working margin */
-constexpr int32_t DCoffset_V_max{(512L + 100L) * 256L}; /**< mid-point of ADC plus a working margin */
+constexpr int32_t DCoffset_V_min{ (512L - 100L) * 256L }; /**< mid-point of ADC minus a working margin */
+constexpr int32_t DCoffset_V_max{ (512L + 100L) * 256L }; /**< mid-point of ADC plus a working margin */
 
-int32_t divertedEnergyRecent_IEU{0}; /**< Hi-res accumulator of limited range */
-uint16_t divertedEnergyTotal_Wh{0};  /**< WattHour register of 63K range */
+int32_t divertedEnergyRecent_IEU{ 0 }; /**< Hi-res accumulator of limited range */
+uint16_t divertedEnergyTotal_Wh{ 0 };  /**< WattHour register of 63K range */
 
 #ifdef TEMP_SENSOR
-constexpr uint8_t displayCyclingInSeconds{5}; /**< duration for cycling between diverted energy and temperature */
+constexpr uint8_t displayCyclingInSeconds{ 5 }; /**< duration for cycling between diverted energy and temperature */
 #endif
-constexpr uint32_t displayShutdown_inMainsCycles{DISPLAY_SHUTDOWN_IN_HOURS * CYCLES_PER_SECOND * 3600L};
-uint32_t absenceOfDivertedEnergyCount{0};         /**< count the # of cycles w/o energy diversion */
+constexpr uint32_t displayShutdown_inMainsCycles{ DISPLAY_SHUTDOWN_IN_HOURS * CYCLES_PER_SECOND * 3600L };
+uint32_t absenceOfDivertedEnergyCount{ 0 };       /**< count the # of cycles w/o energy diversion */
 int16_t sampleSetsDuringNegativeHalfOfMainsCycle; /**< for arming the triac/trigger */
 int32_t energyInBucket_prediction;                /**< predicted energy level until the end of the cycle */
 
 // extra items for an LPF to improve the processing of data samples from CT1
-static long lpf_long; // new LPF, for ofsetting the behaviour of CT1 as a HPF
+static long lpf_long;  // new LPF, for ofsetting the behaviour of CT1 as a HPF
 
 // The next two constants determine the profile of the LPF.
 // They are matched to the physical behaviour of the YHDC SCT-013-000 CT
 // and the CT1 samples being 375 us apart
-constexpr float lpf_gain{12}; // <- setting this to 0 disables this extra processing
-constexpr float alpha{0.002}; //
+constexpr float lpf_gain{ 12 };  // <- setting this to 0 disables this extra processing
+constexpr float alpha{ 0.002 };  //
 
 // for interaction between the main processor and the ISRs
-volatile bool b_datalogEventPending{false}; /**< async trigger to signal datalog is available */
-volatile bool b_newMainsCycle{false};       /**< async trigger to signal start of new main cycle based on first phase */
+volatile bool b_datalogEventPending{ false }; /**< async trigger to signal datalog is available */
+volatile bool b_newMainsCycle{ false };       /**< async trigger to signal start of new main cycle based on first phase */
 
 volatile int32_t copyOf_sumP_atSupplyPoint;                /**< for per-cycle summation of 'real power' */
 volatile int32_t copyOf_divertedEnergyTotal_Wh;            /**< for per-cycle summation of 'real power' */
@@ -282,16 +282,16 @@ volatile int16_t copyOf_lowestNoOfSampleSetsPerMainsCycle; /**< copy of lowest #
 volatile uint16_t copyOf_countLoadON[NO_OF_DUMPLOADS];     /**< copy of number of cycle the load was ON (over 1 datalog period) */
 
 // For an enhanced polarity detection mechanism, which includes a persistence check
-constexpr uint8_t PERSISTENCE_FOR_POLARITY_CHANGE{1}; /**< allows polarity changes to be confirmed */
-Polarities polarityOfMostRecentVsample;               /**< for zero-crossing detection */
-Polarities polarityConfirmed;                         /**< for zero-crossing detection */
-Polarities polarityConfirmedOfLastSampleV;            /**< for zero-crossing detection */
+constexpr uint8_t PERSISTENCE_FOR_POLARITY_CHANGE{ 1 }; /**< allows polarity changes to be confirmed */
+Polarities polarityOfMostRecentVsample;                 /**< for zero-crossing detection */
+Polarities polarityConfirmed;                           /**< for zero-crossing detection */
+Polarities polarityConfirmedOfLastSampleV;              /**< for zero-crossing detection */
 
 // For a mechanism to check the continuity of the sampling sequence
-constexpr int32_t CONTINUITY_CHECK_MAXCOUNT{250}; /**< mains cycles */
-int16_t sampleCount_forContinuityChecker;         /**< for checking the stability of acquisition */
-int16_t sampleSetsDuringThisMainsCycle;           /**< # of sample sets during this cycle */
-int16_t lowestNoOfSampleSetsPerMainsCycle;        /**< lowest # of sample sets during this cycle */
+constexpr int32_t CONTINUITY_CHECK_MAXCOUNT{ 250 }; /**< mains cycles */
+int16_t sampleCount_forContinuityChecker;           /**< for checking the stability of acquisition */
+int16_t sampleSetsDuringThisMainsCycle;             /**< # of sample sets during this cycle */
+int16_t lowestNoOfSampleSetsPerMainsCycle;          /**< lowest # of sample sets during this cycle */
 
 // Calibration values
 //-------------------
@@ -337,102 +337,102 @@ int16_t lowestNoOfSampleSetsPerMainsCycle;        /**< lowest # of sample sets d
 // powerCal is the RECIPR0CAL of the power conversion rate. A good value
 // to start with is therefore 1/20 = 0.05 (Watts per ADC-step squared)
 //
-constexpr float powerCal_grid{0.0765};     /**< for CT1 */
-constexpr float powerCal_diverted{0.0854}; /**< for CT2 */
+constexpr float powerCal_grid{ 0.0765 };     /**< for CT1 */
+constexpr float powerCal_diverted{ 0.0854 }; /**< for CT2 */
 
 // For datalogging purposes, f_voltageCal has been added too. Because the range of ADC values is
 // similar to the actual range of volts, the optimal value for this cal factor is likely to be
 // close to unity.
-constexpr float f_voltageCal{1.00f}; /**< compared with Fluke 77 meter */
+constexpr float f_voltageCal{ 1.00f }; /**< compared with Fluke 77 meter */
 
-constexpr int32_t capacityOfEnergyBucket_long{(int32_t)WORKING_RANGE_IN_JOULES * CYCLES_PER_SECOND * (1 / powerCal_grid)}; /**< depends on powerCal, frequency & the 'sweetzone' size. */
-constexpr int32_t nominalEnergyThreshold{capacityOfEnergyBucket_long * 0.5};
+constexpr int32_t capacityOfEnergyBucket_long{ (int32_t)WORKING_RANGE_IN_JOULES * CYCLES_PER_SECOND * (1 / powerCal_grid) }; /**< depends on powerCal, frequency & the 'sweetzone' size. */
+constexpr int32_t nominalEnergyThreshold{ capacityOfEnergyBucket_long * 0.5 };
 
-int32_t workingEnergyThreshold_upper{nominalEnergyThreshold}; /**< initial value */
-int32_t workingEnergyThreshold_lower{nominalEnergyThreshold}; /**< initial value */
+int32_t workingEnergyThreshold_upper{ nominalEnergyThreshold }; /**< initial value */
+int32_t workingEnergyThreshold_lower{ nominalEnergyThreshold }; /**< initial value */
 
-constexpr int32_t IEU_per_Wh{(int32_t)JOULES_PER_WATT_HOUR * CYCLES_PER_SECOND * (1 / powerCal_diverted)}; /**< depends on powerCal, frequency & the 'sweetzone' size. */
-constexpr int32_t antiCreepLimit_inIEUperMainsCycle{(float)ANTI_CREEP_LIMIT * (1 / powerCal_grid)};        /**< to avoid the diverted energy accumulator 'creeping' when the load is not active */
+constexpr int32_t IEU_per_Wh{ (int32_t)JOULES_PER_WATT_HOUR * CYCLES_PER_SECOND * (1 / powerCal_diverted) }; /**< depends on powerCal, frequency & the 'sweetzone' size. */
+constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ (float)ANTI_CREEP_LIMIT * (1 / powerCal_grid) };        /**< to avoid the diverted energy accumulator 'creeping' when the load is not active */
 
 // for this go-faster sketch, the phaseCal logic has been removed. If required, it can be
 // found in most of the standard Mk2_bothDisplay_n versions
 
 // Various settings for the 4-digit display, which needs to be refreshed every few mS
-constexpr uint8_t noOfDigitLocations{4};
+constexpr uint8_t noOfDigitLocations{ 4 };
 
 //  The two versions of the hardware require different logic.
 #ifdef PIN_SAVING_HARDWARE
 
-constexpr uint8_t noOfPossibleCharacters{22};
+constexpr uint8_t noOfPossibleCharacters{ 22 };
 
 #define DRIVER_CHIP_DISABLED HIGH
 #define DRIVER_CHIP_ENABLED LOW
 
 #ifdef TEMP_SENSOR
-constexpr uint8_t tempSensorPin{xx}; /**< <- a free pin must be choosen for temperature sensor */
+constexpr uint8_t tempSensorPin{ xx }; /**< <- a free pin must be choosen for temperature sensor */
 #endif
 
 // the primary segments are controlled by a pair of logic chips
-constexpr uint8_t noOfDigitSelectionLines{4}; /**< <- for the 74HC4543 7-segment display driver */
-constexpr uint8_t noOfDigitLocationLines{2};  /**< <- for the 74HC138 2->4 line demultiplexer */
+constexpr uint8_t noOfDigitSelectionLines{ 4 }; /**< <- for the 74HC4543 7-segment display driver */
+constexpr uint8_t noOfDigitLocationLines{ 2 };  /**< <- for the 74HC138 2->4 line demultiplexer */
 
-constexpr uint8_t enableDisableLine{5}; /**< <- affects the primary 7 segments only (not the DP) */
-constexpr uint8_t decimalPointLine{14}; /**< <- this line has to be individually controlled. */
+constexpr uint8_t enableDisableLine{ 5 }; /**< <- affects the primary 7 segments only (not the DP) */
+constexpr uint8_t decimalPointLine{ 14 }; /**< <- this line has to be individually controlled. */
 
-constexpr uint8_t digitLocationLine[noOfDigitLocationLines]{16, 15};
-constexpr uint8_t digitSelectionLine[noOfDigitSelectionLines]{7, 9, 8, 6};
+constexpr uint8_t digitLocationLine[noOfDigitLocationLines]{ 16, 15 };
+constexpr uint8_t digitSelectionLine[noOfDigitSelectionLines]{ 7, 9, 8, 6 };
 
 // The final column of digitValueMap[] is for the decimal point status. In this version,
 // the decimal point has to be treated differently than the other seven segments, so
 // a convenient means of accessing this column is provided.
 //
 constexpr uint8_t digitValueMap[noOfPossibleCharacters][noOfDigitSelectionLines + 1]{
-    LOW, LOW, LOW, LOW, LOW,     // '0' <- element 0
-    LOW, LOW, LOW, HIGH, LOW,    // '1' <- element 1
-    LOW, LOW, HIGH, LOW, LOW,    // '2' <- element 2
-    LOW, LOW, HIGH, HIGH, LOW,   // '3' <- element 3
-    LOW, HIGH, LOW, LOW, LOW,    // '4' <- element 4
-    LOW, HIGH, LOW, HIGH, LOW,   // '5' <- element 5
-    LOW, HIGH, HIGH, LOW, LOW,   // '6' <- element 6
-    LOW, HIGH, HIGH, HIGH, LOW,  // '7' <- element 7
-    HIGH, LOW, LOW, LOW, LOW,    // '8' <- element 8
-    HIGH, LOW, LOW, HIGH, LOW,   // '9' <- element 9
-    LOW, LOW, LOW, LOW, HIGH,    // '0.' <- element 10
-    LOW, LOW, LOW, HIGH, HIGH,   // '1.' <- element 11
-    LOW, LOW, HIGH, LOW, HIGH,   // '2.' <- element 12
-    LOW, LOW, HIGH, HIGH, HIGH,  // '3.' <- element 13
-    LOW, HIGH, LOW, LOW, HIGH,   // '4.' <- element 14
-    LOW, HIGH, LOW, HIGH, HIGH,  // '5.' <- element 15
-    LOW, HIGH, HIGH, LOW, HIGH,  // '6.' <- element 16
-    LOW, HIGH, HIGH, HIGH, HIGH, // '7.' <- element 17
-    HIGH, LOW, LOW, LOW, HIGH,   // '8.' <- element 18
-    HIGH, LOW, LOW, HIGH, HIGH,  // '9.' <- element 19
-    HIGH, HIGH, HIGH, HIGH, LOW, // ' '  <- element 20
-    HIGH, HIGH, HIGH, HIGH, HIGH // '.'  <- element 21
+  LOW, LOW, LOW, LOW, LOW,      // '0' <- element 0
+  LOW, LOW, LOW, HIGH, LOW,     // '1' <- element 1
+  LOW, LOW, HIGH, LOW, LOW,     // '2' <- element 2
+  LOW, LOW, HIGH, HIGH, LOW,    // '3' <- element 3
+  LOW, HIGH, LOW, LOW, LOW,     // '4' <- element 4
+  LOW, HIGH, LOW, HIGH, LOW,    // '5' <- element 5
+  LOW, HIGH, HIGH, LOW, LOW,    // '6' <- element 6
+  LOW, HIGH, HIGH, HIGH, LOW,   // '7' <- element 7
+  HIGH, LOW, LOW, LOW, LOW,     // '8' <- element 8
+  HIGH, LOW, LOW, HIGH, LOW,    // '9' <- element 9
+  LOW, LOW, LOW, LOW, HIGH,     // '0.' <- element 10
+  LOW, LOW, LOW, HIGH, HIGH,    // '1.' <- element 11
+  LOW, LOW, HIGH, LOW, HIGH,    // '2.' <- element 12
+  LOW, LOW, HIGH, HIGH, HIGH,   // '3.' <- element 13
+  LOW, HIGH, LOW, LOW, HIGH,    // '4.' <- element 14
+  LOW, HIGH, LOW, HIGH, HIGH,   // '5.' <- element 15
+  LOW, HIGH, HIGH, LOW, HIGH,   // '6.' <- element 16
+  LOW, HIGH, HIGH, HIGH, HIGH,  // '7.' <- element 17
+  HIGH, LOW, LOW, LOW, HIGH,    // '8.' <- element 18
+  HIGH, LOW, LOW, HIGH, HIGH,   // '9.' <- element 19
+  HIGH, HIGH, HIGH, HIGH, LOW,  // ' '  <- element 20
+  HIGH, HIGH, HIGH, HIGH, HIGH  // '.'  <- element 21
 };
 
 // a tidy means of identifying the DP status data when accessing the above table
-constexpr uint8_t DPstatus_columnID{noOfDigitSelectionLines};
+constexpr uint8_t DPstatus_columnID{ noOfDigitSelectionLines };
 
 constexpr uint8_t digitLocationMap[noOfDigitLocations][noOfDigitLocationLines]{
-    LOW, LOW,   // Digit 1
-    LOW, HIGH,  // Digit 2
-    HIGH, LOW,  // Digit 3
-    HIGH, HIGH, // Digit 4
+  LOW, LOW,    // Digit 1
+  LOW, HIGH,   // Digit 2
+  HIGH, LOW,   // Digit 3
+  HIGH, HIGH,  // Digit 4
 };
 
-#else // PIN_SAVING_HARDWARE
+#else  // PIN_SAVING_HARDWARE
 
 #define ON HIGH
 #define OFF LOW
 
 #ifdef TEMP_SENSOR
-constexpr uint8_t tempSensorPin{15}; /**< the only free pin left in this case (pin1 of IC4) */
+constexpr uint8_t tempSensorPin{ 15 }; /**< the only free pin left in this case (pin1 of IC4) */
 #endif
 
-constexpr uint8_t noOfSegmentsPerDigit{8}; /**< includes one for the decimal point */
+constexpr uint8_t noOfSegmentsPerDigit{ 8 }; /**< includes one for the decimal point */
 
-constexpr uint8_t noOfPossibleCharacters{23};
+constexpr uint8_t noOfPossibleCharacters{ 23 };
 
 enum class DigitEnableStates : uint8_t
 {
@@ -440,45 +440,45 @@ enum class DigitEnableStates : uint8_t
   DIGIT_DISABLED
 };
 
-constexpr uint8_t digitSelectorPin[noOfDigitLocations]{16, 10, 13, 11};
-constexpr uint8_t segmentDrivePin[noOfSegmentsPerDigit]{2, 5, 12, 6, 7, 9, 8, 14};
+constexpr uint8_t digitSelectorPin[noOfDigitLocations]{ 16, 10, 13, 11 };
+constexpr uint8_t segmentDrivePin[noOfSegmentsPerDigit]{ 2, 5, 12, 6, 7, 9, 8, 14 };
 
 // The final column of segMap[] is for the decimal point status. In this version,
 // the decimal point is treated just like all the other segments, so there is
 // no need to access this column specifically.
 //
 constexpr uint8_t segMap[noOfPossibleCharacters][noOfSegmentsPerDigit]{
-    ON, ON, ON, ON, ON, ON, OFF, OFF,       // '0' <- element 0
-    OFF, ON, ON, OFF, OFF, OFF, OFF, OFF,   // '1' <- element 1
-    ON, ON, OFF, ON, ON, OFF, ON, OFF,      // '2' <- element 2
-    ON, ON, ON, ON, OFF, OFF, ON, OFF,      // '3' <- element 3
-    OFF, ON, ON, OFF, OFF, ON, ON, OFF,     // '4' <- element 4
-    ON, OFF, ON, ON, OFF, ON, ON, OFF,      // '5' <- element 5
-    ON, OFF, ON, ON, ON, ON, ON, OFF,       // '6' <- element 6
-    ON, ON, ON, OFF, OFF, OFF, OFF, OFF,    // '7' <- element 7
-    ON, ON, ON, ON, ON, ON, ON, OFF,        // '8' <- element 8
-    ON, ON, ON, ON, OFF, ON, ON, OFF,       // '9' <- element 9
-    ON, ON, ON, ON, ON, ON, OFF, ON,        // '0.' <- element 10
-    OFF, ON, ON, OFF, OFF, OFF, OFF, ON,    // '1.' <- element 11
-    ON, ON, OFF, ON, ON, OFF, ON, ON,       // '2.' <- element 12
-    ON, ON, ON, ON, OFF, OFF, ON, ON,       // '3.' <- element 13
-    OFF, ON, ON, OFF, OFF, ON, ON, ON,      // '4.' <- element 14
-    ON, OFF, ON, ON, OFF, ON, ON, ON,       // '5.' <- element 15
-    ON, OFF, ON, ON, ON, ON, ON, ON,        // '6.' <- element 16
-    ON, ON, ON, OFF, OFF, OFF, OFF, ON,     // '7.' <- element 17
-    ON, ON, ON, ON, ON, ON, ON, ON,         // '8.' <- element 18
-    ON, ON, ON, ON, OFF, ON, ON, ON,        // '9.' <- element 19
-    OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF, // ' ' <- element 20
-    OFF, OFF, OFF, OFF, OFF, OFF, OFF, ON,  // '.' <- element 21
-    ON, ON, OFF, OFF, OFF, ON, ON, OFF      // '°' <- element 22
+  ON, ON, ON, ON, ON, ON, OFF, OFF,        // '0' <- element 0
+  OFF, ON, ON, OFF, OFF, OFF, OFF, OFF,    // '1' <- element 1
+  ON, ON, OFF, ON, ON, OFF, ON, OFF,       // '2' <- element 2
+  ON, ON, ON, ON, OFF, OFF, ON, OFF,       // '3' <- element 3
+  OFF, ON, ON, OFF, OFF, ON, ON, OFF,      // '4' <- element 4
+  ON, OFF, ON, ON, OFF, ON, ON, OFF,       // '5' <- element 5
+  ON, OFF, ON, ON, ON, ON, ON, OFF,        // '6' <- element 6
+  ON, ON, ON, OFF, OFF, OFF, OFF, OFF,     // '7' <- element 7
+  ON, ON, ON, ON, ON, ON, ON, OFF,         // '8' <- element 8
+  ON, ON, ON, ON, OFF, ON, ON, OFF,        // '9' <- element 9
+  ON, ON, ON, ON, ON, ON, OFF, ON,         // '0.' <- element 10
+  OFF, ON, ON, OFF, OFF, OFF, OFF, ON,     // '1.' <- element 11
+  ON, ON, OFF, ON, ON, OFF, ON, ON,        // '2.' <- element 12
+  ON, ON, ON, ON, OFF, OFF, ON, ON,        // '3.' <- element 13
+  OFF, ON, ON, OFF, OFF, ON, ON, ON,       // '4.' <- element 14
+  ON, OFF, ON, ON, OFF, ON, ON, ON,        // '5.' <- element 15
+  ON, OFF, ON, ON, ON, ON, ON, ON,         // '6.' <- element 16
+  ON, ON, ON, OFF, OFF, OFF, OFF, ON,      // '7.' <- element 17
+  ON, ON, ON, ON, ON, ON, ON, ON,          // '8.' <- element 18
+  ON, ON, ON, ON, OFF, ON, ON, ON,         // '9.' <- element 19
+  OFF, OFF, OFF, OFF, OFF, OFF, OFF, OFF,  // ' ' <- element 20
+  OFF, OFF, OFF, OFF, OFF, OFF, OFF, ON,   // '.' <- element 21
+  ON, ON, OFF, OFF, OFF, ON, ON, OFF       // '°' <- element 22
 };
-#endif // PIN_SAVING_HARDWARE
+#endif  // PIN_SAVING_HARDWARE
 
-uint8_t charsForDisplay[noOfDigitLocations]{20, 20, 20, 20}; /**< all blank */
+uint8_t charsForDisplay[noOfDigitLocations]{ 20, 20, 20, 20 }; /**< all blank */
 
-bool EDD_isActive{false}; /**< energy divertion detection */
+bool EDD_isActive{ false }; /**< energy divertion detection */
 
-constexpr int32_t requiredExportPerMainsCycle_inIEU{(int32_t)REQUIRED_EXPORT_IN_WATTS * (1 / powerCal_grid)};
+constexpr int32_t requiredExportPerMainsCycle_inIEU{ (int32_t)REQUIRED_EXPORT_IN_WATTS * (1 / powerCal_grid) };
 
 #ifdef TEMP_SENSOR
 // For temperature sensing
@@ -498,21 +498,21 @@ void setup()
   //  pinMode(outOfRangeIndication, OUTPUT);
   //  digitalWriteFast (outOfRangeIndication, LED_OFF);
 
-  pinMode(physicalLoad_0_pin, OUTPUT); // driver pin for the primary load
-  pinMode(physicalLoad_1_pin, OUTPUT); // driver pin for an additional load
-  pinMode(physicalLoad_2_pin, OUTPUT); // driver pin for an additional load
+  pinMode(physicalLoad_0_pin, OUTPUT);  // driver pin for the primary load
+  pinMode(physicalLoad_1_pin, OUTPUT);  // driver pin for an additional load
+  pinMode(physicalLoad_2_pin, OUTPUT);  // driver pin for an additional load
   //
-  for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i) // re-using the logic from my multiLoad code
+  for (int16_t i = 0; i < NO_OF_DUMPLOADS; ++i)  // re-using the logic from my multiLoad code
   {
     logicalLoadState[i] = LoadStates::LOAD_OFF;
     physicalLoadState[i] = LoadStates::LOAD_OFF;
   }
   //
-  digitalWrite(physicalLoad_0_pin, (uint8_t)physicalLoadState[0]);  // the primary load is active low.
-  digitalWrite(physicalLoad_1_pin, !(uint8_t)physicalLoadState[1]); // the additional load is active high.
-  digitalWrite(physicalLoad_2_pin, !(uint8_t)physicalLoadState[2]); // the additional load is active high.
+  digitalWrite(physicalLoad_0_pin, (uint8_t)physicalLoadState[0]);   // the primary load is active low.
+  digitalWrite(physicalLoad_1_pin, !(uint8_t)physicalLoadState[1]);  // the additional load is active high.
+  digitalWrite(physicalLoad_2_pin, !(uint8_t)physicalLoadState[2]);  // the additional load is active high.
 
-  delay(delayBeforeSerialStarts); // allow time to open Serial monitor
+  delay(delayBeforeSerialStarts);  // allow time to open Serial monitor
 
   Serial.begin(9600);
   Serial.println();
@@ -529,14 +529,14 @@ void setup()
   // configure the IO drivers for the 4-digit display
   //
   // the Decimal Point line is driven directly from the processor
-  pinMode(decimalPointLine, OUTPUT); // the 'decimal point' line
+  pinMode(decimalPointLine, OUTPUT);  // the 'decimal point' line
 
   // set up the control lines for the 74HC4543 7-seg display driver
   for (int16_t i = 0; i < noOfDigitSelectionLines; ++i)
     pinMode(digitSelectionLine[i], OUTPUT);
 
   // an enable line is required for the 74HC4543 7-seg display driver
-  pinMode(enableDisableLine, OUTPUT); // for the 74HC4543 7-seg display driver
+  pinMode(enableDisableLine, OUTPUT);  // for the 74HC4543 7-seg display driver
   digitalWrite(enableDisableLine, DRIVER_CHIP_DISABLED);
 
   // set up the control lines for the 74HC138 2->4 demux
@@ -586,19 +586,19 @@ void setup()
   Serial.println("ADC mode:       free-running");
 
   // Set up the ADC to be free-running
-  ADCSRA = (1 << ADPS0) + (1 << ADPS1) + (1 << ADPS2); // Set the ADC's clock to system clock / 128
-  ADCSRA |= (1 << ADEN);                               // Enable the ADC
+  ADCSRA = (1 << ADPS0) + (1 << ADPS1) + (1 << ADPS2);  // Set the ADC's clock to system clock / 128
+  ADCSRA |= (1 << ADEN);                                // Enable the ADC
 
-  ADCSRA |= (1 << ADATE); // set the Auto Trigger Enable bit in the ADCSRA register. Because
-                          // bits ADTS0-2 have not been set (i.e. they are all zero), the
-                          // ADC's trigger source is set to "free running mode".
+  ADCSRA |= (1 << ADATE);  // set the Auto Trigger Enable bit in the ADCSRA register. Because
+                           // bits ADTS0-2 have not been set (i.e. they are all zero), the
+                           // ADC's trigger source is set to "free running mode".
 
-  ADCSRA |= (1 << ADIE); // set the ADC interrupt enable bit. When this bit is written
-                         // to one and the I-bit in SREG is set, the
-                         // ADC Conversion Complete Interrupt is activated.
+  ADCSRA |= (1 << ADIE);  // set the ADC interrupt enable bit. When this bit is written
+                          // to one and the I-bit in SREG is set, the
+                          // ADC Conversion Complete Interrupt is activated.
 
-  ADCSRA |= (1 << ADSC); // start ADC manually first time
-  sei();                 // Enable Global Interrupts
+  ADCSRA |= (1 << ADSC);  // start ADC manually first time
+  sei();                  // Enable Global Interrupts
 
   Serial.print(F("powerCal_grid =      "));
   Serial.println(powerCal_grid, 4);
@@ -621,12 +621,12 @@ void setup()
   Serial.println(nominalEnergyThreshold);
 
   Serial.print(F(">>free RAM = "));
-  Serial.println(freeRam()); // a useful value to keep an eye on
+  Serial.println(freeRam());  // a useful value to keep an eye on
 
   Serial.println("----");
 
 #ifdef TEMP_SENSOR
-  convertTemperature(); // start initial temperature conversion
+  convertTemperature();  // start initial temperature conversion
 #endif
 }
 
@@ -660,7 +660,7 @@ void setup()
  */
 ISR(ADC_vect)
 {
-  static unsigned char sample_index{0};
+  static unsigned char sample_index{ 0 };
   int16_t rawSample;
   int32_t sampleIminusDC_grid;
   int32_t sampleIminusDC_diverted;
@@ -672,72 +672,72 @@ ISR(ADC_vect)
 
   switch (sample_index)
   {
-  case 0:
-    rawSample = ADC;                       // store the ADC value (this one is for Voltage)
-    ADMUX = 0x40 + currentSensor_diverted; // set up the next conversion, which is for Diverted Current
-    ++sample_index;                        // increment the control flag
+    case 0:
+      rawSample = ADC;                        // store the ADC value (this one is for Voltage)
+      ADMUX = 0x40 + currentSensor_diverted;  // set up the next conversion, which is for Diverted Current
+      ++sample_index;                         // increment the control flag
 
-    sampleVminusDC_long = ((int32_t)rawSample << 8) - DCoffset_V_long;
-    polarityOfMostRecentVsample = (sampleVminusDC_long > 0) ? Polarities::POSITIVE : Polarities::NEGATIVE;
-    confirmPolarity();
-    //
-    processRawSamples(); // deals with aspects that only occur at particular stages of each mains cycle
-                         //
-    // for the Vrms calculation (for datalogging only)
-    filtV_div4 = sampleVminusDC_long >> 2;   // reduce to 16-bits (now x64, or 2^6)
-    inst_Vsquared = filtV_div4 * filtV_div4; // 32-bits (now x4096, or 2^12)
-    inst_Vsquared >>= 12;                    // scaling is now x1 (V_ADC x I_ADC)
-    sum_Vsquared += inst_Vsquared;           // cumulative V^2 (V_ADC x I_ADC)
-    ++sampleSetsDuringThisDatalogPeriod_long;
-    //
-    // store items for use during next loop
-    cumVdeltasThisCycle_long += sampleVminusDC_long;    // for use with LP filter
-    polarityConfirmedOfLastSampleV = polarityConfirmed; // for identification of half cycle boundaries
-    ++sampleSetsDuringThisMainsCycle;                   // for real power calculations
+      sampleVminusDC_long = ((int32_t)rawSample << 8) - DCoffset_V_long;
+      polarityOfMostRecentVsample = (sampleVminusDC_long > 0) ? Polarities::POSITIVE : Polarities::NEGATIVE;
+      confirmPolarity();
+      //
+      processRawSamples();  // deals with aspects that only occur at particular stages of each mains cycle
+                            //
+      // for the Vrms calculation (for datalogging only)
+      filtV_div4 = sampleVminusDC_long >> 2;    // reduce to 16-bits (now x64, or 2^6)
+      inst_Vsquared = filtV_div4 * filtV_div4;  // 32-bits (now x4096, or 2^12)
+      inst_Vsquared >>= 12;                     // scaling is now x1 (V_ADC x I_ADC)
+      sum_Vsquared += inst_Vsquared;            // cumulative V^2 (V_ADC x I_ADC)
+      ++sampleSetsDuringThisDatalogPeriod_long;
+      //
+      // store items for use during next loop
+      cumVdeltasThisCycle_long += sampleVminusDC_long;     // for use with LP filter
+      polarityConfirmedOfLastSampleV = polarityConfirmed;  // for identification of half cycle boundaries
+      ++sampleSetsDuringThisMainsCycle;                    // for real power calculations
 
-    refreshDisplay();
-    break;
-  case 1:
-    rawSample = ADC;              // store the ADC value (this one is for Grid Current)
-    ADMUX = 0x40 + voltageSensor; // set up the next conversion, which is for Voltage
-    ++sample_index;               // increment the control flag
-    //
-    // First, deal with the power at the grid connection point (as measured via CT1)
-    // remove most of the DC offset from the current sample (the precise value does not matter)
-    sampleIminusDC_grid = ((int32_t)(rawSample - DCoffset_I)) << 8;
-    //
-    // extra filtering to offset the HPF effect of CT1
-    last_lpf_long = lpf_long;
-    lpf_long = last_lpf_long + alpha * (sampleIminusDC_grid - last_lpf_long);
-    sampleIminusDC_grid += (lpf_gain * lpf_long);
-    //
-    // calculate the "real power" in this sample pair and add to the accumulated sum
-    filtV_div4 = sampleVminusDC_long >> 2; // reduce to 16-bits (now x64, or 2^6)
-    filtI_div4 = sampleIminusDC_grid >> 2;      // reduce to 16-bits (now x64, or 2^6)
-    instP = filtV_div4 * filtI_div4;       // 32-bits (now x4096, or 2^12)
-    instP >>= 12;                          // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
-    sumP_forEnergyBucket += instP;         // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
-    sumP_atSupplyPoint += instP;
-    break;
-  case 2:
-    rawSample = ADC;                   // store the ADC value (this one is for Diverted Current)
-    ADMUX = 0x40 + currentSensor_grid; // set up the next conversion, which is for Grid Current
-    sample_index = 0;                  // reset the control flag
-    //
-    // remove most of the DC offset from the current sample (the precise value does not matter)
-    sampleIminusDC_diverted = ((int32_t)(rawSample - DCoffset_I)) << 8;
-    //
-    // calculate the "real power" in this sample pair and add to the accumulated sum
-    filtV_div4 = sampleVminusDC_long >> 2; // reduce to 16-bits (now x64, or 2^6)
-    filtI_div4 = sampleIminusDC_diverted >> 2;      // reduce to 16-bits (now x64, or 2^6)
-    instP = filtV_div4 * filtI_div4;       // 32-bits (now x4096, or 2^12)
-    instP >>= 12;                          // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
-    sumP_diverted += instP;                // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
-    break;
-  default:
-    sample_index = 0; // to prevent lockup (should never get here)
+      refreshDisplay();
+      break;
+    case 1:
+      rawSample = ADC;               // store the ADC value (this one is for Grid Current)
+      ADMUX = 0x40 + voltageSensor;  // set up the next conversion, which is for Voltage
+      ++sample_index;                // increment the control flag
+      //
+      // First, deal with the power at the grid connection point (as measured via CT1)
+      // remove most of the DC offset from the current sample (the precise value does not matter)
+      sampleIminusDC_grid = ((int32_t)(rawSample - DCoffset_I)) << 8;
+      //
+      // extra filtering to offset the HPF effect of CT1
+      last_lpf_long = lpf_long;
+      lpf_long = last_lpf_long + alpha * (sampleIminusDC_grid - last_lpf_long);
+      sampleIminusDC_grid += (lpf_gain * lpf_long);
+      //
+      // calculate the "real power" in this sample pair and add to the accumulated sum
+      filtV_div4 = sampleVminusDC_long >> 2;  // reduce to 16-bits (now x64, or 2^6)
+      filtI_div4 = sampleIminusDC_grid >> 2;  // reduce to 16-bits (now x64, or 2^6)
+      instP = filtV_div4 * filtI_div4;        // 32-bits (now x4096, or 2^12)
+      instP >>= 12;                           // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
+      sumP_forEnergyBucket += instP;          // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
+      sumP_atSupplyPoint += instP;
+      break;
+    case 2:
+      rawSample = ADC;                    // store the ADC value (this one is for Diverted Current)
+      ADMUX = 0x40 + currentSensor_grid;  // set up the next conversion, which is for Grid Current
+      sample_index = 0;                   // reset the control flag
+      //
+      // remove most of the DC offset from the current sample (the precise value does not matter)
+      sampleIminusDC_diverted = ((int32_t)(rawSample - DCoffset_I)) << 8;
+      //
+      // calculate the "real power" in this sample pair and add to the accumulated sum
+      filtV_div4 = sampleVminusDC_long >> 2;      // reduce to 16-bits (now x64, or 2^6)
+      filtI_div4 = sampleIminusDC_diverted >> 2;  // reduce to 16-bits (now x64, or 2^6)
+      instP = filtV_div4 * filtI_div4;            // 32-bits (now x4096, or 2^12)
+      instP >>= 12;                               // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
+      sumP_diverted += instP;                     // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
+      break;
+    default:
+      sample_index = 0;  // to prevent lockup (should never get here)
   }
-} // end of ISR
+}  // end of ISR
 
 /* -----------------------------------------------------------
    Start of various helper functions which are used by the ISR
@@ -764,13 +764,13 @@ void processRawSamples()
         processLatestContribution();
       else
         processStartUp();
-    } // end of processing that is specific to the first Vsample in each +ve half cycle
+    }  // end of processing that is specific to the first Vsample in each +ve half cycle
 
     // still processing samples where the voltage is Polarities::POSITIVE ...
-    if (beyondStartUpPhase && (sampleSetsDuringThisMainsCycle == 5)) // to distribute the workload within each mains cycle
+    if (beyondStartUpPhase && (sampleSetsDuringThisMainsCycle == 5))  // to distribute the workload within each mains cycle
       postProcessPlusHalfCycle();
-  }    // end of processing that is specific to samples where the voltage is Polarities::POSITIVE
-  else // the polatity of this sample is Polarities::NEGATIVE
+  }  // end of processing that is specific to samples where the voltage is Polarities::POSITIVE
+  else  // the polatity of this sample is Polarities::NEGATIVE
   {
     if (polarityConfirmedOfLastSampleV != Polarities::NEGATIVE)
       processMinusHalfCycle();
@@ -780,7 +780,7 @@ void processRawSamples()
       postProcessMinusHalfCycle();
 
     ++sampleSetsDuringNegativeHalfOfMainsCycle;
-  } // end of processing that is specific to samples where the voltage is Polarities::NEGATIVE
+  }  // end of processing that is specific to samples where the voltage is Polarities::NEGATIVE
 }
 
 /**
@@ -792,15 +792,15 @@ void processStartUp()
 {
   // wait until the DC-blocking filters have had time to settle
   if (millis() <= (delayBeforeSerialStarts + startUpPeriod))
-    return; // still settling, do nothing
+    return;  // still settling, do nothing
 
   // the DC-blocking filters have had time to settle
   beyondStartUpPhase = true;
   sumP_forEnergyBucket = 0;
   sumP_atSupplyPoint = 0;
   sumP_diverted = 0;
-  sampleSetsDuringThisMainsCycle = 0;   // not yet dealt with for this cycle
-  sampleCount_forContinuityChecker = 1; // opportunity has been missed for this cycle
+  sampleSetsDuringThisMainsCycle = 0;    // not yet dealt with for this cycle
+  sampleCount_forContinuityChecker = 1;  // opportunity has been missed for this cycle
   lowestNoOfSampleSetsPerMainsCycle = 999;
   sampleSetsDuringThisDatalogPeriod_long = 0;
   // can't say "Go!" here 'cos we're in an ISR!
@@ -813,7 +813,7 @@ void processStartUp()
  */
 void processLatestContribution()
 {
-  b_newMainsCycle = true; // <--  a 50 Hz 'tick' for use by the main code
+  b_newMainsCycle = true;  // <--  a 50 Hz 'tick' for use by the main code
 
   // a simple routine for checking the performance of this new ISR structure
   if (sampleSetsDuringThisMainsCycle < lowestNoOfSampleSetsPerMainsCycle)
@@ -831,10 +831,10 @@ void processLatestContribution()
   // to save time, calibration of power is omitted at this stage. Real Power (stored as
   // a 'int32_t') is therefore (1/powerCal) times larger than the actual power in Watts.
   //
-  int32_t realPower_grid{sumP_forEnergyBucket / sampleSetsDuringThisMainsCycle}; // proportional to Watts
-  int32_t realPower_diverted{sumP_diverted / sampleSetsDuringThisMainsCycle};    // proportional to Watts
+  int32_t realPower_grid{ sumP_forEnergyBucket / sampleSetsDuringThisMainsCycle };  // proportional to Watts
+  int32_t realPower_diverted{ sumP_diverted / sampleSetsDuringThisMainsCycle };     // proportional to Watts
 
-  realPower_grid -= requiredExportPerMainsCycle_inIEU; // <- useful for PV simulation
+  realPower_grid -= requiredExportPerMainsCycle_inIEU;  // <- useful for PV simulation
 
   // Next, the energy content of this power rating needs to be determined. Energy is
   // power multiplied by time, so the next step would normally be to multiply the measured
@@ -849,8 +849,8 @@ void processLatestContribution()
   //   The 'energy' variable below is CYCLES_PER_SECOND * (1/powerCal) times larger than
   // the actual energy in Joules.
   //
-  int32_t realEnergy_grid{realPower_grid};
-  int32_t realEnergy_diverted{realPower_diverted};
+  int32_t realEnergy_grid{ realPower_grid };
+  int32_t realEnergy_diverted{ realPower_diverted };
 
   // Energy contributions from the grid connection point (CT1) are summed in an
   // accumulator which is known as the energy bucket. The purpose of the energy bucket
@@ -882,7 +882,7 @@ void processLatestContribution()
         else {
           digitalWriteFast (outOfRangeIndication , LED_OFF); }*/
 
-  if (EDD_isActive) // Energy Diversion Display
+  if (EDD_isActive)  // Energy Diversion Display
   {
     // For diverted energy, the latest contribution needs to be added to an
     // accumulator which operates with maximum precision.
@@ -920,8 +920,8 @@ void processLatestContribution()
     copyOf_sumP_atSupplyPoint = sumP_atSupplyPoint;
     copyOf_divertedEnergyTotal_Wh = divertedEnergyTotal_Wh;
     copyOf_sum_Vsquared = sum_Vsquared;
-    copyOf_sampleSetsDuringThisDatalogPeriod = sampleSetsDuringThisDatalogPeriod_long; // (for diags only)
-    copyOf_lowestNoOfSampleSetsPerMainsCycle = lowestNoOfSampleSetsPerMainsCycle;      // (for diags only)
+    copyOf_sampleSetsDuringThisDatalogPeriod = sampleSetsDuringThisDatalogPeriod_long;  // (for diags only)
+    copyOf_lowestNoOfSampleSetsPerMainsCycle = lowestNoOfSampleSetsPerMainsCycle;       // (for diags only)
 
     for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
     {
@@ -960,7 +960,7 @@ void postProcessPlusHalfCycle()
   // During the post-transition period, any change in the energy level is noted.
   if (energyInBucket_long > workingEnergyThreshold_upper)
   {
-    workingEnergyThreshold_lower = nominalEnergyThreshold; // reset the opposite threshold
+    workingEnergyThreshold_lower = nominalEnergyThreshold;  // reset the opposite threshold
     workingEnergyThreshold_upper = energyInBucket_long;
 
     // the energy thresholds must remain within range
@@ -969,7 +969,7 @@ void postProcessPlusHalfCycle()
   }
   else if (energyInBucket_long < workingEnergyThreshold_lower)
   {
-    workingEnergyThreshold_upper = nominalEnergyThreshold; // reset the opposite threshold
+    workingEnergyThreshold_upper = nominalEnergyThreshold;  // reset the opposite threshold
     workingEnergyThreshold_lower = energyInBucket_long;
 
     // the energy thresholds must remain within range
@@ -990,7 +990,7 @@ void processMinusHalfCycle()
   //  The portion which is fed back into the integrator is approximately one percent
   // of the average offset of all the Vsamples in the previous mains cycle.
   //
-  int32_t previousOffset{DCoffset_V_long};
+  int32_t previousOffset{ DCoffset_V_long };
   DCoffset_V_long = previousOffset + (cumVdeltasThisCycle_long >> 12);
   cumVdeltasThisCycle_long = 0;
 
@@ -1008,7 +1008,7 @@ void processMinusHalfCycle()
   // the state of the load as necessary. The arming signal for the triac can't be set yet - that must
   // wait until the voltage has advanced further beyond the -ve going zero-crossing point.
   //
-  int32_t averagePower{sumP_forEnergyBucket / sampleSetsDuringThisMainsCycle}; // for 1st half of this mains cycle only
+  int32_t averagePower{ sumP_forEnergyBucket / sampleSetsDuringThisMainsCycle };  // for 1st half of this mains cycle only
   //
   // To avoid repetitive and unnecessary calculations, the increase in energy during each mains cycle is
   // deemed to be numerically equal to the average power. The predicted value for the energy state at the
@@ -1017,7 +1017,7 @@ void processMinusHalfCycle()
   // number of contributing sample sets has been used so the result can be expected to be a true measurement
   // of average power, not half of it.
 
-  energyInBucket_prediction = energyInBucket_long + averagePower; // at end of this mains cycle
+  energyInBucket_prediction = energyInBucket_long + averagePower;  // at end of this mains cycle
 }
 
 /**
@@ -1041,12 +1041,12 @@ void postProcessMinusHalfCycle()
   else if (energyInBucket_prediction < workingEnergyThreshold_lower)
     proceedLowEnergyLevel();
 
-  updatePhysicalLoadStates(); // allows the logical-to-physical mapping to be changed
+  updatePhysicalLoadStates();  // allows the logical-to-physical mapping to be changed
 
   // update each of the physical loads
-  digitalWrite(physicalLoad_0_pin, (uint8_t)physicalLoadState[0]);  // active low for trigger
-  digitalWrite(physicalLoad_1_pin, !(uint8_t)physicalLoadState[1]); // active high for additional load
-  digitalWrite(physicalLoad_2_pin, !(uint8_t)physicalLoadState[2]); // active high for additional load
+  digitalWrite(physicalLoad_0_pin, (uint8_t)physicalLoadState[0]);   // active low for trigger
+  digitalWrite(physicalLoad_1_pin, !(uint8_t)physicalLoadState[1]);  // active high for additional load
+  digitalWrite(physicalLoad_2_pin, !(uint8_t)physicalLoadState[2]);  // active high for additional load
 
   // update the Energy Diversion Detector
   if (physicalLoadState[0] == LoadStates::LOAD_ON)
@@ -1066,9 +1066,9 @@ void postProcessMinusHalfCycle()
 void proceedHighEnergyLevel()
 {
   // the predicted energy state is high so an extra load may need to be added
-  bool OK_toAddLoad{true}; // default state of flag
+  bool OK_toAddLoad{ true };  // default state of flag
 
-  auto tempLoad{nextLogicalLoadToBeAdded()};
+  auto tempLoad{ nextLogicalLoadToBeAdded() };
   if (tempLoad >= NO_OF_DUMPLOADS)
     return;
 
@@ -1094,9 +1094,9 @@ void proceedHighEnergyLevel()
 void proceedLowEnergyLevel()
 {
   // the predicted energy state is low so some load may need to be removed
-  bool OK_toRemoveLoad{true}; // default state of flag
+  bool OK_toRemoveLoad{ true };  // default state of flag
 
-  auto tempLoad{nextLogicalLoadToBeRemoved()};
+  auto tempLoad{ nextLogicalLoadToBeRemoved() };
   if (tempLoad >= NO_OF_DUMPLOADS)
     return;
 
@@ -1126,7 +1126,7 @@ void confirmPolarity()
    * a certain number of consecutive samples in the 'other' half of the 
    * waveform have been encountered. 
    */
-  static uint8_t count{0};
+  static uint8_t count{ 0 };
   if (polarityOfMostRecentVsample != polarityConfirmedOfLastSampleV)
     ++count;
   else
@@ -1164,7 +1164,7 @@ uint8_t nextLogicalLoadToBeAdded()
  */
 uint8_t nextLogicalLoadToBeRemoved()
 {
-  uint8_t index{NO_OF_DUMPLOADS};
+  uint8_t index{ NO_OF_DUMPLOADS };
   do
   {
     --index;
@@ -1209,8 +1209,8 @@ void updatePhysicalLoadStates()
  */
 void refreshDisplay()
 {
-  static uint8_t displayTime_count{0};
-  static uint8_t digitLocationThatIsActive{0};
+  static uint8_t displayTime_count{ 0 };
+  static uint8_t digitLocationThatIsActive{ 0 };
 
   if (++displayTime_count <= MAX_DISPLAY_TIME_COUNT)
     return;
@@ -1254,7 +1254,7 @@ void refreshDisplay()
 
   // 5. determine the character to be displayed at this new location
   // (which includes the decimal point information)
-  uint8_t digitVal{charsForDisplay[digitLocationThatIsActive]};
+  uint8_t digitVal{ charsForDisplay[digitLocationThatIsActive] };
 
   // 6. configure the 7-segment driver for the character to be displayed
   for (uint8_t line = 0; line < noOfDigitSelectionLines; ++line)
@@ -1269,7 +1269,7 @@ void refreshDisplay()
   // 8. enable the 7-segment driver chip
   digitalWrite(enableDisableLine, DRIVER_CHIP_ENABLED);
 
-#else // PIN_SAVING_HARDWARE
+#else  // PIN_SAVING_HARDWARE
 
   // This version is more straightforward because the digit-enable lines can be
   // used to mask out all of the transitory states, including the Decimal Point.
@@ -1290,20 +1290,20 @@ void refreshDisplay()
     digitLocationThatIsActive = 0;
 
   // 3. determine the relevant character for the new active location
-  uint8_t digitVal{charsForDisplay[digitLocationThatIsActive]};
+  uint8_t digitVal{ charsForDisplay[digitLocationThatIsActive] };
 
   // 4. set up the segment drivers for the character to be displayed (includes the DP)
   for (uint8_t segment = 0; segment < noOfSegmentsPerDigit; ++segment)
   {
-    uint8_t segmentState{segMap[digitVal][segment]};
+    uint8_t segmentState{ segMap[digitVal][segment] };
     digitalWrite(segmentDrivePin[segment], segmentState);
   }
 
   // 5. activate the digit-enable line for the new active location
   digitalWrite(digitSelectorPin[digitLocationThatIsActive], (uint8_t)DigitEnableStates::DIGIT_ENABLED);
 
-#endif // PIN_SAVING_HARDWARE
-} // end of refreshDisplay()
+#endif  // PIN_SAVING_HARDWARE
+}  // end of refreshDisplay()
 
 /* End of helper functions which are used by the ISR
    -------------------------------------------------
@@ -1316,21 +1316,21 @@ void refreshDisplay()
  */
 void configureValueForDisplay(const bool bToggleDisplayTemp)
 {
-  static uint8_t locationOfDot{0};
+  static uint8_t locationOfDot{ 0 };
 
 #ifdef TEMP_SENSOR
   // leave the temperature in case of zero diversion instead of "walking dots"
   if (bToggleDisplayTemp || !EDD_isActive)
   {
     // we want to display the temperature
-    uint16_t val{tx_data.temperature_times100};
+    uint16_t val{ tx_data.temperature_times100 };
 
-    uint8_t thisDigit{val / 1000};
+    uint8_t thisDigit{ val / 1000 };
     charsForDisplay[0] = thisDigit;
     val -= 1000 * thisDigit;
 
     thisDigit = val / 100;
-    charsForDisplay[1] = thisDigit + 10; // dec point after 2nd digit
+    charsForDisplay[1] = thisDigit + 10;  // dec point after 2nd digit
     val -= 100 * thisDigit;
 
     thisDigit = val / 10;
@@ -1339,7 +1339,7 @@ void configureValueForDisplay(const bool bToggleDisplayTemp)
 
 #ifndef PIN_SAVING_HARDWARE
     // In case we use the BCD converter, we cannot display this character :-(
-    charsForDisplay[3] = 22; // we skip the last character, display '°' instead
+    charsForDisplay[3] = 22;  // we skip the last character, display '°' instead
 #endif
 
     return;
@@ -1349,22 +1349,22 @@ void configureValueForDisplay(const bool bToggleDisplayTemp)
   if (!EDD_isActive)
   {
     // "walking dots" display
-    charsForDisplay[locationOfDot] = 20; // blank
+    charsForDisplay[locationOfDot] = 20;  // blank
 
     ++locationOfDot;
     if (locationOfDot >= noOfDigitLocations)
       locationOfDot = 0;
 
-    charsForDisplay[locationOfDot] = 21; // dot
+    charsForDisplay[locationOfDot] = 21;  // dot
 
     return;
   }
 
-  uint16_t val{divertedEnergyTotal_Wh};
+  uint16_t val{ divertedEnergyTotal_Wh };
   bool energyValueExceeds10kWh;
 
   if (val < 10000)
-    energyValueExceeds10kWh = false; // no need to re-scale (display to 3 DPs)
+    energyValueExceeds10kWh = false;  // no need to re-scale (display to 3 DPs)
   else
   {
     // re-scale is needed (display to 2 DPs)
@@ -1372,7 +1372,7 @@ void configureValueForDisplay(const bool bToggleDisplayTemp)
     val = val / 10;
   }
 
-  uint8_t thisDigit{val / 1000};
+  uint8_t thisDigit{ val / 1000 };
   charsForDisplay[0] = thisDigit;
   val -= 1000 * thisDigit;
 
@@ -1388,9 +1388,9 @@ void configureValueForDisplay(const bool bToggleDisplayTemp)
 
   // assign the decimal point location
   if (energyValueExceeds10kWh)
-    charsForDisplay[1] += 10; // dec point after 2nd digit
+    charsForDisplay[1] += 10;  // dec point after 2nd digit
   else
-    charsForDisplay[0] += 10; // dec point after 1st digit
+    charsForDisplay[0] += 10;  // dec point after 1st digit
 }
 
 /**
@@ -1401,10 +1401,10 @@ void configureValueForDisplay(const bool bToggleDisplayTemp)
 */
 void loop()
 {
-  static uint8_t perSecondTimer{0};
-  static bool bToggleDisplayTemp{false};
+  static uint8_t perSecondTimer{ 0 };
+  static bool bToggleDisplayTemp{ false };
 #ifdef TEMP_SENSOR
-  static uint16_t displayCyclingTimer{0};
+  static uint16_t displayCyclingTimer{ 0 };
 #endif
 
   if (b_newMainsCycle)
@@ -1430,10 +1430,10 @@ void loop()
         //
         divertedEnergyTotal_Wh = 0;
         divertedEnergyRecent_IEU = 0;
-        EDD_isActive = false; // energy diversion detector is now inactive
+        EDD_isActive = false;  // energy diversion detector is now inactive
       }
 
-      configureValueForDisplay(bToggleDisplayTemp); // this timing is not critical so does not need to be in the ISR
+      configureValueForDisplay(bToggleDisplayTemp);  // this timing is not critical so does not need to be in the ISR
     }
   }
 #ifdef TEMP_SENSOR
@@ -1449,7 +1449,7 @@ void loop()
     b_datalogEventPending = false;
 
     tx_data.powerAtSupplyPoint_Watts = copyOf_sumP_atSupplyPoint * powerCal_grid / copyOf_sampleSetsDuringThisDatalogPeriod;
-    tx_data.powerAtSupplyPoint_Watts *= -1; // to match the OEM convention (import is =ve; export is -ve)
+    tx_data.powerAtSupplyPoint_Watts *= -1;  // to match the OEM convention (import is =ve; export is -ve)
     tx_data.divertedEnergyTotal_Wh = copyOf_divertedEnergyTotal_Wh;
     tx_data.Vrms_times100 = (int16_t)(100 * f_voltageCal * sqrt(copyOf_sum_Vsquared / copyOf_sampleSetsDuringThisDatalogPeriod));
 
@@ -1485,10 +1485,10 @@ void loop()
 #endif
 
 #ifdef TEMP_SENSOR
-    convertTemperature(); // for use next time around
+    convertTemperature();  // for use next time around
 #endif
   }
-} // end of loop()
+}  // end of loop()
 
 #ifdef TEMP_SENSOR
 /**

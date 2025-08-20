@@ -385,7 +385,7 @@ void processPolarity(const int16_t rawSample)
   // remove DC offset from the raw voltage sample by subtracting the accurate value
   // as determined by a LP filter.
   sampleVminusDC_long = ((long)rawSample << 8) - DCoffset_V_long;
-  
+
   // determine the polarity of the latest voltage sample
   polarityOfMostRecentVsample = (sampleVminusDC_long > 0) ? Polarities::POSITIVE : Polarities::NEGATIVE;
 }

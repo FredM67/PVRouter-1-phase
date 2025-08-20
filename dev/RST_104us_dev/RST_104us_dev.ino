@@ -330,7 +330,7 @@ void allGeneralProcessing()  // each iteration is for one set of data samples
     {
       setPinOFF(outputForTrigger);  // triac will fire at the next ZC point
     }
-  }     // end of specific processing of +ve cycles
+  }  // end of specific processing of +ve cycles
   else  // the polarity of this sample is negative
   {
     if (polarityOfLastVsample != NEGATIVE)
