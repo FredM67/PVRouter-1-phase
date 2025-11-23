@@ -9,6 +9,7 @@ Ce programme est conçu pour être utilisé avec l'IDE Arduino et/ou d'autres ID
 - [Documentation de développement](#documentation-de-développement)
 - [Étalonnage du routeur](#étalonnage-du-routeur)
 - [Configuration du programme](#configuration-du-programme)
+  - [Configuration de la version du PCB](#configuration-de-la-version-du-pcb)
   - [Type de sortie série](#type-de-sortie-série)
   - [Configuration de l'affichage](#configuration-de-laffichage)
   - [Configuration des sorties TRIAC](#configuration-des-sorties-triac)
@@ -115,6 +116,29 @@ La configuration d'une fonctionnalité suit généralement deux étapes :
 - Configuration des paramètres de la fonctionnalité
 
 La cohérence de la configuration est vérifiée lors de la compilation. Par exemple, si une *pin* est allouée deux fois par erreur, le compilateur générera une erreur.
+
+## Configuration de la version du PCB
+
+Le routeur existe en deux versions de PCB (circuit imprimé), qui utilisent des broches analogiques différentes pour les capteurs de tension et de courant. Il est important de configurer correctement cette option selon la version du PCB que vous possédez.
+
+Pour activer l'ancien PCB (par défaut) :
+```cpp
+inline constexpr bool OLD_PCB{ true };
+```
+
+Pour utiliser le nouveau PCB :
+```cpp
+inline constexpr bool OLD_PCB{ false };
+```
+
+Cette configuration modifie automatiquement l'affectation des broches analogiques :
+- **Ancien PCB** : capteur de tension sur A3, CT1 (réseau) sur A5, CT2 (déviation) sur A4
+- **Nouveau PCB** : capteur de tension sur A0, CT1 (réseau) sur A1, CT2 (déviation) sur A3
+
+---
+> [!WARNING]
+> Une mauvaise configuration de ce paramètre empêchera le routeur de fonctionner correctement, car les capteurs ne seront pas lus sur les bonnes broches analogiques.
+---
 
 ## Type de sortie série
 
