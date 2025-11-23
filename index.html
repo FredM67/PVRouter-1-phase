@@ -100,7 +100,6 @@ History</h1>
 <li>better Doxygen documentation.</li>
 <li>added support for new PCB-based hardware. Old hardware is still supported.</li>
 <li>added support for new OLED display. Old display is still supported.</li>
-<li>delayed start of diversion</li>
 </ul>
 <p><b>November 2024, renamed as Mk2_fasterControl_Full with these changes:</b></p><ul>
 <li>heavy refactoring to make the code more readable and maintainable.</li>
@@ -109,13 +108,10 @@ History</h1>
 <li>added a link to the README.md file in the comments.</li>
 <li>refactoring of the ISR to enhance the performance.</li>
 </ul>
+<p><b>Previous history by Robin Emley (www.Mk2PVrouter.co.uk):</b></p>
 <p><b>July 2023: updated to Mk2_fasterControl_twoLoads_5 with these changes:</b></p><ul>
-<li>the ability to control two loads has been transferred from the latest version of my standard multiLoad sketch, Mk2_multiLoad_wired_7a. The faster control algorithm <br  />
- has been retained. <br  />
- The previous 2-load "faster control" sketch (version 4) has been archived as its behaviour was found to be problematic.</li>
+<li>the ability to control two loads has been transferred from the latest version of my standard multiLoad sketch, Mk2_multiLoad_wired_7a. The faster control algorithm has been retained. The previous 2-load "faster control" sketch (version 4) has been archived as its behaviour was found to be problematic.</li>
 </ul>
-<dl class="section author"><dt>Author</dt><dd>Fred Metrich </dd></dl>
-<dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2025</dd></dl>
 <p><b>June 2021: updated to Mk2_fasterControl_3 with these changes:</b></p><ul>
 <li>to reflect the performance of recently manufactured YHDC SCT_013_000 CTs, the value of the parameter lpf_gain has been reduced from 12 to 8.</li>
 </ul>
@@ -155,14 +151,12 @@ History</h1>
 <li>addition of REQUIRED_EXPORT_IN_WATTS logic (useful as a built-in PV simulation facility);</li>
 </ul>
 <p><b>Issue 1 was released as Mk2_bothDisplays_1 in March 2014.</b></p>
-<p>This sketch is for diverting surplus PV power to a dump load using a triac or <br  />
- Solid State Relay. It is based on the Mk2i PV Router code that I have posted in on <br  />
- the OpenEnergyMonitor forum. The original version, and other related material, can be found on my Summary Page at www.openenergymonitor.org/emon/node/1757</p>
-<p>In this latest version, the pin-allocations have been changed to suit my PCB-based hardware for the Mk2 PV Router. The integral voltage sensor is fed from one of the secondary coils of the transformer. Current is measured via Current Transformers at the CT1 and CT1 ports. <br  />
-</p>
+<p>This sketch is for diverting surplus PV power to a dump load using a triac or Solid State Relay. It is based on the Mk2i PV Router code that I have posted in on the OpenEnergyMonitor forum. The original version, and other related material, can be found on my Summary Page at www.openenergymonitor.org/emon/node/1757</p>
+<p>In this latest version, the pin-allocations have been changed to suit my PCB-based hardware for the Mk2 PV Router. The integral voltage sensor is fed from one of the secondary coils of the transformer. Current is measured via Current Transformers at the CT1 and CT1 ports.</p>
 <p>CT1 is for 'grid' current, to be measured at the grid supply point. CT2 is for the load current, so that diverted energy can be recorded</p>
 <p>A persistence-based 4-digit display is supported. This can be driven in two different ways, one with an extra pair of logic chips, and one without. The appropriate version of the sketch must be selected by including or commenting out the "#define PIN_SAVING_HARDWARE" statement near the top of the code.</p>
-<dl class="section author"><dt>Author</dt><dd>Robin Emley www.Mk2PVrouter.co.uk </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Fred Metrich </dd></dl>
+<dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2025 </dd></dl>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->
