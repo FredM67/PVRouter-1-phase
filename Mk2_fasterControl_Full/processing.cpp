@@ -37,8 +37,10 @@ constexpr int32_t midPointOfEnergyBucket_long{ capacityOfEnergyBucket_long >> 1 
 constexpr int32_t lowerThreshold_default{ midPointOfEnergyBucket_long }; /**< default lower threshold for the energy bucket (50% of capacity) */
 constexpr int32_t upperThreshold_default{ midPointOfEnergyBucket_long }; /**< default upper threshold for the energy bucket (50% of capacity) */
 
-constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1.0f / powerCal_diverted)) };     /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
-constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1.0f / powerCal_grid)) }; /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
+constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1.0f / powerCal_diverted)) };        /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
+constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1.0f / powerCal_grid)) };    /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
+constexpr int32_t diversionStartThreshold_inIEU{ static_cast< int32_t >(DIVERSION_START_THRESHOLD_WATTS * (1.0f / powerCal_grid)) }; /**< threshold value in Integer Energy Units (IEU) that must be exceeded before diversion starts */
+
 // When using integer maths, calibration values that have supplied in floating point
 // form need to be rescaled.
 
@@ -108,6 +110,8 @@ remove_cv< remove_reference< decltype(DATALOG_PERIOD_IN_MAINS_CYCLES) >::type >:
 uint8_t perSecondCounter{ 0 }; /**< for counting  every second inside the ISR */
 
 bool beyondStartUpPeriod{ false }; /**< start-up delay, allows things to settle */
+
+bool b_diversionStarted{ false }; /**< Tracks whether diversion has started */
 
 /**
  * @brief Retrieves the output pins configuration.
@@ -350,13 +354,13 @@ void updatePhysicalLoadStates()
     }
   }
 
-  const bool bDiversionOff{ Shared::b_diversionOff };
+  const bool bDiversionEnabled{ Shared::b_diversionEnabled };
   uint8_t idx{ NO_OF_DUMPLOADS };
   do
   {
     --idx;
     const auto iLoad{ loadPrioritiesAndState[idx] & loadStateMask };
-    physicalLoadState[iLoad] = !bDiversionOff && (Shared::b_overrideLoadOn[iLoad] || (loadPrioritiesAndState[idx] & loadStateOnBit)) ? LoadStates::LOAD_ON : LoadStates::LOAD_OFF;
+    physicalLoadState[iLoad] = bDiversionEnabled && (Shared::b_overrideLoadOn[iLoad] || (loadPrioritiesAndState[idx] & loadStateOnBit)) ? LoadStates::LOAD_ON : LoadStates::LOAD_OFF;
   } while (idx);
 }
 
@@ -381,6 +385,7 @@ void processPolarity(const int16_t rawSample)
   // remove DC offset from the raw voltage sample by subtracting the accurate value
   // as determined by a LP filter.
   sampleVminusDC_long = ((long)rawSample << 8) - DCoffset_V_long;
+
   // determine the polarity of the latest voltage sample
   polarityOfMostRecentVsample = (sampleVminusDC_long > 0) ? Polarities::POSITIVE : Polarities::NEGATIVE;
 }
@@ -446,7 +451,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
  */
 void processDivertedCurrentRawSample(const int16_t rawSample)
 {
-  if (Shared::b_diversionOff || Shared::b_overrideLoadOn[0])
+  if (!Shared::b_diversionEnabled || Shared::b_overrideLoadOn[0])
   {
     return;  // no diverted power when the load is overridden
   }
@@ -575,6 +580,9 @@ void processRawSamples()
           lowerEnergyThreshold = lowerThreshold_default;  // reset the "opposite" threshold
           if (energyInBucket_prediction > upperEnergyThreshold)
           {
+            b_diversionStarted = true;
+            // Once started, we divert all surplus according to the configured fixed offset
+
             // Because the energy level is high, some action may be required
             proceedHighEnergyLevel();
           }
@@ -870,7 +878,10 @@ void processLatestContribution()
   int32_t realPower_grid = sumP_grid / sampleSetsDuringThisMainsCycle;          // proportional to Watts
   int32_t realPower_diverted = sumP_diverted / sampleSetsDuringThisMainsCycle;  // proportional to Watts
 
-  realPower_grid -= requiredExportPerMainsCycle_inIEU;  // <- useful for PV simulation
+  if (!b_diversionStarted)
+    realPower_grid -= diversionStartThreshold_inIEU;
+  else
+    realPower_grid -= requiredExportPerMainsCycle_inIEU;  // <- useful for PV simulation
 
   // Next, the energy content of this power rating needs to be determined.  Energy is
   // power multiplied by time, so the next step would normally be to multiply the measured
@@ -932,7 +943,11 @@ void processLatestContribution()
     perSecondCounter = 0;
 
     if (absenceOfDivertedEnergyCountInMC > SUPPLY_FREQUENCY)
+    {
       ++Shared::absenceOfDivertedEnergyCountInSeconds;
+      // Reset diversion state if we've had no diversion for a full second
+      b_diversionStarted = false;
+    }
     else
       Shared::absenceOfDivertedEnergyCountInSeconds = 0;
 

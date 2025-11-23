@@ -27,6 +27,9 @@ Ce programme est conçu pour être utilisé avec l'IDE Arduino et/ou d'autres ID
   - [Rotation des priorités](#rotation-des-priorités)
   - [Configuration de la marche forcée](#configuration-de-la-marche-forcée)
   - [Arrêt du routage](#arrêt-du-routage)
+- [Configuration avancée du programme](#configuration-avancée-du-programme)
+  - [Paramètre `DIVERSION_START_THRESHOLD_WATTS`](#paramètre-diversion_start_threshold_watts)
+  - [Paramètre `REQUIRED_EXPORT_IN_WATTS`](#paramètre-required_export_in_watts)
 - [Dépannage](#dépannage)
 - [Contribuer](#contribuer)
 
@@ -168,10 +171,8 @@ Les options possibles sont :
 - **DisplayType::SEG_HW** : Utilise un afficheur à segments avec une interface matérielle spécifique pour afficher les informations (présence des circuits **IC3** et **IC4**).
 
 ---
-**_Note_**
-
-L'affichage OLED n'est pas encore disponible. Il nécessite une nouvelle version du PCB qui sera disponible prochainement.
-
+> [!NOTE]
+> L'affichage OLED n'est pas encore disponible. Il nécessite une nouvelle version du PCB qui sera disponible prochainement.
 ---
 
 ## Configuration des sorties TRIAC
@@ -228,8 +229,8 @@ Si l'utilisateur souhaite plutôt une fenêtre de 15 min, il suffira d'écrire�
 inline constexpr RelayEngine relays{ 15_i, { { 3, 1000, 200, 1, 1 } } };
 ```
 ___
-**_Note_**
-Attention au suffixe '**_i**' après le nombre *15* !
+> [!NOTE]
+> Attention au suffixe '**_i**' après le nombre *15* !
 ___
 
 Les relais configurés dans le système sont gérés par un système similaire à une machine à états.
@@ -296,9 +297,9 @@ inline constexpr TemperatureSensing temperatureSensing{ 4,
 Le nombre *4* en premier paramètre est la *pin* que l'utilisateur aura choisi pour le bus *OneWire*.
 
 ___
-**_Note_**
-Plusieurs capteurs peuvent être branchés sur le même câble.  
-Sur Internet vous trouverez tous les détails concernant la topologie utilisable avec ce genre de capteurs.
+> [!NOTE]
+> Plusieurs capteurs peuvent être branchés sur le même câble.  
+> Sur Internet vous trouverez tous les détails concernant la topologie utilisable avec ce genre de capteurs.
 ___
 
 ## Configuration de la gestion des Heures Creuses (dual tariff)
@@ -310,9 +311,9 @@ Cette limite peut être en durée ou en température (nécessite d'utiliser un c
 Décâblez la commande du contacteur Jour/Nuit, qui n'est plus nécessaire.  
 Reliez directement une *pin* choisie au contact sec du compteur (bornes *C1* et *C2*).
 ___
-**__ATTENTION__**
-Il faut relier **directement**, une paire *pin/masse* avec les bornes *C1/C2* du compteur.  
-Il NE doit PAS y avoir de 230 V sur ce circuit !
+> [!WARNING]
+> Il faut relier **directement**, une paire *pin/masse* avec les bornes *C1/C2* du compteur.  
+> Il NE doit PAS y avoir de 230 V sur ce circuit !
 ___
 
 ### Configuration logicielle
@@ -407,6 +408,29 @@ Vous devez également spécifier la *pin* à laquelle le contact sec est connect
 ```cpp
 inline constexpr uint8_t diversionPin{ 12 };
 ```
+
+# Configuration avancée du programme
+
+Ces paramètres se trouvent dans le fichier `config_system.h`.
+
+## Paramètre `DIVERSION_START_THRESHOLD_WATTS`
+Le paramètre `DIVERSION_START_THRESHOLD_WATTS` définit un seuil de surplus avant tout routage vers les charges configurées sur le routeur. Elle est principalement destinée aux installations avec batteries de stockage.   
+Par défaut, cette valeur est réglée à 0 W.  
+En réglant ce paramètre à 50 W par exemple, le routeur ne démarrera le routage qu'à partir du moment où 50 W de surplus sera disponible. Une fois le routage démarré, la totalité du surplus sera routé.  
+Cette fonctionnalité permet d'établir une hiérarchie claire dans l'utilisation de l'énergie produite, en privilégiant le stockage d'énergie sur la consommation immédiate. Vous pouvez ajuster cette valeur selon la réactivité du système de charge des batteries et vos priorités d'utilisation de l'énergie.
+
+> [!IMPORTANT]
+> Ce paramètre concerne uniquement la condition de démarrage du routage.
+> Une fois le seuil atteint et le routage démarré, la **totalité** du surplus devient disponible pour les charges.
+
+## Paramètre `REQUIRED_EXPORT_IN_WATTS`
+Le paramètre `REQUIRED_EXPORT_IN_WATTS` détermine la quantité minimale d'énergie que le système doit réserver pour l'exportation ou l'importation vers le réseau électrique avant de dévier le surplus vers les charges contrôlées.  
+Par défaut réglé à 0 W, ce paramètre peut être utilisé pour garantir une exportation constante vers le réseau, par exemple pour respecter des accords de revente d'électricité.  
+Une valeur négative obligera le routeur à consommer cette puissance depuis le réseau. Cela peut être utile voire nécessaire pour les installations configurées en *zéro injection* afin d'amorcer la production solaire.
+
+> [!IMPORTANT]
+> Contrairement au premier paramètre, celui-ci représente un décalage permanent qui est continuellement soustrait du surplus disponible.
+> Si réglé à 20 W par exemple, le système réservera **toujours** 20 W pour l'exportation, indépendamment des autres conditions.
 
 # Dépannage
 - Assurez-vous que toutes les bibliothèques requises sont installées.

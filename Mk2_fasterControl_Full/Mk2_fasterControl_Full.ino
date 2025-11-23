@@ -191,7 +191,7 @@
  *  @note The telemetry feature ensures that the system's performance and status can be monitored remotely.
  */
 
- /**
+/**
  * @defgroup GeneralProcessing General Processing
  * @brief Functions and routines that handle general system processing tasks.
  *

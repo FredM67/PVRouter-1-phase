@@ -300,7 +300,7 @@ void sendTelemetryData()
   }
 
   teleInfo.send("N", static_cast< int16_t >(Shared::absenceOfDivertedEnergyCountInSeconds));  // Send absence of diverted energy count for 50Hz
-  
+
   teleInfo.send("S_MC", Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle);
   teleInfo.send("S", Shared::copyOf_sampleSetsDuringThisDatalogPeriod);
 
