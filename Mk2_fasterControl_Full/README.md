@@ -143,6 +143,11 @@ Cette configuration modifie automatiquement l'affectation des broches analogique
 > Une mauvaise configuration de ce paramètre empêchera le routeur de fonctionner correctement, car les capteurs ne seront pas lus sur les bonnes broches analogiques.
 ---
 
+---
+> [!IMPORTANT]
+> **Utilisateurs de PCB triphasé en mode monophasé** : Si vous utilisez un PCB triphasé en mode monophasé (par exemple, si vous avez changé votre raccordement de triphasé à monophasé), vous **devez** configurer `OLD_PCB` sur `true`. Cela garantit que les bonnes broches analogiques sont utilisées pour les capteurs.
+---
+
 ## Type de sortie série
 
 Le type de sortie série peut être configuré pour s'adapter à différents besoins. Trois options sont disponibles :

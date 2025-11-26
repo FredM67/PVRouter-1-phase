@@ -144,6 +144,11 @@ This configuration automatically modifies the analog pin assignments:
 > Incorrect configuration of this parameter will prevent the router from functioning correctly, as the sensors will not be read on the correct analog pins.
 ---
 
+---
+> [!IMPORTANT]
+> **Users with 3-phase PCB in single-phase mode**: If you are using a 3-phase PCB in single-phase mode (for example, if you changed your grid connection from 3-phase to single-phase), you **must** set `OLD_PCB` to `true`. This ensures that the correct analog pins are used for the sensors.
+---
+
 ## Serial Output Type
 
 The serial output type can be configured to suit different needs. Three options are available:
