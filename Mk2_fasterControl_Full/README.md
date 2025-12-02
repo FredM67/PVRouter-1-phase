@@ -145,7 +145,7 @@ Cette configuration modifie automatiquement l'affectation des broches analogique
 
 ---
 > [!IMPORTANT]
-> **Utilisateurs de PCB triphasé en mode monophasé** : Si vous utilisez un PCB triphasé en mode monophasé (par exemple, si vous avez changé votre raccordement de triphasé à monophasé), vous **devez** configurer `OLD_PCB` sur `true`. Cela garantit que les bonnes broches analogiques sont utilisées pour les capteurs.
+> **Utilisateurs de PCB triphasé en mode monophasé** : Si vous utilisez un PCB triphasé en mode monophasé (par exemple, si vous avez changé votre raccordement de triphasé à monophasé), vous **devez** configurer `OLD_PCB` sur `false`. Cela garantit que les bonnes broches analogiques sont utilisées pour les capteurs.
 ---
 
 ## Type de sortie série
