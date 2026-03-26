@@ -38,6 +38,7 @@
 #define SERIALOUT       /**< Wired serial output enabled */
 
 #include "config_system.h"
+#include "config_types.h"
 #include "debug.h"
 #include "types.h"
 #include "utils_dualtariff.h"
@@ -141,13 +142,6 @@ inline constexpr uint16_t ROTATION_AFTER_SECONDS{ 8u * 3600u };
 //   true  => adds a dedicated OLED page to reboot the router
 //   false => page hidden
 //======================================================================================
-struct OledEncoderConfig
-{
-  uint8_t pinCLK;
-  uint8_t pinDT;
-  uint8_t pinSW;
-};
-
 inline constexpr OledEncoderConfig oledEncoder{ 11, 12, 13 };
 inline constexpr bool OLED_ENABLE_RUNTIME_SETTINGS{ true };
 inline constexpr bool OLED_ENABLE_RESTART_PAGE{ true };
@@ -208,13 +202,6 @@ constexpr uint16_t allOutputsMask()
 //   BOOST 2 => D8 => RELAY 1
 //   BOOST 3 => D9 => RELAY 2
 //======================================================================================
-struct BoostControlConfig
-{
-  uint8_t inputPin;
-  uint8_t outputIndex;
-  bool visibleOnOLED;
-};
-
 inline constexpr uint8_t BOOST_CONTROL_COUNT{ 3 };
 inline constexpr BoostControlConfig boostControls[BOOST_CONTROL_COUNT]{
   { unused_pin, triacOutputIndex(0), true },
@@ -248,13 +235,6 @@ inline constexpr BoostControlConfig boostControls[BOOST_CONTROL_COUNT]{
 //   Diversion 2 => OLED only  => output 1    => OLED visible
 //   Diversion 3 => OLED only  => outputs 2,3 => OLED visible
 //======================================================================================
-struct DiversionGroupConfig
-{
-  uint8_t inputPin;
-  uint16_t outputMask;
-  bool visibleOnOLED;
-};
-
 inline constexpr uint8_t DIVERSION_GROUP_COUNT{ 4 };
 inline constexpr DiversionGroupConfig diversionGroups[DIVERSION_GROUP_COUNT]{
   { 10, allOutputsMask(), true },

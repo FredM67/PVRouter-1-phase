@@ -262,7 +262,7 @@ inline void printForJSON(const bool bOffPeak)
  *
  * @throws static_assert If `SUPPLY_FREQUENCY` is not 50 or 60 Hz.
  */
-void sendTelemetryData()
+inline void sendTelemetryData()
 {
   static TeleInfo teleInfo;
 

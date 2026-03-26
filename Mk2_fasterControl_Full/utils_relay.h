@@ -154,17 +154,18 @@ public:
   }
 
   /**
-   * @brief Proceed with the relay
-   * 
+   * @brief Proceed with the relay using runtime-editable settings
+   *
+   * @param currentAvgPower Current average power
+   * @param settings Runtime relay settings (thresholds and timers)
    * @return bool True if state has changed
    */
-  bool proceed_relay(const int32_t currentAvgPower, const int16_t _surplusThreshold, const int16_t _importThreshold, const uint16_t _minON_minutes,
-                    const uint16_t _minOFF_minutes) const
+  bool proceed_relay(const int32_t currentAvgPower, const RelayRuntimeSettings &settings) const
   {
-    const int16_t localSurplusThreshold{ static_cast< int16_t >(-abs(_surplusThreshold)) };
-    const int16_t localImportThreshold{ static_cast< int16_t >(abs(_importThreshold)) };
-    const uint16_t localMinON{ static_cast< uint16_t >(_minON_minutes * 60u) };
-    const uint16_t localMinOFF{ static_cast< uint16_t >(_minOFF_minutes * 60u) };
+    const int16_t localSurplusThreshold{ static_cast< int16_t >(-abs(settings.surplusThreshold)) };
+    const int16_t localImportThreshold{ static_cast< int16_t >(abs(settings.importThreshold)) };
+    const uint16_t localMinON{ static_cast< uint16_t >(settings.minON_minutes * 60u) };
+    const uint16_t localMinOFF{ static_cast< uint16_t >(settings.minOFF_minutes * 60u) };
 
     // To avoid changing sign, surplus is a negative value
     if (currentAvgPower < localSurplusThreshold)
@@ -176,6 +177,23 @@ public:
       return try_turnOFF(localMinON);
     }
     return false;
+  }
+
+  /**
+   * @brief Proceed with the relay using its own built-in thresholds
+   *
+   * @param currentAvgPower Current average power
+   * @return bool True if state has changed
+   */
+  bool proceed_relay(const int32_t currentAvgPower) const
+  {
+    const RelayRuntimeSettings defaults{
+      static_cast< int16_t >(surplusThreshold),
+      importThreshold,
+      static_cast< uint16_t >(minOFF / 60u),
+      static_cast< uint16_t >(minON / 60u)
+    };
+    return proceed_relay(currentAvgPower, defaults);
   }
 
   bool force_turnON() const
@@ -436,9 +454,7 @@ public:
           continue;
         }
 
-        if (relay[idx].proceed_relay(ewma_average.getAverageS(), RouterRuntime::relaySettings[idx].surplusThreshold,
-                                     RouterRuntime::relaySettings[idx].importThreshold, RouterRuntime::relaySettings[idx].minON_minutes,
-                                     RouterRuntime::relaySettings[idx].minOFF_minutes))
+        if (relay[idx].proceed_relay(ewma_average.getAverageS(), RouterRuntime::relaySettings[idx]))
         {
           settle_change = 60;
           return;
@@ -456,9 +472,7 @@ public:
           continue;
         }
 
-        if (relay[idx].proceed_relay(ewma_average.getAverageS(), RouterRuntime::relaySettings[idx].surplusThreshold,
-                                     RouterRuntime::relaySettings[idx].importThreshold, RouterRuntime::relaySettings[idx].minON_minutes,
-                                     RouterRuntime::relaySettings[idx].minOFF_minutes))
+        if (relay[idx].proceed_relay(ewma_average.getAverageS(), RouterRuntime::relaySettings[idx]))
         {
           settle_change = 60;
           return;
