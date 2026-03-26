@@ -24,6 +24,7 @@ static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVR
 #include "utils_oled.h"
 #include "utils_temp.h"
 #include "validation.h"
+#include "router_settings.h"
 
 // --------------  general global variables -----------------
 //
@@ -54,9 +55,9 @@ static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVR
  */
 bool forceFullPower()
 {
-  if constexpr (OVERRIDE_PIN_PRESENT)
+  if constexpr (OVERRIDE_PIN_PRESENT && (forcePin != unused_pin))
   {
-    const auto pinState{ getPinState(forcePin) };
+    const auto pinState{ forcePin != unused_pin ? getPinState(forcePin) : HIGH };
 
 #ifdef ENABLE_DEBUG
     static uint8_t previousState{ HIGH };
@@ -160,7 +161,7 @@ bool proceedLoadPrioritiesAndOverridingDualTariff(const int16_t currentTemperatu
   else
   {
     const auto ulElapsedTime{ static_cast< uint32_t >(millis() - ul_TimeOffPeak) };
-    const auto pinState{ getPinState(forcePin) };
+    const auto pinState{ forcePin != unused_pin ? getPinState(forcePin) : HIGH };
 
     for (uint8_t i = 0; i < NO_OF_DUMPLOADS; ++i)
     {
@@ -241,7 +242,7 @@ bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
     }
     Shared::absenceOfDivertedEnergyCountInSeconds = 0;
   }
-  if constexpr (OVERRIDE_PIN_PRESENT)
+  if constexpr (OVERRIDE_PIN_PRESENT && (forcePin != unused_pin))
   {
     const auto pinState{ getPinState(forcePin) };
 
@@ -269,7 +270,7 @@ bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
  */
 void checkDiversionOnOff()
 {
-  if constexpr (DIVERSION_PIN_PRESENT)
+  if constexpr (DIVERSION_PIN_PRESENT && (diversionPin != unused_pin))
   {
     const auto pinState{ getPinState(diversionPin) };
 
@@ -399,6 +400,10 @@ void setup()
   printConfiguration();
 
   setupOLED();
+  loadRuntimeSettingsFromEEPROM();
+
+  // NEW: initialize OLED/runtime command states. Diversion authorizations start ON by default.
+  initializeRuntimeRoutingCommands();
 
   initializeDisplay();
 
@@ -448,10 +453,16 @@ void handlePerSecondTasks(bool &bOffPeak, int16_t iTemperature_x100)
   updateWatchdog();
   checkDiversionOnOff();
 
+  // NEW: refresh boost/diversion commands coming from dedicated inputs and from the OLED UI.
+  refreshRoutingMasks();
+
   if (!forceFullPower())
   {
     bOffPeak = proceedLoadPrioritiesAndOverriding(iTemperature_x100);
   }
+
+  // NEW: merge per-output BOOST commands with the existing TRIAC override mechanism.
+  applyBoostOverridesToTriacs();
 
   if constexpr (RELAY_DIVERSION)
   {
@@ -487,6 +498,7 @@ void handlePerSecondTasks(bool &bOffPeak, int16_t iTemperature_x100)
 void loop()
 {
   static bool initLoop{ true };
+  handleOLED();
   static uint8_t perSecondTimer{ 0 };
   static bool bOffPeak{ false };
   static uint8_t timerForDisplayUpdate{ 0 };
@@ -501,7 +513,7 @@ void loop()
       // this action is performed every N times around this processing loop.
       timerForDisplayUpdate = 0;
 
-      configureValueForDisplay(Shared::EDD_isActive, Shared::copyOf_divertedEnergyTotal_Wh, Shared::b_diversionEnabled, Shared::b_overrideLoadOn[0]);
+      configureValueForDisplay(Shared::EDD_isActive, Shared::copyOf_divertedEnergyTotal_Wh, Shared::b_diversionEnabled, triacIsForced(0));
     }
 
     if (++perSecondTimer >= SUPPLY_FREQUENCY)

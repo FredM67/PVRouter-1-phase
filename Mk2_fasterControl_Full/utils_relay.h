@@ -20,6 +20,7 @@
 #include "movingAvg.h"
 #include "ewma_avg.hpp"
 #include "utils_pins.h"
+#include "router_runtime.h"
 
 /**
  * @class relayOutput
@@ -157,18 +158,52 @@ public:
    * 
    * @return bool True if state has changed
    */
-  bool proceed_relay(const int32_t currentAvgPower) const
+  bool proceed_relay(const int32_t currentAvgPower, const int16_t _surplusThreshold, const int16_t _importThreshold, const uint16_t _minON_minutes,
+                    const uint16_t _minOFF_minutes) const
   {
+    const int16_t localSurplusThreshold{ static_cast< int16_t >(-abs(_surplusThreshold)) };
+    const int16_t localImportThreshold{ static_cast< int16_t >(abs(_importThreshold)) };
+    const uint16_t localMinON{ static_cast< uint16_t >(_minON_minutes * 60u) };
+    const uint16_t localMinOFF{ static_cast< uint16_t >(_minOFF_minutes * 60u) };
+
     // To avoid changing sign, surplus is a negative value
-    if (currentAvgPower < surplusThreshold)
+    if (currentAvgPower < localSurplusThreshold)
     {
-      return try_turnON();
+      return try_turnON(localMinOFF);
     }
-    if (currentAvgPower > importThreshold)
+    if (currentAvgPower > localImportThreshold)
     {
-      return try_turnOFF();
+      return try_turnOFF(localMinON);
     }
     return false;
+  }
+
+  bool force_turnON() const
+  {
+    if (relayIsON)
+    {
+      return false;
+    }
+
+    setPinON(relay_pin);
+    relayIsON = true;
+    duration = 0;
+    DBUGLN(F("Relay forced ON!"));
+    return true;
+  }
+
+  bool force_turnOFF() const
+  {
+    if (!relayIsON)
+    {
+      return false;
+    }
+
+    setPinOFF(relay_pin);
+    relayIsON = false;
+    duration = 0;
+    DBUGLN(F("Relay forced OFF!"));
+    return true;
   }
 
   /**
@@ -202,9 +237,9 @@ private:
    * 
    * @return bool True if state has changed
    */
-  bool try_turnON() const
+  bool try_turnON(const uint16_t localMinOFF) const
   {
-    if (relayIsON || duration < minOFF)
+    if (relayIsON || duration < localMinOFF)
     {
       return false;
     }
@@ -224,9 +259,9 @@ private:
    * 
    * @return bool True if state has changed
    */
-  bool try_turnOFF() const
+  bool try_turnOFF(const uint16_t localMinON) const
   {
-    if (!relayIsON || duration < minON)
+    if (!relayIsON || duration < localMinON)
     {
       return false;
     }
@@ -360,9 +395,31 @@ public:
    */
   void proceed_relays() const
   {
+    bool forcedChange{ false };
+
+    for (uint8_t idx = 0; idx < N; ++idx)
+    {
+      if (bit_read(RouterRuntime::relayDiversionMask, idx))
+      {
+        forcedChange |= relay[idx].force_turnOFF();
+        continue;
+      }
+
+      if (bit_read(RouterRuntime::relayBoostMask, idx))
+      {
+        forcedChange |= relay[idx].force_turnON();
+      }
+    }
+
+    if (forcedChange)
+    {
+      settle_change = 60;
+      return;
+    }
+
     if (settle_change != 0)
     {
-      // A relay has been toggle less than a minute ago, wait until changes take effect
+      // A relay has been toggled less than a minute ago, wait until changes take effect
       return;
     }
 
@@ -372,7 +429,16 @@ public:
       uint8_t idx{ N };
       do
       {
-        if (relay[--idx].proceed_relay(ewma_average.getAverageS()))
+        --idx;
+
+        if (bit_read(RouterRuntime::relayBoostMask, idx) || bit_read(RouterRuntime::relayDiversionMask, idx))
+        {
+          continue;
+        }
+
+        if (relay[idx].proceed_relay(ewma_average.getAverageS(), RouterRuntime::relaySettings[idx].surplusThreshold,
+                                     RouterRuntime::relaySettings[idx].importThreshold, RouterRuntime::relaySettings[idx].minON_minutes,
+                                     RouterRuntime::relaySettings[idx].minOFF_minutes))
         {
           settle_change = 60;
           return;
@@ -385,7 +451,14 @@ public:
       uint8_t idx{ 0 };
       do
       {
-        if (relay[idx].proceed_relay(ewma_average.getAverageS()))
+        if (bit_read(RouterRuntime::relayBoostMask, idx) || bit_read(RouterRuntime::relayDiversionMask, idx))
+        {
+          continue;
+        }
+
+        if (relay[idx].proceed_relay(ewma_average.getAverageS(), RouterRuntime::relaySettings[idx].surplusThreshold,
+                                     RouterRuntime::relaySettings[idx].importThreshold, RouterRuntime::relaySettings[idx].minON_minutes,
+                                     RouterRuntime::relaySettings[idx].minOFF_minutes))
         {
           settle_change = 60;
           return;

@@ -6,6 +6,7 @@
 #include "processing.h"
 #include "utils_pins.h"
 #include "utils_display.h"
+#include "router_settings.h"
 
 // allocation of analogue pins which are not dependent on the display type that is in use
 // **************************************************************************************
@@ -38,8 +39,6 @@ constexpr int32_t lowerThreshold_default{ midPointOfEnergyBucket_long }; /**< de
 constexpr int32_t upperThreshold_default{ midPointOfEnergyBucket_long }; /**< default upper threshold for the energy bucket (50% of capacity) */
 
 constexpr int32_t antiCreepLimit_inIEUperMainsCycle{ static_cast< int32_t >(ANTI_CREEP_LIMIT * (1.0f / powerCal_diverted)) };        /**< threshold value in Integer Energy Units (IEU) that prevents small measurement noise from being incorrectly registered as diverted energy */
-constexpr int32_t requiredExportPerMainsCycle_inIEU{ static_cast< int32_t >(REQUIRED_EXPORT_IN_WATTS * (1.0f / powerCal_grid)) };    /**< target amount of energy to be exported to the grid during each mains cycle, expressed in Integer Energy Units (IEU) */
-constexpr int32_t diversionStartThreshold_inIEU{ static_cast< int32_t >(DIVERSION_START_THRESHOLD_WATTS * (1.0f / powerCal_grid)) }; /**< threshold value in Integer Energy Units (IEU) that must be exceeded before diversion starts */
 
 // When using integer maths, calibration values that have supplied in floating point
 // form need to be rescaled.
@@ -192,10 +191,18 @@ constexpr uint16_t getInputPins()
 
   if constexpr (DIVERSION_PIN_PRESENT)
   {
-    if (bit_read(input_pins, diversionPin))
-      return 0;
+    for (uint8_t idx = 0; idx < DIVERSION_GROUP_COUNT; ++idx)
+    {
+      if (diversionGroups[idx].inputPin == unused_pin)
+      {
+        continue;
+      }
 
-    bit_set(input_pins, diversionPin);
+      if (bit_read(input_pins, diversionGroups[idx].inputPin))
+        return 0;
+
+      bit_set(input_pins, diversionGroups[idx].inputPin);
+    }
   }
 
   if constexpr (PRIORITY_ROTATION == RotationModes::PIN)
@@ -208,10 +215,35 @@ constexpr uint16_t getInputPins()
 
   if constexpr (OVERRIDE_PIN_PRESENT)
   {
-    if (bit_read(input_pins, forcePin))
-      return 0;
+    for (uint8_t idx = 0; idx < BOOST_CONTROL_COUNT; ++idx)
+    {
+      if (boostControls[idx].inputPin == unused_pin)
+      {
+        continue;
+      }
 
-    bit_set(input_pins, forcePin);
+      if (bit_read(input_pins, boostControls[idx].inputPin))
+        return 0;
+
+      bit_set(input_pins, boostControls[idx].inputPin);
+    }
+  }
+
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
+  {
+    const uint8_t encoderPins[3]{ oledEncoder.pinCLK, oledEncoder.pinDT, oledEncoder.pinSW };
+    for (const auto encoderPin : encoderPins)
+    {
+      if (encoderPin == unused_pin)
+      {
+        continue;
+      }
+
+      if (bit_read(input_pins, encoderPin))
+        return 0;
+
+      bit_set(input_pins, encoderPin);
+    }
   }
 
   return input_pins;
@@ -354,13 +386,14 @@ void updatePhysicalLoadStates()
     }
   }
 
-  const bool bDiversionEnabled{ Shared::b_diversionEnabled };
   uint8_t idx{ NO_OF_DUMPLOADS };
   do
   {
     --idx;
     const auto iLoad{ loadPrioritiesAndState[idx] & loadStateMask };
-    physicalLoadState[iLoad] = bDiversionEnabled && (Shared::b_overrideLoadOn[iLoad] || (loadPrioritiesAndState[idx] & loadStateOnBit)) ? LoadStates::LOAD_ON : LoadStates::LOAD_OFF;
+    // NEW: each TRIAC output can now be stopped independently by one or more diversion groups.
+    const bool outputStoppedByDiversion{ bit_read(RouterRuntime::triacDiversionMask, iLoad) };
+    physicalLoadState[iLoad] = !outputStoppedByDiversion && (triacIsForced(iLoad) || (loadPrioritiesAndState[idx] & loadStateOnBit)) ? LoadStates::LOAD_ON : LoadStates::LOAD_OFF;
   } while (idx);
 }
 
@@ -451,7 +484,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
  */
 void processDivertedCurrentRawSample(const int16_t rawSample)
 {
-  if (!Shared::b_diversionEnabled || Shared::b_overrideLoadOn[0])
+  if (!Shared::b_diversionEnabled || triacIsForced(0))
   {
     return;  // no diverted power when the load is overridden
   }
@@ -879,9 +912,9 @@ void processLatestContribution()
   int32_t realPower_diverted = sumP_diverted / sampleSetsDuringThisMainsCycle;  // proportional to Watts
 
   if (!b_diversionStarted)
-    realPower_grid -= diversionStartThreshold_inIEU;
+    realPower_grid -= RouterRuntime::diversionStartThreshold_inIEU;
   else
-    realPower_grid -= requiredExportPerMainsCycle_inIEU;  // <- useful for PV simulation
+    realPower_grid -= RouterRuntime::requiredExportPerMainsCycle_inIEU;  // <- useful for PV simulation
 
   // Next, the energy content of this power rating needs to be determined.  Energy is
   // power multiplied by time, so the next step would normally be to multiply the measured
@@ -1310,8 +1343,16 @@ void initializeOldPCBPins()
 
   if constexpr (OVERRIDE_PIN_PRESENT)
   {
-    pinMode(forcePin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
-    delay(100);                       // allow time to settle
+    for (uint8_t idx = 0; idx < BOOST_CONTROL_COUNT; ++idx)
+    {
+      if (boostControls[idx].inputPin == unused_pin)
+      {
+        continue;
+      }
+
+      pinMode(boostControls[idx].inputPin, INPUT_PULLUP);
+      delay(100);
+    }
   }
 
   if constexpr (PRIORITY_ROTATION == RotationModes::PIN)
@@ -1322,8 +1363,24 @@ void initializeOldPCBPins()
 
   if constexpr (DIVERSION_PIN_PRESENT)
   {
-    pinMode(diversionPin, INPUT_PULLUP);  // set as input & enable the internal pullup resistor
-    delay(100);                           // allow time to settle
+    for (uint8_t idx = 0; idx < DIVERSION_GROUP_COUNT; ++idx)
+    {
+      if (diversionGroups[idx].inputPin == unused_pin)
+      {
+        continue;
+      }
+
+      pinMode(diversionGroups[idx].inputPin, INPUT_PULLUP);
+      delay(100);
+    }
+  }
+
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
+  {
+    pinMode(oledEncoder.pinCLK, INPUT_PULLUP);
+    pinMode(oledEncoder.pinDT, INPUT_PULLUP);
+    pinMode(oledEncoder.pinSW, INPUT_PULLUP);
+    delay(100);
   }
 
   if constexpr (RELAY_DIVERSION)

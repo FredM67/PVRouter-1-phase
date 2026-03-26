@@ -2,8 +2,8 @@
 #define VERSION_H
 
 #define PROJECT_PATH "Mk2_fasterControl_Full"
-#define CURRENT_TIME "2025-11-26 11:19:01+01:00"
-#define BRANCH_NAME "main"
-#define COMMIT_HASH "eee508d"
+#define CURRENT_TIME "2026-03-26 08:51:58+01:00"
+#define BRANCH_NAME "N/A"
+#define COMMIT_HASH "N/A"
 
 #endif // VERSION_H
