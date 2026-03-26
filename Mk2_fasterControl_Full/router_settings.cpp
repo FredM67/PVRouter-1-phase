@@ -46,7 +46,7 @@ uint16_t getDiversionMaskFromInputsAndOLED()
     }
   }
 
-  return static_cast< uint16_t >(mask & ALL_OUTPUTS_MASK());
+  return static_cast< uint16_t >(mask & ALL_OUTPUTS());
 }
 
 void refreshRoutingMasks()

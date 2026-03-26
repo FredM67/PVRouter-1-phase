@@ -161,22 +161,17 @@ inline constexpr uint8_t TOTAL_ROUTER_OUTPUTS{
   static_cast< uint8_t >(NO_OF_DUMPLOADS + (RELAY_DIVERSION ? relays.get_size() : 0))
 };
 
-constexpr uint8_t TRIAC(const uint8_t idx)
+constexpr OutputId TRIAC(const uint8_t idx)
 {
-  return idx;
+  return { idx };
 }
 
-constexpr uint8_t RELAY(const uint8_t idx)
+constexpr OutputId RELAY(const uint8_t idx)
 {
-  return static_cast< uint8_t >(NO_OF_DUMPLOADS + idx);
+  return { static_cast< uint8_t >(NO_OF_DUMPLOADS + idx) };
 }
 
-constexpr uint16_t outputMask(const uint8_t idx)
-{
-  return idx < 16u ? static_cast< uint16_t >(1u << idx) : 0u;
-}
-
-constexpr uint16_t ALL_OUTPUTS_MASK()
+constexpr uint16_t ALL_OUTPUTS()
 {
   return TOTAL_ROUTER_OUTPUTS >= 16u ? 0xFFFFu : static_cast< uint16_t >((1u << TOTAL_ROUTER_OUTPUTS) - 1u);
 }
@@ -224,7 +219,7 @@ inline constexpr BoostControlConfig boostControls[BOOST_CONTROL_COUNT]{
 //
 // outputMask:
 //   - affected outputs
-//   - use ALL_OUTPUTS_MASK() for all active outputs
+//   - use ALL_OUTPUTS() for all active outputs
 //
 // visibleOnOLED:
 //   - true  => appears on OLED routing page
@@ -237,10 +232,10 @@ inline constexpr BoostControlConfig boostControls[BOOST_CONTROL_COUNT]{
 //======================================================================================
 inline constexpr uint8_t DIVERSION_GROUP_COUNT{ 4 };
 inline constexpr DiversionGroupConfig diversionGroups[DIVERSION_GROUP_COUNT]{
-  { 10, ALL_OUTPUTS_MASK(), true },
-  { unused_pin, outputMask(TRIAC(0)), true },
-  { unused_pin, outputMask(RELAY(0)), true },
-  { unused_pin, outputMask(RELAY(1)), true }
+  { 10, ALL_OUTPUTS(), true },
+  { unused_pin, TRIAC(0), true },
+  { unused_pin, RELAY(0), true },
+  { unused_pin, RELAY(1), true }
 };
 
 #endif /* CONFIG_H */
