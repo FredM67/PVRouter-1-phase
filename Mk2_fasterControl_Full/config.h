@@ -153,20 +153,20 @@ inline constexpr bool OLED_ENABLE_RESTART_PAGE{ true };
 // Relay outputs : NO_OF_DUMPLOADS .. NO_OF_DUMPLOADS + relay_count - 1
 //
 // Example with 1 TRIAC + 2 relays:
-//   TRIAC 1  => output index 0
-//   RELAY 1  => output index 1
-//   RELAY 2  => output index 2
+//   TRIAC(0)  => output index 0
+//   RELAY(0)  => output index 1
+//   RELAY(1)  => output index 2
 //======================================================================================
 inline constexpr uint8_t TOTAL_ROUTER_OUTPUTS{
   static_cast< uint8_t >(NO_OF_DUMPLOADS + (RELAY_DIVERSION ? relays.get_size() : 0))
 };
 
-constexpr uint8_t triacOutputIndex(const uint8_t idx)
+constexpr uint8_t TRIAC(const uint8_t idx)
 {
   return idx;
 }
 
-constexpr uint8_t relayOutputIndex(const uint8_t idx)
+constexpr uint8_t RELAY(const uint8_t idx)
 {
   return static_cast< uint8_t >(NO_OF_DUMPLOADS + idx);
 }
@@ -176,7 +176,7 @@ constexpr uint16_t outputMask(const uint8_t idx)
   return idx < 16u ? static_cast< uint16_t >(1u << idx) : 0u;
 }
 
-constexpr uint16_t allOutputsMask()
+constexpr uint16_t ALL_OUTPUTS_MASK()
 {
   return TOTAL_ROUTER_OUTPUTS >= 16u ? 0xFFFFu : static_cast< uint16_t >((1u << TOTAL_ROUTER_OUTPUTS) - 1u);
 }
@@ -204,9 +204,9 @@ constexpr uint16_t allOutputsMask()
 //======================================================================================
 inline constexpr uint8_t BOOST_CONTROL_COUNT{ 3 };
 inline constexpr BoostControlConfig boostControls[BOOST_CONTROL_COUNT]{
-  { unused_pin, triacOutputIndex(0), true },
-  { unused_pin, relayOutputIndex(0), true },
-  { unused_pin, relayOutputIndex(1), true }
+  { unused_pin, TRIAC(0), true },
+  { unused_pin, RELAY(0), true },
+  { unused_pin, RELAY(1), true }
 };
 
 //======================================================================================
@@ -224,7 +224,7 @@ inline constexpr BoostControlConfig boostControls[BOOST_CONTROL_COUNT]{
 //
 // outputMask:
 //   - affected outputs
-//   - use allOutputsMask() for all active outputs
+//   - use ALL_OUTPUTS_MASK() for all active outputs
 //
 // visibleOnOLED:
 //   - true  => appears on OLED routing page
@@ -237,10 +237,10 @@ inline constexpr BoostControlConfig boostControls[BOOST_CONTROL_COUNT]{
 //======================================================================================
 inline constexpr uint8_t DIVERSION_GROUP_COUNT{ 4 };
 inline constexpr DiversionGroupConfig diversionGroups[DIVERSION_GROUP_COUNT]{
-  { 10, allOutputsMask(), true },
-  { unused_pin, outputMask(triacOutputIndex(0)), true },
-  { unused_pin, outputMask(relayOutputIndex(0)), true },
-  { unused_pin, outputMask(relayOutputIndex(1)), true }
+  { 10, ALL_OUTPUTS_MASK(), true },
+  { unused_pin, outputMask(TRIAC(0)), true },
+  { unused_pin, outputMask(RELAY(0)), true },
+  { unused_pin, outputMask(RELAY(1)), true }
 };
 
 #endif /* CONFIG_H */
