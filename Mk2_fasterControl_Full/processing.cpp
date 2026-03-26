@@ -191,7 +191,7 @@ constexpr uint16_t getInputPins()
 
   if constexpr (DIVERSION_PIN_PRESENT)
   {
-    for (uint8_t idx = 0; idx < DIVERSION_GROUP_COUNT; ++idx)
+    for (uint8_t idx = 0; idx < diversionGroups.size(); ++idx)
     {
       if (diversionGroups[idx].inputPin == unused_pin)
       {
@@ -215,7 +215,7 @@ constexpr uint16_t getInputPins()
 
   if constexpr (OVERRIDE_PIN_PRESENT)
   {
-    for (uint8_t idx = 0; idx < BOOST_CONTROL_COUNT; ++idx)
+    for (uint8_t idx = 0; idx < boostControls.size(); ++idx)
     {
       if (boostControls[idx].inputPin == unused_pin)
       {
@@ -1343,7 +1343,7 @@ void initializeOldPCBPins()
 
   if constexpr (OVERRIDE_PIN_PRESENT)
   {
-    for (uint8_t idx = 0; idx < BOOST_CONTROL_COUNT; ++idx)
+    for (uint8_t idx = 0; idx < boostControls.size(); ++idx)
     {
       if (boostControls[idx].inputPin == unused_pin)
       {
@@ -1363,7 +1363,7 @@ void initializeOldPCBPins()
 
   if constexpr (DIVERSION_PIN_PRESENT)
   {
-    for (uint8_t idx = 0; idx < DIVERSION_GROUP_COUNT; ++idx)
+    for (uint8_t idx = 0; idx < diversionGroups.size(); ++idx)
     {
       if (diversionGroups[idx].inputPin == unused_pin)
       {

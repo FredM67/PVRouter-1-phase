@@ -9,7 +9,7 @@ uint16_t getBoostMaskFromInputsAndOLED()
 {
   uint16_t mask{ 0 };
 
-  for (uint8_t idx = 0; idx < BOOST_CONTROL_COUNT; ++idx)
+  for (uint8_t idx = 0; idx < boostControls.size(); ++idx)
   {
     bool active{ RouterRuntime::boostStateFromOLED[idx] };
 
@@ -31,7 +31,7 @@ uint16_t getDiversionMaskFromInputsAndOLED()
 {
   uint16_t mask{ 0 };
 
-  for (uint8_t idx = 0; idx < DIVERSION_GROUP_COUNT; ++idx)
+  for (uint8_t idx = 0; idx < diversionGroups.size(); ++idx)
   {
     bool authorized{ RouterRuntime::diversionAuthorizedFromOLED[idx] };
 

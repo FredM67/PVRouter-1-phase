@@ -186,7 +186,7 @@ void drawCentered2x2(const uint8_t row, const char *text)
 uint8_t visibleBoostPageCount()
 {
   uint8_t count{ 0 };
-  for (uint8_t idx = 0; idx < BOOST_CONTROL_COUNT; ++idx)
+  for (uint8_t idx = 0; idx < boostControls.size(); ++idx)
   {
     count += boostControls[idx].visibleOnOLED ? 1u : 0u;
   }
@@ -196,7 +196,7 @@ uint8_t visibleBoostPageCount()
 uint8_t visibleDiversionCount()
 {
   uint8_t count{ 0 };
-  for (uint8_t idx = 0; idx < DIVERSION_GROUP_COUNT; ++idx)
+  for (uint8_t idx = 0; idx < diversionGroups.size(); ++idx)
   {
     count += diversionGroups[idx].visibleOnOLED ? 1u : 0u;
   }
@@ -222,7 +222,7 @@ uint8_t currentConfigItemCount()
 
 uint8_t boostPageConfigIndexFromVisibleIndex(uint8_t visibleIndex)
 {
-  for (uint8_t idx = 0; idx < BOOST_CONTROL_COUNT; ++idx)
+  for (uint8_t idx = 0; idx < boostControls.size(); ++idx)
   {
     if (!boostControls[idx].visibleOnOLED)
     {
@@ -242,7 +242,7 @@ uint8_t boostPageConfigIndexFromVisibleIndex(uint8_t visibleIndex)
 
 uint8_t diversionConfigIndexFromVisibleIndex(uint8_t visibleIndex)
 {
-  for (uint8_t idx = 0; idx < DIVERSION_GROUP_COUNT; ++idx)
+  for (uint8_t idx = 0; idx < diversionGroups.size(); ++idx)
   {
     if (!diversionGroups[idx].visibleOnOLED)
     {
@@ -550,7 +550,7 @@ void handleButton(ButtonEvent event)
   if ((page.kind == OledPageKind::BOOST) && (event == ButtonEvent::SHORT_PRESS))
   {
     const uint8_t boostIndex{ boostPageConfigIndexFromVisibleIndex(page.index) };
-    if (boostIndex >= BOOST_CONTROL_COUNT) { return; }
+    if (boostIndex >= boostControls.size()) { return; }
     RouterRuntime::boostStateFromOLED[boostIndex] ^= true;
     refreshRoutingMasks();
     requestOLEDRefresh();
@@ -572,7 +572,7 @@ void handleButton(ButtonEvent event)
     else
     {
       const uint8_t diversionIndex{ diversionConfigIndexFromVisibleIndex(OledUI::selectedItem) };
-      if (diversionIndex >= DIVERSION_GROUP_COUNT) { return; }
+      if (diversionIndex >= diversionGroups.size()) { return; }
       RouterRuntime::diversionAuthorizedFromOLED[diversionIndex] ^= true;
       OledUI::mode = OledInteractionMode::VIEW;
       refreshRoutingMasks();
@@ -688,7 +688,7 @@ void renderRoutingPage()
   for (uint8_t line = 0; line < visibleDiversionCount(); ++line)
   {
     const uint8_t diversionIndex{ diversionConfigIndexFromVisibleIndex(line) };
-    if (diversionIndex >= DIVERSION_GROUP_COUNT) { continue; }
+    if (diversionIndex >= diversionGroups.size()) { continue; }
     const char prefix{ (OledUI::mode == OledInteractionMode::LIST_NAV && OledUI::selectedItem == line) ? '>' : ' ' };
     bool authorized{ RouterRuntime::diversionAuthorizedFromOLED[diversionIndex] };
     if (diversionGroups[diversionIndex].inputPin != unused_pin)
@@ -704,7 +704,7 @@ void renderRoutingPage()
 void renderBoostPage(const uint8_t visibleBoostIndex)
 {
   const uint8_t boostIndex{ boostPageConfigIndexFromVisibleIndex(visibleBoostIndex) };
-  if (boostIndex >= BOOST_CONTROL_COUNT) { return; }
+  if (boostIndex >= boostControls.size()) { return; }
   const auto &cfg{ boostControls[boostIndex] };
   const bool active{ RouterRuntime::boostStateFromOLED[boostIndex] || (cfg.inputPin != unused_pin && !getPinState(cfg.inputPin)) };
 

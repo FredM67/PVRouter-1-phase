@@ -179,11 +179,10 @@ inline constexpr bool OLED_ENABLE_RESTART_PAGE{ true };
 //   BOOST 2 => D8 => RELAY 1
 //   BOOST 3 => D9 => RELAY 2
 //======================================================================================
-inline constexpr uint8_t BOOST_CONTROL_COUNT{ 3 };
-inline constexpr BoostControlConfig boostControls[BOOST_CONTROL_COUNT]{
-  { unused_pin, TRIAC(0), true },
-  { unused_pin, RELAY(0), true },
-  { unused_pin, RELAY(1), true }
+inline constexpr BoostControlConfig boostControls{
+  { { unused_pin, TRIAC(0), true },
+    { unused_pin, RELAY(0), true },
+    { unused_pin, RELAY(1), true } }
 };
 
 //======================================================================================
@@ -212,12 +211,11 @@ inline constexpr BoostControlConfig boostControls[BOOST_CONTROL_COUNT]{
 //   Diversion 2 => OLED only  => output 1    => OLED visible
 //   Diversion 3 => OLED only  => outputs 2,3 => OLED visible
 //======================================================================================
-inline constexpr uint8_t DIVERSION_GROUP_COUNT{ 4 };
-inline constexpr DiversionGroupConfig diversionGroups[DIVERSION_GROUP_COUNT]{
-  { 10, ALL_OUTPUTS(), true },
-  { unused_pin, TRIAC(0), true },
-  { unused_pin, RELAY(0), true },
-  { unused_pin, RELAY(1), true }
+inline constexpr DiversionGroupConfig diversionGroups{
+  { { 10, ALL_OUTPUTS(), true },
+    { unused_pin, TRIAC(0), true },
+    { unused_pin, RELAY(0), true },
+    { unused_pin, RELAY(1), true } }
 };
 
 #endif /* CONFIG_H */

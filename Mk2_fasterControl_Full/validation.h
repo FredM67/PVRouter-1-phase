@@ -30,8 +30,8 @@ static_assert(NO_OF_DUMPLOADS > 0, "Number of dump loads must be greater than 0"
 static_assert(iTemperatureThreshold > 0, "Temperature threshold must be greater than 0");
 static_assert(iTemperatureThreshold <= 100, "Temperature threshold must be lower than 100");
 static_assert(getRelayCount() <= MAX_RELAY_OUTPUTS, "******** Too many relay outputs for OLED/EEPROM support. Maximum is 6. ********");
-static_assert(BOOST_CONTROL_COUNT <= MAX_BOOST_CHANNELS, "******** Too many boost controls. Please check config.h ! ********");
-static_assert(DIVERSION_GROUP_COUNT <= MAX_DIVERSION_GROUPS, "******** Too many diversion groups. Please check config.h ! ********");
+static_assert(boostControls.size() <= MAX_BOOST_CHANNELS, "******** Too many boost controls. Please check config.h ! ********");
+static_assert(diversionGroups.size() <= MAX_DIVERSION_GROUPS, "******** Too many diversion groups. Please check config.h ! ********");
 
 constexpr bool check_output_index(const uint8_t outputIndex)
 {
@@ -125,7 +125,7 @@ constexpr uint32_t check_pins()
     }
   }
 
-  for (uint8_t idx = 0; idx < BOOST_CONTROL_COUNT; ++idx)
+  for (uint8_t idx = 0; idx < boostControls.size(); ++idx)
   {
     if (!check_output_index(boostControls[idx].outputIndex))
       return 0;
@@ -139,7 +139,7 @@ constexpr uint32_t check_pins()
     bit_set(used_pins, boostControls[idx].inputPin);
   }
 
-  for (uint8_t idx = 0; idx < DIVERSION_GROUP_COUNT; ++idx)
+  for (uint8_t idx = 0; idx < diversionGroups.size(); ++idx)
   {
     if (diversionGroups[idx].outputMask == 0)
       return 0;
