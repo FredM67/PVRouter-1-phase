@@ -189,20 +189,17 @@ constexpr uint16_t getInputPins()
     bit_set(input_pins, dualTariffPin);
   }
 
-  if constexpr (DIVERSION_PIN_PRESENT)
+  for (uint8_t idx = 0; idx < diversionGroups.size(); ++idx)
   {
-    for (uint8_t idx = 0; idx < diversionGroups.size(); ++idx)
+    if (diversionGroups[idx].inputPin == unused_pin)
     {
-      if (diversionGroups[idx].inputPin == unused_pin)
-      {
-        continue;
-      }
-
-      if (bit_read(input_pins, diversionGroups[idx].inputPin))
-        return 0;
-
-      bit_set(input_pins, diversionGroups[idx].inputPin);
+      continue;
     }
+
+    if (bit_read(input_pins, diversionGroups[idx].inputPin))
+      return 0;
+
+    bit_set(input_pins, diversionGroups[idx].inputPin);
   }
 
   if constexpr (PRIORITY_ROTATION == RotationModes::PIN)
@@ -1361,18 +1358,15 @@ void initializeOldPCBPins()
     delay(100);                          // allow time to settle
   }
 
-  if constexpr (DIVERSION_PIN_PRESENT)
+  for (uint8_t idx = 0; idx < diversionGroups.size(); ++idx)
   {
-    for (uint8_t idx = 0; idx < diversionGroups.size(); ++idx)
+    if (diversionGroups[idx].inputPin == unused_pin)
     {
-      if (diversionGroups[idx].inputPin == unused_pin)
-      {
-        continue;
-      }
-
-      pinMode(diversionGroups[idx].inputPin, INPUT_PULLUP);
-      delay(100);
+      continue;
     }
+
+    pinMode(diversionGroups[idx].inputPin, INPUT_PULLUP);
+    delay(100);
   }
 
   if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)

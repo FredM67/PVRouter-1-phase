@@ -60,8 +60,7 @@ inline constexpr bool TEMP_SENSOR_PRESENT{ false };
 inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::OFF };
 inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED };
 
-// Backward compatibility flags kept enabled automatically when related tables are used.
-inline constexpr bool DIVERSION_PIN_PRESENT{ true };
+// Backward compatibility flag kept enabled automatically when related tables are used.
 inline constexpr bool OVERRIDE_PIN_PRESENT{ true };
 
 #include "utils_temp.h"
@@ -82,11 +81,22 @@ inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0 };
 
 //======================================================================================
 // OUTPUTS - RELAY diversion outputs
-// Format per relay: { pin, SM, SA, Ton, Toff }
-//   SM   = Seuil Marche   (surplus threshold, W)
-//   SA   = Seuil Arrêt    (import threshold, W)
-//   Ton  = minimum ON time in minutes
-//   Toff = minimum OFF time in minutes
+// -------------------------------------------------------------------------------------
+// Each entry = { pin, surplusThreshold, importThreshold, minON, minOFF }
+//
+//   pin              : digital output pin driving the relay
+//   surplusThreshold : surplus power (W) to turn ON
+//   importThreshold  : import power (W) to turn OFF
+//   minON            : minimum ON time in minutes
+//   minOFF           : minimum OFF time in minutes
+//
+// Example:
+//   inline constexpr RelayEngine relays{
+//     {
+//       { 3, 1000, 200, 5, 5 },
+//       { 4, 500, 100, 10, 10 }
+//     }
+//   };
 //======================================================================================
 inline constexpr RelayEngine relays{
   {
@@ -100,7 +110,6 @@ inline constexpr RelayEngine relays{
 // Set to 0xff when not used
 //======================================================================================
 inline constexpr uint8_t dualTariffPin{ 0xff };
-inline constexpr uint8_t diversionPin{ 0xff };   /**< Legacy single diversion input kept unused */
 inline constexpr uint8_t rotationPin{ 0xff };
 inline constexpr uint8_t forcePin{ 0xff };       /**< Legacy single boost input kept unused */
 inline constexpr uint8_t watchDogPin{ 5 };
@@ -161,23 +170,19 @@ inline constexpr bool OLED_ENABLE_RESTART_PAGE{ true };
 //======================================================================================
 // BOOST COMMANDS (manual force ON per output)
 // -------------------------------------------------------------------------------------
-// One entry = one independent boost source.
+// Each entry = { inputPin, outputIndex, visibleOnOLED }
 //
-// inputPin:
-//   - physical input pin using INPUT_PULLUP logic
-//   - unused_pin if no physical input is used
+//   inputPin      : physical pin (INPUT_PULLUP) or unused_pin for OLED-only
+//   outputIndex   : target output — use LOAD(n) or RELAY(n)
+//   visibleOnOLED : true => dedicated BOOST page on OLED
+//                   false => physical input only
 //
-// outputIndex:
-//   - target output (TRIAC or relay)
-//
-// visibleOnOLED:
-//   - true  => create a dedicated BOOST page on OLED
-//   - false => command exists only from physical input
-//
-// Current configuration requested:
-//   BOOST 1 => D7 => TRIAC 1
-//   BOOST 2 => D8 => RELAY 1
-//   BOOST 3 => D9 => RELAY 2
+// Example:
+//   inline constexpr BoostControlConfig boostControls{
+//     { { 7, LOAD(0), true },
+//       { unused_pin, RELAY(1), true },
+//       { 8, LOAD(0), false } }
+//   };
 //======================================================================================
 inline constexpr BoostControlConfig boostControls{
   { { unused_pin, LOAD(0), true },
@@ -188,28 +193,24 @@ inline constexpr BoostControlConfig boostControls{
 //======================================================================================
 // DIVERSION AUTHORIZATION GROUPS
 // -------------------------------------------------------------------------------------
-// IMPORTANT SEMANTIC:
-//   ON  = routing authorized
-//   OFF = routing blocked for the configured outputs
-// Startup is ON by default.
+// Each entry = { inputPin, outputMask, visibleOnOLED }
 //
-// inputPin:
-//   - physical input pin using INPUT_PULLUP logic
-//   - pulling the pin LOW blocks the group
-//   - unused_pin if the group is OLED-only
+// Semantic: ON = routing authorized, OFF = routing blocked.
+// All groups start ON at boot.
 //
-// outputMask:
-//   - affected outputs
-//   - use ALL_LOADS_AND_RELAYS() for all active outputs
+//   inputPin      : physical pin (INPUT_PULLUP, LOW = block) or unused_pin for OLED-only
+//   outputMask    : affected outputs — use LOAD(n), RELAY(n), ALL_LOADS(),
+//                   ALL_RELAYS(), ALL_LOADS_AND_RELAYS(), or combine with |
+//   visibleOnOLED : true => toggle from OLED routing page
+//                   false => physical input only
 //
-// visibleOnOLED:
-//   - true  => appears on OLED routing page
-//   - false => physical-only group
-//
-// Current configuration requested:
-//   Diversion 1 => D10        => ALL outputs => OLED visible
-//   Diversion 2 => OLED only  => output 1    => OLED visible
-//   Diversion 3 => OLED only  => outputs 2,3 => OLED visible
+// Example:
+//   inline constexpr DiversionGroupConfig diversionGroups{
+//     { { 10, ALL_LOADS_AND_RELAYS(), true },
+//       { unused_pin, LOAD(0), true },
+//       { unused_pin, RELAY(0) | RELAY(1), true },
+//       { 9, ALL_LOADS(), false } }
+//   };
 //======================================================================================
 inline constexpr DiversionGroupConfig diversionGroups{
   { { 10, ALL_LOADS_AND_RELAYS(), true },

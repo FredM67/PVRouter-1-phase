@@ -69,13 +69,6 @@ constexpr uint32_t check_pins()
     bit_set(used_pins, forcePin);
   }
 
-  if (diversionPin != 0xff)
-  {
-    if (bit_read(used_pins, diversionPin))
-      return 0;
-    bit_set(used_pins, diversionPin);
-  }
-
   if (watchDogPin != 0xff)
   {
     if (bit_read(used_pins, watchDogPin))

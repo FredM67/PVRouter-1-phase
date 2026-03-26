@@ -256,40 +256,6 @@ bool proceedLoadPrioritiesAndOverriding(const int16_t currentTemperature_x100)
 }
 
 /**
- * @brief Checks and updates the diversion state.
- * 
- * @details This function monitors the state of the diversion pin to determine whether the diversion 
- *          is active or not. If the diversion pin state changes, it updates the `b_diversionEnabled` 
- *          flag accordingly. Additionally, if debugging is enabled, it logs the state transitions 
- *          (e.g., "Trigger diversion OFF!" or "End diversion OFF!") to the debug output.
- * 
- * @note This function is only executed if the `DIVERSION_PIN_PRESENT` compile-time constant is defined.
- * 
- * @see getPinState
- * @see ENABLE_DEBUG
- */
-void checkDiversionOnOff()
-{
-  if constexpr (DIVERSION_PIN_PRESENT && (diversionPin != unused_pin))
-  {
-    const auto pinState{ getPinState(diversionPin) };
-
-#ifdef ENABLE_DEBUG
-    static auto previousState{ HIGH };
-    if (previousState != pinState)
-    {
-      DBUG(F("Trigger - diversion turned "));
-      DBUGLN(!pinState ? F("'OFF'!") : F("'ON'!"));
-    }
-
-    previousState = pinState;
-#endif
-
-    Shared::b_diversionEnabled = pinState;
-  }
-}
-
-/**
  * @brief Updates the temperature readings and sends a new request for the next cycle.
  * 
  * @details This function reads the temperature values from the sensors, validates them, 
@@ -441,7 +407,6 @@ void setup()
  * 
  * @see proceedLoadPrioritiesAndOverriding
  * @see forceFullPower
- * @see checkDiversionOnOff
  */
 void handlePerSecondTasks(bool &bOffPeak, int16_t iTemperature_x100)
 {
@@ -451,9 +416,8 @@ void handlePerSecondTasks(bool &bOffPeak, int16_t iTemperature_x100)
   }
 
   updateWatchdog();
-  checkDiversionOnOff();
 
-  // NEW: refresh boost/diversion commands coming from dedicated inputs and from the OLED UI.
+  // Refresh boost/diversion commands coming from dedicated inputs and from the OLED UI.
   refreshRoutingMasks();
 
   if (!forceFullPower())
