@@ -387,31 +387,42 @@ Em mode **manuel**, vous devez également définir la *pin* qui déclenchera la 
 inline constexpr uint8_t rotationPin{ 10 };
 ```
 
-## Configuration de la marche forcée
-Il est possible de déclencher la marche forcée (certains routeurs appellent cette fonction *Boost*) via une *pin*.  
-On peut y relier un micro-interrupteur, une minuterie (ATTENTION, PAS de 230 V sur cette ligne), ou tout autre contact sec.
+## Commandes Boost (Marche forcée)
+Chaque entrée dans la table boost définit une source indépendante pouvant forcer une sortie spécifique à ON.
+Un boost peut être déclenché par une pin physique (micro-interrupteur, minuterie — ATTENTION, PAS de 230 V sur cette ligne), depuis l'interface OLED, ou les deux.
 
-Pour activer cette fonctionnalité, utilisez le code suivant :
+Chaque entrée = `{ inputPin, outputIndex, visibleOnOLED }`
+- `inputPin` : pin physique (INPUT_PULLUP) ou `unused_pin` pour OLED uniquement
+- `outputIndex` : sortie cible — utiliser `LOAD(n)` ou `RELAY(n)`
+- `visibleOnOLED` : `true` pour créer une page BOOST dédiée sur l'OLED
+
+Exemple :
 ```cpp
-inline constexpr bool OVERRIDE_PIN_PRESENT{ true };
-```
-Vous devez également spécifier la *pin* à laquelle le contact sec est connecté :
-```cpp
-inline constexpr uint8_t forcePin{ 11 };
+inline constexpr BoostControlConfig boostControls{
+  { { 7, LOAD(0), true },
+    { unused_pin, RELAY(1), true },
+    { 8, LOAD(0), false } }
+};
 ```
 
-## Arrêt du routage
-Il peut être pratique de désactiver le routage lors d'une absence prolongée.  
-Cette fonctionnalité est particulièrement utile si la *pin* de commande est connectée à un contact sec qui peut être contrôlé à distance, par exemple via une routine Alexa ou similaire.  
-Ainsi, vous pouvez désactiver le routage pendant votre absence et le réactiver un ou deux jours avant votre retour, afin de disposer d'eau chaude (gratuite) à votre arrivée.
+## Groupes d'autorisation de routage
+Chaque entrée définit un groupe de sorties dont le routage peut être bloqué indépendamment.
+C'est utile pour désactiver le routage lors d'une absence prolongée.
+La commande peut provenir d'une pin physique (contact sec, contrôlable à distance via une routine Alexa ou similaire), de l'interface OLED, ou les deux.
 
-Pour activer cette fonctionnalité, utilisez le code suivant :
+Chaque entrée = `{ inputPin, outputMask, visibleOnOLED }`
+- `inputPin` : pin physique (INPUT_PULLUP, LOW = bloquer) ou `unused_pin` pour OLED uniquement
+- `outputMask` : sorties concernées — utiliser `LOAD(n)`, `RELAY(n)`, `ALL_LOADS()`, `ALL_RELAYS()`, `ALL_LOADS_AND_RELAYS()`, ou combiner avec `|`
+- `visibleOnOLED` : `true` pour afficher un interrupteur sur la page routage de l'OLED
+
+Exemple :
 ```cpp
-inline constexpr bool DIVERSION_PIN_PRESENT{ true };
-```
-Vous devez également spécifier la *pin* à laquelle le contact sec est connecté :
-```cpp
-inline constexpr uint8_t diversionPin{ 12 };
+inline constexpr DiversionGroupConfig diversionGroups{
+  { { 10, ALL_LOADS_AND_RELAYS(), true },
+    { unused_pin, LOAD(0), true },
+    { unused_pin, RELAY(0) | RELAY(1), true },
+    { 9, ALL_LOADS(), false } }
+};
 ```
 
 # Configuration avancée du programme

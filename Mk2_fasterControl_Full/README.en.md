@@ -388,31 +388,42 @@ In **manual** mode, you must also define the *pin* that will trigger rotation:
 inline constexpr uint8_t rotationPin{ 10 };
 ```
 
-## Forced Operation Configuration
-It's possible to trigger forced operation (some routers call this function *Boost*) via a *pin*.
-You can connect a micro-switch, a timer (WARNING, NO 230 V on this line), or any other dry contact.
+## Boost Commands (Forced Operation)
+Each entry in the boost table defines an independent source that can force a specific output ON.
+A boost can be triggered by a physical pin (micro-switch, timer — WARNING, NO 230 V on this line), from the OLED UI, or both.
 
-To enable this feature, use the following code:
+Each entry = `{ inputPin, outputIndex, visibleOnOLED }`
+- `inputPin` : physical pin (INPUT_PULLUP) or `unused_pin` for OLED-only
+- `outputIndex` : target output — use `LOAD(n)` or `RELAY(n)`
+- `visibleOnOLED` : `true` to create a dedicated BOOST page on OLED
+
+Example:
 ```cpp
-inline constexpr bool OVERRIDE_PIN_PRESENT{ true };
-```
-You must also specify the *pin* to which the dry contact is connected:
-```cpp
-inline constexpr uint8_t forcePin{ 11 };
+inline constexpr BoostControlConfig boostControls{
+  { { 7, LOAD(0), true },
+    { unused_pin, RELAY(1), true },
+    { 8, LOAD(0), false } }
+};
 ```
 
-## Diversion Shutdown
-It can be convenient to disable routing during a prolonged absence.
-This feature is particularly useful if the control *pin* is connected to a dry contact that can be remotely controlled, for example via an Alexa routine or similar.
-Thus, you can disable routing during your absence and reactivate it one or two days before your return, to have hot water (free) available upon arrival.
+## Diversion Authorization Groups
+Each entry defines a group of outputs whose routing can be blocked independently.
+This is useful to disable routing during a prolonged absence.
+The control can come from a physical pin (dry contact, remotely controlled via an Alexa routine or similar), from the OLED UI, or both.
 
-To enable this feature, use the following code:
+Each entry = `{ inputPin, outputMask, visibleOnOLED }`
+- `inputPin` : physical pin (INPUT_PULLUP, LOW = block) or `unused_pin` for OLED-only
+- `outputMask` : affected outputs — use `LOAD(n)`, `RELAY(n)`, `ALL_LOADS()`, `ALL_RELAYS()`, `ALL_LOADS_AND_RELAYS()`, or combine with `|`
+- `visibleOnOLED` : `true` to show a toggle on the OLED routing page
+
+Example:
 ```cpp
-inline constexpr bool DIVERSION_PIN_PRESENT{ true };
-```
-You must also specify the *pin* to which the dry contact is connected:
-```cpp
-inline constexpr uint8_t diversionPin{ 12 };
+inline constexpr DiversionGroupConfig diversionGroups{
+  { { 10, ALL_LOADS_AND_RELAYS(), true },
+    { unused_pin, LOAD(0), true },
+    { unused_pin, RELAY(0) | RELAY(1), true },
+    { 9, ALL_LOADS(), false } }
+};
 ```
 
 # Advanced Program Configuration
