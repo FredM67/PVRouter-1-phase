@@ -20,7 +20,6 @@
  * IMPORTANT
  * --------------------------------------------------------------------------------------
  * - Keep the same constant names used by the firmware.
- * - The bottom part of this file contains helper structures derived from your choices.
  * - Use 0xff or unused_pin when a pin or option is not used.
  */
 
@@ -147,7 +146,7 @@ inline constexpr bool OLED_ENABLE_RUNTIME_SETTINGS{ true };
 inline constexpr bool OLED_ENABLE_RESTART_PAGE{ true };
 
 //======================================================================================
-// ADVANCED OUTPUT INDEXING (used by BOOST and DIVERSION tables below)
+// OUTPUT INDEXING HELPERS — TRIAC(), RELAY(), ALL_OUTPUTS()
 // -------------------------------------------------------------------------------------
 // TRIAC outputs : 0 .. NO_OF_DUMPLOADS - 1
 // Relay outputs : NO_OF_DUMPLOADS .. NO_OF_DUMPLOADS + relay_count - 1
@@ -157,24 +156,7 @@ inline constexpr bool OLED_ENABLE_RESTART_PAGE{ true };
 //   RELAY(0)  => output index 1
 //   RELAY(1)  => output index 2
 //======================================================================================
-inline constexpr uint8_t TOTAL_ROUTER_OUTPUTS{
-  static_cast< uint8_t >(NO_OF_DUMPLOADS + (RELAY_DIVERSION ? relays.get_size() : 0))
-};
-
-constexpr OutputId TRIAC(const uint8_t idx)
-{
-  return { idx };
-}
-
-constexpr OutputId RELAY(const uint8_t idx)
-{
-  return { static_cast< uint8_t >(NO_OF_DUMPLOADS + idx) };
-}
-
-constexpr uint16_t ALL_OUTPUTS()
-{
-  return TOTAL_ROUTER_OUTPUTS >= 16u ? 0xFFFFu : static_cast< uint16_t >((1u << TOTAL_ROUTER_OUTPUTS) - 1u);
-}
+#include "config_helpers.h"
 
 //======================================================================================
 // BOOST COMMANDS (manual force ON per output)
