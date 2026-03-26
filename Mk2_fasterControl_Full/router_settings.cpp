@@ -46,7 +46,7 @@ uint16_t getDiversionMaskFromInputsAndOLED()
     }
   }
 
-  return static_cast< uint16_t >(mask & ALL_OUTPUTS());
+  return static_cast< uint16_t >(mask & ALL_LOADS_AND_RELAYS());
 }
 
 void refreshRoutingMasks()
@@ -54,13 +54,13 @@ void refreshRoutingMasks()
   const uint16_t flatBoostMask{ getBoostMaskFromInputsAndOLED() };
   const uint16_t flatDiversionMask{ getDiversionMaskFromInputsAndOLED() };
 
-  RouterRuntime::triacBoostMask = static_cast< uint16_t >(flatBoostMask & makeTriacOutputMask());
+  RouterRuntime::loadBoostMask = static_cast< uint16_t >(flatBoostMask & makeLoadOutputMask());
   RouterRuntime::relayBoostMask = static_cast< uint16_t >((flatBoostMask >> NO_OF_DUMPLOADS) & makeRelayOutputMask());
 
-  RouterRuntime::triacDiversionMask = static_cast< uint16_t >(flatDiversionMask & makeTriacOutputMask());
+  RouterRuntime::loadDiversionMask = static_cast< uint16_t >(flatDiversionMask & makeLoadOutputMask());
   RouterRuntime::relayDiversionMask = static_cast< uint16_t >((flatDiversionMask >> NO_OF_DUMPLOADS) & makeRelayOutputMask());
 
-  Shared::b_diversionEnabled = RouterRuntime::triacDiversionMask != makeTriacOutputMask();
+  Shared::b_diversionEnabled = RouterRuntime::loadDiversionMask != makeLoadOutputMask();
 }
 
 void initializeRuntimeRoutingCommands()

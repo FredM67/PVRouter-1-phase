@@ -392,8 +392,8 @@ void updatePhysicalLoadStates()
     --idx;
     const auto iLoad{ loadPrioritiesAndState[idx] & loadStateMask };
     // NEW: each TRIAC output can now be stopped independently by one or more diversion groups.
-    const bool outputStoppedByDiversion{ bit_read(RouterRuntime::triacDiversionMask, iLoad) };
-    physicalLoadState[iLoad] = !outputStoppedByDiversion && (triacIsForced(iLoad) || (loadPrioritiesAndState[idx] & loadStateOnBit)) ? LoadStates::LOAD_ON : LoadStates::LOAD_OFF;
+    const bool outputStoppedByDiversion{ bit_read(RouterRuntime::loadDiversionMask, iLoad) };
+    physicalLoadState[iLoad] = !outputStoppedByDiversion && (loadIsForced(iLoad) || (loadPrioritiesAndState[idx] & loadStateOnBit)) ? LoadStates::LOAD_ON : LoadStates::LOAD_OFF;
   } while (idx);
 }
 
@@ -484,7 +484,7 @@ void processGridCurrentRawSample(const int16_t rawSample)
  */
 void processDivertedCurrentRawSample(const int16_t rawSample)
 {
-  if (!Shared::b_diversionEnabled || triacIsForced(0))
+  if (!Shared::b_diversionEnabled || loadIsForced(0))
   {
     return;  // no diverted power when the load is overridden
   }

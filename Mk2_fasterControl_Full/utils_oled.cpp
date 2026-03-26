@@ -710,7 +710,7 @@ void renderBoostPage(const uint8_t visibleBoostIndex)
 
   drawCenteredTitleFmt("BOOST %u", boostIndex + 1);
 
-  if (isTriacOutputIndex(cfg.outputIndex))
+  if (isLoadOutputIndex(cfg.outputIndex))
   {
     drawCenteredLineFmt(3, "Sortie TRIAC %u", cfg.outputIndex + 1);
   }

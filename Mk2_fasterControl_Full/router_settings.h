@@ -24,7 +24,7 @@ inline constexpr uint8_t getRelayCount()
   return RELAY_DIVERSION ? relays.get_size() : 0;
 }
 
-inline constexpr bool isTriacOutputIndex(const uint8_t outputIndex)
+inline constexpr bool isLoadOutputIndex(const uint8_t outputIndex)
 {
   return outputIndex < NO_OF_DUMPLOADS;
 }
@@ -49,7 +49,7 @@ inline uint16_t makeRelayOutputMask()
   return mask;
 }
 
-inline uint16_t makeTriacOutputMask()
+inline uint16_t makeLoadOutputMask()
 {
   uint16_t mask{ 0 };
 
@@ -61,15 +61,15 @@ inline uint16_t makeTriacOutputMask()
   return mask;
 }
 
-inline bool triacIsForced(const uint8_t triacIndex)
+inline bool loadIsForced(const uint8_t loadIndex)
 {
-  return Shared::b_overrideLoadOn[triacIndex] || bit_read(RouterRuntime::triacBoostMask, triacIndex);
+  return Shared::b_overrideLoadOn[loadIndex] || bit_read(RouterRuntime::loadBoostMask, loadIndex);
 }
 
-inline void applyBoostOverridesToTriacs()
+inline void applyBoostOverridesToLoads()
 {
   // Intentionally left empty.
-  // TRIAC boost is evaluated on demand via triacIsForced() so that switching BOOST OFF
+  // TRIAC boost is evaluated on demand via loadIsForced() so that switching BOOST OFF
   // immediately removes the forced contribution without corrupting the legacy override flags.
 }
 

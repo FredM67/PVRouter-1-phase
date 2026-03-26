@@ -462,7 +462,7 @@ void handlePerSecondTasks(bool &bOffPeak, int16_t iTemperature_x100)
   }
 
   // NEW: merge per-output BOOST commands with the existing TRIAC override mechanism.
-  applyBoostOverridesToTriacs();
+  applyBoostOverridesToLoads();
 
   if constexpr (RELAY_DIVERSION)
   {
@@ -513,7 +513,7 @@ void loop()
       // this action is performed every N times around this processing loop.
       timerForDisplayUpdate = 0;
 
-      configureValueForDisplay(Shared::EDD_isActive, Shared::copyOf_divertedEnergyTotal_Wh, Shared::b_diversionEnabled, triacIsForced(0));
+      configureValueForDisplay(Shared::EDD_isActive, Shared::copyOf_divertedEnergyTotal_Wh, Shared::b_diversionEnabled, loadIsForced(0));
     }
 
     if (++perSecondTimer >= SUPPLY_FREQUENCY)

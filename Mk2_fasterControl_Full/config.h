@@ -146,13 +146,13 @@ inline constexpr bool OLED_ENABLE_RUNTIME_SETTINGS{ true };
 inline constexpr bool OLED_ENABLE_RESTART_PAGE{ true };
 
 //======================================================================================
-// OUTPUT INDEXING HELPERS — TRIAC(), RELAY(), ALL_OUTPUTS()
+// OUTPUT INDEXING HELPERS — LOAD(), RELAY(), ALL_LOADS_AND_RELAYS()
 // -------------------------------------------------------------------------------------
 // TRIAC outputs : 0 .. NO_OF_DUMPLOADS - 1
 // Relay outputs : NO_OF_DUMPLOADS .. NO_OF_DUMPLOADS + relay_count - 1
 //
 // Example with 1 TRIAC + 2 relays:
-//   TRIAC(0)  => output index 0
+//   LOAD(0)  => output index 0
 //   RELAY(0)  => output index 1
 //   RELAY(1)  => output index 2
 //======================================================================================
@@ -180,7 +180,7 @@ inline constexpr bool OLED_ENABLE_RESTART_PAGE{ true };
 //   BOOST 3 => D9 => RELAY 2
 //======================================================================================
 inline constexpr BoostControlConfig boostControls{
-  { { unused_pin, TRIAC(0), true },
+  { { unused_pin, LOAD(0), true },
     { unused_pin, RELAY(0), true },
     { unused_pin, RELAY(1), true } }
 };
@@ -200,7 +200,7 @@ inline constexpr BoostControlConfig boostControls{
 //
 // outputMask:
 //   - affected outputs
-//   - use ALL_OUTPUTS() for all active outputs
+//   - use ALL_LOADS_AND_RELAYS() for all active outputs
 //
 // visibleOnOLED:
 //   - true  => appears on OLED routing page
@@ -212,8 +212,8 @@ inline constexpr BoostControlConfig boostControls{
 //   Diversion 3 => OLED only  => outputs 2,3 => OLED visible
 //======================================================================================
 inline constexpr DiversionGroupConfig diversionGroups{
-  { { 10, ALL_OUTPUTS(), true },
-    { unused_pin, TRIAC(0), true },
+  { { 10, ALL_LOADS_AND_RELAYS(), true },
+    { unused_pin, LOAD(0), true },
     { unused_pin, RELAY(0), true },
     { unused_pin, RELAY(1), true } }
 };

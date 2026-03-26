@@ -3,7 +3,8 @@
  * @brief Output indexing helpers derived from user configuration values.
  *
  * Included by config.h after the user values (NO_OF_DUMPLOADS, relays, etc.)
- * are defined. Provides TRIAC(), RELAY(), ALL_OUTPUTS() for use in the
+ * are defined. Provides LOAD(), RELAY(), ALL_LOADS(), ALL_RELAYS(),
+ * ALL_LOADS_AND_RELAYS() for use in the
  * boost/diversion tables.
  */
 
@@ -16,7 +17,7 @@ inline constexpr uint8_t TOTAL_ROUTER_OUTPUTS{
   static_cast< uint8_t >(NO_OF_DUMPLOADS + (RELAY_DIVERSION ? relays.get_size() : 0))
 };
 
-constexpr OutputId TRIAC(const uint8_t idx)
+constexpr OutputId LOAD(const uint8_t idx)
 {
   return { idx };
 }
@@ -26,7 +27,25 @@ constexpr OutputId RELAY(const uint8_t idx)
   return { static_cast< uint8_t >(NO_OF_DUMPLOADS + idx) };
 }
 
-constexpr uint16_t ALL_OUTPUTS()
+constexpr uint16_t ALL_LOADS()
+{
+  return NO_OF_DUMPLOADS >= 16u ? 0xFFFFu : static_cast< uint16_t >((1u << NO_OF_DUMPLOADS) - 1u);
+}
+
+constexpr uint16_t ALL_RELAYS()
+{
+  if constexpr (!RELAY_DIVERSION)
+  {
+    return 0u;
+  }
+  else
+  {
+    const uint8_t count{ relays.get_size() };
+    return static_cast< uint16_t >(((1u << count) - 1u) << NO_OF_DUMPLOADS);
+  }
+}
+
+constexpr uint16_t ALL_LOADS_AND_RELAYS()
 {
   return TOTAL_ROUTER_OUTPUTS >= 16u ? 0xFFFFu : static_cast< uint16_t >((1u << TOTAL_ROUTER_OUTPUTS) - 1u);
 }

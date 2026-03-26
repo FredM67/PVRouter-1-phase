@@ -24,8 +24,8 @@ namespace RouterRuntime
 {
 inline RelayRuntimeSettings relaySettings[MAX_RELAY_OUTPUTS]{};
 
-inline uint16_t triacBoostMask{ 0 };
-inline uint16_t triacDiversionMask{ 0 };
+inline uint16_t loadBoostMask{ 0 };
+inline uint16_t loadDiversionMask{ 0 };
 inline uint16_t relayBoostMask{ 0 };
 inline uint16_t relayDiversionMask{ 0 };
 
