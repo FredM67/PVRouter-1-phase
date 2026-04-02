@@ -11,13 +11,13 @@ L'affichage est organisé sous forme d'un **carrousel circulaire de pages**, con
 | **ENERGIE** | toujours | Énergie déviée en kWh (grande police) |
 | **INFO RESEAU** | toujours | Tension, puissance réseau instantanée, puissance moyenne relais, puissance déviée |
 | **TEMPERATURES** | `TEMP_SENSOR_PRESENT` | Jusqu'à 6 capteurs de température |
-| **ROUTAGE** | toujours | Interrupteurs ON/OFF par groupe de déviation |
+| **ROUTAGE** | toujours | Interrupteurs ON/OFF par groupe de routage |
 | **BOOST** | un par entrée visible | Interrupteur ON/OFF par canal de boost |
 | **RELAIS CFG** | un par relais, si `RELAY_DIVERSION` | Modification des seuils surplus/import et minuteries ON/OFF |
 | **REQ / DIV** | `OLED_ENABLE_RUNTIME_SETTINGS` | Modification de `REQUIRED_EXPORT_IN_WATTS` et `DIVERSION_START_THRESHOLD_WATTS` |
 | **RESTART** | `OLED_ENABLE_RESTART_PAGE` | Redémarrage logiciel via watchdog |
 
-Seules les pages pertinentes pour la configuration actuelle sont affichées. Par exemple, les pages TEMPERATURES n'apparaissent que si des capteurs sont configurés, les pages RELAIS CFG uniquement si la déviation par relais est activée, et les pages BOOST uniquement pour les entrées avec `visibleOnOLED: true`.
+Seules les pages pertinentes pour la configuration actuelle sont affichées. Par exemple, les pages TEMPERATURES n'apparaissent que si des capteurs sont configurés, les pages RELAIS CFG uniquement si le routage par relais est activé, et les pages BOOST uniquement pour les entrées avec `visibleOnOLED: true`.
 
 ## Modèle d'interaction
 
@@ -30,7 +30,7 @@ L'interface dispose de trois modes, pilotés par la rotation de l'encodeur et le
 
 ### 2. Mode NAVIGATION (pages ROUTAGE, RELAIS CFG, REQ / DIV)
 - **Tourner** : déplacer le curseur (`>`) entre les éléments de la liste
-- **Appui court sur la page ROUTAGE** : basculer le groupe de déviation sélectionné ON/OFF
+- **Appui court sur la page ROUTAGE** : basculer le groupe de routage sélectionné ON/OFF
 - **Appui court sur la page RELAIS CFG / REQ / DIV** :
   - Sur un élément de valeur : passer en mode MODIFICATION
   - Sur « VALIDER » : sauvegarder toutes les valeurs en EEPROM et revenir en mode AFFICHAGE
@@ -89,11 +89,11 @@ Un **appui court** bascule le boost ON/OFF immédiatement. L'état du boost est 
 
 ## Page Routage
 
-Chaque groupe de déviation avec `visibleOnOLED: true` apparaît comme une ligne sur la page ROUTAGE. Un appui court entre en mode navigation, puis un second appui bascule le groupe sélectionné. L'état de déviation est combiné en ET avec l'état de la broche physique : le bouton OLED et la broche matérielle doivent tous deux être actifs pour que le routage soit autorisé.
+Chaque groupe de routage avec `visibleOnOLED: true` apparaît comme une ligne sur la page ROUTAGE. Un appui court entre en mode navigation, puis un second appui bascule le groupe sélectionné. L'état du routage est combiné en ET avec l'état de la broche physique : le bouton OLED et la broche matérielle doivent tous deux être actifs pour que le routage soit autorisé.
 
 ## Persistance EEPROM
 
 Lorsque `OLED_ENABLE_RUNTIME_SETTINGS` est `true`, les valeurs modifiables (seuils/minuteries des relais, paramètres système en watts) sont sauvegardées en EEPROM lorsque l'utilisateur confirme via l'élément « VALIDER ». Les données EEPROM incluent une signature, un octet de version et une somme de contrôle. Au démarrage, les valeurs sauvegardées sont chargées si elles sont valides ; sinon, les valeurs par défaut définies à la compilation dans `config.h` sont utilisées.
 
 > [!NOTE]
-> Les états des boutons boost et déviation ne sont **pas** sauvegardés en EEPROM. Ils sont réinitialisés à leurs valeurs par défaut à chaque redémarrage (tous les boosts OFF, toutes les déviations autorisées).
+> Les états des boutons boost et routage ne sont **pas** sauvegardés en EEPROM. Ils sont réinitialisés à leurs valeurs par défaut à chaque redémarrage (tous les boosts OFF, tout le routage autorisé).
