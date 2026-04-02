@@ -13,6 +13,7 @@ This program is designed to be used with the Arduino IDE and/or other developmen
   - [PCB Version Configuration](#pcb-version-configuration)
   - [Serial Output Type](#serial-output-type)
   - [Display Configuration](#display-configuration)
+    - [OLED Display with Rotary Encoder](#oled-display-with-rotary-encoder)
   - [TRIAC Output Configuration](#triac-output-configuration)
   - [On-Off Relay Output Configuration](#on-off-relay-output-configuration)
     - [Operating Principle](#operating-principle)
@@ -167,19 +168,36 @@ Replace `HumanReadable` with `IoT` or `JSON` according to your needs.
 
 Configure the display type in `config.h`:
 ```cpp
-inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE };
+inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED };
 ```
 
 Possible options are:
 - **DisplayType::NONE** : No display is used.
-- **DisplayType::OLED** : Uses an OLED screen to display information.
+- **DisplayType::OLED** : Uses a 128x64 SSD1306 OLED display with a rotary encoder for navigation and runtime settings.
 - **DisplayType::SEG** : Uses a segment display to display information.
 - **DisplayType::SEG_HW** : Uses a segment display with specific hardware interface to display information (presence of **IC3** and **IC4** circuits).
 
----
-> [!NOTE]
-> The OLED display is not yet available. It requires a new PCB version that will be available soon.
----
+### OLED Display with Rotary Encoder
+
+When `DisplayType::OLED` is selected, the system uses a **128x64 SSD1306 I2C OLED display** (on A4/A5) paired with a **rotary encoder with push button** for navigating pages and editing settings at runtime.
+
+The rotary encoder has 3 pins configured in `config.h`:
+```cpp
+inline constexpr OledEncoderConfig oledEncoder{ 11, 12, 13 };
+```
+- **Pin 1 (CLK)**: encoder clock signal
+- **Pin 2 (DT)**: encoder data signal
+- **Pin 3 (SW)**: push button (INPUT_PULLUP, active LOW)
+
+Additionally, two optional features can be enabled:
+```cpp
+inline constexpr bool OLED_ENABLE_RUNTIME_SETTINGS{ true };
+inline constexpr bool OLED_ENABLE_RESTART_PAGE{ true };
+```
+- **OLED_ENABLE_RUNTIME_SETTINGS**: when `true`, relay thresholds and system parameters are editable from the OLED and saved to EEPROM
+- **OLED_ENABLE_RESTART_PAGE**: when `true`, adds a dedicated page to reboot the router via software
+
+For full details on navigation, page descriptions, interaction modes, and EEPROM persistence, see the **[OLED User Guide](docs/OLED_GUIDE.en.md)**.
 
 ## TRIAC Output Configuration
 
@@ -232,11 +250,8 @@ For Arduino performance reasons, the chosen duration will be rounded to a nearby
 
 If the user prefers a 15 min window, just write:
 ```cpp
-inline constexpr RelayEngine relays{ 15_i, { { 3, 1000, 200, 1, 1 } } };
+inline constexpr RelayEngine relays{ MINUTES(15), { { 3, 1000, 200, 1, 1 } } };
 ```
-___
-> [!NOTE]
-> Pay attention to the '**_i**' suffix after the number *15*!
 ___
 
 The relays configured in the system are managed by a system similar to a state machine.
@@ -286,7 +301,8 @@ If the *OneWire* library is not installed, install it via the **Tools** => **Man
 Search for "Onewire" and install "**OneWire** by Jim Studt, ..." version **2.3.7** or newer.
 
 #### With Visual Studio Code and PlatformIO
-Select the "**env:temperature (Mk2_3phase_RFdatalog_temp)**" configuration.
+There is currently no dedicated PlatformIO environment for temperature.
+Simply define `TEMP_SENSOR_PRESENT` to `true` in `config.h` and ensure the *OneWire* library is available.
 
 ### Sensor Configuration (common to both cases)
 To configure the sensors, you need to enter their addresses.
@@ -308,64 +324,159 @@ ___
 > On the Internet you'll find all the details regarding the topology usable with this type of sensor.
 ___
 
-## Dual Tariff Configuration (Off-Peak Hours Management)
-It's possible to entrust off-peak hours management to the router.
-This allows, for example, limiting forced heating to avoid heating water too much with the goal of using surplus the next morning.
-This limit can be in duration or temperature (requires using a Dallas DS18B20 temperature sensor).
+## Off-peak hours management and scheduled boost (dual tariff)
+
+This feature allows the router to automatically manage heating during off-peak electricity periods. It's useful for:
+- Heating water at night when electricity is cheaper
+- Ensuring hot water is available in the morning if solar surplus was insufficient during the day
+- Limiting heating duration to avoid overheating (optionally using a temperature sensor)
 
 ### Hardware Configuration
+
 Disconnect the Day/Night contactor control, which is no longer necessary.
-Connect directly a chosen *pin* to the meter's dry contact (*C1* and *C2* terminals).
-___
+Connect directly a chosen *pin* to the dry contact of the meter (*C1* and *C2* terminals).
+
 > [!WARNING]
-> You must connect **directly**, a *pin/ground* pair with the meter's *C1/C2* terminals.
+> You must connect **directly**, a *pin/ground* pair with the *C1/C2* terminals of the meter.
 > There must NOT be 230 V on this circuit!
-___
 
 ### Software Configuration
-Enable the feature as follows:
+
+**Step 1:** Activate the feature:
 ```cpp
 inline constexpr bool DUAL_TARIFF{ true };
 ```
-Configure the *pin* to which the meter is connected:
+
+**Step 2:** Configure the *pin* connected to the meter:
 ```cpp
 inline constexpr uint8_t dualTariffPin{ 3 };
 ```
 
-Configure the duration in *hours* of the off-peak period (for now, only one period per day is supported):
+**Step 3:** Set the off-peak period duration in hours (currently, only one period per day is supported):
 ```cpp
 inline constexpr uint8_t ul_OFF_PEAK_DURATION{ 8 };
 ```
 
-Finally, define the operating modalities during the off-peak period:
+**Step 4:** Configure the scheduled boost timing for each load.
+
+### Scheduled boost configuration (rg_ForceLoad)
+
+The `rg_ForceLoad` array defines **when** and **how long** each load should be boosted during the off-peak period.
+
 ```cpp
-inline constexpr pairForceLoad rg_ForceLoad[NO_OF_DUMPLOADS]{ { -3, 2 } };
+inline constexpr pairForceLoad rg_ForceLoad[NO_OF_DUMPLOADS]{ { START_TIME, DURATION } };
 ```
-It's possible to define a configuration for each load independently of the others.
-The first parameter of *rg_ForceLoad* determines the start delay relative to the beginning or end of off-peak hours:
-- if the number is positive and less than 24, it's the number of hours,
-- if the number is negative greater than −24, it's the number of hours relative to the end of off-peak hours
-- if the number is positive and greater than 24, it's the number of minutes,
-- if the number is negative less than −24, it's the number of minutes relative to the end of off-peak hours
 
-The second parameter determines the forced operation duration:
-- if the number is less than 24, it's the number of hours,
-- if the number is greater than 24, it's the number of minutes.
+Each load has two parameters: `{ START_TIME, DURATION }`
 
-Examples for better understanding (with off-peak start at 23:00, until 7:00 i.e. 8 h duration):
-- ```{ -3, 2 }``` : start **3 hours BEFORE** the end of period (at 4 am), for a duration of 2 h.
-- ```{ 3, 2 }``` : start **3 hours AFTER** the beginning of period (at 2 am), for a duration of 2 h.
-- ```{ -150, 2 }``` : start **150 minutes BEFORE** the end of period (at 4:30), for a duration of 2 h.
-- ```{ 3, 180 }``` : start **3 hours AFTER** the beginning of period (at 2 am), for a duration of 180 min.
+#### Understanding the timeline
 
-For *infinite* duration (therefore until the end of the off-peak period), use ```UINT16_MAX``` as the second parameter:
-- ```{ -3, UINT16_MAX }``` : start **3 hours BEFORE** the end of period (at 4 am) with forced operation until the end of off-peak period.
+```
+Off-peak period example: 23:00 to 07:00 (8 hours)
 
-If your system consists of 2 outputs (```NO_OF_DUMPLOADS``` will then have a value of 2), and you only want forced operation on the 2nd output, write:
+        23:00                                           07:00
+          |================== OFF-PEAK ==================|
+          |                                              |
+     START ──────────────────────────────────────────► END
+          │                                              │
+          │  Positive values                             │
+          │  count from here ───►                        │
+          │                                              │
+          │                        ◄─── Negative values  │
+          │                             count from here  │
+```
+
+#### Parameter 1: START_TIME (when to start)
+
+| Value | Meaning | Example (off-peak 23:00-07:00) |
+|-------|---------|-------------------------------|
+| `0` | **Disabled** - no boost for this load | - |
+| `1` to `23` | Hours **after** off-peak START | `3` = start at 02:00 (23:00 + 3h) |
+| `-1` to `-23` | Hours **before** off-peak END | `-3` = start at 04:00 (07:00 - 3h) |
+| `24` or more | Minutes **after** off-peak START | `90` = start at 00:30 (23:00 + 90min) |
+| `-24` or less | Minutes **before** off-peak END | `-90` = start at 05:30 (07:00 - 90min) |
+
+> [!NOTE]
+> **Why 24?** The value 24 is used as a threshold to distinguish between hours and minutes.
+> Values from 1-23 are interpreted as hours, values 24+ are interpreted as minutes.
+
+#### Parameter 2: DURATION (how long to boost)
+
+| Value | Meaning |
+|-------|---------|
+| `0` | **Disabled** - no boost |
+| `1` to `23` | Duration in **hours** |
+| `24` or more | Duration in **minutes** |
+| `UINT16_MAX` | Until the **end** of off-peak period |
+
+> [!IMPORTANT]
+> **Boost always stops when the off-peak period ends**, regardless of the configured duration.
+> If you set a duration that would extend past the end of off-peak, the boost will be cut short.
+
+### Visual examples
+
+All examples assume off-peak period from **23:00 to 07:00** (8 hours):
+
+**Example 1:** `{ -3, 2 }` - Start 3 hours before end, run for 2 hours
+```
+23:00                              04:00    06:00    07:00
+  |====================================|======|========|
+                                       |BOOST |
+                                       └──2h──┘
+```
+Result: Boost runs from **04:00 to 06:00**
+
+**Example 2:** `{ 2, 3 }` - Start 2 hours after start, run for 3 hours
+```
+23:00    01:00          04:00                        07:00
+  |========|=============|==============================|
+           |────BOOST────|
+           └─────3h──────┘
+```
+Result: Boost runs from **01:00 to 04:00**
+
+**Example 3:** `{ -90, 120 }` - Start 90 minutes before end, duration of 120 minutes (but limited)
+```
+23:00                              05:30    07:00
+  |====================================|======|
+                                       |BOOST | ← stops here (off-peak ends)
+                                       └─90min─┘
+```
+Result: Boost runs from **05:30 to 07:00** (stops at end of off-peak, not 07:30)
+
+> [!NOTE]
+> **Boost always stops at the end of the off-peak period**, even if the configured duration is longer.
+> In this example, only 90 minutes of boost occur instead of the configured 120 minutes.
+
+**Example 4:** `{ 1, UINT16_MAX }` - Start 1 hour after start, run until end
+```
+23:00    00:00                                       07:00
+  |========|=========================================|
+           |──────────────BOOST──────────────────────|
+```
+Result: Boost runs from **00:00 to 07:00**
+
+### Multiple loads configuration
+
+Each load can have its own boost schedule. Use `{ 0, 0 }` to disable boost for a specific load.
+
+**Example:** 2 loads, boost only the second one:
 ```cpp
-inline constexpr pairForceLoad rg_ForceLoad[NO_OF_DUMPLOADS]{ { 0, 0 },
-                                                              { -3, 2 } };
+inline constexpr pairForceLoad rg_ForceLoad[NO_OF_DUMPLOADS]{
+    { 0, 0 },      // Load #1: no scheduled boost
+    { -3, 2 }      // Load #2: boost 3h before end, for 2h
+};
 ```
+
+### Quick reference
+
+| Want to... | Use this |
+|------------|----------|
+| Disable boost | `{ 0, 0 }` |
+| Start 2h after off-peak begins, run 3h | `{ 2, 3 }` |
+| Start 3h before off-peak ends, run 2h | `{ -3, 2 }` |
+| Start 90min after off-peak begins, run 2h | `{ 90, 2 }` |
+| Start 90min before off-peak ends, run until end | `{ -90, UINT16_MAX }` |
 
 ## Priority Rotation
 Priority rotation is useful when powering a three-phase water heater.

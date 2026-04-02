@@ -12,6 +12,7 @@ Ce programme est conçu pour être utilisé avec l'IDE Arduino et/ou d'autres ID
   - [Configuration de la version du PCB](#configuration-de-la-version-du-pcb)
   - [Type de sortie série](#type-de-sortie-série)
   - [Configuration de l'affichage](#configuration-de-laffichage)
+    - [Affichage OLED avec encodeur rotatif](#affichage-oled-avec-encodeur-rotatif)
   - [Configuration des sorties TRIAC](#configuration-des-sorties-triac)
   - [Configuration des sorties relais tout-ou-rien](#configuration-des-sorties-relais-tout-ou-rien)
     - [Principe de fonctionnement](#principe-de-fonctionnement)
@@ -21,12 +22,14 @@ Ce programme est conçu pour être utilisé avec l'IDE Arduino et/ou d'autres ID
       - [Avec l'Arduino IDE](#avec-larduino-ide)
       - [Avec Visual Studio Code et PlatformIO](#avec-visual-studio-code-et-platformio)
     - [Configuration du ou des capteurs (commun aux 2 cas précédents)](#configuration-du-ou-des-capteurs-commun-aux-2-cas-précédents)
-  - [Configuration de la gestion des Heures Creuses (dual tariff)](#configuration-de-la-gestion-des-heures-creuses-dual-tariff)
+  - [Gestion des Heures Creuses et boost programmé (dual tariff)](#gestion-des-heures-creuses-et-boost-programmé-dual-tariff)
     - [Configuration matérielle](#configuration-matérielle)
     - [Configuration logicielle](#configuration-logicielle)
+    - [Configuration du boost programmé (rg_ForceLoad)](#configuration-du-boost-programmé-rg_forceload)
+    - [Exemples visuels](#exemples-visuels)
+    - [Configuration pour plusieurs charges](#configuration-pour-plusieurs-charges)
+    - [Aide-mémoire](#aide-mémoire)
   - [Rotation des priorités](#rotation-des-priorités)
-  - [Configuration de la marche forcée](#configuration-de-la-marche-forcée)
-  - [Arrêt du routage](#arrêt-du-routage)
 - [Configuration avancée du programme](#configuration-avancée-du-programme)
   - [Paramètre `DIVERSION_START_THRESHOLD_WATTS`](#paramètre-diversion_start_threshold_watts)
   - [Paramètre `REQUIRED_EXPORT_IN_WATTS`](#paramètre-required_export_in_watts)
@@ -164,21 +167,38 @@ Remplacez `HumanReadable` par `IoT` ou `JSON` selon vos besoins.
 
 ## Configuration de l'affichage
 
-Configurez le type d'affichage dans `config.h` :
+Configurez le type d'affichage dans `config.h` :
 ```cpp
-inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE };
+inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::OLED };
 ```
 
-Les options possibles sont :
-- **DisplayType::NONE** : Aucun affichage n'est utilisé.
-- **DisplayType::OLED** : Utilise un écran OLED pour afficher les informations.
-- **DisplayType::SEG** : Utilise un afficheur à segments pour afficher les informations.
-- **DisplayType::SEG_HW** : Utilise un afficheur à segments avec une interface matérielle spécifique pour afficher les informations (présence des circuits **IC3** et **IC4**).
+Les options possibles sont :
+- **DisplayType::NONE** : Aucun affichage n'est utilisé.
+- **DisplayType::OLED** : Utilise un écran OLED 128x64 SSD1306 avec un encodeur rotatif pour la navigation et les réglages en temps réel.
+- **DisplayType::SEG** : Utilise un afficheur à segments pour afficher les informations.
+- **DisplayType::SEG_HW** : Utilise un afficheur à segments avec une interface matérielle spécifique pour afficher les informations (présence des circuits **IC3** et **IC4**).
 
----
-> [!NOTE]
-> L'affichage OLED n'est pas encore disponible. Il nécessite une nouvelle version du PCB qui sera disponible prochainement.
----
+### Affichage OLED avec encodeur rotatif
+
+Lorsque `DisplayType::OLED` est sélectionné, le système utilise un **écran OLED I2C SSD1306 128x64** (sur A4/A5) couplé à un **encodeur rotatif avec bouton poussoir** pour naviguer entre les pages et modifier les paramètres en temps réel.
+
+L'encodeur rotatif possède 3 broches configurées dans `config.h` :
+```cpp
+inline constexpr OledEncoderConfig oledEncoder{ 11, 12, 13 };
+```
+- **Broche 1 (CLK)** : signal d'horloge de l'encodeur
+- **Broche 2 (DT)** : signal de données de l'encodeur
+- **Broche 3 (SW)** : bouton poussoir (INPUT_PULLUP, actif à l'état bas)
+
+De plus, deux fonctionnalités optionnelles peuvent être activées :
+```cpp
+inline constexpr bool OLED_ENABLE_RUNTIME_SETTINGS{ true };
+inline constexpr bool OLED_ENABLE_RESTART_PAGE{ true };
+```
+- **OLED_ENABLE_RUNTIME_SETTINGS** : si `true`, les seuils des relais et les paramètres système sont modifiables depuis l'OLED et sauvegardés en EEPROM
+- **OLED_ENABLE_RESTART_PAGE** : si `true`, ajoute une page dédiée pour redémarrer le routeur par logiciel
+
+Pour tous les détails sur la navigation, la description des pages, les modes d'interaction et la persistance EEPROM, consultez le **[Guide d'utilisation OLED](docs/OLED_GUIDE.md)**.
 
 ## Configuration des sorties TRIAC
 
@@ -231,11 +251,11 @@ Pour des raisons de performances de l'Arduino, la durée choisie sera arrondie �
 
 Si l'utilisateur souhaite plutôt une fenêtre de 15 min, il suffira d'écrire :
 ```cpp
-inline constexpr RelayEngine relays{ 15_i, { { 3, 1000, 200, 1, 1 } } };
+inline constexpr RelayEngine relays{ MINUTES(15), { { 3, 1000, 200, 1, 1 } } };
 ```
 ___
 > [!NOTE]
-> Attention au suffixe '**_i**' après le nombre *15* !
+> La macro `MINUTES()` convertit automatiquement la valeur en paramètre template. Aucun suffixe spécial n'est nécessaire !
 ___
 
 Les relais configurés dans le système sont gérés par un système similaire à une machine à états.
@@ -285,7 +305,8 @@ Si la bibliothèque *OneWire* n'est pas installée, installez-la via le menu **O
 Recherchez "Onewire" et installez "**OneWire** par Jim Studt, …" en version **2.3.7** ou plus récente.
 
 #### Avec Visual Studio Code et PlatformIO
-Sélectionnez la configuration "**env:temperature (Mk2_3phase_RFdatalog_temp)**".
+Il n'y a pas d'environnement PlatformIO dédié pour la température.
+Définissez simplement `TEMP_SENSOR_PRESENT` à `true` dans `config.h` et assurez-vous que la bibliothèque *OneWire* est disponible.
 
 ### Configuration du ou des capteurs (commun aux 2 cas précédents)
 Pour configurer les capteurs, vous devez entrer leurs adresses.  
@@ -307,64 +328,159 @@ ___
 > Sur Internet vous trouverez tous les détails concernant la topologie utilisable avec ce genre de capteurs.
 ___
 
-## Configuration de la gestion des Heures Creuses (dual tariff)
-Il est possible de confier la gestion des Heures Creuses au routeur.  
-Cela permet par exemple de limiter la chauffe en marche forcée afin de ne pas trop chauffer l'eau dans l'optique d'utiliser le surplus le lendemain matin.  
-Cette limite peut être en durée ou en température (nécessite d'utiliser un capteur de température Dallas DS18B20).
+## Gestion des Heures Creuses et boost programmé (dual tariff)
+
+Cette fonctionnalité permet au routeur de gérer automatiquement le chauffage pendant les périodes d'Heures Creuses. Elle est utile pour :
+- Chauffer l'eau la nuit quand l'électricité est moins chère
+- Garantir de l'eau chaude le matin si le surplus solaire a été insuffisant pendant la journée
+- Limiter la durée de chauffe pour éviter la surchauffe (optionnellement avec un capteur de température)
 
 ### Configuration matérielle
-Décâblez la commande du contacteur Jour/Nuit, qui n'est plus nécessaire.  
+
+Décâblez la commande du contacteur Jour/Nuit, qui n'est plus nécessaire.
 Reliez directement une *pin* choisie au contact sec du compteur (bornes *C1* et *C2*).
-___
+
 > [!WARNING]
-> Il faut relier **directement**, une paire *pin/masse* avec les bornes *C1/C2* du compteur.  
-> Il NE doit PAS y avoir de 230 V sur ce circuit !
-___
+> Il faut relier **directement**, une paire *pin/masse* avec les bornes *C1/C2* du compteur.
+> Il NE doit PAS y avoir de 230 V sur ce circuit !
 
 ### Configuration logicielle
-Activez la fonctionnalité comme suit :
+
+**Étape 1 :** Activez la fonctionnalité :
 ```cpp
 inline constexpr bool DUAL_TARIFF{ true };
 ```
-Configurez la *pin* sur laquelle est relié le compteur :
+
+**Étape 2 :** Configurez la *pin* sur laquelle est relié le compteur :
 ```cpp
 inline constexpr uint8_t dualTariffPin{ 3 };
 ```
 
-Configurez la durée en *heures* de la période d'Heures Creuses (pour l'instant, une seule période est supportée par jour) :
+**Étape 3 :** Configurez la durée en heures de la période d'Heures Creuses (pour l'instant, une seule période est supportée par jour) :
 ```cpp
 inline constexpr uint8_t ul_OFF_PEAK_DURATION{ 8 };
 ```
 
-Enfin, on définira les modalités de fonctionnement pendant la période d'Heures Creuses :
+**Étape 4 :** Configurez le timing du boost programmé pour chaque charge.
+
+### Configuration du boost programmé (rg_ForceLoad)
+
+Le tableau `rg_ForceLoad` définit **quand** et **combien de temps** chaque charge doit être en boost pendant la période d'Heures Creuses.
+
 ```cpp
-inline constexpr pairForceLoad rg_ForceLoad[NO_OF_DUMPLOADS]{ { -3, 2 } };
+inline constexpr pairForceLoad rg_ForceLoad[NO_OF_DUMPLOADS]{ { HEURE_DEBUT, DUREE } };
 ```
-Il est possible de définir une configuration pour chaque charge indépendamment l'une des autres.
-Le premier paramètre de *rg_ForceLoad* détermine la temporisation de démarrage par rapport au début ou à la fin des Heures Creuses :
-- si le nombre est positif et inférieur à 24, il s'agit du nombre d'heures,
-- si le nombre est négatif supérieur à −24, il s'agit du nombre d'heures par rapport à la fin des Heures Creuses
-- si le nombre est positif et supérieur à 24, il s'agit du nombre de minutes,
-- si le nombre est négatif inférieur à −24, il s'agit du nombre de minutes par rapport à la fin des Heures Creuses
 
-Le deuxième paramètre détermine la durée de la marche forcée :
-- si le nombre est inférieur à 24, il s'agit du nombre d'heures,
-- si le nombre est supérieur à 24, il s'agit du nombre de minutes.
+Chaque charge a deux paramètres : `{ HEURE_DEBUT, DUREE }`
 
-Exemples pour mieux comprendre (avec début d'HC à 23:00, jusqu'à 7:00 soit 8 h de durée) :
-- ```{ -3, 2 }``` : démarrage **3 heures AVANT** la fin de période (à 4 h du matin), pour une durée de 2 h.
-- ```{ 3, 2 }``` : démarrage **3 heures APRÈS** le début de période (à 2 h du matin), pour une durée de 2 h.
-- ```{ -150, 2 }``` : démarrage **150 minutes AVANT** la fin de période (à 4:30), pour une durée de 2 h.
-- ```{ 3, 180 }``` : démarrage **3 heures APRÈS** le début de période (à 2 h du matin), pour une durée de 180 min.
+#### Comprendre la ligne du temps
 
-Pour une durée *infinie* (donc jusqu'à la fin de la période d'HC), utilisez ```UINT16_MAX``` comme deuxième paramètre :
-- ```{ -3, UINT16_MAX }``` : démarrage **3 heures AVANT** la fin de période (à 4 h du matin) avec marche forcée jusqu'à la fin de période d'HC.
+```
+Exemple de période HC : 23:00 à 07:00 (8 heures)
 
-Si votre système est constitué 2 sorties (```NO_OF_DUMPLOADS``` aura alors une valeur de 2), et que vous souhaitez une marche forcée uniquement sur la 2ᵉ sortie, écrivez :
+        23:00                                           07:00
+          |================== HEURES CREUSES =============|
+          |                                              |
+     DEBUT ──────────────────────────────────────────► FIN
+          │                                              │
+          │  Les valeurs positives                       │
+          │  comptent à partir d'ici ───►                │
+          │                                              │
+          │                      ◄─── Les valeurs        │
+          │                           négatives comptent │
+          │                           à partir d'ici     │
+```
+
+#### Paramètre 1 : HEURE_DEBUT (quand démarrer)
+
+| Valeur | Signification | Exemple (HC 23:00-07:00) |
+|--------|---------------|--------------------------|
+| `0` | **Désactivé** – pas de boost pour cette charge | - |
+| `1` à `23` | Heures **après** le DÉBUT des HC | `3` = démarrage à 02:00 (23:00 + 3 h) |
+| `-1` à `-23` | Heures **avant** la FIN des HC | `-3` = démarrage à 04:00 (07:00 - 3 h) |
+| `24` ou plus | Minutes **après** le DÉBUT des HC | `90` = démarrage à 00:30 (23:00 + 90 min) |
+| `-24` ou moins | Minutes **avant** la FIN des HC | `-90` = démarrage à 05:30 (07:00 - 90 min) |
+
+> [!NOTE]
+> **Pourquoi 24 ?** La valeur 24 sert de seuil pour distinguer les heures des minutes.
+> Les valeurs de 1 à 23 sont interprétées comme des heures, les valeurs 24+ sont interprétées comme des minutes.
+
+#### Paramètre 2 : DUREE (combien de temps)
+
+| Valeur | Signification |
+|--------|---------------|
+| `0` | **Désactivé** - pas de boost |
+| `1` à `23` | Durée en **heures** |
+| `24` ou plus | Durée en **minutes** |
+| `UINT16_MAX` | Jusqu'à la **fin** de la période HC |
+
+> [!IMPORTANT]
+> **Le boost s'arrête toujours à la fin de la période d'Heures Creuses**, quelle que soit la durée configurée.
+> Si vous définissez une durée qui dépasse la fin des HC, le boost sera interrompu.
+
+### Exemples visuels
+
+Tous les exemples supposent une période HC de **23:00 à 07:00** (8 heures) :
+
+**Exemple 1 :** `{ -3, 2 }` - Démarrage 3 heures avant la fin, durée 2 heures
+```
+23:00                              04:00    06:00    07:00
+  |====================================|======|========|
+                                       |BOOST |
+                                       └─2 h──┘
+```
+Résultat : Le boost fonctionne de **04:00 à 06:00**
+
+**Exemple 2 :** `{ 2, 3 }` - Démarrage 2 heures après le début, durée 3 heures
+```
+23:00    01:00          04:00                        07:00
+  |========|=============|==============================|
+           |────BOOST────|
+           └────3 h──────┘
+```
+Résultat : Le boost fonctionne de **01:00 à 04:00**
+
+**Exemple 3 :** `{ -90, 120 }` - Démarrage 90 minutes avant la fin, durée de 120 minutes (mais limitée)
+```
+23:00                              05:30    07:00
+  |====================================|======|
+                                       |BOOST | ← s'arrête ici (fin des HC)
+                                       └90 min┘
+```
+Résultat : Le boost fonctionne de **05:30 à 07:00** (s'arrête à la fin des HC, pas à 07:30)
+
+> [!NOTE]
+> **Le boost s'arrête toujours à la fin de la période d'Heures Creuses**, même si la durée configurée est plus longue.
+> Dans cet exemple, seules 90 minutes de boost ont lieu au lieu des 120 minutes configurées.
+
+**Exemple 4 :** `{ 1, UINT16_MAX }` - Démarrage 1 heure après le début, jusqu'à la fin
+```
+23:00    00:00                                       07:00
+  |========|=========================================|
+           |──────────────BOOST──────────────────────|
+```
+Résultat : Le boost fonctionne de **00:00 à 07:00**
+
+### Configuration pour plusieurs charges
+
+Chaque charge peut avoir sa propre programmation de boost. Utilisez `{ 0, 0 }` pour désactiver le boost d'une charge spécifique.
+
+**Exemple :** 2 charges, boost uniquement sur la deuxième :
 ```cpp
-inline constexpr pairForceLoad rg_ForceLoad[NO_OF_DUMPLOADS]{ { 0, 0 },
-                                                              { -3, 2 } };
+inline constexpr pairForceLoad rg_ForceLoad[NO_OF_DUMPLOADS]{
+    { 0, 0 },      // Charge #1 : pas de boost programmé
+    { -3, 2 }      // Charge #2 : boost 3h avant la fin, pendant 2h
+};
 ```
+
+### Aide-mémoire
+
+| Vous voulez…   | Utilisez ceci |
+|----------------|---------------|
+| Désactiver le boost | `{ 0, 0 }` |
+| Démarrer 2 h après le début des HC, pendant 3 h | `{ 2, 3 }` |
+| Démarrer 3 h avant la fin des HC, pendant 2 h | `{ -3, 2 }` |
+| Boost jusqu'à la fin des HC | `{ 1, UINT16_MAX }` |
 
 ## Rotation des priorités
 La rotation des priorités est utile lors de l'alimentation d'un chauffe-eau triphasé.  
