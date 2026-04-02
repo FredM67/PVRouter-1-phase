@@ -85,15 +85,15 @@ Chaque entrée boost avec `visibleOnOLED: true` possède sa propre page BOOST. L
 - La sortie cible (TRIAC ou relais)
 - L'état actuel (ON/OFF)
 
-Un **appui court** bascule le boost ON/OFF immédiatement. L'état du boost est combiné en OU avec l'état de la broche physique : si le basculeur OLED ou la broche matérielle est actif, le boost est ON.
+Un **appui court** bascule le boost ON/OFF immédiatement. L'état du boost est combiné en OU avec l'état de la broche physique : si le bouton OLED ou la broche matérielle est actif, le boost est ON.
 
 ## Page Routage
 
-Chaque groupe de déviation avec `visibleOnOLED: true` apparaît comme une ligne sur la page ROUTAGE. Un appui court entre en mode navigation, puis un second appui bascule le groupe sélectionné. L'état de déviation est combiné en ET avec l'état de la broche physique : le basculeur OLED et la broche matérielle doivent tous deux être actifs pour que le routage soit autorisé.
+Chaque groupe de déviation avec `visibleOnOLED: true` apparaît comme une ligne sur la page ROUTAGE. Un appui court entre en mode navigation, puis un second appui bascule le groupe sélectionné. L'état de déviation est combiné en ET avec l'état de la broche physique : le bouton OLED et la broche matérielle doivent tous deux être actifs pour que le routage soit autorisé.
 
 ## Persistance EEPROM
 
 Lorsque `OLED_ENABLE_RUNTIME_SETTINGS` est `true`, les valeurs modifiables (seuils/minuteries des relais, paramètres système en watts) sont sauvegardées en EEPROM lorsque l'utilisateur confirme via l'élément « VALIDER ». Les données EEPROM incluent une signature, un octet de version et une somme de contrôle. Au démarrage, les valeurs sauvegardées sont chargées si elles sont valides ; sinon, les valeurs par défaut définies à la compilation dans `config.h` sont utilisées.
 
 > [!NOTE]
-> Les états des basculeurs boost et déviation ne sont **pas** sauvegardés en EEPROM. Ils sont réinitialisés à leurs valeurs par défaut à chaque redémarrage (tous les boosts OFF, toutes les déviations autorisées).
+> Les états des boutons boost et déviation ne sont **pas** sauvegardés en EEPROM. Ils sont réinitialisés à leurs valeurs par défaut à chaque redémarrage (tous les boosts OFF, toutes les déviations autorisées).
