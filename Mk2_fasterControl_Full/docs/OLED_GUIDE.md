@@ -56,12 +56,12 @@ Chaque ligne OLED fait 16 caractères de large (police 8x8 pixels).
 +----------------+      +----------------+      +----------------+
 |    ROUTAGE     |      |   RELAIS 1     |      |   REQ / DIV    |
 |                |      |                |      |                |
-| >Div 1  ON    |      | > SM  : 1000W  |      | > REQ :    0W  |
-|  Div 2  OFF   |      |   SA  :  200W  |      |   DIV :    0W  |
-|  Div 3  ON    |      |   Ton :   10m  |      |                |
+| >Div 1  ON     |      | > SM  : 1000W  |      | > REQ :    0W  |
+|  Div 2  OFF    |      |   SA  :  200W  |      |   DIV :    0W  |
+|  Div 3  ON     |      |   Ton :   10m  |      |                |
 |                |      |   Toff:   10m  |      |   VALIDER      |
 |                |      |   VALIDER      |      | Act. / 3s back |
-| Act. / 3s bk  |      | Act. / 3s back |      +----------------+
+| Act. / 3s bk   |      | Act. / 3s back |      +----------------+
 +----------------+      +----------------+
 
 
