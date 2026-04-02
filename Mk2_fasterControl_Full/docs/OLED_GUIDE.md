@@ -48,18 +48,34 @@ L'interface dispose de trois modes, pilotés par la rotation de l'encodeur et le
 - Préfixe `>` : le curseur pointe vers cet élément (mode NAVIGATION)
 - Préfixe `*` : cet élément est en cours de modification (mode MODIFICATION)
 
-```
-Exemple page ROUTAGE              Exemple page RELAIS CFG
+Chaque ligne OLED fait 16 caractères de large (police 8x8 pixels).
 
-   ╔════════════════╗            ╔════════════════╗
-   ║    ROUTAGE     ║            ║   RELAIS 1     ║
-   ║                ║            ║  > SM  : 1000W ║
-   ║  >Div 1  ON   ║            ║    SA  :  200W ║
-   ║   Div 2  OFF  ║            ║    Ton :  10m  ║
-   ║   Div 3  ON   ║            ║    Toff:  10m  ║
-   ║                ║            ║    VALIDER     ║
-   ║  Act. / 3s bk ║            ║  Act. / 3s bk  ║
-   ╚════════════════╝            ╚════════════════╝
+```
+  Page ROUTAGE             Page RELAIS CFG          Page REQ / DIV
+
++----------------+      +----------------+      +----------------+
+|    ROUTAGE     |      |   RELAIS 1     |      |   REQ / DIV    |
+|                |      |                |      |                |
+| >Div 1  ON    |      | > SM  : 1000W  |      | > REQ :    0W  |
+|  Div 2  OFF   |      |   SA  :  200W  |      |   DIV :    0W  |
+|  Div 3  ON    |      |   Ton :   10m  |      |                |
+|                |      |   Toff:   10m  |      |   VALIDER      |
+|                |      |   VALIDER      |      | Act. / 3s back |
+| Act. / 3s bk  |      | Act. / 3s back |      +----------------+
++----------------+      +----------------+
+
+
+  Page ENERGIE             Page INFO RESEAU         Page BOOST
+
++----------------+      +----------------+      +----------------+
+|    ENERGIE     |      |  INFO RESEAU   |      |   BOOST 1      |
+|                |      |                |      |                |
+|                |      |  U  230.15 V   |      | Sortie TRIAC 1 |
+|    1 . 2 3 4   |      |  Pinst  -120W  |      |                |
+|                |      |                |      | Etat : OFF     |
+|      kWh       |      |  PmRel   850W  |      |                |
+|                |      |  Pdiv    950W  |      | Clic=action    |
++----------------+      +----------------+      +----------------+
 ```
 
 ## Pages Boost
