@@ -78,6 +78,7 @@ jobs:
         libraries: |
           - name: U8g2
           - name: ArduinoJson
+          - name: OneWire
         sketch-paths: |
           - Mk2_fasterControl_Full
 
