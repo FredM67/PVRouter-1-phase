@@ -31,11 +31,7 @@
 
 #include "version.h"
 
-#if TEMP_SENSOR_PRESENT
-inline PayloadTx_struct< temperatureSensing.get_size() > tx_data; /**< logging data */
-#else
-inline PayloadTx_struct<> tx_data; /**< logging data */
-#endif
+inline PayloadTx_struct< TEMP_SENSOR_PRESENT ? temperatureSensing.get_size() : 0 > tx_data; /**< logging data */
 
 /**
  * @brief Print the configuration during startup.

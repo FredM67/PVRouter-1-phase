@@ -27,11 +27,7 @@
 #include "constants.h"
 #include "config.h"
 
-#if TEMP_SENSOR_PRESENT
-#include <OneWire.h>  // for temperature sensing
-#endif
-
-class OneWire;
+#include <OneWire.h>  // for temperature sensing (the bus type is chosen below, with TEMP_SENSOR_PRESENT)
 
 /**
  * @struct DeviceAddress
