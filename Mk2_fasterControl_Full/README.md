@@ -18,9 +18,7 @@ Ce programme est conçu pour être utilisé avec l'IDE Arduino et/ou d'autres ID
   - [Configuration du Watchdog](#configuration-du-watchdog)
   - [Configuration du ou des capteurs de température](#configuration-du-ou-des-capteurs-de-température)
     - [Activation de la fonctionnalité](#activation-de-la-fonctionnalité)
-      - [Avec l'Arduino IDE](#avec-larduino-ide)
-      - [Avec Visual Studio Code et PlatformIO](#avec-visual-studio-code-et-platformio)
-    - [Configuration du ou des capteurs (commun aux 2 cas précédents)](#configuration-du-ou-des-capteurs-commun-aux-2-cas-précédents)
+    - [Configuration du ou des capteurs](#configuration-du-ou-des-capteurs)
   - [Configuration de la gestion des Heures Creuses (dual tariff)](#configuration-de-la-gestion-des-heures-creuses-dual-tariff)
     - [Configuration matérielle](#configuration-matérielle)
     - [Configuration logicielle](#configuration-logicielle)
@@ -269,25 +267,16 @@ inline constexpr uint8_t watchDogPin{ 9 };
 Il est possible de brancher un ou plusieurs capteurs de température Dallas DS18B20.  
 Ces capteurs peuvent servir à des fins informatives ou pour contrôler le mode de fonctionnement forcé.
 
-Pour activer cette fonctionnalité, il faudra procéder différemment selon que l'on utilise l'Arduino IDE ou Visual Studio Code avec l'extension PlatformIO.
-
 ### Activation de la fonctionnalité
 
-Pour activer cette fonctionnalité, la procédure diffère selon que vous utilisez l'Arduino IDE ou Visual Studio Code avec l'extension PlatformIO.
-
-#### Avec l'Arduino IDE
-Activez la ligne suivante en supprimant le commentaire :
+Dans `config.h`, passez `TEMP_SENSOR_PRESENT` à `true`, et indiquez la pin du bus et les adresses des capteurs dans `temperatureSensing` (voir plus bas) :
 ```cpp
-#define TEMP_ENABLED
+inline constexpr bool TEMP_SENSOR_PRESENT{ true };
 ```
 
-Si la bibliothèque *OneWire* n'est pas installée, installez-la via le menu **Outils** => **Gérer les bibliothèques…**.  
-Recherchez "Onewire" et installez "**OneWire** par Jim Studt, …" en version **2.3.7** ou plus récente.
+Avec l'Arduino IDE, la bibliothèque *OneWire* doit être installée, comme pour toute compilation du firmware : **Outils** => **Gérer les bibliothèques…**, recherchez "Onewire" et installez "**OneWire** par Jim Studt, …" en version **2.3.7** ou plus récente. PlatformIO l'installe de lui-même.
 
-#### Avec Visual Studio Code et PlatformIO
-Sélectionnez la configuration "**env:temperature (Mk2_3phase_RFdatalog_temp)**".
-
-### Configuration du ou des capteurs (commun aux 2 cas précédents)
+### Configuration du ou des capteurs
 Pour configurer les capteurs, vous devez entrer leurs adresses.  
 Utilisez un programme pour scanner les capteurs connectés.  
 Vous pouvez trouver de tels programmes sur Internet ou parmi les exemples fournis avec l'Arduino IDE.  

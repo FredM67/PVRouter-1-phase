@@ -19,9 +19,7 @@ This program is designed to be used with the Arduino IDE and/or other developmen
   - [Watchdog Configuration](#watchdog-configuration)
   - [Temperature Sensor Configuration](#temperature-sensor-configuration)
     - [Enabling the Feature](#enabling-the-feature)
-      - [With Arduino IDE](#with-arduino-ide)
-      - [With Visual Studio Code and PlatformIO](#with-visual-studio-code-and-platformio)
-    - [Sensor Configuration (common to both cases)](#sensor-configuration-common-to-both-cases)
+    - [Sensor Configuration](#sensor-configuration)
   - [Dual Tariff Configuration (Off-Peak Hours Management)](#dual-tariff-configuration-off-peak-hours-management)
     - [Hardware Configuration](#hardware-configuration)
     - [Software Configuration](#software-configuration)
@@ -270,25 +268,16 @@ inline constexpr uint8_t watchDogPin{ 9 };
 It's possible to connect one or more Dallas DS18B20 temperature sensors.
 These sensors can be used for informational purposes or to control forced operation mode.
 
-To enable this feature, the procedure differs depending on whether you use the Arduino IDE or Visual Studio Code with the PlatformIO extension.
-
 ### Enabling the Feature
 
-To enable this feature, the procedure differs depending on whether you use the Arduino IDE or Visual Studio Code with the PlatformIO extension.
-
-#### With Arduino IDE
-Enable the following line by removing the comment:
+In `config.h`, set `TEMP_SENSOR_PRESENT` to `true`, and give the bus pin and the sensor addresses in `temperatureSensing` (see below):
 ```cpp
-#define TEMP_ENABLED
+inline constexpr bool TEMP_SENSOR_PRESENT{ true };
 ```
 
-If the *OneWire* library is not installed, install it via the **Tools** => **Manage Libraries...** menu.
-Search for "Onewire" and install "**OneWire** by Jim Studt, ..." version **2.3.7** or newer.
+With the Arduino IDE, the *OneWire* library must be installed, as for any build of the firmware: **Tools** => **Manage Libraries...**, search for "Onewire" and install "**OneWire** by Jim Studt, ..." version **2.3.7** or newer. PlatformIO installs it by itself.
 
-#### With Visual Studio Code and PlatformIO
-Select the "**env:temperature (Mk2_3phase_RFdatalog_temp)**" configuration.
-
-### Sensor Configuration (common to both cases)
+### Sensor Configuration
 To configure the sensors, you need to enter their addresses.
 Use a program to scan the connected sensors.
 You can find such programs on the Internet or among the examples provided with the Arduino IDE.
