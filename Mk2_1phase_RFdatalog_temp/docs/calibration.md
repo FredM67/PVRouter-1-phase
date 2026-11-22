@@ -1,7 +1,7 @@
 # Where the default calibration values come from
 
-The default values of `calibration.h` suit the universal **3phaseDiverter** board (rev. 6.0 and
-later) with 333 mV voltage-output CTs. They are calculated from the design of the board, then
+The new-board values of `calibration.h` suit the universal board (rev. 6.0 and later, the
+3phaseDiverter board, used here in single-phase mode) with 333 mV voltage-output CTs. They are calculated from the design of the board, then
 corrected by the calibration of a first board; this page shows how, out of curiosity. You don't need it to calibrate: compare with a reference meter, and
 new value = old value × reference reading / router reading.
 
@@ -16,8 +16,10 @@ The firmware works on 10-bit ADC samples, steps from 0 to 1023 around a mid-poin
   It is the product of volts per voltage step and amps per current step.
 
 For the new board, `calibration.h` gives `f_powerCal` per amp of CT rating: `f_powerCal` =
-`f_powerCalPerAmp` × `f_ctRating`, and `f_voltageCal` = `f_voltageCalNewBoard`. The old board has
-its own values, `f_powerCalOldBoard` and `f_voltageCalOldBoard`.
+`f_powerCalPerAmp` × `f_ctRating` for CT1 (grid) and `f_powerCalPerAmp` × `f_ctRatingDiverted` for
+CT2 (diverted, on the L2 current input, A3), and `f_voltageCal` = `f_voltageCalNewBoard`. The two
+old boards (`OLD_SEG`, `OLD_OLED`) share their own values, `f_powerCalOldBoard` (CT1),
+`f_powerCalDivertedOldBoard` (CT2) and `f_voltageCalOldBoard`.
 
 ## Voltage: 0.8952 V per step (`f_voltageCalNewBoard`)
 
@@ -57,18 +59,25 @@ R, the CT gives R × I / 2000 volts: it behaves like a 333 mV CT rated for the c
 Keep the peak voltage across R below half the ADC range, 0.55 V: R < 0.55 × 2000 / (√2 × the
 largest current).
 
-### Old board
+### Old boards
 
-The old board has other input stages, and its ADC reference is AVCC, the supply voltage (5 V or
-3.3 V), not the internal 1.1 V: this calculation doesn't apply. Its values, `f_powerCalOldBoard`
-(0.05 to start) and `f_voltageCalOldBoard`, are found by calibration.
+The old boards have other input stages, and their ADC reference is AVCC, the supply voltage, not
+the internal 1.1 V: this calculation doesn't apply. Their values, `f_powerCalOldBoard` and
+`f_powerCalDivertedOldBoard` (0.05 to start) and `f_voltageCalOldBoard`, are found by calibration.
+
+Their CT1 sample also goes through Robin's filter, which offsets the CT acting as a high-pass
+filter: `lpf_gainOldBoard` 9 and `alphaOldBoard` 0.0011. These values are **interim**: those of
+`Mk2_fasterControl_Full` (December 2024, on real hardware with the YHDC SCT-013-000, at the same
+~312 µs sample spacing), until each CT type is measured with a recording tool. The new board has
+the filter off (`lpf_gainNewBoard` 0).
 
 ## Calibration of a first board
 
-On the first board, the calibration against a reference gave 0.888065 V per step (0.8 % below the
-design) and 0.00286405 per A of CT rating (2.0 % below), the same on the three phases: these are the
-default values. Most of the difference is the internal ADC reference of that ATmega328P (see
-below), so another board may differ by a few percent, the same way on its three phases.
+On the first board (calibrated in 3-phase mode), the calibration against a reference gave
+0.888065 V per step (0.8 % below the design) and 0.00286405 per A of CT rating (2.0 % below), the
+same on the three phases: these are the default values. Most of the difference is the internal ADC
+reference of that ATmega328P (see below), so another board may differ by a few percent, the same
+way on all its inputs.
 
 ## How close it is
 
@@ -81,7 +90,7 @@ below), so another board may differ by a few percent, the same way on its three 
 | CT ratio error | typically ±1 % |
 | 60 Hz instead of 50 Hz | 0.06 % |
 
-The three phases share the ADC reference, so it never unbalances them: the router balances import
-and export the same way, only the watts and volts shown are off. The CTs differ from one phase to
-another; to match the phases, run one cable through the three CTs, with the voltage inputs on the
-same phase, and bring P2 and P3 to the value of P1.
+CT1 and CT2 share the ADC reference, so it never moves the regulation point: the router balances
+import and export the same way, only the watts and volts shown are off. The two CTs may differ from
+each other; to match CT2 to CT1, on the bench, run one cable through both, with a resistive load on it, and bring
+the diverted power to the value of `P` (`f_ctRatingDiverted`).

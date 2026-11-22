@@ -4,7 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PVRouter-3-phase is a real-time embedded system for intelligent 3-phase solar power routing on Arduino Uno (ATmega328P). It diverts excess photovoltaic energy to loads (water heaters, etc.) via TRIAC/relay control. This is **safety-critical power electronics code** with strict real-time constraints.
+Mk2_1phase_RFdatalog_temp (repository PVRouter-1-phase) is a real-time embedded system for single-phase solar power routing on Arduino Uno (ATmega328P). It diverts excess photovoltaic energy to loads (water heaters, etc.) via TRIAC/relay control, and measures the diverted energy with a second CT. This is **safety-critical power electronics code** with strict real-time constraints.
+
+It derives from the 3-phase firmware (PVRouter-3-phase, `Mk2_3phase_RFdatalog_temp`): same settings, same names, same meaning, same file names and interfaces (sharing code later must stay possible). What differs:
+- **Control core**: Robin Emley's fasterControl (`Mk2_fasterControl_twoLoads_5`), in `fast_control.h` and `processing.cpp`: prediction at the first sample set of the negative half cycle, decision at its index 3 (`DECISION_SAMPLE`), loads switched at the next positive zero crossing. Never bring back the version 4 logic (thresholds moved on the measured energy, decisions on the predicted one).
+- **Boards** (`PCB_VERSION`): `OLD_SEG` (V A3, CT1 A5, CT2 A4, AVcc), `OLD_OLED` (V A0, CT1 A1, CT2 A3, AVcc), `NEW` (V A0, CT1 A1, CT2 A3, internal 1.1 V); `adc_chain.h`. Calibration values are single values, not per-phase arrays (`f_powerCalOldBoard`, `f_powerCalDivertedOldBoard`, `f_ctRating`, `f_ctRatingDiverted`...).
+- **Diverted energy** on CT2 (`diverted_energy.h`), **displays** (`TYPE_OF_DISPLAY`: `display_core.h`, `utils_display.h`, `utils_oled.h`), **CT1 filter** of the old boards (`ct_filter.h`, fixed point, interim values).
+- `RemoteLoadReceiver` is not in this repository: the single-phase router drives the 3-phase repository's receivers.
 
 ## Build Commands
 
@@ -18,13 +24,17 @@ pio run -e basic_debug     # Debug build with symbols
 
 # Run tests
 pio test -e native         # Cross-platform unit tests
-pio test -e uno            # Embedded tests (requires hardware)
+pio test -e uno_sim        # Embedded tests in simavr (no hardware)
+bash ../scripts/ci/compile-fail.sh   # settings validation.h must refuse (from the repo root: scripts/ci/compile-fail.sh)
 
 # Upload to Arduino
 pio run -t upload
 
-# Code formatting check
+# Code formatting check (clang-format 18, as the pre-commit hook and CI pin it)
 clang-format --dry-run --Werror *.cpp *.h
+
+# Grid simulator (Linux/WSL, from the repo root): see ../sim/README.md
+make -C ../sim check
 
 # Static analysis
 pio check
@@ -35,7 +45,7 @@ pio check
 ### Layer Structure
 
 1. **Application Layer** (`main.cpp`) - Main loop, load priority management, dual tariff forcing
-2. **Processing Engine** (`processing.cpp`) - 9.6 kHz ADC ISR, real power calculation (V × I × cos φ), energy bucket algorithm
+2. **Processing Engine** (`processing.cpp`) - 9.6 kHz ADC ISR over three channels (V, CT1, CT2), real power calculation (V × I × cos φ), energy bucket, fasterControl prediction and decision, diverted energy
 3. **Hardware Abstraction** (`utils_*.h`) - Pin control, relay timing, OneWire temperature sensors
 4. **Configuration Layer** (`config.h`, `validation.h`) - Compile-time configuration with `static_assert` validation
 
@@ -53,8 +63,9 @@ pio check
 
 ### Real-Time Constraints
 
-- ADC ISR runs at **9.6 kHz** (every 104μs, 1,664 CPU cycles)
-- Every ISR call must end within one ADC conversion (104μs); measured in the grid simulator: **318 cycles (~20μs) on average**, ~930 cycles (~58μs) for the longest steady-state call (once per datalog period), ~1,280 cycles once at the end of start-up (docs/performance.md)
+- ADC ISR runs at **9.6 kHz** (every 104μs, 1,664 CPU cycles); each channel every ~312μs, 64 sample sets per mains cycle at 50 Hz
+- Free-running ADC: the ADMUX written in the ISR applies to the conversion after next (`adc_chain.h`)
+- Every ISR call must end within one ADC conversion; the grid simulator enforces it (`sim/scenarios/common.scn`): longest call `isr_max` 560 cycles, latest ADMUX write `admux_delay_max` 1620 cycles (temperature builds, after a 1-Wire slot). The once-per-cycle work is spread over the CT2 calls that follow the zero crossings (`CycleTask` in processing.cpp) to keep each call short
 - No blocking calls, no dynamic allocation in ISR
 - Volatile shared variables for ISR-main loop communication
 
@@ -91,20 +102,24 @@ pio check
 
 ```
 test/
-├── embedded/     # Hardware-dependent tests (run on Arduino)
+├── embedded/     # AVR tests, run in simavr (uno_sim), benchmarks included
 │   ├── test_teleinfo/
 │   ├── test_utils_relay/
-│   └── test_utils_pins/
+│   └── ...
 └── native/       # Cross-platform tests (run on host)
-    ├── test_dual_tariff/
-    ├── test_ewma_avg/
-    ├── test_load_priorities/
-    ├── test_remote_loads/
-    └── test_utils_override/
+    ├── test_fast_control/
+    ├── test_diverted_energy/
+    ├── test_ct_filter/
+    ├── test_adc_chain/
+    ├── test_display/
+    └── ...
 ```
+
+Also: `../scripts/ci/compile-fail/` (one case per file, the static_assert message expected) and `../sim/` (grid simulator, scenarios with expected results on every board).
 
 ## Dependencies
 
 - **ArduinoJson 6.x** (NOT v7): only for the embedded test `test_serial_output`, the firmware writes its JSON itself
 - **OneWire 2.3.8+** (for DS18B20 sensors)
-- **JeeLib** (optional, for RF support)
+- **RFM69** by LowPowerLab (RF datalog and remote loads; RFM12B / JeeLib not supported)
+- **U8g2** (its U8x8 part, for the OLED)

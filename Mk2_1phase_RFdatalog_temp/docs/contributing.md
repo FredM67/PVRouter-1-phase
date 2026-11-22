@@ -21,8 +21,8 @@ The PVRouter is a safety-critical embedded system that controls electrical power
 pip install platformio
 
 # Clone repository
-git clone https://github.com/FredM67/PVRouter-3-phase.git
-cd PVRouter-3-phase/Mk2_1phase_RFdatalog_temp
+git clone https://github.com/FredM67/PVRouter-1-phase.git
+cd PVRouter-1-phase/Mk2_1phase_RFdatalog_temp
 
 # Build and test
 pio run
@@ -38,7 +38,7 @@ pio test
 
 ### Hardware Requirements for Testing
 - Arduino Uno or compatible board
-- 3-phase PVRouter shield (for full testing)
+- one of the three boards: OLD_SEG, OLD_OLED or the universal board (for full testing)
 - Oscilloscope (for timing verification)
 - Multimeter (for power measurements)
 
@@ -291,7 +291,7 @@ Brief description of the change and why it's needed.
 ## Hardware Tested
 - [ ] Arduino Uno
 - [ ] ESP32 (if applicable)
-- [ ] Full 3-phase hardware setup
+- [ ] Board: OLD_SEG / OLD_OLED / NEW
 
 ## Checklist
 - [ ] Code follows project style guidelines

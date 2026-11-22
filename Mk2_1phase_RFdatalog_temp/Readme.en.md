@@ -1,6 +1,8 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](Readme.en.md)
 [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](Readme.md)
 
+**Mk2_1phase_RFdatalog_temp** is the single-phase PV router firmware. It diverts the surplus of a photovoltaic installation to resistive loads (water heaters…), through TRIACs, relays or remote units, on Robin Emley's two Mk2 boards or on the universal board. It has the features and the settings of the 3-phase firmware ([PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase)), and measures the diverted energy with a second CT.
+
 This program is designed to be used with the Arduino IDE and/or other development IDEs like VSCode + PlatformIO.
 
 - [Use with Visual Studio Code (recommended)](#use-with-visual-studio-code-recommended)
@@ -10,11 +12,15 @@ This program is designed to be used with the Arduino IDE and/or other developmen
     - [Important note](#important-note)
 - [Quick overview of files](#quick-overview-of-files)
 - [Development documentation](#development-documentation)
+- [How the router decides](#how-the-router-decides)
 - [Router calibration](#router-calibration)
+  - [CT1 filter (old boards)](#ct1-filter-old-boards)
 - [Analysis documentation and tools](#analysis-documentation-and-tools)
 - [Program configuration](#program-configuration)
-  - [Motherboard: old or new](#motherboard-old-or-new)
+  - [Motherboard](#motherboard)
   - [Serial output type](#serial-output-type)
+  - [Diverted energy (CT2)](#diverted-energy-ct2)
+  - [Display](#display)
   - [TRIAC output configuration](#triac-output-configuration)
   - [On/off relay output configuration](#onoff-relay-output-configuration)
     - [Operating principle](#operating-principle)
@@ -57,6 +63,7 @@ This program is designed to be used with the Arduino IDE and/or other developmen
 - [Configuration without the mk2Wifi module](#configuration-without-the-mk2wifi-module)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
+- [License](#license)
 
 # Use with Visual Studio Code (recommended)
 
@@ -96,6 +103,10 @@ This project requires the installation of the following libraries via the Arduin
   - Used for RF communication (telemetry and remote loads)
   - Installed even if RF module is not present (unused code will be eliminated by the linker)
 
+- **U8g2** by Oliver Kraus (version 2.36.5 or higher)
+  - Used for the OLED display (its text-only part, U8x8)
+  - Installed even if no OLED is used (unused code will be eliminated by the linker)
+
 - **SPI** (included with Arduino IDE)
   - Used for communication with the RFM69 module
 
@@ -107,25 +118,34 @@ All libraries are always included in the source code. However, only the code act
 # Quick overview of files
 
 - **Mk2_1phase_RFdatalog_temp.ino** : This file is needed for Arduino IDE
+- **adc_chain.h** : the order of the three analog channels (V, CT1, CT2) and the ADC input of each board — *do not edit*
 - **calibration.h** : contains the calibration parameters
 - **config.h** : the user's preferences are stored here (pin assignments, features ...), and nothing else
 - **config_types.h** : what **config.h** is written with (types, `LOAD()`, `HOURS()`...) — *do not edit*
 - **config_derived.h** : what the firmware builds from **config.h** — *do not edit*
 - **config_system.h** : rarely modified system constants
 - **constants.h** : some constants — *do not edit*
+- **ct_filter.h** : the CT1 filter of the old boards, in fixed point
 - **debug.h** : Some macros for serial output and debugging
+- **display_core.h** : what the display shows, and when, without Arduino
+- **diverted_energy.h** : the diverted energy counted from CT2
 - **dualtariff.h** : dual tariff function definitions
-- **ewma_avg.h** : EWMA averaging calculation functions
+- **ewma_avg.hpp** : EWMA averaging calculation functions
+- **fast_control.h** : the prediction and the decision of Robin's *fasterControl*
 - **main.cpp** : main source code
 - **processing.cpp** : processing engine source code
 - **processing.h** : processing engine function prototypes
 - **Readme.en.md** : this file
 - **relay_engine.h** : decisions of the *relay diversion* (thresholds, minimum times, order), Arduino-free
+- **rotation_groups.h** : the loads that take turns in the priority rotation
+- **sample_sets.h** : the count of sample sets of a datalog period
 - **teleinfo.h**: *IoT Telemetry* feature source code
 - **types.h** : type definitions ...
 - **type_traits.h** : some STL stuff not yet available in the avr package
 - **type_traits** : contains missing STL templates
+- **utils_display.h** : the 7-segment display of the OLD_SEG board
 - **utils_dualtariff.h** : *Off-peak hours management* feature source code
+- **utils_oled.h** : the OLED display of the OLD_OLED and NEW boards
 - **utils_pins.h** : some functions for direct access to microcontroller inputs/outputs
 - **utils_relay.h** : *relay diversion* feature source code
 - **utils_rf.h** : *RF* function source code
@@ -139,44 +159,65 @@ All libraries are always included in the source code. However, only the code act
 The end-user should ONLY edit the **calibration.h** and **config.h** files.
 
 > [!NOTE]
-> **config.h** only holds settings: it includes `config_types.h` and nothing else. A **config.h** from an earlier version, with `#include` lines, `NO_OF_REMOTE_LOADS` or `remoteLoads`, stops the build with *This config.h has the former layout*: create it again with the [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur/), or delete those lines (see the CHANGELOG).
+> **config.h** only holds settings: it includes `config_types.h` and nothing else. Its settings have the names, the meaning and the syntax of the 3-phase firmware's. The **config.h** of `Mk2_fasterControl_Full` does not fit: start from the shipped one. A **config.h** with `#include` lines, `NO_OF_REMOTE_LOADS` or `remoteLoads` (the former layout of the 3-phase firmware) stops the build with *This config.h has the former layout*.
 
 # Development documentation
 
-You can start reading the documentation here [3-phase router](https://fredm67.github.io/Mk2PVRouter-3-phase/) (in English).
+The **[docs/](docs/)** folder holds the technical documentation: [architecture](docs/architecture.md), [interrupts](docs/interrupts.md), [power calculation](docs/power-calculation.md), [calibration values](docs/calibration.md), [performance](docs/performance.md), [tests](docs/testing.md). The tests themselves are described in [test/README.md](test/README.md), and the grid simulator, which runs this firmware on a simulated single-phase installation, in [sim/README.md](../sim/README.md).
+
+# How the router decides
+
+The router samples, about every 312 µs, the mains voltage, the current at the grid connection (CT1) and the current to the local loads (CT2): 64 sample sets per mains cycle at 50 Hz, 53 at 60 Hz. The power at the grid connection, cycle after cycle, fills or empties an energy bucket of 3600 J (1 Wh). The loads are decided with Robin Emley's *fasterControl* logic, that of his sketch `Mk2_fasterControl_twoLoads_5` (July 2023):
+
+- at the first sample set of the negative half cycle, the router predicts the level of the bucket at the end of the cycle, from its level at the start of the cycle and the average power of the first half;
+- at the 4th sample set of the negative half cycle (index 3), it decides on that prediction: above the middle of the bucket, the next load in priority order may come ON; below it, the last one ON may go OFF. Right after a switch, only the load just switched may change, until the effect of the switch shows;
+- the zero-crossing triac drivers switch the loads at the next positive zero crossing, at the start of the next cycle: half a cycle sooner than a decision taken after that crossing.
+
+The order of the loads follows their priorities and the [priority rotation](#priority-rotation). The relays decide on the filtered grid power ([relays](#onoff-relay-output-configuration)), and the remote loads receive their state by RF once per decision.
+
+> [!NOTE]
+> The single-file sketches `Mk2_fasterControl_twoLoads_temp_1` and `Mk2_fasterControl_threeLoads_temp_1`, at the root of the repository, still carry the two-load logic of Robin's version 4, which he archived as problematic. This firmware has the logic of his version 5.
 
 # Router calibration
-Calibration values are found in the **calibration.h** file, one set per board: the router uses the one of `PCB_VERSION` (**config.h**). Only the power matters for routing; the voltage (`V1`, `V2`, `V3`) is only displayed.
+Calibration values are found in the **calibration.h** file, one set for the two old boards and one for the new board: the router uses the one of `PCB_VERSION` (**config.h**). The power factor of CT1 is the one the router regulates with; the one of CT2 only serves the diverted energy it reports; the voltage (`V`) is only displayed.
 
 ```cpp
-// Old board
-inline constexpr float f_powerCalOldBoard[NO_OF_PHASES]{ 0.05000F, 0.05000F, 0.05000F };
-inline constexpr float f_voltageCalOldBoard[NO_OF_PHASES]{ 0.8151F, 0.8184F, 0.8195F };
-// New board
-inline constexpr float f_ctRating[NO_OF_PHASES]{ 50.0F, 50.0F, 50.0F };
-inline constexpr float f_powerCalPerAmp[NO_OF_PHASES]{ 0.00286405F, 0.00286405F, 0.00286405F };
-inline constexpr float f_voltageCalNewBoard[NO_OF_PHASES]{ 0.888065256F, 0.888065256F, 0.888065256F };
+// Old boards (OLD_SEG, OLD_OLED)
+inline constexpr float f_powerCalOldBoard{ 0.05000F };         // CT1, grid
+inline constexpr float f_powerCalDivertedOldBoard{ 0.05000F }; // CT2, diverted
+inline constexpr float f_voltageCalOldBoard{ 0.8151F };
+inline constexpr float lpf_gainOldBoard{ 9 };                  // CT1 filter (see below)
+inline constexpr float alphaOldBoard{ 0.0011 };
+// New board (NEW)
+inline constexpr float f_ctRating{ 50.0F };                    // CT1, grid, in A
+inline constexpr float f_ctRatingDiverted{ 50.0F };            // CT2, diverted, in A
+inline constexpr float f_powerCalPerAmp{ 0.00286405F };
+inline constexpr float f_voltageCalNewBoard{ 0.888065256F };
+// All boards
+inline constexpr float f_phaseCal{ 1 };
 ```
 
-Old board: the values are as before; 0.05 is a good start for `f_powerCalOldBoard`. If you already calibrated your router, copy your former `f_powerCal` and `f_voltageCal` values there.
+Old boards: 0.05 is a good start for `f_powerCalOldBoard` and `f_powerCalDivertedOldBoard`. If you calibrated `Mk2_fasterControl_Full`, copy its `powerCal_grid`, `powerCal_diverted` and `f_voltageCal` there.
 
-New universal board (rev. 6.0 and later): the power factor is given per amp of CT rating, enter the rated current of your CTs in `f_ctRating`. The default values suit 333 mV voltage-output CTs, and come from its design, corrected by the calibration of a first board ([how](docs/calibration.md)): with them, the router is usually accurate to a few percent without calibration. With a current-output CT and a burden resistor R, such as the YHDC SCT-013-000 (2000:1), `f_ctRating` = 666 / R, the current giving 333 mV across the burden (30.3 with 22 Ω).
+New universal board (rev. 6.0 and later): the power factor is given per amp of CT rating, enter the rated current of each CT in `f_ctRating` (CT1) and `f_ctRatingDiverted` (CT2). The default values suit 333 mV voltage-output CTs, and come from its design, corrected by the calibration of a first board ([how](docs/calibration.md)): with them, the router is usually accurate to a few percent without calibration. With a current-output CT and a burden resistor R, such as the YHDC SCT-013-000 (2000:1), `f_ctRating` = 666 / R, the current giving 333 mV across the burden (30.3 with 22 Ω).
 
-The router program itself is used for calibration, so the values are measured with exactly the processing they will be used with. With `SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable` (in **config.h**), it prints every 5 seconds, on the serial monitor at 9600 baud, the power of each phase (`P1`, `P2`, `P3`, in W, positive when importing).
+The router program itself is used for calibration, so the values are measured with exactly the processing they will be used with. With `SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable` (in **config.h**), it prints every 5 seconds, on the serial monitor at 9600 baud, the power at the grid connection (`P`, in W, positive when importing) and, with CT2, the diverted power and energy (`diverted <W> W, <Wh> Wh`).
 
 1. Set `CALIBRATION_MODE` to `true` in **config.h** and upload: the router then measures and logs as usual, but never switches any load (TRIACs, relays, remote loads, overrides), which would change the power being measured. It says so at start-up.
-2. Measure the power on phase 1 with a reference instrument (a clamp wattmeter around the same cable as the CT, for instance), ideally with a large resistive load on that phase, such as a water heater.
-3. Compare it with `P1`, and correct the value of phase 1: new value = old value × reference power / `P1`, for `f_powerCalOldBoard[0]` or `f_powerCalPerAmp[0]` depending on the board. The [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur/) does this calculation in calibration mode, and can write your **calibration.h** again with the new values.
-4. Repeat for phases 2 and 3, upload again and check.
-5. Set `CALIBRATION_MODE` back to `false` and upload: the router diverts again.
+2. Measure the power at the grid connection with a reference instrument (a clamp wattmeter around the same cable as CT1, for instance), ideally with a large resistive load running, such as a kettle or a heater.
+3. Compare it with `P`, and correct CT1: new value = old value × reference power / `P`, for `f_powerCalOldBoard` or, on the new board, `f_powerCalPerAmp`.
+4. For CT2, pass the cable of a resistive load through it, measure that load with the reference instrument, and compare with the diverted power: new value = old value × reference power / diverted power, for `f_powerCalDivertedOldBoard` or, on the new board, `f_ctRatingDiverted`.
+5. Upload again and check, then set `CALIBRATION_MODE` back to `false` and upload: the router diverts again.
 
-If a phase shows a negative power while importing, its CT is the wrong way round (or not on the phase of its voltage input).
+If `P` is negative while importing, CT1 is the wrong way round; if the diverted power is negative, CT2 is.
+
+## CT1 filter (old boards)
+
+A current transformer acts as a high-pass filter. On the old boards, as in Robin's sketches, a low-pass filter of the CT1 current, added back with a gain, offsets it: `lpf_gainOldBoard` (0 turns it off) and `alphaOldBoard`. The values shipped, 9 and 0.0011, are **interim**: those of `Mk2_fasterControl_Full`, set in December 2024 on real hardware with the YHDC SCT-013-000, at the same sample spacing. They are to be measured for each CT type with a recording tool, still to come. On the new board, the filter is off (`lpf_gainNewBoard` 0): its voltage-output CTs behave differently. The firmware computes the filter in fixed point, from these values, at compile time.
 
 # Analysis documentation and tools
 
-📊 **[Analysis Tools and Technical Documentation](../analysis/README.en.md)** [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](../analysis/README.md)
-
-This section contains advanced analysis tools and technical documentation for:
+📊 The **[docs/](docs/)** folder also holds analysis scripts and charts (`*.py`, `*.png`), and the [battery configuration guide](docs/BATTERY_CONFIGURATION_GUIDE.en.md), for:
 
 - **🔄 EWMA/TEMA Filtering** : Cloud immunity analysis and filter optimization
 - **📈 Performance Analysis** : Visualization scripts and benchmarks
@@ -193,16 +234,25 @@ The configuration of a feature generally follows two steps:
 
 Configuration consistency is checked during compilation. For example, if a *pin* is accidentally allocated twice, the compiler will generate an error.
 
-> [!TIP]
-> The [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur/) does it for you: choose your loads, relays, remote units, control pins and options, and it checks them and writes `config.h`, `config_system.h`, `config_rf.h`, the remote units' files and, with the mk2Wifi module, the ESPHome YAML. Keep your `calibration.h`.
+> [!NOTE]
+> The [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur/) writes the files of the 3-phase firmware; its single-phase mode is still to come. Until then, edit `config.h` by hand: the settings have the same names and syntax.
 
-## Motherboard: old or new
+## Motherboard
 
-The old 3-phase board and the new universal **3phaseDiverter** board (rev. 6.0 and later) do not measure the same way: the new board uses the internal 1.1 V reference of the ATmega328P, which the firmware must switch on. Tell the firmware which board you have, in **config.h**:
+Three boards, which differ in their analog inputs, their ADC reference and their display. Tell the firmware which board you have, in **config.h**:
+
+| `PCB_VERSION` | Board | Voltage | CT1, grid | CT2, diverted | ADC reference | Display |
+|---|---|---|---|---|---|---|
+| `PcbVersion::OLD_SEG` | Robin's Mk2 board | A3 | A5 | A4 | AVcc | 7-segment |
+| `PcbVersion::OLD_OLED` | the second old single-phase board | A0 | A1 | A3 | AVcc | OLED (I2C, A4/A5) |
+| `PcbVersion::NEW` | the universal board (rev. 6.0 and later), single-phase mode (JP1/JP2 on I2C) | A0 | A1 | A3 (the L2 current input) | internal 1.1 V | OLED (I2C, A4/A5) |
+
 ```cpp
-inline constexpr PcbVersion PCB_VERSION{ PcbVersion::OLD };  // NEW for the universal 3phaseDiverter board
+inline constexpr PcbVersion PCB_VERSION{ PcbVersion::NEW };  // OLD_SEG or OLD_OLED for the old boards
 ```
-The startup summary shows the choice (`Motherboard: old` or `new`).
+The startup summary shows the choice (`Motherboard: old, 7-segment`, `old, OLED` or `new`).
+
+The analog pins, A0 to A5 (pins 14 and above), cannot be used for any feature, on any board: they are analog inputs, the display or the I2C bus. The build refuses them.
 
 > [!IMPORTANT]
 > With the wrong choice, all the measurements are wrong. After changing it, calibrate again.
@@ -220,6 +270,45 @@ To configure the serial output type, modify the following constant in the **conf
 inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable;
 ```
 Replace `HumanReadable` with `IoT` or `JSON` according to your needs.
+
+Every datalog period (5 s by default, `DATALOG_PERIOD_IN_SECONDS` in **config_system.h**, up to 40 s, or 30 s with relays, which need a divisor of 60), the router prints:
+- **HumanReadable**: the bucket level, `P:` the grid power (and the relays' average), `V:` the voltage, `, diverted <W> W, <Wh> Wh` with CT2, each temperature, and diagnostics;
+- **JSON**: `{"P":-25,"R":0,"D":1850,"E":4012,"T1":21.37,"TA":"low"}`: `D` and `E` are the diverted power and energy, with CT2;
+- **IoT** (for the mk2Wifi module), one frame line by line: `P` the grid power, `D` the diverted power in W and `E` the diverted energy in Wh (with CT2), `V` the voltage, `R` and `R1`…`Rn` (relays), `D1`…`Dn` the ON time of each load in %, `T1`…`Tn` the temperatures, `N` the seconds without diverted energy, `TA` the tariff, `S` and `S_MC` the sample sets. Do not confuse `D` with `D1`…`Dn`.
+
+## Diverted energy (CT2)
+
+CT2 measures the current that the router sends to its local loads. Pass the wires of **every local output**, TRIACs and relays, through CT2. Remote loads are never counted.
+
+```cpp
+inline constexpr bool DIVERTED_CT_PRESENT{ true };       // false if no CT2 is fitted
+inline constexpr uint8_t ANTI_CREEP_LIMIT{ 5 };          // in W: a mains cycle below this average power does not count (0: no limit)
+inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 }; // the total is reset after this period without diversion
+```
+
+- The diverted power is the average over the datalog period, in W, and the diverted energy a total in Wh, shown on the display and in every serial output. Without CT2 (`DIVERTED_CT_PRESENT{ false }`), nothing about it is reported or displayed; CT2 is sampled anyway, so the timing does not depend on this setting.
+- **While a load is forced** (override pin, scheduled boost, forced output), the diverted energy is not counted, nor the surplus diverted meanwhile to the other loads: a forced load takes more than the surplus, so it is not diverted energy. The diverted power reads 0 W in those cycles. To keep a forced load out of the count without losing the rest, fit a physical bypass switch around CT2 for that load.
+- The total is reset after `DISPLAY_SHUTDOWN_IN_HOURS` without diversion (usually during the night), for the next day's figure. Forced cycles count as cycles without diversion.
+
+## Display
+
+```cpp
+inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE };
+```
+
+| `TYPE_OF_DISPLAY` | Display | Boards | Pins taken |
+|---|---|---|---|
+| `NONE` | no display | all | none |
+| `SEG` | 4-digit 7-segment display, without the pin-saving chips | `OLD_SEG` | D2, D5 to D13, A0, A2: only D3 and D4 are left |
+| `SEG_HW` | the same display, through its pin-saving chips | `OLD_SEG` | D5 to D9, A0 to A2: D2 to D4 and D10 to D13 are left |
+| `OLED` | SSD1306 128×64 OLED on I2C | `OLD_OLED`, `NEW` | A4, A5 |
+
+The build refuses a display on the wrong board, and a pin used by both the display and a feature.
+
+The display shows, in turn, every 5 seconds, the diverted energy (in kWh, with CT2) and each temperature. `FORC` takes the energy's turn while a load or relay is forced, and `OFF` while the router or the diversion is off. Before anything is diverted, the 7-segment display shows walking dots.
+
+- `SEG_HW` shows digits only (its chips cannot show letters): `FORC` and `OFF` appear as `70 2` and ` 077`, as in Robin's sketches, and a negative temperature lights the decimal point of the first digit.
+- The OLED is redrawn only when its value changes; a redraw keeps the main loop busy about 20 ms, which the diversion does not depend on (it runs in the ADC interrupt). A hung I2C bus would stall the main loop: a known limit.
 
 ## TRIAC output configuration
 
@@ -249,7 +338,8 @@ inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1 };
 - `physicalLoadPin` holds **every** load, local and remote alike — one entry per load, `NO_OF_DUMPLOADS` entries in total
 - local and remote loads may be listed in **any order**; `NO_OF_REMOTE_LOADS` and `NO_OF_REMOTE_UNITS` are derived from the map by the compiler and must never be edited by hand
 - a **remote** load has no TRIAC pin on the router; the optional second argument of `Load::remote()` adds a status LED so its state can be seen locally
-- `loadPrioritiesAtStartup` defines the priority order for **all** loads, and indexes the load map: priority *p* at position *i* means "load *i* has priority *p*"
+- `loadPrioritiesAtStartup` defines the priority order for **all** loads: it lists the load numbers in priority order, position *i* holding the load with priority *i* (0 the highest)
+- pass the wires of every local output through CT2 (see [Diverted energy](#diverted-energy-ct2))
 
 ## On/off relay output configuration
 On/off relay outputs allow powering devices that contain electronics (heat pump ...).
@@ -397,7 +487,8 @@ Up to **three remote units** can be driven, each one a separate Arduino at its o
 **For transmitter (main router):**
 - RFM69W/CW or RFM69HW/HCW module (868 MHz for Europe, 915 MHz for North America)
 - Appropriate antenna for chosen frequency
-- Standard SPI connection (D10=CS, D2=IRQ)
+- Standard SPI connection (D10=CS, D2=IRQ, and D11 to D13)
+- on `OLD_SEG`, the 7-segment display without its pin-saving chips (`SEG`) also uses D2 and D10 to D13: the build refuses RF with it
 
 **For each remote receiver:**
 - Arduino UNO or compatible
@@ -478,7 +569,7 @@ inline constexpr uint8_t NETWORK_ID{ 210 };               // Network ID (1-255)
 
 ### Remote receiver configuration
 
-The **RemoteLoadReceiver** sketch is provided in the `RemoteLoadReceiver/` folder. It needs no modification to support several units: build and upload it once per unit, changing only `REMOTE_NODE_ID` and the load list.
+The **RemoteLoadReceiver** sketch is in the `RemoteLoadReceiver/` folder of [PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase/tree/main/RemoteLoadReceiver): the single-phase router sends the same frames. It needs no modification to support several units: build and upload it once per unit, changing only `REMOTE_NODE_ID` and the load list.
 
 **Minimum configuration (in receiver's config_rf.h):**
 
@@ -541,7 +632,9 @@ It's possible to connect one or more Dallas DS18B20 temperature sensors.
 These sensors can serve informational purposes or to control boost mode.
 
 - **New board** (`PcbVersion::NEW`): the probes' bus is on `D3`, wired with its pull-up on the board. Connect the probes to the board's temperature connector; with the mk2Wifi module, put the `TEMP` jumper in the router position (see [`TEMP` jumper](#temp-jumper)).
-- **Old board** (`PcbVersion::OLD`): nothing is wired. Choose a free pin, add a 4.7 kΩ pull-up between the data line and +5 V, and power the probes (+5 V, GND).
+- **Old boards** (`PcbVersion::OLD_SEG`, `PcbVersion::OLD_OLED`): choose a free digital pin, add a 4.7 kΩ pull-up between the data line and +5 V, and power the probes (+5 V, GND).
+
+Each 1-Wire time slot keeps the interrupts off for up to ~65 µs; the ADC interrupt still meets its deadline after such a delay, even with the 7-segment display refreshed from it (checked in the grid simulator, `check-new-temp` and `check-seg-temp`).
 
 ### Feature activation
 
@@ -733,7 +826,7 @@ Local loads and relays print as their pins (D5, D4), in ascending pin order. Rem
 | No boost | `inline constexpr ScheduledBoosts scheduledBoosts{};` |
 
 ## Priority rotation
-Priority rotation is useful when powering a three-phase water heater.
+Priority rotation is useful with a water heater that has several heating elements, each on its own output.
 It allows balancing the operating duration of different resistors over an extended period.
 
 But it can also be interesting if you want to swap the priorities of two devices each day (two water heaters, ...): make them a group of two loads.
@@ -759,12 +852,12 @@ The pin works the same with or without dual tariff.
 ```cpp
 inline constexpr RotationGroups rotationGroups{ { ALL_LOCAL_LOADS() } };
 ```
-Each group rotates among the priority places its loads hold at startup; loads in no group never move. With two 3-phase water heaters and interleaved priorities:
+Each group rotates among the priority places its loads hold at startup; loads in no group never move. With two water heaters of two elements each, and interleaved priorities:
 ```cpp
-inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 3, 1, 4, 2, 5 };
-inline constexpr RotationGroups rotationGroups{ { LOAD(0), LOAD(1), LOAD(2) }, { LOAD(3), LOAD(4), LOAD(5) } };
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 2, 1, 3 };
+inline constexpr RotationGroups rotationGroups{ { LOAD(0), LOAD(1) }, { LOAD(2), LOAD(3) } };
 ```
-one rotation turns `0, 3, 1, 4, 2, 5` into `2, 5, 0, 3, 1, 4`: each heater moves its last element to the top, and each still holds the same places.
+one rotation turns `0, 2, 1, 3` into `1, 3, 0, 2`: each heater moves its last element to the top, and each still holds the same places.
 
 The rules, checked at compile time:
 - a group has at least 2 loads;
@@ -955,12 +1048,15 @@ A negative value will force the router to consume this power from the grid. This
 
 # Configuration with the mk2Wifi module
 
-The **mk2Wifi** module connects an **ESP32-C6** (WiFi 6, Bluetooth LE, Zigbee, Thread) to the Mk2PVRouter, for monitoring and remote control from Home Assistant via ESPHome. It plugs onto the `UART_EXT` and `TRIG_EXT` connectors of the motherboard and replaces the former ESP32 extension board.
+The **mk2Wifi** module connects an **ESP32-C6** (WiFi 6, Bluetooth LE, Zigbee, Thread) to the Mk2PVRouter, for monitoring and remote control from Home Assistant via ESPHome. It plugs onto the `UART_EXT` and `TRIG_EXT` connectors of the universal motherboard (`PcbVersion::NEW`) and replaces the former ESP32 extension board.
+
+> [!NOTE]
+> The ESPHome configuration has no sensors yet for the diverted power and energy (`D` and `E`): the module ignores these lines of the frame until the single-phase packages come.
 
 The hardware, its installation and troubleshooting are documented on the [mk2Wifi pages](https://fredm67.github.io/Mk2PVRouter/mk2wifi/presentation-mk2wifi/), and the ESPHome configuration in [this gist](https://gist.github.com/FredM67/986e1cb0fc020fa6324ccc151006af99). This section only covers the router side.
 
 > [!TIP]
-> The [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur/) writes the router's `config.h` and the matching ESPHome YAML together, and lists the solder jumpers to close. Its controls are fail-safe: the module only pulls a router input LOW for the non-default state, so a broken wire or a rebooting module leaves the router routing, without boost.
+> The module's controls are fail-safe: it only pulls a router input LOW for the non-default state, so a broken wire or a rebooting module leaves the router routing, without boost.
 
 > [!CAUTION]
 > Never connect the module's USB-C while it is plugged onto the motherboard: the two 5 V supplies are not isolated.
@@ -1052,5 +1148,9 @@ The [gist](https://gist.github.com/FredM67/986e1cb0fc020fa6324ccc151006af99) des
 
 # Contributing
 Contributions are welcome! Please submit issues, feature requests, and pull requests via GitHub.
+
+# License
+
+GPL-3.0-or-later, see [LICENSE](../LICENSE). [NOTICE](../NOTICE) details where the code comes from: this firmware derives from the 3-phase firmware and from Robin Emley's single-phase Mk2PVRouter sketches, which he published without a license statement. The files that hold your settings (`config.h`, `config_system.h`, `config_rf.h`, `calibration.h`) are yours: use, change and share them on any terms you like.
 
 *unfinished doc*

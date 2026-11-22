@@ -6,7 +6,7 @@ This document describes the software architecture of the PVRouter system, includ
 
 The PVRouter is designed as a real-time embedded system with the following core responsibilities:
 
-1. **Real-time power measurement** across three phases
+1. **Real-time power measurement** at the grid connection (CT1), and of the diverted power (CT2)
 2. **Intelligent load switching** based on surplus energy
 3. **Temperature monitoring** for load management
 4. **Remote control and monitoring** capabilities
@@ -184,6 +184,15 @@ Data logging → Serial output → Telemetry transmission
 - **Efficient algorithms**: Optimized for AVR instruction set
 - **Low-power modes**: Available for battery applications
 
+## Single-phase specifics
+
+- **Sampling chain** (`adc_chain.h`): V → CT1 (grid) → CT2 (diverted), free-running, ~104 µs per conversion, ~312 µs per sample set. When the interrupt of a conversion runs, the next conversion has already started with the previous ADMUX: the interrupt writes the channel two steps ahead. Each board has its analog inputs and its reference (AVcc on the old boards, internal 1.1 V on `NEW`).
+- **Control core** (`fast_control.h`, `processing.cpp`): Robin Emley's fasterControl, that of `Mk2_fasterControl_twoLoads_5`. At the first sample set of the negative half cycle, the bucket level at the end of the cycle is predicted from its level at the start and the average power of the first half (through a per-sample calibration table: no division in the interrupt). At sample set index 3 of the negative half, the loads are decided on that prediction; the zero-crossing triac drivers switch them at the next positive zero crossing.
+- **Once-per-cycle work** (`CycleTask` in `processing.cpp`): the work of the mains cycle (diverted energy, datalog sums, load states) is spread over the CT2 calls that follow the zero crossings, so that no interrupt call needs more than ~420 cycles to reach its ADMUX write, even when entered late after a 1-Wire time slot.
+- **Diverted energy** (`diverted_energy.h`): CT2 power per cycle, accumulated in Wh with an anti-creep limit (`ANTI_CREEP_LIMIT`, in W), not counted while a load is forced, reset after `DISPLAY_SHUTDOWN_IN_HOURS` without diversion.
+- **CT1 filter** (`ct_filter.h`): Robin's IIR low-pass of the grid current, added back with a gain, in fixed point (~210 cycles instead of ~1100 with floats). Old boards only; interim values.
+- **Displays** (`display_core.h`, `utils_display.h`, `utils_oled.h`): the 7-segment display multiplexed from the ADC interrupt (one port image per digit, prepared by the loop), or the OLED written from the loop (about 20 ms per redraw, only when the value changes).
+
 ## Extension Points
 
 ### Adding New Features
@@ -194,7 +203,7 @@ Data logging → Serial output → Telemetry transmission
 
 ### Hardware Adaptations
 1. **Different microcontrollers**: Modify pin definitions
-2. **Additional phases**: Extend NO_OF_PHASES constant
+2. **3-phase sites**: use the 3-phase firmware (PVRouter-3-phase), whose settings and file names this firmware shares
 3. **Different ADC resolution**: Adjust calibration factors
 4. **Custom hardware**: Implement new utils modules
 

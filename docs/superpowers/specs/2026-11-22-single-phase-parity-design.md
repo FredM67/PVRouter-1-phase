@@ -195,7 +195,8 @@ Robin's `twoLoads_5` logic, already in `Mk2_fasterControl_Full/processing.cpp`:
 - `OLD_OLED` and `NEW`: the OLED on I2C (A4/A5), from `Mk2_fasterControl_Full/utils_oled.h`.
   A compile-time check refuses the 7-segment display on these boards, and the OLED on `OLD_SEG`
   (A4/A5 are analog inputs there).
-- Content as `Full`: diverted energy and temperature, in turn.
+- Content: diverted energy and temperature, in turn. `Full` shows the diverted energy only (no
+  temperature): the temperature display is new.
 - `TYPE_OF_DISPLAY` selects none, 7-segment (with or without pin-saving chips) or OLED; the pins
   the display takes enter the pin checks.
 

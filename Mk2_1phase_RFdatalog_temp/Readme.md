@@ -1,5 +1,7 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](Readme.en.md)
 
+**Mk2_1phase_RFdatalog_temp** est le firmware du routeur PV monophasé. Il dirige le surplus d’une installation photovoltaïque vers des charges résistives (chauffe-eau…), par des triacs, des relais ou des unités distantes, sur les deux cartes Mk2 de Robin Emley ou sur la carte universelle. Il a les fonctionnalités et les réglages du firmware triphasé ([PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase)), et mesure l’énergie routée avec une seconde sonde.
+
 Ce programme est conçu pour être utilisé avec l’IDE Arduino et/ou d’autres IDE de développement comme VSCode + PlatformIO.
 
 # Table des matières
@@ -12,11 +14,15 @@ Ce programme est conçu pour être utilisé avec l’IDE Arduino et/ou d’autre
 - [Aperçu rapide des fichiers](#aperçu-rapide-des-fichiers)
   - [Documentation technique](#documentation-technique)
 - [Documentation de développement](#documentation-de-développement)
+- [Comment le routeur décide](#comment-le-routeur-décide)
 - [Étalonnage du routeur](#étalonnage-du-routeur)
+  - [Filtre de la sonde 1 (anciennes cartes)](#filtre-de-la-sonde-1-anciennes-cartes)
 - [Documentation d’analyse et outils](#documentation-danalyse-et-outils)
 - [Configuration du programme](#configuration-du-programme)
-  - [Carte-mère : ancienne ou nouvelle](#carte-mère-ancienne-ou-nouvelle)
+  - [Carte mère](#carte-mère)
   - [Type de sortie série](#type-de-sortie-série)
+  - [Énergie routée (sonde 2)](#énergie-routée-sonde-2)
+  - [Afficheur](#afficheur)
   - [Configuration des sorties TRIAC](#configuration-des-sorties-triac)
   - [Configuration des sorties relais tout-ou-rien](#configuration-des-sorties-relais-tout-ou-rien)
     - [Principe de fonctionnement](#principe-de-fonctionnement)
@@ -59,6 +65,7 @@ Ce programme est conçu pour être utilisé avec l’IDE Arduino et/ou d’autre
 - [Configuration sans module mk2Wifi](#configuration-sans-module-mk2wifi)
 - [Dépannage](#dépannage)
 - [Contribuer](#contribuer)
+- [Licence](#licence)
 
 # Utilisation avec Visual Studio Code (recommandé)
 
@@ -79,7 +86,7 @@ Pour **Linux**, si vous utilisez le package AppImage, vous trouverez ce fichier 
 
 Pour **MacOSX**, ce fichier se trouve dans '/Users/[user]/Library/Arduino15/packages/arduino/hardware/avr/1.8.6'.
 
-Ouvrez le fichier dans n’importe quel éditeur de texte (vous aurez besoin des droits d’administrateur) et remplacez le paramètre '**-std=gnu++11**' par '**-std=gnu++17**'. C’est tout !
+Ouvrez le fichier dans n’importe quel éditeur de texte (vous aurez besoin des droits d’administrateur) et remplacez le paramètre '**-std=gnu++11**' par '**-std=gnu++17**'. C’est tout !
 
 Facultatif : dans le même fichier, ajoutez '**-Wl,--relax**' à la fin de la ligne qui commence par '**compiler.c.elf.flags=**'. L’éditeur de liens raccourcit alors chaque appel et chaque saut dont la cible est assez proche (2 octets au lieu de 4) : le firmware est plus petit d’environ 270 octets, comme avec PlatformIO, qui fixe ce paramètre lui-même.
 
@@ -98,6 +105,10 @@ Ce projet nécessite l’installation des bibliothèques suivantes via le **Gest
   - Utilisée pour la communication RF (télémétrie et charges distantes)
   - Installée même si le module RF n’est pas présent (le code non utilisé sera éliminé par le linker)
 
+- **U8g2** par Oliver Kraus (version 2.36.5 ou supérieure)
+  - Utilisée pour l’afficheur OLED (sa partie texte seul, U8x8)
+  - Installée même sans OLED (le code non utilisé sera éliminé par le linker)
+
 - **SPI** (incluse avec l’Arduino IDE)
   - Utilisée pour la communication avec le module RFM69
 
@@ -109,25 +120,34 @@ Toutes les bibliothèques sont toujours incluses dans le code source. Cependant,
 # Aperçu rapide des fichiers
 
 - **Mk2_1phase_RFdatalog_temp.ino** : Ce fichier est nécessaire pour l’IDE Arduino
+- **adc_chain.h** : l’ordre des trois voies analogiques (tension, sonde 1, sonde 2) et l’entrée de chaque carte — *ne pas modifier*
 - **calibration.h** : contient les paramètres d’étalonnage
 - **config.h** : les préférences de l’utilisateur sont stockées ici (affectation des broches, fonctionnalités…), et rien d’autre
 - **config_types.h** : ce avec quoi s’écrit **config.h** (types, `LOAD()`, `HOURS()`…) — *ne pas modifier*
 - **config_derived.h** : ce que le firmware construit à partir de **config.h** — *ne pas modifier*
 - **config_system.h** : constantes système rarement modifiées
 - **constants.h** : quelques constantes — *ne pas modifier*
+- **ct_filter.h** : le filtre de la sonde 1 des anciennes cartes, en virgule fixe
 - **debug.h** : Quelques macros pour la sortie série et le débogage
+- **display_core.h** : ce que montre l’afficheur, et quand, sans Arduino
+- **diverted_energy.h** : l’énergie routée, comptée sur la sonde 2
 - **dualtariff.h** : définitions de la fonction double tarif
-- **ewma_avg.h** : fonctions de calcul de moyenne EWMA
+- **ewma_avg.hpp** : fonctions de calcul de moyenne EWMA
+- **fast_control.h** : la prédiction et la décision du *fasterControl* de Robin
 - **main.cpp** : code source principal
 - **processing.cpp** : code source du moteur de traitement
 - **processing.h** : prototypes de fonctions du moteur de traitement
 - **Readme.md** : ce fichier
 - **relay_engine.h** : décisions de la *diversion par relais* (seuils, temps minimaux, ordre), sans Arduino
+- **rotation_groups.h** : les charges qui tournent dans la rotation des priorités
+- **sample_sets.h** : le compte des jeux d’échantillons d’une période d’enregistrement
 - **teleinfo.h**: code source de la fonctionnalité *Télémétrie IoT*
 - **types.h** : définitions des types…
 - **type_traits.h** : quelques trucs STL qui ne sont pas encore disponibles dans le paquet avr
 - **type_traits** : contient des patrons STL manquants
+- **utils_display.h** : l’afficheur 7 segments de la carte OLD_SEG
 - **utils_dualtariff.h** : code source de la fonctionnalité *gestion Heures Creuses*
+- **utils_oled.h** : l’afficheur OLED des cartes OLD_OLED et NEW
 - **utils_pins.h** : quelques fonctions d’accès direct aux entrées/sorties du micro-contrôleur
 - **utils_relay.h** : code source de la fonctionnalité *diversion par relais*
 - **utils_rf.h** : code source de la fonction *RF*
@@ -141,49 +161,73 @@ Toutes les bibliothèques sont toujours incluses dans le code source. Cependant,
 L’utilisateur final ne doit éditer QUE les fichiers **calibration.h** et **config.h**.
 
 > [!NOTE]
-> **config.h** ne contient que des réglages : il n’inclut que `config_types.h`. Un **config.h** d’une version précédente, avec des lignes `#include`, `NO_OF_REMOTE_LOADS` ou `remoteLoads`, arrête la compilation sur *This config.h has the former layout* : recréez-le avec le [configurateur](https://fredm67.github.io/Mk2PVRouter/configurateur/), ou supprimez ces lignes (voir le CHANGELOG).
+> **config.h** ne contient que des réglages : il n’inclut que `config_types.h`. Ses réglages ont les noms, le sens et la syntaxe de ceux du firmware triphasé. Le **config.h** de `Mk2_fasterControl_Full` ne convient pas : partez de celui fourni. Un **config.h** avec des lignes `#include`, `NO_OF_REMOTE_LOADS` ou `remoteLoads` (l’ancienne forme du firmware triphasé) arrête la compilation sur *This config.h has the former layout*.
 
 ## Documentation technique
-Le dossier **[docs/](docs/)** contient la documentation technique détaillée :
+Le dossier **[docs/](docs/)** contient la documentation technique détaillée (en anglais) :
 - **[Architecture logicielle](docs/architecture.md)** - Conception et organisation des modules
+- **[Interruptions](docs/interrupts.md)** et **[calcul de la puissance](docs/power-calculation.md)**
+- **[Valeurs d’étalonnage](docs/calibration.md)** - D’où viennent les valeurs par défaut
 - **[Performances](docs/performance.md)** - Analyses de timing et optimisations
+- **[Tests](docs/testing.md)** - Les tests sont décrits dans [test/README.md](test/README.md), et le simulateur de réseau, qui fait tourner ce firmware sur une installation monophasée simulée, dans [sim/README.md](../sim/README.md)
 
 # Documentation de développement
 
-Vous pouvez commencer à lire la documentation ici [3-phase routeur](https://fredm67.github.io/Mk2PVRouter-3-phase/) (en anglais).
+Voir la [documentation technique](#documentation-technique) ci-dessus, et la documentation du code, générée par Doxygen (`Doxyfile`).
+
+# Comment le routeur décide
+
+Le routeur échantillonne, environ toutes les 312 µs, la tension secteur, le courant au point de raccordement (sonde 1) et le courant des charges locales (sonde 2) : 64 jeux d’échantillons par période secteur à 50 Hz, 53 à 60 Hz. La puissance au point de raccordement, période après période, remplit ou vide un réservoir d’énergie de 3600 J (1 Wh). Les charges sont décidées avec la logique *fasterControl* de Robin Emley, celle de son sketch `Mk2_fasterControl_twoLoads_5` (juillet 2023) :
+
+- au premier jeu d’échantillons de l’alternance négative, le routeur prédit le niveau du réservoir à la fin de la période, à partir de son niveau au début de la période et de la puissance moyenne de la première alternance ;
+- au 4e jeu d’échantillons de l’alternance négative (indice 3), il décide sur cette prédiction : au-dessus du milieu du réservoir, la charge suivante dans l’ordre des priorités peut s’allumer ; en dessous, la dernière allumée peut s’éteindre. Juste après une commutation, seule la charge qui vient de commuter peut changer, jusqu’à ce que l’effet de la commutation se voie ;
+- les optocoupleurs à passage par zéro commutent les charges au passage par zéro positif suivant, au début de la période suivante : une demi-période plus tôt qu’une décision prise après ce passage.
+
+L’ordre des charges suit leurs priorités et la [rotation des priorités](#rotation-des-priorités). Les relais décident sur la puissance réseau filtrée ([relais](#configuration-des-sorties-relais-tout-ou-rien)), et les charges distantes reçoivent leur état par RF à chaque décision.
+
+> [!NOTE]
+> Les sketches en un seul fichier `Mk2_fasterControl_twoLoads_temp_1` et `Mk2_fasterControl_threeLoads_temp_1`, à la racine du dépôt, ont encore la logique à deux charges de la version 4 de Robin, qu’il a archivée comme problématique. Ce firmware a la logique de sa version 5.
 
 # Étalonnage du routeur
-Les valeurs d’étalonnage se trouvent dans le fichier **calibration.h**, un jeu par carte : le routeur utilise celui de `PCB_VERSION` (**config.h**). Seule la puissance compte pour le routage ; la tension (`V1`, `V2`, `V3`) n’est qu’affichée.
+Les valeurs d’étalonnage se trouvent dans le fichier **calibration.h**, un jeu pour les deux anciennes cartes et un pour la nouvelle : le routeur utilise celui de `PCB_VERSION` (**config.h**). Le facteur de puissance de la sonde 1 est celui avec lequel le routeur régule ; celui de la sonde 2 ne sert qu’à l’énergie routée qu’il affiche ; la tension (`V`) n’est qu’affichée.
 
 ```cpp
-// Ancienne carte
-inline constexpr float f_powerCalOldBoard[NO_OF_PHASES]{ 0.05000F, 0.05000F, 0.05000F };
-inline constexpr float f_voltageCalOldBoard[NO_OF_PHASES]{ 0.8151F, 0.8184F, 0.8195F };
-// Nouvelle carte
-inline constexpr float f_ctRating[NO_OF_PHASES]{ 50.0F, 50.0F, 50.0F };
-inline constexpr float f_powerCalPerAmp[NO_OF_PHASES]{ 0.00286405F, 0.00286405F, 0.00286405F };
-inline constexpr float f_voltageCalNewBoard[NO_OF_PHASES]{ 0.888065256F, 0.888065256F, 0.888065256F };
+// Anciennes cartes (OLD_SEG, OLD_OLED)
+inline constexpr float f_powerCalOldBoard{ 0.05000F };         // sonde 1, réseau
+inline constexpr float f_powerCalDivertedOldBoard{ 0.05000F }; // sonde 2, routée
+inline constexpr float f_voltageCalOldBoard{ 0.8151F };
+inline constexpr float lpf_gainOldBoard{ 9 };                  // filtre de la sonde 1 (voir plus bas)
+inline constexpr float alphaOldBoard{ 0.0011 };
+// Nouvelle carte (NEW)
+inline constexpr float f_ctRating{ 50.0F };                    // sonde 1, réseau, en A
+inline constexpr float f_ctRatingDiverted{ 50.0F };            // sonde 2, routée, en A
+inline constexpr float f_powerCalPerAmp{ 0.00286405F };
+inline constexpr float f_voltageCalNewBoard{ 0.888065256F };
+// Toutes les cartes
+inline constexpr float f_phaseCal{ 1 };
 ```
 
-Ancienne carte : les valeurs sont celles d’avant, 0,05 est un bon départ pour `f_powerCalOldBoard`. Si votre routeur est déjà étalonné, recopiez-y vos anciennes valeurs de `f_powerCal` et `f_voltageCal`.
+Anciennes cartes : 0,05 est un bon départ pour `f_powerCalOldBoard` et `f_powerCalDivertedOldBoard`. Si vous avez étalonné `Mk2_fasterControl_Full`, recopiez-y ses `powerCal_grid`, `powerCal_diverted` et `f_voltageCal`.
 
-Nouvelle carte universelle (rev. 6.0 et suivantes) : le facteur de puissance est donné par ampère de calibre de sonde, indiquez le courant nominal de vos sondes dans `f_ctRating`. Les valeurs par défaut conviennent aux sondes à sortie tension 333 mV, et découlent de sa conception, corrigée par l’étalonnage d’une première carte ([détails, en anglais](docs/calibration.md)) : avec elles, le routeur est en général précis à quelques pour cent sans étalonnage. Avec une sonde à sortie courant et une résistance de charge R, comme la YHDC SCT-013-000 (2000:1), `f_ctRating` = 666 / R, le courant qui donne 333 mV aux bornes de la résistance (30,3 avec 22 Ω).
+Nouvelle carte universelle (rev. 6.0 et suivantes) : le facteur de puissance est donné par ampère de calibre de sonde, indiquez le courant nominal de chaque sonde dans `f_ctRating` (sonde 1) et `f_ctRatingDiverted` (sonde 2). Les valeurs par défaut conviennent aux sondes à sortie tension 333 mV, et découlent de sa conception, corrigée par l’étalonnage d’une première carte ([détails, en anglais](docs/calibration.md)) : avec elles, le routeur est en général précis à quelques pour cent sans étalonnage. Avec une sonde à sortie courant et une résistance de charge R, comme la YHDC SCT-013-000 (2000:1), `f_ctRating` = 666 / R, le courant qui donne 333 mV aux bornes de la résistance (30,3 avec 22 Ω).
 
-L’étalonnage se fait avec le programme du routeur lui-même : les valeurs sont ainsi mesurées avec exactement le traitement avec lequel elles seront utilisées. Avec `SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable` (dans **config.h**), il affiche toutes les 5 secondes, sur le moniteur série à 9600 bauds, la puissance de chaque phase (`P1`, `P2`, `P3`, en W, positive en import).
+L’étalonnage se fait avec le programme du routeur lui-même : les valeurs sont ainsi mesurées avec exactement le traitement avec lequel elles seront utilisées. Avec `SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable` (dans **config.h**), il affiche toutes les 5 secondes, sur le moniteur série à 9600 bauds, la puissance au point de raccordement (`P`, en W, positive en import) et, avec la sonde 2, la puissance et l’énergie routées (`diverted <W> W, <Wh> Wh`).
 
 1. Passez `CALIBRATION_MODE` à `true` dans **config.h** et téléversez : le routeur mesure et affiche comme d’habitude, mais ne commute plus aucune charge (triacs, relais, charges distantes, forçages), ce qui modifierait la puissance mesurée. Il l’annonce au démarrage.
-2. Mesurez la puissance sur la phase 1 avec un appareil de référence (par exemple une pince wattmétrique autour du même câble que la sonde), idéalement avec une forte charge résistive sur cette phase, comme un chauffe-eau.
-3. Comparez-la à `P1` et corrigez la valeur de la phase 1 : nouvelle valeur = ancienne valeur × puissance de référence / `P1`, pour `f_powerCalOldBoard[0]` ou `f_powerCalPerAmp[0]` selon la carte. Le [configurateur](https://fredm67.github.io/Mk2PVRouter/configurateur/) fait ce calcul en mode étalonnage, et peut réécrire votre **calibration.h** avec les nouvelles valeurs.
-4. Recommencez pour les phases 2 et 3, téléversez à nouveau et vérifiez.
-5. Remettez `CALIBRATION_MODE` à `false` et téléversez : le routeur route à nouveau.
+2. Mesurez la puissance au point de raccordement avec un appareil de référence (par exemple une pince wattmétrique autour du même câble que la sonde 1), idéalement avec une forte charge résistive en marche, comme une bouilloire ou un radiateur.
+3. Comparez-la à `P` et corrigez la sonde 1 : nouvelle valeur = ancienne valeur × puissance de référence / `P`, pour `f_powerCalOldBoard` ou, sur la nouvelle carte, `f_powerCalPerAmp`.
+4. Pour la sonde 2, passez-y le câble d’une charge résistive, mesurez cette charge avec l’appareil de référence et comparez à la puissance routée : nouvelle valeur = ancienne valeur × puissance de référence / puissance routée, pour `f_powerCalDivertedOldBoard` ou, sur la nouvelle carte, `f_ctRatingDiverted`.
+5. Téléversez à nouveau et vérifiez, puis remettez `CALIBRATION_MODE` à `false` et téléversez : le routeur route à nouveau.
 
-Si une phase affiche une puissance négative en import, sa sonde est montée à l’envers (ou n’est pas sur la phase de son entrée tension).
+Si `P` est négative en import, la sonde 1 est montée à l’envers ; si la puissance routée est négative, c’est la sonde 2.
+
+## Filtre de la sonde 1 (anciennes cartes)
+
+Une sonde de courant se comporte comme un filtre passe-haut. Sur les anciennes cartes, comme dans les sketches de Robin, un filtre passe-bas du courant de la sonde 1, rajouté avec un gain, compense cet effet : `lpf_gainOldBoard` (0 le désactive) et `alphaOldBoard`. Les valeurs fournies, 9 et 0,0011, sont **provisoires** : celles de `Mk2_fasterControl_Full`, réglées en décembre 2024 sur du matériel réel avec la YHDC SCT-013-000, au même espacement des échantillons. Elles sont à mesurer pour chaque type de sonde avec un outil d’enregistrement, encore à venir. Sur la nouvelle carte, le filtre est désactivé (`lpf_gainNewBoard` 0) : ses sondes à sortie tension se comportent autrement. Le firmware calcule le filtre en virgule fixe, à partir de ces valeurs, à la compilation.
 
 # Documentation d’analyse et outils
 
-📊 **[Outils d’Analyse et Documentation Technique](../analysis/README.md)** [![en](https://img.shields.io/badge/lang-en-red.svg)](../analysis/README.en.md)
-
-Cette section contient des outils d’analyse avancés et de la documentation technique pour :
+📊 Le dossier **[docs/](docs/)** contient aussi des scripts d’analyse et des graphiques (`*.py`, `*.png`), et le [guide de configuration avec batterie](docs/BATTERY_CONFIGURATION_GUIDE.md), pour :
 
 - **🔄 Filtrage EWMA/TEMA** : Analyse de l’immunité aux nuages et optimisation des filtres
 - **📈 Analyse de performance** : Scripts de visualisation et benchmarks
@@ -200,16 +244,25 @@ La configuration d’une fonctionnalité suit généralement deux étapes :
 
 La cohérence de la configuration est vérifiée lors de la compilation. Par exemple, si une *pin* est allouée deux fois par erreur, le compilateur générera une erreur.
 
-> [!TIP]
-> Le [configurateur](https://fredm67.github.io/Mk2PVRouter/configurateur/) le fait pour vous : choisissez vos charges, relais, unités distantes, broches de commande et options, il les vérifie et écrit `config.h`, `config_system.h`, `config_rf.h`, les fichiers des unités distantes et, avec le module mk2Wifi, le YAML ESPHome. Gardez votre `calibration.h`.
+> [!NOTE]
+> Le [configurateur](https://fredm67.github.io/Mk2PVRouter/configurateur/) écrit les fichiers du firmware triphasé ; son mode monophasé est encore à venir. D’ici là, modifiez `config.h` à la main : les réglages ont les mêmes noms et la même syntaxe.
 
-## Carte-mère : ancienne ou nouvelle
+## Carte mère
 
-L’ancienne carte triphasée et la nouvelle carte universelle **3phaseDiverter** (rév. 6.0 et suivantes) ne mesurent pas de la même façon : la nouvelle carte utilise la référence interne de 1,1 V de l’ATmega328P, que le firmware doit activer. Indiquez au firmware quelle carte vous avez, dans **config.h** :
+Trois cartes, qui diffèrent par leurs entrées analogiques, leur référence du convertisseur analogique-numérique et leur afficheur. Indiquez au firmware quelle carte vous avez, dans **config.h** :
+
+| `PCB_VERSION` | Carte | Tension | Sonde 1, réseau | Sonde 2, routée | Référence | Afficheur |
+|---|---|---|---|---|---|---|
+| `PcbVersion::OLD_SEG` | la carte Mk2 de Robin | A3 | A5 | A4 | AVcc | 7 segments |
+| `PcbVersion::OLD_OLED` | la seconde ancienne carte monophasée | A0 | A1 | A3 | AVcc | OLED (I2C, A4/A5) |
+| `PcbVersion::NEW` | la carte universelle (rév. 6.0 et suivantes), en mode monophasé (JP1/JP2 sur I2C) | A0 | A1 | A3 (l’entrée courant L2) | interne 1,1 V | OLED (I2C, A4/A5) |
+
 ```cpp
-inline constexpr PcbVersion PCB_VERSION{ PcbVersion::OLD };  // NEW pour la carte universelle 3phaseDiverter
+inline constexpr PcbVersion PCB_VERSION{ PcbVersion::NEW };  // OLD_SEG ou OLD_OLED pour les anciennes cartes
 ```
-Le résumé affiché au démarrage indique le choix (`Motherboard: old` ou `new`).
+Le résumé affiché au démarrage indique le choix (`Motherboard: old, 7-segment`, `old, OLED` ou `new`).
+
+Les broches analogiques, A0 à A5 (broches 14 et au-delà), ne peuvent servir à aucune fonctionnalité, sur aucune carte : ce sont des entrées analogiques, l’afficheur ou le bus I2C. La compilation les refuse.
 
 > [!IMPORTANT]
 > Avec un mauvais choix, toutes les mesures sont fausses. Après un changement, refaites l’étalonnage.
@@ -227,6 +280,45 @@ Pour configurer le type de sortie série, modifiez la constante suivante dans le
 inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable;
 ```
 Remplacez `HumanReadable` par `IoT` ou `JSON` selon vos besoins.
+
+À chaque période d’enregistrement (5 s par défaut, `DATALOG_PERIOD_IN_SECONDS` dans **config_system.h**, jusqu’à 40 s, ou 30 s avec des relais, qui demandent un diviseur de 60), le routeur envoie :
+- **HumanReadable** : le niveau du réservoir, `P:` la puissance réseau (et la moyenne des relais), `V:` la tension, `, diverted <W> W, <Wh> Wh` avec la sonde 2, chaque température, et des diagnostics ;
+- **JSON** : `{"P":-25,"R":0,"D":1850,"E":4012,"T1":21.37,"TA":"low"}` : `D` et `E` sont la puissance et l’énergie routées, avec la sonde 2 ;
+- **IoT** (pour le module mk2Wifi), une trame envoyée ligne par ligne : `P` la puissance réseau, `D` la puissance routée en W et `E` l’énergie routée en Wh (avec la sonde 2), `V` la tension, `R` et `R1`…`Rn` (relais), `D1`…`Dn` le temps de marche de chaque charge en %, `T1`…`Tn` les températures, `N` les secondes sans énergie routée, `TA` le tarif, `S` et `S_MC` les jeux d’échantillons. Ne confondez pas `D` avec `D1`…`Dn`.
+
+## Énergie routée (sonde 2)
+
+La sonde 2 mesure le courant que le routeur envoie à ses charges locales. Passez-y les fils de **toutes les sorties locales**, triacs et relais. Les charges distantes ne sont jamais comptées.
+
+```cpp
+inline constexpr bool DIVERTED_CT_PRESENT{ true };       // false sans sonde 2
+inline constexpr uint8_t ANTI_CREEP_LIMIT{ 5 };          // en W : une période secteur sous cette puissance moyenne ne compte pas (0 : pas de limite)
+inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 }; // le total est remis à zéro après cette durée sans routage
+```
+
+- La puissance routée est la moyenne sur la période d’enregistrement, en W, et l’énergie routée un total en Wh, montrés sur l’afficheur et dans chaque sortie série. Sans sonde 2 (`DIVERTED_CT_PRESENT{ false }`), rien n’en est envoyé ni affiché ; la sonde 2 est échantillonnée quand même, si bien que le minutage ne dépend pas de ce réglage.
+- **Tant qu’une charge est forcée** (pin de forçage, boost programmé, sortie forcée), l’énergie routée n’est pas comptée, ni le surplus routé pendant ce temps vers les autres charges : une charge forcée prend plus que le surplus, ce n’est donc pas de l’énergie routée. La puissance routée vaut 0 W pendant ces périodes. Pour garder une charge forcée hors du compte sans perdre le reste, montez un interrupteur de dérivation autour de la sonde 2 pour cette charge.
+- Le total est remis à zéro après `DISPLAY_SHUTDOWN_IN_HOURS` sans routage (en général pendant la nuit), pour le chiffre du lendemain. Les périodes forcées comptent comme des périodes sans routage.
+
+## Afficheur
+
+```cpp
+inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE };
+```
+
+| `TYPE_OF_DISPLAY` | Afficheur | Cartes | Broches prises |
+|---|---|---|---|
+| `NONE` | pas d’afficheur | toutes | aucune |
+| `SEG` | afficheur 7 segments à 4 chiffres, sans les circuits d’économie de broches | `OLD_SEG` | D2, D5 à D13, A0, A2 : seules D3 et D4 restent |
+| `SEG_HW` | le même afficheur, avec ses circuits d’économie de broches | `OLD_SEG` | D5 à D9, A0 à A2 : D2 à D4 et D10 à D13 restent |
+| `OLED` | OLED SSD1306 128×64 sur I2C | `OLD_OLED`, `NEW` | A4, A5 |
+
+La compilation refuse un afficheur sur la mauvaise carte, et une broche prise à la fois par l’afficheur et par une fonctionnalité.
+
+L’afficheur montre, à tour de rôle, toutes les 5 secondes, l’énergie routée (en kWh, avec la sonde 2) et chaque température. `FORC` prend le tour de l’énergie tant qu’une charge ou un relais est forcé, et `OFF` tant que le routeur ou le routage est arrêté. Tant que rien n’a été routé, l’afficheur 7 segments montre des points qui défilent.
+
+- `SEG_HW` n’affiche que des chiffres (ses circuits ne savent pas afficher de lettres) : `FORC` et `OFF` apparaissent comme `70 2` et ` 077`, comme dans les sketches de Robin, et une température négative allume le point décimal du premier chiffre.
+- L’OLED n’est redessiné que quand sa valeur change ; un redessin occupe la boucle principale environ 20 ms, dont le routage ne dépend pas (il tourne dans l’interruption de l’ADC). Un bus I2C bloqué bloquerait la boucle principale : une limite connue.
 
 ## Configuration des sorties TRIAC
 
@@ -252,11 +344,12 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
 inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1 };
 ```
 
-**Important :**
+**Important :**
 - `physicalLoadPin` contient **toutes** les charges, locales comme distantes — une entrée par charge, soit `NO_OF_DUMPLOADS` entrées
-- les charges locales et distantes peuvent être déclarées dans **n'importe quel ordre** ; `NO_OF_REMOTE_LOADS` et `NO_OF_REMOTE_UNITS` sont déduits de la table par le compilateur et ne doivent jamais être modifiés à la main
-- une charge **distante** n'a pas de pin TRIAC sur le routeur ; le second argument optionnel de `Load::remote()` ajoute une LED d'état permettant de visualiser son état localement
-- `loadPrioritiesAtStartup` définit l'ordre de priorité de **toutes** les charges et indexe la table : la priorité *p* en position *i* signifie « la charge *i* a la priorité *p* »
+- les charges locales et distantes peuvent être déclarées dans **n'importe quel ordre** ; `NO_OF_REMOTE_LOADS` et `NO_OF_REMOTE_UNITS` sont déduits de la table par le compilateur et ne doivent jamais être modifiés à la main
+- une charge **distante** n'a pas de pin TRIAC sur le routeur ; le second argument optionnel de `Load::remote()` ajoute une LED d'état permettant de visualiser son état localement
+- `loadPrioritiesAtStartup` définit l’ordre de priorité de **toutes** les charges : il liste les numéros des charges par ordre de priorité, la position *i* contenant la charge de priorité *i* (0 la plus haute)
+- passez les fils de toutes les sorties locales dans la sonde 2 (voir [Énergie routée](#énergie-routée-sonde-2))
 
 ## Configuration des sorties relais tout-ou-rien
 Les sorties relais tout-ou-rien permettent d’alimenter des appareils qui contiennent de l’électronique (pompe à chaleur …).
@@ -401,12 +494,13 @@ Jusqu'à **trois unités distantes** peuvent être pilotées, chacune étant un 
 
 ### Matériel requis
 
-**Pour l'émetteur (routeur principal) :**
+**Pour l'émetteur (routeur principal) :**
 - Module RFM69W/CW ou RFM69HW/HCW (868 MHz pour l'Europe, 915 MHz pour l'Amérique du Nord)
 - Antenne appropriée pour la fréquence choisie
-- Connexion SPI standard (D10=CS, D2=IRQ)
+- Connexion SPI standard (D10=CS, D2=IRQ, et D11 à D13)
+- sur `OLD_SEG`, l’afficheur 7 segments sans ses circuits d’économie de broches (`SEG`) utilise aussi D2 et D10 à D13 : la compilation refuse la RF avec lui
 
-**Pour chaque récepteur distant :**
+**Pour chaque récepteur distant :**
 - Arduino UNO ou compatible
 - Module RFM69 (même modèle que l'émetteur)
 - TRIAC ou SSR pour commander les charges
@@ -414,24 +508,24 @@ Jusqu'à **trois unités distantes** peuvent être pilotées, chacune étant un 
 
 ### Configuration logicielle
 
-**Activation des fonctionnalités RF :**
+**Activation des fonctionnalités RF :**
 
-Le module RF peut être utilisé pour deux fonctionnalités indépendantes :
+Le module RF peut être utilisé pour deux fonctionnalités indépendantes :
 
-1. **Télémétrie RF** (`RF_LOGGING_PRESENT`) : Envoi des données de puissance/tension vers une passerelle
-2. **Charges distantes** (`REMOTE_LOADS_PRESENT`) : Contrôle de charges via RF
+1. **Télémétrie RF** (`RF_LOGGING_PRESENT`) : Envoi des données de puissance/tension vers une passerelle
+2. **Charges distantes** (`REMOTE_LOADS_PRESENT`) : Contrôle de charges via RF
 
-La télémétrie RF s'active dans **config.h** :
+La télémétrie RF s'active dans **config.h** :
 
 ```cpp
 inline constexpr bool RF_LOGGING_PRESENT{ false };       // Télémétrie RF (optionnel)
 ```
 
-Le contrôle des charges distantes n'a pas d'interrupteur propre : dès que la table des charges contient au moins une entrée distante, `REMOTE_LOADS_PRESENT` devient vrai et le module RF est compilé.
+Le contrôle des charges distantes n'a pas d'interrupteur propre : dès que la table des charges contient au moins une entrée distante, `REMOTE_LOADS_PRESENT` devient vrai et le module RF est compilé.
 
-**Configuration des charges :**
+**Configuration des charges :**
 
-Déclarez le nombre total de charges, puis indiquez qui pilote chacune d'elles :
+Déclarez le nombre total de charges, puis indiquez qui pilote chacune d'elles :
 
 ```cpp
 inline constexpr uint8_t NO_OF_DUMPLOADS{ 4 };  // Total : 4 charges
@@ -444,7 +538,7 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
 };
 ```
 
-Le compilateur en déduit le reste :
+Le compilateur en déduit le reste :
 
 | Constante déduite | Valeur ici | Signification |
 |---|---|---|
@@ -452,9 +546,9 @@ Le compilateur en déduit le reste :
 | `NO_OF_REMOTE_UNITS` | 2 | numéro d'unité le plus élevé utilisé (3 au maximum) |
 | `REMOTE_LOADS_PRESENT` | `true` | au moins une entrée distante |
 
-Chaque unité distante reçoit un seul octet, **un bit par charge, dans l'ordre croissant de la table**. L'unité 1 ci-dessus reçoit donc le bit 0 pour la charge 1 et le bit 1 pour la charge 3 ; l'unité 2 reçoit le bit 0 pour la charge 2. Côté récepteur, `loadPins[0]` correspond au bit 0, `loadPins[1]` au bit 1, et ainsi de suite.
+Chaque unité distante reçoit un seul octet, **un bit par charge, dans l'ordre croissant de la table**. L'unité 1 ci-dessus reçoit donc le bit 0 pour la charge 1 et le bit 1 pour la charge 3 ; l'unité 2 reçoit le bit 0 pour la charge 2. Côté récepteur, `loadPins[0]` correspond au bit 0, `loadPins[1]` au bit 1, et ainsi de suite.
 
-**Priorités :**
+**Priorités :**
 
 Charges locales et distantes partagent une seule liste de priorités (un [groupe de rotation](#rotation-des-priorités) ne contient que des charges locales, ou les charges d’une seule unité distante). Il n'y a plus de règle imposant aux charges distantes d'être en dernier — `loadPrioritiesAtStartup` donne l'ordre, quel que soit le mélange :
 
@@ -462,15 +556,15 @@ Charges locales et distantes partagent une seule liste de priorités (un [groupe
 inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2, 3 };
 ```
 
-**Configuration RF (dans config_rf.h) :**
+**Configuration RF (dans config_rf.h) :**
 
-Les paramètres par défaut sont :
-- Fréquence : 868 MHz (Europe)
-- ID réseau : 210
-- ID routeur : 10
-- ID des unités distantes : 15, 16, 17
+Les paramètres par défaut sont :
+- Fréquence : 868 MHz (Europe)
+- ID réseau : 210
+- ID routeur : 10
+- ID des unités distantes : 15, 16, 17
 
-Pour modifier ces paramètres, éditez **config_rf.h** :
+Pour modifier ces paramètres, éditez **config_rf.h** :
 
 ```cpp
 inline constexpr uint8_t ROUTER_NODE_ID{ 10 };            // ID du routeur (cet appareil)
@@ -479,13 +573,13 @@ inline constexpr uint8_t REMOTE_NODE_ID[]{ 15, 16, 17 };  // Un ID par unité di
 inline constexpr uint8_t NETWORK_ID{ 210 };               // ID du réseau (1-255)
 ```
 
-`REMOTE_NODE_ID[0]` est l'adresse de l'unité 1, `REMOTE_NODE_ID[1]` celle de l'unité 2, etc. Ces ID doivent être compris entre 1 et 30, distincts entre eux et différents de `ROUTER_NODE_ID` ; le compilateur le vérifie.
+`REMOTE_NODE_ID[0]` est l'adresse de l'unité 1, `REMOTE_NODE_ID[1]` celle de l'unité 2, etc. Ces ID doivent être compris entre 1 et 30, distincts entre eux et différents de `ROUTER_NODE_ID` ; le compilateur le vérifie.
 
 ### Configuration du récepteur distant
 
-Le sketch **RemoteLoadReceiver** est fourni dans le dossier `RemoteLoadReceiver/`. Il n'a besoin d'aucune modification pour gérer plusieurs unités : compilez-le et téléversez-le une fois par unité, en ne changeant que `REMOTE_NODE_ID` et la liste des charges.
+Le sketch **RemoteLoadReceiver** est dans le dossier `RemoteLoadReceiver/` de [PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase/tree/main/RemoteLoadReceiver) : le routeur monophasé envoie les mêmes trames. Il n’a besoin d'aucune modification pour gérer plusieurs unités : compilez-le et téléversez-le une fois par unité, en ne changeant que `REMOTE_NODE_ID` et la liste des charges.
 
-**Configuration minimale (dans config_rf.h du récepteur) :**
+**Configuration minimale (dans config_rf.h du récepteur) :**
 
 ```cpp
 // Configuration RF - doit correspondre au routeur
@@ -503,20 +597,20 @@ inline constexpr uint8_t RED_LED_PIN{ 7 };          // LED rouge : perte liaison
 inline constexpr bool STATUS_LEDS_PRESENT{ true };  // Activer les LEDs
 ```
 
-**Sécurité :**
+**Sécurité :**
 
 Le récepteur désactive automatiquement **toutes les charges** si aucun message n'est reçu pendant plus de 500 ms. Cela garantit la sécurité en cas de perte de liaison RF.
 
-**Test de la liaison :**
+**Test de la liaison :**
 
-Une fois configurés et téléversés, le routeur et ses unités communiquent automatiquement :
+Une fois configurés et téléversés, le routeur et ses unités communiquent automatiquement :
 - Le routeur envoie l'état d'une unité dès qu'il change, et le rafraîchit sinon tous les 5 cycles secteur (~100 ms à 50 Hz) afin qu'un récepteur ayant manqué une trame, ou allumé tardivement, se remette à jour
-- Chaque unité est adressée séparément : un changement ne concernant que l'unité 2 ne génère aucun trafic vers l'unité 1
+- Chaque unité est adressée séparément : un changement ne concernant que l'unité 2 ne génère aucun trafic vers l'unité 1
 - Le récepteur affiche les commandes reçues sur le port série
 - La LED verte clignote à 1 Hz (système actif)
 - La LED rouge clignote rapidement si la liaison RF est perdue
 
-**Diagnostic :**
+**Diagnostic :**
 
 Sur le moniteur série du récepteur, vous devriez voir :
 ```
@@ -545,8 +639,10 @@ inline constexpr uint8_t watchDogPin{ 9 };
 Il est possible de brancher un ou plusieurs capteurs de température Dallas DS18B20.
 Ces capteurs peuvent servir à des fins informatives ou pour contrôler le mode boost.
 
-- **Nouvelle carte** (`PcbVersion::NEW`) : le bus des sondes est sur `D3`, câblé avec son pull-up sur la carte. Branchez les sondes sur le connecteur de température de la carte ; avec le module mk2Wifi, mettez le cavalier `TEMP` en position routeur (voir [Cavalier `TEMP`](#cavalier-temp)).
-- **Ancienne carte** (`PcbVersion::OLD`) : rien n’est câblé. Choisissez une pin libre, ajoutez un pull-up de 4,7 kΩ entre la ligne de données et le +5 V, et alimentez les sondes (+5 V, GND).
+- **Nouvelle carte** (`PcbVersion::NEW`) : le bus des sondes est sur `D3`, câblé avec son pull-up sur la carte. Branchez les sondes sur le connecteur de température de la carte ; avec le module mk2Wifi, mettez le cavalier `TEMP` en position routeur (voir [Cavalier `TEMP`](#cavalier-temp)).
+- **Anciennes cartes** (`PcbVersion::OLD_SEG`, `PcbVersion::OLD_OLED`) : choisissez une pin numérique libre, ajoutez un pull-up de 4,7 kΩ entre la ligne de données et le +5 V, et alimentez les sondes (+5 V, GND).
+
+Chaque créneau 1-Wire coupe les interruptions jusqu’à ~65 µs ; l’interruption de l’ADC tient encore son échéance après un tel retard, même avec l’afficheur 7 segments rafraîchi depuis elle (vérifié dans le simulateur de réseau, `check-new-temp` et `check-seg-temp`).
 
 ### Activation de la fonctionnalité
 
@@ -573,7 +669,7 @@ inline constexpr TemperatureSensing temperatureSensing{ 3,
                                                         { { 0x28, 0xBE, 0x41, 0x6B, 0x09, 0x00, 0x00, 0xA4 },
                                                           { 0x28, 0x1B, 0xD7, 0x6A, 0x09, 0x00, 0x00, 0xB7 } } };
 ```
-Le premier paramètre, *3*, est la pin du bus *OneWire* : `D3` sur la nouvelle carte, la pin choisie sur l’ancienne.
+Le premier paramètre, *3*, est la pin du bus *OneWire* : `D3` sur la nouvelle carte, la pin choisie sur l’ancienne.
 
 ___
 > [!NOTE]
@@ -738,7 +834,7 @@ Les charges locales et les relais s’affichent par leur broche (D5, D4), dans l
 | Aucun boost | `inline constexpr ScheduledBoosts scheduledBoosts{};` |
 
 ## Rotation des priorités
-La rotation des priorités est utile lors de l’alimentation d’un chauffe-eau triphasé.
+La rotation des priorités est utile avec un chauffe-eau à plusieurs résistances, chacune sur sa propre sortie.
 Elle permet d’équilibrer la durée de fonctionnement des différentes résistances sur une période prolongée.
 
 Mais elle peut aussi être intéressante si on veut permuter les priorités de deux appareils chaque jour (deux chauffe-eau…) : on en fait un groupe de deux charges.
@@ -764,12 +860,12 @@ La pin fonctionne de la même façon avec ou sans double tarif.
 ```cpp
 inline constexpr RotationGroups rotationGroups{ { ALL_LOCAL_LOADS() } };
 ```
-Chaque groupe tourne entre les places de priorité que ses charges occupent au démarrage ; les charges hors groupe ne bougent jamais. Avec deux chauffe-eau triphasés et des priorités entrelacées :
+Chaque groupe tourne entre les places de priorité que ses charges occupent au démarrage ; les charges hors groupe ne bougent jamais. Avec deux chauffe-eau à deux résistances chacun, et des priorités entrelacées :
 ```cpp
-inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 3, 1, 4, 2, 5 };
-inline constexpr RotationGroups rotationGroups{ { LOAD(0), LOAD(1), LOAD(2) }, { LOAD(3), LOAD(4), LOAD(5) } };
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 2, 1, 3 };
+inline constexpr RotationGroups rotationGroups{ { LOAD(0), LOAD(1) }, { LOAD(2), LOAD(3) } };
 ```
-une rotation transforme `0, 3, 1, 4, 2, 5` en `2, 5, 0, 3, 1, 4` : chaque chauffe-eau fait passer son dernier élément en tête, et chacun garde les mêmes places.
+une rotation transforme `0, 2, 1, 3` en `1, 3, 0, 2` : chaque chauffe-eau fait passer son dernier élément en tête, et chacun garde les mêmes places.
 
 Les règles, vérifiées à la compilation :
 - un groupe compte au moins 2 charges ;
@@ -960,12 +1056,15 @@ Une valeur négative obligera le routeur à consommer cette puissance depuis le 
 
 # Configuration avec le module mk2Wifi
 
-Le module **mk2Wifi** relie un **ESP32-C6** (WiFi 6, Bluetooth LE, Zigbee, Thread) au Mk2PVRouter, pour la supervision et le contrôle à distance depuis Home Assistant via ESPHome. Il se branche sur les connecteurs `UART_EXT` et `TRIG_EXT` de la carte mère et remplace l’ancienne carte d’extension ESP32.
+Le module **mk2Wifi** relie un **ESP32-C6** (WiFi 6, Bluetooth LE, Zigbee, Thread) au Mk2PVRouter, pour la supervision et le contrôle à distance depuis Home Assistant via ESPHome. Il se branche sur les connecteurs `UART_EXT` et `TRIG_EXT` de la carte mère universelle (`PcbVersion::NEW`) et remplace l’ancienne carte d’extension ESP32.
+
+> [!NOTE]
+> La configuration ESPHome n’a pas encore de capteurs pour la puissance et l’énergie routées (`D` et `E`) : le module ignore ces lignes de la trame jusqu’à l’arrivée des paquets monophasés.
 
 Le matériel, son installation et le dépannage sont documentés sur les [pages mk2Wifi](https://fredm67.github.io/Mk2PVRouter/mk2wifi/presentation-mk2wifi/), et la configuration ESPHome dans [ce gist](https://gist.github.com/FredM67/986e1cb0fc020fa6324ccc151006af99). Cette section ne traite que du côté routeur.
 
 > [!TIP]
-> Le [configurateur](https://fredm67.github.io/Mk2PVRouter/configurateur/) écrit ensemble le `config.h` du routeur et le YAML ESPHome correspondant, et liste les ponts de soudure à fermer. Ses commandes sont sûres en cas de défaut : le module ne tire une entrée du routeur à l’état bas que pour l’état non par défaut, si bien qu’un fil coupé ou un module qui redémarre laisse le routeur router, sans marche forcée.
+> Les commandes du module sont sûres en cas de défaut : le module ne tire une entrée du routeur à l’état bas que pour l’état non par défaut, si bien qu’un fil coupé ou un module qui redémarre laisse le routeur router, sans marche forcée.
 
 > [!CAUTION]
 > Ne branchez jamais l’USB-C du module lorsqu’il est enfiché sur la carte mère : les deux alimentations 5 V ne sont pas isolées.
@@ -1057,3 +1156,7 @@ Le [gist](https://gist.github.com/FredM67/986e1cb0fc020fa6324ccc151006af99) déc
 
 # Contribuer
 Les contributions sont les bienvenues ! Veuillez soumettre des problèmes, des demandes de fonctionnalités et des pull requests via GitHub.
+
+# Licence
+
+GPL-3.0-or-later, voir [LICENSE](../LICENSE). [NOTICE](../NOTICE) détaille l’origine du code : ce firmware dérive du firmware triphasé et des sketches monophasés Mk2PVRouter de Robin Emley, qu’il a publiés sans mention de licence. Les fichiers qui contiennent vos réglages (`config.h`, `config_system.h`, `config_rf.h`, `calibration.h`) sont à vous : utilisez-les, modifiez-les et partagez-les aux conditions que vous voulez.

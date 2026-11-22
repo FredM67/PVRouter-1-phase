@@ -86,7 +86,7 @@ volatile bool flags[6];                             // 6 bytes
 
 ### ADC Processing Performance
 
-**Test Setup**: Arduino Uno, 16MHz, standard 3-phase configuration
+**Test Setup**: Arduino Uno, 16MHz, standard 3-phase configuration (these figures come from the 3-phase firmware; for this one, the grid simulator enforces a longest ISR call of 560 cycles and an ADMUX written at most 1620 cycles after its conversion started, `sim/scenarios/common.scn`)
 **Measurement Method**: grid simulator (simavr), cycle-exact; see [ADC Interrupt Service Routine](#adc-interrupt-service-routine-isr)
 
 | Metric | Value | Unit | Notes |

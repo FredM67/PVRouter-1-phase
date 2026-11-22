@@ -5,7 +5,7 @@
  * @brief A photovoltaic energy diverter.
  * @date 2026-11-21
  *
- * @mainpage A 3-phase photovoltaic router/diverter
+ * @mainpage A single-phase photovoltaic router/diverter
  *
  * @section description Description
  * Mk2_1phase_RFdatalog_temp.ino - Arduino program that maximizes the use of home photovoltaic production
@@ -13,6 +13,18 @@
  * In the absence of such a system, surplus energy flows away to the grid and is of no benefit to the PV-owner.
  *
  * @section history History
+ *
+ * __November 2026: the single-phase firmware, Mk2_1phase_RFdatalog_temp:__
+ * - derived from the 3-phase firmware, Mk2_3phase_RFdatalog_temp, with every feature and setting
+ *   of it that applies to one phase (the history below, from "November 2026: changes", is that of
+ *   the 3-phase firmware)
+ * - Robin Emley's fasterControl core of Mk2_fasterControl_twoLoads_5: prediction at the start of
+ *   the negative half cycle, decision at its 4th sample set, loads switched at the next cycle
+ * - three boards: OLD_SEG (Robin's Mk2 board), OLD_OLED and NEW (the universal board)
+ * - diverted energy measured on CT2, on every serial output and on the display
+ * - 7-segment display (with or without its pin-saving chips) and OLED display
+ * - CT1 filter of the old boards, in fixed point
+ * - native tests, compile-time checks and grid simulator scenarios of the three boards
  *
  * __November 2026: changes:__
  * - no floating-point code left: integer datalog arithmetic, with a square root in assembly
@@ -109,7 +121,7 @@
  * - added support of temperature sensors (virtually no limit of sensors count)
  * - added support for emonESP (see https://github.com/openenergymonitor/EmonESP)
  *
- * __April 2021, renamed as Mk2_1phase_RFdatalog_temp with these changes:__
+ * __April 2021, renamed as Mk2_3phase_RFdatalog_temp with these changes:__
  * - since this sketch is under source control, no need to write the version in the name
  * - rename function 'checkLoadPrioritySelection' to function's job
  * - made forcePin presence configurable
@@ -317,6 +329,6 @@
  */
 
 static_assert(__cplusplus >= 201703L, "**** Please define 'gnu++17' in 'platform.txt' ! ****");
-static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVRouter-3-phase/blob/main/Mk2_1phase_RFdatalog_temp/Readme.md");
+static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVRouter-1-phase/blob/main/Mk2_1phase_RFdatalog_temp/Readme.md");
 
 // The active code can be found in the other cpp/h files

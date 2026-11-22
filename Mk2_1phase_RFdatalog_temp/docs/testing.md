@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
 
 #### Required Equipment
 - **Arduino Uno/ESP32** - Target microcontroller
-- **3-Phase Test Bench** - Controlled AC voltage/current source
+- **Single-Phase Test Bench** - Controlled AC voltage/current source
 - **Oscilloscope** - 4+ channel, 100MHz+ bandwidth
 - **Power Analyzer** - Calibrated reference instrument
 - **Multimeter** - True RMS capability
@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 
 #### Test Bench Configuration
 ```
-AC Source (3-phase) → Current Transformers → PVRouter PCB
+AC Source (single-phase) → CT1 and CT2 → PVRouter PCB
                   ↓
               Oscilloscope
                   ↓

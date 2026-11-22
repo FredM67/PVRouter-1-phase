@@ -169,7 +169,7 @@ A relay's contacts follow its pin at once. The firmware decides on the grid powe
 
 ### In CI
 
-The scenarios are spread over parallel jobs. `ci_targets.sh` gives the make targets of a job, from the scenarios it finds: job k of n takes every n-th scenario, starting from the k-th. A grid scenario runs on all its boards in the same job (`OLD_SEG`, `OLD_OLED`, `NEW`, `NEW` with 20 A CTs, `OLD_SEG` at 60 Hz, `NEW` with temperature sensing), which then compares them.
+The scenarios are spread over parallel jobs. `ci_targets.sh` gives the make targets of a job, from the scenarios it finds: job k of n takes every n-th scenario, starting from the k-th. A grid scenario runs on all its boards in the same job (`OLD_SEG`, `OLD_OLED`, `NEW`, `NEW` with 20 A CTs, `OLD_SEG` at 60 Hz, `NEW` with temperature sensing, `OLD_SEG` with the 7-segment display and temperature sensing), which then compares them. The workflow (`.github/workflows/build.yml`, job `grid-sim`) builds each of these firmwares as above, with `git apply --unidiff-zero` for the patches.
 
 ```bash
 sim/ci_targets.sh grid 1/3      # check-clouds check-old-oled-clouds check-new-clouds check-new20-clouds check-60hz-clouds ...
@@ -219,7 +219,7 @@ Plain text, one command per line, `#` starts a comment.
 | `expect admux_delay_max <cycles>` | ... nor later than this (the deadline is 1664) |
 | `expect clipped <n>` | at most n samples beyond the ADC's range |
 
-`scenarios/common.scn` describes the installation of the default `config.h` (three local loads on D5-D7, override pin D4) and the timing expected on every run (no misfiled sample, ADMUX written 128 cycles or more after its conversion started, no ISR overrun, no clipped sample), with margins enforced: the longest ISR call and the latest ADMUX write must stay a little above the worst measured on the builds that run them (`isr_max`, `admux_delay_max`), so that a change eating the headroom fails before samples are lost; the other scenarios include it. `scenarios/rf/common.scn` and `scenarios/relays/common.scn` do the same for the remote-loads and relay configurations. The relay and RF scenarios are those of the 3-phase router, every power halved (relay thresholds included) to stay within the range of one CT.
+`scenarios/common.scn` describes the installation of the default `config.h` (three local loads on D5-D7, override pin D4) and the timing expected on every run (no misfiled sample, ADMUX written 128 cycles or more after its conversion started, no ISR overrun, no clipped sample), with margins enforced: the longest ISR call and the latest ADMUX write must stay a little above the worst measured on the builds that run them (`isr_max`, `admux_delay_max`), so that a change eating the headroom fails before samples are lost; the other scenarios include it. The ADMUX margin of the grid scenarios, 1620 cycles, leaves room for the ordinary shifts of the 1-Wire time slots against the ADC phase in the temperature builds: a failure between 1620 and the 1664-cycle deadline, with `misfiled_samples` 0, is a margin warning, not a lost sample. `scenarios/rf/common.scn` and `scenarios/relays/common.scn` do the same for the remote-loads and relay configurations. The relay and RF scenarios are those of the 3-phase router, every power halved (relay thresholds included) to stay within the range of one CT.
 
 The firmware's datalog starts about 11 s after power-up (banner, then the start-up period), and reports every 5 s: a diverted energy is only seen once a line follows it. When the surplus comes, the energy bucket first fills up to half its 3600 J (exported, 0.5 Wh), and it empties when the surplus goes: the diverted energy is the surplus × time less the export target, within those half-bucket transients.
 
@@ -231,6 +231,9 @@ The firmware's datalog starts about 11 s after power-up (banner, then the start-
 - **Ideal signals**: pure sine waves, no ADC noise, no CT phase error or high-pass behaviour (which the CT1 filter of the old boards offsets), no harmonics.
 - **Power stage**: an ideal zero-crossing triac driver, resistive loads; relays switch at once, with no bounce.
 - **Timing**: simavr executes the real instructions with their datasheet cycle counts; peripherals are modelled, not exact.
+- **ADC reference**: the board file's `avcc` cancels out (the simulator turns the counts it wants into millivolts on the reference the firmware selected, which the ADC turns back into the same counts), so a firmware that selects the wrong reference still reads the right counts: the simulator cannot catch it. The native tests of `adc_chain.h` check the ADMUX of each board.
+- **ADC pipeline**: the depth of the ADMUX pipeline (written for the conversion after next) is only checked through behaviour: a wrong depth files samples under the wrong channel (`misfiled_samples`) and breaks the regulation.
+- **Diverted energy bands**: the firmware counts whole Wh and `expect diverted_wh` floors both ends of its band, so a whole-run band is effectively about ±9 % around its middle on these short scenarios, wider than the ±5 % it is written with.
 
 ## simavr ADC fix
 

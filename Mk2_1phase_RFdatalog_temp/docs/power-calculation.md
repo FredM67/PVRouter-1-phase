@@ -4,7 +4,7 @@ This document details the algorithms and mathematical foundations used for real 
 
 ## Overview
 
-The PVRouter implements a sophisticated real power measurement system that accurately calculates instantaneous and average power across three phases of an AC electrical system. The engine is designed for high accuracy, real-time operation, and minimal computational overhead.
+The PVRouter implements a sophisticated real power measurement system that accurately calculates instantaneous and average power of a single-phase AC installation: at the grid connection (CT1), which the router regulates, and to the local loads (CT2), the diverted power. The engine is designed for high accuracy, real-time operation, and minimal computational overhead.
 
 ## Mathematical Foundation
 
@@ -40,16 +40,16 @@ Where:
 constexpr uint16_t SAMPLES_PER_MAIN_CYCLE = 50;
 constexpr uint32_t SAMPLE_RATE = SAMPLES_PER_MAIN_CYCLE * MAINS_FREQUENCY; // 2.5 kHz
 
-// For 3-phase system with V+I per phase:
-constexpr uint32_t ADC_RATE = SAMPLE_RATE * NO_OF_PHASES * 2; // 15 kHz
+// In the firmware: the ADC runs free at 9.6 kHz (13 ADC clocks at 16 MHz / 128) over three
+// channels, V, CT1 and CT2: 3.2 kHz each, 64 sample sets per mains cycle at 50 Hz.
 ```
 
 ### Channel Sequencing
 The ADC samples channels in a specific sequence to maintain phase relationships:
 
 ```
-Sample Sequence: V1 → I1 → V2 → I2 → V3 → I3 → [repeat]
-Timing:         0μs  17μs  33μs  50μs  67μs  83μs
+Sample Sequence: V → I1 (CT1) → I2 (CT2) → [repeat]
+Timing:         0μs  104μs     208μs
 ```
 
 ## Signal Processing Pipeline
@@ -86,27 +86,11 @@ sumOfInstantaneousPowers += instantaneousPower;
 sampleCount++;
 ```
 
-## Multi-Phase Power Summation
+## Grid and Diverted Power
 
-### Three-Phase Total Power
-```cpp
-// Calculate power for each phase
-for (uint8_t phase = 0; phase < NO_OF_PHASES; ++phase) {
-  long phasePower = voltageV[phase] * currentI[phase];
-  instantPower[phase] = phasePower;
-}
-
-// Sum all phases for total power
-long totalInstantaneousPower = instantPower[0] + instantPower[1] + instantPower[2];
-```
-
-### Phase Balance Monitoring
-```cpp
-// Calculate power balance between phases
-long maxPhasePower = max({instantPower[0], instantPower[1], instantPower[2]});
-long minPhasePower = min({instantPower[0], instantPower[1], instantPower[2]});
-long phaseImbalance = maxPhasePower - minPhasePower;
-```
+The same voltage sample multiplies both currents:
+- **CT1, at the grid connection**: its power, cycle after cycle, fills or empties the energy bucket the loads are decided on (fasterControl: predicted at the first sample set of the negative half cycle, decided at its index 3). On the old boards, the CT1 sample first goes through the CT1 filter (`ct_filter.h`).
+- **CT2, on the wires of every local output**: its power per mains cycle is the diverted power; cycles above the anti-creep limit (`ANTI_CREEP_LIMIT`, in W) are added to the diverted energy, in Wh (`diverted_energy.h`), except while a load is forced.
 
 ## Advanced Power Calculations
 

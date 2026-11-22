@@ -1,7 +1,7 @@
 /**
  * @file main.cpp
  * @author Frédéric Metrich (frederic.metrich@live.fr)
- * @brief Main code for the PVRouter 3-phase project.
+ * @brief Main code for the PVRouter single-phase project.
  *
  * This file contains the main logic for the PVRouter, including the setup and loop functions,
  * as well as interrupt service routines (ISRs) and utility functions for managing load priorities,
@@ -23,7 +23,7 @@
  */
 
 static_assert(__cplusplus >= 201703L, "**** Please define 'gnu++17' in 'platform.txt' ! ****");
-static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVRouter-3-phase/blob/main/Mk2_1phase_RFdatalog_temp/Readme.md");
+static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVRouter-1-phase/blob/main/Mk2_1phase_RFdatalog_temp/Readme.md");
 
 #include <Arduino.h>  // may not be needed, but it's probably a good idea to include this
 

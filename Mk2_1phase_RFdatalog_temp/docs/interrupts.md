@@ -38,18 +38,18 @@ ISR(ADC_vect) {
 |-----------|--------|-------|
 | **ADC Conversion Time** | 104μs | 13 ADC clocks at 125kHz, free-running |
 | **ISR Execution Time** | ~22μs average, ~66μs longest | Must end within one conversion (104μs), see [performance.md](performance.md) |
-| **Sample Rate** | 9.6 kHz | 6 channels × 1.6 kHz each |
-| **Cycle Period** | 104μs | 1 sample per interrupt; 6 interrupts (625μs) per set of V and I samples |
+| **Sample Rate** | 9.6 kHz | 3 channels (V, CT1, CT2) × 3.2 kHz each |
+| **Cycle Period** | 104μs | 1 sample per interrupt; 3 interrupts (~312μs) per sample set |
 
 ## Sample Processing Pipeline
 
 ### Phase 1: ADC Sample Acquisition
 ```
 ADC Channel Sequence:
-V1 → I1 → V2 → I2 → V3 → I3 → [repeat]
+V → I1 (CT1, grid) → I2 (CT2, diverted) → [repeat]
 ```
 
-Each channel is sampled in round-robin fashion to maintain phase relationships.
+Each channel is sampled in round-robin fashion to maintain phase relationships. The ADC runs free: the ADMUX written in the interrupt applies to the conversion after next (`adc_chain.h`). The ISR durations of the table above were measured on the 3-phase firmware; for this one, the grid simulator enforces a longest call of 560 cycles and an ADMUX written at most 1620 cycles after its conversion started (`sim/scenarios/common.scn`).
 
 ### Phase 2: Signal Conditioning
 ```cpp

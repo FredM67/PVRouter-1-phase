@@ -37,7 +37,7 @@ static_assert(AdcChain::BIT_REFS1 == REFS1 && AdcChain::BIT_REFS0 == REFS0 && Ad
 constexpr uint16_t i_DCoffset_V_nom{ 511U << 6 }; /**< nominal mid-point value of ADC @ x64 scale */
 uint16_t i_DCoffset_V[NO_OF_PHASES]{};            /**< <--- for LPF */
 
-/**< main energy bucket for 3-phase use, with units of Joules * SUPPLY_FREQUENCY * 2^Energy::FRACTION_BITS */
+/**< main energy bucket, with units of Joules * SUPPLY_FREQUENCY * 2^Energy::FRACTION_BITS */
 constexpr int32_t l_capacityOfEnergyBucket_main{ Energy::fromWatts(WORKING_ZONE_IN_JOULES * SUPPLY_FREQUENCY) };
 /**< for resetting flexible thresholds */
 constexpr int32_t l_midPointOfEnergyBucket_main{ l_capacityOfEnergyBucket_main / 2 };
