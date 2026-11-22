@@ -88,7 +88,7 @@ inline static constexpr size_t lineSize(size_t tagLen, size_t valueLen)
  * - 1 line for the "TA" tag (1 digit) - tariff state (0=high/on-peak, 1=low/off-peak).
  *
  * - 1 line for the "S_MC" tag (unsigned 2 digits) - sample sets per mains cycle.
- * - 1 line for the "S" tag (unsigned 5 digits) - sample count.
+ * - 1 line for the "S" tag (unsigned 5 digits, 6 for datalog periods beyond 19 s) - sample count.
  * - 1 byte for the end-of-text (ETX) character.
  *
  * @ingroup Telemetry
@@ -133,8 +133,8 @@ inline static constexpr size_t calcBufferSize()
     size += lineSize(2, 1);  // TA (1 digit) - tariff state (0=high/on-peak, 1=low/off-peak)
   }
 
-  size += lineSize(4, 2);  // S_MC (unsigned 2 digits) - sample sets per mains cycle
-  size += lineSize(1, 5);  // S (unsigned 5 digits) - sample count
+  size += lineSize(4, 2);                                     // S_MC (unsigned 2 digits) - sample sets per mains cycle
+  size += lineSize(1, sizeof(SampleSetCounter) > 2 ? 6 : 5);  // S (unsigned 5 digits, 6 beyond 19 s) - sample count
 
   size += 1;  // ETX
 
@@ -220,10 +220,11 @@ private:
    * @brief Writes a whole line: line feed, tag, value, checksum and carriage return.
    * @param tag The tag associated with the value.
    * @param index Appended to the tag if not 0.
-   * @param magnitude The magnitude of the value.
+   * @param magnitude The magnitude of the value: 16 bits, or 32 bits for the sample count.
    * @param negative Whether the value is negative.
    */
-  void writeLine(const char* tag, uint8_t index, uint16_t magnitude, bool negative)
+  template< typename Magnitude >
+  void writeLine(const char* tag, uint8_t index, Magnitude magnitude, bool negative)
   {
     buffer[bufferPos++] = LF;
 
@@ -234,7 +235,15 @@ private:
     {
       buffer[bufferPos++] = '-';
     }
-    auto str = utoa(magnitude, buffer + bufferPos, 10);
+    char* str;
+    if constexpr (sizeof(Magnitude) > 2)
+    {
+      str = ultoa(magnitude, buffer + bufferPos, 10);
+    }
+    else
+    {
+      str = utoa(magnitude, buffer + bufferPos, 10);
+    }
     bufferPos += strlen(str);  // Advance bufferPos by the length of the written string
     buffer[bufferPos++] = TAB;
 
@@ -269,11 +278,20 @@ public:
   /**
    * @brief Sends a telemetry value as an unsigned integer (above 32767, send() would wrap).
    * @param tag The tag associated with the value.
-   * @param value The unsigned value to send.
+   * @param value The unsigned value to send: 16 bits, or 32 bits (the sample count beyond 19 s).
    */
-  void sendUnsigned(const char* tag, uint16_t value)
+  template< typename Unsigned >
+  void sendUnsigned(const char* tag, Unsigned value)
   {
-    writeLine(tag, 0, value, false);
+    static_assert(sizeof(Unsigned) <= 4, "at most 32 bits");
+    if constexpr (sizeof(Unsigned) > 2)
+    {
+      writeLine(tag, 0, static_cast< uint32_t >(value), false);
+    }
+    else
+    {
+      writeLine(tag, 0, static_cast< uint16_t >(value), false);
+    }
   }
 
   /**

@@ -42,22 +42,12 @@ constexpr int32_t l_midPointOfEnergyBucket_main{ l_capacityOfEnergyBucket_main /
 /**< threshold in anti-flicker mode - must not exceed 0.4 */
 constexpr float f_offsetOfEnergyThresholdsInAFmode{ 0.1F };
 
-// Expected number of sample sets per mains cycle. One ADC conversion takes 13 ADC clocks
-// at F_CPU / 128 (104 us at 16 MHz); a sample set is one conversion of each channel: V, CT1, CT2.
-constexpr uint8_t ADC_CLOCKS_PER_CONVERSION{ 13 };
-constexpr uint8_t ADC_PRESCALER{ 128 };
-constexpr uint32_t SAMPLE_SET_PERIOD_US{ 1UL * AdcChain::NO_OF_CHANNELS * ADC_CLOCKS_PER_CONVERSION * ADC_PRESCALER / (F_CPU / 1000000UL) }; /**< 312 us */
-constexpr uint8_t SAMPLE_SETS_PER_CYCLE{ 1000000UL / (SUPPLY_FREQUENCY * SAMPLE_SET_PERIOD_US) };                                            /**< 64 at 50 Hz, 53 at 60 Hz */
-constexpr uint8_t SAMPLE_SETS_MARGIN{ 4 };                                                                                                   /**< covers crossing jitter and frequency drift */
-constexpr uint8_t N_MIN{ SAMPLE_SETS_PER_CYCLE - SAMPLE_SETS_MARGIN };
-constexpr uint8_t N_MAX{ SAMPLE_SETS_PER_CYCLE + SAMPLE_SETS_MARGIN };
-
-// The sums of a datalog period cannot wrap, whatever DATALOG_PERIOD_IN_SECONDS: at most N_MAX
-// sample sets per mains cycle, each adding at most 2^18 (|V_ADC x I_ADC| or V_ADC^2, x1 scale).
-constexpr uint32_t MAX_SAMPLE_SETS_PER_DATALOG{ static_cast< uint32_t >(DATALOG_PERIOD_IN_MAINS_CYCLES) * N_MAX };
+// The sums of a datalog period cannot wrap, whatever DATALOG_PERIOD_IN_SECONDS (40 s at most,
+// validation.h): at most N_MAX sample sets per mains cycle (config_derived.h), each adding at
+// most 2^18 (|V_ADC x I_ADC| or V_ADC^2, x1 scale).
 constexpr uint64_t FULL_SCALE_PER_SAMPLE{ 1UL << 18 };
-// the sample sets, the divisor of the datalog power and voltage: 16 bits (19 s at most)
-static_assert(MAX_SAMPLE_SETS_PER_DATALOG <= UINT16_MAX, "******** DATALOG_PERIOD_IN_SECONDS too long: the sample sets of one datalog period must fit in 16 bits (19 s at most with 3 conversions per sample set) ! ********");
+// the sample sets, the divisor of the datalog power and voltage: 16 or 32 bits, as needed
+static_assert(static_cast< SampleSetCounter >(MAX_SAMPLE_SETS_PER_DATALOG) == MAX_SAMPLE_SETS_PER_DATALOG, "******** The counter of the sample sets of a datalog period is too narrow ! ********");
 // the power: 64 bits, summed once per mains cycle
 static_assert(MAX_SAMPLE_SETS_PER_DATALOG * FULL_SCALE_PER_SAMPLE <= static_cast< uint64_t >(INT64_MAX), "the datalog power would overflow");
 // V^2: 32 bits, scaled down by 16 when the period needs it
@@ -120,9 +110,9 @@ uint32_t l_filterDC_V[NO_OF_PHASES]{};    /**< for the LPF which determines DC o
 int64_t l_sumP_atSupplyPoint[NO_OF_PHASES]{}; /**< for summation of 'real power' values during datalog period, once per mains cycle */
 uint32_t l_sum_Vsquared[NO_OF_PHASES]{};      /**< for summation of V^2 values during datalog period */
 
-uint8_t n_samplesDuringThisMainsCycle[NO_OF_PHASES]{}; /**< number of sample sets for each phase during each mains cycle */
-uint8_t n_samplesDuringNegativeHalf{ 0 };              /**< sample sets of the negative half cycle so far (phase 0), up to DECISION_SAMPLE + 1 */
-uint16_t i_sampleSetsDuringThisDatalogPeriod{ 0 };     /**< number of sample sets during each datalogging period */
+uint8_t n_samplesDuringThisMainsCycle[NO_OF_PHASES]{};     /**< number of sample sets for each phase during each mains cycle */
+uint8_t n_samplesDuringNegativeHalf{ 0 };                  /**< sample sets of the negative half cycle so far (phase 0), up to DECISION_SAMPLE + 1 */
+SampleSetCounter i_sampleSetsDuringThisDatalogPeriod{ 0 }; /**< number of sample sets during each datalogging period */
 
 remove_cv< remove_reference< decltype(DATALOG_PERIOD_IN_MAINS_CYCLES) >::type >::type n_cycleCountForDatalogging{ 0 }; /**< for counting how often datalog is updated */
 

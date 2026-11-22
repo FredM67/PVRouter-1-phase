@@ -12,6 +12,7 @@
  *          settings; here come the values derived from them and the objects built from them:
  *          - the calibration of the board (calibration.h): f_powerCal, f_voltageCal and the CT1
  *            filter of PCB_VERSION, in the per-phase arrays the code uses (one phase);
+ *          - the sample sets per mains cycle, and the counter of those of a datalog period;
  *          - the number of remote loads and units, from the load map;
  *          - remoteLoads, the remote-load controller, which holds the transmission state;
  *          - relayDiverter, the relay engine, from relays;
@@ -56,6 +57,27 @@ inline constexpr float f_powerCalDiverted{ NEW_BOARD_CALIBRATION ? f_powerCalPer
 /** the CT1 filter of the board */
 inline constexpr float lpf_gain{ NEW_BOARD_CALIBRATION ? lpf_gainNewBoard : lpf_gainOldBoard };
 inline constexpr float alpha{ NEW_BOARD_CALIBRATION ? alphaNewBoard : alphaOldBoard };
+
+//--------------------------------------------------------------------------------------------------
+// From the sampling: 3 conversions per sample set (adc_chain.h), and the datalog period
+//
+#include "adc_chain.h"
+#include "sample_sets.h"
+
+// Expected number of sample sets per mains cycle. One ADC conversion takes 13 ADC clocks
+// at F_CPU / 128 (104 us at 16 MHz); a sample set is one conversion of each channel: V, CT1, CT2.
+inline constexpr uint8_t ADC_CLOCKS_PER_CONVERSION{ 13 };
+inline constexpr uint8_t ADC_PRESCALER{ 128 };
+inline constexpr uint32_t SAMPLE_SET_PERIOD_US{ 1UL * AdcChain::NO_OF_CHANNELS * ADC_CLOCKS_PER_CONVERSION * ADC_PRESCALER / (F_CPU / 1000000UL) }; /**< 312 us */
+inline constexpr uint8_t SAMPLE_SETS_PER_CYCLE{ 1000000UL / (SUPPLY_FREQUENCY * SAMPLE_SET_PERIOD_US) };                                            /**< 64 at 50 Hz, 53 at 60 Hz */
+inline constexpr uint8_t SAMPLE_SETS_MARGIN{ 4 };                                                                                                   /**< covers crossing jitter and frequency drift */
+inline constexpr uint8_t N_MIN{ SAMPLE_SETS_PER_CYCLE - SAMPLE_SETS_MARGIN };
+inline constexpr uint8_t N_MAX{ SAMPLE_SETS_PER_CYCLE + SAMPLE_SETS_MARGIN };
+
+/** the most sample sets in a datalog period */
+inline constexpr uint32_t MAX_SAMPLE_SETS_PER_DATALOG{ SampleSets::maxPerDatalog(DATALOG_PERIOD_IN_MAINS_CYCLES, N_MAX) };
+/** their counter: 16 bits up to 19 s, 32 bits above */
+using SampleSetCounter = SampleSets::Counter< MAX_SAMPLE_SETS_PER_DATALOG >;
 
 //--------------------------------------------------------------------------------------------------
 // From the load map

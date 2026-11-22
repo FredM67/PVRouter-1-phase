@@ -376,7 +376,7 @@ void updatePowerAndVoltageData()
   static constexpr auto powerCal PROGMEM{ Datalog::powerCalibration(f_powerCal) };
   static constexpr auto voltageCal PROGMEM{ Datalog::voltageCalibration(Datalog::vrmsFactor(DATALOG_PERIOD_IN_SECONDS), f_voltageCal) };
 
-  const uint16_t sampleSets{ Shared::copyOf_sampleSetsDuringThisDatalogPeriod };
+  const SampleSetCounter sampleSets{ Shared::copyOf_sampleSetsDuringThisDatalogPeriod };
 
   // import = +ve: the sum of the ISR is negative when importing
   tx_data.power_L[0] = Datalog::watts(static_cast< int32_t >(-Shared::copyOf_sumP_atSupplyPoint[0] / sampleSets),
