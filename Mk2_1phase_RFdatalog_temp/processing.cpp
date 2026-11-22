@@ -63,15 +63,10 @@ constexpr uint8_t SUM_P_SHIFT{ N_MAX > 64 ? 1 : 0 };
 const Energy::PerSampleCalibration< N_MIN, N_MAX, NO_OF_PHASES > powerCalPerSample PROGMEM{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCal) };
 constexpr uint8_t powerCalPerSampleShift{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCal).shift };
 
-// The prediction at mid-cycle (fast_control.h): the sum of the sample sets so far goes through the
-// table entry for a whole cycle of SAMPLE_SETS_PER_CYCLE sample sets, then is scaled by
-// SAMPLE_SETS_PER_CYCLE / (sample sets so far). Its largest magnitude, with N_MAX sample sets at full
-// scale, x SAMPLE_SETS_PER_CYCLE must fit in the int32_t of FastControl::predictEndOfCycle().
-constexpr uint8_t PREDICTION_CAL_INDEX{ SAMPLE_SETS_PER_CYCLE - N_MIN };
-constexpr uint64_t MAX_PREDICTION_ENERGY{ ((((static_cast< uint64_t >(N_MAX) << 18) >> SUM_P_SHIFT) * Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCal).value[0][PREDICTION_CAL_INDEX])
-                                           >> (powerCalPerSampleShift - Energy::FRACTION_BITS))
-                                          + 1 };
-static_assert(MAX_PREDICTION_ENERGY * SAMPLE_SETS_PER_CYCLE <= static_cast< uint64_t >(INT32_MAX), "the predicted energy would overflow: check f_powerCal");
+// The prediction at mid-cycle (fast_control.h): 2 x the sum of the n sample sets so far goes through
+// the table entry for 2n sample sets, sumP x cal / n, without a division. With 2n <= N_MAX, 2 x sumP
+// is at most N_MAX x 2^18, within the 24 bits of Energy::contribution() once shifted by SUM_P_SHIFT
+// (as a whole cycle's sum), and the energy at most a whole cycle's at full scale.
 
 // ---- Diverted energy (CT2) ----
 // The cycle's CT2 sum goes through the same conversion as the grid's in processLatestContribution()
@@ -868,19 +863,17 @@ void processMinusHalfCycle(const uint8_t phase)
     return;
   }
 
-  // The prediction, as Robin's 'energyInBucket_long + averagePower'. The sum of the first half
-  // goes through the same conversion as the whole cycle in processLatestContribution() (same
-  // shift, same table), with the entry for SAMPLE_SETS_PER_CYCLE sample sets; predictEndOfCycle()
-  // then scales it by SAMPLE_SETS_PER_CYCLE / n: (sumP / n) x cal, the first half's average power
-  // as one cycle's energy, in bucket units. Beyond N_MAX sample sets (no proper half cycle), the
-  // sum may exceed the 24 bits of Energy::contribution(): no prediction, the bucket as it is.
-  const uint8_t n{ n_samplesDuringThisMainsCycle[0] };
-  int32_t energyFirstHalf{ 0 };
-  if (n <= N_MAX)
+  // The prediction, as Robin's 'energyInBucket_long + averagePower': the first half's average power
+  // as one cycle's energy, in bucket units, through the table entry for 2n sample sets (no
+  // division, fast_control.h). Outside N_MIN..N_MAX for 2n (no proper half cycle), no prediction:
+  // the bucket as it is.
+  const uint8_t index{ FastControl::wholeCycleIndexOf(n_samplesDuringThisMainsCycle[0], N_MIN, N_MAX) };
+  if (FastControl::NO_INDEX == index)
   {
-    energyFirstHalf = Energy::contribution(l_sumP[0] >> SUM_P_SHIFT, pgm_read_word(&powerCalPerSample.value[0][PREDICTION_CAL_INDEX]), powerCalPerSampleShift);
+    l_energyInBucket_prediction = l_energyInBucket_main;
+    return;
   }
-  l_energyInBucket_prediction = FastControl::predictEndOfCycle(l_energyInBucket_main, energyFirstHalf, n, SAMPLE_SETS_PER_CYCLE);
+  l_energyInBucket_prediction = FastControl::predictEndOfCycle(l_energyInBucket_main, l_sumP[0], pgm_read_word(&powerCalPerSample.value[0][index]), SUM_P_SHIFT, powerCalPerSampleShift);
 }
 
 /**
