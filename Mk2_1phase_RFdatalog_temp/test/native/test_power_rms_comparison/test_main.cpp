@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /**
  * @file test_main.cpp
  * @brief Unity tests for power and RMS calculations: old vs new (left-aligned ADC)

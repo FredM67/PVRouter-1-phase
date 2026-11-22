@@ -6,6 +6,7 @@
  * @date 2026-11-21
  *
  * @copyright Copyright (c) 2026-2026
+ * SPDX-License-Identifier: GPL-3.0-or-later
  *
  * @details rotationGroups (config.h) lists, group by group, the loads that take turns at the top
  *          of the priority list: one group per appliance, such as the elements of a 3-phase water

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
 """The performance and size report of a pull request, as a Markdown comment.
 
 Compares the figures of the target branch with those of the pull request (merged into the

@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Builds the RemoteLoadReceiver firmware once per remote unit, for grid_sim -r.
 #
 #   build_receivers.sh <RemoteLoadReceiver dir> <out dir> <node ID>...

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /**
  * @file Mk2_fasterControl_twoLoads_temp_1.ino
  * @author Robin Emley (www.Mk2PVrouter.co.uk)

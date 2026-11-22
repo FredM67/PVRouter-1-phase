@@ -1,0 +1,67 @@
+PVRouter-1-phase
+Copyright (c) 2020-2026 Frédéric Metrich and contributors
+
+Licensed under the GNU General Public License, version 3 or (at your option) any later
+version (GPL-3.0-or-later): see LICENSE. This applies to every file of this repository
+unless the file, or this notice, says otherwise.
+
+
+Origins
+-------
+
+The router firmware (Mk2_1phase_RFdatalog_temp) derives from the 3-phase router firmware
+of the same author, Mk2_3phase_RFdatalog_temp of PVRouter-3-phase (GPL-3.0-or-later),
+itself derived from Robin Emley's 3-phase Mk2 PV Router sketch. Its control core, which
+predicts the energy of each mains cycle and decides once per cycle, is that of Robin
+Emley's single-phase sketch Mk2_fasterControl_twoLoads_5.ino (July 2023), whose multi-load
+logic comes from his Mk2_multiLoad_wired_7a.ino (not in this repository), as ported in
+Mk2_fasterControl_Full; its displays come from Mk2_fasterControl_Full as well.
+
+The older sketches are kept as they are, for reference:
+
+- Robin/ holds two of his single-phase sketches, Mk2_fasterControl_twoLoads_5 and
+  Mk2_fasterControl_RFdatalog_1.
+- Mk2_fasterControl_Full, Mk2_fasterControl_twoLoads_temp_1 and
+  Mk2_fasterControl_threeLoads_temp_1 are Frédéric Metrich's versions of his
+  fasterControl sketches.
+- dev/ holds his test and calibration tools: RST_104us_dev, RST_375us_dev,
+  RawSamplesTool_2chan, Transformer_Checker, balanceCheck_1kW, blink_dig4,
+  cal_CT1_v_meter, cal_CT2_v_CT1, cal_bothDisplays_3 and segCheck_bothDisplays.
+
+He published his sketches on the OpenEnergyMonitor forum (summary page:
+www.openenergymonitor.org/emon/node/1757) and on www.mk2pvrouter.co.uk, for others to
+build PV routers with, without any license statement.
+
+The changes made since 2020 are by Frédéric Metrich and the contributors listed on
+GitHub, under GPL-3.0-or-later.
+
+
+Your settings
+-------------
+
+The files that hold your settings are yours: use, change and share them on any terms you
+like. These are, for the router, config.h, config_system.h, config_rf.h and calibration.h
+(and the config.h, config_system.h and calibration.h of Mk2_fasterControl_Full), whether
+you edit them by hand or a tool writes them. They carry no license tag for that reason.
+
+
+Third-party code in this repository
+-----------------------------------
+
+- type_traits/ (in Mk2_1phase_RFdatalog_temp and Mk2_fasterControl_Full): from
+  ArduinoJson, Copyright (c) 2014-2024 Benoit Blanchon, MIT License (stated in each file).
+- sim/avr_adc.c: from simavr, Copyright 2008, 2010 Michel Pollet, GPL-3.0-or-later.
+- run-clang-format.py: from run-clang-format (github.com/Sarcasm/run-clang-format) by
+  Guillaume Papin, MIT License; it carries no license tag.
+- FastDivision.cpp and FastDivision.h (in Mk2_1phase_RFdatalog_temp and
+  Mk2_fasterControl_Full): division by 10 in AVR assembly; their origin is not recorded
+  here, so they carry no license tag.
+
+
+Libraries used, not included
+----------------------------
+
+- RFM69 by LowPowerLab (RF datalog and remote loads): GPL-3.0.
+- OneWire by Paul Stoffregen (temperature sensors): MIT-style license.
+- U8g2 by Oliver Kraus (OLED display): 2-clause BSD license.
+- The Arduino AVR core: LGPL-2.1-or-later.

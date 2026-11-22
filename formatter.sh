@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 if ! which clang-format &>/dev/null; then
   echo "clang-format not found or not in PATH. Please install: https://github.com/arduino/clang-static-binaries/releases"
   exit 1

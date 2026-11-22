@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
 # The same scenario must give the same result on every board: compares the summaries of two
 # runs, scenario by scenario.
 #

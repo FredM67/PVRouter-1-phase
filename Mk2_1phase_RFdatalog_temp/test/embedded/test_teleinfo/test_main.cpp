@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /**
  * @file test_main.cpp
  * @brief Embedded tests for teleinfo.h: the IoT frame on the ATmega328P (16-bit int)

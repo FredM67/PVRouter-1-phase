@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Keep the @date / @copyright fields of Doxygen file headers up to date.
 #

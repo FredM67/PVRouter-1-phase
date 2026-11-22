@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
 """The benchmark results of a test log, for benchmark-action/github-action-benchmark.
 
 Reads the `BENCH|<name>|<value>|<unit>` lines that the embedded benchmarks print

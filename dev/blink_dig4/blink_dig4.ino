@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 /* A modified version of the standard example sketch, blink.ino, in which 
  * digital pin 4 is driven up and down instead of pin 13.  

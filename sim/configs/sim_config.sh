@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Settings the simulated grid needs, whatever the defaults of config.h:
 # - the board: OLD_SEG by default (V A3, CT1 A5, CT2 A4, AVCC reference), OLD_OLED (V A0, CT1 A1,
 #   CT2 A3, AVCC reference) or NEW (the same inputs, internal 1.1 V reference); grid_sim takes

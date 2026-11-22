@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /* Mk2_fasterControl_twoLoads_5.ino
  *
  *  (initially released as Mk2_bothDisplays_1 in March 2014)

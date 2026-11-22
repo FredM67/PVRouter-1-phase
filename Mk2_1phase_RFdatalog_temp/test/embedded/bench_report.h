@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /**
  * @file bench_report.h
  * @brief Machine-readable lines per benchmark result, for the CI performance report

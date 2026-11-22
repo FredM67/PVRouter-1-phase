@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
 # The figures of the PR report (scripts/ci/pr_report.py), measured on a source tree: the flash and
 # RAM of the builds, and the BENCH| results of the embedded tests (simavr). Used for the target
 # branch of a pull request; the PR's own figures come from the build and test-embedded jobs.

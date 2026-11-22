@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /*
  * This sketch exercises every digit of the 4-digit display that forms part of my
  * PCB-based Mk2 PV Router hardware.  Before fitting a display module into an

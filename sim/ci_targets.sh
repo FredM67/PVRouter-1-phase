@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
 # The make targets of one CI job, when the scenarios of a set are spread over several jobs.
 #
 #   ci_targets.sh grid <k>/<n>     scenarios/*.scn, each on the three boards and their variants

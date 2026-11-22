@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
 # The settings of a board, as grid_sim settings: its analog inputs, its ADC reference, its
 # calibration read from calibration.h (the simulator must generate the voltages and powers the
 # firmware reads back with the same values), and the mains.

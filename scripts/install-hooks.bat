@@ -1,4 +1,5 @@
 @echo off
+REM SPDX-License-Identifier: GPL-3.0-or-later
 REM Install Git hooks for the PVRouter-1-phase project
 REM
 REM This script copies all hooks from scripts\git-hooks\ to .git\hooks\

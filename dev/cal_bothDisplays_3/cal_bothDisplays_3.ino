@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /* cal_bothDisplays_3.ino
  *
  * This sketch provides an easy way of calibrating the current sensors that are 

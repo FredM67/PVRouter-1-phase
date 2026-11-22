@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /**
  * @file bench_timer.h
  * @brief Exact CPU cycle count of a benchmark loop, whatever its length

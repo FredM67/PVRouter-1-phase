@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Builds the router with settings that must be refused, and checks that the compiler refuses
 # each one with the expected static_assert message: a check that lets a wrong setting
 # through, or rejects a good one, shows up here instead of on someone's water heater.

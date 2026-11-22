@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /**
  * @file halt_after_tests.h
  * @brief Stops the MCU once an embedded test suite has run

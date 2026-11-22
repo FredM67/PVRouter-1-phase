@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # grid_sim - runs the PVRouter firmware on a simulated single-phase grid (Linux / WSL)
 #
 #   make                build grid_sim
