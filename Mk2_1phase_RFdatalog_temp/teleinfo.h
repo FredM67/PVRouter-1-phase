@@ -1,22 +1,23 @@
 /**
  * @file teleinfo.h
  * @author your name (you@domain.com)
- * @brief Manages telemetry data and frame formatting.
- *
- * This file defines the `TeleInfo` class, which is responsible for creating and sending
- * telemetry frames. It includes functions for calculating buffer sizes, formatting data,
- * and ensuring data integrity with checksums.
+ * @brief The telemetry frame of the IoT output, written a line at a time.
  *
  * @details
- * - **Frame Structure**: Frames start with a Start-of-Text (STX) character and end with an
- *   End-of-Text (ETX) character.
- * - **Checksum**: Ensures data integrity for each line in the frame.
- * - **Conditional Features**: Supports optional features like relay diversion and temperature sensing.
- * - **Serial Configuration**: Telemetry data is sent via Serial with 9600 baud, 7 data bits,
- *   1 stop bit, and even parity.
+ * - **Frame Structure**: a frame starts with a Start-of-Text (STX) character and ends with an
+ *   End-of-Text (ETX) character. In between, one line per value: LF, tag (and index), TAB,
+ *   value, TAB, checksum, CR.
+ * - **Checksum**: each line carries its own, (the sum of the bytes from the tag to the TAB
+ *   before the checksum) & 0x3F, + 0x20.
+ * - **Streamed**: the frame is written one line per step of the serial output (see
+ *   serial_output.h), as the text and JSON outputs: a line is built in a buffer of a few bytes
+ *   on the stack, there is no frame buffer.
+ * - **Arduino-free**: the values come from a data source given as a template parameter (see
+ *   writeFrameStep()), so the frame is tested natively (test/native/test_teleinfo).
+ * - **Serial Configuration**: Serial at 9600 baud, 7 data bits, even parity, 1 stop bit.
  *
- * @version 0.1
- * @date 2026-11-21
+ * @version 0.2
+ * @date 2026-11-22
  *
  * @copyright Copyright (c) 2025-2026
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -25,302 +26,320 @@
 #ifndef TELEINFO_H
 #define TELEINFO_H
 
-#include "config_system.h"
-#include "config_derived.h"
+#include <stdint.h>
 
 /**
- * @brief Calculates the size of a single telemetry line in the frame.
- *
- * This function computes the size of a single line in the telemetry frame, including
- * the tag, value, and formatting characters. Each line consists of:
- * - 1 byte for the Line Feed (LF) character.
- * - `tagLen` bytes for the tag.
- * - 1 byte for the Tab (TAB) character separating the tag and value.
- * - `valueLen` bytes for the value.
- * - 1 byte for the Tab (TAB) character separating the value and checksum.
- * - 1 byte for the checksum.
- * - 1 byte for the Carriage Return (CR) character.
- *
- * @param tagLen The length of the tag in bytes.
- * @param valueLen The length of the value in bytes.
- * @return The total size of the line in bytes.
+ * @brief The telemetry frame of the IoT output.
  *
  * @ingroup Telemetry
  */
-inline static constexpr size_t lineSize(size_t tagLen, size_t valueLen)
+namespace TeleInfo
 {
-  return 1 + tagLen + 1 + valueLen + 1 + 1 + 1;  // LF+tag+TAB+value+TAB+checksum+CR
+inline constexpr char STX{ 0x02 }; /**< Start of Frame character. */
+inline constexpr char ETX{ 0x03 }; /**< End of Frame character. */
+inline constexpr char LF{ 0x0A };  /**< Line Feed character. */
+inline constexpr char CR{ 0x0D };  /**< Carriage Return character. */
+inline constexpr char TAB{ 0x09 }; /**< Tab character. */
+
+/**
+ * @brief The size of a line: LF, tag, TAB, value, TAB, checksum and CR.
+ *
+ * @param tagLength The length of the tag, its index included.
+ * @param valueLength The length of the value, its sign included.
+ * @return The size of the line in bytes.
+ */
+constexpr uint8_t lineSize(uint8_t tagLength, uint8_t valueLength)
+{
+  return 1 + tagLength + 1 + valueLength + 1 + 1 + 1;
 }
 
 /**
- * @brief Calculates the total buffer size required for the telemetry frame.
- *
- * This function computes the size of the buffer needed to store the entire telemetry frame,
- * including all tags, values, and formatting characters. The calculation takes into account
- * the presence of optional features and system configuration.
- *
- * @return The total buffer size as a compile-time constant.
- *
- * The buffer size is calculated as follows:
- * - 1 byte for the start-of-text (STX) character.
- * - 1 line for the "P" tag (signed 6 digits) - power measurement.
- *
- * For multi-phase systems (`NO_OF_PHASES > 1`):
- * - `NO_OF_PHASES` lines for the "V1" to "Vn" tags (unsigned 5 digits each) - voltage measurements.
- * - `NO_OF_DUMPLOADS` lines for the "D1" to "Dn" tags (unsigned 3 digits each) - diversion rates.
- *
- * For single-phase systems:
- * - 1 line for the "V" tag (unsigned 5 digits) - voltage measurement.
- * - 1 line for the "D" tag (unsigned 4 digits) - diverted power.
- * - 1 line for the "E" tag (unsigned 5 digits) - diverted energy.
- *
- * If relay diversion is enabled (`RELAY_DIVERSION`):
- * - 1 line for the "R" tag (signed 6 digits) - mean power for relay diversion.
- * - `relayDiverter.size()` lines for the "R1" to "Rn" tags (1 digit each) - relay states.
- *
- * If temperature sensors are present (`TEMP_SENSOR_PRESENT`):
- * - `tempSensors.size()` lines for the "T1" to "Tn" tags (5 characters each, sign included) - temperature readings.
- *
- * Common for all configurations:
- * - 1 line for the "N" tag (unsigned 5 digits) - absence of diverted energy count.
- *
- * If dual tariff is enabled (`DUAL_TARIFF`):
- * - 1 line for the "TA" tag (1 digit) - tariff state (0=high/on-peak, 1=low/off-peak).
- *
- * - 1 line for the "S_MC" tag (unsigned 2 digits) - sample sets per mains cycle.
- * - 1 line for the "S" tag (unsigned 5 digits, 6 for datalog periods beyond 19 s) - sample count.
- * - 1 byte for the end-of-text (ETX) character.
- *
- * @ingroup Telemetry
+ * @brief The most a step writes: STX or ETX, and the longest line, a 4-character tag ("S_MC")
+ *        with a 10-digit value (a 32-bit sample count).
  */
-inline static constexpr size_t calcBufferSize()
+inline constexpr uint8_t MAX_STEP_LENGTH{ 1 + lineSize(4, 10) };
+
+/**
+ * @brief Writes the decimal digits of a value.
+ *
+ * @param dst Where to write.
+ * @param value The value: 16 bits, or 32 bits for the sample count.
+ * @return The end of what was written.
+ */
+template< typename Unsigned >
+char* writeDigits(char* dst, Unsigned value)
 {
-  size_t size{ 1 };  // STX
-
-  size += lineSize(1, 6);  // P (signed 6 digits)
-
-  if constexpr (NO_OF_PHASES > 1)
+  char digits[10];
+  uint8_t count{ 0 };
+  do
   {
-    size += NO_OF_PHASES * lineSize(2, 5);  // V1-Vn (unsigned 5 digits) - voltage
+    digits[count++] = static_cast< char >('0' + value % 10);
+    value /= 10;
+  } while (value != 0);
 
-    size += NO_OF_PHASES * lineSize(2, 6);  // P1-Pn (signed 6 digits) - instant power
+  do
+  {
+    *dst++ = digits[--count];
+  } while (count != 0);
 
-    size += NO_OF_DUMPLOADS * lineSize(2, 3);  // D1-Dn (unsigned 3 digits) - diversion rate
+  return dst;
+}
+
+/**
+ * @brief Writes a whole line: LF, tag and index, TAB, value, TAB, checksum and CR.
+ *
+ * @details The checksum is summed over the line once written: about 15 bytes, once per datalog
+ *          period, in the main loop.
+ *
+ * @param dst Where to write, room for lineSize() bytes.
+ * @param tag The tag, at most 4 characters with the index.
+ * @param index Appended to the tag as a digit (1-9), none when 0.
+ * @param magnitude The magnitude of the value: 16 bits, or 32 bits for the sample count.
+ * @param negative Whether the value is negative.
+ * @return The end of the line.
+ */
+template< typename Magnitude >
+char* writeLine(char* dst, const char* tag, uint8_t index, Magnitude magnitude, bool negative)
+{
+  *dst++ = LF;
+
+  char* const start{ dst };
+  while (*tag)
+  {
+    *dst++ = *tag++;
+  }
+  if (index != 0)
+  {
+    *dst++ = static_cast< char >('0' + index);
+  }
+  *dst++ = TAB;
+
+  if (negative)
+  {
+    *dst++ = '-';
+  }
+  dst = writeDigits(dst, magnitude);
+  *dst++ = TAB;
+
+  uint8_t sum{ 0 };
+  for (const char* ptr = start; ptr != dst; ++ptr)
+  {
+    sum += static_cast< uint8_t >(*ptr);
+  }
+  *dst++ = static_cast< char >((sum & 0x3F) + 0x20);
+
+  *dst++ = CR;
+  return dst;
+}
+
+/**
+ * @brief Writes the line of a signed value.
+ *
+ * @param dst Where to write, room for lineSize() bytes.
+ * @param tag The tag.
+ * @param value The value.
+ * @param index Appended to the tag as a digit (1-9), none when 0.
+ * @return The end of the line.
+ */
+inline char* line(char* dst, const char* tag, int16_t value, uint8_t index = 0)
+{
+  const uint16_t magnitude{ value < 0 ? static_cast< uint16_t >(0U - static_cast< uint16_t >(value)) : static_cast< uint16_t >(value) };
+  return writeLine(dst, tag, index, magnitude, value < 0);
+}
+
+/**
+ * @brief Writes the line of an unsigned value (above 32767, line() would wrap).
+ *
+ * @param dst Where to write, room for lineSize() bytes.
+ * @param tag The tag.
+ * @param value The value: 16 bits, or 32 bits (the sample count beyond 19 s).
+ * @return The end of the line.
+ */
+template< typename Unsigned >
+char* lineUnsigned(char* dst, const char* tag, Unsigned value)
+{
+  static_assert(sizeof(Unsigned) <= 4, "at most 32 bits");
+  if constexpr (sizeof(Unsigned) > 2)
+  {
+    return writeLine(dst, tag, 0, static_cast< uint32_t >(value), false);
   }
   else
   {
-    size += lineSize(1, 5);  // V (unsigned 5 digits) - voltage
-
-    size += lineSize(1, 4);  // D (unsigned 4 digits) - diverted power
-    size += lineSize(1, 5);  // E (unsigned 5 digits) - diverted energy
+    return writeLine(dst, tag, 0, static_cast< uint16_t >(value), false);
   }
-
-  if constexpr (RELAY_DIVERSION)
-  {
-    size += lineSize(1, 6);                         // R (signed 6 digits) - mean power for relay diversion
-    size += relayDiverter.size() * lineSize(2, 1);  // R1-Rn (1 (ON), 0 (OFF)) - relay state
-  }
-
-  if constexpr (TEMP_SENSOR_PRESENT)
-  {
-    size += tempSensors.size() * lineSize(2, 5);  // T1-Tn (signed, 5 characters: -55.00 to 125.00 C) - temperature
-  }
-
-  size += lineSize(1, 5);  // N (unsigned 5 digits) - absence of diverted energy count
-
-  if constexpr (DUAL_TARIFF)
-  {
-    size += lineSize(2, 1);  // TA (1 digit) - tariff state (0=high/on-peak, 1=low/off-peak)
-  }
-
-  size += lineSize(4, 2);                                     // S_MC (unsigned 2 digits) - sample sets per mains cycle
-  size += lineSize(1, sizeof(SampleSetCounter) > 2 ? 6 : 5);  // S (unsigned 5 digits, 6 beyond 19 s) - sample count
-
-  size += 1;  // ETX
-
-  return size;
 }
 
 /**
- * @class TeleInfo
- * @brief A class for managing and sending telemetry information in a structured frame format.
- *
- * The `TeleInfo` class is responsible for creating and sending telemetry frames that include
- * various data points such as power, voltage, temperature, and relay states. The frames are
- * formatted with tags, values, and checksums to ensure data integrity.
- *
- * @details
- * - **Frame Structure**: Each frame starts with a Start-of-Text (STX) character and ends with
- *   an End-of-Text (ETX) character. Data points are added as lines, each containing a tag,
- *   value, and checksum.
- * - **Checksum Calculation**: A checksum is calculated for each line to ensure data integrity.
- * - **Conditional Features**: The class supports optional features such as relay diversion
- *   and temperature sensing, which are included or excluded at compile time based on
- *   configuration constants.
- * - **Buffer Management**: A buffer is used to store the frame data before sending it over
- *   the Serial interface, a part at a time with writeNext(), so sending never waits.
- * - **Serial Configuration**: Uses Serial with 9600 baud, 7 data bits, 1 stop bit, and even parity.
- *
- * @ingroup Telemetry
+ * @brief The number of steps of a frame: one per line, invalid temperatures included (they
+ *        write nothing).
  */
-class TeleInfo
+template< typename Source >
+constexpr uint8_t frameSteps()
 {
-private:
-  static const char STX{ 0x02 }; /**< Start of Frame character. */
-  static const char ETX{ 0x03 }; /**< End of Frame character. */
-  static const char LF{ 0x0A };  /**< Line Feed character. */
-  static const char CR{ 0x0D };  /**< Carriage Return character. */
-  static const char TAB{ 0x09 }; /**< Tab character. */
+  uint8_t steps{ 1 + 1 };  // P, V
 
-  char buffer[calcBufferSize()]{}; /**< Buffer to store the frame data. Adjust size as needed. */
-  size_t bufferPos{ 0 };           /**< Current position in the buffer. */
-  size_t sentPos{ 0 };             /**< Part of the finished frame already written out. */
-
-  /**
-   * @brief Calculates the checksum for a portion of the buffer.
-   * @param startPos The starting position in the buffer.
-   * @param endPos The ending position in the buffer.
-   * @return The calculated checksum as a single byte.
-   *
-   * @details A plain loop: a line is about 15 bytes, summed once per datalog period in the main
-   *          loop, never in the ISR. Unrolled 4 times, it saved a few cycles per byte for 40 bytes
-   *          of flash more.
-   */
-  [[nodiscard]] uint8_t calculateChecksum(size_t startPos, size_t endPos) const
+  if constexpr (Source::DIVERTED_CT)
   {
-    uint8_t sum{ 0 };
-    for (const char* ptr = buffer + startPos; ptr != buffer + endPos; ++ptr)
-    {
-      sum += *ptr;
-    }
-
-    return (sum & 0x3F) + 0x20;
+    steps += 2;  // D, E
   }
 
-  /**
-   * @brief Writes a tag to the buffer.
-   * @param tag The tag to write.
-   * @param index Appended to the tag as a digit (1-9), none when 0.
-   */
-  __attribute__((always_inline)) void writeTag(const char* tag, uint8_t index)
+  if constexpr (Source::RELAY_DIVERSION)
   {
-    auto* ptr{ tag };
-    while (*ptr) buffer[bufferPos++] = *ptr++;
+    steps += 1 + Source::RELAY_COUNT;  // R, R1-Rn
+  }
+  steps += Source::LOAD_COUNT + Source::TEMP_COUNT;  // D1-Dn, T1-Tn
+  steps += 1;                                        // N
+  if constexpr (Source::DUAL_TARIFF)
+  {
+    steps += 1;  // TA
+  }
+  steps += 1 + 1;  // S, S_MC
 
-    // If an index is provided, append it to the tag
-    if (index != 0)
+  return steps;
+}
+
+/**
+ * @brief Writes the line of a step.
+ *
+ * @param step The index of the step.
+ * @param dst Where to write.
+ * @return The end of the line, dst for an invalid temperature (no line).
+ */
+template< typename Source >
+char* frameLine(uint8_t step, char* dst)
+{
+  if (step == 0)
+  {
+    return line(dst, "P", Source::power());
+  }
+  --step;
+
+  if constexpr (Source::DIVERTED_CT)
+  {
+    if (step == 0)
     {
-      buffer[bufferPos++] = static_cast< char >('0' + index);  // Convert index to a character
+      return line(dst, "D", Source::divertedPower());
     }
-
-    buffer[bufferPos++] = TAB;
+    if (step == 1)
+    {
+      return lineUnsigned(dst, "E", Source::divertedEnergy());
+    }
+    step -= 2;
   }
 
-  /**
-   * @brief Writes a whole line: line feed, tag, value, checksum and carriage return.
-   * @param tag The tag associated with the value.
-   * @param index Appended to the tag if not 0.
-   * @param magnitude The magnitude of the value: 16 bits, or 32 bits for the sample count.
-   * @param negative Whether the value is negative.
-   */
-  template< typename Magnitude >
-  void writeLine(const char* tag, uint8_t index, Magnitude magnitude, bool negative)
+  if (step == 0)
   {
-    buffer[bufferPos++] = LF;
+    return line(dst, "V", Source::voltage());
+  }
+  --step;
 
-    const auto startPos{ bufferPos };
-
-    writeTag(tag, index);
-    if (negative)
+  if constexpr (Source::RELAY_DIVERSION)
+  {
+    if (step == 0)
     {
-      buffer[bufferPos++] = '-';
+      return line(dst, "R", Source::relayAverage());
     }
-    char* str;
-    if constexpr (sizeof(Magnitude) > 2)
-    {
-      str = ultoa(magnitude, buffer + bufferPos, 10);
-    }
-    else
-    {
-      str = utoa(magnitude, buffer + bufferPos, 10);
-    }
-    bufferPos += strlen(str);  // Advance bufferPos by the length of the written string
-    buffer[bufferPos++] = TAB;
+    --step;
 
-    const auto crc{ calculateChecksum(startPos, bufferPos) };
-    buffer[bufferPos++] = crc;
-
-    buffer[bufferPos++] = CR;
+    if (step < Source::RELAY_COUNT)  // Rn first
+    {
+      const uint8_t index{ static_cast< uint8_t >(Source::RELAY_COUNT - step) };
+      return line(dst, "R", Source::relayOn(index - 1), index);
+    }
+    step -= Source::RELAY_COUNT;
   }
 
-public:
-  /**
-   * @brief Initializes a new frame by resetting the buffer and adding the start character.
-   */
-  __attribute__((always_inline)) void startFrame()
+  if (step < Source::LOAD_COUNT)  // Dn first
   {
-    bufferPos = 0;
-    buffer[bufferPos++] = STX;
+    const uint8_t index{ static_cast< uint8_t >(Source::LOAD_COUNT - step) };
+    return line(dst, "D", Source::loadOnPercent(index - 1), index);
   }
+  step -= Source::LOAD_COUNT;
 
-  /**
-   * @brief Sends a telemetry value as an integer.
-   * @param tag The tag associated with the value.
-   * @param value The integer value to send.
-   * @param index Appended to the tag as a digit (1-9), none when 0.
-   */
-  void send(const char* tag, int16_t value, uint8_t index = 0)
+  if constexpr (Source::TEMP_COUNT != 0)
   {
-    const auto magnitude{ value < 0 ? static_cast< uint16_t >(0U - static_cast< uint16_t >(value)) : static_cast< uint16_t >(value) };
-    writeLine(tag, index, magnitude, value < 0);
-  }
-
-  /**
-   * @brief Sends a telemetry value as an unsigned integer (above 32767, send() would wrap).
-   * @param tag The tag associated with the value.
-   * @param value The unsigned value to send: 16 bits, or 32 bits (the sample count beyond 19 s).
-   */
-  template< typename Unsigned >
-  void sendUnsigned(const char* tag, Unsigned value)
-  {
-    static_assert(sizeof(Unsigned) <= 4, "at most 32 bits");
-    if constexpr (sizeof(Unsigned) > 2)
+    if (step < Source::TEMP_COUNT)
     {
-      writeLine(tag, 0, static_cast< uint32_t >(value), false);
+      return Source::temperatureValid(step) ? line(dst, "T", Source::temperature(step), step + 1) : dst;
     }
-    else
-    {
-      writeLine(tag, 0, static_cast< uint16_t >(value), false);
-    }
+    step -= Source::TEMP_COUNT;
   }
 
-  /**
-   * @brief Finalizes the frame by adding the end character.
-   * @details The frame is then written out by writeNext(), a part at a time.
-   */
-  __attribute__((always_inline)) void endFrame()
+  if (step == 0)
   {
-    buffer[bufferPos++] = ETX;
-    sentPos = 0;
+    return line(dst, "N", Source::absenceCount());
+  }
+  --step;
+
+  if constexpr (Source::DUAL_TARIFF)
+  {
+    if (step == 0)
+    {
+      return line(dst, "TA", Source::offPeak() ? 1 : 0);
+    }
+    --step;
   }
 
-  /**
-   * @brief Writes the next part of the finished frame.
-   * @param out Where to write.
-   * @param maxLength Maximum number of characters to write.
-   * @return true while some of the frame is left to write.
-   */
-  bool writeNext(Print& out, uint8_t maxLength)
+  if (step == 0)
   {
-    size_t length{ bufferPos - sentPos };
-    if (length > maxLength)
-    {
-      length = maxLength;
-    }
-    out.write(buffer + sentPos, length);
-    sentPos += length;
-    return sentPos < bufferPos;
+    return lineUnsigned(dst, "S", Source::sampleSets());
   }
-};
+  return line(dst, "S_MC", Source::lowestSampleSetsPerCycle());
+}
+
+/**
+ * @brief Writes a step of the frame: one line, STX before the first one, ETX after the last.
+ *
+ * @details The lines, in this order:
+ * - "P": the power at the grid connection, in W (import > 0);
+ * - with CT2, "D": the diverted power, average over the datalog period, in W, and "E": the
+ *   diverted energy, in Wh (not to be confused with "D1" to "Dn" below);
+ * - "V": the RMS voltage, in hundredths of V;
+ * - with relay diversion, "R": the relays' average power, in W, then "R1" to "Rn": each relay's
+ *   state (1 ON, 0 OFF), Rn first;
+ * - "D1" to "Dn": each load's ON time over the datalog period, in %, Dn first;
+ * - with temperature sensing, "T1" to "Tn": each valid temperature, in hundredths of °C;
+ * - "N": the number of seconds without diverted energy;
+ * - with dual tariff, "TA": the tariff (0 high/on-peak, 1 low/off-peak);
+ * - "S": the number of sample sets over the datalog period;
+ * - "S_MC": the lowest number of sample sets in a mains cycle.
+ *
+ * The data source is a type with these members:
+ * - `static constexpr bool DIVERTED_CT`, `RELAY_DIVERSION`, `DUAL_TARIFF`;
+ * - `static constexpr uint8_t RELAY_COUNT`, `LOAD_COUNT`, `TEMP_COUNT`;
+ * - `static int16_t power()`, `divertedPower()`, `voltage()`, `relayAverage()`, `absenceCount()`;
+ * - `static uint16_t divertedEnergy()`;
+ * - `static bool relayOn(uint8_t idx)`, `temperatureValid(uint8_t idx)`, `offPeak()`;
+ * - `static int16_t loadOnPercent(uint8_t idx)`, `temperature(uint8_t idx)`;
+ * - `static sampleSets()`: 16 or 32 bits unsigned; `static uint8_t lowestSampleSetsPerCycle()`.
+ *
+ * Every value of a frame must stay that of the same datalog period until its last step.
+ *
+ * @param step The index of the step, from 0.
+ * @param text Where to write, room for MAX_STEP_LENGTH characters.
+ * @param[out] length The number of characters written (0 for an invalid temperature).
+ * @return false at the last step.
+ */
+template< typename Source >
+bool writeFrameStep(const uint8_t step, char* const text, uint8_t& length)
+{
+  char* end{ text };
+  if (step == 0)
+  {
+    *end++ = STX;
+  }
+
+  end = frameLine< Source >(step, end);
+
+  const bool last{ step == frameSteps< Source >() - 1 };
+  if (last)
+  {
+    *end++ = ETX;
+  }
+
+  length = static_cast< uint8_t >(end - text);
+  return !last;
+}
+}  // namespace TeleInfo
 
 #endif /* TELEINFO_H */
