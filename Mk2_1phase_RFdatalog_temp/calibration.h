@@ -42,7 +42,7 @@ inline constexpr float f_powerCalDivertedOldBoard{ 0.05000F }; /**< CT2, diverte
 // For datalogging purposes, f_voltageCal has been added too. Because the range of ADC values is
 // similar to the actual range of volts, the optimal value for this cal factor is likely to be
 // close to unity.
-inline constexpr float f_voltageCalOldBoard{ 0.8151F }; /**< compared with Sentron PAC 4200 */
+inline constexpr float f_voltageCalOldBoard{ 0.805653F }; /**< measured on a Mk2 board (Mk2_fasterControl_Full), compared with Sentron PAC 4200 */
 //
 // CT1 filter: an IIR low-pass filter of the grid current, added back with a gain, offsets the CT
 // acting as a high-pass filter. Interim values for the SCT-013-000 (Dec. 2024, on real hardware).

@@ -20,7 +20,7 @@ shipped `config.h`:
   display), `PcbVersion::OLD_OLED` (the second old board, OLED) or `PcbVersion::NEW` (the
   universal board). The shipped `config.h` targets `NEW` with the mk2Wifi module
   (`SerialOutputType::IoT`).
-- **Calibration:** copy `powerCal_grid`, `powerCal_diverted` and `f_voltageCal` of `Full` into
+- **Calibration:** copy your own `powerCal_grid`, `powerCal_diverted` and `f_voltageCal` of `Full` into
   `f_powerCalOldBoard`, `f_powerCalDivertedOldBoard` and `f_voltageCalOldBoard`; `lpf_gain` and
   `alpha` become `lpf_gainOldBoard` and `alphaOldBoard`. On the new board, enter the CT ratings in
   `f_ctRating` and `f_ctRatingDiverted`.

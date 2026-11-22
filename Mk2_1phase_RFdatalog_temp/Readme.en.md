@@ -188,7 +188,7 @@ Calibration values are found in the **calibration.h** file, one set for the two 
 // Old boards (OLD_SEG, OLD_OLED)
 inline constexpr float f_powerCalOldBoard{ 0.05000F };         // CT1, grid
 inline constexpr float f_powerCalDivertedOldBoard{ 0.05000F }; // CT2, diverted
-inline constexpr float f_voltageCalOldBoard{ 0.8151F };
+inline constexpr float f_voltageCalOldBoard{ 0.805653F };
 inline constexpr float lpf_gainOldBoard{ 9 };                  // CT1 filter (see below)
 inline constexpr float alphaOldBoard{ 0.0011 };
 // New board (NEW)
