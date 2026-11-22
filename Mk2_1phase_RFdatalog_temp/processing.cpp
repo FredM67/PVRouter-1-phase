@@ -20,6 +20,7 @@
 #include "mult_asm.h"
 #include "energy_bucket.h"
 #include "load_priorities.h"
+#include "fast_control.h"
 #include "adc_chain.h"
 #include "ct_filter.h"
 #include "datalog_math.h"
@@ -70,6 +71,16 @@ constexpr uint8_t SUM_P_SHIFT{ N_MAX > 64 ? 1 : 0 };
 const Energy::PerSampleCalibration< N_MIN, N_MAX, NO_OF_PHASES > powerCalPerSample PROGMEM{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCal) };
 constexpr uint8_t powerCalPerSampleShift{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCal).shift };
 
+// The prediction at mid-cycle (fast_control.h): the sum of the sample sets so far goes through the
+// table entry for a whole cycle of SAMPLE_SETS_PER_CYCLE sample sets, then is scaled by
+// SAMPLE_SETS_PER_CYCLE / (sample sets so far). Its largest magnitude, with N_MAX sample sets at full
+// scale, x SAMPLE_SETS_PER_CYCLE must fit in the int32_t of FastControl::predictEndOfCycle().
+constexpr uint8_t PREDICTION_CAL_INDEX{ SAMPLE_SETS_PER_CYCLE - N_MIN };
+constexpr uint64_t MAX_PREDICTION_ENERGY{ ((((static_cast< uint64_t >(N_MAX) << 18) >> SUM_P_SHIFT) * Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCal).value[0][PREDICTION_CAL_INDEX])
+                                           >> (powerCalPerSampleShift - Energy::FRACTION_BITS))
+                                          + 1 };
+static_assert(MAX_PREDICTION_ENERGY * SAMPLE_SETS_PER_CYCLE <= static_cast< uint64_t >(INT32_MAX), "the predicted energy would overflow: check f_powerCal");
+
 /** override bit of each load: the ISR tests a mask instead of shifting by the pin */
 const Load::OverrideMasks< NO_OF_DUMPLOADS > overrideMasks PROGMEM{ Load::overrideMasks(physicalLoadPin) };
 
@@ -93,7 +104,8 @@ constexpr int32_t initThreshold(const bool lower)
 constexpr int32_t l_lowerThreshold_default{ initThreshold(true) };  /**< lower default threshold set accordingly to the output mode */
 constexpr int32_t l_upperThreshold_default{ initThreshold(false) }; /**< upper default threshold set accordingly to the output mode */
 
-int32_t l_energyInBucket_main{ 0 }; /**< main energy bucket (over all phases) */
+int32_t l_energyInBucket_main{ 0 };       /**< main energy bucket (over all phases) */
+int32_t l_energyInBucket_prediction{ 0 }; /**< the bucket predicted at the end of the current mains cycle (fast_control.h) */
 
 /** the fixed levels of the main energy bucket */
 constexpr LoadPriorities::Bucket bucketLevels{ l_capacityOfEnergyBucket_main, l_midPointOfEnergyBucket_main,
@@ -109,6 +121,7 @@ int64_t l_sumP_atSupplyPoint[NO_OF_PHASES]{}; /**< for summation of 'real power'
 uint32_t l_sum_Vsquared[NO_OF_PHASES]{};      /**< for summation of V^2 values during datalog period */
 
 uint8_t n_samplesDuringThisMainsCycle[NO_OF_PHASES]{}; /**< number of sample sets for each phase during each mains cycle */
+uint8_t n_samplesDuringNegativeHalf{ 0 };              /**< sample sets of the negative half cycle so far (phase 0), up to DECISION_SAMPLE + 1 */
 uint16_t i_sampleSetsDuringThisDatalogPeriod{ 0 };     /**< number of sample sets during each datalogging period */
 
 remove_cv< remove_reference< decltype(DATALOG_PERIOD_IN_MAINS_CYCLES) >::type >::type n_cycleCountForDatalogging{ 0 }; /**< for counting how often datalog is updated */
@@ -698,24 +711,24 @@ void processStartUp(const uint8_t phase)
 }
 
 /**
- * @brief Processes the start of a new mains cycle on phase 0.
+ * @brief Decides the loads of the next mains cycle, on phase 0.
  *
- * This function is executed once per 20ms (for 50Hz), shortly after the start of each
- * new mains cycle on phase 0. It manages the energy level and load states, ensuring
- * proper operation of the system.
+ * This function is executed once per 20ms (for 50Hz), at the sample set DECISION_SAMPLE of
+ * the negative half cycle of phase 0 (fast_control.h). The zero-crossing triac drivers latch
+ * the new states at the next positive zero crossing.
  *
  * @details
+ * - Decides on the energy predicted at the end of the cycle, not on the measured bucket.
  * - Handles recent transitions and updates the post-transition counter.
  * - Adjusts energy thresholds and determines whether to add or remove loads.
  * - Updates the physical load states and control ports.
- * - Ensures the energy bucket level remains within defined limits.
  *
  * @ingroup TimeCritical
  */
 void processStartNewCycle()
 {
-  // may switch one load ON or OFF (load_priorities.h)
-  loadSwitching.onNewCycle(loadPrioritiesAndState, l_energyInBucket_main, bucketLevels);
+  // may switch one load ON or OFF (load_priorities.h), on the prediction
+  loadSwitching.onNewCycle(loadPrioritiesAndState, l_energyInBucket_prediction, bucketLevels);
 
   updatePhysicalLoadStates();  // allows the logical-to-physical mapping to be changed
 
@@ -736,19 +749,6 @@ void processStartNewCycle()
   {
     ++absenceOfDivertedEnergyCountInMC;
   }
-
-  // Now that the energy-related decisions have been taken, min and max limits can now
-  // be applied  to the level of the energy bucket. This is to ensure correct operation
-  // when conditions change, i.e. when import changes to export, and vice versa.
-  //
-  if (l_energyInBucket_main > l_capacityOfEnergyBucket_main)
-  {
-    l_energyInBucket_main = l_capacityOfEnergyBucket_main;
-  }
-  else if (l_energyInBucket_main < 0)
-  {
-    l_energyInBucket_main = 0;
-  }
 }
 
 /**
@@ -768,6 +768,8 @@ void processStartNewCycle()
  *   constant is long enough that a plausible offset drift is tracked smoothly, while
  *   a stuck or disconnected VT settles to that input instead of to a fixed limit.
  *   See @c test/native/test_dc_offset_filter for the tracking and step-response cases.
+ * - On phase 0, beyond the start-up period, the energy at the end of the cycle is predicted
+ *   from the first half (fast_control.h), for the decision a few sample sets later.
  *
  * @ingroup TimeCritical
  */
@@ -778,6 +780,25 @@ void processMinusHalfCycle(const uint8_t phase)
   // shift loop (~105 cycles, 4 here): '<< 1' only drops bit 31, which the uint16_t drops
   // too. Identical for all 2^32 values (checked exhaustively).
   i_DCoffset_V[phase] = static_cast< uint16_t >((l_filterDC_V[phase] << 1) >> 16);
+
+  if ((0 != phase) || !beyondStartUpPeriod)
+  {
+    return;
+  }
+
+  // The prediction, as Robin's 'energyInBucket_long + averagePower'. The sum of the first half
+  // goes through the same conversion as the whole cycle in processLatestContribution() (same
+  // shift, same table), with the entry for SAMPLE_SETS_PER_CYCLE sample sets; predictEndOfCycle()
+  // then scales it by SAMPLE_SETS_PER_CYCLE / n: (sumP / n) x cal, the first half's average power
+  // as one cycle's energy, in bucket units. Beyond N_MAX sample sets (no proper half cycle), the
+  // sum may exceed the 24 bits of Energy::contribution(): no prediction, the bucket as it is.
+  const uint8_t n{ n_samplesDuringThisMainsCycle[0] };
+  int32_t energyFirstHalf{ 0 };
+  if (n <= N_MAX)
+  {
+    energyFirstHalf = Energy::contribution(l_sumP[0] >> SUM_P_SHIFT, pgm_read_word(&powerCalPerSample.value[0][PREDICTION_CAL_INDEX]), powerCalPerSampleShift);
+  }
+  l_energyInBucket_prediction = FastControl::predictEndOfCycle(l_energyInBucket_main, energyFirstHalf, n, SAMPLE_SETS_PER_CYCLE);
 }
 
 /**
@@ -852,9 +873,7 @@ void processLatestContribution(const uint8_t phase)
 
     Shared::b_newMainsCycle = true;  //  a 50 Hz 'tick' for use by the main code
   }
-  // Applying max and min limits to the main accumulator's level
-  // is deferred until after the energy related decisions have been taken
-  //
+  // max and min limits to the main accumulator's level: processPlusHalfCycle()
 }
 
 /**
@@ -939,6 +958,19 @@ void processPlusHalfCycle(const uint8_t phase)
   //
   if (0 == phase)
   {
+    // Min and max limits to the level of the energy bucket, once the cycle's contribution is in
+    // (the decision of this cycle comes later, at mid-cycle, on the prediction). This is to
+    // ensure correct operation when conditions change, i.e. when import changes to export, and
+    // vice versa.
+    if (l_energyInBucket_main > l_capacityOfEnergyBucket_main)
+    {
+      l_energyInBucket_main = l_capacityOfEnergyBucket_main;
+    }
+    else if (l_energyInBucket_main < 0)
+    {
+      l_energyInBucket_main = 0;
+    }
+
     if (n_samplesDuringThisMainsCycle[phase] < n_lowestNoOfSampleSetsPerMainsCycle)
     {
       n_lowestNoOfSampleSetsPerMainsCycle = n_samplesDuringThisMainsCycle[phase];
@@ -988,14 +1020,6 @@ void processRawSamples(const uint8_t phase)
         processStartUp(phase);
       }
     }
-
-    // still processing samples where the voltage is POSITIVE ...
-    // check to see whether the trigger device can now be reliably armed
-    if ((0 == phase) && beyondStartUpPeriod && (2 == n_samplesDuringThisMainsCycle[0]))  // lower value for larger sample set
-    {
-      // This code is executed once per 20mS, shortly after the start of each new mains cycle on phase 0.
-      processStartNewCycle();
-    }
   }
   else
   {
@@ -1004,6 +1028,24 @@ void processRawSamples(const uint8_t phase)
     {
       // This is the start of a new -ve half cycle (just after the zero-crossing point)
       processMinusHalfCycle(phase);
+      if (0 == phase)
+      {
+        n_samplesDuringNegativeHalf = 0;
+      }
+    }
+
+    // The loads are decided at mid-cycle, on the prediction (fast_control.h): the voltage is now
+    // far enough past the zero crossing for the trigger devices to be reliably armed, and they
+    // latch the new states at the next positive zero crossing. The count stops past the decision,
+    // so that a negative voltage that lasts never wraps it into a second decision.
+    if ((0 == phase) && (n_samplesDuringNegativeHalf <= FastControl::DECISION_SAMPLE))
+    {
+      if (beyondStartUpPeriod && (FastControl::DECISION_SAMPLE == n_samplesDuringNegativeHalf))
+      {
+        // This code is executed once per 20mS, at mid-cycle on phase 0.
+        processStartNewCycle();
+      }
+      ++n_samplesDuringNegativeHalf;
     }
   }
 }
