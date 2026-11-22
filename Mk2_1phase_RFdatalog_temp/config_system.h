@@ -25,7 +25,7 @@ inline constexpr int16_t DIVERSION_START_THRESHOLD_WATTS{ 0 }; /**< surplus in W
 // other system constants, should match most of installations
 inline constexpr uint8_t SUPPLY_FREQUENCY{ 50 }; /**< number of cycles/s of the grid power supply */
 
-inline constexpr uint32_t WORKING_ZONE_IN_JOULES{ 3600UL }; /**< number of joule for 1Wh */
+inline constexpr uint32_t WORKING_ZONE_IN_JOULES{ 360UL }; /**< number of joules of the energy bucket: 0.1 Wh, as Robin Emley's fasterControl sketches */
 
 inline constexpr uint8_t DATALOG_PERIOD_IN_SECONDS{ 5 }; /**< Period of datalogging in seconds */
 

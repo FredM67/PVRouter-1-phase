@@ -177,7 +177,7 @@ Voir la [documentation technique](#documentation-technique) ci-dessus, et la doc
 
 # Comment le routeur décide
 
-Le routeur échantillonne, environ toutes les 312 µs, la tension secteur, le courant au point de raccordement (sonde 1) et le courant des charges locales (sonde 2) : 64 jeux d’échantillons par période secteur à 50 Hz, 53 à 60 Hz. La puissance au point de raccordement, période après période, remplit ou vide un réservoir d’énergie de 3600 J (1 Wh). Les charges sont décidées avec la logique *fasterControl* de Robin Emley, celle de son sketch `Mk2_fasterControl_twoLoads_5` (juillet 2023) :
+Le routeur échantillonne, environ toutes les 312 µs, la tension secteur, le courant au point de raccordement (sonde 1) et le courant des charges locales (sonde 2) : 64 jeux d’échantillons par période secteur à 50 Hz, 53 à 60 Hz. La puissance au point de raccordement, période après période, remplit ou vide un réservoir d’énergie de 360 J (0,1 Wh). Les charges sont décidées avec la logique *fasterControl* de Robin Emley, celle de son sketch `Mk2_fasterControl_twoLoads_5` (juillet 2023) :
 
 - au premier jeu d’échantillons de l’alternance négative, le routeur prédit le niveau du réservoir à la fin de la période, à partir de son niveau au début de la période et de la puissance moyenne de la première alternance ;
 - au 4e jeu d’échantillons de l’alternance négative (indice 3), il décide sur cette prédiction : au-dessus du milieu du réservoir, la charge suivante dans l’ordre des priorités peut s’allumer ; en dessous, la dernière allumée peut s’éteindre. Juste après une commutation, seule la charge qui vient de commuter peut changer, jusqu’à ce que l’effet de la commutation se voie ;

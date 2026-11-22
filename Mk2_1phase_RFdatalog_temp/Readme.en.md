@@ -167,7 +167,7 @@ The **[docs/](docs/)** folder holds the technical documentation: [architecture](
 
 # How the router decides
 
-The router samples, about every 312 µs, the mains voltage, the current at the grid connection (CT1) and the current to the local loads (CT2): 64 sample sets per mains cycle at 50 Hz, 53 at 60 Hz. The power at the grid connection, cycle after cycle, fills or empties an energy bucket of 3600 J (1 Wh). The loads are decided with Robin Emley's *fasterControl* logic, that of his sketch `Mk2_fasterControl_twoLoads_5` (July 2023):
+The router samples, about every 312 µs, the mains voltage, the current at the grid connection (CT1) and the current to the local loads (CT2): 64 sample sets per mains cycle at 50 Hz, 53 at 60 Hz. The power at the grid connection, cycle after cycle, fills or empties an energy bucket of 360 J (0.1 Wh). The loads are decided with Robin Emley's *fasterControl* logic, that of his sketch `Mk2_fasterControl_twoLoads_5` (July 2023):
 
 - at the first sample set of the negative half cycle, the router predicts the level of the bucket at the end of the cycle, from its level at the start of the cycle and the average power of the first half;
 - at the 4th sample set of the negative half cycle (index 3), it decides on that prediction: above the middle of the bucket, the next load in priority order may come ON; below it, the last one ON may go OFF. Right after a switch, only the load just switched may change, until the effect of the switch shows;

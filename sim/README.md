@@ -225,10 +225,11 @@ Plain text, one command per line, `#` starts a comment.
 | `expect clipped <n>` | at most n samples beyond the ADC's range |
 | `expect ds18b20_early_reads <n>` | at most n scratchpads read before the end of their conversion |
 | `expect temperature <n> <min> <max>` | every `T<n>` the datalog reports lies within [min, max], and at least one line reports it |
+| `expect voltage <min> <max>` | every `V` the datalog reports lies within [min, max], and at least one line reports it (`common.scn`: 220 to 240 V on the 230 V mains of the board files) |
 
 `scenarios/common.scn` describes the installation of the default `config.h` (three local loads on D5-D7, override pin D4) and the timing expected on every run (no misfiled sample, ADMUX written 128 cycles or more after its conversion started, no ISR overrun, no clipped sample), with margins enforced: the longest ISR call and the latest ADMUX write must stay a little above the worst measured on the builds that run them (`isr_max`, `admux_delay_max`), so that a change eating the headroom fails before samples are lost; the other scenarios include it. The ADMUX margin of the grid scenarios, 1620 cycles, leaves room for the ordinary shifts of the 1-Wire time slots against the ADC phase in the temperature builds: a failure between 1620 and the 1664-cycle deadline, with `misfiled_samples` 0, is a margin warning, not a lost sample. `scenarios/rf/common.scn` and `scenarios/relays/common.scn` do the same for the remote-loads and relay configurations. The relay and RF scenarios are those of the 3-phase router, every power halved (relay thresholds included) to stay within the range of one CT.
 
-The firmware's datalog starts about 11 s after power-up (banner, then the start-up period), and reports every 5 s: a diverted energy is only seen once a line follows it. When the surplus comes, the energy bucket first fills up to half its 3600 J (exported, 0.5 Wh), and it empties when the surplus goes: the diverted energy is the surplus × time less the export target, within those half-bucket transients.
+The firmware's datalog starts about 11 s after power-up (banner, then the start-up period), and reports every 5 s: a diverted energy is only seen once a line follows it. When the surplus comes, the energy bucket first fills up to half its 360 J (exported, 0.05 Wh), and it empties when the surplus goes: the diverted energy is the surplus × time less the export target, within those half-bucket transients.
 
 ## Limits
 
