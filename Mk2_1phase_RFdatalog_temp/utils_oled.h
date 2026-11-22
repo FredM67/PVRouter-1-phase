@@ -26,6 +26,7 @@
 
 #include <Arduino.h>
 #include <U8x8lib.h>
+#include <Wire.h>
 
 #include "config_derived.h"
 #include "display_core.h"
@@ -190,6 +191,8 @@ inline void setupOLED()
   if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
   {
     u8x8.begin();
+    // a stuck SDA or SCL (noise, unplugged display) would otherwise block the main loop for ever
+    Wire.setWireTimeout(25000, true);
     u8x8.clearDisplay();
 
     u8x8_draw_xbm((u8x8.getCols() - (LOGO_WIDTH >> 3)) >> 1, (u8x8.getRows() - (LOGO_HEIGHT >> 3)) >> 1, LOGO_WIDTH, LOGO_HEIGHT, logo_xbm);
