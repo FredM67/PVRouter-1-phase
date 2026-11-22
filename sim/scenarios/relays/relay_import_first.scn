@@ -4,14 +4,14 @@
 include common.scn
 duration 380
 
-at 0   -200 -200 -200
-at 30  -200 -200 -200
-at 30  2000 2000 2000   # 6000 W: triac loads on (3000 W), 3000 W exported
-at 200 2000 2000 2000
-at 200 3000 3000 3000   # 9000 W: relay 1 on, still 4500 W exported
-at 300 3000 3000 3000
-at 300 -200 -200 -200   # import, while relay 2 is within its minimum ON time
-at 380 -200 -200 -200
+at 0    -300
+at 30   -300
+at 30   3000   # triac loads on (1500 W), 1500 W exported
+at 200  3000
+at 200  4500   # relay 1 on (750 W), still 2250 W exported
+at 300  4500
+at 300  -300   # import, while relay 2 is within its minimum ON time
+at 380  -300
 
 expect 290 pin 8 on
 expect 290 pin 9 on

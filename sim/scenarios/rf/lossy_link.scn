@@ -7,7 +7,7 @@ include common.scn
 duration 30
 input 4 0    # override: every load forced on, the remote ones included
 
-at 0 -200 -200 -200
+at 0    -300
 
 rf_loss 10 3
 

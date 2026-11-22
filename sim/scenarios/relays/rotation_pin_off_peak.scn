@@ -4,8 +4,8 @@
 include common.scn
 duration 60
 
-at 0   600 600 600
-at 60  600 600 600
+at 0     900
+at 60    900
 
 input 11 0 10           # off-peak starts, and lasts
 input 12 0 30           # pressed

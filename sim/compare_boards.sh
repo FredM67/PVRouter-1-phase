@@ -2,20 +2,22 @@
 # The same scenario must give the same result on every board: compares the summaries of two
 # runs, scenario by scenario.
 #
-#   compare_boards.sh [out dir [run [% [Wh [reference]]]]]   (default: out new 1 0.1, old board)
+#   compare_boards.sh [out dir [run [% [Wh [reference]]]]]   (default: out new 1 0.1, OLD_SEG)
 #
-# run: the prefix of the summaries to check, new (make check-new) or new20 (make check-new20).
-# reference: the prefix of the summaries to compare with; none for the old board (make check).
-# Compared: grid import and export, in total and per phase, and the energy of each load.
+# run: the prefix of the summaries to check: new, new20 or old-oled (make check-new...).
+# reference: the prefix of the summaries to compare with; none for OLD_SEG (make check).
+# Compared: grid import and export, and the energy of each load and relay. Not the diverted
+# energy the firmware reports: it counts whole Wh, which a few hundredths of a Wh can tip.
 # Allowed difference: the given % or Wh, whichever is larger. The boards differ in resolution
-# only (with 50 A CTs, the new board has 2.6 times fewer ADC steps per watt), which can move a
-# switching instant by a half-cycle now and then: a few hundredths of a Wh over a scenario.
+# (with 50 A CTs, the new board has 2.6 times fewer ADC steps per watt than the old ones) and in
+# analog inputs, which can move a switching instant by a half-cycle now and then: a few
+# hundredths of a Wh over a scenario.
 out=${1:-out}
 run=${2:-new}
 pct=${3:-1}
 min_wh=${4:-0.1}
 ref=${5:-}
-ref_name=${ref:-old}
+ref_name=${ref:-old_seg}
 status=0
 found=0
 for new in "$out"/$run-*-summary.txt; do
@@ -30,15 +32,10 @@ for new in "$out"/$run-*-summary.txt; do
     continue
   fi
   awk -v name="$name ($run against $ref_name)" -v ref="$ref_name" -v run="$run" -v pct="$pct" -v min_wh="$min_wh" '
-    # figures of a summary: grid import/export (total and per phase), energy of each load
-    function grab(  i, n, p, v) {
+    # figures of a summary: grid import/export, energy of each load and relay
+    function grab(  i) {
       if ($1 == "Grid") {
         fig["grid import"] = $3; fig["grid export"] = $6
-        for (i = 8; i <= NF; i += 2) {      # (L1 5.51/4.81, L2 ...
-          p = $i; sub(/^\(/, "", p)
-          v = $(i + 1); sub(/[,)]$/, "", v); split(v, n, "/")
-          fig[p " import"] = n[1]; fig[p " export"] = n[2]
-        }
       } else if ($1 == "Load" || $1 == "Relay") {
         for (i = 3; i < NF; ++i)
           if ($(i + 1) == "Wh,") { fig[$1 " " $2] = $i; break }

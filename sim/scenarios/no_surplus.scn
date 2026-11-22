@@ -2,19 +2,15 @@
 include common.scn
 duration 40
 
-at 0   -300 -150 -500
-at 20  -300 -150 -500
-at 25  -1500 -800 -50   # consumption changes, still importing on every phase
-at 40  -1500 -800 -50
+at 0   -475
+at 20  -475
+at 25  -1175   # consumption changes, still importing
+at 40  -1175
 
 expect 10 pin 5 off
 expect 39 pin 5 off
 expect 39 pin 6 off
 expect 39 pin 7 off
-expect min_sample_sets 30
-# ISR calls longer than one ADC conversion (104 us), where the next sample may be
-# taken on the wrong channel. dev has a handful per minute, at datalog time.
-expect isr_overruns 40
-# Conversions filed under the wrong channel (an ISR that overran ADMUX's
-# two-conversion pipeline): none allowed.
-expect misfiled_samples 0
+# nothing diverted: CT2 sees no current
+expect diverted_wh 0 0
+expect diverted_w_avg 0 0

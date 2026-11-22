@@ -1,19 +1,20 @@
-# Hardware shared by the scenarios - matches the default config.h and calibration.h
-#
-# mains <frequency Hz> <Vrms>
-mains 50 230
-# f_voltageCal and f_powerCal from calibration.h: the firmware must read back
-# the voltages and powers the simulator generates
-vcal 0.8151 0.8184 0.8195
-pcal 0.05 0.05 0.05
+# Hardware shared by the scenarios - matches the default config.h: three local loads on D5-D7,
+# override pin D4. The board (its analog inputs, ADC reference, calibration and mains) comes from
+# the board file, read after the scenario (board_scn.sh, grid_sim -b): the same scenarios run on
+# the three boards.
 
-# load <pin> <phase 1-3> <W>: physicalLoadPin[] = { 5, 6, 7 }, priorities 0, 1, 2
-load 5 1 2000
-load 6 2 2000
-load 7 3 2000
+# load <pin> <W>: physicalLoadPin[] = { 5, 6, 7 }, priorities 0, 1, 2. CT2 measures the three.
+load 5 1000
+load 6 1000
+load 7 1000
 
 # D4 is the override pin (active LOW): keep it released
 input 4 1
 
+# Conversions filed under the wrong channel (an ISR longer than one conversion breaks ADMUX's
+# two-conversion pipeline): none allowed.
+expect misfiled_samples 0
 # ADMUX must change one ADC clock (128 cycles) or more after the conversion started
 expect admux_delay_min 128
+# The ISR must end within the 1664 cycles of one conversion
+expect isr_overruns 0

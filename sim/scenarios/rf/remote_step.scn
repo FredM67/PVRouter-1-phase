@@ -4,13 +4,13 @@
 include common.scn
 duration 75
 
-at 0   -200 -200 -200
-at 15  -200 -200 -200
-at 15  1600 1600 1600   # 4800 W surplus: local loads on, unit 1 partly
-at 40  1600 1600 1600
-at 40  2400 2400 2400   # 7200 W surplus: unit 1 on, unit 2 partly
-at 60  2400 2400 2400
-at 60  -200 -200 -200   # surplus gone
+at 0    -300
+at 15   -300
+at 15   2400   # local loads on (2000 W), unit 1 partly
+at 40   2400
+at 40   3600   # unit 1 on, unit 2 partly
+at 60   3600
+at 60   -300   # surplus gone
 
 expect 14 remote 15 0 off
 expect 35 pin 5 on
@@ -28,5 +28,6 @@ expect 45 60 grid_avg -30 -10
 # (serial_output.h). The receiver's link timeout is 500 ms.
 expect rf_max_gap 15 0.15
 expect rf_max_gap 16 0.15
-expect min_sample_sets 30
-expect misfiled_samples 0
+# CT2 measures the local loads only: both ON from the first step to the end of the surplus,
+# 2000 W x 45 s = 25 Wh +-5 %, whole Wh
+expect diverted_wh 23.75 26.25

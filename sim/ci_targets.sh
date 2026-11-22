@@ -1,9 +1,10 @@
 #!/bin/sh
 # The make targets of one CI job, when the scenarios of a set are spread over several jobs.
 #
-#   ci_targets.sh grid <k>/<n>     scenarios/*.scn, each on the three boards (check-, check-new-,
-#                                  check-new20-): the boards of a scenario stay in the same job,
-#                                  which can then compare them
+#   ci_targets.sh grid <k>/<n>     scenarios/*.scn, each on the three boards and their variants
+#                                  (check-, check-old-oled-, check-new-, check-new20-, check-60hz-):
+#                                  the boards of a scenario stay in the same job, which can then
+#                                  compare them
 #   ci_targets.sh relays <k>/<n>   scenarios/relays/*.scn
 #
 # Job k of n takes every n-th scenario, in alphabetical order, starting from the k-th. The
@@ -29,7 +30,7 @@ fi
 
 for name in $names; do
   case $set_name in
-    grid)   printf 'check-%s check-new-%s check-new20-%s\n' "$name" "$name" "$name" ;;
+    grid)   printf 'check-%s check-old-oled-%s check-new-%s check-new20-%s check-60hz-%s\n' "$name" "$name" "$name" "$name" "$name" ;;
     relays) printf 'check-relays-%s\n' "$name" ;;
   esac
 done | tr '\n' ' '

@@ -1,20 +1,23 @@
 Firmware for scenarios/rf: the project's config with the third and fourth loads
-on remote units 1 and 2 (nodes 15 and 16, REMOTE_NODE_ID in config_rf.h).
+on remote units 1 and 2 (nodes 15 and 16, REMOTE_NODE_ID in the receiver's config_rf.h).
+The RFM69 takes D2 (IRQ) and D10 to D13 (SPI): the local loads stay on D5 and D6, the
+override pin on D4.
 
-  git apply --unidiff-zero sim/configs/remote_loads.patch
+  PVR_SIM_BUILD=1 sh sim/configs/sim_config.sh
+  sed -n '/^diff --git/,$p' sim/configs/remote_loads.patch | patch -p1    # or git apply --unidiff-zero
   PLATFORMIO_BUILD_DIR=.pio/build-rf pio run --project-dir Mk2_1phase_RFdatalog_temp -e basic
 
 diff --git a/Mk2_1phase_RFdatalog_temp/config.h b/Mk2_1phase_RFdatalog_temp/config.h
-index c2e358a4..2a9bb904 100644
+index 15de861..5a2d094 100644
 --- a/Mk2_1phase_RFdatalog_temp/config.h
 +++ b/Mk2_1phase_RFdatalog_temp/config.h
-@@ -40 +40 @@ inline constexpr bool CALIBRATION_MODE{ false };
+@@ -43 +43 @@ inline constexpr bool CALIBRATION_MODE{ false };
 -inline constexpr uint8_t NO_OF_DUMPLOADS{ 3 }; /**< TOTAL number of dump loads (local + remote) */
 +inline constexpr uint8_t NO_OF_DUMPLOADS{ 4 }; /**< TOTAL number of dump loads (local + remote) */
-@@ -53 +53,2 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
+@@ -56 +56,2 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
 -  Load::local(7)
 +  Load::remote(1),
 +  Load::remote(2)
-@@ -91 +92 @@ inline constexpr bool RF_LOGGING_PRESENT{ false };   /**< set it to 'true' if RF
+@@ -115 +116 @@ inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE }; /**< the disp
 -inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2 }; /**< load priorities at startup (0=highest) */
 +inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2, 3 }; /**< load priorities at startup (0=highest) */

@@ -1,20 +1,19 @@
 # Router with two local loads and two remote units (configs/remote_loads.patch):
 # the third load on unit 1 (node 15), the fourth on unit 2 (node 16), bit 0 of
-# each unit's payload.
-mains 50 230
-vcal 0.8151 0.8184 0.8195
-pcal 0.05 0.05 0.05
+# each unit's payload. CT2 measures the local loads only.
 
-# load <pin> <phase> <W>
-load 5 1 2000
-load 6 2 2000
-# remote <node> <bit> <phase> <W>
-remote 15 0 3 2000
-remote 16 0 1 2000
+# load <pin> <W>
+load 5 1000
+load 6 1000
+# remote <node> <bit> <W>
+remote 15 0 1000
+remote 16 0 1000
 # with the RemoteLoadReceiver firmware (grid_sim -r): its loadPins, bit 0 first
 receiver_pins 4 3
 
 input 4 1    # override pin released (active low)
 
+expect misfiled_samples 0
 # ADMUX must change one ADC clock (128 cycles) or more after the conversion started
 expect admux_delay_min 128
+expect isr_overruns 0

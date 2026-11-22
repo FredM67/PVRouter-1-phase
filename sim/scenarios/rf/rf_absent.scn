@@ -6,7 +6,7 @@ duration 20
 rf_absent
 input 4 0 10    # override pin pulled low at 10 s
 
-at 0 -200 -200 -200
+at 0    -300
 
 expect 9 pin 5 off
 expect 15 pin 5 on

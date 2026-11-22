@@ -5,8 +5,8 @@
 include common.scn
 duration 70
 
-at 0   600 600 600
-at 70  600 600 600
+at 0     900
+at 70    900
 
 input 4 0 25            # override: every load forced
 input 12 0 30           # rotation pressed during the override...

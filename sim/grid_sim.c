@@ -1,14 +1,16 @@
 /*
- * grid_sim - runs the PVRouter firmware on a simulated 3-phase grid
+ * grid_sim - runs the PVRouter firmware on a simulated single-phase grid
  *
  * The production firmware (firmware.elf) runs in simavr, an ATmega328P emulator.
- * grid_sim feeds its 6 ADC channels with 50 Hz voltage and current waves computed
- * at the exact CPU cycle of each conversion, and models the loads driven by the
- * firmware's output pins: when a load conducts, its power is taken from the surplus
- * of its phase, which the firmware then measures.
+ * grid_sim feeds its 3 ADC channels (voltage, CT1 at the grid connection, CT2 on the
+ * diverted current) with 50 Hz waves computed at the exact CPU cycle of each conversion,
+ * on the analog inputs of the board (channels), and models the loads driven by the
+ * firmware's output pins: when a load conducts, its power is taken from the surplus,
+ * which the firmware then measures on CT1, and CT2 measures every local load and relay
+ * that conducts.
  *
  * Loads are driven through zero-crossing triac drivers: a pin change only takes
- * effect at the next zero crossing of the load's own phase.
+ * effect at the next zero crossing.
  *
  * An RFM69 radio model sits on the SPI bus (chip select D10). Remote loads are
  * driven by an ideal receiver: each frame sent to their node sets them from the
@@ -16,7 +18,7 @@
  * within the receiver's link timeout, like RemoteLoadReceiver does.
  *
  * Measured: ADC conversion period, ADC ISR duration (cycle-exact), delay of its ADMUX write, load switching,
- * RF frames, grid import/export energy, and the firmware's own serial output.
+ * RF frames, grid import/export energy, diverted energy, and the firmware's own serial output.
  *
  * Usage: grid_sim [-q] [-t trace.csv] [-e events.csv] firmware.elf scenario.scn
  *
@@ -44,22 +46,22 @@
 #include "sim_interrupts.h"
 
 #define F_CPU 16000000UL
-#define ADC_VECTOR 21                  /* ADC_vect on the ATmega328P */
-#define ADC_CYCLES_PER_CONVERSION 1664 /* 13 ADC clocks at F_CPU / 128 */
-#define ADC_MID_COUNTS 511.5           /* bias of the analog front end */
-#define ADC_MAX_SWING 510.0            /* counts, either side of the bias */
-#define ADMUX_ADDR 0x7C                /* ADMUX in the data space of the ATmega328P */
-#define ADC_CLOCK_CYCLES 128           /* one ADC clock at F_CPU / 128 */
-#define AVCC_MV 5000.0                 /* old board: ADC reference AVCC, the 5 V supply */
-#define INTERNAL_REF_MV 1100.0         /* new board: internal 1.1 V reference */
-#define NO_OF_PHASES 3
-#define ADC_SEQUENCE_SETTLING (2 * 2 * NO_OF_PHASES) /* conversions ignored after the ADC starts */
+#define ADC_VECTOR 21                            /* ADC_vect on the ATmega328P */
+#define ADC_CYCLES_PER_CONVERSION 1664           /* 13 ADC clocks at F_CPU / 128 */
+#define ADC_MID_COUNTS 511.5                     /* bias of the analog front end */
+#define ADC_MAX_SWING 510.0                      /* counts, either side of the bias */
+#define ADMUX_ADDR 0x7C                          /* ADMUX in the data space of the ATmega328P */
+#define ADC_CLOCK_CYCLES 128                     /* one ADC clock at F_CPU / 128 */
+#define INTERNAL_REF_MV 1100.0                   /* new board: internal 1.1 V reference */
+#define ADC_CHANNELS 3                           /* V -> I1 (CT1, grid) -> I2 (CT2, diverted), in this order */
+#define ADC_SEQUENCE_SETTLING (2 * ADC_CHANNELS) /* conversions ignored after the ADC starts */
 
 #define MAX_LOADS 8
 #define MAX_POINTS 512
 #define MAX_EXPECTS 128
 #define MAX_INPUTS 16
 #define MAX_RF_NODES 8
+#define MAX_DATALOG 4096 /* datalog lines kept, for the diverted energy */
 
 #define MAX_RECEIVERS 8
 #define MAX_RECEIVER_PINS 8
@@ -76,23 +78,25 @@
 typedef struct
 {
   double t;
-  double surplus[NO_OF_PHASES]; /* W available before the router's loads, > 0 = export */
+  double surplus; /* W available before the router's loads, > 0 = export */
 } point_t;
 
 typedef enum
 {
-  EXPECT_PIN,      /* expect <t> pin <p> on|off   or   expect <t> remote <node> <bit> on|off */
-  EXPECT_GRID_AVG, /* expect <t0> <t1> grid_avg <min> <max>  (W, import > 0, all phases) */
-  EXPECT_ISR_MAX,  /* expect isr_max <cycles> */
-  EXPECT_MIN_SETS, /* expect min_sample_sets <n>  (lowest value reported by the firmware) */
-  EXPECT_OVERRUNS, /* expect isr_overruns <n>  (ISR calls longer than one conversion, at most) */
-  EXPECT_MISFILED, /* expect misfiled_samples <n>  (conversions filed under the wrong channel, at most) */
-  EXPECT_ADMUX,    /* expect admux_delay_min <cycles>  (ADMUX written by the ISR this long after its conversion started, at least) */
-  EXPECT_RF_GAP,   /* expect rf_max_gap <node> <s>  (longest silence towards a node, once it got a frame) */
-  EXPECT_RF_LOST,  /* expect rf_links_lost <node> <min> <max>  (times the node's receiver lost the link) */
-  EXPECT_SWITCHES, /* expect switches <pin> <min> <max>  (switch-ons of a load or relay) */
-  EXPECT_MIN_ON,   /* expect min_on <pin> <s>  (shortest complete ON period, at least) */
-  EXPECT_MIN_OFF,  /* expect min_off <pin> <s>  (shortest complete OFF period between two ON ones, at least) */
+  EXPECT_PIN,         /* expect <t> pin <p> on|off   or   expect <t> remote <node> <bit> on|off */
+  EXPECT_GRID_AVG,    /* expect <t0> <t1> grid_avg <min> <max>  (W, import > 0) */
+  EXPECT_DIVERTED_WH, /* expect [<t0> <t1>] diverted_wh <min> <max>  (Wh the firmware reports: last value, or its increase) */
+  EXPECT_DIVERTED_W,  /* expect [<t0> <t1>] diverted_w_avg <min> <max>  (average of the W it reports, every line or those printed within) */
+  EXPECT_ISR_MAX,     /* expect isr_max <cycles> */
+  EXPECT_MIN_SETS,    /* expect min_sample_sets <n>  (lowest value reported by the firmware) */
+  EXPECT_OVERRUNS,    /* expect isr_overruns <n>  (ISR calls longer than one conversion, at most) */
+  EXPECT_MISFILED,    /* expect misfiled_samples <n>  (conversions filed under the wrong channel, at most) */
+  EXPECT_ADMUX,       /* expect admux_delay_min <cycles>  (ADMUX written by the ISR this long after its conversion started, at least) */
+  EXPECT_RF_GAP,      /* expect rf_max_gap <node> <s>  (longest silence towards a node, once it got a frame) */
+  EXPECT_RF_LOST,     /* expect rf_links_lost <node> <min> <max>  (times the node's receiver lost the link) */
+  EXPECT_SWITCHES,    /* expect switches <pin> <min> <max>  (switch-ons of a load or relay) */
+  EXPECT_MIN_ON,      /* expect min_on <pin> <s>  (shortest complete ON period, at least) */
+  EXPECT_MIN_OFF,     /* expect min_off <pin> <s>  (shortest complete OFF period between two ON ones, at least) */
 } expect_kind_t;
 
 typedef struct
@@ -124,7 +128,6 @@ typedef struct
 {
   int pin;       /* local load: output pin */
   int node, bit; /* remote load: node ID (0 for a local load) and bit of the payload */
-  int phase;     /* 0-based */
   double watts;
   int relay; /* the contacts follow the pin at once, with no zero-crossing latching */
   /* pin state, as driven by the firmware */
@@ -146,7 +149,10 @@ static struct
 {
   double duration;
   double frequency, vrms;
-  double vcal[NO_OF_PHASES], pcal[NO_OF_PHASES];
+  double vcal;               /* f_voltageCal: volts per ADC step */
+  double pcal, pcal2;        /* f_powerCal of CT1 (grid) and CT2 (diverted): W per ADC step squared */
+  double avcc_mv;            /* AVCC, the ADC reference of the old boards */
+  int adc_pin[ADC_CHANNELS]; /* analog input of V, I1 and I2 (A0 = 0), -1: not given */
   load_t loads[MAX_LOADS];
   int no_of_loads;
   point_t points[MAX_POINTS];
@@ -169,8 +175,11 @@ static struct
   .rf_timeout = 0.5,
   .frequency = 50.0,
   .vrms = 230.0,
-  .vcal = { 0.8151, 0.8184, 0.8195 },
-  .pcal = { 0.05, 0.05, 0.05 },
+  .vcal = -1,
+  .pcal = -1,
+  .pcal2 = -1,
+  .avcc_mv = -1,
+  .adc_pin = { -1, -1, -1 },
 };
 
 static void die(const char *fmt, ...)
@@ -228,17 +237,46 @@ static void parse_scenario(const char *path, int depth)
     else if (!strcmp(cmd, "mains"))
       ok = sscanf(args, "%lf %lf", &scn.frequency, &scn.vrms) == 2;
     else if (!strcmp(cmd, "vcal"))
-      ok = sscanf(args, "%lf %lf %lf", &scn.vcal[0], &scn.vcal[1], &scn.vcal[2]) == 3;
+      ok = sscanf(args, "%lf", &scn.vcal) == 1 && scn.vcal > 0;
     else if (!strcmp(cmd, "pcal"))
-      ok = sscanf(args, "%lf %lf %lf", &scn.pcal[0], &scn.pcal[1], &scn.pcal[2]) == 3;
+    {
+      /* pcal <CT1> [<CT2>]: CT2 as CT1 when not given */
+      const int n = sscanf(args, "%lf %lf", &scn.pcal, &scn.pcal2);
+      if (n == 1)
+        scn.pcal2 = scn.pcal;
+      ok = n >= 1 && scn.pcal > 0 && scn.pcal2 > 0;
+    }
+    else if (!strcmp(cmd, "avcc"))
+      ok = sscanf(args, "%lf", &scn.avcc_mv) == 1 && scn.avcc_mv >= 1800 && scn.avcc_mv <= 5500;
+    else if (!strcmp(cmd, "channels"))
+    {
+      /* channels V <pin> I1 <pin> I2 <pin>: analog inputs, A3 or 3 */
+      static const char *const names[ADC_CHANNELS] = { "V", "I1", "I2" };
+      const char *p = args;
+      for (int ch = 0; ok && ch < ADC_CHANNELS; ++ch)
+      {
+        char name[8];
+        int n = 0, pin;
+        ok = sscanf(p, " %7s %n", name, &n) == 1 && !strcmp(name, names[ch]);
+        p += n;
+        if (ok && (*p == 'A' || *p == 'a'))
+          ++p;
+        ok = ok && sscanf(p, "%d%n", &pin, &n) == 1 && pin >= 0 && pin <= 7;
+        if (ok)
+        {
+          p += n;
+          for (int other = 0; other < ch; ++other)
+            ok = ok && scn.adc_pin[other] != pin;
+          scn.adc_pin[ch] = pin;
+        }
+      }
+    }
     else if (!strcmp(cmd, "load") || !strcmp(cmd, "relay"))
     {
       if (scn.no_of_loads == MAX_LOADS)
         die("%s:%d: too many loads", path, lineno);
       load_t *l = &scn.loads[scn.no_of_loads];
-      ok = sscanf(args, "%d %d %lf", &l->pin, &l->phase, &l->watts) == 3 && l->pin >= 0 && l->pin <= 13
-           && l->phase >= 1 && l->phase <= NO_OF_PHASES;
-      l->phase -= 1;
+      ok = sscanf(args, "%d %lf", &l->pin, &l->watts) == 2 && l->pin >= 0 && l->pin <= 13;
       l->first_on = l->last_change = l->min_on = l->min_off = -1.0;
       l->relay = !strcmp(cmd, "relay");
       if (ok)
@@ -249,10 +287,9 @@ static void parse_scenario(const char *path, int depth)
       if (scn.no_of_loads == MAX_LOADS)
         die("%s:%d: too many loads", path, lineno);
       load_t *l = &scn.loads[scn.no_of_loads];
-      ok = sscanf(args, "%d %d %d %lf", &l->node, &l->bit, &l->phase, &l->watts) == 4 && l->node >= 1
-           && l->node <= 1023 && l->bit >= 0 && l->bit <= 7 && l->phase >= 1 && l->phase <= NO_OF_PHASES;
+      ok = sscanf(args, "%d %d %lf", &l->node, &l->bit, &l->watts) == 3 && l->node >= 1 && l->node <= 1023
+           && l->bit >= 0 && l->bit <= 7;
       l->pin = -1;
-      l->phase -= 1;
       l->first_on = l->last_change = l->min_on = l->min_off = -1.0;
       if (ok)
         ++scn.no_of_loads;
@@ -300,7 +337,7 @@ static void parse_scenario(const char *path, int depth)
       if (scn.no_of_points == MAX_POINTS)
         die("%s:%d: too many points", path, lineno);
       point_t *p = &scn.points[scn.no_of_points];
-      ok = sscanf(args, "%lf %lf %lf %lf", &p->t, &p->surplus[0], &p->surplus[1], &p->surplus[2]) == 4;
+      ok = sscanf(args, "%lf %lf", &p->t, &p->surplus) == 2;
       if (ok && scn.no_of_points && p->t < scn.points[scn.no_of_points - 1].t)
         die("%s:%d: points must be in chronological order", path, lineno);
       if (ok)
@@ -314,6 +351,7 @@ static void parse_scenario(const char *path, int depth)
       char a[32], b[32];
       double t;
       e->line = lineno;
+      e->t0 = e->t1 = -1; /* diverted_wh, diverted_w_avg: the whole run */
       if (sscanf(args, " isr_max %lf", &e->hi) == 1)
         e->kind = EXPECT_ISR_MAX;
       else if (sscanf(args, " min_sample_sets %lf", &e->lo) == 1)
@@ -348,9 +386,22 @@ static void parse_scenario(const char *path, int depth)
         e->t0 = t;
         e->state = !strcmp(a, "on");
       }
-      else if (sscanf(args, "%lf %lf %31s %lf %lf", &e->t0, &e->t1, b, &e->lo, &e->hi) == 5 && !strcmp(b, "grid_avg")
-               && e->t1 > e->t0)
-        e->kind = EXPECT_GRID_AVG;
+      else if (sscanf(args, " diverted_wh %lf %lf", &e->lo, &e->hi) == 2 && e->hi >= e->lo)
+        e->kind = EXPECT_DIVERTED_WH;
+      else if (sscanf(args, " diverted_w_avg %lf %lf", &e->lo, &e->hi) == 2 && e->hi >= e->lo)
+        e->kind = EXPECT_DIVERTED_W;
+      else if (sscanf(args, "%lf %lf %31s %lf %lf", &e->t0, &e->t1, b, &e->lo, &e->hi) == 5 && e->t1 > e->t0
+               && e->hi >= e->lo)
+      {
+        if (!strcmp(b, "grid_avg"))
+          e->kind = EXPECT_GRID_AVG;
+        else if (!strcmp(b, "diverted_wh"))
+          e->kind = EXPECT_DIVERTED_WH;
+        else if (!strcmp(b, "diverted_w_avg"))
+          e->kind = EXPECT_DIVERTED_W;
+        else
+          ok = 0;
+      }
       else
         ok = 0;
       if (ok)
@@ -365,21 +416,31 @@ static void parse_scenario(const char *path, int depth)
   fclose(f);
 }
 
-/* surplus of one phase at time t: linear interpolation between the points */
-static double surplus_at(int phase, double t)
+/* surplus at time t: linear interpolation between the points */
+static double surplus_at(double t)
 {
   if (!scn.no_of_points)
     return 0.0;
   if (t <= scn.points[0].t)
-    return scn.points[0].surplus[phase];
+    return scn.points[0].surplus;
   for (int i = 1; i < scn.no_of_points; ++i)
   {
     const point_t *a = &scn.points[i - 1], *b = &scn.points[i];
     if (t < b->t)
-      return (b->t == a->t) ? b->surplus[phase]
-                            : a->surplus[phase] + (b->surplus[phase] - a->surplus[phase]) * (t - a->t) / (b->t - a->t);
+      return (b->t == a->t) ? b->surplus : a->surplus + (b->surplus - a->surplus) * (t - a->t) / (b->t - a->t);
   }
-  return scn.points[scn.no_of_points - 1].surplus[phase];
+  return scn.points[scn.no_of_points - 1].surplus;
+}
+
+/* the board's settings must be given: by the board file (board_scn.sh), or by the scenario */
+static void check_board(void)
+{
+  if (scn.adc_pin[0] < 0)
+    die("no 'channels' setting: give the board's settings (board_scn.sh, grid_sim -b)");
+  if (scn.avcc_mv < 0)
+    die("no 'avcc' setting: give the board's settings (board_scn.sh, grid_sim -b)");
+  if (scn.vcal < 0 || scn.pcal < 0)
+    die("no 'vcal' or 'pcal' setting: give the board's calibration (board_scn.sh, grid_sim -b)");
 }
 
 /* ------------------------------------------------------------------------- */
@@ -397,11 +458,12 @@ static double now(void)
 static struct
 {
   double last_t;
-  long half_cycle[NO_OF_PHASES]; /* index of the current half cycle of each phase */
-  double export_w[NO_OF_PHASES]; /* current grid export per phase (< 0 = import) */
+  long half_cycle;   /* index of the current half cycle */
+  double export_w;   /* current grid export, CT1 (< 0 = import) */
+  double diverted_w; /* current power of the local loads and relays that conduct, CT2 */
   double import_wh, export_wh;
-  double phase_import_wh[NO_OF_PHASES], phase_export_wh[NO_OF_PHASES];
-} grid;
+  double diverted_wh; /* energy through CT2, forced loads included */
+} grid = { .half_cycle = LONG_MIN };
 
 static struct
 {
@@ -409,17 +471,22 @@ static struct
   uint64_t conversions;
   avr_cycle_count_t min_period, max_period;
   int clipped;
-  /* The firmware files the conversions as V1 I1 V2 I2 V3 I3 in turn, and writes
-   * ADMUX at the end of its ISR for the conversion after next. When the ISR runs
-   * longer than one conversion, that conversion has already started on the old
-   * channel: the sample is filed under the wrong channel. */
-  int expected_src;
+  /* The firmware files the conversions as V I1 I2 in turn, and writes ADMUX at the
+   * end of its ISR for the conversion after next. When the ISR runs longer than one
+   * conversion, that conversion has already started on the old channel: the sample
+   * is filed under the wrong channel. */
+  int expected_ch;
+  /* channel of the conversion in progress and of the last one completed, which the ISR reads
+   * (-1: none), and when they were sampled */
+  int converting, completed;
+  double converting_t, completed_t;
+  double peak_mv[ADC_CHANNELS]; /* largest swing on each input, for the summary */
   uint64_t misfiled;
   double first_misfiled;
   /* the reference the firmware selected (REFS1:0 of ADMUX), in mV: 0 before the first conversion */
   double vref_mv;
   int vref_changed;
-} adc = { .min_period = UINT64_MAX, .expected_src = -1 };
+} adc = { .min_period = UINT64_MAX, .expected_ch = -1, .converting = -1, .completed = -1 };
 
 static struct
 {
@@ -427,10 +494,15 @@ static struct
   uint64_t count;
   uint64_t total;
   avr_cycle_count_t max;
-  double max_at;
+  double max_at, max_angle; /* when, and where in the mains cycle (degrees from the rising zero crossing) */
+  int max_ch;               /* channel of the sample it processed */
+  /* the longest call per channel and half cycle of its sample (0: positive, 1: negative) */
+  avr_cycle_count_t max_of[ADC_CHANNELS][2];
+  double max_angle_of[ADC_CHANNELS][2];
   uint64_t overruns; /* calls longer than one conversion: the next sample may use the wrong channel */
-  int running;
-} isr;
+  int running, ch;
+  double t_sample;
+} isr = { .max_ch = -1 };
 
 /* ADMUX writes of the ADC ISR, timed from the start of the conversion in progress.
  * Free-running, a conversion starts when the previous one completes and raises the
@@ -447,12 +519,21 @@ static struct
   double min_at;
 } admux = { .min = UINT64_MAX };
 
+/* a datalog line with the diverted power and energy (DIVERTED_CT_PRESENT) */
+typedef struct
+{
+  double t; /* printed at */
+  double w, wh;
+} datalog_t;
+
 static struct
 {
   char line[256];
   size_t len;
   int datalog_lines;
   int min_sets, max_sets;
+  datalog_t diverted[MAX_DATALOG];
+  int no_of_diverted;
 } serial = { .min_sets = INT_MAX, .max_sets = INT_MIN };
 
 /* a remote unit running the receiver firmware in its own simulated AVR */
@@ -518,20 +599,12 @@ static void update_grid(void)
   /* energy over the elapsed interval, with the conduction states it had */
   if (dt > 0)
   {
-    double total_import_w = 0;
-    for (int k = 0; k < NO_OF_PHASES; ++k)
-    {
-      const double import_w = -grid.export_w[k];
-      total_import_w += import_w;
-      if (import_w > 0)
-        grid.phase_import_wh[k] += import_w * dt / 3600.0;
-      else
-        grid.phase_export_wh[k] -= import_w * dt / 3600.0;
-    }
+    const double total_import_w = -grid.export_w;
     if (total_import_w > 0)
       grid.import_wh += total_import_w * dt / 3600.0;
     else
       grid.export_wh -= total_import_w * dt / 3600.0;
+    grid.diverted_wh += grid.diverted_w * dt / 3600.0;
 
     for (int i = 0; i < scn.no_of_loads; ++i)
     {
@@ -556,28 +629,26 @@ static void update_grid(void)
   }
   grid.last_t = t;
 
-  /* zero crossings: phase k is sin(2 pi f t - 2 pi k / 3), so its half cycles
-   * are numbered floor(2 f t - 2 k / 3) and start at t = (m + 2 k / 3) / (2 f) */
-  for (int k = 0; k < NO_OF_PHASES; ++k)
+  /* zero crossings: the voltage is sin(2 pi f t), so its half cycles are
+   * numbered floor(2 f t) and start at t = m / (2 f) */
+  const long m = (long)floor(2.0 * scn.frequency * t);
+  if (m != grid.half_cycle)
   {
-    const long m = (long)floor(2.0 * scn.frequency * t - 2.0 * k / 3.0);
-    if (m == grid.half_cycle[k])
-      continue;
-    grid.half_cycle[k] = m;
+    grid.half_cycle = m;
 
-    const double t_zc = (m + 2.0 * k / 3.0) / (2.0 * scn.frequency);
+    const double t_zc = m / (2.0 * scn.frequency);
     const avr_cycle_count_t zc_cycle = (avr_cycle_count_t)(t_zc * F_CPU);
 
     /* a zero-crossing triac driver latches its input at the crossing */
     for (int i = 0; i < scn.no_of_loads; ++i)
     {
       load_t *l = &scn.loads[i];
-      if (l->phase != k || l->relay)
+      if (l->relay)
         continue;
       const int conducting = load_state_at(l, zc_cycle);
       if (conducting != l->conducting)
       {
-        /* m even: the voltage of phase k rises through zero */
+        /* m even: the voltage rises through zero */
         const double latency = t_zc - (double)l->changed_at / F_CPU;
         ++l->transitions;
         l->at_positive_zc += (m % 2) == 0;
@@ -588,27 +659,26 @@ static void update_grid(void)
       l->conducting = conducting;
     }
 
-    /* one trace line per mains cycle, at L1's positive crossing */
-    if (k == 0 && (m % 2) == 0 && trace_file)
+    /* one trace line per mains cycle, at the positive crossing */
+    if ((m % 2) == 0 && trace_file)
     {
       unsigned mask = 0;
       for (int i = 0; i < scn.no_of_loads; ++i)
         mask |= (unsigned)scn.loads[i].conducting << i;
-      fprintf(trace_file, "%.4f", t_zc);
-      for (int j = 0; j < NO_OF_PHASES; ++j)
-        fprintf(trace_file, ",%.1f", surplus_at(j, t_zc));
-      for (int j = 0; j < NO_OF_PHASES; ++j)
-        fprintf(trace_file, ",%.1f", -grid.export_w[j]);
-      fprintf(trace_file, ",%u\n", mask);
+      fprintf(trace_file, "%.4f,%.1f,%.1f,%.1f,%u\n", t_zc, surplus_at(t_zc), -grid.export_w, grid.diverted_w, mask);
     }
   }
 
-  /* grid export of each phase: surplus minus the conducting loads */
-  for (int k = 0; k < NO_OF_PHASES; ++k)
-    grid.export_w[k] = surplus_at(k, t);
+  /* grid export: surplus minus the conducting loads; CT2: the local loads and relays that conduct */
+  grid.export_w = surplus_at(t);
+  grid.diverted_w = 0;
   for (int i = 0; i < scn.no_of_loads; ++i)
     if (scn.loads[i].conducting)
-      grid.export_w[scn.loads[i].phase] -= scn.loads[i].watts;
+    {
+      grid.export_w -= scn.loads[i].watts;
+      if (!scn.loads[i].node)
+        grid.diverted_w += scn.loads[i].watts;
+    }
 }
 
 /* ------------------------------------------------------------------------- */
@@ -636,35 +706,42 @@ static void adc_trigger_hook(struct avr_irq_t *irq, uint32_t value, void *param)
   }
   adc.last_trigger = avr->cycle;
 
-  if (e.mux.kind != ADC_MUX_SINGLE || e.mux.src >= 2 * NO_OF_PHASES)
+  adc.converting = -1;
+  adc.converting_t = now();
+  if (e.mux.kind != ADC_MUX_SINGLE)
     return;
+  int ch = -1;
+  for (int c = 0; c < ADC_CHANNELS; ++c)
+    if (scn.adc_pin[c] == (int)e.mux.src)
+      ch = c;
+  adc.converting = ch;
 
-  /* the first two rounds fill ADMUX's two-conversion pipeline: follow the
-   * firmware's sequence from there on */
+  /* the first two rounds fill ADMUX's two-conversion pipeline: follow the firmware's
+   * sequence V -> I1 -> I2 from there on; an input of no channel is misfiled too */
   if (adc.conversions <= ADC_SEQUENCE_SETTLING)
-    adc.expected_src = e.mux.src;
-  else if (e.mux.src != adc.expected_src)
+    adc.expected_ch = ch;
+  else if (ch < 0 || ch != adc.expected_ch)
   {
     if (!adc.misfiled++)
       adc.first_misfiled = now();
   }
-  adc.expected_src = (adc.expected_src + 1) % (2 * NO_OF_PHASES);
+  adc.expected_ch = ((ch < 0 ? adc.expected_ch : ch) + 1) % ADC_CHANNELS;
+  if (ch < 0)
+    return;
 
   update_grid();
 
-  /* 3-phase PCB: V1 I1 V2 I2 V3 I3 on ADC0 to ADC5 */
-  const int phase = e.mux.src / 2;
-  const int is_current = e.mux.src & 1;
-  const double angle = 2.0 * M_PI * (scn.frequency * now() - phase / 3.0);
-
-  const double vrms_counts = scn.vrms / scn.vcal[phase];
+  const double angle = 2.0 * M_PI * scn.frequency * now();
+  const double vrms_counts = scn.vrms / scn.vcal;
   double counts;
-  if (!is_current)
+  if (ch == 0)
     counts = M_SQRT2 * vrms_counts * sin(angle);
   else
   {
-    /* firmware: P = pcal x Vrms_counts x Irms_counts, positive when exporting */
-    const double irms_counts = grid.export_w[phase] / (scn.pcal[phase] * vrms_counts);
+    /* firmware: P = pcal x Vrms_counts x Irms_counts; CT1 positive when exporting, CT2
+     * positive when the loads take power */
+    const double irms_counts = (ch == 1) ? grid.export_w / (scn.pcal * vrms_counts)
+                                         : grid.diverted_w / (scn.pcal2 * vrms_counts);
     counts = M_SQRT2 * irms_counts * sin(angle);
   }
 
@@ -675,13 +752,16 @@ static void adc_trigger_hook(struct avr_irq_t *irq, uint32_t value, void *param)
       fprintf(stderr, "grid_sim: warning: ADC%d clipped at %.3f s\n", e.mux.src, now());
   }
 
-  /* The front end gives the same counts on both boards: the analog levels follow the
-   * reference the firmware selected, AVCC (old board) or the internal 1.1 V (new board) */
-  const double vref_mv = (avr->data[ADMUX_ADDR] >> 6) == 3 ? INTERNAL_REF_MV : AVCC_MV;
+  /* The front end gives the counts of the calibration on every board: the analog levels follow
+   * the reference the firmware selected, AVCC (old boards) or the internal 1.1 V (new board) */
+  const double vref_mv = (avr->data[ADMUX_ADDR] >> 6) == 3 ? INTERNAL_REF_MV : scn.avcc_mv;
   if (adc.vref_mv && vref_mv != adc.vref_mv)
     adc.vref_changed = 1;
   adc.vref_mv = vref_mv;
   const double millivolts = (ADC_MID_COUNTS + counts + 0.5) * vref_mv / 1023.0;
+  const double swing_mv = fabs(counts) * vref_mv / 1023.0;
+  if (swing_mv > adc.peak_mv[ch])
+    adc.peak_mv[ch] = swing_mv;
   avr_raise_irq(avr_io_getirq(avr, AVR_IOCTL_ADC_GETIRQ, e.mux.src), (uint32_t)lround(millivolts));
 }
 
@@ -694,9 +774,14 @@ static void isr_hook(struct avr_irq_t *irq, uint32_t value, void *param)
   if (value)
   {
     isr.started = avr->cycle;
+    isr.ch = adc.completed;
+    isr.t_sample = adc.completed_t;
     return;
   }
   const avr_cycle_count_t duration = avr->cycle - isr.started;
+  /* where its sample was taken in the mains cycle */
+  const double t_sample = isr.t_sample;
+  const double angle = 360.0 * (scn.frequency * t_sample - floor(scn.frequency * t_sample));
   ++isr.count;
   isr.total += duration;
   if (duration > ADC_CYCLES_PER_CONVERSION)
@@ -705,16 +790,29 @@ static void isr_hook(struct avr_irq_t *irq, uint32_t value, void *param)
   {
     isr.max = duration;
     isr.max_at = now();
+    isr.max_angle = angle;
+    isr.max_ch = isr.ch;
+  }
+  const int half = angle >= 180.0;
+  if (isr.ch >= 0 && duration > isr.max_of[isr.ch][half])
+  {
+    isr.max_of[isr.ch][half] = duration;
+    isr.max_angle_of[isr.ch][half] = angle;
   }
 }
 
-/* the ADC interrupt is raised: free-running, the next conversion starts now */
+/* the ADC interrupt is raised: the conversion in progress is complete, and free-running, the
+ * next one starts now (it samples its input 2 ADC clocks later, avr_adc.c) */
 static void adc_pending_hook(struct avr_irq_t *irq, uint32_t value, void *param)
 {
   (void)irq;
   (void)param;
   if (value)
+  {
     admux.conversion_started = avr->cycle;
+    adc.completed = adc.converting;
+    adc.completed_t = adc.converting_t;
+  }
 }
 
 static void admux_write(struct avr_t *mcu, avr_io_addr_t addr, uint8_t v, void *param)
@@ -893,6 +991,12 @@ static void rf_frame(const rfm69_frame_t *f, void *param)
 
 static void serial_line(const char *line)
 {
+  /* ", diverted <W> W, <Wh> Wh" (DIVERTED_CT_PRESENT) */
+  const char *d = strstr(line, ", diverted ");
+  double w, wh;
+  if (d && sscanf(d, ", diverted %lf W, %lf Wh", &w, &wh) == 2 && serial.no_of_diverted < MAX_DATALOG)
+    serial.diverted[serial.no_of_diverted++] = (datalog_t){ .t = now(), .w = w, .wh = wh };
+
   const char *p = strstr(line, "minSampleSets/MC ");
   if (p)
   {
@@ -1055,6 +1159,47 @@ static int report_expects(void)
         snprintf(what, sizeof what, "%.1f-%.1f s, grid average in [%.0f, %.0f] W: %.1f W", e->t0, e->t1, e->lo, e->hi,
                  e->measured);
         break;
+      case EXPECT_DIVERTED_WH:
+      case EXPECT_DIVERTED_W:
+        {
+          /* the lines printed within the window, or every line */
+          const int whole = e->t0 < 0;
+          double before = 0, last = -1, sum = 0;
+          int n = 0;
+          for (int j = 0; j < serial.no_of_diverted; ++j)
+          {
+            const datalog_t *dl = &serial.diverted[j];
+            if (!whole && dl->t < e->t0)
+              before = dl->wh;
+            else if (whole || dl->t <= e->t1)
+            {
+              last = dl->wh;
+              sum += dl->w;
+              ++n;
+            }
+          }
+          e->done = whole || e->t1 <= now();
+          const int wh = e->kind == EXPECT_DIVERTED_WH;
+          /* diverted_wh: the last total reported, or its increase over the window */
+          e->measured = !n ? -1 : (wh ? last - before : sum / n);
+          /* The firmware counts whole Wh: from 0, an energy within [lo, hi] is reported as floor(lo)
+           * to floor(hi) Wh. An increase over a window is compared as it is. */
+          const double lo = (wh && whole) ? floor(e->lo) : e->lo, hi = (wh && whole) ? floor(e->hi) : e->hi;
+          e->passed = e->done && n && e->measured >= lo && e->measured <= hi;
+          char window[48] = "";
+          if (!whole)
+            snprintf(window, sizeof window, "%.1f-%.1f s, ", e->t0, e->t1);
+          if (!n)
+            snprintf(what, sizeof what, "%sdiverted %s in [%g, %g]: no datalog line with it", window,
+                     wh ? "energy" : "power", e->lo, e->hi);
+          else if (wh)
+            snprintf(what, sizeof what, "%sdiverted energy%s in [%g, %g] Wh: %.0f Wh", window, whole ? "" : " increase",
+                     e->lo, e->hi, e->measured);
+          else
+            snprintf(what, sizeof what, "%sdiverted power, average of %d lines, in [%g, %g] W: %.1f W", window, n, e->lo,
+                     e->hi, e->measured);
+          break;
+        }
       case EXPECT_ISR_MAX:
         e->passed = isr.count && isr.max <= e->hi;
         snprintf(what, sizeof what, "ADC ISR at most %.0f cycles: %llu", e->hi, (unsigned long long)isr.max);
@@ -1145,13 +1290,13 @@ static void usage(void)
 }
 
 /* a simulated ATmega328P running the given firmware, its serial output sent to uart_cb */
-static avr_t *make_avr(const char *elf_path, avr_irq_notify_t uart_cb, void *uart_param)
+static avr_t *make_avr(const char *elf_path, avr_irq_notify_t uart_cb, void *uart_param, uint32_t avcc_mv)
 {
   elf_firmware_t fw = { 0 };
   if (elf_read_firmware(elf_path, &fw))
     die("cannot read firmware '%s'", elf_path);
   fw.frequency = F_CPU;
-  fw.vcc = fw.avcc = fw.aref = 5000;
+  fw.vcc = fw.avcc = fw.aref = avcc_mv;
 
   avr_t *mcu = avr_make_mcu_by_name("atmega328p");
   if (!mcu)
@@ -1201,11 +1346,12 @@ int main(int argc, char *argv[])
   const char *elf_path = argv[argi];
   snprintf(scn.name, sizeof scn.name, "%s", argv[argi + 1]);
   parse_scenario(scn.name, 0);
-  /* read last: the board's settings (vcal, pcal) replace those of the scenario */
+  /* read last: the board's settings (channels, avcc, vcal, pcal, mains) replace those of the scenario */
   if (board_path)
     parse_scenario(board_path, 0);
+  check_board();
 
-  avr = make_avr(elf_path, uart_hook, NULL);
+  avr = make_avr(elf_path, uart_hook, NULL, (uint32_t)lround(scn.avcc_mv));
 
   avr_irq_register_notify(avr_io_getirq(avr, AVR_IOCTL_ADC_GETIRQ, ADC_IRQ_OUT_TRIGGER), adc_trigger_hook, NULL);
   avr_irq_register_notify(avr_get_interrupt_irq(avr, ADC_VECTOR) + AVR_INT_IRQ_RUNNING, isr_hook, NULL);
@@ -1228,7 +1374,7 @@ int main(int argc, char *argv[])
   for (int r = 0; r < no_of_receivers; ++r)
   {
     receiver_t *rx = &receivers[r];
-    rx->avr = make_avr(rx->elf, receiver_uart_hook, rx);
+    rx->avr = make_avr(rx->elf, receiver_uart_hook, rx, 5000);
     rx->state = cpu_Running;
     rfm69_init(&rx->chip, rx->avr, RF_CS_PORT, RF_CS_BIT, rf_frame, &rx->chip);
     rfm69_connect_dio0(&rx->chip, RF_IRQ_PORT, RF_IRQ_BIT);
@@ -1249,7 +1395,7 @@ int main(int argc, char *argv[])
   {
     if (!(trace_file = fopen(trace_path, "w")))
       die("cannot write '%s'", trace_path);
-    fprintf(trace_file, "t,surplus1,surplus2,surplus3,grid1,grid2,grid3,loads\n");
+    fprintf(trace_file, "t,surplus,grid,diverted,loads\n");
   }
   if (events_path)
   {
@@ -1257,9 +1403,6 @@ int main(int argc, char *argv[])
       die("cannot write '%s'", events_path);
     fprintf(events_file, "t,pin,state\n");
   }
-  for (int k = 0; k < NO_OF_PHASES; ++k)
-    grid.half_cycle[k] = LONG_MIN;
-
   const avr_cycle_count_t end = (avr_cycle_count_t)(scn.duration * F_CPU);
   int state = cpu_Running;
   while (avr->cycle < end)
@@ -1288,10 +1431,15 @@ int main(int argc, char *argv[])
   printf("ADC       conversion period %llu-%llu cycles (expected %d), %llu conversions%s\n",
          (unsigned long long)adc.min_period, (unsigned long long)adc.max_period, ADC_CYCLES_PER_CONVERSION,
          (unsigned long long)adc.conversions, adc.clipped ? ", CLIPPED" : "");
-  printf("ADC       reference %s%s\n",
-         adc.vref_mv == INTERNAL_REF_MV ? "internal 1.1 V (new board)" : adc.vref_mv ? "AVCC 5 V (old board)"
-                                                                                     : "unknown",
-         adc.vref_changed ? ", CHANGED while running" : "");
+  if (adc.vref_mv == INTERNAL_REF_MV)
+    printf("ADC       reference internal 1.1 V (new board)");
+  else if (adc.vref_mv)
+    printf("ADC       reference AVCC %.0f mV (old boards)", adc.vref_mv);
+  else
+    printf("ADC       reference unknown");
+  printf("%s\n", adc.vref_changed ? ", CHANGED while running" : "");
+  printf("ADC       V on A%d, I1 (CT1, grid) on A%d, I2 (CT2, diverted) on A%d; largest swing %.0f / %.0f / %.0f mV\n",
+         scn.adc_pin[0], scn.adc_pin[1], scn.adc_pin[2], adc.peak_mv[0], adc.peak_mv[1], adc.peak_mv[2]);
   printf("ADC       %llu samples filed under the wrong channel", (unsigned long long)adc.misfiled);
   if (adc.misfiled)
     printf(", first at %.3f s", adc.first_misfiled);
@@ -1301,17 +1449,30 @@ int main(int argc, char *argv[])
            (unsigned long long)admux.min, (unsigned long long)admux.max, ADC_CLOCK_CYCLES, admux.min_at,
            admux.early ? ", TOO EARLY" : "");
   if (isr.count)
-    printf("ADC ISR   average %.1f cycles, max %llu cycles (%.1f us) at %.3f s, %llu of %llu calls over %d cycles\n",
+  {
+    static const char *const ch_names[ADC_CHANNELS] = { "V", "I1", "I2" };
+    printf("ADC ISR   average %.1f cycles, max %llu cycles (%.1f us) at %.3f s, %s sample at %.0f deg, %llu of %llu calls "
+           "over %d cycles\n",
            (double)isr.total / isr.count, (unsigned long long)isr.max, isr.max * 1e6 / F_CPU, isr.max_at,
-           (unsigned long long)isr.overruns, (unsigned long long)isr.count, ADC_CYCLES_PER_CONVERSION);
+           isr.max_ch >= 0 ? ch_names[isr.max_ch] : "?", isr.max_angle, (unsigned long long)isr.overruns,
+           (unsigned long long)isr.count, ADC_CYCLES_PER_CONVERSION);
+    for (int half = 0; half < 2; ++half)
+    {
+      printf("ADC ISR   max with a sample of the %s half: ", half ? "negative" : "positive");
+      for (int c = 0; c < ADC_CHANNELS; ++c)
+        printf("%s%s %llu cycles at %.0f deg", c ? ", " : "", ch_names[c], (unsigned long long)isr.max_of[c][half],
+               isr.max_angle_of[c][half]);
+      printf("\n");
+    }
+  }
   if (serial.datalog_lines)
     printf("Datalog   %d lines, min sample sets per mains cycle %d-%d\n", serial.datalog_lines, serial.min_sets,
            serial.max_sets);
   for (int i = 0; i < scn.no_of_loads; ++i)
   {
     const load_t *l = &scn.loads[i];
-    printf("%s %-5s L%d %5.0f W: %4u switch-ons, on %5.1f %%, %7.2f Wh, first on at %s", l->relay ? "Relay" : "Load ",
-           load_name(l), l->phase + 1, l->watts, l->switches, 100.0 * l->on_time / now(), l->energy_wh,
+    printf("%s %-5s %5.0f W: %4u switch-ons, on %5.1f %%, %7.2f Wh, first on at %s", l->relay ? "Relay" : "Load ",
+           load_name(l), l->watts, l->switches, 100.0 * l->on_time / now(), l->energy_wh,
            l->first_on < 0 ? "never" : "");
     if (l->first_on >= 0)
       printf("%.3f s", l->first_on);
@@ -1344,9 +1505,14 @@ int main(int argc, char *argv[])
     if (rx->state == cpu_Crashed || rx->state == cpu_Done)
       state = cpu_Crashed;
   }
-  printf("Grid      import %.2f Wh, export %.2f Wh (L1 %.2f/%.2f, L2 %.2f/%.2f, L3 %.2f/%.2f)\n", grid.import_wh,
-         grid.export_wh, grid.phase_import_wh[0], grid.phase_export_wh[0], grid.phase_import_wh[1],
-         grid.phase_export_wh[1], grid.phase_import_wh[2], grid.phase_export_wh[2]);
+  printf("Grid      import %.2f Wh, export %.2f Wh\n", grid.import_wh, grid.export_wh);
+  printf("Diverted  CT2 %.2f Wh (every local load and relay that conducted, forced ones included)", grid.diverted_wh);
+  if (serial.no_of_diverted)
+  {
+    const datalog_t *last = &serial.diverted[serial.no_of_diverted - 1];
+    printf("; reported %.0f Wh at %.3f s, last %.0f W", last->wh, last->t, last->w);
+  }
+  printf("\n");
 
   int failed = report_expects();
 
