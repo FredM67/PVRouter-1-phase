@@ -65,6 +65,8 @@ shipped `config.h`:
   cases (displays, CT2, analog pins), and the grid simulator with a model of each board (CT2
   measuring every local load and relay, the 7-segment display's pin remapping), its scenarios
   run on every board, at 60 Hz, with 20 A CTs and with temperature sensing.
+- **Compile-fail checks:** the expected message must be in the compiler's own error line, not in the
+  source line gcc echoes under it, so a case proves that its own `static_assert` fired.
 - **CI:** builds of each board with its display, native, embedded and compile-fail tests, the grid
   and relay simulations, the size and speed report of the pull requests, the formatting check
   (clang-format 18).
