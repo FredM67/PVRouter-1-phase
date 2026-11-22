@@ -174,10 +174,10 @@ jobs:
           {
             echo "### Benchmarks (simavr, exact)"
             echo ""
-            echo "| Benchmark | µs | cycles |"
+            echo "| Benchmark | Âµs | cycles |"
             echo "|---|---:|---:|"
             # one row per benchmark: its "<name> [us]" and "<name> [cycles]" results
-            jq -r 'def num: if . == null then "—" elif . == floor then floor else . end;
+            jq -r 'def num: if . == null then "â€”" elif . == floor then floor else . end;
               (map({key: .name, value: .value}) | from_entries) as $v
               | .[] | select(.name | endswith(" [us]")) | (.name | rtrimstr(" [us]")) as $n
               | "| \($n) | \(.value | num) | \($v[$n + " [cycles]"] | num) |"' bench/speed.json
@@ -350,6 +350,68 @@ jobs:
         with:
           name: grid-sim-${{ strategy.job-index }}
           path: sim/out/
+
+  # GitHub Pages (https://fredm67.github.io/PVRouter-1-phase/): each push to dev publishes the
+  # landing page and the size and speed history (pages/), and adds the flash and RAM of every
+  # build and the embedded benchmarks to bench/history.json (scripts/ci/pages_update.py). Failed
+  # embedded tests do not hold back the sizes: the entry then has no speed. The doc (doc/) is
+  # deployed by doxygen-gh-pages.yml, in the same concurrency group. Regressions are reported on
+  # pull requests, by the pr-report job.
+  pages:
+    name: GitHub Pages
+    needs: [ build, test-embedded ]
+    if: >-
+      !cancelled() && needs.build.result == 'success'
+      && github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # push to gh-pages
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: bench-size-*
+          path: bench
+          merge-multiple: true
+
+      - name: Merge the sizes of the builds
+        run: jq -s 'add' bench/size-*.json > bench/size.json
+
+      - uses: actions/download-artifact@v8
+        if: needs.test-embedded.result == 'success'
+        with:
+          name: bench-speed
+          path: bench
+
+      - uses: actions/checkout@v7
+        with:
+          ref: gh-pages
+          path: site
+
+      - name: Update the pages and the size and speed history
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: >-
+          python3 scripts/ci/pages_update.py site pages bench/size.json
+          "${{ github.sha }}" "${{ github.event.head_commit.timestamp }}" "${{ github.event.head_commit.url }}"
+          bench/speed.json
+
+      - name: Push to gh-pages
+        working-directory: site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to publish"
+          else
+            git commit -q -m "Pages and size and speed history for ${GITHUB_SHA::8}"
+            git push origin HEAD:gh-pages
+          fi
 
   # The target branch of a pull request, measured as the PR is: the builds of the build matrix and
   # the embedded benchmarks, with the PR's scripts/ci/measure.sh (the target may predate it).
