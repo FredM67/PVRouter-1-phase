@@ -184,7 +184,7 @@ inline void refresh7SegDisplay() __attribute__((always_inline));
 /**
  * @brief Multiplexes the 7-segment display: the next digit, every MAX_DISPLAY_TIME_COUNT calls.
  *
- * @details Called by the ADC interrupt once per sample set (with the voltage sample), as in
+ * @details Called by the ADC interrupt once per sample set (with the CT1 sample), as in
  *          Full. Most calls only count. Every MAX_DISPLAY_TIME_COUNT-th call:
  *          1. nothing shows: every digit off (SEG), or the 74HC4543 off and the DP off (SEG_HW);
  *          2. the image of the next digit is written to ports B, C, then D. With SEG_HW, the

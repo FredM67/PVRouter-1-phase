@@ -787,18 +787,59 @@ void processStartUp(const uint8_t phase)
   // can't say "Go!" here 'cos we're in an ISR!
 }
 
+// ---- The work of the mains cycle, spread over the CT2 calls that follow ----
+//
+// The ADC interrupt writes ADMUX last, and that write must land within one conversion (1664
+// cycles) of the interrupt, even when the interrupt waited for the end of a 1-Wire time slot
+// (interrupts off up to ~1150 cycles, temperature sensing): every call must reach its ADMUX
+// write within about 450 cycles. The V call at a zero crossing only takes the snapshots that
+// must be taken on that very sample, and posts the rest of the work as tasks; each CT2 call,
+// the lightest, then runs one task, in the order of the bits below. The loads still latch at
+// the positive zero crossing; the decision is taken on the same prediction as before, and the
+// energies and datalog values are the same, only computed a few sample sets later.
+static_assert(NO_OF_PHASES == 1, "the cycle tasks handle one phase");
+
+namespace CycleTask
+{
+inline constexpr uint16_t CONTRIBUTION{ 1U << 0 };     /**< the cycle's energy into the bucket (positive crossing) */
+inline constexpr uint16_t DIVERTED{ 1U << 1 };         /**< the cycle's CT2 energy (positive crossing) */
+inline constexpr uint16_t DIVERTED_COUNT{ 1U << 2 };   /**< the CT2 energy counted (positive crossing) */
+inline constexpr uint16_t DATALOG_SUM{ 1U << 3 };      /**< the datalog sum, the counters, the main code's tick (positive crossing) */
+inline constexpr uint16_t DATALOG_COPY{ 1U << 4 };     /**< end of a datalog period: the copies for the main code */
+inline constexpr uint16_t DATALOG_COPY_CT2{ 1U << 5 }; /**< end of a datalog period: the CT2 copies, then the event */
+inline constexpr uint16_t PREDICTION{ 1U << 6 };       /**< the prediction (negative crossing) */
+inline constexpr uint16_t DECISION{ 1U << 7 };         /**< the decision on the prediction (DECISION_SAMPLE) */
+inline constexpr uint16_t LOAD_STATES{ 1U << 8 };      /**< the logical states to the physical loads (after the decision) */
+inline constexpr uint16_t PORTS{ 1U << 9 };            /**< the physical states to the ports and the RF payloads (after the decision) */
+}  // namespace CycleTask
+
+uint16_t pendingCycleTasks{ 0 }; /**< CycleTask bits still to run */
+
+// snapshots taken at the zero crossings, for the tasks
+int32_t l_sumP_lastCycle{ 0 };          /**< l_sumP of the cycle that just ended */
+int32_t l_sumP_diverted_lastCycle{ 0 }; /**< l_sumP_diverted of the cycle that just ended */
+int32_t l_divertedEnergy_lastCycle{ 0 }; /**< its energy, from the CT2 table */
+uint16_t divertedOutputsON_lastCycle{ 0 }; /**< the local outputs ON when it was turned into energy */
+uint8_t n_samplesLastCycle{ 0 };        /**< sample sets of the cycle that just ended */
+int32_t l_sumP_firstHalf{ 0 };          /**< l_sumP of the first half, at the negative crossing */
+uint8_t n_samplesFirstHalf{ 0 };        /**< sample sets of the first half */
+// the sums of a datalog period, taken on its last sample
+uint32_t l_sum_Vsquared_lastPeriod{ 0 };
+SampleSetCounter i_sampleSetsLastPeriod{ 0 };
+bool b_datalogPeriodEndsNext{ DATALOG_PERIOD_IN_MAINS_CYCLES == 1 }; /**< the next positive crossing ends the datalog period (addToDatalogSum()) */
+
 /**
- * @brief Decides the loads of the next mains cycle, on phase 0.
+ * @brief Decides the loads of the next mains cycle, on the prediction.
  *
- * This function is executed once per 20ms (for 50Hz), at the sample set DECISION_SAMPLE of
- * the negative half cycle of phase 0 (fast_control.h). The zero-crossing triac drivers latch
+ * This task runs once per mains cycle, on the CT2 call of the sample set DECISION_SAMPLE of the
+ * negative half cycle (fast_control.h). The physical states and the ports follow on the next two
+ * CT2 calls (updatePhysicalLoadStates(), applyDecision()); the zero-crossing triac drivers latch
  * the new states at the next positive zero crossing.
  *
  * @details
  * - Decides on the energy predicted at the end of the cycle, not on the measured bucket.
  * - Handles recent transitions and updates the post-transition counter.
  * - Adjusts energy thresholds and determines whether to add or remove loads.
- * - Updates the physical load states and control ports.
  *
  * @ingroup TimeCritical
  */
@@ -806,9 +847,17 @@ void processStartNewCycle()
 {
   // may switch one load ON or OFF (load_priorities.h), on the prediction
   loadSwitching.onNewCycle(loadPrioritiesAndState, l_energyInBucket_prediction, bucketLevels);
+}
 
-  updatePhysicalLoadStates();  // allows the logical-to-physical mapping to be changed
-
+/**
+ * @brief Applies the decision: the ports of the local loads, the RF payloads, the absence count.
+ *
+ * @details The task after updatePhysicalLoadStates(), on the next CT2 call.
+ *
+ * @ingroup TimeCritical
+ */
+void applyDecision()
+{
   updatePortsStates();  // update the control ports for each of the physical loads
 
   if constexpr (REMOTE_LOADS_PRESENT)
@@ -845,8 +894,9 @@ void processStartNewCycle()
  *   constant is long enough that a plausible offset drift is tracked smoothly, while
  *   a stuck or disconnected VT settles to that input instead of to a fixed limit.
  *   See @c test/native/test_dc_offset_filter for the tracking and step-response cases.
- * - On phase 0, beyond the start-up period, the energy at the end of the cycle is predicted
- *   from the first half (fast_control.h), for the decision a few sample sets later.
+ * - On phase 0, beyond the start-up period, the sum of the first half is taken for the
+ *   prediction (fast_control.h), which the next CT2 call computes (predictEndOfCycle()), for
+ *   the decision a few sample sets later.
  *
  * @ingroup TimeCritical
  */
@@ -863,121 +913,167 @@ void processMinusHalfCycle(const uint8_t phase)
     return;
   }
 
-  // The prediction, as Robin's 'energyInBucket_long + averagePower': the first half's average power
-  // as one cycle's energy, in bucket units, through the table entry for 2n sample sets (no
-  // division, fast_control.h). Outside N_MIN..N_MAX for 2n (no proper half cycle), no prediction:
-  // the bucket as it is.
-  const uint8_t index{ FastControl::wholeCycleIndexOf(n_samplesDuringThisMainsCycle[0], N_MIN, N_MAX) };
+  if (pendingCycleTasks)
+  {
+    finishCycleTasks();  // a half cycle shorter than its tasks: never on a proper mains
+  }
+
+  // the first half, as it is on this sample
+  l_sumP_firstHalf = l_sumP[0];
+  n_samplesFirstHalf = n_samplesDuringThisMainsCycle[0];
+  pendingCycleTasks = CycleTask::PREDICTION;
+}
+
+/**
+ * @brief Predicts the bucket at the end of the cycle, from the first half (fast_control.h).
+ *
+ * @details The task posted at the negative crossing. As Robin's "energyInBucket_long +
+ *          averagePower": the first half's average power as one cycle's energy, in bucket
+ *          units, through the table entry for 2n sample sets (no division). Outside N_MIN..N_MAX
+ *          for 2n (no proper half cycle), no prediction: the bucket as it is.
+ *
+ * @ingroup TimeCritical
+ */
+void predictEndOfCycle()
+{
+  const uint8_t index{ FastControl::wholeCycleIndexOf(n_samplesFirstHalf, N_MIN, N_MAX) };
   if (FastControl::NO_INDEX == index)
   {
     l_energyInBucket_prediction = l_energyInBucket_main;
     return;
   }
-  l_energyInBucket_prediction = FastControl::predictEndOfCycle(l_energyInBucket_main, l_sumP[0], pgm_read_word(&powerCalPerSample.value[0][index]), SUM_P_SHIFT, powerCalPerSampleShift);
+  l_energyInBucket_prediction = FastControl::predictEndOfCycle(l_energyInBucket_main, l_sumP_firstHalf, pgm_read_word(&powerCalPerSample.value[0][index]), SUM_P_SHIFT, powerCalPerSampleShift);
 }
 
 /**
- * @brief Process the latest contribution after each phase-specific new cycle.
+ * @brief Rescales the sum of a cycle of an unexpected length to N_MIN sample sets.
  *
- * This function calculates and updates the energy contribution for the specified phase
- * after each new cycle. It ensures that the energy bucket is updated with the latest
- * power measurements and applies necessary adjustments.
+ * @details A call of its own: its division keeps its registers out of the contribution task,
+ *          which runs it on an unexpected cycle length only (start-up, missing mains).
  *
- * @param phase The phase number [0..NO_OF_PHASES[.
+ * @param sumP The sum of the cycle.
+ * @param n Its sample sets, not 0.
+ * @return (sumP / n) x N_MIN
+ */
+int32_t rescaleToNMin(const int32_t sumP, const uint8_t n)
+{
+  return (sumP / n) * N_MIN;
+}
+
+/**
+ * @brief Process the latest contribution, the task after each positive crossing.
+ *
+ * This function calculates and updates the energy contribution of the cycle that just ended.
+ * It ensures that the energy bucket is updated with the latest power measurements and applies
+ * necessary adjustments.
  *
  * @details
  * - Adds the latest energy contribution to the main energy bucket.
- * - Applies adjustments for required export energy on phase 0.
- * - Signals a new mains cycle for phase 0.
+ * - Applies adjustments for required export energy.
+ * - Limits the bucket to its range, once the cycle's contribution is in.
  *
  * @ingroup TimeCritical
  */
-void processLatestContribution(const uint8_t phase)
+void processLatestContribution()
 {
   // for efficiency, the energy scale is Joules * SUPPLY_FREQUENCY, in integer fixed point
   // add the latest energy contribution to the main energy accumulator
   // (sumP / n) x cal == sumP x (cal / n): cal / n comes from the table, so there is no division
-  const uint8_t n{ n_samplesDuringThisMainsCycle[phase] };
-  int32_t sumP{ l_sumP[phase] };
+  const uint8_t n{ n_samplesLastCycle };
+  int32_t sumP{ l_sumP_lastCycle };
   uint8_t index{ static_cast< uint8_t >(n - N_MIN) };
+
+  // the new cycle's samples so far stay in the sum (processPlusHalfCycle())
+  l_sumP[0] -= sumP;
 
   if ((n < N_MIN) || (n > N_MAX))
   {
     // unexpected cycle length (start-up, missing phase): rescale the sum to N_MIN samples
-    sumP = (sumP / n) * N_MIN;
+    sumP = rescaleToNMin(sumP, n);
     index = 0;
   }
 
-  l_energyInBucket_main += Energy::contribution(sumP >> SUM_P_SHIFT, pgm_read_word(&powerCalPerSample.value[phase][index]), powerCalPerSampleShift);
+  l_energyInBucket_main += Energy::contribution(sumP >> SUM_P_SHIFT, pgm_read_word(&powerCalPerSample.value[0][index]), powerCalPerSampleShift);
 
   // apply any adjustment that is required.
-  if (0 == phase)
+  // If diversion hasn't started yet, use start threshold, otherwise use regular offset
+  if (!b_diversionStarted)
   {
-    // If diversion hasn't started yet, use start threshold, otherwise use regular offset
-    if (!b_diversionStarted)
+    l_energyInBucket_main -= Energy::fromWatts(DIVERSION_START_THRESHOLD_WATTS);
+
+    // Check if we've exceeded the threshold to start diversion
+    if (l_energyInBucket_main > l_upperThreshold_default)
     {
-      l_energyInBucket_main -= Energy::fromWatts(DIVERSION_START_THRESHOLD_WATTS);
-
-      // Check if we've exceeded the threshold to start diversion
-      if (l_energyInBucket_main > l_upperThreshold_default)
-      {
-        b_diversionStarted = true;
-        // Once started, we divert all surplus according to the configured fixed offset
-      }
+      b_diversionStarted = true;
+      // Once started, we divert all surplus according to the configured fixed offset
     }
-    else
-    {
-      // When diversion is already started, apply normal export offset if configured
-      // Comment or remove this if you want to divert ALL surplus once started
-      l_energyInBucket_main -= Energy::fromWatts(REQUIRED_EXPORT_IN_WATTS);
-    }
-
-    if (++perSecondCounter == SUPPLY_FREQUENCY)
-    {
-      perSecondCounter = 0;
-
-      if (absenceOfDivertedEnergyCountInMC > SUPPLY_FREQUENCY)
-      {
-        ++Shared::absenceOfDivertedEnergyCountInSeconds;
-        // Reset diversion state if we've had no diversion for a full second
-        b_diversionStarted = false;
-      }
-      else
-        Shared::absenceOfDivertedEnergyCountInSeconds = 0;
-    }
-
-    Shared::b_newMainsCycle = true;  //  a 50 Hz 'tick' for use by the main code
   }
-  // max and min limits to the main accumulator's level: processPlusHalfCycle()
+  else
+  {
+    // When diversion is already started, apply normal export offset if configured
+    // Comment or remove this if you want to divert ALL surplus once started
+    l_energyInBucket_main -= Energy::fromWatts(REQUIRED_EXPORT_IN_WATTS);
+  }
+
+  // Min and max limits to the level of the energy bucket, once the cycle's contribution is in
+  // (the decision of this cycle comes later, at mid-cycle, on the prediction). This is to
+  // ensure correct operation when conditions change, i.e. when import changes to export, and
+  // vice versa.
+  if (l_energyInBucket_main > l_capacityOfEnergyBucket_main)
+  {
+    l_energyInBucket_main = l_capacityOfEnergyBucket_main;
+  }
+  else if (l_energyInBucket_main < 0)
+  {
+    l_energyInBucket_main = 0;
+  }
 }
 
 /**
- * @brief Turns the cycle's CT2 sum into energy and counts it, at the positive zero crossing.
+ * @brief Turns the cycle's CT2 sum into energy, the task after the contribution.
  *
  * @details
  * - The sum goes through the CT2 table, as the grid's in processLatestContribution(): the
  *   cycle's average power in W x 2^Energy::FRACTION_BITS. A cycle of an unexpected length
  *   (start-up, missing mains) counts as no energy: no division in the ISR.
- * - The local outputs are read on their port registers: any of them ON, and any of them ON
- *   and forced (override pin, scheduled boost: the local override bitmask). A cycle with a
- *   forced output is not counted (DivertedEnergy, diverted_energy.h). The port holds the states
- *   just decided for the cycle that starts now, so the states may lag one cycle behind the
- *   energy; the overrides change once per second.
- * - The energy counted goes into the datalog sum too, for the average diverted power.
+ * - The sum was taken, not cleared, at the crossing: it is taken off here.
+ * - The local outputs are read on their port registers. The port holds the states decided for
+ *   the cycle that starts now, so the states may lag one cycle behind the energy.
+ * - countDivertedEnergy() counts it on the next CT2 call.
  *
  * @ingroup TimeCritical
  */
 void processDivertedEnergy()
 {
-  const uint8_t n{ n_samplesDuringThisMainsCycle[0] };
+  const int32_t sumP{ l_sumP_diverted_lastCycle };
+  l_sumP_diverted -= sumP;  // the new cycle's samples so far stay in the sum (processPlusHalfCycle())
+
+  const uint8_t n{ n_samplesLastCycle };
   int32_t energy{ 0 };
   if ((n >= N_MIN) && (n <= N_MAX))
   {
-    energy = Energy::contribution(l_sumP_diverted >> SUM_P_SHIFT, pgm_read_word(&divertedCalPerSample.value[0][n - N_MIN]), divertedCalPerSampleShift);
+    energy = Energy::contribution(sumP >> SUM_P_SHIFT, pgm_read_word(&divertedCalPerSample.value[0][n - N_MIN]), divertedCalPerSampleShift);
   }
-  l_sumP_diverted = 0;
+  l_divertedEnergy_lastCycle = energy;
 
-  const uint16_t outputsON{ static_cast< uint16_t >(((static_cast< uint16_t >(PORTB) << 8) | PORTD) & divertedOutputPins) };
+  divertedOutputsON_lastCycle = static_cast< uint16_t >(((static_cast< uint16_t >(PORTB) << 8) | PORTD) & divertedOutputPins);
+}
+
+/**
+ * @brief Counts the cycle's CT2 energy, the task after processDivertedEnergy().
+ *
+ * @details
+ * - Any of the local outputs ON, and any of them ON and forced (override pin, scheduled boost:
+ *   the local override bitmask). A cycle with a forced output is not counted (DivertedEnergy,
+ *   diverted_energy.h). The overrides change once per second.
+ * - The energy counted goes into the datalog sum too, for the average diverted power.
+ *
+ * @ingroup TimeCritical
+ */
+void countDivertedEnergy()
+{
+  const int32_t energy{ l_divertedEnergy_lastCycle };
+  const uint16_t outputsON{ divertedOutputsON_lastCycle };
   const bool anyLoadOn{ outputsON != 0 };
   const bool anyLoadForced{ (Shared::overrideBitmask & outputsON) != 0 };
 
@@ -989,38 +1085,22 @@ void processDivertedEnergy()
 }
 
 /**
- * @brief Process data logging at the end of each logging period.
+ * @brief Copies the sums of the datalog period that just ended for the main code.
  *
- * This function handles the data logging process by copying relevant variables
- * for use by the main code and resetting them for the next logging period.
- *
- * @details
- * - Copies cumulative power and voltage squared values for each phase.
- * - Copies load ON counts and other diagnostic variables.
- * - Resets variables for the next data logging period.
- * - Signals the main processor that logging data is available after the startup period.
+ * @details The task after the cycle's power is in the datalog sum: the power, V^2 and the
+ *          sample sets (taken on the last sample of the period), the ON counts of the loads and
+ *          the diagnostics. Without CT2, it signals the main code that logging data are available.
  *
  * @ingroup TimeCritical
  */
 void processDataLogging()
 {
-  if (++n_cycleCountForDatalogging < DATALOG_PERIOD_IN_MAINS_CYCLES)
-  {
-    return;  // data logging period not yet reached
-  }
+  Shared::copyOf_sumP_atSupplyPoint[0] = l_sumP_atSupplyPoint[0];
+  l_sumP_atSupplyPoint[0] = 0;
 
-  n_cycleCountForDatalogging = 0;
-
-  uint8_t phase{ NO_OF_PHASES };
-  do
-  {
-    --phase;
-    Shared::copyOf_sumP_atSupplyPoint[phase] = l_sumP_atSupplyPoint[phase];
-    l_sumP_atSupplyPoint[phase] = 0;
-
-    Shared::copyOf_sum_Vsquared[phase] = l_sum_Vsquared[phase];
-    l_sum_Vsquared[phase] = 0;
-  } while (phase);
+  Shared::copyOf_sum_Vsquared[0] = l_sum_Vsquared_lastPeriod;
+  l_sum_Vsquared[0] -= l_sum_Vsquared_lastPeriod;                       // the next period's samples so far stay
+  i_sampleSetsDuringThisDatalogPeriod -= i_sampleSetsLastPeriod;          // the same
 
   uint8_t i{ NO_OF_DUMPLOADS };
   do
@@ -1030,82 +1110,213 @@ void processDataLogging()
     countLoadON[i] = 0;
   } while (i);
 
-  Shared::copyOf_sampleSetsDuringThisDatalogPeriod = i_sampleSetsDuringThisDatalogPeriod;  // (for diags only)
+  Shared::copyOf_sampleSetsDuringThisDatalogPeriod = i_sampleSetsLastPeriod;            // (for diags only)
   Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle = n_lowestNoOfSampleSetsPerMainsCycle;  // (for diags only)
-  Shared::copyOf_energyInBucket_main = l_energyInBucket_main;                              // (for diags only)
+  n_lowestNoOfSampleSetsPerMainsCycle = UINT8_MAX;
+  Shared::copyOf_energyInBucket_main = l_energyInBucket_main;                           // (for diags only)
 
-  if constexpr (DIVERTED_CT_PRESENT)
+  if constexpr (!DIVERTED_CT_PRESENT)
   {
-    // the average over the whole period: a forced cycle counts as 0 W
-    Shared::copyOf_divertedPower_W = DivertedPower::watts(l_divertedEnergy_overDL, divertedPowerAverage);
-    Shared::copyOf_divertedEnergyTotal_Wh = divertedEnergy.totalWh();
-    l_divertedEnergy_overDL = 0;
+    // signal the main processor that logging data are available (beyond the start-up period)
+    Shared::b_datalogEventPending = true;
+  }
+}
+
+/**
+ * @brief Copies the CT2 figures of the datalog period that just ended, then signals the main code.
+ *
+ * @ingroup TimeCritical
+ */
+void processDivertedDataLogging()
+{
+  // the average over the whole period: a forced cycle counts as 0 W
+  Shared::copyOf_divertedPower_W = DivertedPower::watts(l_divertedEnergy_overDL, divertedPowerAverage);
+  Shared::copyOf_divertedEnergyTotal_Wh = divertedEnergy.totalWh();
+  l_divertedEnergy_overDL = 0;
+
+  // signal the main processor that logging data are available (beyond the start-up period)
+  Shared::b_datalogEventPending = true;
+}
+
+/**
+ * @brief The rest of the cycle's bookkeeping, the task after the CT2 energy.
+ *
+ * @details
+ * - Adds the power of the cycle that just ended to the datalog sum.
+ * - Updates the minimum number of ADC sample sets per mains cycle.
+ * - Counts the cycles of the datalog period, and tells the next positive crossing whether it
+ *   ends the period.
+ * - Counts the seconds without diversion, and signals a new mains cycle to the main code.
+ *
+ * @ingroup TimeCritical
+ */
+void addToDatalogSum()
+{
+  l_sumP_atSupplyPoint[0] += l_sumP_lastCycle;  // the cycle's power into the datalog sum, 64 bits
+
+  // A performance check to monitor and display the minimum number of sets of
+  // ADC samples per mains cycle, the expected number being 20ms / (104us * 3) = 64
+  if (n_samplesLastCycle < n_lowestNoOfSampleSetsPerMainsCycle)
+  {
+    n_lowestNoOfSampleSetsPerMainsCycle = n_samplesLastCycle;
   }
 
-  n_lowestNoOfSampleSetsPerMainsCycle = UINT8_MAX;
-  i_sampleSetsDuringThisDatalogPeriod = 0;
+  if (++n_cycleCountForDatalogging >= DATALOG_PERIOD_IN_MAINS_CYCLES)
+  {
+    n_cycleCountForDatalogging = 0;
+  }
+  b_datalogPeriodEndsNext = (n_cycleCountForDatalogging == DATALOG_PERIOD_IN_MAINS_CYCLES - 1);
 
-  // signal the main processor that logging data are available
-  // we skip the period from start to running stable
-  Shared::b_datalogEventPending = beyondStartUpPeriod;
+  if (++perSecondCounter == SUPPLY_FREQUENCY)
+  {
+    perSecondCounter = 0;
+
+    if (absenceOfDivertedEnergyCountInMC > SUPPLY_FREQUENCY)
+    {
+      ++Shared::absenceOfDivertedEnergyCountInSeconds;
+      // Reset diversion state if we've had no diversion for a full second
+      b_diversionStarted = false;
+    }
+    else
+      Shared::absenceOfDivertedEnergyCountInSeconds = 0;
+  }
+
+  Shared::b_newMainsCycle = true;  //  a 50 Hz 'tick' for use by the main code
+}
+
+/**
+ * @brief Runs the first pending cycle task (CycleTask), on a CT2 call.
+ *
+ * @details The dispatch only: each task is a call of its own (processing.h), which saves only the
+ *          registers it uses.
+ *
+ * @ingroup TimeCritical
+ */
+void runNextCycleTask()
+{
+  const uint16_t tasks{ pendingCycleTasks };
+
+  if (tasks & CycleTask::CONTRIBUTION)
+  {
+    pendingCycleTasks = tasks & ~CycleTask::CONTRIBUTION;
+    processLatestContribution();
+  }
+  else if (tasks & CycleTask::DIVERTED)
+  {
+    pendingCycleTasks = tasks & ~CycleTask::DIVERTED;
+    processDivertedEnergy();
+  }
+  else if (tasks & CycleTask::DIVERTED_COUNT)
+  {
+    pendingCycleTasks = tasks & ~CycleTask::DIVERTED_COUNT;
+    countDivertedEnergy();
+  }
+  else if (tasks & CycleTask::DATALOG_SUM)
+  {
+    pendingCycleTasks = tasks & ~CycleTask::DATALOG_SUM;
+    addToDatalogSum();
+  }
+  else if (tasks & CycleTask::DATALOG_COPY)
+  {
+    pendingCycleTasks = tasks & ~CycleTask::DATALOG_COPY;
+    processDataLogging();
+  }
+  else if (tasks & CycleTask::DATALOG_COPY_CT2)
+  {
+    pendingCycleTasks = tasks & ~CycleTask::DATALOG_COPY_CT2;
+    processDivertedDataLogging();
+  }
+  else if (tasks & CycleTask::PREDICTION)
+  {
+    pendingCycleTasks = tasks & ~CycleTask::PREDICTION;
+    predictEndOfCycle();
+  }
+  else if (tasks & CycleTask::DECISION)
+  {
+    pendingCycleTasks = (tasks & ~CycleTask::DECISION) | CycleTask::LOAD_STATES;
+    processStartNewCycle();
+  }
+  else if (tasks & CycleTask::LOAD_STATES)
+  {
+    pendingCycleTasks = (tasks & ~CycleTask::LOAD_STATES) | CycleTask::PORTS;
+    updatePhysicalLoadStates();  // allows the logical-to-physical mapping to be changed
+  }
+  else
+  {
+    pendingCycleTasks = tasks & ~CycleTask::PORTS;
+    applyDecision();
+  }
+}
+
+/**
+ * @brief Runs every pending cycle task at once, before new snapshots replace theirs.
+ *
+ * @details Only with a half cycle shorter than its tasks (a few sample sets), which a proper
+ *          mains never gives.
+ *
+ * @ingroup TimeCritical
+ */
+void finishCycleTasks()
+{
+  while (pendingCycleTasks)
+  {
+    runNextCycleTask();
+  }
 }
 
 /**
  * @brief Process the start of a new positive half cycle for the specified phase.
  *
  * This function is called just after the zero-crossing point of a positive half cycle.
- * It processes the latest energy contribution, updates performance metrics, and handles
- * data logging for phase 0.
+ * It takes what must be taken on this very sample, and posts the rest of the work of the
+ * cycle that just ended to the following CT2 calls (CycleTask).
  *
  * @param phase The phase number [0..NO_OF_PHASES[.
  *
  * @details
- * - Processes the latest energy contribution for the specified phase.
- * - Updates the minimum number of ADC sample sets per mains cycle for phase 0.
- * - Handles data logging at the end of the logging period for phase 0.
- * - Resets cumulative power and sample count for the phase.
+ * - The sums and the sample count of the cycle that just ended are taken and restarted: this
+ *   sample's power and count belong to the new cycle.
+ * - At the end of a datalog period, takes and restarts its V^2 sum and its sample count: this
+ *   sample belongs to the next period.
+ * - Posts the contribution, the CT2 energy, the rest of the bookkeeping and, at the end of a
+ *   period, the copies.
  *
  * @ingroup TimeCritical
  */
 void processPlusHalfCycle(const uint8_t phase)
 {
-  processLatestContribution(phase);  // runs at 6.6 ms intervals
+  (void)phase;  // one phase (static_assert above)
 
-  l_sumP_atSupplyPoint[phase] += l_sumP[phase];  // the cycle's power into the datalog sum, 64 bits
-
-  // A performance check to monitor and display the minimum number of sets of
-  // ADC samples per mains cycle, the expected number being 20ms / (104us * 6) = 32.05
-  //
-  if (0 == phase)
+  if (pendingCycleTasks)
   {
-    // Min and max limits to the level of the energy bucket, once the cycle's contribution is in
-    // (the decision of this cycle comes later, at mid-cycle, on the prediction). This is to
-    // ensure correct operation when conditions change, i.e. when import changes to export, and
-    // vice versa.
-    if (l_energyInBucket_main > l_capacityOfEnergyBucket_main)
-    {
-      l_energyInBucket_main = l_capacityOfEnergyBucket_main;
-    }
-    else if (l_energyInBucket_main < 0)
-    {
-      l_energyInBucket_main = 0;
-    }
-
-    if (n_samplesDuringThisMainsCycle[phase] < n_lowestNoOfSampleSetsPerMainsCycle)
-    {
-      n_lowestNoOfSampleSetsPerMainsCycle = n_samplesDuringThisMainsCycle[phase];
-    }
-
-    if constexpr (DIVERTED_CT_PRESENT)
-    {
-      processDivertedEnergy();  // before the datalog, so that the period ends with this cycle
-    }
-
-    processDataLogging();
+    finishCycleTasks();  // a half cycle shorter than its tasks: never on a proper mains
   }
 
-  l_sumP[phase] = 0;
-  n_samplesDuringThisMainsCycle[phase] = 0;
+  // The sums are taken, not cleared: the contribution task takes them off the sums, which by
+  // then also hold the first samples of the new cycle (fewer cycles on this sample).
+  n_samplesLastCycle = n_samplesDuringThisMainsCycle[0];
+  n_samplesDuringThisMainsCycle[0] = 0;
+  l_sumP_lastCycle = l_sumP[0];
+  if constexpr (DIVERTED_CT_PRESENT)
+  {
+    l_sumP_diverted_lastCycle = l_sumP_diverted;
+  }
+
+  uint16_t tasks{ static_cast< uint16_t >(CycleTask::CONTRIBUTION | CycleTask::DATALOG_SUM | (DIVERTED_CT_PRESENT ? (CycleTask::DIVERTED | CycleTask::DIVERTED_COUNT) : 0)) };
+
+  if (b_datalogPeriodEndsNext)
+  {
+    b_datalogPeriodEndsNext = false;
+
+    // the last sample of the period: this sample belongs to the next one (taken here, taken off
+    // the sums by processDataLogging())
+    l_sum_Vsquared_lastPeriod = l_sum_Vsquared[0];
+    i_sampleSetsLastPeriod = i_sampleSetsDuringThisDatalogPeriod;
+
+    tasks |= CycleTask::DATALOG_COPY | (DIVERTED_CT_PRESENT ? CycleTask::DATALOG_COPY_CT2 : 0);
+  }
+
+  pendingCycleTasks = tasks;
 }
 
 /**
@@ -1167,8 +1378,9 @@ void processRawSamples(const uint8_t phase)
     {
       if (beyondStartUpPeriod && (FastControl::DECISION_SAMPLE == n_samplesDuringNegativeHalf))
       {
-        // This code is executed once per 20mS, at mid-cycle on phase 0.
-        processStartNewCycle();
+        // Once per mains cycle, at mid-cycle on phase 0: the decision and the ports, on the
+        // next two CT2 calls (CycleTask)
+        pendingCycleTasks |= CycleTask::DECISION;
       }
       ++n_samplesDuringNegativeHalf;
     }
@@ -1206,7 +1418,6 @@ void processVoltageRawSample(const uint8_t phase, const uint16_t rawSample)
     ++i_sampleSetsDuringThisDatalogPeriod;
   }
 
-  refresh7SegDisplay();  // the 7-segment display, multiplexed once per sample set (as Full); nothing otherwise
 }
 
 /**
@@ -1316,9 +1527,14 @@ ISR(ADC_vect)
       break;
     case AdcChain::Channel::I_GRID:
       processCurrentRawSample(0, adc_raw);
+      refresh7SegDisplay();  // the 7-segment display, multiplexed once per sample set (as Full); nothing otherwise
       break;
     default:
       processDivertedCurrentRawSample(adc_raw);
+      if (pendingCycleTasks)
+      {
+        runNextCycleTask();  // the work of the mains cycle, one task per CT2 call
+      }
       break;
   }
 

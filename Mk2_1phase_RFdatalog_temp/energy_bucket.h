@@ -165,7 +165,7 @@ constexpr bool isValidCalibration(const float (&cal)[N])
  * @param shift The shift returned by calibrationShift().
  * @return averagePower x cal, in bucket units, rounded to the nearest unit.
  */
-inline int32_t contribution(const int32_t averagePower, const uint16_t calFixed, const uint8_t shift)
+inline __attribute__((always_inline)) int32_t contribution(const int32_t averagePower, const uint16_t calFixed, const uint8_t shift)
 {
   // Work on the magnitude and apply the sign last: rounding is then half away from
   // zero, and import and export weigh exactly the same.

@@ -30,7 +30,6 @@ void printParamsForSelectedOutputMode();
 #if defined(__DOXYGEN__)
 void initializeProcessing();
 inline void processStartUp(uint8_t phase);
-inline void processStartNewCycle();
 inline void processVoltageRawSample(const uint8_t phase, const uint16_t rawSample);
 inline void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample);
 inline void processDivertedCurrentRawSample(const uint16_t rawSample);
@@ -40,16 +39,24 @@ inline void processRawSamples(const uint8_t phase);
 inline void processVoltage(uint8_t phase);
 inline void processPolarity(uint8_t phase, uint16_t rawSample);
 inline void confirmPolarity(uint8_t phase);
-inline void processLatestContribution(uint8_t phase);
+inline void runNextCycleTask();
+void finishCycleTasks();
+void processLatestContribution();
+int32_t rescaleToNMin(int32_t sumP, uint8_t n);
 void processDivertedEnergy();
-inline void processDataLogging();
+void countDivertedEnergy();
+void addToDatalogSum();
+void processDataLogging();
+void processDivertedDataLogging();
+void predictEndOfCycle();
+void processStartNewCycle();
+void updatePhysicalLoadStates();
+void applyDecision();
 inline void updatePortsStates();
-inline void updatePhysicalLoadStates();
 #else
 // -O3 on a function that is a call of its own: here 50 bytes smaller than with -Os
 void initializeProcessing() __attribute__((optimize("-O3")));
 inline void processStartUp(uint8_t phase) __attribute__((always_inline));
-inline void processStartNewCycle() __attribute__((always_inline));
 inline void processVoltageRawSample(const uint8_t phase, const uint16_t rawSample) __attribute__((always_inline));
 inline void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample) __attribute__((always_inline));
 inline void processDivertedCurrentRawSample(const uint16_t rawSample) __attribute__((always_inline));
@@ -59,18 +66,25 @@ inline void processRawSamples(const uint8_t phase) __attribute__((always_inline)
 inline void processVoltage(uint8_t phase) __attribute__((always_inline));
 inline void processPolarity(uint8_t phase, uint16_t rawSample) __attribute__((always_inline));
 inline void confirmPolarity(uint8_t phase) __attribute__((always_inline));
-inline void processLatestContribution(uint8_t phase) __attribute__((always_inline));
-// not inlined on purpose: inlined, it took 3 more registers that every ADC interrupt then saved and
-// restored (~12 cycles each time, against ~25 for the call once per mains cycle); 40 bytes smaller
+// The work of the mains cycle (CycleTask in processing.cpp), one task per CT2 call: the ISR keeps
+// the dispatch only, each task is a call of its own that saves only the registers it uses.
+inline void runNextCycleTask() __attribute__((always_inline));
+void finishCycleTasks() __attribute__((noinline));  // the tasks at once: a half cycle shorter than its tasks only
+void processLatestContribution() __attribute__((noinline));
+int32_t rescaleToNMin(int32_t sumP, uint8_t n) __attribute__((noinline));  // its division apart: unexpected cycle lengths only
 void processDivertedEnergy() __attribute__((noinline));
-inline void processDataLogging() __attribute__((always_inline));
-// An inlined function is compiled with the options of the ISR it lands in: an optimize() attribute
-// on it changes nothing (same firmware, to the byte). updatePortsStates() is a call: -O3 unrolls
-// its load loop into constant masks (grid simulator: 38 cycles less on average, 88 less at most).
+void countDivertedEnergy() __attribute__((noinline));
+void addToDatalogSum() __attribute__((noinline));
+void processDataLogging() __attribute__((noinline));
+void processDivertedDataLogging() __attribute__((noinline));
+void predictEndOfCycle() __attribute__((noinline));
+void processStartNewCycle() __attribute__((noinline));
+void updatePhysicalLoadStates() __attribute__((noinline));
+void applyDecision() __attribute__((noinline));
+// An inlined function is compiled with the options of the function it lands in: an optimize()
+// attribute on it changes nothing. updatePortsStates() is a call: -O3 unrolls its load loop into
+// constant masks (grid simulator: 38 cycles less on average, 88 less at most).
 inline void updatePortsStates() __attribute__((optimize("-O3")));
-// not inlined on purpose: inlined, it takes registers that the rest of the ISR then spills to a
-// stack frame on every call (grid simulator: 30 cycles more on average, 65 more at most)
-inline void updatePhysicalLoadStates() __attribute__((noinline));
 #endif
 
 #endif /* PROCESSING_H */
