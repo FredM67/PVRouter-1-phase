@@ -89,6 +89,7 @@ static_assert(NO_OF_DUMPLOADS > 0, "Number of dump loads must be greater than 0"
 - Compile-time bounds checking: `readTemperature<INDEX>()`
 - Runtime bounds checking: `readTemperature(index)`
 - CRC validation and error handling
+- The firmware reads the sensors in transactions of its own (`startRead()`, `readScratchpad()`, `endRead()`), one per mains cycle, scheduled by `temp_schedule.h` (Arduino-free, native tests)
 
 ### 4. Utility Modules
 - **`utils_pins.h`**: Direct port manipulation for performance
@@ -189,6 +190,7 @@ Data logging → Serial output → Telemetry transmission
 - **Sampling chain** (`adc_chain.h`): V → CT1 (grid) → CT2 (diverted), free-running, ~104 µs per conversion, ~312 µs per sample set. When the interrupt of a conversion runs, the next conversion has already started with the previous ADMUX: the interrupt writes the channel two steps ahead. Each board has its analog inputs and its reference (AVcc on the old boards, internal 1.1 V on `NEW`).
 - **Control core** (`fast_control.h`, `processing.cpp`): Robin Emley's fasterControl, that of `Mk2_fasterControl_twoLoads_5`. At the first sample set of the negative half cycle, the bucket level at the end of the cycle is predicted from its level at the start and the average power of the first half (through a per-sample calibration table: no division in the interrupt). At sample set index 3 of the negative half, the loads are decided on that prediction; the zero-crossing triac drivers switch them at the next positive zero crossing.
 - **Once-per-cycle work** (`CycleTask` in `processing.cpp`): the work of the mains cycle (diverted energy, datalog sums, load states) is spread over the CT2 calls that follow the zero crossings, so that no interrupt call needs more than ~420 cycles to reach its ADMUX write, even when entered late after a 1-Wire time slot.
+- **Temperature transactions** (`temp_schedule.h`, `runTemperatureTransaction()` in `main.cpp`): the loop runs the 1-Wire I/O one short transaction per mains cycle, started as soon as it sees the new cycle (`b_newMainsCycle`, set once the work after the positive crossing is done): the slots that keep the interrupts off (resets, 0s written) fall among the ordinary interrupt calls of the positive half, not on the heavier ones of the zero crossings. A round per datalog period: the conversion, then 3 transactions per sensor.
 - **Diverted energy** (`diverted_energy.h`): CT2 power per cycle, accumulated in Wh with an anti-creep limit (`ANTI_CREEP_LIMIT`, in W), not counted while a load is forced, reset after `DISPLAY_SHUTDOWN_IN_HOURS` without diversion.
 - **CT1 filter** (`ct_filter.h`): Robin's IIR low-pass of the grid current, added back with a gain, in fixed point (~210 cycles instead of ~1100 with floats). Old boards only; interim values.
 - **Displays** (`display_core.h`, `utils_display.h`, `utils_oled.h`): the 7-segment display multiplexed from the ADC interrupt (one port image per digit, prepared by the loop), or the OLED written from the loop (about 20 ms per redraw, only when the value changes).

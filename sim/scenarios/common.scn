@@ -19,11 +19,12 @@ expect admux_delay_min 128
 # The ISR must end within the 1664 cycles of one conversion
 expect isr_overruns 0
 # Margins, enforced: the longest ISR call and the latest ADMUX write (from the interrupt), a little
-# above the worst of the builds (495 and 1456 cycles). The deadline is 1664 cycles: an ADMUX written
+# above the worst of the builds (495 and 1477 cycles). The deadline is 1664 cycles: an ADMUX written
 # later misses the conversion after next, which then converts the wrong channel. The latest writes
 # are those of the builds with temperature sensing: a 1-Wire time slot keeps interrupts off up to
-# ~65 us (~1050 cycles), and the ISR entered that late still has to reach its ADMUX write (~420
-# cycles at most: the work of the mains cycle is spread over the CT2 calls, processing.cpp).
+# ~70 us (~1190 cycles), and the ISR entered that late still has to reach its ADMUX write (~420
+# cycles at most: the work of the mains cycle is spread over the CT2 calls, processing.cpp). Their
+# board files have ceilings of their own, lower (Makefile: check-new-temp, check-seg-temp).
 # admux_delay_max leaves room for the ordinary shifts of the 1-Wire slots against the ADC phase: a
 # failure between 1620 and 1664 with misfiled_samples 0 is a margin warning, not a lost sample.
 expect isr_max 560

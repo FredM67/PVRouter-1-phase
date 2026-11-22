@@ -43,12 +43,19 @@ static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVR
 #include "validation.h"
 #include "main.h"
 #include "override_masks.h"
+#include "temp_schedule.h"
 
 // --------------  general global variables -----------------
 //
 // Some of these variables are used in multiple blocks so cannot be static.
 // For integer maths, some variables need to be 'int32_t'
 //
+
+/** @brief The round of the temperature sensors: one 1-Wire transaction per mains cycle (temp_schedule.h). */
+TempSchedule::Scheduler< tempSensors.size(), TempSchedule::conversionCycles(SUPPLY_FREQUENCY) > tempSchedule;
+
+/** @brief The last reading of each sensor, in hundredths of °C, as endRead() returned it (none yet: setup()). */
+int16_t temperatureReadings[tempSensors.size()];
 
 /**
  * @brief Calculates the dual tariff forcing bitmasks based on current conditions.
@@ -354,6 +361,10 @@ void setup()
   {
     tempSensors.printSensorsOnBus();  // empty unless CALIBRATION_MODE
     tempSensors.initTemperatureSensors();
+    for (auto& reading : temperatureReadings)
+    {
+      reading = DEVICE_DISCONNECTED_RAW;  // not sent until read
+    }
   }
 
   debug(F(">>free RAM = "));
@@ -395,12 +406,52 @@ void updatePowerAndVoltageData()
 }
 
 /**
+ * @brief Runs the 1-Wire transaction of this mains cycle, if any.
+ *
+ * @details Called at the top of the loop pass that sees the new mains cycle, before any other
+ *          work: the cycle's work in the ADC interrupt is done by then (Shared::b_newMainsCycle),
+ *          and the long slots of the transaction (its resets and 0s written, which keep
+ *          interrupts off for 65 to 70 µs) end before the negative crossing (temp_schedule.h).
+ *
+ * @param onTime Whether the loop was idle when the cycle began: the flag is fresh
+ *
+ * @ingroup TemperatureSensing
+ */
+void runTemperatureTransaction(const bool onTime)
+{
+  const TempSchedule::Action action{ tempSchedule.next(onTime) };
+  switch (action.step)
+  {
+    case TempSchedule::Step::CONVERT:
+      tempSensors.requestTemperatures();
+      break;
+    case TempSchedule::Step::ADDRESS:
+      if (!tempSensors.startRead(action.sensor))
+      {
+        temperatureReadings[action.sensor] = DEVICE_DISCONNECTED_RAW;  // no answer to the reset
+        tempSchedule.skipRestOf(action.sensor);
+      }
+      break;
+    case TempSchedule::Step::READ:
+      tempSensors.readScratchpad(action.sensor);
+      break;
+    case TempSchedule::Step::CLOSE:
+      temperatureReadings[action.sensor] = tempSensors.endRead();
+      break;
+    default:
+      break;
+  }
+}
+
+/**
  * @brief Processes temperature data from DS18B20 sensors.
  *
- * @details This function reads temperature values from all connected DS18B20 sensors, filters out invalid readings,
- *          and updates the telemetry data structure with valid temperature values. Invalid readings are identified
- *          as 85.00°C (encoded as 8500) with a delta greater than 5.00°C (encoded as 500) from the previous reading.
- *          After processing, it requests new temperature measurements for the next cycle.
+ * @details At the end of each datalog period: the readings of the period's round (runTemperatureTransaction()),
+ *          converted 750 ms or more before they were read, filtered and copied for the datalog output. Invalid
+ *          readings are identified as 85.00°C (encoded as 8500) with a delta greater than 5.00°C (encoded as 500)
+ *          from the previous reading. The next round starts at once if the loop handles the end of the
+ *          period on time, so that its conversion runs before the datalog output (the UART interrupts would add
+ *          to the delay of the ADC interrupt after a 1-Wire slot); otherwise with the next mains cycle.
  *
  * @note This function assumes that temperature values are stored as integers multiplied by 100 for precision.
  *
@@ -408,9 +459,11 @@ void updatePowerAndVoltageData()
  *
  * @post The `tx_data.temperature_x100` array is updated with the latest valid temperature readings.
  *
+ * @param bStartNow Whether the end of the period is handled on time, soon after its mains cycle began
+ *
  * @ingroup TemperatureSensing
  */
-void processTemperatureData()
+void processTemperatureData(const bool bStartNow)
 {
   // 85.00 °C more than 5.00 °C away from the last valid reading: the power-on value, skipped
   static DS18B20::PowerOnFilter powerOnFilter[tempSensors.size()];
@@ -419,10 +472,15 @@ void processTemperatureData()
   do
   {
     --idx;
-    tx_data.temperature_x100[idx] = powerOnFilter[idx](tempSensors.readTemperature(idx));
+    tx_data.temperature_x100[idx] = powerOnFilter[idx](temperatureReadings[idx]);
   } while (idx);
 
-  tempSensors.requestTemperatures();  // for use next time around
+  // the next round: its conversion now, in the cycle that ends the period (which had no transaction,
+  // the round being over), or with the next cycle
+  if (tempSchedule.newPeriod() && bStartNow)
+  {
+    runTemperatureTransaction(true);
+  }
 }
 
 /**
@@ -548,7 +606,8 @@ void updateDisplay(const uint16_t energyWh)
  * proper system operation.
  *
  * @details
- * - Executes tasks triggered by the `b_newMainsCycle` flag, which is set after every pair of ADC conversions.
+ * - Executes tasks triggered by the `b_newMainsCycle` flag, which is set once per mains cycle; with temperature
+ *   sensing, the cycle's 1-Wire transaction first, before any other work.
  * - Handles per-second tasks such as load priority management and diversion state updates.
  * - Processes data logging events and updates power, voltage, and temperature data.
  * - Sends telemetry results and updates relay states if relay diversion is enabled.
@@ -562,6 +621,32 @@ void loop()
   static int16_t iTemperature_x100{ 0 };
   static bool bDisplayStarted{ false };  // from the first datalog event, after the logo
   static uint16_t displayedEnergy_Wh{ 0 };
+  [[maybe_unused]] static uint32_t cycleSeen_us{ 0 };  // temperature sensing: when the loop saw the last new cycle
+  [[maybe_unused]] static bool bCycleOnTime{ false };   // ... and whether on time
+
+  const bool bNewMainsCycle{ Shared::b_newMainsCycle };  // set once per mains cycle, by the ADC interrupt
+  if (bNewMainsCycle)
+  {
+    Shared::b_newMainsCycle = false;  // reset the flag
+  }
+
+  if constexpr (TEMP_SENSOR_PRESENT)
+  {
+    // The flag was set at most one loop pass ago: on time if the last pass was short (the loop
+    // idle when the cycle began), late after a long one (per-second work, display, RF frame).
+    constexpr uint32_t ON_TIME_US{ 1000 };
+    static uint32_t passStart_us{ 0 };
+    const uint32_t now_us{ micros() };
+    const bool bOnTime{ (now_us - passStart_us) < ON_TIME_US };
+    passStart_us = now_us;
+
+    if (bNewMainsCycle)
+    {
+      cycleSeen_us = now_us;
+      bCycleOnTime = bOnTime;
+      runTemperatureTransaction(bOnTime);  // first: its long slots must end before the negative crossing
+    }
+  }
 
   // Write the datalog output in progress, as far as the serial buffer allows (never waits)
   SerialOutput::poll();
@@ -572,9 +657,8 @@ void loop()
     processRemoteLoadTransmissions();
   }
 
-  if (Shared::b_newMainsCycle)  // flag is set after every pair of ADC conversions
+  if (bNewMainsCycle)
   {
-    Shared::b_newMainsCycle = false;  // reset the flag
     ++perSecondTimer;
 
     if (perSecondTimer >= SUPPLY_FREQUENCY)
@@ -613,7 +697,11 @@ void loop()
 
     if constexpr (TEMP_SENSOR_PRESENT)
     {
-      processTemperatureData();
+      // The end of the period comes 2 sample sets after its new cycle: on time if the loop saw that
+      // cycle on time and is still within 3 ms of it (the conversion's slots then end long before
+      // the negative crossing)
+      constexpr uint32_t PERIOD_END_ON_TIME_US{ 3000 };
+      processTemperatureData(bCycleOnTime && (micros() - cycleSeen_us) < PERIOD_END_ON_TIME_US);
 
       // the sensor checked against the dual tariff temperature threshold
       iTemperature_x100 = tx_data.temperature_x100[BOOST_TEMP_SENSOR];

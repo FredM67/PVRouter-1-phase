@@ -58,14 +58,14 @@ pio check
 - `processing.cpp/.h` - Core real-time processing engine
 - `validation.h` - ~50+ compile-time safety assertions
 - `utils_relay.h` - Relay control: pins and printing; the decisions, with EWMA filtering, are in `relay_engine.h` (Arduino-free, native tests)
-- `utils_temp.h` - DS18B20 temperature sensor management
+- `utils_temp.h` - DS18B20 temperature sensor management; `temp_schedule.h` - which 1-Wire transaction runs on which mains cycle (Arduino-free, native tests)
 - `utils_display.h` / `utils_oled.h` - The display (`TYPE_OF_DISPLAY`): the 7-segment display, multiplexed from the ADC ISR, and the OLED (U8x8), updated once per second from the loop; the pins, port images and content are in `display_core.h` (Arduino-free, native tests)
 
 ### Real-Time Constraints
 
 - ADC ISR runs at **9.6 kHz** (every 104μs, 1,664 CPU cycles); each channel every ~312μs, 64 sample sets per mains cycle at 50 Hz
 - Free-running ADC: the ADMUX written in the ISR applies to the conversion after next (`adc_chain.h`)
-- Every ISR call must end within one ADC conversion; the grid simulator enforces it (`sim/scenarios/common.scn`): longest call `isr_max` 560 cycles, latest ADMUX write `admux_delay_max` 1620 cycles (temperature builds, after a 1-Wire slot). The once-per-cycle work is spread over the CT2 calls that follow the zero crossings (`CycleTask` in processing.cpp) to keep each call short
+- Every ISR call must end within one ADC conversion; the grid simulator enforces it (`sim/scenarios/common.scn`): longest call `isr_max` 560 cycles, latest ADMUX write `admux_delay_max` 1620 cycles (1480 for `check-new-temp`, 1600 for `check-seg-temp`: the temperature builds, after a 1-Wire slot). The once-per-cycle work is spread over the CT2 calls that follow the zero crossings (`CycleTask` in processing.cpp) to keep each call short; the 1-Wire transactions start right after the positive crossing's work (`temp_schedule.h`), one per mains cycle, so that their slots miss those calls
 - No blocking calls, no dynamic allocation in ISR
 - Volatile shared variables for ISR-main loop communication
 

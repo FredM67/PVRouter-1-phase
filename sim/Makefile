@@ -135,16 +135,22 @@ $(OUT)/old_seg_60hz_board.scn: board_scn.sh $(CAL)
 	@mkdir -p $(OUT)
 	sh board_scn.sh OLD_SEG $(CAL) '' 60 > $@
 
+# The temperature builds, ADMUX ceilings of their own (below common.scn's 1620): the 1-Wire slots
+# start right after the positive crossing's work (temp_schedule.h), and only delay ordinary calls.
+# An ISR entered up to ~1200 cycles late then reaches ADMUX within ~276 cycles on NEW (worst seen
+# 1401), within ~400 on the old boards, whose CT1 call (filter, display refresh) is never light
+# (worst seen 1477).
 # NEW with temperature sensing: the DS18B20 of configs/temperature.patch on D3
-$(OUT)/new_temp_board.scn: board_scn.sh $(CAL) configs/ds18b20.scn
+$(OUT)/new_temp_board.scn: board_scn.sh $(CAL) configs/ds18b20.scn Makefile
 	@mkdir -p $(OUT)
-	{ sh board_scn.sh NEW $(CAL); cat configs/ds18b20.scn; } > $@
+	{ sh board_scn.sh NEW $(CAL); cat configs/ds18b20.scn; echo 'expect admux_delay_max 1480'; } > $@
 
 # OLD_SEG with SEG_HW: the loads of the scenarios (D5-D7) are on D10-D12 (configs/seg_hw.patch);
 # temperature sensing, with the DS18B20 on D3
-$(OUT)/old_seg_hw_temp_board.scn: board_scn.sh $(CAL) configs/ds18b20.scn
+$(OUT)/old_seg_hw_temp_board.scn: board_scn.sh $(CAL) configs/ds18b20.scn Makefile
 	@mkdir -p $(OUT)
-	{ sh board_scn.sh OLD_SEG $(CAL); printf 'remap 5 10\nremap 6 11\nremap 7 12\n'; cat configs/ds18b20.scn; } > $@
+	{ sh board_scn.sh OLD_SEG $(CAL); printf 'remap 5 10\nremap 6 11\nremap 7 12\n'; cat configs/ds18b20.scn; \
+	  echo 'expect admux_delay_max 1600'; } > $@
 
 # make run: the board file and the firmware of BOARD
 RUN_BOARD = $(OUT)/$(shell echo $(BOARD) | tr A-Z a-z)_board.scn

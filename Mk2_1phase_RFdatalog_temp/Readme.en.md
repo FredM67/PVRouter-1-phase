@@ -634,7 +634,7 @@ These sensors can serve informational purposes or to control boost mode.
 - **New board** (`PcbVersion::NEW`): the probes' bus is on `D3`, wired with its pull-up on the board. Connect the probes to the board's temperature connector; with the mk2Wifi module, put the `TEMP` jumper in the router position (see [`TEMP` jumper](#temp-jumper)).
 - **Old boards** (`PcbVersion::OLD_SEG`, `PcbVersion::OLD_OLED`): choose a free digital pin, add a 4.7 kΩ pull-up between the data line and +5 V, and power the probes (+5 V, GND).
 
-Each 1-Wire time slot keeps the interrupts off for up to ~65 µs; the ADC interrupt still meets its deadline after such a delay, even with the 7-segment display refreshed from it (checked in the grid simulator, `check-new-temp` and `check-seg-temp`).
+The probes are read in short 1-Wire transactions, one per mains cycle at most, each started right after the work of the positive zero crossing: their resets and 0s written keep the interrupts off for up to ~70 µs, away from the heavier ADC interrupts of the zero crossings. Each datalog period, the probes convert as it begins, before the datalog output of the period before, and are read about 0.8 s later; the datalog sends these readings at the end of the period. With a 1 s datalog period, 3 probes at most (4 at 60 Hz): the build refuses more. Checked in the grid simulator with two simulated DS18B20 (`check-new-temp` and `check-seg-temp`, the latter with the 7-segment display refreshed from the ADC interrupt).
 
 ### Feature activation
 

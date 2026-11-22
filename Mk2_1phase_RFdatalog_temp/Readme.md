@@ -642,7 +642,7 @@ Ces capteurs peuvent servir à des fins informatives ou pour contrôler le mode 
 - **Nouvelle carte** (`PcbVersion::NEW`) : le bus des sondes est sur `D3`, câblé avec son pull-up sur la carte. Branchez les sondes sur le connecteur de température de la carte ; avec le module mk2Wifi, mettez le cavalier `TEMP` en position routeur (voir [Cavalier `TEMP`](#cavalier-temp)).
 - **Anciennes cartes** (`PcbVersion::OLD_SEG`, `PcbVersion::OLD_OLED`) : choisissez une pin numérique libre, ajoutez un pull-up de 4,7 kΩ entre la ligne de données et le +5 V, et alimentez les sondes (+5 V, GND).
 
-Chaque créneau 1-Wire coupe les interruptions jusqu’à ~65 µs ; l’interruption de l’ADC tient encore son échéance après un tel retard, même avec l’afficheur 7 segments rafraîchi depuis elle (vérifié dans le simulateur de réseau, `check-new-temp` et `check-seg-temp`).
+Les sondes sont lues par courtes transactions 1-Wire, une par cycle secteur au plus, chacune lancée juste après le travail du passage par zéro montant : leurs resets et leurs 0 écrits coupent les interruptions jusqu’à ~70 µs, à l’écart des interruptions de l’ADC plus lourdes des passages par zéro. À chaque période de datalog, les sondes convertissent dès son début, avant la sortie du datalog de la période précédente, et sont lues environ 0,8 s plus tard ; le datalog envoie ces lectures à la fin de la période. Avec une période de datalog de 1 s, 3 sondes au plus (4 à 60 Hz) : la compilation en refuse davantage. Vérifié dans le simulateur de réseau avec deux DS18B20 simulées (`check-new-temp` et `check-seg-temp`, la seconde avec l’afficheur 7 segments rafraîchi depuis l’interruption de l’ADC).
 
 ### Activation de la fonctionnalité
 

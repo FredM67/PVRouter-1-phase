@@ -22,7 +22,7 @@
 
 #if !defined(__DOXYGEN__)
 inline void updatePowerAndVoltageData() __attribute__((always_inline));
-inline void processTemperatureData() __attribute__((always_inline));
+inline void processTemperatureData(bool bStartNow) __attribute__((always_inline));
 inline void sendResults(bool bOffPeak) __attribute__((always_inline));
 #endif
 
