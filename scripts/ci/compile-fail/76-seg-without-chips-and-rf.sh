@@ -7,4 +7,4 @@ replace $'{\n  Load::local(5),\n  Load::local(6),\n  Load::local(7)\n}' '{ Load:
 replace 'loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2 }' 'loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0 }'
 replace 'overridePins{ { { 4, ALL_LOADS() } } }' 'overridePins{ { { 3, ALL_LOADS() } } }'
 replace 'RF_LOGGING_PRESENT{ false }' 'RF_LOGGING_PRESENT{ true }'
-expect='Duplicate pin definition'
+expect='The display uses pins that the RF chip needs'

@@ -100,49 +100,54 @@ static_assert(TEMP_RANGE_LOW < TEMP_RANGE_HIGH, "******** Invalid temperature ra
 struct PinCheck
 {
   bool unique;   /**< no pin is used twice */
-  uint16_t used; /**< the pins used (0 on a conflict) */
+  uint32_t used; /**< the pins used, bit n = pin n (0 on a conflict); bit 31 = a pin from 32 on */
 };
+
+/**
+ * @brief Marks @p pin as used in @p used.
+ * @return false if it was already used. A pin from 32 on (not a pin of an ATmega328P) sets bit 31,
+ *         which the range check below refuses, as it does every pin from 14 on.
+ */
+constexpr bool claimPin(uint32_t &used, const uint8_t pin)
+{
+  const uint8_t bit{ pin > 31 ? static_cast< uint8_t >(31) : pin };
+  const bool free{ !bit_read(used, bit) };
+  bit_set(used, bit);
+  return free;
+}
 
 constexpr PinCheck check_pins()
 {
-  uint16_t used_pins{ 0 };
+  uint32_t used_pins{ 0 };
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
-    if (temperatureSensing.get_pin() != unused_pin)
-      bit_set(used_pins, temperatureSensing.get_pin());
+    if (temperatureSensing.get_pin() != unused_pin && !claimPin(used_pins, temperatureSensing.get_pin()))
+      return { false, 0 };
   }
 
   if (diversionPin != unused_pin)
   {
-    if (bit_read(used_pins, diversionPin))
+    if (!claimPin(used_pins, diversionPin))
       return { false, 0 };
-
-    bit_set(used_pins, diversionPin);
   }
 
   if (routerOffPin != unused_pin)
   {
-    if (bit_read(used_pins, routerOffPin))
+    if (!claimPin(used_pins, routerOffPin))
       return { false, 0 };
-
-    bit_set(used_pins, routerOffPin);
   }
 
   if (rotationPin != unused_pin)
   {
-    if (bit_read(used_pins, rotationPin))
+    if (!claimPin(used_pins, rotationPin))
       return { false, 0 };
-
-    bit_set(used_pins, rotationPin);
   }
 
   if (dualTariffPin != unused_pin)
   {
-    if (bit_read(used_pins, dualTariffPin))
+    if (!claimPin(used_pins, dualTariffPin))
       return { false, 0 };
-
-    bit_set(used_pins, dualTariffPin);
   }
 
   // Check override pins from the flexible override system
@@ -153,20 +158,16 @@ constexpr PinCheck check_pins()
       const uint8_t pin = overridePins.getPin(i);
       if (pin != unused_pin)
       {
-        if (bit_read(used_pins, pin))
+        if (!claimPin(used_pins, pin))
           return { false, 0 };
-
-        bit_set(used_pins, pin);
       }
     }
   }
 
   if (watchDogPin != unused_pin)
   {
-    if (bit_read(used_pins, watchDogPin))
+    if (!claimPin(used_pins, watchDogPin))
       return { false, 0 };
-
-    bit_set(used_pins, watchDogPin);
   }
 
   // physicalLoadPin: the local TRIACs, plus the optional status LED of each remote load
@@ -188,10 +189,8 @@ constexpr PinCheck check_pins()
     if (pin > 15)
       continue;
 
-    if (bit_read(used_pins, pin))
+    if (!claimPin(used_pins, pin))
       return { false, 0 };
-
-    bit_set(used_pins, pin);
   }
 
   if constexpr (RELAY_DIVERSION)
@@ -202,16 +201,14 @@ constexpr PinCheck check_pins()
 
       if (relayPin != unused_pin)
       {
-        if (bit_read(used_pins, relayPin))
+        if (!claimPin(used_pins, relayPin))
           return { false, 0 };
-
-        bit_set(used_pins, relayPin);
       }
     }
   }
 
   // the pins the display takes (D2..D13 and A2, A4, A5: a 32-bit mask) belong to it alone
-  if ((static_cast< uint32_t >(used_pins) & displayPinMask) != 0)
+  if ((used_pins & displayPinMask) != 0)
     return { false, 0 };
 
   return { true, used_pins };
@@ -374,7 +371,7 @@ static_assert(Rotation::noLoadTwice(rotationGroups, physicalLoadPin), "******** 
 static_assert(Rotation::groupsAreConsistent(rotationGroups, physicalLoadPin), "******** A rotation group mixes local and remote loads, or loads of two remote units ! Please check rotationGroups in your config.h ! ********");
 static_assert(check_pins().unique, "******** Duplicate pin definition ! Please check your config ! ********");
 static_assert((check_pins().used & B00000011) == 0, "******** Pins 0 & 1 are reserved for RX/TX ! Please check your config ! ********");
-static_assert((check_pins().used & 0xC000) == 0, "******** Pins 14 and/or 15 do not exist ! Please check your config ! ********");
+static_assert((check_pins().used & 0xFFFFC000UL) == 0, "******** Pins 14 and above cannot be used (A0 to A5 are analog inputs, the display or the I2C bus) ! Please check your config ! ********");
 static_assert(check_relay_pins(), "******** Wrong pin(s) configuration for relay(s) ********");
 static_assert(check_relay_minimum_times(), "******** A relay's minimum ON or OFF time cannot exceed 1092 minutes (about 18 hours) ! Please check relays in your config.h ! ********");
 static_assert(check_override_targets(), "******** An override pin forces a pin that is neither a local load nor a relay (REMOTE_LOAD() goes up to 7) ! Please check overridePins in your config.h ! ********");
