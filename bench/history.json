@@ -1,0 +1,61 @@
+{
+ "entries": [
+  {
+   "commit": "fe341e19dcc4b9e7adc15abf81d9da802aae7c3f",
+   "date": "2026-11-22T23:32:47+01:00",
+   "message": "ci: GitHub Pages (landing page, flash/RAM/speed history), Doxygen and CodeQL for Mk2_1phase_RFdatalog_temp (#29)\n\n* ci: GitHub Pages landing page and flash/RAM/speed history\n\nPort of the PVRouter-3-phase pages: a pages job in build.yml (push to dev) appends the\nsizes of every build and the embedded benchmarks to bench/history.json of gh-pages with\nscripts/ci/pages_update.py, and publishes pages/ (landing page, charts), without the\nconfigurator. build.yml is now valid UTF-8 (a cp1252 micro sign and em dash had slipped in).\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* ci: Doxygen to doc/ and CodeQL follow Mk2_1phase_RFdatalog_temp\n\ndoxygen-gh-pages.yml as in PVRouter-3-phase: Doxygen 1.13.2 deployed to doc/ of gh-pages,\nin the gh-pages concurrency group, on pushes to main touching the firmware or the Doxyfile.\nThe root Doxyfile takes the firmware as INPUT, its @mainpage as main page. CodeQL builds the\nfirmware (and dev/ projects) with PlatformIO, plus the actions and python languages.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: flash and RAM badges, links to the pages, changelog\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: the colons and semicolons of the French README are back\n\nA Python \"\\1\" in a plain string turned each colon and semicolon after a\nno-break space into U+0001 when the README went French.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/fe341e19dcc4b9e7adc15abf81d9da802aae7c3f",
+   "sizes": {
+    "basic": {
+     "flash": 10238,
+     "ram": 398
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 11514,
+     "ram": 425
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 23106,
+     "ram": 864
+    },
+    "basic, NEW, OLED": {
+     "flash": 22632,
+     "ram": 861
+    },
+    "basic, remote loads": {
+     "flash": 14628,
+     "ram": 495
+    },
+    "basic, IoT": {
+     "flash": 10238,
+     "ram": 398
+    },
+    "basic, HumanReadable": {
+     "flash": 10130,
+     "ram": 378
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
+  }
+ ]
+}
