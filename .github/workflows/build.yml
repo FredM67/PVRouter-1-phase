@@ -174,10 +174,10 @@ jobs:
           {
             echo "### Benchmarks (simavr, exact)"
             echo ""
-            echo "| Benchmark | Âµs | cycles |"
+            echo "| Benchmark | µs | cycles |"
             echo "|---|---:|---:|"
             # one row per benchmark: its "<name> [us]" and "<name> [cycles]" results
-            jq -r 'def num: if . == null then "â€”" elif . == floor then floor else . end;
+            jq -r 'def num: if . == null then "—" elif . == floor then floor else . end;
               (map({key: .name, value: .value}) | from_entries) as $v
               | .[] | select(.name | endswith(" [us]")) | (.name | rtrimstr(" [us]")) as $n
               | "| \($n) | \(.value | num) | \($v[$n + " [cycles]"] | num) |"' bench/speed.json
@@ -367,12 +367,27 @@ jobs:
           path: target
           submodules: 'true'
 
+      # the first PR that brings the firmware has nothing to compare with: the report then gives
+      # the PR's figures alone
+      - name: Is the firmware on ${{ github.base_ref }}?
+        id: target
+        run: |
+          if [ -d "target/$PROJECT_DIR" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::$PROJECT_DIR is not on ${{ github.base_ref }} yet: no baseline"
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: ./.github/actions/setup-platformio
+        if: steps.target.outputs.present == 'true'
 
       - name: Measure ${{ github.base_ref }}
+        if: steps.target.outputs.present == 'true'
         run: scripts/ci/measure.sh target baseline
 
       - name: Upload the figures of ${{ github.base_ref }}
+        if: steps.target.outputs.present == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: baseline

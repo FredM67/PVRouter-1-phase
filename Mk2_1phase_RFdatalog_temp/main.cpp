@@ -361,7 +361,7 @@ void setup()
   {
     tempSensors.printSensorsOnBus();  // empty unless CALIBRATION_MODE
     tempSensors.initTemperatureSensors();
-    for (auto& reading : temperatureReadings)
+    for (auto &reading : temperatureReadings)
     {
       reading = DEVICE_DISCONNECTED_RAW;  // not sent until read
     }
@@ -622,7 +622,7 @@ void loop()
   static bool bDisplayStarted{ false };  // from the first datalog event, after the logo
   static uint16_t displayedEnergy_Wh{ 0 };
   [[maybe_unused]] static uint32_t cycleSeen_us{ 0 };  // temperature sensing: when the loop saw the last new cycle
-  [[maybe_unused]] static bool bCycleOnTime{ false };   // ... and whether on time
+  [[maybe_unused]] static bool bCycleOnTime{ false };  // ... and whether on time
 
   const bool bNewMainsCycle{ Shared::b_newMainsCycle };  // set once per mains cycle, by the ADC interrupt
   if (bNewMainsCycle)
