@@ -12,6 +12,7 @@
 #include "config.h"            // the settings, and config_types.h: nothing else
 #include "utils_dualtariff.h"  // BoostSchedule
 #include "utils_override.h"    // TargetMap, OverrideTable
+#include "adc_chain.h"         // the analog inputs of each board
 
 void setUp(void) {}
 void tearDown(void) {}
@@ -41,12 +42,28 @@ void test_targets_resolve_as_in_config_derived_h(void)
   TEST_ASSERT_EQUAL(scheduledBoosts.size(), boosts.size());
 }
 
+void test_board_is_one_of_the_three(void)
+{
+  using AdcChain::Channel;
+
+  TEST_ASSERT_TRUE(PCB_VERSION == PcbVersion::OLD_SEG || PCB_VERSION == PcbVersion::OLD_OLED || PCB_VERSION == PcbVersion::NEW);
+
+  // three different analog inputs, A0 to A5 (A6/A7 are not on every ATmega328P package)
+  const uint8_t v{ AdcChain::pinOf(PCB_VERSION, Channel::V) };
+  const uint8_t grid{ AdcChain::pinOf(PCB_VERSION, Channel::I_GRID) };
+  const uint8_t diverted{ AdcChain::pinOf(PCB_VERSION, Channel::I_DIVERTED) };
+
+  TEST_ASSERT_TRUE(v != grid && v != diverted && grid != diverted);
+  TEST_ASSERT_TRUE(v <= 5 && grid <= 5 && diverted <= 5);
+}
+
 int main(int /* argc */, char** /* argv */)
 {
   UNITY_BEGIN();
 
   RUN_TEST(test_config_h_reads_on_its_own);
   RUN_TEST(test_targets_resolve_as_in_config_derived_h);
+  RUN_TEST(test_board_is_one_of_the_three);
 
   return UNITY_END();
 }

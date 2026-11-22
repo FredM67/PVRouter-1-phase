@@ -14,7 +14,7 @@
 
 #include "type_traits.hpp"
 
-inline constexpr uint8_t NO_OF_PHASES{ 3 }; /**< number of phases of the main supply. */
+inline constexpr uint8_t NO_OF_PHASES{ 1 }; /**< single phase: the internal per-phase arrays have one entry */
 
 //--------------------------------------------------------------------------------------------------
 // for users with zero-export profile, this value will be negative

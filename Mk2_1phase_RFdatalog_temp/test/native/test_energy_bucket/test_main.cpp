@@ -380,6 +380,37 @@ void test_per_sample_full_scale_does_not_overflow(void)
   TEST_ASSERT_TRUE(fabs(Energy::contribution(-sumP, calOverN, table.shift) + expected) <= 1.0 + expected * 4e-5);
 }
 
+void test_per_sample_halved_sum_beyond_64_samples(void)
+{
+  // single phase: 3 conversions per sample set, ~64 sets per cycle at 50 Hz, up to 68 with the
+  // margin. 68 samples of full scale exceed 24 bits: the ISR halves sumP, the table doubles cal / n
+  constexpr uint8_t N_MIN_1PH{ 60 };
+  constexpr uint8_t N_MAX_1PH{ 68 };
+  constexpr auto table{ Energy::toFixedPerSample< N_MIN_1PH, N_MAX_1PH, 1 >(largeCal) };
+
+  // the largest sum: N_MAX samples of full scale
+  const int32_t sumP{ static_cast< int32_t >(N_MAX_1PH) * FULL_SCALE };
+  const double expected{ exactReference(sumP, N_MAX_1PH, largeCal[0]) };
+  const uint16_t calOverN{ table.value[0][N_MAX_1PH - N_MIN_1PH] };
+
+  TEST_ASSERT_TRUE(fabs(Energy::contribution(sumP >> 1, calOverN, table.shift) - expected) <= 1.0 + expected * 4e-5);
+  TEST_ASSERT_TRUE(fabs(Energy::contribution(-sumP >> 1, calOverN, table.shift) + expected) <= 1.0 + expected * 4e-5);
+
+  // and every n in range, over the whole input range
+  constexpr auto typical{ Energy::toFixedPerSample< N_MIN_1PH, N_MAX_1PH, 1 >(typicalCal) };
+  for (uint8_t n = N_MIN_1PH; n <= N_MAX_1PH; ++n)
+  {
+    for (int32_t sum = -static_cast< int32_t >(n) * FULL_SCALE; sum <= static_cast< int32_t >(n) * FULL_SCALE; sum += 77777)
+    {
+      const double exact{ exactReference(sum, n, typicalCal[0]) };
+      const double actual{ static_cast< double >(Energy::contribution(sum >> 1, typical.value[0][n - N_MIN_1PH], typical.shift)) };
+
+      // one unit of rounding, half a unit of V_ADC x I_ADC lost by the halving, plus the quantisation
+      TEST_ASSERT_TRUE_MESSAGE(fabs(actual - exact) <= 2.0 + fabs(exact) * 4e-5, "the halved sum differs from the exact reference");
+    }
+  }
+}
+
 void test_per_sample_no_drift_over_one_minute(void)
 {
   // 3000 cycles with n wandering around 32, as it does between zero crossings
@@ -486,6 +517,7 @@ int main(int, char **)
   RUN_TEST(test_per_sample_agrees_with_the_division_path);
   RUN_TEST(test_per_sample_fallback_for_an_unexpected_cycle_length);
   RUN_TEST(test_per_sample_full_scale_does_not_overflow);
+  RUN_TEST(test_per_sample_halved_sum_beyond_64_samples);
   RUN_TEST(test_per_sample_no_drift_over_one_minute);
 
   RUN_TEST(test_fromWatts_scales_by_the_fraction_bits);

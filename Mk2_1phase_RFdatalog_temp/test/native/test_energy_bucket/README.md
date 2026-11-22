@@ -20,6 +20,7 @@ Tests for the integer energy bucket (`energy_bucket.h`), which replaces the floa
 | `test_per_sample_agrees_with_the_division_path` | The table and the divide-then-multiply path agree |
 | `test_per_sample_fallback_*` | An out-of-range `n` (start-up, missing phase) is rescaled to `NMin` samples and stays exact |
 | `test_per_sample_full_scale_*` / `test_per_sample_no_drift_*` | No overflow at `NMax` samples of full scale; no drift with `n` wandering around 32 |
+| `test_per_sample_halved_sum_beyond_64_samples` | Single phase, 60 to 68 sample sets per cycle: `sumP >> 1` with the table built for it (`SumShift` 1) matches the exact energy, full scale included |
 | `test_fromWatts_*` / `test_bucket_capacity_*` | Watts to bucket units; the largest bucket fits in 32 bits |
 
 ## Running

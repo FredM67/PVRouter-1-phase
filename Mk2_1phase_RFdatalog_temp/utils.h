@@ -17,7 +17,7 @@
 
 #include "FastDivision.h"
 
-#include "calibration.h"
+#include "config_derived.h"
 #include "constants.h"
 #include "dualtariff.h"
 #include "energy_bucket.h"
@@ -123,7 +123,18 @@ inline void printConfiguration()
   infoln(F(__TIME__));
 #endif
   infoln(F("ADC mode:       free-running"));
-  infoln(PCB_VERSION == PcbVersion::NEW ? F("Motherboard:    new (internal 1.1 V reference)") : F("Motherboard:    old (AVCC reference)"));
+  if constexpr (PCB_VERSION == PcbVersion::NEW)
+  {
+    infoln(F("Motherboard:    new (internal 1.1 V reference)"));
+  }
+  else if constexpr (PCB_VERSION == PcbVersion::OLD_OLED)
+  {
+    infoln(F("Motherboard:    old, OLED (AVCC reference)"));
+  }
+  else
+  {
+    infoln(F("Motherboard:    old, 7-segment (AVCC reference)"));
+  }
 
   if constexpr (CALIBRATION_MODE)
   {
@@ -136,20 +147,13 @@ inline void printConfiguration()
   constexpr int32_t phaseCal_x100{ SerialOutput::toDecimals(f_phaseCal, 2) };
 
   infoln(F("Electrical settings"));
-  for (uint8_t phase = 0; phase < NO_OF_PHASES; ++phase)
-  {
-    info(F("\tf_powerCal for L"));
-    info(phase + 1);
-    info(F(" =    "));
-    infolnDecimals_P(&powerCal_x1e6.value[phase], 6);
+  info(F("\tf_powerCal =    "));
+  infolnDecimals_P(&powerCal_x1e6.value[0], 6);
 
-    info(F("\tf_voltageCal, for Vrms_L"));
-    info(phase + 1);
-    info(F(" =    "));
-    infolnDecimals_P(&voltageCal_x1e5.value[phase], 5);
-  }
+  info(F("\tf_voltageCal, for Vrms =    "));
+  infolnDecimals_P(&voltageCal_x1e5.value[0], 5);
 
-  info(F("\tf_phaseCal for all phases =     "));
+  info(F("\tf_phaseCal =     "));
   infolnDecimals(phaseCal_x100, 2);
 
   info(F("\tExport rate (Watts) = "));
@@ -254,9 +258,8 @@ inline bool datalogOffPeak{ false }; /**< tariff at the datalog being printed, f
  * @brief One step of the datalog in JSON format.
  *
  * @details One field per step (see serial_output.h), which gives:
- *          {"P":-25,"R":0,"P1":399,"P2":399,"P3":-823,"T1":21.37,"TA":"low"}
- * - total mean power over the datalog period, and the relays' average if relay diversion is enabled;
- * - mean power of each phase;
+ *          {"P":-25,"R":0,"T1":21.37,"TA":"low"}
+ * - mean power over the datalog period, and the relays' average if relay diversion is enabled;
  * - each valid temperature, if temperature sensing is enabled;
  * - the tariff, if dual tariff is enabled.
  *
@@ -281,16 +284,6 @@ inline bool printJsonStep(Print& out, uint8_t step)
     return true;
   }
   --step;
-
-  if (step < NO_OF_PHASES)
-  {
-    out.print(F(",\"P"));
-    out.print(step + 1);
-    out.print(F("\":"));
-    out.print(tx_data.power_L[step]);
-    return true;
-  }
-  step -= NO_OF_PHASES;
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
@@ -325,8 +318,8 @@ inline bool printJsonStep(Print& out, uint8_t step)
  * @brief One step of the datalog in text format.
  *
  * @details One field per step (see serial_output.h):
- * - energy in the bucket, total power (and the relays' average if relay diversion is enabled);
- * - power and RMS voltage of each phase;
+ * - energy in the bucket, power (and the relays' average if relay diversion is enabled);
+ * - RMS voltage;
  * - each valid temperature, if temperature sensing is enabled;
  * - the number of sample sets, and the absence of diverted energy count if priority rotation is automatic.
  *
@@ -355,27 +348,13 @@ inline bool printTextStep(Print& out, uint8_t step)
     }
     return true;
   }
-  step -= 2;
-
-  if (step < NO_OF_PHASES)
+  if (step == 2)
   {
-    out.print(F(", P"));
-    out.print(step + 1);
-    out.print(F(":"));
-    out.print(tx_data.power_L[step]);
+    out.print(F(", V:"));
+    SerialOutput::printDecimals(out, tx_data.Vrms_L_x100[0], 2);
     return true;
   }
-  step -= NO_OF_PHASES;
-
-  if (step < NO_OF_PHASES)
-  {
-    out.print(F(", V"));
-    out.print(step + 1);
-    out.print(F(":"));
-    SerialOutput::printDecimals(out, tx_data.Vrms_L_x100[step], 2);
-    return true;
-  }
-  step -= NO_OF_PHASES;
+  step -= 3;
 
   if constexpr (TEMP_SENSOR_PRESENT)
   {
@@ -447,7 +426,7 @@ inline bool writeTeleInfoStep(Print& out, uint8_t /*step*/)
  * @details
  * - **Power Data**: Sends the total power grid data.
  * - **Relay Data**: If relay diversion is enabled (`RELAY_DIVERSION`), sends the average relay data.
- * - **Voltage Data**: Sends the voltage data for each phase.
+ * - **Voltage Data**: Sends the RMS voltage.
  * - **Temperature Data**: If temperature sensing is enabled (`TEMP_SENSOR_PRESENT`), sends valid temperature readings.
  * - **Dual Tariff Data**: If dual tariff is enabled (`DUAL_TARIFF`), sends the current tariff state.
  * - **Absence of Diverted Energy Count**: The amount of seconds without diverting energy.
@@ -465,16 +444,7 @@ void sendTelemetryData(const bool bOffPeak)
 
   teleInfo.send("P", tx_data.power);  // Send power grid data
 
-  if constexpr (NO_OF_PHASES > 1)
-  {
-    idx = NO_OF_PHASES;
-    do
-    {
-      --idx;
-      teleInfo.send("P", tx_data.power_L[idx], idx + 1);      // Send power for each phase
-      teleInfo.send("V", tx_data.Vrms_L_x100[idx], idx + 1);  // Send voltage for each phase
-    } while (idx);
-  }
+  teleInfo.send("V", tx_data.Vrms_L_x100[0]);  // Send voltage
 
   if constexpr (RELAY_DIVERSION)
   {

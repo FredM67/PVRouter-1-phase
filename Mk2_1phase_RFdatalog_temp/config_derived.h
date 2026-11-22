@@ -10,6 +10,8 @@
  *
  * @details The code includes this file, never config.h directly. config.h only holds the
  *          settings; here come the values derived from them and the objects built from them:
+ *          - the calibration of the board (calibration.h): f_powerCal, f_voltageCal and the CT1
+ *            filter of PCB_VERSION, in the per-phase arrays the code uses (one phase);
  *          - the number of remote loads and units, from the load map;
  *          - remoteLoads, the remote-load controller, which holds the transmission state;
  *          - relayDiverter, the relay engine, from relays;
@@ -31,6 +33,29 @@
 
 #include "types.h"
 #include "debug.h"
+
+//--------------------------------------------------------------------------------------------------
+// From calibration.h: the values of the board, as the firmware uses them
+//
+#include "calibration.h"
+
+static_assert(NO_OF_PHASES == 1, "f_powerCal and f_voltageCal below list 1 phase");
+
+/** Whether the router runs with the set of the new board */
+inline constexpr bool NEW_BOARD_CALIBRATION{ PCB_VERSION == PcbVersion::NEW };
+
+/** f_powerCal of CT1, in the per-phase array the router uses */
+inline constexpr float f_powerCal[NO_OF_PHASES]{ NEW_BOARD_CALIBRATION ? f_powerCalPerAmp * f_ctRating : f_powerCalOldBoard };
+
+/** f_voltageCal, in the per-phase array the router uses */
+inline constexpr float f_voltageCal[NO_OF_PHASES]{ NEW_BOARD_CALIBRATION ? f_voltageCalNewBoard : f_voltageCalOldBoard };
+
+/** f_powerCal of CT2, for the diverted energy */
+inline constexpr float f_powerCalDiverted{ NEW_BOARD_CALIBRATION ? f_powerCalPerAmp * f_ctRatingDiverted : f_powerCalDivertedOldBoard };
+
+/** the CT1 filter of the board */
+inline constexpr float lpf_gain{ NEW_BOARD_CALIBRATION ? lpf_gainNewBoard : lpf_gainOldBoard };
+inline constexpr float alpha{ NEW_BOARD_CALIBRATION ? alphaNewBoard : alphaOldBoard };
 
 //--------------------------------------------------------------------------------------------------
 // From the load map

@@ -13,7 +13,6 @@
 #include <Arduino.h>
 
 #include "config_derived.h"
-#include "calibration.h"
 #include "dualtariff.h"
 #include "processing.h"
 #include "utils_pins.h"
@@ -21,14 +20,12 @@
 #include "mult_asm.h"
 #include "energy_bucket.h"
 #include "load_priorities.h"
+#include "adc_chain.h"
 
-// analogue input pins
-inline constexpr uint8_t sensorV[NO_OF_PHASES]{ 0, 2, 4 }; /**< for 3-phase PCB, voltage measurement for each phase */
-inline constexpr uint8_t sensorI[NO_OF_PHASES]{ 1, 3, 5 }; /**< for 3-phase PCB, current measurement for each phase */
-
-// ADC reference: AVCC (= VCC, 5 V or 3.3 V) on the old board, the internal 1.1 V on the new one (buffered from AREF).
+// analogue input pins and ADC reference of the board: adc_chain.h
+// AVCC (= VCC, 5 V or 3.3 V) on the old boards, the internal 1.1 V on the new one (buffered from AREF).
 // ADLAR=1 enables left-aligned ADC for efficient fixed-point math.
-constexpr uint8_t _ADMUX{ (PCB_VERSION == PcbVersion::NEW ? bit(REFS1) | bit(REFS0) : bit(REFS0)) | bit(ADLAR) };
+static_assert(AdcChain::BIT_REFS1 == REFS1 && AdcChain::BIT_REFS0 == REFS0 && AdcChain::BIT_ADLAR == ADLAR, "adc_chain.h: ADMUX bits differ from avr/io.h");
 // ------------------------------------------
 
 // Define ideal bias, ADC mid-range, left aligned.
@@ -43,18 +40,21 @@ constexpr int32_t l_midPointOfEnergyBucket_main{ l_capacityOfEnergyBucket_main /
 constexpr float f_offsetOfEnergyThresholdsInAFmode{ 0.1F };
 
 // Expected number of sample sets per mains cycle. One ADC conversion takes 13 ADC clocks
-// at F_CPU / 128 (104 us at 16 MHz); a sample set is one V and one I conversion per phase.
+// at F_CPU / 128 (104 us at 16 MHz); a sample set is one conversion of each channel: V, CT1, CT2.
 constexpr uint8_t ADC_CLOCKS_PER_CONVERSION{ 13 };
 constexpr uint8_t ADC_PRESCALER{ 128 };
-constexpr uint32_t SAMPLE_SET_PERIOD_US{ 2UL * NO_OF_PHASES * ADC_CLOCKS_PER_CONVERSION * ADC_PRESCALER / (F_CPU / 1000000UL) }; /**< 624 us */
-constexpr uint8_t SAMPLE_SETS_PER_CYCLE{ 1000000UL / (SUPPLY_FREQUENCY * SAMPLE_SET_PERIOD_US) };                                /**< 32 at 50 Hz, 26 at 60 Hz */
-constexpr uint8_t SAMPLE_SETS_MARGIN{ 4 };                                                                                       /**< covers crossing jitter and frequency drift */
+constexpr uint32_t SAMPLE_SET_PERIOD_US{ 1UL * AdcChain::NO_OF_CHANNELS * ADC_CLOCKS_PER_CONVERSION * ADC_PRESCALER / (F_CPU / 1000000UL) }; /**< 312 us */
+constexpr uint8_t SAMPLE_SETS_PER_CYCLE{ 1000000UL / (SUPPLY_FREQUENCY * SAMPLE_SET_PERIOD_US) };                                            /**< 64 at 50 Hz, 53 at 60 Hz */
+constexpr uint8_t SAMPLE_SETS_MARGIN{ 4 };                                                                                                   /**< covers crossing jitter and frequency drift */
 constexpr uint8_t N_MIN{ SAMPLE_SETS_PER_CYCLE - SAMPLE_SETS_MARGIN };
 constexpr uint8_t N_MAX{ SAMPLE_SETS_PER_CYCLE + SAMPLE_SETS_MARGIN };
 
+/**< beyond 64 sample sets per cycle, sumP may exceed the 24 bits of Energy::contribution(): halved */
+constexpr uint8_t SUM_P_SHIFT{ N_MAX > 64 ? 1 : 0 };
+
 /**< power calibration over n, in fixed point, for every expected n: no division in the ISR */
-const Energy::PerSampleCalibration< N_MIN, N_MAX, NO_OF_PHASES > powerCalPerSample PROGMEM{ Energy::toFixedPerSample< N_MIN, N_MAX >(f_powerCal) };
-constexpr uint8_t powerCalPerSampleShift{ Energy::toFixedPerSample< N_MIN, N_MAX >(f_powerCal).shift };
+const Energy::PerSampleCalibration< N_MIN, N_MAX, NO_OF_PHASES > powerCalPerSample PROGMEM{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCal) };
+constexpr uint8_t powerCalPerSampleShift{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCal).shift };
 
 /** override bit of each load: the ISR tests a mask instead of shifting by the pin */
 const Load::OverrideMasks< NO_OF_DUMPLOADS > overrideMasks PROGMEM{ Load::overrideMasks(physicalLoadPin) };
@@ -338,8 +338,8 @@ void initializeProcessing()
   // Activate free-running mode
   ADCSRB = 0x00;
 
-  // Reference and left-aligned result for the first conversion too, on the first channel (V1)
-  ADMUX = _ADMUX | sensorV[0];
+  // Reference and left-aligned result for the first conversion too, on the first channel (V)
+  ADMUX = AdcChain::admuxOf(PCB_VERSION, AdcChain::Channel::V);
 
   // Set up the ADC to be free-running
   bit_set(ADCSRA, ADPS0);  // Set the ADC's clock to system clock / 128
@@ -554,6 +554,21 @@ void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample)
 
   l_sumP[phase] += instP;                // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
   l_sumP_atSupplyPoint[phase] += instP;  // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
+}
+
+/**
+ * @brief Processes the raw sample of CT2, the current diverted to the loads.
+ *
+ * @details CT2 is sampled in every round of the chain, so that the timing never depends on the
+ *          settings. The diverted energy is not computed yet: the sample is dropped.
+ *
+ * @param rawSample The raw sample of CT2 (left-aligned ADC).
+ *
+ * @ingroup TimeCritical
+ */
+void processDivertedCurrentRawSample(const uint16_t rawSample)
+{
+  (void)rawSample;
 }
 
 /**
@@ -786,7 +801,7 @@ void processLatestContribution(const uint8_t phase)
     index = 0;
   }
 
-  l_energyInBucket_main += Energy::contribution(sumP, pgm_read_word(&powerCalPerSample.value[phase][index]), powerCalPerSampleShift);
+  l_energyInBucket_main += Energy::contribution(sumP >> SUM_P_SHIFT, pgm_read_word(&powerCalPerSample.value[phase][index]), powerCalPerSampleShift);
 
   // apply any adjustment that is required.
   if (0 == phase)
@@ -1093,19 +1108,17 @@ void printParamsForSelectedOutputMode()
  */
 struct adc_ctx_t
 {
-  struct adc_ctx_t *next; /**< pointer to next context in circular list */
-  uint8_t index;          /**< channel index (0-5 for V1,I1,V2,I2,V3,I3) */
-  uint8_t admux;          /**< ADMUX register value for this channel */
+  struct adc_ctx_t *next;  /**< pointer to next context in circular list */
+  AdcChain::Channel index; /**< channel just converted: V, I_GRID, I_DIVERTED */
+  uint8_t admux;           /**< ADMUX register value written after this channel: the channel after next */
 };
 
 // ADC optimization: circular linked list for channel management
-static adc_ctx_t _channels[6] = {
-  { .next = &_channels[1], .index = 0, .admux = _ADMUX | sensorV[1] },  // V1 -> setup for V2
-  { .next = &_channels[2], .index = 1, .admux = _ADMUX | sensorI[1] },  // I1 -> setup for I2
-  { .next = &_channels[3], .index = 2, .admux = _ADMUX | sensorV[2] },  // V2 -> setup for V3
-  { .next = &_channels[4], .index = 3, .admux = _ADMUX | sensorI[2] },  // I2 -> setup for I3
-  { .next = &_channels[5], .index = 4, .admux = _ADMUX | sensorV[0] },  // V3 -> setup for V1
-  { .next = &_channels[0], .index = 5, .admux = _ADMUX | sensorI[0] }   // I3 -> setup for I1
+// The ADMUX written after a conversion applies to the conversion after next (adc_chain.h)
+static adc_ctx_t _channels[AdcChain::NO_OF_CHANNELS] = {
+  { .next = &_channels[1], .index = AdcChain::Channel::V, .admux = AdcChain::admuxWrittenAfter(PCB_VERSION, AdcChain::Channel::V) },                   // V -> setup for I_DIVERTED
+  { .next = &_channels[2], .index = AdcChain::Channel::I_GRID, .admux = AdcChain::admuxWrittenAfter(PCB_VERSION, AdcChain::Channel::I_GRID) },         // I_GRID -> setup for V
+  { .next = &_channels[0], .index = AdcChain::Channel::I_DIVERTED, .admux = AdcChain::admuxWrittenAfter(PCB_VERSION, AdcChain::Channel::I_DIVERTED) }  // I_DIVERTED -> setup for I_GRID
 };
 
 static adc_ctx_t *_ctx = &_channels[0];
@@ -1114,15 +1127,17 @@ ISR(ADC_vect)
 {
   uint16_t adc_raw = ADC;
 
-  if ((_ctx->index & 1) == 0)
-  {  // even=voltage, odd=current
-    // process voltage channel
-    processVoltageRawSample(_ctx->index >> 1, adc_raw);
-  }
-  else
+  switch (_ctx->index)
   {
-    // process current channel
-    processCurrentRawSample(_ctx->index >> 1, adc_raw);
+    case AdcChain::Channel::V:
+      processVoltageRawSample(0, adc_raw);
+      break;
+    case AdcChain::Channel::I_GRID:
+      processCurrentRawSample(0, adc_raw);
+      break;
+    default:
+      processDivertedCurrentRawSample(adc_raw);
+      break;
   }
 
   // Set ADMUX at the end of the interrupt to ensure at least 128 CPU cycles

@@ -16,8 +16,11 @@
 
 #include "config_types.h"  // the types and helpers used below (Load::local(), LOAD(), HOURS()...)
 
-// Motherboard: OLD for the former 3-phase board, NEW for the universal 3phaseDiverter board
-// (rev. 6.0 and later). A wrong choice gives wrong measurements: recalibrate after a change.
+// Motherboard, it sets the analog inputs and the ADC reference:
+// - OLD_SEG:  Robin's Mk2 board, 7-segment display (V A3, CT1 A5, CT2 A4, AVCC reference);
+// - OLD_OLED: the second old single-phase board, OLED (V A0, CT1 A1, CT2 A3, AVCC reference);
+// - NEW:      the universal board, rev. 6.0 and later (V A0, CT1 A1, CT2 A3, internal 1.1 V).
+// A wrong choice gives wrong measurements: recalibrate after a change.
 inline constexpr PcbVersion PCB_VERSION{ PcbVersion::NEW };
 
 // Serial output type - IoT, for the mk2Wifi module / Home Assistant (9600 baud, 7E1)

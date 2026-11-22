@@ -35,11 +35,12 @@ enum class SerialOutputType
   JSON           /**< Output in JSON format */
 };
 
-/** Motherboard generation: they do not measure the same way */
+/** Motherboard: each has its own analog inputs and ADC reference (adc_chain.h) */
 enum class PcbVersion : uint8_t
 {
-  OLD, /**< the former 3-phase board: ADC reference AVCC (= VCC, 5 V or 3.3 V) */
-  NEW  /**< the universal 3phaseDiverter board (rev. 6.0 and later): internal 1.1 V ADC reference */
+  OLD_SEG,  /**< Robin's Mk2 board, 7-segment display: V A3, CT1 A5, CT2 A4, ADC reference AVCC */
+  OLD_OLED, /**< the second old single-phase board, OLED: V A0, CT1 A1, CT2 A3, ADC reference AVCC */
+  NEW       /**< the universal board (rev. 6.0 and later): V A0, CT1 A1, CT2 A3, internal 1.1 V ADC reference */
 };
 
 /** Rotation modes */
