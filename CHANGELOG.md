@@ -7,6 +7,8 @@ tooling. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 Changes on `dev`, not yet on `main`.
 
+> **Not yet tested on a real board:** `Mk2_1phase_RFdatalog_temp` passes the native tests, the compile-time checks and the grid simulator, but has not run on real hardware yet. Keep `Mk2_fasterControl_Full` on an installation in service until it has.
+
 ### Upgrading from `Mk2_fasterControl_Full`
 
 `Mk2_1phase_RFdatalog_temp` is a new firmware, next to the older sketches, which stay as they

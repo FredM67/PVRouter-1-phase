@@ -37,6 +37,9 @@ For a three-phase version, please see [PVRouter-3-phase](https://github.com/Fred
 - serial output for the serial monitor, for Home Assistant through the mk2Wifi module (ESPHome), or in JSON;
 - every setting checked at compile time; native tests, tests in a simulated ATmega328P, and a grid simulator that runs the firmware on a simulated single-phase installation, all run by CI.
 
+> [!WARNING]
+> **Not yet tested on a real board.** This firmware passes its native tests, its compile-time checks and the grid simulator on the three boards, but it has not run on real hardware yet. Until it has, use `Mk2_fasterControl_Full` on an installation in service.
+
 Documentation: [English](Mk2_1phase_RFdatalog_temp/Readme.en.md), [français](Mk2_1phase_RFdatalog_temp/Readme.md). Changes: [CHANGELOG.md](CHANGELOG.md).
 
 ## The older sketches, frozen

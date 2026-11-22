@@ -3,6 +3,9 @@
 
 **Mk2_1phase_RFdatalog_temp** is the single-phase PV router firmware. It diverts the surplus of a photovoltaic installation to resistive loads (water heaters…), through TRIACs, relays or remote units, on Robin Emley's two Mk2 boards or on the universal board. It has the features and the settings of the 3-phase firmware ([PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase)), and measures the diverted energy with a second CT.
 
+> [!WARNING]
+> **Not yet tested on a real board.** This firmware passes its native tests, its compile-time checks and the grid simulator on the three boards, but it has not run on real hardware yet. Until it has, use `Mk2_fasterControl_Full` on an installation in service.
+
 This program is designed to be used with the Arduino IDE and/or other development IDEs like VSCode + PlatformIO.
 
 - [Use with Visual Studio Code (recommended)](#use-with-visual-studio-code-recommended)

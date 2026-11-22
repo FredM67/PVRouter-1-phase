@@ -2,6 +2,9 @@
 
 **Mk2_1phase_RFdatalog_temp** est le firmware du routeur PV monophasé. Il dirige le surplus d’une installation photovoltaïque vers des charges résistives (chauffe-eau…), par des triacs, des relais ou des unités distantes, sur les deux cartes Mk2 de Robin Emley ou sur la carte universelle. Il a les fonctionnalités et les réglages du firmware triphasé ([PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase)), et mesure l’énergie routée avec une seconde sonde.
 
+> [!WARNING]
+> **Pas encore testé sur une vraie carte.** Ce firmware passe ses tests natifs, ses vérifications à la compilation et le simulateur de réseau sur les trois cartes, mais il n’a pas encore tourné sur du vrai matériel. En attendant, utilisez `Mk2_fasterControl_Full` sur une installation en service.
+
 Ce programme est conçu pour être utilisé avec l’IDE Arduino et/ou d’autres IDE de développement comme VSCode + PlatformIO.
 
 # Table des matières
