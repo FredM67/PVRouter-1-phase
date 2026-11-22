@@ -56,6 +56,63 @@
     "fastdivision: divu10(12345) per call": 41.01,
     "fastdivision: divmod10(12345678) per call": 130.05
    }
+  },
+  {
+   "commit": "0f461dad5478ed6f4b70f73f48e0628d65effa0f",
+   "date": "2026-11-23T00:03:16+01:00",
+   "message": "fix: the old boards ship the voltage factor measured on a Mk2 board (#30)\n\n* fix: the old boards ship the calibration measured on a Mk2 board\n\nf_powerCalOldBoard 0.0436, f_powerCalDivertedOldBoard 0.04446 and\nf_voltageCalOldBoard 0.805653, as in Mk2_fasterControl_Full (the voltage\nagainst a Sentron PAC 4200), instead of the generic 0.05 and the 3-phase\nL1 voltage factor. The grid simulator takes its calibration from\ncalibration.h, so its model follows.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* fix: the old-board power factors stay at 0.05000\n\nOnly the voltage factor takes the value measured on a Mk2 board.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/0f461dad5478ed6f4b70f73f48e0628d65effa0f",
+   "sizes": {
+    "basic": {
+     "flash": 10238,
+     "ram": 398
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 11514,
+     "ram": 425
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 23106,
+     "ram": 864
+    },
+    "basic, NEW, OLED": {
+     "flash": 22632,
+     "ram": 861
+    },
+    "basic, remote loads": {
+     "flash": 14628,
+     "ram": 495
+    },
+    "basic, IoT": {
+     "flash": 10238,
+     "ram": 398
+    },
+    "basic, HumanReadable": {
+     "flash": 10130,
+     "ram": 378
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
   }
  ]
 }
