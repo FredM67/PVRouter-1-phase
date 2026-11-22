@@ -34,6 +34,7 @@ static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "******** SUPPLY
 static_assert(DATALOG_PERIOD_IN_SECONDS <= 40, "**** Data log duration is too long and will lead to overflow ! ****");
 
 static_assert(Energy::isValidCalibration(f_powerCal), "******** Wrong power calibration ! Each value of f_powerCal must be positive and below 8. Please check your calibration.h ! ********");
+static_assert(!DIVERTED_CT_PRESENT || ((f_powerCalDiverted > 0.0F) && (Energy::shiftFor(f_powerCalDiverted) >= Energy::FRACTION_BITS + 9)), "******** Wrong CT2 power calibration ! f_powerCalDiverted must be positive and below 8. Please check your calibration.h ! ********");
 static_assert(Datalog::isValidVoltageCalibration(Datalog::vrmsFactor(DATALOG_PERIOD_IN_SECONDS), f_voltageCal), "******** Wrong voltage calibration ! Each value of f_voltageCal must be positive. Please check your calibration.h ! ********");
 
 static_assert(TEMP_SENSOR_PRESENT ^ (temperatureSensing.get_pin() == unused_pin), "******** Wrong pin value for temperature sensor(s). Please check your config.h ! ********");

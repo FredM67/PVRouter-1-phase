@@ -24,6 +24,7 @@
 #include "adc_chain.h"
 #include "ct_filter.h"
 #include "datalog_math.h"
+#include "diverted_energy.h"
 
 // analogue input pins and ADC reference of the board: adc_chain.h
 // AVCC (= VCC, 5 V or 3.3 V) on the old boards, the internal 1.1 V on the new one (buffered from AREF).
@@ -71,6 +72,64 @@ constexpr uint64_t MAX_PREDICTION_ENERGY{ ((((static_cast< uint64_t >(N_MAX) << 
                                           + 1 };
 static_assert(MAX_PREDICTION_ENERGY * SAMPLE_SETS_PER_CYCLE <= static_cast< uint64_t >(INT32_MAX), "the predicted energy would overflow: check f_powerCal");
 
+// ---- Diverted energy (CT2) ----
+// The cycle's CT2 sum goes through the same conversion as the grid's in processLatestContribution()
+// (same SUM_P_SHIFT, a table of the same shape), with the CT2 calibration: the energy of a cycle
+// is its average power in W x 2^Energy::FRACTION_BITS, the unit of the energy bucket. One Wh is
+// 3600 J, i.e. 3600 x SUPPLY_FREQUENCY cycles of 1 W: Energy::fromWatts(3600 x SUPPLY_FREQUENCY).
+// The anti-creep limit compares the cycle's average power with ANTI_CREEP_LIMIT W, as Robin's
+// (his IEU per cycle and his limit are both 1 / powerCal_diverted per W).
+constexpr float f_powerCalDivertedTable[NO_OF_PHASES]{ f_powerCalDiverted }; /**< for the per-sample table */
+/**< CT2 calibration over n, in fixed point: no division in the ISR */
+const Energy::PerSampleCalibration< N_MIN, N_MAX, NO_OF_PHASES > divertedCalPerSample PROGMEM{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCalDivertedTable) };
+constexpr uint8_t divertedCalPerSampleShift{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCalDivertedTable).shift };
+
+constexpr int32_t DIVERTED_IEU_PER_WH{ Energy::fromWatts(3600L * SUPPLY_FREQUENCY) };                                /**< 2 880 000 at 50 Hz */
+constexpr int32_t DIVERTED_ANTI_CREEP_IEU{ Energy::fromWatts(ANTI_CREEP_LIMIT) };                                    /**< 80 with 5 W */
+constexpr uint32_t DIVERTED_SHUTDOWN_CYCLES{ static_cast< uint32_t >(DISPLAY_SHUTDOWN_IN_HOURS) * 3600UL * SUPPLY_FREQUENCY }; /**< 1 440 000 with 8 h at 50 Hz */
+
+// The largest energy of a cycle: N_MAX sample sets at full scale, through the largest table entry.
+constexpr uint32_t MAX_DIVERTED_CYCLE_ENERGY{ static_cast< uint32_t >(((((static_cast< uint64_t >(N_MAX) << 18) >> SUM_P_SHIFT) * Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCalDivertedTable).value[0][0])
+                                                                       >> (divertedCalPerSampleShift - Energy::FRACTION_BITS))
+                                                                      + 1) };
+// a cycle carries one Wh at most (DivertedEnergy::addCycle())
+static_assert(MAX_DIVERTED_CYCLE_ENERGY < static_cast< uint32_t >(DIVERTED_IEU_PER_WH), "a mains cycle would divert more than 1 Wh: check f_powerCalDiverted");
+// the energy counted over a datalog period, for its average power: 32 bits
+constexpr uint32_t MAX_DIVERTED_DATALOG_ENERGY{ MAX_DIVERTED_CYCLE_ENERGY * DATALOG_PERIOD_IN_MAINS_CYCLES };
+static_assert(static_cast< uint64_t >(MAX_DIVERTED_CYCLE_ENERGY) * DATALOG_PERIOD_IN_MAINS_CYCLES <= UINT32_MAX, "******** The diverted energy of a datalog period would overflow: shorten DATALOG_PERIOD_IN_SECONDS or check f_powerCalDiverted ! ********");
+/**< the average power over the period: sum / (cycles x 2^FRACTION_BITS), without a division */
+constexpr DivertedPower::Average divertedPowerAverage{ DivertedPower::averageOver(DATALOG_PERIOD_IN_MAINS_CYCLES, MAX_DIVERTED_DATALOG_ENERGY, Energy::FRACTION_BITS) };
+
+/**
+ * @brief The pins of the local outputs that CT2 measures: the local loads' TRIACs and the relays.
+ * @details Neither the remote loads' status LEDs, nor the watchdog LED.
+ */
+constexpr uint16_t getDivertedOutputPins()
+{
+  uint16_t pins{ 0 };
+
+  for (const auto &loadEntry : physicalLoadPin)
+  {
+    if (Load::isLocal(loadEntry))
+    {
+      bit_set(pins, Load::pinOf(loadEntry));
+    }
+  }
+
+  if constexpr (RELAY_DIVERSION)
+  {
+    for (uint8_t idx = 0; idx < relayDiverter.size(); ++idx)
+    {
+      bit_set(pins, relayDiverter.get_relay(idx).get_pin());
+    }
+  }
+
+  return pins;
+}
+constexpr uint16_t divertedOutputPins{ getDivertedOutputPins() }; /**< pins 0..13 (validation.h): PORTD, then PORTB */
+
+DivertedEnergy< DIVERTED_IEU_PER_WH, DIVERTED_ANTI_CREEP_IEU, DIVERTED_SHUTDOWN_CYCLES > divertedEnergy; /**< Wh total and EDD_isActive */
+
 /** override bit of each load: the ISR tests a mask instead of shifting by the pin */
 const Load::OverrideMasks< NO_OF_DUMPLOADS > overrideMasks PROGMEM{ Load::overrideMasks(physicalLoadPin) };
 
@@ -109,6 +168,9 @@ uint32_t l_filterDC_V[NO_OF_PHASES]{};    /**< for the LPF which determines DC o
 
 int64_t l_sumP_atSupplyPoint[NO_OF_PHASES]{}; /**< for summation of 'real power' values during datalog period, once per mains cycle */
 uint32_t l_sum_Vsquared[NO_OF_PHASES]{};      /**< for summation of V^2 values during datalog period */
+
+int32_t l_sumP_diverted{ 0 };            /**< cumulative power on CT2 during the mains cycle (V_ADC x I_ADC) */
+uint32_t l_divertedEnergy_overDL{ 0 };   /**< diverted energy counted during the datalog period, in Energy:: units */
 
 uint8_t n_samplesDuringThisMainsCycle[NO_OF_PHASES]{};     /**< number of sample sets for each phase during each mains cycle */
 uint8_t n_samplesDuringNegativeHalf{ 0 };                  /**< sample sets of the negative half cycle so far (phase 0), up to DECISION_SAMPLE + 1 */
@@ -574,7 +636,13 @@ void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample)
  * @brief Processes the raw sample of CT2, the current diverted to the loads.
  *
  * @details CT2 is sampled in every round of the chain, so that the timing never depends on the
- *          settings. The diverted energy is not computed yet: the sample is dropped.
+ *          settings. As processCurrentRawSample(), without the CT filter: the same DC removal
+ *          (the voltage bias), V x I at x1 scale (V_ADC x I_ADC) into the cycle's sum, which
+ *          processDivertedEnergy() turns into energy at the positive zero crossing. Without
+ *          DIVERTED_CT_PRESENT, the sample is dropped.
+ *
+ *          The voltage sample is the latest one, two conversions (~208 us) before this CT2
+ *          sample, against one (~104 us) for CT1.
  *
  * @param rawSample The raw sample of CT2 (left-aligned ADC).
  *
@@ -582,7 +650,23 @@ void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample)
  */
 void processDivertedCurrentRawSample(const uint16_t rawSample)
 {
-  (void)rawSample;
+  if constexpr (!DIVERTED_CT_PRESENT)
+  {
+    (void)rawSample;
+    return;
+  }
+
+  // Add 0.5 for the rounding, +32 when 10-bits left aligned `1<<(15-10)`
+  const int16_t sampleIminusDC = (rawSample | 32U) - i_DCoffset_V[0];
+
+  const int16_t filtV_div4{ i_sampleVminusDC[0] >> 2 };  // reduce to 14-bits (now x16, or 2^4)
+  const int16_t filtI_div4{ sampleIminusDC >> 2 };       // reduce to 14-bits (now x16, or 2^4)
+
+  int32_t instP;
+  multS16x16_to32(instP, filtV_div4, filtI_div4);  // 32-bits (now x256, or 2^8)
+  instP >>= 8;                                     // scaling is now x1 (V_ADC x I_ADC)
+
+  l_sumP_diverted += instP;  // at most N_MAX x 2^18 in a cycle
 }
 
 /**
@@ -693,6 +777,7 @@ void processStartUp(const uint8_t phase)
   beyondStartUpPeriod = true;
   l_sumP[phase] = 0;
   l_sumP_atSupplyPoint[phase] = 0;
+  l_sumP_diverted = 0;
   n_samplesDuringThisMainsCycle[phase] = 0;
   i_sampleSetsDuringThisDatalogPeriod = 0;
 
@@ -867,6 +952,43 @@ void processLatestContribution(const uint8_t phase)
 }
 
 /**
+ * @brief Turns the cycle's CT2 sum into energy and counts it, at the positive zero crossing.
+ *
+ * @details
+ * - The sum goes through the CT2 table, as the grid's in processLatestContribution(): the
+ *   cycle's average power in W x 2^Energy::FRACTION_BITS. A cycle of an unexpected length
+ *   (start-up, missing mains) counts as no energy: no division in the ISR.
+ * - The local outputs are read on their port registers: any of them ON, and any of them ON
+ *   and forced (override pin, scheduled boost: the local override bitmask). A cycle with a
+ *   forced output is not counted (DivertedEnergy, diverted_energy.h). The port holds the states
+ *   just decided for the cycle that starts now, so the states may lag one cycle behind the
+ *   energy; the overrides change once per second.
+ * - The energy counted goes into the datalog sum too, for the average diverted power.
+ *
+ * @ingroup TimeCritical
+ */
+void processDivertedEnergy()
+{
+  const uint8_t n{ n_samplesDuringThisMainsCycle[0] };
+  int32_t energy{ 0 };
+  if ((n >= N_MIN) && (n <= N_MAX))
+  {
+    energy = Energy::contribution(l_sumP_diverted >> SUM_P_SHIFT, pgm_read_word(&divertedCalPerSample.value[0][n - N_MIN]), divertedCalPerSampleShift);
+  }
+  l_sumP_diverted = 0;
+
+  const uint16_t outputsON{ static_cast< uint16_t >(((static_cast< uint16_t >(PORTB) << 8) | PORTD) & divertedOutputPins) };
+  const bool anyLoadOn{ outputsON != 0 };
+  const bool anyLoadForced{ (Shared::overrideBitmask & outputsON) != 0 };
+
+  const int32_t counted{ divertedEnergy.countedEnergy(energy, anyLoadForced) };
+  divertedEnergy.addCycle(counted, anyLoadOn, anyLoadForced);
+  l_divertedEnergy_overDL += static_cast< uint32_t >(counted);  // 0 or more
+
+  Shared::EDD_isActive = divertedEnergy.isActive();
+}
+
+/**
  * @brief Process data logging at the end of each logging period.
  *
  * This function handles the data logging process by copying relevant variables
@@ -911,6 +1033,14 @@ void processDataLogging()
   Shared::copyOf_sampleSetsDuringThisDatalogPeriod = i_sampleSetsDuringThisDatalogPeriod;  // (for diags only)
   Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle = n_lowestNoOfSampleSetsPerMainsCycle;  // (for diags only)
   Shared::copyOf_energyInBucket_main = l_energyInBucket_main;                              // (for diags only)
+
+  if constexpr (DIVERTED_CT_PRESENT)
+  {
+    // the average over the whole period: a forced cycle counts as 0 W
+    Shared::copyOf_divertedPower_W = DivertedPower::watts(l_divertedEnergy_overDL, divertedPowerAverage);
+    Shared::copyOf_divertedEnergyTotal_Wh = divertedEnergy.totalWh();
+    l_divertedEnergy_overDL = 0;
+  }
 
   n_lowestNoOfSampleSetsPerMainsCycle = UINT8_MAX;
   i_sampleSetsDuringThisDatalogPeriod = 0;
@@ -964,6 +1094,11 @@ void processPlusHalfCycle(const uint8_t phase)
     if (n_samplesDuringThisMainsCycle[phase] < n_lowestNoOfSampleSetsPerMainsCycle)
     {
       n_lowestNoOfSampleSetsPerMainsCycle = n_samplesDuringThisMainsCycle[phase];
+    }
+
+    if constexpr (DIVERTED_CT_PRESENT)
+    {
+      processDivertedEnergy();  // before the datalog, so that the period ends with this cycle
     }
 
     processDataLogging();

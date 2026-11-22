@@ -18,6 +18,7 @@ inline volatile uint16_t overrideBitmask{ 0 };       /**< combined bitmask of al
 inline volatile uint8_t remoteOverrideBitmask{ 0 };  /**< combined bitmask of all active override pins (remote) */
 
 inline volatile uint16_t absenceOfDivertedEnergyCountInSeconds{ 0 }; /**< number of seconds without diverted energy */
+inline volatile bool EDD_isActive{ false };                          /**< energy diversion detection: diverted energy (CT2) counted since the last reset */
 
 // since there's no real locking feature for shared variables, a couple of data
 // generated from inside the ISR are copied from time to time to be passed to the
@@ -28,6 +29,8 @@ inline volatile int32_t copyOf_energyInBucket_main;                        /**< 
 inline volatile uint8_t copyOf_lowestNoOfSampleSetsPerMainsCycle;          /**< copy of a mechanism to check the integrity of this code structure */
 inline volatile SampleSetCounter copyOf_sampleSetsDuringThisDatalogPeriod; /**< copy of for counting the sample sets during each datalogging period */
 inline volatile uint16_t copyOf_countLoadON[NO_OF_DUMPLOADS];              /**< copy of number of cycle the load was ON (over 1 datalog period) */
+inline volatile uint16_t copyOf_divertedEnergyTotal_Wh;                   /**< copy of the diverted energy (CT2) since the last reset, in Wh */
+inline volatile int16_t copyOf_divertedPower_W;                           /**< copy of the average diverted power (CT2) over the datalog period, the forced cycles as 0 W */
 }
 
 #endif /* SHARED_VAR_H */

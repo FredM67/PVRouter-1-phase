@@ -41,6 +41,7 @@ inline void processVoltage(uint8_t phase);
 inline void processPolarity(uint8_t phase, uint16_t rawSample);
 inline void confirmPolarity(uint8_t phase);
 inline void processLatestContribution(uint8_t phase);
+void processDivertedEnergy();
 inline void processDataLogging();
 inline void updatePortsStates();
 inline void updatePhysicalLoadStates();
@@ -59,6 +60,9 @@ inline void processVoltage(uint8_t phase) __attribute__((always_inline));
 inline void processPolarity(uint8_t phase, uint16_t rawSample) __attribute__((always_inline));
 inline void confirmPolarity(uint8_t phase) __attribute__((always_inline));
 inline void processLatestContribution(uint8_t phase) __attribute__((always_inline));
+// not inlined on purpose: inlined, it took 3 more registers that every ADC interrupt then saved and
+// restored (~12 cycles each time, against ~25 for the call once per mains cycle); 40 bytes smaller
+void processDivertedEnergy() __attribute__((noinline));
 inline void processDataLogging() __attribute__((always_inline));
 // An inlined function is compiled with the options of the ISR it lands in: an optimize() attribute
 // on it changes nothing (same firmware, to the byte). updatePortsStates() is a call: -O3 unrolls

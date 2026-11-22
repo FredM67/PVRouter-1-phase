@@ -68,6 +68,15 @@ inline constexpr bool DUAL_TARIFF{ false };          /**< set it to 'true' if th
 inline constexpr bool TEMP_SENSOR_PRESENT{ false };  /**< set it to 'true' if temperature sensing is needed */
 inline constexpr bool RF_LOGGING_PRESENT{ false };   /**< set it to 'true' if RF data logging is needed */
 
+// ----------- Diverted energy (CT2) -----------
+//
+// CT2 measures the energy diverted to the local loads: pass the wires of every local output,
+// TRIAC and relay, through it. The mains cycles during which a local load or relay is forced
+// (override pin, scheduled boost) are not counted. CT2 is sampled whatever this setting.
+inline constexpr bool DIVERTED_CT_PRESENT{ true };       /**< set it to 'false' if no CT2 is fitted */
+inline constexpr uint8_t ANTI_CREEP_LIMIT{ 5 };          /**< a mains cycle below this average power, in W, does not count (0: no limit) */
+inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 }; /**< the diverted energy is reset after this period without diversion */
+
 // ----------- Pinout Assignments -----------
 //
 // ANALOG pins:
