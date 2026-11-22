@@ -17,7 +17,7 @@
 - `PCB_VERSION`: `PcbVersion::OLD_SEG` (V A3, CT1 A5, CT2 A4, AVcc), `PcbVersion::OLD_OLED` (V A0, CT1 A1, CT2 A3, AVcc), `PcbVersion::NEW` (V A0, CT1 A1, CT2 A3, internal 1.1 V).
 - `TYPE_OF_DISPLAY`: `DisplayType::NONE`, `SEG`, `SEG_HW` (with the pin-saving chips), `OLED`. 7-segment only on `OLD_SEG`; OLED only on `OLD_OLED` and `NEW`.
 - `DIVERTED_CT_PRESENT` (`bool`, default `true`): without it nothing about diverted energy is reported or displayed; CT2 is sampled either way.
-- Diverted energy = whatever CT2 measures (forced and boosted loads included); remote loads never counted.
+- Diverted energy = the surplus the router diverts: the mains cycles during which any local load is forced or boosted are not counted (CT2 cannot tell the loads apart); remote loads never counted.
 - IoT labels: `PD` diverted power in W, `ED` diverted energy in Wh.
 - CT1 filter interim values: `lpf_gain` 9, `alpha` 0.0011 on `OLD_SEG` and `OLD_OLED`; `lpf_gain` 0 on `NEW`.
 - Bucket: `WORKING_ZONE_IN_JOULES` as in the 3-phase firmware's `constants.h`/`config.h` (Robin's 360 J = 0.1 Wh range).
@@ -140,16 +140,17 @@ The decision moves from "2nd sample of the positive half, measured bucket" (3-ph
 
 **Interfaces:**
 - Produces, in `diverted_energy.h`: `template< int32_t IEU_PER_WH, int32_t ANTI_CREEP_IEU, uint32_t SHUTDOWN_CYCLES > class DivertedEnergy` with
-  - `void addCycle(int32_t energyIEU, bool anyLoadOn)` – adds one mains cycle's energy if it is at least `ANTI_CREEP_IEU`, carries whole Wh into the total, counts cycles without any load ON and resets everything after `SHUTDOWN_CYCLES` of them;
+  - `void addCycle(int32_t energyIEU, bool anyLoadOn, bool anyLoadForced)` – ignores the cycle's energy when `anyLoadForced`; otherwise adds it if it is at least `ANTI_CREEP_IEU`, carries whole Wh into the total, counts cycles without any load ON and resets everything after `SHUTDOWN_CYCLES` of them;
   - `uint16_t totalWh() const`, `bool isActive() const` (Robin's `EDD_isActive`: some energy since the last reset).
 - Produces: `Shared::copyOf_divertedEnergyTotal_Wh` (uint16_t), `Shared::copyOf_divertedPower_W` (int16_t, average over the datalog period), `Shared::EDD_isActive` (bool).
-- `anyLoadOn` = any local load or relay physically ON (diverted energy = whatever CT2 measures, forced and boosted loads included: this differs from `Full`, which skipped overridden loads).
+- `anyLoadOn` = any local load or relay physically ON. `anyLoadForced` = any local load or relay ON because of an override (override pin, scheduled boost, forced output: the 3-phase `Shared::b_overrideLoadOn[]`), as `Full` skips CT2 while its load is overridden.
 
 - [ ] **Step 1: Write the failing tests** `test_diverted_energy`:
   - `test_whole_wh_carried`: with `IEU_PER_WH` 100, adding 60 twice gives `totalWh() == 1` and the remainder kept (a third 60 gives 1, a fourth gives 2).
   - `test_anti_creep_drops_noise`: with `ANTI_CREEP_IEU` 5, 1000 cycles of 4 leave `totalWh() == 0` and `isActive() == false`.
   - `test_reset_after_inactivity`: with `SHUTDOWN_CYCLES` 10, energy then 11 cycles with `anyLoadOn` false reset the total to 0 and `isActive()` to false; 9 cycles do not.
   - `test_total_saturates`: the total stops at 65535, never wraps.
+  - `test_forced_cycle_not_counted`: 10 cycles of 60 with `anyLoadForced` true leave `totalWh() == 0`; the same 10 cycles with it false give 6 Wh.
 - [ ] **Step 2: Run** native tests. Expected: FAIL, `diverted_energy.h` not found.
 - [ ] **Step 3: Implement** `diverted_energy.h`; in `processing.cpp`, `processDivertedCurrentRawSample` accumulates V × I for CT2 like `processCurrentRawSample` (same DC removal, no CT filter), and the positive half cycle turns the cycle's sum into energy with the CT2 calibration and calls `addCycle`, only when `DIVERTED_CT_PRESENT`. The calibration: `f_powerCalDivertedOldBoard` on the old boards, `f_powerCalPerAmp × f_ctRatingDiverted` on NEW.
 - [ ] **Step 4: Run** native tests and build. Expected: PASS, `SUCCESS`; with `DIVERTED_CT_PRESENT` false, the build is smaller (the accounting compiles out).
@@ -162,7 +163,7 @@ The decision moves from "2nd sample of the positive half, measured bucket" (3-ph
 
 **Interfaces:**
 - Consumes: `Shared::copyOf_divertedEnergyTotal_Wh`, `Shared::copyOf_divertedPower_W` (Task 4).
-- Produces: IoT labels `PD` (W) and `ED` (Wh), sent after `P`; JSON keys `"divertedPower"` and `"divertedEnergy"` (my call: the JSON names of the 3-phase output are camelCase); HumanReadable: `, diverted <W> W, <Wh> Wh` appended to the datalog line; startup summary: `Diverted energy (CT2) is present` / `is NOT present` through `infolnPresence`.
+- Produces: IoT labels `PD` (W) and `ED` (Wh), sent after `P`; JSON keys `"PD"` and `"ED"` (short, as the other JSON keys); HumanReadable: `, diverted <W> W, <Wh> Wh` appended to the datalog line; startup summary: `Diverted energy (CT2) is present` / `is NOT present` through `infolnPresence`.
 
 - [ ] **Step 1: Write the failing test** `test_no_diverted_labels_without_ct2` and `test_diverted_labels_with_ct2` in the teleinfo test (whichever environment runs it today): the frame for a datalog with `DIVERTED_CT_PRESENT` true contains `PD` and `ED` with the given values; false contains neither.
 - [ ] **Step 2: Run** it. Expected: FAIL.
