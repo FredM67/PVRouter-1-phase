@@ -7,7 +7,9 @@
 # - optionally, the CT rating of the new board, written into f_ctRating and f_ctRatingDiverted of
 #   calibration.h: 20 for 'make check-new20' (about the resolution of the old boards);
 # - optionally, a 60 Hz mains: SUPPLY_FREQUENCY of config_system.h, for 'make check-60hz';
-# - the human-readable output: grid_sim reads its datalog.
+# - the human-readable output: grid_sim reads its datalog;
+# - three local loads on D5, D6 and D7 (three_loads.sh): config.h ships with one, the scenarios and
+#   the patches of this directory assume three.
 #
 #   sim/configs/sim_config.sh [OLD_SEG|OLD_OLED|NEW] [CT rating] [60Hz] [config.h]
 #   (default: OLD_SEG, ratings of calibration.h, 50 Hz, Mk2_1phase_RFdatalog_temp/config.h)
@@ -23,6 +25,7 @@ dir=$(dirname "$cfg")
 sed -i -E "s/(PCB_VERSION\{ PcbVersion::)[A-Z_]+/\1$board/; s/(SERIAL_OUTPUT_TYPE = SerialOutputType::)[A-Za-z]+/\1HumanReadable/" "$cfg"
 grep -q "PCB_VERSION{ PcbVersion::$board }" "$cfg"
 grep -q 'SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable;' "$cfg"
+"$(dirname "$0")/three_loads.sh" "$cfg"
 if [ -n "$ct" ]; then
   case $ct in *.*) ;; *) ct=$ct.0 ;; esac # 20 -> 20.0F, a float literal
   cal=$dir/calibration.h

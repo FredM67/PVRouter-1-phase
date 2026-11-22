@@ -19,22 +19,22 @@ diff --git a/Mk2_1phase_RFdatalog_temp/config.h b/Mk2_1phase_RFdatalog_temp/conf
 index 15de861..d7130c9 100644
 --- a/Mk2_1phase_RFdatalog_temp/config.h
 +++ b/Mk2_1phase_RFdatalog_temp/config.h
-@@ -60,3 +60,3 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
+@@ -67,3 +67,3 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
 -inline constexpr bool DIVERSION_PIN_PRESENT{ false };                   /**< set it to 'true' if you want to control diversion ON/OFF */
 -inline constexpr bool ROUTER_OFF_PIN_PRESENT{ false };                  /**< set it to 'true' if you want a pin that switches the router OFF */
 -inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::OFF }; /**< set it to 'OFF/AUTO/PIN' if you want manual/automatic rotation of priorities */
 +inline constexpr bool DIVERSION_PIN_PRESENT{ true };                    /**< set it to 'true' if you want to control diversion ON/OFF */
 +inline constexpr bool ROUTER_OFF_PIN_PRESENT{ true };                   /**< set it to 'true' if you want a pin that switches the router OFF */
 +inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::PIN }; /**< set it to 'OFF/AUTO/PIN' if you want manual/automatic rotation of priorities */
-@@ -66,2 +66,2 @@ inline constexpr bool WATCHDOG_PIN_PRESENT{ false }; /**< set it to 'true' if th
+@@ -73,2 +73,2 @@ inline constexpr bool WATCHDOG_PIN_PRESENT{ false }; /**< set it to 'true' if th
 -inline constexpr bool RELAY_DIVERSION{ false };      /**< set it to 'true' if a relay is used for diversion */
 -inline constexpr bool DUAL_TARIFF{ false };          /**< set it to 'true' if there's a dual tariff each day AND the router is connected to the billing meter */
 +inline constexpr bool RELAY_DIVERSION{ true };       /**< set it to 'true' if a relay is used for diversion */
 +inline constexpr bool DUAL_TARIFF{ true };           /**< set it to 'true' if there's a dual tariff each day AND the router is connected to the billing meter */
-@@ -124 +124 @@ inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2 }; /*
+@@ -131 +131 @@ inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2 }; /*
 -inline constexpr RotationGroups rotationGroups{}; /**< the loads that take turns, {} without rotation */
 +inline constexpr RotationGroups rotationGroups{ { ALL_LOCAL_LOADS() } }; /**< the loads that take turns, {} without rotation */
-@@ -127,4 +127,4 @@ inline constexpr RotationGroups rotationGroups{}; /**< the loads that take turns
+@@ -134,4 +134,4 @@ inline constexpr RotationGroups rotationGroups{}; /**< the loads that take turns
 -inline constexpr uint8_t dualTariffPin{ unused_pin }; /**< off-peak trigger, the meter's dry contact */
 -inline constexpr uint8_t diversionPin{ unused_pin };  /**< if LOW, no surplus diversion: only forced loads/relays are ON */
 -inline constexpr uint8_t routerOffPin{ unused_pin };  /**< if LOW, router OFF: every load and relay is OFF, forcing included */
@@ -43,15 +43,15 @@ index 15de861..d7130c9 100644
 +inline constexpr uint8_t diversionPin{ 3 };           /**< if LOW, no surplus diversion: only forced loads/relays are ON */
 +inline constexpr uint8_t routerOffPin{ 2 };           /**< if LOW, router OFF: every load and relay is OFF, forcing included */
 +inline constexpr uint8_t rotationPin{ 12 };           /**< if LOW, trigger a load priority rotation */
-@@ -147 +147 @@ inline constexpr uint8_t watchDogPin{ unused_pin };   /**< watch dog LED */
+@@ -154 +154 @@ inline constexpr uint8_t watchDogPin{ unused_pin };   /**< watch dog LED */
 -inline constexpr uint8_t RELAY_FILTER_DELAY{ 2 }; /**< EWMA filter delay in minutes for relay control */
 +inline constexpr uint8_t RELAY_FILTER_DELAY{ 1 }; /**< EWMA filter delay in minutes for relay control */
-@@ -155,3 +155,2 @@ inline constexpr RelayEngine relays{ MINUTES(RELAY_FILTER_DELAY),
+@@ -162,3 +162,2 @@ inline constexpr RelayEngine relays{ MINUTES(RELAY_FILTER_DELAY),
 -                                     { { unused_pin, 100, 200, 1, 1 },
 -                                       { unused_pin, 300, 400, 1, 1 },
 -                                       { unused_pin, 500, 600, 1, 1 } } }; /**< config for relay diversion with optimized EWMA filtering */
 +                                     { { 8, 500, 100, 2, 2 },
 +                                       { 9, 1000, 100, 2, 2 } } }; /**< config for relay diversion with optimized EWMA filtering */
-@@ -181 +180 @@ inline constexpr RelayEngine relays{ MINUTES(RELAY_FILTER_DELAY),
+@@ -188 +187 @@ inline constexpr RelayEngine relays{ MINUTES(RELAY_FILTER_DELAY),
 -inline constexpr OverridePins overridePins{ { { 4, ALL_LOADS() } } }; /**< list of override pin/loads-relays pairs */
 +inline constexpr OverridePins overridePins{ { { 4, ALL_LOADS_AND_RELAYS() }, { 13, ALL_RELAYS() } } }; /**< list of override pin/loads-relays pairs */

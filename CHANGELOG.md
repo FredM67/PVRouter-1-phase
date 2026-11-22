@@ -26,6 +26,7 @@ shipped `config.h`:
   `f_ctRating` and `f_ctRatingDiverted`.
 - **Display:** `TYPE_OF_DISPLAY` is `NONE`, `SEG`, `SEG_HW` or `OLED`.
 - **CT2:** pass the wires of every local output, TRIACs and relays, through CT2.
+- **Loads:** the shipped `config.h` has one load now, a TRIAC on D5 (`NO_OF_DUMPLOADS{ 1 }`), as most single-phase users have a single water heater; it had three, on D5, D6 and D7. A user who keeps their own `config.h` is unaffected. To add loads, change `NO_OF_DUMPLOADS`, `physicalLoadPin` and `loadPrioritiesAtStartup` together (the comments of `config.h` show the three loads). The grid simulator builds its firmware with three loads (`sim/configs/three_loads.sh`).
 - **mk2Wifi:** the frames carry two new lines, `D` (diverted power, W) and `E` (diverted energy,
   Wh); the ESPHome configuration ignores them until its single-phase sensors come.
 

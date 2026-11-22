@@ -331,6 +331,8 @@ La première étape consiste à définir le nombre de sorties TRIAC :
 inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 };
 ```
 
+Le `config.h` livré a **une** seule charge, un TRIAC sur D5 (`NO_OF_DUMPLOADS{ 1 }`), ce qui suffit à la plupart des installations monophasées (un chauffe-eau). Les exemples ci-dessous prennent deux charges. Pour ajouter une deuxième et une troisième charge, sur D6 et D7, changez ensemble `NO_OF_DUMPLOADS`, `physicalLoadPin` et `loadPrioritiesAtStartup`, comme l’expliquent leurs commentaires dans `config.h`.
+
 Ensuite, il faudra décrire chaque charge dans la **table des charges**, ainsi que l'ordre des priorités au démarrage.
 
 ```cpp
@@ -1086,7 +1088,7 @@ Le matériel, son installation et le dépannage sont documentés sur les [pages 
 L’attribution des fonctions aux broches est entièrement libre : toute fonction du routeur commandée par une entrée (arrêt du routage, boost, rotation des priorités…) peut être placée sur n’importe laquelle des broches D5 à D9, à condition que le `config.h` du routeur et le YAML ESPHome utilisent les mêmes broches. Sur le module, ne fermez que les ponts de soudure des broches réellement utilisées.
 
 > [!WARNING]
-> D5 à D9 sont aussi des broches du routeur : par défaut, les charges TRIAC utilisent **D5, D6 et D7** (`physicalLoadPin`). Ne fermez que les ponts des broches libres dans votre configuration. Le compilateur refuse une broche attribuée deux fois dans `config.h`, mais il ne peut pas savoir quels ponts sont fermés sur le module.
+> D5 à D9 sont aussi des broches du routeur : par défaut, la charge TRIAC utilise **D5** (`physicalLoadPin` ; une deuxième et une troisième charge utiliseraient D6 et D7). Ne fermez que les ponts des broches libres dans votre configuration. Le compilateur refuse une broche attribuée deux fois dans `config.h`, mais il ne peut pas savoir quels ponts sont fermés sur le module.
 
 ## Cavalier `TEMP`
 Le cavalier `TEMP` de la carte mère détermine qui lit les sondes DS18B20 :

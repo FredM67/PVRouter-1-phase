@@ -14,10 +14,10 @@ index 15de861..5a2d094 100644
 @@ -43 +43 @@ inline constexpr bool CALIBRATION_MODE{ false };
 -inline constexpr uint8_t NO_OF_DUMPLOADS{ 3 }; /**< TOTAL number of dump loads (local + remote) */
 +inline constexpr uint8_t NO_OF_DUMPLOADS{ 4 }; /**< TOTAL number of dump loads (local + remote) */
-@@ -56 +56,2 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
+@@ -63 +63,2 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
 -  Load::local(7)
 +  Load::remote(1),
 +  Load::remote(2)
-@@ -115 +116 @@ inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE }; /**< the disp
+@@ -122 +123 @@ inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE }; /**< the disp
 -inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2 }; /**< load priorities at startup (0=highest) */
 +inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2, 3 }; /**< load priorities at startup (0=highest) */

@@ -13,9 +13,9 @@ diff --git a/Mk2_1phase_RFdatalog_temp/config.h b/Mk2_1phase_RFdatalog_temp/conf
 index 15de861..678a31e 100644
 --- a/Mk2_1phase_RFdatalog_temp/config.h
 +++ b/Mk2_1phase_RFdatalog_temp/config.h
-@@ -68 +68 @@ inline constexpr bool DUAL_TARIFF{ false };          /**< set it to 'true' if th
+@@ -75 +75 @@ inline constexpr bool DUAL_TARIFF{ false };          /**< set it to 'true' if th
 -inline constexpr bool TEMP_SENSOR_PRESENT{ false };  /**< set it to 'true' if temperature sensing is needed */
 +inline constexpr bool TEMP_SENSOR_PRESENT{ true };   /**< set it to 'true' if temperature sensing is needed */
-@@ -201 +201 @@ inline constexpr uint8_t BOOST_TEMP_SENSOR{ 0 };       /**< the sensor checked a
+@@ -208 +208 @@ inline constexpr uint8_t BOOST_TEMP_SENSOR{ 0 };       /**< the sensor checked a
 -inline constexpr TemperatureSensing temperatureSensing{ unused_pin,
 +inline constexpr TemperatureSensing temperatureSensing{ 3,

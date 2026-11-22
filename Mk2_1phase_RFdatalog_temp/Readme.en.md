@@ -321,6 +321,8 @@ The first step is to define the number of TRIAC outputs:
 inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 };
 ```
 
+The shipped `config.h` has **one** load, a TRIAC on D5 (`NO_OF_DUMPLOADS{ 1 }`), which is what most single-phase installations need (one water heater). The examples below use two loads. To add a second and a third load, on D6 and D7, change `NO_OF_DUMPLOADS`, `physicalLoadPin` and `loadPrioritiesAtStartup` together, as their comments in `config.h` explain.
+
 Then, you need to describe each load in the **load map**, as well as the priority order at startup.
 
 ```cpp
@@ -1078,7 +1080,7 @@ The hardware, its installation and troubleshooting are documented on the [mk2Wif
 Which function goes on which pin is entirely up to you: any router feature driven by an input pin (routing stop, boost, priority rotation…) can be put on any of D5–D9, as long as the router's `config.h` and the ESPHome YAML use the same pins. On the module, only close the solder jumpers of the pins you actually use.
 
 > [!WARNING]
-> D5–D9 are also router pins: by default, the TRIAC loads use **D5, D6 and D7** (`physicalLoadPin`). Only close the solder jumpers of pins that are free in your configuration. The compiler rejects a pin assigned twice in `config.h`, but it cannot know which jumpers are closed on the module.
+> D5–D9 are also router pins: by default, the TRIAC load uses **D5** (`physicalLoadPin`; a second and a third load would use D6 and D7). Only close the solder jumpers of pins that are free in your configuration. The compiler rejects a pin assigned twice in `config.h`, but it cannot know which jumpers are closed on the module.
 
 ## `TEMP` jumper
 The `TEMP` jumper of the motherboard decides who reads the DS18B20 probes:

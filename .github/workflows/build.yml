@@ -86,7 +86,9 @@ jobs:
 
       - name: Select remote loads
         if: matrix.remote
-        run: git apply --unidiff-zero sim/configs/remote_loads.patch
+        run: |
+          sim/configs/three_loads.sh ${{ env.PROJECT_DIR }}/config.h
+          git apply --unidiff-zero sim/configs/remote_loads.patch
 
       - name: Build firmware (${{ matrix.environment }})
         run: pio run --project-dir ${{ env.PROJECT_DIR }} -e ${{ matrix.environment }}

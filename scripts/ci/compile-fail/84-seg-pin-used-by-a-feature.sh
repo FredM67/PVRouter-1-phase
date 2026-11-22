@@ -2,9 +2,7 @@
 # One load on D4, override on D3, as case 76, so that only A2 clashes.
 replace 'PCB_VERSION{ PcbVersion::NEW }' 'PCB_VERSION{ PcbVersion::OLD_SEG }'
 replace 'TYPE_OF_DISPLAY{ DisplayType::NONE }' 'TYPE_OF_DISPLAY{ DisplayType::SEG }'
-replace 'NO_OF_DUMPLOADS{ 3 }' 'NO_OF_DUMPLOADS{ 1 }'
-replace $'{\n  Load::local(5),\n  Load::local(6),\n  Load::local(7)\n}' '{ Load::local(4) }'
-replace 'loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2 }' 'loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0 }'
+replace 'physicalLoadPin[NO_OF_DUMPLOADS]{ Load::local(5) }' 'physicalLoadPin[NO_OF_DUMPLOADS]{ Load::local(4) }'
 replace 'overridePins{ { { 4, ALL_LOADS() } } }' 'overridePins{ { { 3, ALL_LOADS() } } }'
 temperature_on
 replace 'temperatureSensing{ 3,' 'temperatureSensing{ 16,'
