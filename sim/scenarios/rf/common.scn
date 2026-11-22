@@ -1,0 +1,30 @@
+# Router with two local loads and two remote units (configs/remote_loads.patch):
+# the third load on unit 1 (node 15), the fourth on unit 2 (node 16), bit 0 of
+# each unit's payload. CT2 measures the local loads only.
+
+# load <pin> <W>
+load 5 1000
+load 6 1000
+# remote <node> <bit> <W>
+remote 15 0 1000
+remote 16 0 1000
+# with the RemoteLoadReceiver firmware (grid_sim -r): its loadPins, bit 0 first
+receiver_pins 4 3
+
+input 4 1    # override pin released (active low)
+
+expect misfiled_samples 0
+# ADMUX must change one ADC clock (128 cycles) or more after the conversion started
+expect admux_delay_min 128
+expect isr_overruns 0
+# Margins, enforced: the longest ISR call and the latest ADMUX write (from the interrupt), a little
+# above the worst measured (490 and 508 cycles; no temperature sensing in this build). The deadline
+# is 1664 cycles: an ADMUX written later misses the conversion after next, which then converts the
+# wrong channel.
+expect isr_max 560
+expect admux_delay_max 620
+# no sample beyond the ADC's range
+expect clipped 0
+# the RMS voltage of every datalog line, the first included (the start-up period is not in it):
+# the mains of the board files is 230 V
+expect voltage 220 240

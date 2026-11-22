@@ -1,0 +1,23 @@
+# Relay 1's minimum ON and OFF times (2 minutes each, longer than the 1-minute settle
+# time after a change): it stays on through an import until its minimum ON time is
+# over, then off through the returning surplus until its minimum OFF time is over.
+include common.scn
+duration 380
+
+at 0    -300
+at 30   -300
+at 30   2250   # 750 W exported once the triac loads are on: relay 1, not relay 2
+at 150  2250
+at 150  -300   # import
+at 260  -300
+at 260  2250   # surplus again
+at 380  2250
+
+expect 200 pin 8 on     # importing, but within its minimum ON time
+expect 330 pin 8 off    # exporting, but within its minimum OFF time
+expect 375 pin 8 on
+# 2 minutes, counted in seconds by loop(): the pin changes within a few ms of the second
+expect min_on 8 119.9
+expect min_off 8 119.9
+expect switches 8 2 2
+expect switches 9 0 0   # never 1000 W of export

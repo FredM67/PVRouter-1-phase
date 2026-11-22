@@ -16,6 +16,7 @@
  * @date 2023-02-09
  *
  * @copyright Copyright (c) 2025
+ * SPDX-License-Identifier: GPL-3.0-or-later
  *
  */
 

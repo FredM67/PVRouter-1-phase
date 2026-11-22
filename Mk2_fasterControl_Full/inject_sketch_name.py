@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 from datetime import datetime, timezone
 import os
 from pathlib import Path

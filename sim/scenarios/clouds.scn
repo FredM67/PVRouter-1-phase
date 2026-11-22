@@ -1,0 +1,30 @@
+# A cloudy afternoon: fast surplus ramps and dips. The router must follow without getting stuck:
+# grid close to the 20 W export target on average, loads off once the sun is gone.
+include common.scn
+duration 90
+
+at 0     -300
+at 10    -300
+at 20    2300   # sun comes out over 10 s
+at 30    2300
+at 31     150   # cloud: surplus drops within a second
+at 38     150
+at 40    2750   # sun again
+at 48    2750
+at 49     700   # thinner cloud
+at 55     700
+at 56    2600
+at 70    2600
+at 75    -450   # sunset
+at 90    -450
+
+expect 25 pin 5 on
+expect 45 pin 5 on
+expect 45 pin 6 on
+expect 89 pin 5 off
+expect 89 pin 6 off
+expect 89 pin 7 off
+# Regulation at -20 W (REQUIRED_EXPORT_IN_WATTS), as in surplus_step.scn; +-15 W here, since the
+# second window starts 2 s after a step of the surplus.
+expect 22 30 grid_avg -35 -5
+expect 58 70 grid_avg -35 -5

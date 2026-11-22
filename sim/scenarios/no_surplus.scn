@@ -1,0 +1,16 @@
+# No surplus at all: nothing may be diverted, whatever the house consumption does.
+include common.scn
+duration 40
+
+at 0   -475
+at 20  -475
+at 25  -1175   # consumption changes, still importing
+at 40  -1175
+
+expect 10 pin 5 off
+expect 39 pin 5 off
+expect 39 pin 6 off
+expect 39 pin 7 off
+# nothing diverted: CT2 sees no current
+expect diverted_wh 0 0
+expect diverted_w_avg 0 0

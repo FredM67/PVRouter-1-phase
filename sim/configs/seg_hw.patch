@@ -1,0 +1,24 @@
+Firmware for 'make check-seg-temp' (with configs/temperature.patch): the 7-segment display of the
+OLD_SEG board through its pin-saving chips (SEG_HW: D5 to D9 and A0 to A2), refreshed in the ADC
+interrupt; the three loads move to D10, D11 and D12 (the override pin stays on D4). The board
+file of the target remaps the scenarios' load pins D5-D7 onto them (grid_sim 'remap').
+
+  PVR_SIM_BUILD=1 sh sim/configs/sim_config.sh OLD_SEG
+  sed -n '/^diff --git/,$p' sim/configs/seg_hw.patch | patch -p1
+  sed -n '/^diff --git/,$p' sim/configs/temperature.patch | patch -p1
+  PLATFORMIO_BUILD_DIR=.pio/build-seg-temp pio run --project-dir Mk2_1phase_RFdatalog_temp -e basic
+
+diff --git a/Mk2_1phase_RFdatalog_temp/config.h b/Mk2_1phase_RFdatalog_temp/config.h
+index 15de861..04b4549 100644
+--- a/Mk2_1phase_RFdatalog_temp/config.h
++++ b/Mk2_1phase_RFdatalog_temp/config.h
+@@ -54,3 +54,3 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
+-  Load::local(5),
+-  Load::local(6),
+-  Load::local(7)
++  Load::local(10),
++  Load::local(11),
++  Load::local(12)
+@@ -90 +90 @@ inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 }; /**< the diverted energ
+-inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE }; /**< the display fitted */
++inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::SEG_HW }; /**< the display fitted */

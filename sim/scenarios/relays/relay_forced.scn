@@ -1,0 +1,24 @@
+# The relays forced alone (override pin D13) with a small surplus: they come in once their
+# minimum OFF time from power-up is over, and the triac load that was diverting the surplus goes
+# out, the relays taking more than the surplus. CT2 then measures the relays only, on PORTB (D8,
+# D9): a cycle with a forced relay ON is not diverted energy, so the firmware counts nothing,
+# which it can only tell from the relay pins in its CT2 output mask.
+include common.scn
+duration 260
+
+at 0   400   # load 1 (D5) partly on, by bursts of mains cycles
+at 260 400
+
+input 13 0 20           # the relays forced
+
+expect 15 pin 8 off
+expect 100 pin 8 off    # forced, but within its minimum OFF time from power-up
+expect 150 pin 8 on     # forced
+expect 150 pin 9 off    # forced, waits for the settle time after relay 1
+expect 150 pin 5 off    # importing: no surplus left for the triac load
+expect 200 pin 9 on
+# D5 diverts the surplus less the 20 W of export before the relays come in: 380 W +-5 %
+expect 22 100 diverted_w_avg 361 399
+# nothing counted once a relay is ON, forced: neither the total nor the power moves
+expect 132 256 diverted_wh 0 0
+expect 132 256 diverted_w_avg 0 0

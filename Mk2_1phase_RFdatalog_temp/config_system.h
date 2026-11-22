@@ -1,0 +1,36 @@
+/**
+ * @file config_system.h
+ * @author Frédéric Metrich (frederic.metrich@live.fr)
+ * @brief Basic configuration values to be set by the end-user
+ * @version 0.1
+ * @date 2026-11-20
+ *
+ * @copyright Copyright (c) 2023-2026
+ *
+ */
+
+#ifndef CONFIG_SYSTEM_H
+#define CONFIG_SYSTEM_H
+
+#include "type_traits.hpp"
+
+inline constexpr uint8_t NO_OF_PHASES{ 1 }; /**< single phase: the internal per-phase arrays have one entry */
+
+//--------------------------------------------------------------------------------------------------
+// for users with zero-export profile, this value will be negative
+inline constexpr int16_t REQUIRED_EXPORT_IN_WATTS{ 20 };       /**< when set to a negative value, this acts as a PV generator */
+inline constexpr int16_t DIVERSION_START_THRESHOLD_WATTS{ 0 }; /**< surplus in W needed before diversion starts (e.g. 50 for a battery to charge first), then the whole surplus is diverted */
+
+//--------------------------------------------------------------------------------------------------
+// other system constants, should match most of installations
+inline constexpr uint8_t SUPPLY_FREQUENCY{ 50 }; /**< number of cycles/s of the grid power supply */
+
+inline constexpr uint32_t WORKING_ZONE_IN_JOULES{ 360UL }; /**< number of joules of the energy bucket: 0.1 Wh, as Robin Emley's fasterControl sketches */
+
+inline constexpr uint8_t DATALOG_PERIOD_IN_SECONDS{ 5 }; /**< Period of datalogging in seconds */
+
+inline constexpr typename conditional< DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUENCY >= UINT8_MAX, uint16_t, uint8_t >::type DATALOG_PERIOD_IN_MAINS_CYCLES{ DATALOG_PERIOD_IN_SECONDS * SUPPLY_FREQUENCY }; /**< Period of datalogging in cycles */
+
+//--------------------------------------------------------------------------------------------------
+
+#endif  // CONFIG_SYSTEM_H

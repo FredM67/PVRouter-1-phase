@@ -1,0 +1,33 @@
+# Surplus steps with the two lowest-priority loads on remote units: each comes in
+# by RF once the loads before it are on, and the router still holds the grid at
+# the configured export.
+include common.scn
+duration 75
+
+at 0    -300
+at 15   -300
+at 15   2400   # local loads on (2000 W), unit 1 partly
+at 40   2400
+at 40   3600   # unit 1 on, unit 2 partly
+at 60   3600
+at 60   -300   # surplus gone
+
+expect 14 remote 15 0 off
+expect 35 pin 5 on
+expect 35 pin 6 on
+expect 35 remote 16 0 off
+expect 55 remote 15 0 on
+expect 70 pin 5 off
+expect 70 pin 6 off
+expect 70 remote 15 0 off
+expect 70 remote 16 0 off
+# regulation at -20 W (REQUIRED_EXPORT_IN_WATTS) +-10 W, as in ../surplus_step.scn
+expect 25 40 grid_avg -30 -10
+expect 45 60 grid_avg -30 -10
+# a refresh every 5 mains cycles (100 ms); printing the datalog does not delay it
+# (serial_output.h). The receiver's link timeout is 500 ms.
+expect rf_max_gap 15 0.15
+expect rf_max_gap 16 0.15
+# CT2 measures the local loads only: both ON from the first step to the end of the surplus,
+# 2000 W x 45 s = 25 Wh +-5 %, whole Wh
+expect diverted_wh 23.75 26.25

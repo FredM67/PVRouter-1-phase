@@ -1,23 +1,198 @@
-# This is a basic workflow to help you get started with Actions
+# CI workflow for PVRouter-1-phase
+# Runs build and tests on pull requests and on the long-lived branches
+# Skips CI for documentation-only changes
 
 name: CI
+permissions:
+  contents: read
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
+  # Pushes to feature branches are covered by their pull request,
+  # so only the long-lived branches are built on push.
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
+      - '.gitignore'
   pull_request:
-    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
+      - '.gitignore'
+  workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# A new push to a pull request supersedes its running CI.
+# Runs on main/dev are never cancelled, so every merged commit gets a result.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  PROJECT_DIR: Mk2_1phase_RFdatalog_temp
+
 jobs:
-  # This workflow contains a single job called "build"
+  # Build job: compiles firmware for embedded targets.
+  # The board, the display, RF telemetry and remote loads are chosen in config.h, like everything
+  # else (no environment of their own, since Arduino IDE users have no environments): the entries
+  # set config.h. The shipped config.h is the NEW board without display; the board entries build
+  # each board with its display (scripts/ci/select_board.sh: OLD_SEG with the 7-segment display
+  # through its pin-saving chips, the loads moved off its pins by sim/configs/seg_hw.patch).
+  # The serial entries set its output: IoT for the mk2Wifi module, HumanReadable for the serial
+  # monitor, whatever the default of config.h. The remote loads entry applies
+  # sim/configs/remote_loads.patch, so that the RF code is built and measured.
+  # The labels must stay those of scripts/ci/measure.sh: the PR report pairs the builds by name.
   build:
-    # The type of runner that the job will run on
+    name: Build Firmware (${{ matrix.environment }}${{ matrix.board && format(', {0}, {1}', matrix.board, matrix.display) || '' }}${{ matrix.serial && format(', {0}', matrix.serial) || '' }}${{ matrix.remote && ', remote loads' || '' }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - environment: basic
+          - environment: basic
+            board: OLD_SEG
+            display: SEG_HW
+          - environment: basic
+            board: OLD_OLED
+            display: OLED
+          - environment: basic
+            board: NEW
+            display: OLED
+          - environment: basic
+            remote: true
+          - environment: basic
+            serial: IoT
+          - environment: basic
+            serial: HumanReadable
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: 'true'
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+      - uses: ./.github/actions/setup-platformio
+
+      - name: Select the ${{ matrix.board }} board and the ${{ matrix.display }} display
+        if: matrix.board
+        run: scripts/ci/select_board.sh . ${{ matrix.board }} ${{ matrix.display }}
+
+      - name: Select the ${{ matrix.serial }} serial output
+        if: matrix.serial
+        run: |
+          sed -i -E 's/SERIAL_OUTPUT_TYPE = SerialOutputType::[A-Za-z]+;/SERIAL_OUTPUT_TYPE = SerialOutputType::${{ matrix.serial }};/' ${{ env.PROJECT_DIR }}/config.h
+          grep -q 'SERIAL_OUTPUT_TYPE = SerialOutputType::${{ matrix.serial }};' ${{ env.PROJECT_DIR }}/config.h
+
+      - name: Select remote loads
+        if: matrix.remote
+        run: git apply --unidiff-zero sim/configs/remote_loads.patch
+
+      - name: Build firmware (${{ matrix.environment }})
+        run: pio run --project-dir ${{ env.PROJECT_DIR }} -e ${{ matrix.environment }}
+
+      # ATmega328P budget: 32256 bytes of flash (bootloader excluded), 2048 bytes of RAM.
+      # Recorded in the job summary so refactorings can be compared against the base branch.
+      - name: Report firmware size (${{ matrix.environment }})
+        run: |
+          ELF=${{ env.PROJECT_DIR }}/.pio/build/${{ matrix.environment }}/firmware.elf
+          read -r TEXT DATA BSS _ < <(~/.platformio/packages/toolchain-atmelavr/bin/avr-size "$ELF" | tail -n 1)
+          FLASH=$((TEXT + DATA))
+          RAM=$((DATA + BSS))
+          {
+            echo "### Firmware size: \`${{ matrix.environment }}\`${{ matrix.board && format(' ({0} board, {1} display)', matrix.board, matrix.display) || '' }}${{ matrix.serial && format(' ({0} serial output)', matrix.serial) || '' }}${{ matrix.remote && ' (remote loads)' || '' }}"
+            echo ""
+            echo "| Memory | Used | Budget | % |"
+            echo "|---|---:|---:|---:|"
+            echo "| Flash | $FLASH | 32256 | $((FLASH * 100 / 32256)) |"
+            echo "| RAM (static) | $RAM | 2048 | $((RAM * 100 / 2048)) |"
+          } >> "$GITHUB_STEP_SUMMARY"
+          # for the size history (job pages) and the PR report: smaller is better
+          LABEL="${{ matrix.environment }}${{ matrix.board && format(', {0}, {1}', matrix.board, matrix.display) || '' }}${{ matrix.serial && format(', {0}', matrix.serial) || '' }}${{ matrix.remote && ', remote loads' || '' }}"
+          mkdir -p bench
+          printf '[{"name": "flash: %s", "value": %d, "unit": "bytes"}, {"name": "RAM: %s", "value": %d, "unit": "bytes"}]\n' \
+            "$LABEL" "$FLASH" "$LABEL" "$RAM" > "bench/size-${{ strategy.job-index }}.json"
+
+      - name: Upload the size for the size history and the PR report
+        uses: actions/upload-artifact@v7
+        with:
+          name: bench-size-${{ strategy.job-index }}
+          path: bench/size-${{ strategy.job-index }}.json
+
+  # Compile checks: the compile-time checks of validation.h must refuse wrong settings with
+  # the right message, and accept good ones (all loads remote, boosts with dual tariff off...).
+  # One case per file under scripts/ci/compile-fail, picked up without editing this file.
+  compile-checks:
+    name: Compile checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup-platformio
+
+      - name: Build the cases
+        run: bash scripts/ci/compile-fail.sh
+
+  # Native tests: every test under test/native runs in a single job,
+  # so a new test is picked up without editing this file.
+  test-native:
+    name: Native tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: 'true'
+
+      - uses: ./.github/actions/setup-platformio
+
+      - name: Run native tests
+        run: pio test --project-dir ${{ env.PROJECT_DIR }} -e native
+
+  # Embedded tests: every test under test/embedded runs in the simavr simulator
+  # (a bare ATmega328P at 16 MHz), benchmarks included - simavr is cycle-accurate,
+  # so their figures are reproducible. Free and unlimited, no token needed.
+  test-embedded:
+    name: Embedded tests (simavr)
+    runs-on: ubuntu-latest
+    # a test that hangs before UNITY_END() would otherwise hold the runner for 6 hours
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: 'true'
+
+      - uses: ./.github/actions/setup-platformio
+
+      # verbose, for the BENCH| lines of the benchmarks (test/embedded/bench_report.h)
+      - name: Run embedded tests in simavr
+        run: pio test --project-dir ${{ env.PROJECT_DIR }} -e uno_sim -v | tee embedded-tests.log
+
+      - name: Collect the benchmark results
+        run: |
+          mkdir -p bench
+          python3 scripts/ci/bench_to_json.py embedded-tests.log > bench/speed.json
+          {
+            echo "### Benchmarks (simavr, exact)"
+            echo ""
+            echo "| Benchmark | µs | cycles |"
+            echo "|---|---:|---:|"
+            # one row per benchmark: its "<name> [us]" and "<name> [cycles]" results
+            jq -r 'def num: if . == null then "—" elif . == floor then floor else . end;
+              (map({key: .name, value: .value}) | from_entries) as $v
+              | .[] | select(.name | endswith(" [us]")) | (.name | rtrimstr(" [us]")) as $n
+              | "| \($n) | \(.value | num) | \($v[$n + " [cycles]"] | num) |"' bench/speed.json
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the benchmark results
+        uses: actions/upload-artifact@v7
+        with:
+          name: bench-speed
+          path: bench/speed.json
+
+  # The older sketch, Mk2_fasterControl_Full, frozen: kept building, not developed further.
+  build-fastercontrol:
+    name: Build Firmware (Mk2_fasterControl_Full)
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
       with:
@@ -32,15 +207,238 @@ jobs:
       uses: actions/setup-python@v7
       with:
         python-version: '>=3.11'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
     - name: Install PlatformIO Core
       run: |
+        python -m pip install --upgrade pip
         pip install --upgrade platformio
-    # It is important to first install the libraries before compiling, since otherwise compilation might fail to find the just-installed libraries
     - name: Install platformIO libraries
       run: pio pkg install --project-dir Mk2_fasterControl_Full
     - name: Run PlatformIO
       run: |
         pio run --project-dir Mk2_fasterControl_Full
+
+  # The production firmware on a simulated single-phase grid (sim/README.md): regulation, load
+  # priorities, diverted energy, ISR timing and switching instants, no hardware needed.
+  grid-sim:
+    name: Grid simulation (${{ matrix.part == 'rf' && 'RF' || matrix.part }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # the same banner length whatever the checkout: same code, same switching instants (sim/README.md)
+    env:
+      PVR_SIM_BUILD: 1
+    # the scenarios spread over jobs: each grid scenario on every board and variant (sim/ci_targets.sh),
+    # and the RF ones, which run three microcontrollers each, in a job of their own
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [ '1/3', '2/3', '3/3', rf ]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: 'true'
+
+      - uses: ./.github/actions/setup-platformio
+
+      # Each firmware in a build directory of its own (sim/Makefile), its sources restored after
+      # the build: sim_config.sh and the patches change config.h, calibration.h, config_system.h.
+
+      # OLD_SEG and the human-readable datalog, which grid_sim reads (sim/README.md)
+      - name: Build firmware (OLD_SEG)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh
+          pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # the same scenarios on the second old board: other analog inputs
+      - name: Build firmware (OLD_OLED)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh OLD_OLED
+          PLATFORMIO_BUILD_DIR=.pio/build-old-oled pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # and on the new board: internal 1.1 V reference, calibration from calibration.h
+      - name: Build firmware (NEW)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh NEW
+          PLATFORMIO_BUILD_DIR=.pio/build-new pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # with 20 A CTs, about the resolution of the old boards
+      - name: Build firmware (NEW, 20 A CTs)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh NEW 20
+          PLATFORMIO_BUILD_DIR=.pio/build-new20 pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # OLD_SEG built for a 60 Hz mains
+      - name: Build firmware (OLD_SEG, 60 Hz)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh OLD_SEG 60Hz
+          PLATFORMIO_BUILD_DIR=.pio/build-60hz pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # NEW with temperature sensing: the 1-Wire time slots against the ADC deadline
+      - name: Build firmware (NEW, temperature sensing)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh NEW
+          git apply --unidiff-zero sim/configs/temperature.patch
+          PLATFORMIO_BUILD_DIR=.pio/build-new-temp pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # OLD_SEG with the 7-segment display (pin-saving chips) and temperature sensing:
+      # the tightest build for the ADC deadline
+      - name: Build firmware (OLD_SEG, 7-segment display, temperature sensing)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh OLD_SEG
+          git apply --unidiff-zero sim/configs/seg_hw.patch
+          git apply --unidiff-zero sim/configs/temperature.patch
+          PLATFORMIO_BUILD_DIR=.pio/build-seg-temp pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # the same grid, with two loads on remote units driven over RF
+      - name: Build firmware (remote loads)
+        if: matrix.part == 'rf'
+        run: |
+          sim/configs/sim_config.sh
+          git apply --unidiff-zero sim/configs/remote_loads.patch
+          PLATFORMIO_BUILD_DIR=.pio/build-rf pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      - name: Install simavr
+        run: pio pkg install --global --tool platformio/tool-simavr
+
+      # the scenarios of this job in parallel, the RF ones with the receiver firmware
+      - name: Run grid scenarios
+        run: |
+          if [ "${{ matrix.part }}" = rf ]; then
+            targets=check-rf
+          else
+            targets=$(sim/ci_targets.sh grid ${{ matrix.part }})
+          fi
+          echo "make $targets"
+          make -C sim -j"$(nproc)" -k $targets
+
+      # OLD_SEG, OLD_OLED, NEW with 50 A CTs, NEW with 20 A CTs: the same result
+      - name: Compare the boards
+        if: matrix.part != 'rf'
+        run: |
+          make -C sim compare-boards
+          make -C sim compare-old-oled
+          make -C sim compare-boards-20
+          make -C sim compare-ct
+
+      - name: Report grid scenarios
+        if: always()
+        run: |
+          {
+            echo "### Grid simulation (${{ matrix.part }})"
+            echo '```'
+            cat sim/out/*-summary.txt 2>/dev/null || echo "no summary"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload traces
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: grid-sim-${{ strategy.job-index }}
+          path: sim/out/
+
+  # The target branch of a pull request, measured as the PR is: the builds of the build matrix and
+  # the embedded benchmarks, with the PR's scripts/ci/measure.sh (the target may predate it).
+  baseline:
+    name: Baseline (${{ github.base_ref }})
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: target
+          submodules: 'true'
+
+      # the first PR that brings the firmware has nothing to compare with: the report then gives
+      # the PR's figures alone
+      - name: Is the firmware on ${{ github.base_ref }}?
+        id: target
+        run: |
+          if [ -d "target/$PROJECT_DIR" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::$PROJECT_DIR is not on ${{ github.base_ref }} yet: no baseline"
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: ./.github/actions/setup-platformio
+        if: steps.target.outputs.present == 'true'
+
+      - name: Measure ${{ github.base_ref }}
+        if: steps.target.outputs.present == 'true'
+        run: scripts/ci/measure.sh target baseline
+
+      - name: Upload the figures of ${{ github.base_ref }}
+        if: steps.target.outputs.present == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: baseline
+          path: |
+            baseline/size.json
+            baseline/speed.json
+
+  # The report of a pull request, as ESPHome does it: the target branch against the PR (merged
+  # into it, as CI builds it), flash and RAM of every build and every benchmark, in one comment
+  # updated at each push. PRs from forks get it in the job summary only (read-only token).
+  pr-report:
+    name: Performance report
+    needs: [ build, test-embedded, baseline ]
+    # a failed baseline still gives a report, with the PR's figures alone
+    if: github.event_name == 'pull_request' && !cancelled() && needs.build.result == 'success' && needs.test-embedded.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write  # the comment
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: bench-*
+          path: pr
+          merge-multiple: true
+
+      - uses: actions/download-artifact@v8
+        continue-on-error: true  # no baseline: the PR's figures alone
+        with:
+          name: baseline
+          path: baseline
+
+      - name: Write the report
+        run: |
+          jq -s 'add' pr/size-*.json > pr/size.json
+          python3 scripts/ci/pr_report.py baseline pr "${{ github.base_ref }}" \
+            "${{ github.event.pull_request.base.sha }}" "${{ github.sha }}" > report.md
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment on the pull request
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          id=$(gh api "repos/${{ github.repository }}/issues/$PR/comments" --paginate \
+            --jq '.[] | select(.body | contains("<!-- pvrouter-bench-report -->")) | .id' | head -n 1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/$id" -F body=@report.md > /dev/null
+          else
+            gh pr comment "$PR" --body-file report.md
+          fi

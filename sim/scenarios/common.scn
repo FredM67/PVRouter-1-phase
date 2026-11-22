@@ -1,0 +1,36 @@
+# Hardware shared by the scenarios - matches the default config.h: three local loads on D5-D7,
+# override pin D4. The board (its analog inputs, ADC reference, calibration and mains) comes from
+# the board file, read after the scenario (board_scn.sh, grid_sim -b): the same scenarios run on
+# the three boards.
+
+# load <pin> <W>: physicalLoadPin[] = { 5, 6, 7 }, priorities 0, 1, 2. CT2 measures the three.
+load 5 1000
+load 6 1000
+load 7 1000
+
+# D4 is the override pin (active LOW): keep it released
+input 4 1
+
+# Conversions filed under the wrong channel (an ISR longer than one conversion breaks ADMUX's
+# two-conversion pipeline): none allowed.
+expect misfiled_samples 0
+# ADMUX must change one ADC clock (128 cycles) or more after the conversion started
+expect admux_delay_min 128
+# The ISR must end within the 1664 cycles of one conversion
+expect isr_overruns 0
+# Margins, enforced: the longest ISR call and the latest ADMUX write (from the interrupt), a little
+# above the worst of the builds (495 and 1477 cycles). The deadline is 1664 cycles: an ADMUX written
+# later misses the conversion after next, which then converts the wrong channel. The latest writes
+# are those of the builds with temperature sensing: a 1-Wire time slot keeps interrupts off up to
+# ~70 us (~1190 cycles), and the ISR entered that late still has to reach its ADMUX write (~420
+# cycles at most: the work of the mains cycle is spread over the CT2 calls, processing.cpp). Their
+# board files have ceilings of their own, lower (Makefile: check-new-temp, check-seg-temp).
+# admux_delay_max leaves room for the ordinary shifts of the 1-Wire slots against the ADC phase: a
+# failure between 1620 and 1664 with misfiled_samples 0 is a margin warning, not a lost sample.
+expect isr_max 560
+expect admux_delay_max 1620
+# no sample beyond the ADC's range
+expect clipped 0
+# the RMS voltage of every datalog line, the first included (the start-up period is not in it):
+# the mains of the board files is 230 V
+expect voltage 220 240

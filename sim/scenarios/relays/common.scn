@@ -1,0 +1,33 @@
+# Router with three local loads and two relays (configs/relays.patch): relay 1 on D8
+# comes in at 500 W of export, relay 2 on D9 at 1000 W, both go out above 100 W of
+# import, after at least 2 minutes ON or OFF (counted from power-up for the first switch-on).
+# The firmware decides on the grid power logged every 5 s, through a 1-minute TEMA filter,
+# and waits 1 minute after any relay change before the next one.
+# The scenarios of the 3-phase router, with every power halved (thresholds included): the
+# same story, within the current range of one CT.
+
+# load <pin> <W>: smaller than usual, so that a surplus can exceed what they absorb
+load 5 500
+load 6 500
+load 7 500
+# relay <pin> <W>: the contacts follow the pin, with no zero-crossing latching
+relay 8 750
+relay 9 750
+
+input 4 1    # override pin released (active low)
+
+expect misfiled_samples 0
+# ADMUX must change one ADC clock (128 cycles) or more after the conversion started
+expect admux_delay_min 128
+expect isr_overruns 0
+# Margins, enforced: the longest ISR call and the latest ADMUX write (from the interrupt), a little
+# above the worst measured (495 and 540 cycles; no temperature sensing in this build). The deadline
+# is 1664 cycles: an ADMUX written later misses the conversion after next, which then converts the
+# wrong channel.
+expect isr_max 560
+expect admux_delay_max 620
+# no sample beyond the ADC's range
+expect clipped 0
+# the RMS voltage of every datalog line, the first included (the start-up period is not in it):
+# the mains of the board files is 230 V
+expect voltage 220 240
