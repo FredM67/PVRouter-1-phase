@@ -80,8 +80,8 @@ constexpr float f_powerCalDivertedTable[NO_OF_PHASES]{ DIVERTED_CT_PRESENT ? f_p
 const Energy::PerSampleCalibration< N_MIN, N_MAX, NO_OF_PHASES > divertedCalPerSample PROGMEM{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCalDivertedTable) };
 constexpr uint8_t divertedCalPerSampleShift{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCalDivertedTable).shift };
 
-constexpr int32_t DIVERTED_IEU_PER_WH{ Energy::fromWatts(3600L * SUPPLY_FREQUENCY) };                                /**< 2 880 000 at 50 Hz */
-constexpr int32_t DIVERTED_ANTI_CREEP_IEU{ Energy::fromWatts(ANTI_CREEP_LIMIT) };                                    /**< 80 with 5 W */
+constexpr int32_t DIVERTED_IEU_PER_WH{ Energy::fromWatts(3600L * SUPPLY_FREQUENCY) };                                          /**< 2 880 000 at 50 Hz */
+constexpr int32_t DIVERTED_ANTI_CREEP_IEU{ Energy::fromWatts(ANTI_CREEP_LIMIT) };                                              /**< 80 with 5 W */
 constexpr uint32_t DIVERTED_SHUTDOWN_CYCLES{ static_cast< uint32_t >(DISPLAY_SHUTDOWN_IN_HOURS) * 3600UL * SUPPLY_FREQUENCY }; /**< 1 440 000 with 8 h at 50 Hz */
 
 // The largest energy of a cycle: N_MAX sample sets at full scale, through the largest table entry.
@@ -165,8 +165,8 @@ uint32_t l_filterDC_V[NO_OF_PHASES]{};    /**< for the LPF which determines DC o
 int64_t l_sumP_atSupplyPoint[NO_OF_PHASES]{}; /**< for summation of 'real power' values during datalog period, once per mains cycle */
 uint32_t l_sum_Vsquared[NO_OF_PHASES]{};      /**< for summation of V^2 values during datalog period */
 
-int32_t l_sumP_diverted{ 0 };            /**< cumulative power on CT2 during the mains cycle (V_ADC x I_ADC) */
-uint32_t l_divertedEnergy_overDL{ 0 };   /**< diverted energy counted during the datalog period, in Energy:: units */
+int32_t l_sumP_diverted{ 0 };          /**< cumulative power on CT2 during the mains cycle (V_ADC x I_ADC) */
+uint32_t l_divertedEnergy_overDL{ 0 }; /**< diverted energy counted during the datalog period, in Energy:: units */
 
 uint8_t n_samplesDuringThisMainsCycle[NO_OF_PHASES]{};     /**< number of sample sets for each phase during each mains cycle */
 uint8_t n_samplesDuringNegativeHalf{ 0 };                  /**< sample sets of the negative half cycle so far (phase 0), up to DECISION_SAMPLE + 1 */
@@ -816,13 +816,13 @@ inline constexpr uint16_t PORTS{ 1U << 9 };            /**< the physical states 
 uint16_t pendingCycleTasks{ 0 }; /**< CycleTask bits still to run */
 
 // snapshots taken at the zero crossings, for the tasks
-int32_t l_sumP_lastCycle{ 0 };          /**< l_sumP of the cycle that just ended */
-int32_t l_sumP_diverted_lastCycle{ 0 }; /**< l_sumP_diverted of the cycle that just ended */
-int32_t l_divertedEnergy_lastCycle{ 0 }; /**< its energy, from the CT2 table */
+int32_t l_sumP_lastCycle{ 0 };             /**< l_sumP of the cycle that just ended */
+int32_t l_sumP_diverted_lastCycle{ 0 };    /**< l_sumP_diverted of the cycle that just ended */
+int32_t l_divertedEnergy_lastCycle{ 0 };   /**< its energy, from the CT2 table */
 uint16_t divertedOutputsON_lastCycle{ 0 }; /**< the local outputs ON when it was turned into energy */
-uint8_t n_samplesLastCycle{ 0 };        /**< sample sets of the cycle that just ended */
-int32_t l_sumP_firstHalf{ 0 };          /**< l_sumP of the first half, at the negative crossing */
-uint8_t n_samplesFirstHalf{ 0 };        /**< sample sets of the first half */
+uint8_t n_samplesLastCycle{ 0 };           /**< sample sets of the cycle that just ended */
+int32_t l_sumP_firstHalf{ 0 };             /**< l_sumP of the first half, at the negative crossing */
+uint8_t n_samplesFirstHalf{ 0 };           /**< sample sets of the first half */
 // the sums of a datalog period, taken on its last sample
 uint32_t l_sum_Vsquared_lastPeriod{ 0 };
 SampleSetCounter i_sampleSetsLastPeriod{ 0 };
@@ -1099,8 +1099,8 @@ void processDataLogging()
   l_sumP_atSupplyPoint[0] = 0;
 
   Shared::copyOf_sum_Vsquared[0] = l_sum_Vsquared_lastPeriod;
-  l_sum_Vsquared[0] -= l_sum_Vsquared_lastPeriod;                       // the next period's samples so far stay
-  i_sampleSetsDuringThisDatalogPeriod -= i_sampleSetsLastPeriod;          // the same
+  l_sum_Vsquared[0] -= l_sum_Vsquared_lastPeriod;                 // the next period's samples so far stay
+  i_sampleSetsDuringThisDatalogPeriod -= i_sampleSetsLastPeriod;  // the same
 
   uint8_t i{ NO_OF_DUMPLOADS };
   do
@@ -1110,10 +1110,10 @@ void processDataLogging()
     countLoadON[i] = 0;
   } while (i);
 
-  Shared::copyOf_sampleSetsDuringThisDatalogPeriod = i_sampleSetsLastPeriod;            // (for diags only)
+  Shared::copyOf_sampleSetsDuringThisDatalogPeriod = i_sampleSetsLastPeriod;               // (for diags only)
   Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle = n_lowestNoOfSampleSetsPerMainsCycle;  // (for diags only)
   n_lowestNoOfSampleSetsPerMainsCycle = UINT8_MAX;
-  Shared::copyOf_energyInBucket_main = l_energyInBucket_main;                           // (for diags only)
+  Shared::copyOf_energyInBucket_main = l_energyInBucket_main;  // (for diags only)
 
   if constexpr (!DIVERTED_CT_PRESENT)
   {
@@ -1417,7 +1417,6 @@ void processVoltageRawSample(const uint8_t phase, const uint16_t rawSample)
   {
     ++i_sampleSetsDuringThisDatalogPeriod;
   }
-
 }
 
 /**

@@ -475,19 +475,58 @@ struct TeleInfoData
     absenceCountAtDatalog = Shared::absenceOfDivertedEnergyCountInSeconds;
   }
 
-  static int16_t power() { return tx_data.power; }
-  static int16_t divertedPower() { return Shared::copyOf_divertedPower_W; }
-  static uint16_t divertedEnergy() { return Shared::copyOf_divertedEnergyTotal_Wh; }
-  static int16_t voltage() { return static_cast< int16_t >(tx_data.Vrms_L_x100[0]); }
-  static int16_t relayAverage() { return static_cast< int16_t >(relayDiverter.get_average()); }
-  static bool relayOn(uint8_t idx) { return relayStatesAtDatalog & (1U << idx); }
-  static int16_t loadOnPercent(uint8_t idx) { return static_cast< int16_t >(Shared::copyOf_countLoadON[idx] * 100UL / DATALOG_PERIOD_IN_MAINS_CYCLES); }
-  static bool temperatureValid(uint8_t idx) { return isValidTemperature(tx_data.temperature_x100[idx]); }
-  static int16_t temperature(uint8_t idx) { return tx_data.temperature_x100[idx]; }
-  static uint16_t absenceCount() { return absenceCountAtDatalog; }
-  static bool offPeak() { return datalogOffPeak; }
-  static SampleSetCounter sampleSets() { return Shared::copyOf_sampleSetsDuringThisDatalogPeriod; }
-  static uint8_t lowestSampleSetsPerCycle() { return Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle; }
+  static int16_t power()
+  {
+    return tx_data.power;
+  }
+  static int16_t divertedPower()
+  {
+    return Shared::copyOf_divertedPower_W;
+  }
+  static uint16_t divertedEnergy()
+  {
+    return Shared::copyOf_divertedEnergyTotal_Wh;
+  }
+  static int16_t voltage()
+  {
+    return static_cast< int16_t >(tx_data.Vrms_L_x100[0]);
+  }
+  static int16_t relayAverage()
+  {
+    return static_cast< int16_t >(relayDiverter.get_average());
+  }
+  static bool relayOn(uint8_t idx)
+  {
+    return relayStatesAtDatalog & (1U << idx);
+  }
+  static int16_t loadOnPercent(uint8_t idx)
+  {
+    return static_cast< int16_t >(Shared::copyOf_countLoadON[idx] * 100UL / DATALOG_PERIOD_IN_MAINS_CYCLES);
+  }
+  static bool temperatureValid(uint8_t idx)
+  {
+    return isValidTemperature(tx_data.temperature_x100[idx]);
+  }
+  static int16_t temperature(uint8_t idx)
+  {
+    return tx_data.temperature_x100[idx];
+  }
+  static uint16_t absenceCount()
+  {
+    return absenceCountAtDatalog;
+  }
+  static bool offPeak()
+  {
+    return datalogOffPeak;
+  }
+  static SampleSetCounter sampleSets()
+  {
+    return Shared::copyOf_sampleSetsDuringThisDatalogPeriod;
+  }
+  static uint8_t lowestSampleSetsPerCycle()
+  {
+    return Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle;
+  }
 };
 
 static_assert(TeleInfo::MAX_STEP_LENGTH <= SerialOutput::MAX_STEP_LENGTH, "a line of the IoT frame must fit a step of the serial output");

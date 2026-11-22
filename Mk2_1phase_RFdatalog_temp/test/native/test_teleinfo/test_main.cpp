@@ -52,19 +52,58 @@ struct TestSource
   static constexpr uint8_t TEMP_COUNT{ TEMPS };
   static constexpr bool DUAL_TARIFF{ DUAL };
 
-  static int16_t power() { return values.power; }
-  static int16_t divertedPower() { return values.divertedPower; }
-  static uint16_t divertedEnergy() { return values.divertedEnergy; }
-  static int16_t voltage() { return static_cast< int16_t >(values.voltage_x100); }
-  static int16_t relayAverage() { return values.relayAverage; }
-  static bool relayOn(uint8_t idx) { return values.relayOn[idx]; }
-  static int16_t loadOnPercent(uint8_t idx) { return values.loadOnPercent[idx]; }
-  static bool temperatureValid(uint8_t idx) { return values.temperatureValid[idx]; }
-  static int16_t temperature(uint8_t idx) { return values.temperature_x100[idx]; }
-  static uint16_t absenceCount() { return values.absenceCount; }
-  static bool offPeak() { return values.offPeak; }
-  static SampleSets sampleSets() { return static_cast< SampleSets >(values.sampleSets); }
-  static uint8_t lowestSampleSetsPerCycle() { return values.lowestSampleSetsPerCycle; }
+  static int16_t power()
+  {
+    return values.power;
+  }
+  static int16_t divertedPower()
+  {
+    return values.divertedPower;
+  }
+  static uint16_t divertedEnergy()
+  {
+    return values.divertedEnergy;
+  }
+  static int16_t voltage()
+  {
+    return static_cast< int16_t >(values.voltage_x100);
+  }
+  static int16_t relayAverage()
+  {
+    return values.relayAverage;
+  }
+  static bool relayOn(uint8_t idx)
+  {
+    return values.relayOn[idx];
+  }
+  static int16_t loadOnPercent(uint8_t idx)
+  {
+    return values.loadOnPercent[idx];
+  }
+  static bool temperatureValid(uint8_t idx)
+  {
+    return values.temperatureValid[idx];
+  }
+  static int16_t temperature(uint8_t idx)
+  {
+    return values.temperature_x100[idx];
+  }
+  static uint16_t absenceCount()
+  {
+    return values.absenceCount;
+  }
+  static bool offPeak()
+  {
+    return values.offPeak;
+  }
+  static SampleSets sampleSets()
+  {
+    return static_cast< SampleSets >(values.sampleSets);
+  }
+  static uint8_t lowestSampleSetsPerCycle()
+  {
+    return values.lowestSampleSetsPerCycle;
+  }
 };
 
 /**
@@ -162,8 +201,14 @@ public:
     buffer[bufferPos++] = ETX;
   }
 
-  [[nodiscard]] const char* data() const { return buffer; }
-  [[nodiscard]] size_t size() const { return bufferPos; }
+  [[nodiscard]] const char* data() const
+  {
+    return buffer;
+  }
+  [[nodiscard]] size_t size() const
+  {
+    return bufferPos;
+  }
 };
 
 /** @brief The frame of sendTelemetryData() as it was, D and E sent after P with CT2. */

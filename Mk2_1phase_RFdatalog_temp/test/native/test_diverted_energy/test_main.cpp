@@ -143,8 +143,8 @@ void test_average_watts(void)
   constexpr DivertedPower::Average average{ DivertedPower::averageOver(250, 250UL * 600000UL, 4) };
 
   TEST_ASSERT_EQUAL_INT16(0, DivertedPower::watts(0, average));
-  TEST_ASSERT_EQUAL_INT16(1000, DivertedPower::watts(250UL * 16000UL, average));     // 1000 W all along
-  TEST_ASSERT_EQUAL_INT16(500, DivertedPower::watts(125UL * 16000UL, average));      // half the cycles forced: 0 W
+  TEST_ASSERT_EQUAL_INT16(1000, DivertedPower::watts(250UL * 16000UL, average));    // 1000 W all along
+  TEST_ASSERT_EQUAL_INT16(500, DivertedPower::watts(125UL * 16000UL, average));     // half the cycles forced: 0 W
   TEST_ASSERT_EQUAL_INT16(32767, DivertedPower::watts(250UL * 600000UL, average));  // 37500 W: saturated
   TEST_ASSERT_EQUAL_INT16(2345, DivertedPower::watts(250UL * 16UL * 2345UL, average));
 

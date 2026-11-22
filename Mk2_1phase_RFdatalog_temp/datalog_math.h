@@ -180,11 +180,11 @@ inline uint16_t squareRoot(uint32_t value, uint8_t& fractionBits)
   uint8_t bits;
   if constexpr (Normalise)
   {
-    asm(DATALOG_SQRT_NORMALISE DATALOG_SQRT_DIGITS : DATALOG_SQRT_OPERANDS : : "cc");
+    asm(DATALOG_SQRT_NORMALISE DATALOG_SQRT_DIGITS:DATALOG_SQRT_OPERANDS : : "cc");
   }
   else
   {
-    asm(DATALOG_SQRT_DIGITS : DATALOG_SQRT_OPERANDS : : "cc");
+    asm(DATALOG_SQRT_DIGITS:DATALOG_SQRT_OPERANDS : : "cc");
   }
 #else
   if constexpr (Normalise)

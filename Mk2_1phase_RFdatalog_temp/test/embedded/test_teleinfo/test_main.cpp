@@ -99,19 +99,58 @@ struct TestSource
   static constexpr uint8_t TEMP_COUNT{ 2 };
   static constexpr bool DUAL_TARIFF{ true };
 
-  static int16_t power() { return -1234; }
-  static int16_t divertedPower() { return 1850; }
-  static uint16_t divertedEnergy() { return 40123; }
-  static int16_t voltage() { return 23045; }
-  static int16_t relayAverage() { return -567; }
-  static bool relayOn(uint8_t) { return true; }
-  static int16_t loadOnPercent(uint8_t idx) { return idx == 0 ? 100 : 37; }
-  static bool temperatureValid(uint8_t idx) { return idx == 0; }
-  static int16_t temperature(uint8_t) { return 2137; }
-  static uint16_t absenceCount() { return 40000; }
-  static bool offPeak() { return true; }
-  static uint32_t sampleSets() { return 96000; }
-  static uint8_t lowestSampleSetsPerCycle() { return 44; }
+  static int16_t power()
+  {
+    return -1234;
+  }
+  static int16_t divertedPower()
+  {
+    return 1850;
+  }
+  static uint16_t divertedEnergy()
+  {
+    return 40123;
+  }
+  static int16_t voltage()
+  {
+    return 23045;
+  }
+  static int16_t relayAverage()
+  {
+    return -567;
+  }
+  static bool relayOn(uint8_t)
+  {
+    return true;
+  }
+  static int16_t loadOnPercent(uint8_t idx)
+  {
+    return idx == 0 ? 100 : 37;
+  }
+  static bool temperatureValid(uint8_t idx)
+  {
+    return idx == 0;
+  }
+  static int16_t temperature(uint8_t)
+  {
+    return 2137;
+  }
+  static uint16_t absenceCount()
+  {
+    return 40000;
+  }
+  static bool offPeak()
+  {
+    return true;
+  }
+  static uint32_t sampleSets()
+  {
+    return 96000;
+  }
+  static uint8_t lowestSampleSetsPerCycle()
+  {
+    return 44;
+  }
 };
 
 /* captures a frame, written step by step as the serial output does */

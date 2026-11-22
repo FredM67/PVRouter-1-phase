@@ -122,10 +122,10 @@ private:
     cyclesWithoutDiversion = 0;
   }
 
-  int32_t recentIEU{ 0 };              /**< energy below one Wh (Robin's divertedEnergyRecent_IEU) */
+  int32_t recentIEU{ 0 };               /**< energy below one Wh (Robin's divertedEnergyRecent_IEU) */
   uint32_t cyclesWithoutDiversion{ 0 }; /**< Robin's absenceOfDivertedEnergyCountInMC */
-  uint16_t total{ 0 };                 /**< whole Wh (Robin's divertedEnergyTotal_Wh) */
-  bool active{ false };                /**< Robin's EDD_isActive */
+  uint16_t total{ 0 };                  /**< whole Wh (Robin's divertedEnergyTotal_Wh) */
+  bool active{ false };                 /**< Robin's EDD_isActive */
 };
 
 namespace DivertedPower

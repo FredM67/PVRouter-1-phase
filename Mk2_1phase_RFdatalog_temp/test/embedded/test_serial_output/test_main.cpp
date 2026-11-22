@@ -237,19 +237,58 @@ struct FrameSource
   static constexpr uint8_t TEMP_COUNT{ 1 };
   static constexpr bool DUAL_TARIFF{ false };
 
-  static int16_t power() { return -1234; }
-  static int16_t divertedPower() { return 1850; }
-  static uint16_t divertedEnergy() { return 40123; }
-  static int16_t voltage() { return 23012; }
-  static int16_t relayAverage() { return 0; }
-  static bool relayOn(uint8_t) { return false; }
-  static int16_t loadOnPercent(uint8_t) { return 37; }
-  static bool temperatureValid(uint8_t) { return true; }
-  static int16_t temperature(uint8_t) { return 2137; }
-  static uint16_t absenceCount() { return 7; }
-  static bool offPeak() { return false; }
-  static uint16_t sampleSets() { return 64000; }
-  static uint8_t lowestSampleSetsPerCycle() { return 44; }
+  static int16_t power()
+  {
+    return -1234;
+  }
+  static int16_t divertedPower()
+  {
+    return 1850;
+  }
+  static uint16_t divertedEnergy()
+  {
+    return 40123;
+  }
+  static int16_t voltage()
+  {
+    return 23012;
+  }
+  static int16_t relayAverage()
+  {
+    return 0;
+  }
+  static bool relayOn(uint8_t)
+  {
+    return false;
+  }
+  static int16_t loadOnPercent(uint8_t)
+  {
+    return 37;
+  }
+  static bool temperatureValid(uint8_t)
+  {
+    return true;
+  }
+  static int16_t temperature(uint8_t)
+  {
+    return 2137;
+  }
+  static uint16_t absenceCount()
+  {
+    return 7;
+  }
+  static bool offPeak()
+  {
+    return false;
+  }
+  static uint16_t sampleSets()
+  {
+    return 64000;
+  }
+  static uint8_t lowestSampleSetsPerCycle()
+  {
+    return 44;
+  }
 };
 
 /* one step of the IoT frame, as writeTeleInfoStep() in utils.h */
