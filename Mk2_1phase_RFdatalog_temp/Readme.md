@@ -1,0 +1,1059 @@
+[![en](https://img.shields.io/badge/lang-en-red.svg)](Readme.en.md)
+
+Ce programme est conçu pour être utilisé avec l’IDE Arduino et/ou d’autres IDE de développement comme VSCode + PlatformIO.
+
+# Table des matières
+- [Table des matières](#table-des-matières)
+- [Utilisation avec Visual Studio Code (recommandé)](#utilisation-avec-visual-studio-code-recommandé)
+- [Utilisation avec Arduino IDE](#utilisation-avec-arduino-ide)
+  - [Bibliothèques requises pour l’Arduino IDE](#bibliothèques-requises-pour-larduino-ide)
+    - [Bibliothèques obligatoires](#bibliothèques-obligatoires)
+    - [Note importante](#note-importante)
+- [Aperçu rapide des fichiers](#aperçu-rapide-des-fichiers)
+  - [Documentation technique](#documentation-technique)
+- [Documentation de développement](#documentation-de-développement)
+- [Étalonnage du routeur](#étalonnage-du-routeur)
+- [Documentation d’analyse et outils](#documentation-danalyse-et-outils)
+- [Configuration du programme](#configuration-du-programme)
+  - [Carte-mère : ancienne ou nouvelle](#carte-mère-ancienne-ou-nouvelle)
+  - [Type de sortie série](#type-de-sortie-série)
+  - [Configuration des sorties TRIAC](#configuration-des-sorties-triac)
+  - [Configuration des sorties relais tout-ou-rien](#configuration-des-sorties-relais-tout-ou-rien)
+    - [Principe de fonctionnement](#principe-de-fonctionnement)
+  - [Configuration du module RF et des charges distantes](#configuration-du-module-rf-et-des-charges-distantes)
+    - [Matériel requis](#matériel-requis)
+    - [Configuration logicielle](#configuration-logicielle)
+    - [Configuration du récepteur distant](#configuration-du-récepteur-distant)
+  - [Configuration du Watchdog](#configuration-du-watchdog)
+  - [Configuration du ou des capteurs de température](#configuration-du-ou-des-capteurs-de-température)
+    - [Activation de la fonctionnalité](#activation-de-la-fonctionnalité)
+    - [Configuration du ou des capteurs](#configuration-du-ou-des-capteurs)
+  - [Gestion des Heures Creuses et boost programmé (dual tariff)](#gestion-des-heures-creuses-et-boost-programmé-dual-tariff)
+    - [Configuration matérielle](#configuration-matérielle)
+    - [Configuration logicielle](#configuration-logicielle-1)
+    - [Configuration des boosts programmés (scheduledBoosts)](#configuration-des-boosts-programmés-scheduledboosts)
+      - [Comprendre la ligne du temps](#comprendre-la-ligne-du-temps)
+      - [Exemples](#exemples)
+    - [Aide-mémoire](#aide-mémoire)
+  - [Rotation des priorités](#rotation-des-priorités)
+    - [Groupes de rotation](#groupes-de-rotation)
+  - [Boost manuel (déclenché par pin)](#boost-manuel-déclenché-par-pin)
+    - [Fonctionnement](#fonctionnement)
+    - [Quand utiliser le boost manuel](#quand-utiliser-le-boost-manuel)
+    - [Configuration](#configuration)
+    - [Cibler les charges et relais](#cibler-les-charges-et-relais)
+    - [Exemples de configuration](#exemples-de-configuration)
+    - [Câblage](#câblage)
+    - [Exemples pratiques](#exemples-pratiques)
+  - [Arrêt du routage](#arrêt-du-routage)
+  - [Routeur à l’arrêt](#routeur-à-larrêt)
+- [Configuration avancée du programme](#configuration-avancée-du-programme)
+  - [Paramètre `DIVERSION_START_THRESHOLD_WATTS`](#paramètre-diversion_start_threshold_watts)
+  - [Paramètre `REQUIRED_EXPORT_IN_WATTS`](#paramètre-required_export_in_watts)
+- [Configuration avec le module mk2Wifi](#configuration-avec-le-module-mk2wifi)
+  - [Liaisons entre le routeur et le module](#liaisons-entre-le-routeur-et-le-module)
+  - [Choix des broches D5–D9](#choix-des-broches-d5d9)
+  - [Cavalier `TEMP`](#cavalier-temp)
+  - [Configuration recommandée](#configuration-recommandée)
+  - [Liaison avec Home Assistant](#liaison-avec-homeassistant)
+- [Configuration sans module mk2Wifi](#configuration-sans-module-mk2wifi)
+- [Dépannage](#dépannage)
+- [Contribuer](#contribuer)
+
+# Utilisation avec Visual Studio Code (recommandé)
+
+Vous devrez installer des extensions supplémentaires. Les extensions les plus populaires et les plus utilisées pour ce travail sont « *Platform IO* » et « *Arduino* ».
+L’ensemble du projet a été conçu pour être utilisé de façon optimale avec *Platform IO*.
+
+# Utilisation avec Arduino IDE
+
+Pour utiliser ce programme avec l’IDE Arduino, vous devez télécharger et installer la dernière version de l’IDE Arduino. Choisissez la version « standard », PAS la version du Microsoft Store. Optez pour la version « Win 10 et plus récent, 64 bits » ou la version « MSI installer ».
+
+Comme le code est optimisé avec l’une des dernières normes C++, vous devez modifier un fichier de configuration pour activer C++17. Vous trouverez le fichier '**platform.txt**' dans le chemin d’installation de l’IDE Arduino.
+
+Pour **Windows**, vous trouverez généralement le fichier dans '**C:\Program Files (x86)\Arduino\hardware\arduino\avr**' et/ou dans '**%LOCALAPPDATA%\Arduino15\packages\arduino\hardware\avr\x.y.z**' où **'x.y.z**' est la version du package Arduino AVR Boards.
+
+Vous pouvez également exécuter cette commande dans Powershell : `Get-Childitem –Path C:\ -Include platform.txt -Recurse -ErrorAction SilentlyContinue`. Cela peut prendre quelques secondes/minutes jusqu’à ce que le fichier soit trouvé.
+
+Pour **Linux**, si vous utilisez le package AppImage, vous trouverez ce fichier dans '~/.arduino15/packages/arduino/hardware/avr/1.8.6'. Vous pouvez exécuter `find / -name platform.txt 2>/dev/null` au cas où l’emplacement aurait changé.
+
+Pour **MacOSX**, ce fichier se trouve dans '/Users/[user]/Library/Arduino15/packages/arduino/hardware/avr/1.8.6'.
+
+Ouvrez le fichier dans n’importe quel éditeur de texte (vous aurez besoin des droits d’administrateur) et remplacez le paramètre '**-std=gnu++11**' par '**-std=gnu++17**'. C’est tout !
+
+Facultatif : dans le même fichier, ajoutez '**-Wl,--relax**' à la fin de la ligne qui commence par '**compiler.c.elf.flags=**'. L’éditeur de liens raccourcit alors chaque appel et chaque saut dont la cible est assez proche (2 octets au lieu de 4) : le firmware est plus petit d’environ 270 octets, comme avec PlatformIO, qui fixe ce paramètre lui-même.
+
+Si votre IDE Arduino était ouvert, veuillez fermer toutes les instances et le rouvrir.
+
+## Bibliothèques requises pour l’Arduino IDE
+
+Ce projet nécessite l’installation des bibliothèques suivantes via le **Gestionnaire de bibliothèques** de l’Arduino IDE (menu **Outils** → **Gérer les bibliothèques…**) :
+
+### Bibliothèques obligatoires
+- **OneWire** par Jim Studt et al. (version 2.3.7 ou supérieure)
+  - Utilisée pour les capteurs de température DS18B20
+  - Installée même si aucun capteur n’est utilisé (le code non utilisé sera éliminé par le linker)
+
+- **RFM69** par Felix Rusu, LowPowerLab (version 1.5.3 ou supérieure)
+  - Utilisée pour la communication RF (télémétrie et charges distantes)
+  - Installée même si le module RF n’est pas présent (le code non utilisé sera éliminé par le linker)
+
+- **SPI** (incluse avec l’Arduino IDE)
+  - Utilisée pour la communication avec le module RFM69
+
+### Note importante
+Toutes les bibliothèques sont toujours incluses dans le code source. Cependant, seul le code réellement utilisé par votre configuration sera présent dans le firmware final. Cela simplifie la maintenance du code tout en préservant la taille du firmware.
+
+**Avec PlatformIO** : Toutes les dépendances sont gérées automatiquement via le fichier `platformio.ini`. Aucune installation manuelle n’est nécessaire.
+
+# Aperçu rapide des fichiers
+
+- **Mk2_1phase_RFdatalog_temp.ino** : Ce fichier est nécessaire pour l’IDE Arduino
+- **calibration.h** : contient les paramètres d’étalonnage
+- **config.h** : les préférences de l’utilisateur sont stockées ici (affectation des broches, fonctionnalités…), et rien d’autre
+- **config_types.h** : ce avec quoi s’écrit **config.h** (types, `LOAD()`, `HOURS()`…) — *ne pas modifier*
+- **config_derived.h** : ce que le firmware construit à partir de **config.h** — *ne pas modifier*
+- **config_system.h** : constantes système rarement modifiées
+- **constants.h** : quelques constantes — *ne pas modifier*
+- **debug.h** : Quelques macros pour la sortie série et le débogage
+- **dualtariff.h** : définitions de la fonction double tarif
+- **ewma_avg.h** : fonctions de calcul de moyenne EWMA
+- **main.cpp** : code source principal
+- **processing.cpp** : code source du moteur de traitement
+- **processing.h** : prototypes de fonctions du moteur de traitement
+- **Readme.md** : ce fichier
+- **relay_engine.h** : décisions de la *diversion par relais* (seuils, temps minimaux, ordre), sans Arduino
+- **teleinfo.h**: code source de la fonctionnalité *Télémétrie IoT*
+- **types.h** : définitions des types…
+- **type_traits.h** : quelques trucs STL qui ne sont pas encore disponibles dans le paquet avr
+- **type_traits** : contient des patrons STL manquants
+- **utils_dualtariff.h** : code source de la fonctionnalité *gestion Heures Creuses*
+- **utils_pins.h** : quelques fonctions d’accès direct aux entrées/sorties du micro-contrôleur
+- **utils_relay.h** : code source de la fonctionnalité *diversion par relais*
+- **utils_rf.h** : code source de la fonction *RF*
+- **utils_temp.h** : code source de la fonctionnalité *Température*
+- **utils.h** : fonctions d’aide et trucs divers
+- **validation.h** : validation des paramètres, ce code n’est exécuté qu’au moment de la compilation !
+- **platformio.ini** : paramètres PlatformIO
+- **inject_sketch_name.py** : script d’aide pour PlatformIO
+- **Doxyfile** : paramètre pour Doxygen (documentation du code)
+
+L’utilisateur final ne doit éditer QUE les fichiers **calibration.h** et **config.h**.
+
+> [!NOTE]
+> **config.h** ne contient que des réglages : il n’inclut que `config_types.h`. Un **config.h** d’une version précédente, avec des lignes `#include`, `NO_OF_REMOTE_LOADS` ou `remoteLoads`, arrête la compilation sur *This config.h has the former layout* : recréez-le avec le [configurateur](https://fredm67.github.io/Mk2PVRouter/configurateur/), ou supprimez ces lignes (voir le CHANGELOG).
+
+## Documentation technique
+Le dossier **[docs/](docs/)** contient la documentation technique détaillée :
+- **[Architecture logicielle](docs/architecture.md)** - Conception et organisation des modules
+- **[Performances](docs/performance.md)** - Analyses de timing et optimisations
+
+# Documentation de développement
+
+Vous pouvez commencer à lire la documentation ici [3-phase routeur](https://fredm67.github.io/Mk2PVRouter-3-phase/) (en anglais).
+
+# Étalonnage du routeur
+Les valeurs d’étalonnage se trouvent dans le fichier **calibration.h**, un jeu par carte : le routeur utilise celui de `PCB_VERSION` (**config.h**). Seule la puissance compte pour le routage ; la tension (`V1`, `V2`, `V3`) n’est qu’affichée.
+
+```cpp
+// Ancienne carte
+inline constexpr float f_powerCalOldBoard[NO_OF_PHASES]{ 0.05000F, 0.05000F, 0.05000F };
+inline constexpr float f_voltageCalOldBoard[NO_OF_PHASES]{ 0.8151F, 0.8184F, 0.8195F };
+// Nouvelle carte
+inline constexpr float f_ctRating[NO_OF_PHASES]{ 50.0F, 50.0F, 50.0F };
+inline constexpr float f_powerCalPerAmp[NO_OF_PHASES]{ 0.00286405F, 0.00286405F, 0.00286405F };
+inline constexpr float f_voltageCalNewBoard[NO_OF_PHASES]{ 0.888065256F, 0.888065256F, 0.888065256F };
+```
+
+Ancienne carte : les valeurs sont celles d’avant, 0,05 est un bon départ pour `f_powerCalOldBoard`. Si votre routeur est déjà étalonné, recopiez-y vos anciennes valeurs de `f_powerCal` et `f_voltageCal`.
+
+Nouvelle carte universelle (rev. 6.0 et suivantes) : le facteur de puissance est donné par ampère de calibre de sonde, indiquez le courant nominal de vos sondes dans `f_ctRating`. Les valeurs par défaut conviennent aux sondes à sortie tension 333 mV, et découlent de sa conception, corrigée par l’étalonnage d’une première carte ([détails, en anglais](docs/calibration.md)) : avec elles, le routeur est en général précis à quelques pour cent sans étalonnage. Avec une sonde à sortie courant et une résistance de charge R, comme la YHDC SCT-013-000 (2000:1), `f_ctRating` = 666 / R, le courant qui donne 333 mV aux bornes de la résistance (30,3 avec 22 Ω).
+
+L’étalonnage se fait avec le programme du routeur lui-même : les valeurs sont ainsi mesurées avec exactement le traitement avec lequel elles seront utilisées. Avec `SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable` (dans **config.h**), il affiche toutes les 5 secondes, sur le moniteur série à 9600 bauds, la puissance de chaque phase (`P1`, `P2`, `P3`, en W, positive en import).
+
+1. Passez `CALIBRATION_MODE` à `true` dans **config.h** et téléversez : le routeur mesure et affiche comme d’habitude, mais ne commute plus aucune charge (triacs, relais, charges distantes, forçages), ce qui modifierait la puissance mesurée. Il l’annonce au démarrage.
+2. Mesurez la puissance sur la phase 1 avec un appareil de référence (par exemple une pince wattmétrique autour du même câble que la sonde), idéalement avec une forte charge résistive sur cette phase, comme un chauffe-eau.
+3. Comparez-la à `P1` et corrigez la valeur de la phase 1 : nouvelle valeur = ancienne valeur × puissance de référence / `P1`, pour `f_powerCalOldBoard[0]` ou `f_powerCalPerAmp[0]` selon la carte. Le [configurateur](https://fredm67.github.io/Mk2PVRouter/configurateur/) fait ce calcul en mode étalonnage, et peut réécrire votre **calibration.h** avec les nouvelles valeurs.
+4. Recommencez pour les phases 2 et 3, téléversez à nouveau et vérifiez.
+5. Remettez `CALIBRATION_MODE` à `false` et téléversez : le routeur route à nouveau.
+
+Si une phase affiche une puissance négative en import, sa sonde est montée à l’envers (ou n’est pas sur la phase de son entrée tension).
+
+# Documentation d’analyse et outils
+
+📊 **[Outils d’Analyse et Documentation Technique](../analysis/README.md)** [![en](https://img.shields.io/badge/lang-en-red.svg)](../analysis/README.en.md)
+
+Cette section contient des outils d’analyse avancés et de la documentation technique pour :
+
+- **🔄 Filtrage EWMA/TEMA** : Analyse de l’immunité aux nuages et optimisation des filtres
+- **📈 Analyse de performance** : Scripts de visualisation et benchmarks
+- **⚙️ Guide de réglage** : Documentation pour l’optimisation des paramètres
+- **📊 Graphiques techniques** : Comparaisons visuelles des algorithmes de filtrage
+
+> **Utilisateurs avancés :** Ces outils vous aideront à comprendre et optimiser le comportement du routeur PV, notamment pour les installations avec variabilité de production solaire ou systèmes de batteries.
+
+# Configuration du programme
+
+La configuration d’une fonctionnalité suit généralement deux étapes :
+- Activation de la fonctionnalité
+- Configuration des paramètres de la fonctionnalité
+
+La cohérence de la configuration est vérifiée lors de la compilation. Par exemple, si une *pin* est allouée deux fois par erreur, le compilateur générera une erreur.
+
+> [!TIP]
+> Le [configurateur](https://fredm67.github.io/Mk2PVRouter/configurateur/) le fait pour vous : choisissez vos charges, relais, unités distantes, broches de commande et options, il les vérifie et écrit `config.h`, `config_system.h`, `config_rf.h`, les fichiers des unités distantes et, avec le module mk2Wifi, le YAML ESPHome. Gardez votre `calibration.h`.
+
+## Carte-mère : ancienne ou nouvelle
+
+L’ancienne carte triphasée et la nouvelle carte universelle **3phaseDiverter** (rév. 6.0 et suivantes) ne mesurent pas de la même façon : la nouvelle carte utilise la référence interne de 1,1 V de l’ATmega328P, que le firmware doit activer. Indiquez au firmware quelle carte vous avez, dans **config.h** :
+```cpp
+inline constexpr PcbVersion PCB_VERSION{ PcbVersion::OLD };  // NEW pour la carte universelle 3phaseDiverter
+```
+Le résumé affiché au démarrage indique le choix (`Motherboard: old` ou `new`).
+
+> [!IMPORTANT]
+> Avec un mauvais choix, toutes les mesures sont fausses. Après un changement, refaites l’étalonnage.
+
+## Type de sortie série
+
+Le type de sortie série peut être configuré pour s’adapter à différents besoins. Trois options sont disponibles :
+
+- **HumanReadable** : Sortie lisible par un humain, idéale pour le débogage ou la mise en service.
+- **IoT** : Sortie formatée pour des plateformes IoT comme Home Assistant.
+- **JSON** : Sortie formatée pour des plateformes comme EmonCMS (JSON).
+
+Pour configurer le type de sortie série, modifiez la constante suivante dans le fichier **config.h** :
+```cpp
+inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable;
+```
+Remplacez `HumanReadable` par `IoT` ou `JSON` selon vos besoins.
+
+## Configuration des sorties TRIAC
+
+La première étape consiste à définir le nombre de sorties TRIAC :
+
+```cpp
+inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 };
+```
+
+Ensuite, il faudra décrire chaque charge dans la **table des charges**, ainsi que l'ordre des priorités au démarrage.
+
+```cpp
+// Une entrée par charge, dans n'importe quel ordre. Chaque entrée indique QUI pilote la charge :
+//   Load::local(pin)           - pilotée par le routeur lui-même, sur cette pin numérique
+//   Load::remote(unit)         - pilotée par l'unité distante 'unit' (1..3), par RF
+//   Load::remote(unit, ledPin) - idem, avec en plus une LED d'état sur le routeur
+inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
+  Load::local(5),  // charge 0 : TRIAC sur D5
+  Load::local(6)   // charge 1 : TRIAC sur D6
+};
+
+// Ordre de priorités au démarrage (0 = priorité la plus haute, s'applique à TOUTES les charges)
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1 };
+```
+
+**Important :**
+- `physicalLoadPin` contient **toutes** les charges, locales comme distantes — une entrée par charge, soit `NO_OF_DUMPLOADS` entrées
+- les charges locales et distantes peuvent être déclarées dans **n'importe quel ordre** ; `NO_OF_REMOTE_LOADS` et `NO_OF_REMOTE_UNITS` sont déduits de la table par le compilateur et ne doivent jamais être modifiés à la main
+- une charge **distante** n'a pas de pin TRIAC sur le routeur ; le second argument optionnel de `Load::remote()` ajoute une LED d'état permettant de visualiser son état localement
+- `loadPrioritiesAtStartup` définit l'ordre de priorité de **toutes** les charges et indexe la table : la priorité *p* en position *i* signifie « la charge *i* a la priorité *p* »
+
+## Configuration des sorties relais tout-ou-rien
+Les sorties relais tout-ou-rien permettent d’alimenter des appareils qui contiennent de l’électronique (pompe à chaleur …).
+
+Il faudra activer la fonctionnalité comme ceci :
+```cpp
+inline constexpr bool RELAY_DIVERSION{ true };
+```
+
+Chaque relais nécessite la définition de cinq paramètres :
+- le numéro de **pin** sur laquelle est branché le relais
+- le **seuil de surplus** avant mise en route (par défaut **1000 W**)
+- le **seuil d’import** avant arrêt (par défaut **200 W**)
+- la **durée de fonctionnement minimale** en minutes (par défaut **5 min**)
+- la **durée d’arrêt minimale** en minutes (par défaut **5 min**).
+
+Exemple de configuration d’un relais :
+```cpp
+inline constexpr RelayEngine relays{ { { 4, 1000, 200, 10, 10 } } };
+```
+Dans cet exemple, le relais est connecté sur la *pin* **4**, il se déclenchera à partir de **1000 W** de surplus, s’arrêtera à partir de **200 W** d’import, et a une durée minimale de fonctionnement et d’arrêt de **10 min**.
+
+Pour configurer plusieurs relais, listez simplement les configurations de chaque relais :
+```cpp
+inline constexpr RelayEngine relays{ { { 4, 1000, 200, 10, 10 },
+                                       { 3, 1500, 250, 5, 15 } } };
+```
+Les relais sont activés dans l’ordre de la liste, et désactivés dans l’ordre inverse.
+Dans tous les cas, les durées minimales de fonctionnement et d’arrêt sont toujours respectées.
+
+### Principe de fonctionnement
+Les seuils de surplus et d’import sont calculés en utilisant une moyenne mobile pondérée exponentiellement (EWMA), dans notre cas précis, il s’agit d’une modification d’une moyenne mobile triple exponentiellement pondérée (TEMA).
+Par défaut, cette moyenne est calculée sur une fenêtre d’environ **10 min**. Vous pouvez ajuster cette durée pour l’adapter à vos besoins.
+Il est possible de la rallonger mais aussi de la raccourcir.
+Pour des raisons de performances de l’Arduino, la durée choisie sera arrondie à une durée proche qui permettra de faire les calculs sans impacter les performances du routeur.
+
+La durée de la fenêtre temporelle est contrôlée par le paramètre `RELAY_FILTER_DELAY` dans le fichier de configuration.
+
+Si l’utilisateur souhaite plutôt une fenêtre de 15 min, il suffira d’écrire :
+```cpp
+inline constexpr RelayEngine relays{ MINUTES(15), { { 3, 1000, 200, 1, 1 } } };
+```
+___
+> [!NOTE]
+> La macro `MINUTES()` convertit automatiquement la valeur en paramètre template. Aucun suffixe spécial n’est nécessaire ! La même macro (et `HOURS()`) sert à écrire les temps des [boosts programmés](#configuration-des-boosts-programmés-scheduledboosts).
+___
+
+Les relais configurés dans le système sont gérés par un système similaire à une machine à états.
+Chaque seconde, le système augmente la durée de l’état actuel de chaque relais et procède avec tous les relais en fonction de la puissance moyenne actuelle :
+- si la puissance moyenne actuelle est supérieure au seuil d’import, elle essaie d’éteindre certains relais.
+- si la puissance moyenne actuelle est supérieure au seuil de surplus, elle essaie d’allumer plus de relais.
+
+Les relais s’allument dans l’ordre croissant et s’éteignent dans l’ordre décroissant : sur une importation, et aussi sur un petit surplus pour les relais en mode batterie.
+
+Pour chaque relais, la transition ou le changement d’état est géré de la manière suivante :
+- si le relais est *OFF* et que la puissance moyenne actuelle est inférieure au seuil de surplus, le relais essaie de passer à l’état *ON*. Cette transition est soumise à la condition que le relais ait été *OFF* pendant au moins la durée *minOFF*.
+- si le relais est *ON* et que la puissance moyenne actuelle est supérieure au seuil d’importation, le relais essaie de passer à l’état *OFF*. Cette transition est soumise à la condition que le relais ait été *ON* pendant au moins la durée *minON*.
+
+#### Vue d’ensemble visuelle
+
+**Zones de seuil sur l’axe de puissance :**
+
+```mermaid
+flowchart LR
+    S["<b>Surplus</b>, sous seuilSurplus<br/>(ex. −1000 W, export)<br/>un relais OFF peut passer ON"]
+    Z["<b>Zone stable</b>, entre les seuils<br/>(autour de 0 W)<br/>chaque relais garde son état"]
+    I["<b>Import</b>, au-dessus de seuilImport<br/>(ex. +200 W)<br/>un relais ON peut passer OFF"]
+    S --- Z --- I
+
+    classDef on fill:#c8e6c9,stroke:#2e7d32,color:#000
+    classDef keep fill:#eeeeee,stroke:#757575,color:#000
+    classDef off fill:#ffe0b2,stroke:#e65100,color:#000
+    class S on
+    class Z keep
+    class I off
+```
+
+La puissance réseau filtrée par la moyenne EWMA est comparée en permanence aux deux seuils :
+- En dessous du `seuilSurplus` → le relais est éligible pour passer **ON** (sous réserve de `minOFF`)
+- Au-dessus du `seuilImport` → le relais est éligible pour passer **OFF** (sous réserve de `minON`)
+- Entre les deux seuils → le relais **maintient** son état actuel
+
+**Minuteries de durée minimale :**
+
+```mermaid
+gantt
+    title Un relais, minOFF 1 min et minON 5 min
+    dateFormat YYYY-MM-DD HH:mm
+    axisFormat %M min
+    todayMarker off
+    section Réseau
+    Surplus de plus de 1000 W            :done, g1, 2001-01-01 00:00, 3m
+    Production en baisse, zone stable    :g2, 2001-01-01 00:03, 1m
+    Import de plus de 200 W              :crit, g3, 2001-01-01 00:04, 6m
+    section Relais
+    OFF, minOFF en cours                 :r1, 2001-01-01 00:00, 1m
+    mise en ON                           :milestone, m1, 2001-01-01 00:01, 0m
+    ON, minON doit s’écouler             :active, r2, 2001-01-01 00:01, 5m
+    mise en OFF                          :milestone, m2, 2001-01-01 00:06, 0m
+    OFF                                  :r3, 2001-01-01 00:06, 4m
+```
+
+> [!NOTE]
+> Après **tout** changement d’état d’un relais, une **période de stabilisation de 60 secondes** est appliquée à l’ensemble du système avant que le prochain relais puisse changer d’état. Cela évite les basculements en cascade rapides lorsque la puissance fluctue près d’un seuil.
+
+**Ordre de traitement multi-relais (exemple : 3 relais, seuils 1000 W / 1500 W / 2000 W) :**
+
+```mermaid
+---
+title: "Surplus croissant : relais 0 en premier"
+---
+flowchart LR
+    U0{"Relais 0 OFF,<br/>surplus au-delà de son seuil<br/>et minOFF écoulé ?"} -- non --> U1{"Relais 1 ?"} -- non --> U2{"Relais 2 ?"}
+    U0 -- oui --> U0on([relais 0 ON])
+    U1 -- oui --> U1on([relais 1 ON])
+    U2 -- oui --> U2on([relais 2 ON])
+```
+
+```mermaid
+---
+title: "Import croissant / production en baisse : relais 2 en premier"
+---
+flowchart LR
+    D2{"Relais 2 ON,<br/>import au-delà de son seuil<br/>et minON écoulé ?"} -- non --> D1{"Relais 1 ?"} -- non --> D0{"Relais 0 ?"}
+    D2 -- oui --> D2off([relais 2 OFF])
+    D1 -- oui --> D1off([relais 1 OFF])
+    D0 -- oui --> D0off([relais 0 OFF])
+```
+
+À chaque passe, le système parcourt tous les relais dans l’ordre et s’arrête dès qu’**un relais change d’état avec succès** — ce qui déclenche la période de stabilisation de 60 secondes. Les relais qui ne peuvent pas basculer (durée minimale pas encore écoulée, ou déjà dans l’état cible) sont simplement ignorés.
+
+Le système ne trie **pas** automatiquement les relais par seuil — il suit simplement l’ordre de déclaration dans le tableau de configuration. C’est à l’utilisateur de déclarer les relais dans un ordre pertinent (par ex. `seuilSurplus` croissant) pour obtenir le comportement de priorité souhaité.
+
+> [!TIP]
+> Pour les installations avec un **système de stockage par batteries**, le `seuilImport` positif standard ne fonctionnera pas correctement, car la batterie empêche l’import réseau d’augmenter. Utilisez un `seuilImport` **négatif** à la place (ex. `−50`). Une valeur négative signifie « passer en OFF quand le surplus tombe en dessous de X watts ». Consultez le **[Guide de Configuration pour Systèmes Batterie](docs/BATTERY_CONFIGURATION_GUIDE.md)** [![en](https://img.shields.io/badge/lang-en-red.svg)](docs/BATTERY_CONFIGURATION_GUIDE.en.md) pour tous les détails et graphiques.
+
+## Configuration du module RF et des charges distantes
+
+Le routeur peut contrôler des charges distantes via un module RF RFM69. Cette fonctionnalité permet de piloter des résistances ou des relais situés dans un autre emplacement, sans câblage supplémentaire.
+
+Jusqu'à **trois unités distantes** peuvent être pilotées, chacune étant un Arduino séparé, à son propre emplacement, et portant jusqu'à **8 charges**. Le routeur envoie un octet par unité, un bit par charge.
+
+### Matériel requis
+
+**Pour l'émetteur (routeur principal) :**
+- Module RFM69W/CW ou RFM69HW/HCW (868 MHz pour l'Europe, 915 MHz pour l'Amérique du Nord)
+- Antenne appropriée pour la fréquence choisie
+- Connexion SPI standard (D10=CS, D2=IRQ)
+
+**Pour chaque récepteur distant :**
+- Arduino UNO ou compatible
+- Module RFM69 (même modèle que l'émetteur)
+- TRIAC ou SSR pour commander les charges
+- LEDs optionnelles pour indication d'état (D5=verte watchdog, D7=rouge perte RF)
+
+### Configuration logicielle
+
+**Activation des fonctionnalités RF :**
+
+Le module RF peut être utilisé pour deux fonctionnalités indépendantes :
+
+1. **Télémétrie RF** (`RF_LOGGING_PRESENT`) : Envoi des données de puissance/tension vers une passerelle
+2. **Charges distantes** (`REMOTE_LOADS_PRESENT`) : Contrôle de charges via RF
+
+La télémétrie RF s'active dans **config.h** :
+
+```cpp
+inline constexpr bool RF_LOGGING_PRESENT{ false };       // Télémétrie RF (optionnel)
+```
+
+Le contrôle des charges distantes n'a pas d'interrupteur propre : dès que la table des charges contient au moins une entrée distante, `REMOTE_LOADS_PRESENT` devient vrai et le module RF est compilé.
+
+**Configuration des charges :**
+
+Déclarez le nombre total de charges, puis indiquez qui pilote chacune d'elles :
+
+```cpp
+inline constexpr uint8_t NO_OF_DUMPLOADS{ 4 };  // Total : 4 charges
+
+inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
+  Load::local(5),      // charge 0 : TRIAC local sur D5
+  Load::remote(1, 8),  // charge 1 : unité distante 1, LED d'état sur D8
+  Load::remote(2, 9),  // charge 2 : unité distante 2, LED d'état sur D9
+  Load::remote(1)      // charge 3 : unité distante 1, sans LED d'état
+};
+```
+
+Le compilateur en déduit le reste :
+
+| Constante déduite | Valeur ici | Signification |
+|---|---|---|
+| `NO_OF_REMOTE_LOADS` | 3 | nombre d'entrées distantes dans la table (8 au maximum) |
+| `NO_OF_REMOTE_UNITS` | 2 | numéro d'unité le plus élevé utilisé (3 au maximum) |
+| `REMOTE_LOADS_PRESENT` | `true` | au moins une entrée distante |
+
+Chaque unité distante reçoit un seul octet, **un bit par charge, dans l'ordre croissant de la table**. L'unité 1 ci-dessus reçoit donc le bit 0 pour la charge 1 et le bit 1 pour la charge 3 ; l'unité 2 reçoit le bit 0 pour la charge 2. Côté récepteur, `loadPins[0]` correspond au bit 0, `loadPins[1]` au bit 1, et ainsi de suite.
+
+**Priorités :**
+
+Charges locales et distantes partagent une seule liste de priorités (un [groupe de rotation](#rotation-des-priorités) ne contient que des charges locales, ou les charges d’une seule unité distante). Il n'y a plus de règle imposant aux charges distantes d'être en dernier — `loadPrioritiesAtStartup` donne l'ordre, quel que soit le mélange :
+
+```cpp
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2, 3 };
+```
+
+**Configuration RF (dans config_rf.h) :**
+
+Les paramètres par défaut sont :
+- Fréquence : 868 MHz (Europe)
+- ID réseau : 210
+- ID routeur : 10
+- ID des unités distantes : 15, 16, 17
+
+Pour modifier ces paramètres, éditez **config_rf.h** :
+
+```cpp
+inline constexpr uint8_t ROUTER_NODE_ID{ 10 };            // ID du routeur (cet appareil)
+inline constexpr uint8_t GATEWAY_ID{ 1 };                 // ID de la passerelle (télémétrie)
+inline constexpr uint8_t REMOTE_NODE_ID[]{ 15, 16, 17 };  // Un ID par unité distante, l'unité 1 en premier
+inline constexpr uint8_t NETWORK_ID{ 210 };               // ID du réseau (1-255)
+```
+
+`REMOTE_NODE_ID[0]` est l'adresse de l'unité 1, `REMOTE_NODE_ID[1]` celle de l'unité 2, etc. Ces ID doivent être compris entre 1 et 30, distincts entre eux et différents de `ROUTER_NODE_ID` ; le compilateur le vérifie.
+
+### Configuration du récepteur distant
+
+Le sketch **RemoteLoadReceiver** est fourni dans le dossier `RemoteLoadReceiver/`. Il n'a besoin d'aucune modification pour gérer plusieurs unités : compilez-le et téléversez-le une fois par unité, en ne changeant que `REMOTE_NODE_ID` et la liste des charges.
+
+**Configuration minimale (dans config_rf.h du récepteur) :**
+
+```cpp
+// Configuration RF - doit correspondre au routeur
+inline constexpr uint8_t ROUTER_NODE_ID{ 10 };  // ID du routeur
+inline constexpr uint8_t REMOTE_NODE_ID{ 15 };  // ID de cette unité : le REMOTE_NODE_ID[unité - 1] du routeur
+inline constexpr uint8_t NETWORK_ID{ 210 };     // ID réseau
+
+// Configuration des charges - une entrée par bit de la trame, le bit 0 en premier
+inline constexpr uint8_t NO_OF_LOADS{ 2 };                    // Nombre de charges sur ce récepteur
+inline constexpr uint8_t loadPins[NO_OF_LOADS]{ 4, 3 };       // Pins des sorties TRIAC/SSR
+
+// LEDs de statut (optionnel)
+inline constexpr uint8_t GREEN_LED_PIN{ 5 };        // LED verte : watchdog 1 Hz
+inline constexpr uint8_t RED_LED_PIN{ 7 };          // LED rouge : perte liaison RF (clignotement rapide)
+inline constexpr bool STATUS_LEDS_PRESENT{ true };  // Activer les LEDs
+```
+
+**Sécurité :**
+
+Le récepteur désactive automatiquement **toutes les charges** si aucun message n'est reçu pendant plus de 500 ms. Cela garantit la sécurité en cas de perte de liaison RF.
+
+**Test de la liaison :**
+
+Une fois configurés et téléversés, le routeur et ses unités communiquent automatiquement :
+- Le routeur envoie l'état d'une unité dès qu'il change, et le rafraîchit sinon tous les 5 cycles secteur (~100 ms à 50 Hz) afin qu'un récepteur ayant manqué une trame, ou allumé tardivement, se remette à jour
+- Chaque unité est adressée séparément : un changement ne concernant que l'unité 2 ne génère aucun trafic vers l'unité 1
+- Le récepteur affiche les commandes reçues sur le port série
+- La LED verte clignote à 1 Hz (système actif)
+- La LED rouge clignote rapidement si la liaison RF est perdue
+
+**Diagnostic :**
+
+Sur le moniteur série du récepteur, vous devriez voir :
+```
+Received: 0b01 (RSSI: -45) - Loads: 0:ON 1:OFF
+```
+
+Un RSSI entre -30 et -70 indique une bonne qualité de signal. Au-delà de -80, la liaison devient instable.
+
+## Configuration du Watchdog
+Un chien de garde, en anglais *watchdog*, est un circuit électronique ou un logiciel utilisé en électronique numérique pour s’assurer qu’un automate ou un ordinateur ne reste pas bloqué à une étape particulière du traitement qu’il effectue.
+
+Ceci est réalisé à l’aide d’une LED qui clignote à la fréquence de 1 Hz, soit toutes les secondes.
+Ainsi, l’utilisateur sait d’une part si son routeur est allumé, et si jamais cette LED ne clignote plus, c’est que l’Arduino s’est bloqué (cas encore jamais rencontré !).
+Un simple appui sur le bouton *Reset* permettra de redémarrage le système sans rien débrancher.
+
+Il faudra activer la fonctionnalité comme ceci :
+```cpp
+inline constexpr bool WATCHDOG_PIN_PRESENT{ true };
+```
+et définir la *pin* utilisée, dans l’exemple la *9* :
+```cpp
+inline constexpr uint8_t watchDogPin{ 9 };
+```
+
+## Configuration du ou des capteurs de température
+Il est possible de brancher un ou plusieurs capteurs de température Dallas DS18B20.
+Ces capteurs peuvent servir à des fins informatives ou pour contrôler le mode boost.
+
+- **Nouvelle carte** (`PcbVersion::NEW`) : le bus des sondes est sur `D3`, câblé avec son pull-up sur la carte. Branchez les sondes sur le connecteur de température de la carte ; avec le module mk2Wifi, mettez le cavalier `TEMP` en position routeur (voir [Cavalier `TEMP`](#cavalier-temp)).
+- **Ancienne carte** (`PcbVersion::OLD`) : rien n’est câblé. Choisissez une pin libre, ajoutez un pull-up de 4,7 kΩ entre la ligne de données et le +5 V, et alimentez les sondes (+5 V, GND).
+
+### Activation de la fonctionnalité
+
+Dans `config.h`, passez `TEMP_SENSOR_PRESENT` à `true`, et indiquez la pin du bus (`3`) et les adresses des capteurs dans `temperatureSensing` (voir plus bas) :
+```cpp
+inline constexpr bool TEMP_SENSOR_PRESENT{ true };
+```
+
+Avec l’Arduino IDE, la bibliothèque *OneWire* doit être installée, comme pour toute compilation du firmware : **Outils** => **Gérer les bibliothèques…**, recherchez « Onewire » et installez "**OneWire** par Jim Studt…" en version **2.3.7** ou plus récente. PlatformIO l’installe de lui-même.
+
+### Configuration du ou des capteurs
+Pour configurer les capteurs, vous devez entrer leurs adresses.
+Le routeur les trouve lui-même : mettez `TEMP_SENSOR_PRESENT` à `true` avec la broche du bus, mettez `CALIBRATION_MODE` à `true` (voir [Étalonnage du routeur](#étalonnage-du-routeur)) et téléversez. Au démarrage, il liste les capteurs présents sur le bus, avec leurs adresses écrites comme **config.h** les attend, et indique si **config.h** contient déjà chacune d’elles :
+```
+Temperature sensors found on pin 3:
+	{ 0x28, 0xBE, 0x41, 0x6B, 0x09, 0x00, 0x00, 0xA4 }  not in config.h
+	{ 0x28, 0x1B, 0xD7, 0x6A, 0x09, 0x00, 0x00, 0xB7 }  not in config.h
+```
+En branchant les capteurs un par un, on sait quelle adresse correspond à quel capteur. Il est recommandé de coller une étiquette avec l’adresse de chaque capteur sur son câble.
+
+Entrez les adresses comme suit :
+```cpp
+inline constexpr TemperatureSensing temperatureSensing{ 3,
+                                                        { { 0x28, 0xBE, 0x41, 0x6B, 0x09, 0x00, 0x00, 0xA4 },
+                                                          { 0x28, 0x1B, 0xD7, 0x6A, 0x09, 0x00, 0x00, 0xB7 } } };
+```
+Le premier paramètre, *3*, est la pin du bus *OneWire* : `D3` sur la nouvelle carte, la pin choisie sur l’ancienne.
+
+___
+> [!NOTE]
+> Plusieurs capteurs peuvent être branchés sur le même câble.
+> Sur Internet vous trouverez tous les détails concernant la topologie utilisable avec ce genre de capteurs.
+___
+
+## Gestion des Heures Creuses et boost programmé (dual tariff)
+
+Cette fonctionnalité permet au routeur de gérer automatiquement le chauffage pendant les périodes d’Heures Creuses. Elle est utile pour :
+- Chauffer l’eau la nuit quand l’électricité est moins chère
+- Garantir de l’eau chaude le matin si le surplus solaire a été insuffisant pendant la journée
+- Limiter la durée de chauffe pour éviter la surchauffe (optionnellement avec un capteur de température)
+
+### Configuration matérielle
+
+Décâblez la commande du contacteur Jour/Nuit, qui n’est plus nécessaire.
+Reliez directement une *pin* choisie au contact sec du compteur (bornes *C1* et *C2*).
+
+> [!WARNING]
+> Il faut relier **directement**, une paire *pin/masse* avec les bornes *C1/C2* du compteur.
+> Il NE doit PAS y avoir de 230 V sur ce circuit !
+
+### Configuration logicielle
+
+**Étape 1 :** Activez la fonctionnalité :
+```cpp
+inline constexpr bool DUAL_TARIFF{ true };
+```
+
+**Étape 2 :** Configurez la *pin* sur laquelle est relié le compteur :
+```cpp
+inline constexpr uint8_t dualTariffPin{ 3 };
+```
+
+**Étape 3 :** Configurez la durée en heures de la période d’Heures Creuses (pour l’instant, une seule période est supportée par jour) :
+```cpp
+inline constexpr uint8_t ul_OFF_PEAK_DURATION{ 8 };
+```
+
+**Étape 4 :** Configurez les boosts programmés : quelles charges sont forcées, et quand.
+
+> [!IMPORTANT]
+> `ul_OFF_PEAK_DURATION` doit correspondre à la durée réelle de la période d’Heures Creuses de votre compteur. Le routeur ne connaît que le **début** et la **fin** des HC, par le contact du compteur ; la durée sert à placer les boosts comptés depuis la fin (`LAST`, `BEFORE_END`).
+
+### Configuration des boosts programmés (scheduledBoosts)
+
+La liste `scheduledBoosts` dit **quand** et **combien de temps** quelles charges, charges distantes ou relais sont en boost pendant la période d’Heures Creuses. Elle se lit comme un planning, une ligne par boost, et prend les mêmes cibles que les [pins d’override](#cibler-les-charges-et-relais).
+
+```cpp
+inline constexpr ScheduledBoosts scheduledBoosts{ {
+    { FENETRE, { CIBLES } }
+} };
+```
+
+Chaque boost est une **fenêtre** (quand) suivie de ses **cibles** (qui). Tous les temps sont relatifs à la période d’HC, écrits avec `HOURS(n)` ou `MINUTES(n)` : un nombre seul n’est pas accepté.
+
+#### Les fenêtres
+
+| Fenêtre | Signification |
+|---------|---------------|
+| `FIRST(d)` | depuis le début de la période d’HC, pendant `d` |
+| `LAST(d)` | les `d` dernières de la période, jusqu’à sa fin |
+| `FROM_START(t), FOR(d)` | `t` après le début, pendant `d` |
+| `BEFORE_END(t), FOR(d)` | `t` avant la fin, pendant `d` |
+| `FROM_START(t)` ou `BEFORE_END(t)` sans `FOR` | de là jusqu’à la fin de la période |
+| `HOURS(n)` / `MINUTES(n)` | la seule façon d’écrire un temps `t` ou une durée `d` |
+
+#### Les cibles
+
+Les cibles s’écrivent comme pour les pins d’override : `LOAD(n)`, `REMOTE_LOAD(n)`, `RELAY(n)`, `ALL_LOADS()`, `ALL_RELAYS()`, `ALL_LOADS_AND_RELAYS()`… Tout compte à partir de 0 : `LOAD(0)` est la première charge.
+
+> [!NOTE]
+> `RELAY(n)` ne fonctionne qu’avec la diversion sur relais active (`RELAY_DIVERSION`) et pour un relais qui existe. Sinon la compilation échoue : c’est aussi le cas pour les cibles des pins d’override.
+
+Trois règles à retenir :
+- **Ce qui n’est pas listé n’est jamais en boost.** Une liste vide, `inline constexpr ScheduledBoosts scheduledBoosts{};`, signifie aucun boost.
+- **Chaque boost s’arrête quand le compteur repasse en heures pleines**, quelle que soit sa fenêtre.
+- **Toute la fenêtre tient dans la période d’HC** (`ul_OFF_PEAK_DURATION`) : une fenêtre avec `FOR` finit au plus tard à la fin de la période, sinon la compilation échoue. `LAST` et une fenêtre sans `FOR` durent jusqu’à ce que le compteur repasse en heures pleines.
+- La condition de température (`iTemperatureThreshold`) s’applique à tous les boosts : au-dessus du seuil, rien n’est en boost. Elle demande la mesure de température sur le routeur (`TEMP_SENSOR_PRESENT`) ; `BOOST_TEMP_SENSOR` choisit la sonde, par son rang dans `temperatureSensing` (0 : la première). Le seuil se règle en dessous du thermostat du chauffe-eau, qui reste la sécurité : par exemple le thermostat à 80 °C pour que le chauffe-eau absorbe le plus de surplus possible, et le seuil à 60 °C pour que le boost des heures creuses laisse de la place au surplus du lendemain. Si la sonde ne peut pas être lue (débranchée, en panne), les boosts ont lieu, jusqu’au thermostat.
+
+Une charge peut figurer dans plusieurs boosts : leurs fenêtres s’additionnent. Une fenêtre inclut son début et exclut sa fin.
+
+#### Comprendre la ligne du temps
+
+Tous les exemples supposent une période d’HC de **23:00 à 07:00** (`ul_OFF_PEAK_DURATION{ 8 }`) :
+
+```cpp
+inline constexpr ScheduledBoosts scheduledBoosts{ {
+    { FIRST(HOURS(2)), { LOAD(0), LOAD(2) } },                // charges #1 et #3, les 2 premières heures
+    { LAST(HOURS(2)), { REMOTE_LOAD(1) } },                   // la 2e charge distante, les 2 dernières heures
+    { FROM_START(HOURS(2)), FOR(HOURS(2)), { LOAD(1) } },     // charge #2, 2 h après le début, pendant 2 h
+    { BEFORE_END(HOURS(3)), FOR(MINUTES(90)), { RELAY(0) } }  // relais #1, 3 h avant la fin, pendant 1 h 30
+} };
+```
+
+```mermaid
+gantt
+    title Période HC, de 23:00 à 07:00
+    dateFormat YYYY-MM-DD HH:mm
+    axisFormat %H:%M
+    todayMarker off
+    section HC
+    Heures creuses (8 h) :active, hc, 2001-01-01 23:00, 8h
+    section Boosts
+    FIRST(HOURS(2)), charges #1 et #3 :crit, sb1, 2001-01-01 23:00, 2h
+    FROM_START(HOURS(2)), FOR(HOURS(2)), charge #2 :crit, sb2, 2001-01-02 01:00, 2h
+    BEFORE_END(HOURS(3)), FOR(MINUTES(90)), relais #1 :crit, sb3, 2001-01-02 04:00, 90m
+    LAST(HOURS(2)), charge distante #2 :crit, sb4, 2001-01-02 05:00, 2h
+```
+
+#### Exemples
+
+**Exemple 1 :** `{ BEFORE_END(HOURS(3)), FOR(HOURS(2)), { LOAD(0) } }` : 3 heures avant la fin, pendant 2 heures. Le boost fonctionne de **04:00 à 06:00**.
+
+**Exemple 2 :** `{ FROM_START(HOURS(2)), FOR(HOURS(3)), { LOAD(0) } }` : 2 heures après le début, pendant 3 heures. Le boost fonctionne de **01:00 à 04:00**.
+
+**Exemple 3 :** `{ BEFORE_END(MINUTES(90)), FOR(MINUTES(60)), { LOAD(0) } }` : 90 minutes avant la fin, pendant 60 minutes. Le boost fonctionne de **05:30 à 06:30**. Avec `FOR(MINUTES(120))`, il finirait à 07:30, après la période d’HC : la compilation le refuse. Pour aller jusqu’à la fin, omettez `FOR`.
+
+**Exemple 4 :** `{ FROM_START(HOURS(1)), { LOAD(0) } }` : 1 heure après le début, jusqu’à la fin. Le boost fonctionne de **00:00 à 07:00**.
+
+**Exemple 5 :** toute la nuit, pour une charge : `{ FROM_START(MINUTES(0)), { LOAD(0) } }`. Quelle que soit la durée des HC, le compteur met fin au boost.
+
+Plusieurs charges et plusieurs fenêtres :
+```cpp
+inline constexpr ScheduledBoosts scheduledBoosts{ {
+    { BEFORE_END(HOURS(4)), FOR(HOURS(2)), { LOAD(0) } },  // charge #1 : 03:00-05:00 (dernier recours, si l’eau est encore froide)
+    { LAST(HOURS(2)), { LOAD(1) } },                       // charge #2 : 05:00-07:00 (complément avant le matin)
+    { FIRST(HOURS(1)), { LOAD(0) } }                       // charge #1 aussi : 23:00-00:00
+} };                                                       // charge #3 : jamais en boost
+```
+
+#### Ce que la compilation refuse
+
+Le compilateur s’arrête avec un message qui nomme le problème :
+
+- `A scheduled boost starts or ends outside the off-peak period, or lasts 0 minutes. Please check scheduledBoosts in your config.h !` : par exemple `LAST(HOURS(10))` ou `BEFORE_END(HOURS(9))` avec 8 heures (démarre avant la période), `FIRST(HOURS(10))` ou `BEFORE_END(HOURS(1)), FOR(HOURS(2))` avec 8 heures (finit après), ou `FOR(MINUTES(0))`.
+- `A scheduled boost forces something that is neither a local load nor a relay (is relay diversion on?). Please check scheduledBoosts in your config.h !` : par exemple `RELAY(0)` sans diversion sur relais, un `RELAY(n)` au-delà des relais configurés, ou un `LOAD(n)` au-delà des charges configurées (`LOAD(3)` avec 3 charges). Dans un boost manuel (`overridePins`), les mêmes cibles arrêtent la compilation avec `An override pin forces a pin that is neither a local load nor a relay ! Please check overridePins in your config.h !`
+- `A scheduled boost forces a remote load that does not exist (REMOTE_LOAD() counts from 0). Please check scheduledBoosts in your config.h !`
+
+#### Ce que le routeur affiche au démarrage
+
+Une ligne par boost, dans l’ordre de la liste, avec la fenêtre en heures et minutes après le début des HC. Pour les quatre boosts de [Comprendre la ligne du temps](#comprendre-la-ligne-du-temps) (8 heures d’HC), avec les trois premières charges locales sur D5, D6 et D7, deux charges distantes, et le relais #1 sur D4 :
+```
+	Boost #1: from 0h00 to 2h00 of off-peak, forcing D5, D7.
+	Boost #2: from 6h00 until the end of off-peak, forcing remote load 2.
+	Boost #3: from 2h00 to 4h00 of off-peak, forcing D6.
+	Boost #4: from 5h00 to 6h30 of off-peak, forcing D4.
+```
+Les charges locales et les relais s’affichent par leur broche (D5, D4), dans l’ordre croissant des broches. Les charges distantes comptent à partir de 1 : `REMOTE_LOAD(1)` s’affiche `remote load 2`.
+
+### Aide-mémoire
+
+| Vous voulez… | Écrivez |
+|--------------|---------|
+| Les 2 premières heures, charges #1 et #3 | `{ FIRST(HOURS(2)), { LOAD(0), LOAD(2) } }` |
+| Les 90 dernières minutes | `{ LAST(MINUTES(90)), { LOAD(0) } }` |
+| Démarrer 2 h après le début des HC, pendant 3 h | `{ FROM_START(HOURS(2)), FOR(HOURS(3)), { LOAD(0) } }` |
+| Démarrer 3 h avant la fin des HC, pendant 2 h | `{ BEFORE_END(HOURS(3)), FOR(HOURS(2)), { LOAD(0) } }` |
+| Démarrer 90 min avant la fin des HC, jusqu’à la fin | `{ BEFORE_END(MINUTES(90)), { LOAD(0) } }` |
+| Un boost sur un relais ou une charge distante | `{ ..., { RELAY(0) } }`, `{ ..., { REMOTE_LOAD(0) } }` |
+| Aucun boost | `inline constexpr ScheduledBoosts scheduledBoosts{};` |
+
+## Rotation des priorités
+La rotation des priorités est utile lors de l’alimentation d’un chauffe-eau triphasé.
+Elle permet d’équilibrer la durée de fonctionnement des différentes résistances sur une période prolongée.
+
+Mais elle peut aussi être intéressante si on veut permuter les priorités de deux appareils chaque jour (deux chauffe-eau…) : on en fait un groupe de deux charges.
+
+Une fois n’est pas coutume, l’activation de cette fonction possède 2 modes :
+- **automatique**, on spécifiera alors
+```cpp
+inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::AUTO };
+```
+- **manuel**, on écrira alors
+```cpp
+inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::PIN };
+```
+En mode **automatique**, la rotation se fait quand le routeur n’a rien routé pendant `ROTATION_AFTER_SECONDS` (8 h par défaut), en général une fois par nuit. Avec le double tarif, elle se fait à la place au début de chaque période creuse.
+En mode **manuel**, vous devez également définir la *pin* qui déclenchera la rotation :
+```cpp
+inline constexpr uint8_t rotationPin{ 10 };
+```
+La pin fonctionne de la même façon avec ou sans double tarif.
+
+### Groupes de rotation
+`rotationGroups` liste les charges qui tournent, un groupe par appareil. Pour un chauffe-eau sur toutes les charges locales :
+```cpp
+inline constexpr RotationGroups rotationGroups{ { ALL_LOCAL_LOADS() } };
+```
+Chaque groupe tourne entre les places de priorité que ses charges occupent au démarrage ; les charges hors groupe ne bougent jamais. Avec deux chauffe-eau triphasés et des priorités entrelacées :
+```cpp
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 3, 1, 4, 2, 5 };
+inline constexpr RotationGroups rotationGroups{ { LOAD(0), LOAD(1), LOAD(2) }, { LOAD(3), LOAD(4), LOAD(5) } };
+```
+une rotation transforme `0, 3, 1, 4, 2, 5` en `2, 5, 0, 3, 1, 4` : chaque chauffe-eau fait passer son dernier élément en tête, et chacun garde les mêmes places.
+
+Les règles, vérifiées à la compilation :
+- un groupe compte au moins 2 charges ;
+- une charge est dans un groupe au plus ;
+- un groupe ne contient que des charges locales, ou les charges d’une seule unité distante ;
+- rotation active, il faut au moins un groupe ; rotation `OFF`, `rotationGroups` reste vide, `{}`.
+
+Tous les groupes tournent ensemble, sur le même déclencheur.
+
+## Boost manuel (déclenché par pin)
+
+Contrairement au [boost programmé](#configuration-des-boosts-programmés-scheduledboosts) qui s’exécute automatiquement pendant les Heures Creuses, le **boost manuel** vous permet de déclencher le chauffage à la demande via des interrupteurs physiques, des boutons, des minuteries ou des systèmes domotiques.
+
+### Fonctionnement
+
+```mermaid
+flowchart LR
+    P["Pin physique<br/>(contact sec)"]
+    P -- le contact se ferme --> ON["Charges / relais à 100 %"]
+    P -- le contact s’ouvre --> N["Fonctionnement normal du routeur"]
+```
+
+### Quand utiliser le boost manuel
+
+- **Bouton dans la salle de bain** : Chauffer rapidement l’eau avant une douche
+- **Minuterie externe** : Forcer toutes les charges pendant 30 minutes à une heure précise
+- **Domotique** : Déclencher le boost via Alexa, Home Assistant ou similaire
+- **Chauffage d’urgence** : Passer outre le fonctionnement normal quand plus d’eau chaude est nécessaire
+
+### Configuration
+
+**Étape 1 :** Activez la fonctionnalité :
+```cpp
+inline constexpr bool OVERRIDE_PIN_PRESENT{ true };
+```
+
+**Étape 2 :** Définissez quelle(s) pin(s) contrôle(nt) quelle(s) charge(s) :
+```cpp
+inline constexpr OverridePins overridePins{ { { PIN, CIBLES } } };
+```
+
+### Cibler les charges et relais
+
+Il existe **deux méthodes** pour spécifier quelles charges/relais activer :
+
+#### Méthode 1 : Par index avec les macros (recommandé)
+
+| Macro | Description |
+|-------|-------------|
+| `LOAD(n)` | Charge n de `physicalLoadPin[]`, locale ou distante (0 = première entrée, 1 = deuxième, etc.) |
+| `LOCAL_LOAD(n)` | Comme `LOAD(n)`, pour une charge que l’on sait locale : n compte toujours toutes les charges de `physicalLoadPin[]` |
+| `REMOTE_LOAD(n)` | La n-ième charge distante (0 = première charge distante), en ne comptant que les charges distantes, dans l’ordre de `physicalLoadPin[]` |
+| `RELAY(n)` | Relais par index (0 = premier relais, 1 = deuxième, etc.) |
+| `ALL_LOADS()` | Toutes les charges configurées (locales + distantes) |
+| `ALL_LOCAL_LOADS()` | Toutes les charges locales uniquement |
+| `ALL_REMOTE_LOADS()` | Toutes les charges distantes uniquement |
+| `ALL_RELAYS()` | Tous les relais configurés |
+| `ALL_LOADS_AND_RELAYS()` | Tout le système |
+
+> [!NOTE]
+> `RELAY(n)` ne fonctionne qu’avec la diversion sur relais active (`RELAY_DIVERSION`) et pour un relais qui existe : sinon la compilation échoue, pour les pins d’override comme pour les [boosts programmés](#configuration-des-boosts-programmés-scheduledboosts).
+
+#### Méthode 2 : Par numéro de pin physique
+
+Vous pouvez aussi utiliser directement le **numéro de pin physique**. Cela active la charge ou le relais connecté à cette pin.
+
+```cpp
+{ 3, { 5 } }    // La pin D3 déclenche : active la charge/relais sur la pin 5
+{ 3, { 5, 7 } } // La pin D3 déclenche : active les charges/relais sur les pins 5 et 7
+```
+
+#### Combiner les deux méthodes
+
+Vous pouvez mélanger les deux méthodes dans la même configuration :
+
+```cpp
+{ 3, { 5, LOAD(1) } }  // Pin D3 : active la pin 5 ET la charge #1
+```
+
+Un groupe se mélange aussi : `{ 3, { ALL_LOCAL_LOADS(), RELAY(0) } }` force toutes les charges locales et le relais #1.
+
+### Exemples de configuration
+
+**Simple :** Un bouton contrôle tout
+```cpp
+inline constexpr OverridePins overridePins{ {
+    { 11, ALL_LOADS_AND_RELAYS() }    // Pin D11 : boost de tout le système
+} };
+```
+
+**Avec les macros :** Cibler par index de charge/relais
+```cpp
+inline constexpr OverridePins overridePins{ {
+    { 3, { LOAD(0) } },               // Pin D3 : boost de la charge #0 (première charge)
+    { 4, { RELAY(0), RELAY(1) } }     // Pin D4 : boost des relais #0 et #1
+} };
+```
+
+**Avec les numéros de pins :** Cibler par pin physique
+```cpp
+inline constexpr OverridePins overridePins{ {
+    { 3, { 5 } },                     // Pin D3 : boost de ce qui est sur la pin 5
+    { 4, { 5, 7 } }                   // Pin D4 : boost des pins 5 et 7
+} };
+```
+
+**Approche mixte :** Combiner les deux méthodes
+```cpp
+inline constexpr OverridePins overridePins{ {
+    { 3, { 5, LOAD(1) } },            // Pin D3 : pin 5 + charge #1
+    { 4, ALL_LOADS() },               // Pin D4 : toutes les charges
+    { 11, { LOAD(1), LOAD(2) } },     // Pin D11 : charges #1 et #2
+    { 12, ALL_LOADS_AND_RELAYS() }    // Pin D12 : tout le système
+} };
+```
+
+### Câblage
+
+Connectez chaque pin configurée à un **contact sec** (interrupteur sans tension) :
+
+```mermaid
+flowchart LR
+    PIN["Pin Arduino<br/>(pull-up interne)"] --- SW["Interrupteur / bouton<br/>(ferme le circuit)"] --- GND["GND"]
+```
+
+- **Contact fermé** = boost actif (charges à pleine puissance)
+- **Contact ouvert** = fonctionnement normal du routeur
+
+> [!NOTE]
+> Les pins sont configurées avec des résistances pull-up internes. Aucune résistance externe n’est nécessaire.
+
+### Exemples pratiques
+
+| Installation | Configuration | Résultat |
+|--------------|---------------|----------|
+| Bouton boost salle de bain | `{ 3, { LOAD(0) } }` | Appui sur le bouton → chauffe-eau à 100 % |
+| Minuterie 30 min | `{ 4, ALL_LOADS() }` | La minuterie ferme le contact → toutes les charges en boost pendant la durée de la minuterie |
+| Intégration domotique | `{ 11, ALL_LOADS_AND_RELAYS() }` | Module ESP32/relais déclenche le boost de tout le système |
+
+## Arrêt du routage
+Il peut être pratique de désactiver le routage lors d’une absence prolongée.
+Cette fonctionnalité est particulièrement utile si la *pin* de commande est connectée à un contact sec qui peut être contrôlé à distance, par exemple via une routine Alexa ou similaire.
+Ainsi, vous pouvez désactiver le routage pendant votre absence et le réactiver un ou deux jours avant votre retour, afin de disposer d’eau chaude (gratuite) à votre arrivée.
+
+Pour activer cette fonctionnalité, utilisez le code suivant :
+```cpp
+inline constexpr bool DIVERSION_PIN_PRESENT{ true };
+```
+Vous devez également spécifier la *pin* à laquelle le contact sec est connecté :
+```cpp
+inline constexpr uint8_t diversionPin{ 12 };
+```
+
+Tant que la *pin* est à l’état bas, le surplus n’est plus routé, ni vers les charges à triac, ni vers les relais, ni vers les charges distantes. Les forçages restent actifs : une *pin* de forçage ou le forçage en heures creuses allume toujours ses charges et ses relais. Pour arrêter aussi les forçages, utilisez la *pin* d’arrêt du routeur ci-dessous.
+
+## Routeur à l’arrêt
+La *pin* d’arrêt du routeur éteint toutes les charges et tous les relais, forçages compris, tant qu’elle est à l’état bas. Le routeur continue de mesurer et d’envoyer ses données. Elle convient à une absence pendant laquelle rien ne doit chauffer, pas même avec le forçage en heures creuses.
+
+```cpp
+inline constexpr bool ROUTER_OFF_PIN_PRESENT{ true };
+inline constexpr uint8_t routerOffPin{ 11 };
+```
+
+Les relais respectent toujours leur durée minimale de fonctionnement avant de s’arrêter. `CALIBRATION_MODE` (voir [Étalonnage du routeur](#étalonnage-du-routeur)) donne le même état, en permanence, sans *pin*.
+
+# Configuration avancée du programme
+
+Ces paramètres se trouvent dans le fichier `config_system.h`.
+
+## Paramètre `DIVERSION_START_THRESHOLD_WATTS`
+Le paramètre `DIVERSION_START_THRESHOLD_WATTS` définit un seuil de surplus avant tout routage vers les charges configurées sur le routeur. Elle est principalement destinée aux installations avec batteries de stockage.
+Par défaut, cette valeur est réglée à 0 W.
+En réglant ce paramètre à 50 W par exemple, le routeur ne démarrera le routage qu’à partir du moment où 50 W de surplus sera disponible. Une fois le routage démarré, la totalité du surplus sera routé.
+Cette fonctionnalité permet d’établir une hiérarchie claire dans l’utilisation de l’énergie produite, en privilégiant le stockage d’énergie sur la consommation immédiate. Vous pouvez ajuster cette valeur selon la réactivité du système de charge des batteries et vos priorités d’utilisation de l’énergie.
+
+> [!IMPORTANT]
+> Ce paramètre concerne uniquement la condition de démarrage du routage.
+> Une fois le seuil atteint et le routage démarré, la **totalité** du surplus devient disponible pour les charges.
+
+## Paramètre `REQUIRED_EXPORT_IN_WATTS`
+Le paramètre `REQUIRED_EXPORT_IN_WATTS` détermine la quantité minimale d’énergie que le système doit réserver pour l’exportation ou l’importation vers le réseau électrique avant de dévier le surplus vers les charges contrôlées.
+Par défaut réglé à 20 W, ce paramètre peut être utilisé pour garantir une exportation constante vers le réseau, par exemple pour respecter des accords de revente d’électricité.
+Une valeur négative obligera le routeur à consommer cette puissance depuis le réseau. Cela peut être utile voire nécessaire pour les installations configurées en *zéro injection* afin d’amorcer la production solaire.
+
+> [!IMPORTANT]
+> Contrairement au premier paramètre, celui-ci représente un décalage permanent qui est continuellement soustrait du surplus disponible.
+> Si réglé à 20 W par exemple, le système réservera **toujours** 20 W pour l’exportation, indépendamment des autres conditions.
+
+# Configuration avec le module mk2Wifi
+
+Le module **mk2Wifi** relie un **ESP32-C6** (WiFi 6, Bluetooth LE, Zigbee, Thread) au Mk2PVRouter, pour la supervision et le contrôle à distance depuis Home Assistant via ESPHome. Il se branche sur les connecteurs `UART_EXT` et `TRIG_EXT` de la carte mère et remplace l’ancienne carte d’extension ESP32.
+
+Le matériel, son installation et le dépannage sont documentés sur les [pages mk2Wifi](https://fredm67.github.io/Mk2PVRouter/mk2wifi/presentation-mk2wifi/), et la configuration ESPHome dans [ce gist](https://gist.github.com/FredM67/986e1cb0fc020fa6324ccc151006af99). Cette section ne traite que du côté routeur.
+
+> [!TIP]
+> Le [configurateur](https://fredm67.github.io/Mk2PVRouter/configurateur/) écrit ensemble le `config.h` du routeur et le YAML ESPHome correspondant, et liste les ponts de soudure à fermer. Ses commandes sont sûres en cas de défaut : le module ne tire une entrée du routeur à l’état bas que pour l’état non par défaut, si bien qu’un fil coupé ou un module qui redémarre laisse le routeur router, sans marche forcée.
+
+> [!CAUTION]
+> Ne branchez jamais l’USB-C du module lorsqu’il est enfiché sur la carte mère : les deux alimentations 5 V ne sont pas isolées.
+
+> [!IMPORTANT]
+> Le cavalier **V sel.** de la carte mère doit être en position **3,3 V** (3–centre) : l’ESP32-C6 ne tolère pas 5 V sur ses GPIO.
+
+## Liaisons entre le routeur et le module
+| Liaison                | Routeur                | ESP32-C6                              | Remarques                                                                           |
+| ---------------------- | ---------------------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
+| Série                  | TX / RX                | GPIO17 (U0RXD) / GPIO16 (U0TXD)       | 9600 bauds, 7E1 en mode `SerialOutputType::IoT`                                     |
+| Sondes de température  | Bus DS18B20            | GPIO23                                | Selon le cavalier `TEMP`                                                            |
+| E/S numériques         | D5 / D6 / D7 / D8 / D9 | GPIO0 / GPIO5 / GPIO4 / GPIO3 / GPIO1 | Via 1 kΩ, chacune par un pont de soudure sur le module (**ouvert** par défaut)      |
+
+## Choix des broches D5–D9
+L’attribution des fonctions aux broches est entièrement libre : toute fonction du routeur commandée par une entrée (arrêt du routage, boost, rotation des priorités…) peut être placée sur n’importe laquelle des broches D5 à D9, à condition que le `config.h` du routeur et le YAML ESPHome utilisent les mêmes broches. Sur le module, ne fermez que les ponts de soudure des broches réellement utilisées.
+
+> [!WARNING]
+> D5 à D9 sont aussi des broches du routeur : par défaut, les charges TRIAC utilisent **D5, D6 et D7** (`physicalLoadPin`). Ne fermez que les ponts des broches libres dans votre configuration. Le compilateur refuse une broche attribuée deux fois dans `config.h`, mais il ne peut pas savoir quels ponts sont fermés sur le module.
+
+## Cavalier `TEMP`
+Le cavalier `TEMP` de la carte mère détermine qui lit les sondes DS18B20 :
+- **3–centre** : l’ESP32-C6 les gère (recommandé pour Home Assistant). Désactivez alors la gestion des températures côté routeur : `TEMP_SENSOR_PRESENT{ false }`.
+- autre position : le routeur les lit, comme décrit dans la section sur les capteurs de température.
+
+Confier les sondes à l’ESP32-C6 présente plusieurs avantages :
+- Visualisation des températures directement dans Home Assistant
+- Possibilité de créer des automatisations basées sur les températures
+- Configuration plus flexible des sondes sans avoir à reprogrammer le Mk2PVRouter
+
+## Configuration recommandée
+L’exemple suivant correspond au YAML du gist : **D8** pour l’arrêt du routage, **D9** pour le boost. Fermez les ponts de soudure D8 et D9 sur le module.
+
+```cpp
+// Sortie série pour Home Assistant (9600 bauds, 7E1)
+inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::IoT;
+
+// Arrêt du routage sur D8
+inline constexpr bool DIVERSION_PIN_PRESENT{ true };
+inline constexpr uint8_t diversionPin{ 8 };
+
+// Boost sur D9
+inline constexpr bool OVERRIDE_PIN_PRESENT{ true };
+inline constexpr OverridePins overridePins{ { { 9, ALL_LOADS_AND_RELAYS() } } };
+
+// Sondes gérées par l’ESP32-C6 (cavalier TEMP en 3–centre)
+inline constexpr bool TEMP_SENSOR_PRESENT{ false };
+```
+
+> [!NOTE]
+> La configuration de la sortie série sur `SerialOutputType::IoT` n’est pas strictement obligatoire pour le fonctionnement du routeur. Cependant, elle est nécessaire si vous souhaitez exploiter les données du routeur dans Home Assistant (puissance instantanée, statistiques, etc.). Sans cette configuration, seules les fonctions de contrôle (boost, arrêt routage) seront disponibles dans Home Assistant.
+>
+> Dans tous les modes, le routeur affiche sa configuration au démarrage, pour vérifier ce avec quoi il tourne. En mode `IoT`, il le fait à 9600 bauds 8N1 (le réglage par défaut des moniteurs série), puis passe en 7E1 pour les données de Home Assistant ; en mode `JSON`, ces lignes précèdent la première ligne JSON. Les messages d’état en fonctionnement (relais, rotation, heures creuses…) ne sont affichés qu’en mode `HumanReadable`.
+
+S’il vous reste des broches libres, d’autres fonctions peuvent être ajoutées de la même façon, par exemple la rotation des priorités :
+```cpp
+inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::PIN };
+inline constexpr uint8_t rotationPin{ 7 };  // seulement si D7 n’est pas utilisée par une charge
+```
+
+## Liaison avec Home Assistant
+Une fois votre Mk2PVRouter configuré avec le module mk2Wifi, vous pourrez :
+- Contrôler à distance l’activation/désactivation du routage (idéal pendant les absences)
+- Déclencher un boost à distance
+- Surveiller les températures en temps réel
+- Créer des scénarios d’automatisation avancés combinant les données de production solaire et les températures
+
+# Configuration sans module mk2Wifi
+
+Sans le module mk2Wifi, vous pouvez toujours relier n’importe quel ESP32 au routeur par votre propre câblage :
+- Aucune connexion n’est prédéfinie entre l’ESP32 et le Mk2PVRouter
+- Veillez à configurer de façon cohérente :
+  - Le programme du routeur (fichier `config.h`)
+  - La configuration ESPHome sur l’ESP32
+
+Assurez-vous notamment que les numéros de pins utilisés dans chaque configuration correspondent exactement à vos connexions physiques. N’oubliez pas d’utiliser des adaptateurs de niveau logique si nécessaire entre le Mk2PVRouter (5 V) et l’ESP32 (3.3 V).
+
+Pour les sondes de température, vous pouvez les connecter directement à l’ESP32 en utilisant une broche `GPIO` de votre choix, que vous configurerez ensuite dans ESPHome. **N’oubliez pas d’ajouter une résistance pull-up de 4,7 kΩ entre la ligne de données (DQ) et l’alimentation +3,3 V** pour assurer le bon fonctionnement du bus 1-Wire.
+
+> [!NOTE]
+> Même sans le module, toutes les fonctionnalités d’intégration avec Home Assistant restent accessibles, à condition que votre câblage et vos configurations logicielles soient correctement réalisés.
+
+Le [gist](https://gist.github.com/FredM67/986e1cb0fc020fa6324ccc151006af99) décrit pas à pas la configuration ESPHome, y compris un exemple de câblage manuel.
+
+# Dépannage
+- Assurez-vous que toutes les bibliothèques requises sont installées.
+- Vérifiez la configuration correcte des pins et des paramètres.
+- Consultez la sortie série pour les messages d’erreur.
+
+# Contribuer
+Les contributions sont les bienvenues ! Veuillez soumettre des problèmes, des demandes de fonctionnalités et des pull requests via GitHub.

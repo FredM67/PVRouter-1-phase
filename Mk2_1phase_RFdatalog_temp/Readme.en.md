@@ -1,0 +1,1056 @@
+[![en](https://img.shields.io/badge/lang-en-red.svg)](Readme.en.md)
+[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](Readme.md)
+
+This program is designed to be used with the Arduino IDE and/or other development IDEs like VSCode + PlatformIO.
+
+- [Use with Visual Studio Code (recommended)](#use-with-visual-studio-code-recommended)
+- [Use with Arduino IDE](#use-with-arduino-ide)
+  - [Required libraries for Arduino IDE](#required-libraries-for-arduino-ide)
+    - [Required libraries](#required-libraries)
+    - [Important note](#important-note)
+- [Quick overview of files](#quick-overview-of-files)
+- [Development documentation](#development-documentation)
+- [Router calibration](#router-calibration)
+- [Analysis documentation and tools](#analysis-documentation-and-tools)
+- [Program configuration](#program-configuration)
+  - [Motherboard: old or new](#motherboard-old-or-new)
+  - [Serial output type](#serial-output-type)
+  - [TRIAC output configuration](#triac-output-configuration)
+  - [On/off relay output configuration](#onoff-relay-output-configuration)
+    - [Operating principle](#operating-principle)
+  - [RF module and remote loads configuration](#rf-module-and-remote-loads-configuration)
+    - [Required hardware](#required-hardware)
+    - [Software configuration](#software-configuration)
+    - [Remote receiver configuration](#remote-receiver-configuration)
+  - [Watchdog configuration](#watchdog-configuration)
+  - [Temperature sensor(s) configuration](#temperature-sensors-configuration)
+    - [Feature activation](#feature-activation)
+    - [Sensor configuration](#sensor-configuration)
+  - [Off-peak hours management and scheduled boost (dual tariff)](#off-peak-hours-management-and-scheduled-boost-dual-tariff)
+    - [Hardware configuration](#hardware-configuration)
+    - [Software configuration](#software-configuration-1)
+    - [Scheduled boost configuration (scheduledBoosts)](#scheduled-boost-configuration-scheduledboosts)
+      - [Understanding the timeline](#understanding-the-timeline)
+      - [Examples](#examples)
+    - [Quick reference](#quick-reference)
+  - [Priority rotation](#priority-rotation)
+    - [Rotation groups](#rotation-groups)
+  - [Manual boost (pin-triggered)](#manual-boost-pin-triggered)
+    - [How it works](#how-it-works)
+    - [When to use manual boost](#when-to-use-manual-boost)
+    - [Configuration](#configuration)
+    - [Targeting loads and relays](#targeting-loads-and-relays)
+    - [Configuration examples](#configuration-examples)
+    - [Wiring](#wiring)
+    - [Practical examples](#practical-examples)
+  - [Routing stop](#routing-stop)
+  - [Router OFF](#router-off)
+- [Advanced program configuration](#advanced-program-configuration)
+  - [`DIVERSION_START_THRESHOLD_WATTS` parameter](#diversion_start_threshold_watts-parameter)
+  - [`REQUIRED_EXPORT_IN_WATTS` parameter](#required_export_in_watts-parameter)
+- [Configuration with the mk2Wifi module](#configuration-with-the-mk2wifi-module)
+  - [Connections between the router and the module](#connections-between-the-router-and-the-module)
+  - [Choosing the D5–D9 pins](#choosing-the-d5d9-pins)
+  - [`TEMP` jumper](#temp-jumper)
+  - [Recommended configuration](#recommended-configuration)
+  - [Home Assistant integration](#home-assistant-integration)
+- [Configuration without the mk2Wifi module](#configuration-without-the-mk2wifi-module)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+
+# Use with Visual Studio Code (recommended)
+
+You'll need to install additional extensions. The most popular and used extensions for this job are '*Platform IO*' and '*Arduino*'.
+The entire project has been designed to be used optimally with *Platform IO*.
+
+# Use with Arduino IDE
+
+To use this program with the Arduino IDE, you must download and install the latest version of the Arduino IDE. Choose the "standard" version, NOT the version from the Microsoft Store. Opt for the "Win 10 and newer, 64 bits" or "MSI installer" version.
+
+Since the code is optimized with one of the latest C++ standards, you need to edit a configuration file to activate C++17. You'll find the '**platform.txt**' file in the Arduino IDE installation path.
+
+For **Windows**, you'll typically find the file in '**C:\Program Files (x86)\Arduino\hardware\arduino\avr**' and/or in '**%LOCALAPPDATA%\Arduino15\packages\arduino\hardware\avr\x.y.z**' where **'x.y.z**' is the version of the Arduino AVR Boards package.
+
+You can also run this command in Powershell: `Get-Childitem –Path C:\ -Include platform.txt -Recurse -ErrorAction SilentlyContinue`. This may take a few seconds/minutes until the file is found.
+
+For **Linux**, if using the AppImage package, you'll find this file in '~/.arduino15/packages/arduino/hardware/avr/1.8.6'. You can run `find / -name platform.txt 2>/dev/null` in case the location has changed.
+
+For **MacOSX**, this file is located in '/Users/[user]/Library/Arduino15/packages/arduino/hardware/avr/1.8.6'.
+
+Open the file in any text editor (you'll need administrator rights) and replace the parameter '**-std=gnu++11**' with '**-std=gnu++17**'. That's it!
+
+Optionally, in the same file, add '**-Wl,--relax**' at the end of the line starting with '**compiler.c.elf.flags=**'. The linker then shortens every call and jump whose target is close enough (2 bytes instead of 4): the firmware is about 270 bytes smaller, as with PlatformIO, which sets this flag itself.
+
+If your Arduino IDE was open, please close all instances and reopen it.
+
+## Required libraries for Arduino IDE
+
+This project requires the installation of the following libraries via the Arduino IDE's **Library Manager** (menu **Tools** → **Manage Libraries…**) :
+
+### Required libraries
+- **OneWire** by Jim Studt et al. (version 2.3.7 or higher)
+  - Used for DS18B20 temperature sensors
+  - Installed even if no sensor is used (unused code will be eliminated by the linker)
+
+- **RFM69** by Felix Rusu, LowPowerLab (version 1.5.3 or higher)
+  - Used for RF communication (telemetry and remote loads)
+  - Installed even if RF module is not present (unused code will be eliminated by the linker)
+
+- **SPI** (included with Arduino IDE)
+  - Used for communication with the RFM69 module
+
+### Important note
+All libraries are always included in the source code. However, only the code actually used by your configuration will be present in the final firmware. This simplifies code maintenance while preserving firmware size.
+
+**With PlatformIO**: All dependencies are managed automatically via the `platformio.ini` file. No manual installation is required.
+
+# Quick overview of files
+
+- **Mk2_1phase_RFdatalog_temp.ino** : This file is needed for Arduino IDE
+- **calibration.h** : contains the calibration parameters
+- **config.h** : the user's preferences are stored here (pin assignments, features ...), and nothing else
+- **config_types.h** : what **config.h** is written with (types, `LOAD()`, `HOURS()`...) — *do not edit*
+- **config_derived.h** : what the firmware builds from **config.h** — *do not edit*
+- **config_system.h** : rarely modified system constants
+- **constants.h** : some constants — *do not edit*
+- **debug.h** : Some macros for serial output and debugging
+- **dualtariff.h** : dual tariff function definitions
+- **ewma_avg.h** : EWMA averaging calculation functions
+- **main.cpp** : main source code
+- **processing.cpp** : processing engine source code
+- **processing.h** : processing engine function prototypes
+- **Readme.en.md** : this file
+- **relay_engine.h** : decisions of the *relay diversion* (thresholds, minimum times, order), Arduino-free
+- **teleinfo.h**: *IoT Telemetry* feature source code
+- **types.h** : type definitions ...
+- **type_traits.h** : some STL stuff not yet available in the avr package
+- **type_traits** : contains missing STL templates
+- **utils_dualtariff.h** : *Off-peak hours management* feature source code
+- **utils_pins.h** : some functions for direct access to microcontroller inputs/outputs
+- **utils_relay.h** : *relay diversion* feature source code
+- **utils_rf.h** : *RF* function source code
+- **utils_temp.h** : *Temperature* feature source code
+- **utils.h** : helper functions and miscellaneous stuff
+- **validation.h** : parameter validation, this code is executed at compile time only!
+- **platformio.ini** : PlatformIO settings
+- **inject_sketch_name.py** : helper script for PlatformIO
+- **Doxyfile** : parameter for Doxygen (code documentation)
+
+The end-user should ONLY edit the **calibration.h** and **config.h** files.
+
+> [!NOTE]
+> **config.h** only holds settings: it includes `config_types.h` and nothing else. A **config.h** from an earlier version, with `#include` lines, `NO_OF_REMOTE_LOADS` or `remoteLoads`, stops the build with *This config.h has the former layout*: create it again with the [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur/), or delete those lines (see the CHANGELOG).
+
+# Development documentation
+
+You can start reading the documentation here [3-phase router](https://fredm67.github.io/Mk2PVRouter-3-phase/) (in English).
+
+# Router calibration
+Calibration values are found in the **calibration.h** file, one set per board: the router uses the one of `PCB_VERSION` (**config.h**). Only the power matters for routing; the voltage (`V1`, `V2`, `V3`) is only displayed.
+
+```cpp
+// Old board
+inline constexpr float f_powerCalOldBoard[NO_OF_PHASES]{ 0.05000F, 0.05000F, 0.05000F };
+inline constexpr float f_voltageCalOldBoard[NO_OF_PHASES]{ 0.8151F, 0.8184F, 0.8195F };
+// New board
+inline constexpr float f_ctRating[NO_OF_PHASES]{ 50.0F, 50.0F, 50.0F };
+inline constexpr float f_powerCalPerAmp[NO_OF_PHASES]{ 0.00286405F, 0.00286405F, 0.00286405F };
+inline constexpr float f_voltageCalNewBoard[NO_OF_PHASES]{ 0.888065256F, 0.888065256F, 0.888065256F };
+```
+
+Old board: the values are as before; 0.05 is a good start for `f_powerCalOldBoard`. If you already calibrated your router, copy your former `f_powerCal` and `f_voltageCal` values there.
+
+New universal board (rev. 6.0 and later): the power factor is given per amp of CT rating, enter the rated current of your CTs in `f_ctRating`. The default values suit 333 mV voltage-output CTs, and come from its design, corrected by the calibration of a first board ([how](docs/calibration.md)): with them, the router is usually accurate to a few percent without calibration. With a current-output CT and a burden resistor R, such as the YHDC SCT-013-000 (2000:1), `f_ctRating` = 666 / R, the current giving 333 mV across the burden (30.3 with 22 Ω).
+
+The router program itself is used for calibration, so the values are measured with exactly the processing they will be used with. With `SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable` (in **config.h**), it prints every 5 seconds, on the serial monitor at 9600 baud, the power of each phase (`P1`, `P2`, `P3`, in W, positive when importing).
+
+1. Set `CALIBRATION_MODE` to `true` in **config.h** and upload: the router then measures and logs as usual, but never switches any load (TRIACs, relays, remote loads, overrides), which would change the power being measured. It says so at start-up.
+2. Measure the power on phase 1 with a reference instrument (a clamp wattmeter around the same cable as the CT, for instance), ideally with a large resistive load on that phase, such as a water heater.
+3. Compare it with `P1`, and correct the value of phase 1: new value = old value × reference power / `P1`, for `f_powerCalOldBoard[0]` or `f_powerCalPerAmp[0]` depending on the board. The [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur/) does this calculation in calibration mode, and can write your **calibration.h** again with the new values.
+4. Repeat for phases 2 and 3, upload again and check.
+5. Set `CALIBRATION_MODE` back to `false` and upload: the router diverts again.
+
+If a phase shows a negative power while importing, its CT is the wrong way round (or not on the phase of its voltage input).
+
+# Analysis documentation and tools
+
+📊 **[Analysis Tools and Technical Documentation](../analysis/README.en.md)** [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](../analysis/README.md)
+
+This section contains advanced analysis tools and technical documentation for:
+
+- **🔄 EWMA/TEMA Filtering** : Cloud immunity analysis and filter optimization
+- **📈 Performance Analysis** : Visualization scripts and benchmarks
+- **⚙️ Tuning Guide** : Documentation for parameter optimization
+- **📊 Technical Charts** : Visual comparisons of filtering algorithms
+
+> **Advanced users:** These tools will help you understand and optimize PV router behavior, especially for installations with solar production variability or battery systems.
+
+# Program configuration
+
+The configuration of a feature generally follows two steps:
+- Feature activation
+- Feature parameter configuration
+
+Configuration consistency is checked during compilation. For example, if a *pin* is accidentally allocated twice, the compiler will generate an error.
+
+> [!TIP]
+> The [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur/) does it for you: choose your loads, relays, remote units, control pins and options, and it checks them and writes `config.h`, `config_system.h`, `config_rf.h`, the remote units' files and, with the mk2Wifi module, the ESPHome YAML. Keep your `calibration.h`.
+
+## Motherboard: old or new
+
+The old 3-phase board and the new universal **3phaseDiverter** board (rev. 6.0 and later) do not measure the same way: the new board uses the internal 1.1 V reference of the ATmega328P, which the firmware must switch on. Tell the firmware which board you have, in **config.h**:
+```cpp
+inline constexpr PcbVersion PCB_VERSION{ PcbVersion::OLD };  // NEW for the universal 3phaseDiverter board
+```
+The startup summary shows the choice (`Motherboard: old` or `new`).
+
+> [!IMPORTANT]
+> With the wrong choice, all the measurements are wrong. After changing it, calibrate again.
+
+## Serial output type
+
+The serial output type can be configured to suit different needs. Three options are available:
+
+- **HumanReadable** : Human-readable output, ideal for debugging or commissioning.
+- **IoT** : Formatted output for IoT platforms like Home Assistant.
+- **JSON** : Formatted output for platforms like EmonCMS (JSON).
+
+To configure the serial output type, modify the following constant in the **config.h** file:
+```cpp
+inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable;
+```
+Replace `HumanReadable` with `IoT` or `JSON` according to your needs.
+
+## TRIAC output configuration
+
+The first step is to define the number of TRIAC outputs:
+
+```cpp
+inline constexpr uint8_t NO_OF_DUMPLOADS{ 2 };
+```
+
+Then, you need to describe each load in the **load map**, as well as the priority order at startup.
+
+```cpp
+// One entry per load, in any order. Each entry says WHO drives that load:
+//   Load::local(pin)           - driven by the router itself, on that digital pin
+//   Load::remote(unit)         - driven by remote unit 'unit' (1..3), over RF
+//   Load::remote(unit, ledPin) - same, plus a status LED on the router
+inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
+  Load::local(5),  // load 0: TRIAC on D5
+  Load::local(6)   // load 1: TRIAC on D6
+};
+
+// Priority order at startup (0 = highest priority, applies to ALL loads)
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1 };
+```
+
+**Important:**
+- `physicalLoadPin` holds **every** load, local and remote alike — one entry per load, `NO_OF_DUMPLOADS` entries in total
+- local and remote loads may be listed in **any order**; `NO_OF_REMOTE_LOADS` and `NO_OF_REMOTE_UNITS` are derived from the map by the compiler and must never be edited by hand
+- a **remote** load has no TRIAC pin on the router; the optional second argument of `Load::remote()` adds a status LED so its state can be seen locally
+- `loadPrioritiesAtStartup` defines the priority order for **all** loads, and indexes the load map: priority *p* at position *i* means "load *i* has priority *p*"
+
+## On/off relay output configuration
+On/off relay outputs allow powering devices that contain electronics (heat pump ...).
+
+You need to activate the feature like this:
+```cpp
+inline constexpr bool RELAY_DIVERSION{ true };
+```
+
+Each relay requires the definition of five parameters:
+- the **pin** number to which the relay is connected
+- the **surplus threshold** before startup (default **1000 W**)
+- the **import threshold** before shutdown (default **200 W**)
+- the **minimum operating duration** in minutes (default **5 min**)
+- the **minimum shutdown duration** in minutes (default **5 min**).
+
+Example relay configuration:
+```cpp
+inline constexpr RelayEngine relays{ { { 4, 1000, 200, 10, 10 } } };
+```
+In this example, the relay is connected to *pin* **4**, it will trigger from **1000 W** surplus, stop from **200 W** import, and has a minimum operating and shutdown duration of **10 min**.
+
+To configure multiple relays, simply list the configurations for each relay:
+```cpp
+inline constexpr RelayEngine relays{ { { 4, 1000, 200, 10, 10 },
+                                       { 3, 1500, 250, 5, 15 } } };
+```
+Relays are activated in list order, and deactivated in reverse order.
+In all cases, minimum operating and shutdown durations are always respected.
+
+### Operating principle
+Surplus and import thresholds are calculated using an exponentially weighted moving average (EWMA), in our specific case, it's a modification of a triple exponentially weighted moving average (TEMA).
+By default, this average is calculated over a window of approximately **10 min**. You can adjust this duration to suit your needs.
+It's possible to lengthen it but also to shorten it.
+For Arduino performance reasons, the chosen duration will be rounded to a close duration that allows calculations without impacting router performance.
+
+The time window duration is controlled by the `RELAY_FILTER_DELAY` parameter in the configuration file.
+
+If the user prefers a 15 min window, simply write:
+```cpp
+inline constexpr RelayEngine relays{ MINUTES(15), { { 3, 1000, 200, 1, 1 } } };
+```
+___
+> [!NOTE]
+> The `MINUTES()` macro automatically converts the value to a template parameter. No special suffix is needed! The same macro (and `HOURS()`) writes the times of the [scheduled boosts](#scheduled-boost-configuration-scheduledboosts).
+___
+
+Relays configured in the system are managed by a system similar to a state machine.
+Every second, the system increases the duration of the current state of each relay and proceeds with all relays based on the current average power:
+- if the current average power is above the import threshold, it tries to turn off some relays.
+- if the current average power is above the surplus threshold, it tries to turn on more relays.
+
+Relays turn ON in ascending order and OFF in descending order: on an import, and also on a small surplus for relays in battery mode.
+
+For each relay, the transition or state change is managed as follows:
+- if the relay is *OFF* and the current average power is below the surplus threshold, the relay tries to switch to *ON* state. This transition is subject to the condition that the relay has been *OFF* for at least the *minOFF* duration.
+- if the relay is *ON* and the current average power is above the import threshold, the relay tries to switch to *OFF* state. This transition is subject to the condition that the relay has been *ON* for at least the *minON* duration.
+
+#### Visual overview
+
+**Threshold zones on the power axis:**
+
+```mermaid
+flowchart LR
+    S["<b>Surplus</b>, below surplusThreshold<br/>(e.g. −1000 W, exporting)<br/>a relay that is OFF may turn ON"]
+    Z["<b>Stable zone</b>, between the thresholds<br/>(around 0 W)<br/>every relay keeps its state"]
+    I["<b>Import</b>, above importThreshold<br/>(e.g. +200 W)<br/>a relay that is ON may turn OFF"]
+    S --- Z --- I
+
+    classDef on fill:#c8e6c9,stroke:#2e7d32,color:#000
+    classDef keep fill:#eeeeee,stroke:#757575,color:#000
+    classDef off fill:#ffe0b2,stroke:#e65100,color:#000
+    class S on
+    class Z keep
+    class I off
+```
+
+The EWMA-filtered grid power is compared against both thresholds continuously:
+- Below `surplusThreshold` → relay is eligible to switch **ON** (subject to `minOFF`)
+- Above `importThreshold` → relay is eligible to switch **OFF** (subject to `minON`)
+- Between the two thresholds → relay **holds** its current state
+
+**Minimum duration timers:**
+
+```mermaid
+gantt
+    title One relay, minOFF 1 min and minON 5 min
+    dateFormat YYYY-MM-DD HH:mm
+    axisFormat %M min
+    todayMarker off
+    section Grid
+    Surplus over 1000 W            :done, g1, 2001-01-01 00:00, 3m
+    Solar fades, stable zone       :g2, 2001-01-01 00:03, 1m
+    Import over 200 W              :crit, g3, 2001-01-01 00:04, 6m
+    section Relay
+    OFF, minOFF elapsing           :r1, 2001-01-01 00:00, 1m
+    turns ON                       :milestone, m1, 2001-01-01 00:01, 0m
+    ON, minON must elapse          :active, r2, 2001-01-01 00:01, 5m
+    turns OFF                      :milestone, m2, 2001-01-01 00:06, 0m
+    OFF                            :r3, 2001-01-01 00:06, 4m
+```
+
+> [!NOTE]
+> After **any** relay changes state, a **60-second settle period** is enforced system-wide before the next relay may change state. This prevents rapid cascading toggles when power fluctuates near a threshold.
+
+**Multi-relay ordering (example: 3 relays, thresholds 1000 W / 1500 W / 2000 W):**
+
+```mermaid
+---
+title: "Surplus grows: relay 0 first"
+---
+flowchart LR
+    U0{"Relay 0 OFF,<br/>surplus over its threshold<br/>and minOFF elapsed?"} -- no --> U1{"Relay 1?"} -- no --> U2{"Relay 2?"}
+    U0 -- yes --> U0on([relay 0 ON])
+    U1 -- yes --> U1on([relay 1 ON])
+    U2 -- yes --> U2on([relay 2 ON])
+```
+
+```mermaid
+---
+title: "Import rises / solar fades: relay 2 first"
+---
+flowchart LR
+    D2{"Relay 2 ON,<br/>import over its threshold<br/>and minON elapsed?"} -- no --> D1{"Relay 1?"} -- no --> D0{"Relay 0?"}
+    D2 -- yes --> D2off([relay 2 OFF])
+    D1 -- yes --> D1off([relay 1 OFF])
+    D0 -- yes --> D0off([relay 0 OFF])
+```
+
+In each pass, the system iterates through all relays in order and stops as soon as **one relay successfully changes state** — that triggers the 60-second cooldown. Relays that cannot switch (minimum duration not yet elapsed, or already in the target state) are simply skipped.
+
+The system does **not** automatically sort relays by threshold — it simply follows the declaration order in the configuration array. It is up to the user to declare relays in a meaningful order (e.g. increasing `surplusThreshold`) to achieve the desired priority behaviour.
+
+> [!TIP]
+> For installations with a **battery storage system**, the standard positive `importThreshold` will not work correctly, because the battery prevents grid import from rising. Use a **negative** `importThreshold` instead (e.g. `−50`). A negative value means "turn OFF when surplus drops below X watts". See the [Battery Configuration Guide](docs/BATTERY_CONFIGURATION_GUIDE.en.md) for full details and graphs.
+
+## RF module and remote loads configuration
+
+The router can control remote loads via an RFM69 RF module. This feature allows controlling resistors or relays located in another location, without additional wiring.
+
+Up to **three remote units** can be driven, each one a separate Arduino at its own location, and each carrying up to **8 loads**. The router sends one byte per unit, one bit per load.
+
+### Required hardware
+
+**For transmitter (main router):**
+- RFM69W/CW or RFM69HW/HCW module (868 MHz for Europe, 915 MHz for North America)
+- Appropriate antenna for chosen frequency
+- Standard SPI connection (D10=CS, D2=IRQ)
+
+**For each remote receiver:**
+- Arduino UNO or compatible
+- RFM69 module (same model as transmitter)
+- TRIAC or SSR to control loads
+- Optional status LEDs (D5=green watchdog, D7=red RF loss)
+
+### Software configuration
+
+**Activating RF features:**
+
+The RF module can be used for two independent features:
+
+1. **RF Telemetry** (`RF_LOGGING_PRESENT`): Sends power/voltage data to a gateway
+2. **Remote Loads** (`REMOTE_LOADS_PRESENT`): Load control via RF
+
+To enable the RF module with remote load control, configure in **config.h**:
+
+RF telemetry is enabled in **config.h**:
+
+```cpp
+inline constexpr bool RF_LOGGING_PRESENT{ false };       // RF telemetry (optional)
+```
+
+Remote load control needs no switch of its own: as soon as the load map contains at least one remote entry, `REMOTE_LOADS_PRESENT` becomes true and the RF chip is compiled in.
+
+**Load configuration:**
+
+Declare the total number of loads, then say who drives each of them:
+
+```cpp
+inline constexpr uint8_t NO_OF_DUMPLOADS{ 4 };  // Total: 4 loads
+
+inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
+  Load::local(5),      // load 0: local TRIAC on D5
+  Load::remote(1, 8),  // load 1: remote unit 1, status LED on D8
+  Load::remote(2, 9),  // load 2: remote unit 2, status LED on D9
+  Load::remote(1)      // load 3: remote unit 1, no status LED
+};
+```
+
+The compiler derives the rest from that map:
+
+| Derived constant | Value here | Meaning |
+|---|---|---|
+| `NO_OF_REMOTE_LOADS` | 3 | number of remote entries in the map (max 8) |
+| `NO_OF_REMOTE_UNITS` | 2 | highest unit number used (max 3) |
+| `REMOTE_LOADS_PRESENT` | `true` | at least one remote entry |
+
+Each remote unit receives a single byte, **one bit per load, in ascending map order**. Unit 1 above therefore gets bit 0 for load 1 and bit 1 for load 3; unit 2 gets bit 0 for load 2. On the receiver, `loadPins[0]` corresponds to bit 0, `loadPins[1]` to bit 1, and so on.
+
+**Priorities:**
+
+Local and remote loads share one priority list (a [rotation group](#priority-rotation) holds local loads only, or the loads of one remote unit). There is no longer any rule forcing remote loads to come last — `loadPrioritiesAtStartup` gives the order, whatever the mix:
+
+```cpp
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2, 3 };
+```
+
+**RF configuration (in config_rf.h):**
+
+Default parameters are:
+- Frequency: 868 MHz (Europe)
+- Network ID: 210
+- Router ID: 10
+- Remote unit IDs: 15, 16, 17
+
+To modify these parameters, edit **config_rf.h**:
+
+```cpp
+inline constexpr uint8_t ROUTER_NODE_ID{ 10 };            // Router (this device) ID
+inline constexpr uint8_t GATEWAY_ID{ 1 };                 // Gateway ID (telemetry)
+inline constexpr uint8_t REMOTE_NODE_ID[]{ 15, 16, 17 };  // One ID per remote unit, unit 1 first
+inline constexpr uint8_t NETWORK_ID{ 210 };               // Network ID (1-255)
+```
+
+`REMOTE_NODE_ID[0]` is the address of unit 1, `REMOTE_NODE_ID[1]` that of unit 2, and so on. The IDs must lie between 1 and 30, be distinct from each other and from `ROUTER_NODE_ID`; the compiler checks all of this.
+
+### Remote receiver configuration
+
+The **RemoteLoadReceiver** sketch is provided in the `RemoteLoadReceiver/` folder. It needs no modification to support several units: build and upload it once per unit, changing only `REMOTE_NODE_ID` and the load list.
+
+**Minimum configuration (in receiver's config_rf.h):**
+
+```cpp
+// RF Configuration - must match router
+inline constexpr uint8_t ROUTER_NODE_ID{ 10 };  // Router ID
+inline constexpr uint8_t REMOTE_NODE_ID{ 15 };  // This unit's ID: the router's REMOTE_NODE_ID[unit - 1]
+inline constexpr uint8_t NETWORK_ID{ 210 };     // Network ID
+
+// Load configuration - one entry per bit of the payload, bit 0 first
+inline constexpr uint8_t NO_OF_LOADS{ 2 };                    // Number of loads on this receiver
+inline constexpr uint8_t loadPins[NO_OF_LOADS]{ 4, 3 };       // TRIAC/SSR output pins
+
+// Status LEDs (optional)
+inline constexpr uint8_t GREEN_LED_PIN{ 5 };        // Green LED: 1 Hz watchdog
+inline constexpr uint8_t RED_LED_PIN{ 7 };          // Red LED: RF link lost (fast blink)
+inline constexpr bool STATUS_LEDS_PRESENT{ true };  // Enable LEDs
+```
+
+**Safety:**
+
+The receiver automatically turns OFF **all loads** if no message is received for more than 500 ms. This ensures safety in case of RF link loss.
+
+**Link testing:**
+
+Once configured and uploaded, the router and its units communicate automatically:
+- The router sends a unit's state as soon as it changes, and otherwise refreshes it every 5 mains cycles (~100 ms at 50 Hz) so a receiver that missed a packet, or was powered up late, catches up
+- Each unit is addressed separately: a change affecting only unit 2 generates no traffic towards unit 1
+- Receiver displays received commands on serial port
+- Green LED blinks at 1 Hz (system alive)
+- Red LED blinks rapidly if RF link is lost
+
+**Diagnostics:**
+
+On the receiver's serial monitor, you should see:
+```
+Received: 0b01 (RSSI: -45) - Loads: 0:ON 1:OFF
+```
+
+An RSSI between -30 and -70 indicates good signal quality. Beyond -80, the link becomes unstable.
+
+## Watchdog configuration
+A watchdog is an electronic circuit or software used in digital electronics to ensure that an automaton or computer does not remain stuck at a particular stage of the processing it performs.
+
+This is achieved using an LED that blinks at a frequency of 1 Hz, i.e., every second.
+Thus, the user knows whether their router is powered on, and if this LED stops blinking, it means the Arduino is stuck (a case never encountered yet!).
+A simple press of the *Reset* button will restart the system without unplugging anything.
+
+You need to activate the feature like this:
+```cpp
+inline constexpr bool WATCHDOG_PIN_PRESENT{ true };
+```
+and define the *pin* used, in the example pin *9*:
+```cpp
+inline constexpr uint8_t watchDogPin{ 9 };
+```
+
+## Temperature sensor(s) configuration
+It's possible to connect one or more Dallas DS18B20 temperature sensors.
+These sensors can serve informational purposes or to control boost mode.
+
+- **New board** (`PcbVersion::NEW`): the probes' bus is on `D3`, wired with its pull-up on the board. Connect the probes to the board's temperature connector; with the mk2Wifi module, put the `TEMP` jumper in the router position (see [`TEMP` jumper](#temp-jumper)).
+- **Old board** (`PcbVersion::OLD`): nothing is wired. Choose a free pin, add a 4.7 kΩ pull-up between the data line and +5 V, and power the probes (+5 V, GND).
+
+### Feature activation
+
+In `config.h`, set `TEMP_SENSOR_PRESENT` to `true`, and give the bus pin (`3`) and the sensor addresses in `temperatureSensing` (see below):
+```cpp
+inline constexpr bool TEMP_SENSOR_PRESENT{ true };
+```
+
+With the Arduino IDE, the *OneWire* library must be installed, as for any build of the firmware: **Tools** => **Manage Libraries...**, search for "Onewire" and install "**OneWire** by Jim Studt, ..." version **2.3.7** or newer. PlatformIO installs it by itself.
+
+### Sensor configuration
+To configure the sensors, you must enter their addresses.
+The router finds them itself: set `TEMP_SENSOR_PRESENT` to `true` with the bus pin, set `CALIBRATION_MODE` to `true` (see [Router calibration](#router-calibration)) and upload. At start-up, it lists the sensors on the bus, with their addresses written as `config.h` takes them, and tells whether `config.h` already has each of them:
+```
+Temperature sensors found on pin 3:
+	{ 0x28, 0xBE, 0x41, 0x6B, 0x09, 0x00, 0x00, 0xA4 }  not in config.h
+	{ 0x28, 0x1B, 0xD7, 0x6A, 0x09, 0x00, 0x00, 0xB7 }  not in config.h
+```
+Connecting the sensors one at a time tells which address is which sensor. It's recommended to stick a label with each sensor's address on its cable.
+
+Enter the addresses as follows:
+```cpp
+inline constexpr TemperatureSensing temperatureSensing{ 3,
+                                                        { { 0x28, 0xBE, 0x41, 0x6B, 0x09, 0x00, 0x00, 0xA4 },
+                                                          { 0x28, 0x1B, 0xD7, 0x6A, 0x09, 0x00, 0x00, 0xB7 } } };
+```
+The first parameter, *3*, is the pin of the *OneWire* bus: `D3` on the new board, the chosen pin on the old one.
+
+___
+> [!NOTE]
+> Multiple sensors can be connected to the same cable.
+> On the Internet you'll find all the details regarding the topology usable with this type of sensors.
+___
+
+## Off-peak hours management and scheduled boost (dual tariff)
+
+This feature allows the router to automatically manage heating during off-peak electricity periods. It's useful for:
+- Heating water at night when electricity is cheaper
+- Ensuring hot water is available in the morning if solar surplus was insufficient during the day
+- Limiting heating duration to avoid overheating (optionally using a temperature sensor)
+
+### Hardware configuration
+
+Disconnect the Day/Night contactor control, which is no longer necessary.
+Connect directly a chosen *pin* to the dry contact of the meter (*C1* and *C2* terminals).
+
+> [!WARNING]
+> You must connect **directly**, a *pin/ground* pair with the *C1/C2* terminals of the meter.
+> There must NOT be 230 V on this circuit!
+
+### Software configuration
+
+**Step 1:** Activate the feature:
+```cpp
+inline constexpr bool DUAL_TARIFF{ true };
+```
+
+**Step 2:** Configure the *pin* connected to the meter:
+```cpp
+inline constexpr uint8_t dualTariffPin{ 3 };
+```
+
+**Step 3:** Set the off-peak period duration in hours (currently, only one period per day is supported):
+```cpp
+inline constexpr uint8_t ul_OFF_PEAK_DURATION{ 8 };
+```
+
+**Step 4:** Configure the scheduled boosts: which loads are forced, and when.
+
+> [!IMPORTANT]
+> `ul_OFF_PEAK_DURATION` must match the real length of your meter's off-peak period. The router only learns when off-peak **starts** and **ends** from the meter's contact; the duration is used to place the boosts counted back from the end (`LAST`, `BEFORE_END`).
+
+### Scheduled boost configuration (scheduledBoosts)
+
+The `scheduledBoosts` list says **when** and **for how long** which loads, remote loads or relays are boosted during the off-peak period. It reads as a schedule, one line per boost, and it takes the same targets as the [override pins](#targeting-loads-and-relays).
+
+```cpp
+inline constexpr ScheduledBoosts scheduledBoosts{ {
+    { WINDOW, { TARGETS } }
+} };
+```
+
+Each boost is a **window** (when) followed by its **targets** (who). All times are relative to the off-peak period, written with `HOURS(n)` or `MINUTES(n)`: a bare number is not accepted.
+
+#### The windows
+
+| Window | Meaning |
+|--------|---------|
+| `FIRST(d)` | from the start of the off-peak period, for `d` |
+| `LAST(d)` | the last `d` of the period, until its end |
+| `FROM_START(t), FOR(d)` | from `t` after the start, for `d` |
+| `BEFORE_END(t), FOR(d)` | from `t` before the end, for `d` |
+| `FROM_START(t)` or `BEFORE_END(t)` without `FOR` | from there until the end of the period |
+| `HOURS(n)` / `MINUTES(n)` | the only way to write a time `t` or a duration `d` |
+
+#### The targets
+
+The targets are written as for the override pins: `LOAD(n)`, `REMOTE_LOAD(n)`, `RELAY(n)`, `ALL_LOADS()`, `ALL_RELAYS()`, `ALL_LOADS_AND_RELAYS()`... Everything counts from 0: `LOAD(0)` is the first load.
+
+> [!NOTE]
+> `RELAY(n)` only works with relay diversion on (`RELAY_DIVERSION`) and for a relay that exists. Otherwise the build fails: the same goes for the targets of the override pins.
+
+Three rules to remember:
+- **What is not listed is never boosted.** An empty list, `inline constexpr ScheduledBoosts scheduledBoosts{};`, means no boost at all.
+- **Every boost stops when the meter switches back to peak**, whatever its window.
+- **The whole window lies within the off-peak period** (`ul_OFF_PEAK_DURATION`): a window with `FOR` ends at the latest at the end of the period, or the build fails. `LAST` and a window without `FOR` run until the meter switches back to peak.
+- The temperature condition (`iTemperatureThreshold`) applies to all boosts: above it, nothing is boosted. It needs temperature sensing on the router (`TEMP_SENSOR_PRESENT`); `BOOST_TEMP_SENSOR` chooses the sensor, by its index in `temperatureSensing` (0: the first). The threshold is meant to be below the water heater's own thermostat, which stays the safety limit: for example, the thermostat at 80 °C so the heater takes as much surplus as possible, and the threshold at 60 °C so the off-peak boost leaves room for the next day's surplus. If the sensor cannot be read (disconnected, failed), the boosts run, up to the thermostat.
+
+A load may be in several boosts: their windows add up. A window includes its start and excludes its end.
+
+#### Understanding the timeline
+
+All examples assume an off-peak period from **23:00 to 07:00** (`ul_OFF_PEAK_DURATION{ 8 }`):
+
+```cpp
+inline constexpr ScheduledBoosts scheduledBoosts{ {
+    { FIRST(HOURS(2)), { LOAD(0), LOAD(2) } },                // loads #1 and #3, the first 2 h
+    { LAST(HOURS(2)), { REMOTE_LOAD(1) } },                   // the 2nd remote load, the last 2 h
+    { FROM_START(HOURS(2)), FOR(HOURS(2)), { LOAD(1) } },     // load #2, from 2 h after the start, for 2 h
+    { BEFORE_END(HOURS(3)), FOR(MINUTES(90)), { RELAY(0) } }  // relay #1, from 3 h before the end, for 1 h 30
+} };
+```
+
+```mermaid
+gantt
+    title Off-peak period, 23:00 to 07:00
+    dateFormat YYYY-MM-DD HH:mm
+    axisFormat %H:%M
+    todayMarker off
+    section Off-peak
+    Off-peak (8 h) :active, hc, 2001-01-01 23:00, 8h
+    section Boosts
+    FIRST(HOURS(2)), loads #1 and #3 :crit, sb1, 2001-01-01 23:00, 2h
+    FROM_START(HOURS(2)), FOR(HOURS(2)), load #2 :crit, sb2, 2001-01-02 01:00, 2h
+    BEFORE_END(HOURS(3)), FOR(MINUTES(90)), relay #1 :crit, sb3, 2001-01-02 04:00, 90m
+    LAST(HOURS(2)), remote load #2 :crit, sb4, 2001-01-02 05:00, 2h
+```
+
+#### Examples
+
+**Example 1:** `{ BEFORE_END(HOURS(3)), FOR(HOURS(2)), { LOAD(0) } }`: from 3 hours before the end, for 2 hours. The boost runs from **04:00 to 06:00**.
+
+**Example 2:** `{ FROM_START(HOURS(2)), FOR(HOURS(3)), { LOAD(0) } }`: from 2 hours after the start, for 3 hours. The boost runs from **01:00 to 04:00**.
+
+**Example 3:** `{ BEFORE_END(MINUTES(90)), FOR(MINUTES(60)), { LOAD(0) } }`: from 90 minutes before the end, for 60 minutes. The boost runs from **05:30 to 06:30**. With `FOR(MINUTES(120))`, it would end at 07:30, after the off-peak period: the build rejects it. To run until the end, leave `FOR` out.
+
+**Example 4:** `{ FROM_START(HOURS(1)), { LOAD(0) } }`: from 1 hour after the start, until the end. The boost runs from **00:00 to 07:00**.
+
+**Example 5:** the whole night, for a load: `{ FROM_START(MINUTES(0)), { LOAD(0) } }`. Whatever the length of the off-peak period, the meter ends the boost.
+
+Several loads and several windows:
+```cpp
+inline constexpr ScheduledBoosts scheduledBoosts{ {
+    { BEFORE_END(HOURS(4)), FOR(HOURS(2)), { LOAD(0) } },  // load #1: 03:00-05:00 (last resort, if water still cold)
+    { LAST(HOURS(2)), { LOAD(1) } },                       // load #2: 05:00-07:00 (top-up before morning)
+    { FIRST(HOURS(1)), { LOAD(0) } }                       // load #1 also: 23:00-00:00
+} };                                                       // load #3: never boosted
+```
+
+#### What the build rejects
+
+The compiler stops with a message naming the problem:
+
+- `A scheduled boost starts or ends outside the off-peak period, or lasts 0 minutes. Please check scheduledBoosts in your config.h !` : for instance `LAST(HOURS(10))` or `BEFORE_END(HOURS(9))` with 8 hours (starts before the period), `FIRST(HOURS(10))` or `BEFORE_END(HOURS(1)), FOR(HOURS(2))` with 8 hours (ends after it), or `FOR(MINUTES(0))`.
+- `A scheduled boost forces something that is neither a local load nor a relay (is relay diversion on?). Please check scheduledBoosts in your config.h !` : for instance `RELAY(0)` with relay diversion off, a `RELAY(n)` beyond the configured relays, or a `LOAD(n)` beyond the configured loads (`LOAD(3)` with 3 loads). In a manual boost (`overridePins`), the same targets stop the build with `An override pin forces a pin that is neither a local load nor a relay ! Please check overridePins in your config.h !`
+- `A scheduled boost forces a remote load that does not exist (REMOTE_LOAD() counts from 0). Please check scheduledBoosts in your config.h !`
+
+#### What the router prints at startup
+
+One line per boost, in the order of the list, with the window in hours and minutes after the start of the off-peak period. For the four boosts of [Understanding the timeline](#understanding-the-timeline) (8 hours of off-peak), with the first three loads local on D5, D6 and D7, two remote loads, and relay #1 on D4:
+```
+	Boost #1: from 0h00 to 2h00 of off-peak, forcing D5, D7.
+	Boost #2: from 6h00 until the end of off-peak, forcing remote load 2.
+	Boost #3: from 2h00 to 4h00 of off-peak, forcing D6.
+	Boost #4: from 5h00 to 6h30 of off-peak, forcing D4.
+```
+Local loads and relays print as their pins (D5, D4), in ascending pin order. Remote loads count from 1: `REMOTE_LOAD(1)` prints `remote load 2`.
+
+### Quick reference
+
+| Want to... | Write |
+|------------|-------|
+| The first 2 h, loads #1 and #3 | `{ FIRST(HOURS(2)), { LOAD(0), LOAD(2) } }` |
+| The last 90 min | `{ LAST(MINUTES(90)), { LOAD(0) } }` |
+| Start 2 h after off-peak begins, run 3 h | `{ FROM_START(HOURS(2)), FOR(HOURS(3)), { LOAD(0) } }` |
+| Start 3 h before off-peak ends, run 2 h | `{ BEFORE_END(HOURS(3)), FOR(HOURS(2)), { LOAD(0) } }` |
+| Start 90 min before off-peak ends, run until the end | `{ BEFORE_END(MINUTES(90)), { LOAD(0) } }` |
+| Boost a relay or a remote load | `{ ..., { RELAY(0) } }`, `{ ..., { REMOTE_LOAD(0) } }` |
+| No boost | `inline constexpr ScheduledBoosts scheduledBoosts{};` |
+
+## Priority rotation
+Priority rotation is useful when powering a three-phase water heater.
+It allows balancing the operating duration of different resistors over an extended period.
+
+But it can also be interesting if you want to swap the priorities of two devices each day (two water heaters, ...): make them a group of two loads.
+
+For once, activating this function has 2 modes:
+- **automatic**, you'll then specify
+```cpp
+inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::AUTO };
+```
+- **manual**, you'll then write
+```cpp
+inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::PIN };
+```
+In **automatic** mode, rotation happens once the router has diverted nothing for `ROTATION_AFTER_SECONDS` (8 h by default), usually once a night. With dual tariff, it happens at the start of each off-peak period instead.
+In **manual** mode, you must also define the *pin* that will trigger rotation:
+```cpp
+inline constexpr uint8_t rotationPin{ 10 };
+```
+The pin works the same with or without dual tariff.
+
+### Rotation groups
+`rotationGroups` lists the loads that take turns, one group per appliance. For one water heater on every local load:
+```cpp
+inline constexpr RotationGroups rotationGroups{ { ALL_LOCAL_LOADS() } };
+```
+Each group rotates among the priority places its loads hold at startup; loads in no group never move. With two 3-phase water heaters and interleaved priorities:
+```cpp
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 3, 1, 4, 2, 5 };
+inline constexpr RotationGroups rotationGroups{ { LOAD(0), LOAD(1), LOAD(2) }, { LOAD(3), LOAD(4), LOAD(5) } };
+```
+one rotation turns `0, 3, 1, 4, 2, 5` into `2, 5, 0, 3, 1, 4`: each heater moves its last element to the top, and each still holds the same places.
+
+The rules, checked at compile time:
+- a group has at least 2 loads;
+- a load is in one group at most;
+- a group holds local loads only, or the loads of one remote unit;
+- with rotation on, there is at least one group; with rotation `OFF`, `rotationGroups` stays empty, `{}`.
+
+All the groups rotate together, on the same trigger.
+
+## Manual boost (pin-triggered)
+
+Unlike [scheduled boost](#scheduled-boost-configuration-scheduledboosts) which runs automatically during off-peak hours, **manual boost** lets you trigger heating on-demand using physical switches, buttons, timers, or home automation systems.
+
+### How it works
+
+```mermaid
+flowchart LR
+    P["Physical pin<br/>(dry contact)"]
+    P -- contact closes --> ON["Loads / relays ON at full power"]
+    P -- contact opens --> N["Normal router operation"]
+```
+
+### When to use manual boost
+
+- **Bathroom button**: Quickly heat water before a shower
+- **External timer**: Boost all loads for 30 minutes at a specific time
+- **Home automation**: Trigger boost via Alexa, Home Assistant, or similar
+- **Emergency heating**: Override normal operation when more hot water is needed
+
+### Configuration
+
+**Step 1:** Enable the feature:
+```cpp
+inline constexpr bool OVERRIDE_PIN_PRESENT{ true };
+```
+
+**Step 2:** Define which pin(s) control which load(s):
+```cpp
+inline constexpr OverridePins overridePins{ { { PIN, TARGETS } } };
+```
+
+### Targeting loads and relays
+
+There are **two ways** to specify which loads/relays to activate:
+
+#### Method 1: By index using macros (recommended)
+
+| Macro | Description |
+|-------|-------------|
+| `LOAD(n)` | Load n of `physicalLoadPin[]`, local or remote (0 = first entry, 1 = second, etc.) |
+| `LOCAL_LOAD(n)` | Same as `LOAD(n)`, for a load known to be local: n still counts every load of `physicalLoadPin[]` |
+| `REMOTE_LOAD(n)` | The n-th remote load (0 = first remote load), counting remote loads only, in `physicalLoadPin[]` order |
+| `RELAY(n)` | Relay by index (0 = first relay, 1 = second, etc.) |
+| `ALL_LOADS()` | All configured loads (local + remote) |
+| `ALL_LOCAL_LOADS()` | All local loads only |
+| `ALL_REMOTE_LOADS()` | All remote loads only |
+| `ALL_RELAYS()` | All configured relays |
+| `ALL_LOADS_AND_RELAYS()` | Everything |
+
+> [!NOTE]
+> `RELAY(n)` only works with relay diversion on (`RELAY_DIVERSION`) and for a relay that exists: otherwise the build fails, for the override pins as for the [scheduled boosts](#scheduled-boost-configuration-scheduledboosts).
+
+#### Method 2: By physical pin number
+
+You can also use the **physical pin number** directly. This activates whatever load or relay is connected to that pin.
+
+```cpp
+{ 3, { 5 } }    // Pin D3 triggers: activates load/relay on pin 5
+{ 3, { 5, 7 } } // Pin D3 triggers: activates loads/relays on pins 5 and 7
+```
+
+#### Mixing both methods
+
+You can combine both methods in the same configuration:
+
+```cpp
+{ 3, { 5, LOAD(1) } }  // Pin D3: activates pin 5 AND load #1
+```
+
+A group mixes too: `{ 3, { ALL_LOCAL_LOADS(), RELAY(0) } }` forces every local load and relay #1.
+
+### Configuration examples
+
+**Simple:** One button controls everything
+```cpp
+inline constexpr OverridePins overridePins{ {
+    { 11, ALL_LOADS_AND_RELAYS() }    // Pin D11: boost entire system
+} };
+```
+
+**Using macros:** Target by load/relay index
+```cpp
+inline constexpr OverridePins overridePins{ {
+    { 3, { LOAD(0) } },               // Pin D3: boost load #0 (first load)
+    { 4, { RELAY(0), RELAY(1) } }     // Pin D4: boost relays #0 and #1
+} };
+```
+
+**Using pin numbers:** Target by physical pin
+```cpp
+inline constexpr OverridePins overridePins{ {
+    { 3, { 5 } },                     // Pin D3: boost whatever is on pin 5
+    { 4, { 5, 7 } }                   // Pin D4: boost pins 5 and 7
+} };
+```
+
+**Mixed approach:** Combining both methods
+```cpp
+inline constexpr OverridePins overridePins{ {
+    { 3, { 5, LOAD(1) } },            // Pin D3: pin 5 + load #1
+    { 4, ALL_LOADS() },               // Pin D4: all loads
+    { 11, { LOAD(1), LOAD(2) } },     // Pin D11: loads #1 and #2
+    { 12, ALL_LOADS_AND_RELAYS() }    // Pin D12: entire system
+} };
+```
+
+### Wiring
+
+Connect each configured pin to a **dry contact** (voltage-free switch):
+
+```mermaid
+flowchart LR
+    PIN["Arduino pin<br/>(internal pull-up)"] --- SW["Switch / button<br/>(closes the circuit)"] --- GND["GND"]
+```
+
+- **Contact closed** = boost active (loads at full power)
+- **Contact open** = normal router operation
+
+> [!NOTE]
+> Pins are configured with internal pull-up resistors. No external resistors needed.
+
+### Practical examples
+
+| Setup | Configuration | Result |
+|-------|---------------|--------|
+| Bathroom boost button | `{ 3, { LOAD(0) } }` | Press button → water heater runs at 100% |
+| 30-min timer | `{ 4, ALL_LOADS() }` | Timer closes contact → all loads boost for timer duration |
+| Smart home integration | `{ 11, ALL_LOADS_AND_RELAYS() }` | ESP32/relay module triggers full system boost |
+
+## Routing stop
+It can be convenient to disable routing during a prolonged absence.
+This feature is particularly useful if the control *pin* is connected to a dry contact that can be controlled remotely, for example via an Alexa routine or similar.
+Thus, you can disable routing during your absence and reactivate it one or two days before your return, to have (free) hot water upon your arrival.
+
+To activate this feature, use the following code:
+```cpp
+inline constexpr bool DIVERSION_PIN_PRESENT{ true };
+```
+You must also specify the *pin* to which the dry contact is connected:
+```cpp
+inline constexpr uint8_t diversionPin{ 12 };
+```
+
+While the *pin* is LOW, the surplus is no longer diverted, neither to the TRIAC loads nor to the relays nor to the remote loads. Forcing still works: an override *pin* or the dual tariff forcing still turns its loads and relays ON. To also stop forcing, use the router OFF *pin* below.
+
+## Router OFF
+The router OFF *pin* switches every load and relay OFF, forcing included, while it is LOW. The router keeps measuring and sending its data. It suits an absence during which nothing must heat, not even with the off-peak forcing.
+
+```cpp
+inline constexpr bool ROUTER_OFF_PIN_PRESENT{ true };
+inline constexpr uint8_t routerOffPin{ 11 };
+```
+
+The relays still respect their minimum ON time before going OFF. `CALIBRATION_MODE` (see [Router calibration](#router-calibration)) gives the same state, permanently, without any *pin*.
+
+# Advanced program configuration
+
+These parameters are found in the `config_system.h` file.
+
+## `DIVERSION_START_THRESHOLD_WATTS` parameter
+The `DIVERSION_START_THRESHOLD_WATTS` parameter defines a surplus threshold before any routing to loads configured on the router. It's mainly intended for installations with storage batteries.
+By default, this value is set to 0 W.
+By setting this parameter to 50 W for example, the router will only start routing when 50 W of surplus is available. Once routing has started, the entire surplus will be routed.
+This feature allows establishing a clear hierarchy in the use of produced energy, prioritizing energy storage over immediate consumption. You can adjust this value according to the battery charging system's responsiveness and your energy use priorities.
+
+> [!IMPORTANT]
+> This parameter only concerns the routing startup condition.
+> Once the threshold is reached and routing has started, the **entire** surplus becomes available for loads.
+
+## `REQUIRED_EXPORT_IN_WATTS` parameter
+The `REQUIRED_EXPORT_IN_WATTS` parameter determines the minimum amount of energy that the system must reserve for export or import to the electrical grid before diverting surplus to controlled loads.
+Set to 20 W by default, this parameter can be used to guarantee constant export to the grid, for example to comply with electricity resale agreements.
+A negative value will force the router to consume this power from the grid. This can be useful or even necessary for installations configured in *zero injection* to initiate solar production.
+
+> [!IMPORTANT]
+> Unlike the first parameter, this one represents a permanent offset that is continuously subtracted from available surplus.
+> If set to 20 W for example, the system will **always** reserve 20 W for export, regardless of other conditions.
+
+# Configuration with the mk2Wifi module
+
+The **mk2Wifi** module connects an **ESP32-C6** (WiFi 6, Bluetooth LE, Zigbee, Thread) to the Mk2PVRouter, for monitoring and remote control from Home Assistant via ESPHome. It plugs onto the `UART_EXT` and `TRIG_EXT` connectors of the motherboard and replaces the former ESP32 extension board.
+
+The hardware, its installation and troubleshooting are documented on the [mk2Wifi pages](https://fredm67.github.io/Mk2PVRouter/mk2wifi/presentation-mk2wifi/), and the ESPHome configuration in [this gist](https://gist.github.com/FredM67/986e1cb0fc020fa6324ccc151006af99). This section only covers the router side.
+
+> [!TIP]
+> The [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur/) writes the router's `config.h` and the matching ESPHome YAML together, and lists the solder jumpers to close. Its controls are fail-safe: the module only pulls a router input LOW for the non-default state, so a broken wire or a rebooting module leaves the router routing, without boost.
+
+> [!CAUTION]
+> Never connect the module's USB-C while it is plugged onto the motherboard: the two 5 V supplies are not isolated.
+
+> [!IMPORTANT]
+> The **V sel.** jumper of the motherboard must be set to **3.3 V** (3–centre): the ESP32-C6 does not tolerate 5 V on its GPIOs.
+
+## Connections between the router and the module
+| Link               | Router                 | ESP32-C6                              | Notes                                                                     |
+| ------------------ | ---------------------- | ------------------------------------- | ------------------------------------------------------------------------- |
+| Serial             | TX / RX                | GPIO17 (U0RXD) / GPIO16 (U0TXD)       | 9600 baud, 7E1 in `SerialOutputType::IoT` mode                            |
+| Temperature probes | DS18B20 bus            | GPIO23                                | Selected by the `TEMP` jumper                                             |
+| Digital I/O        | D5 / D6 / D7 / D8 / D9 | GPIO0 / GPIO5 / GPIO4 / GPIO3 / GPIO1 | Through 1 kΩ, each via a solder jumper on the module (**open** by default) |
+
+## Choosing the D5–D9 pins
+Which function goes on which pin is entirely up to you: any router feature driven by an input pin (routing stop, boost, priority rotation…) can be put on any of D5–D9, as long as the router's `config.h` and the ESPHome YAML use the same pins. On the module, only close the solder jumpers of the pins you actually use.
+
+> [!WARNING]
+> D5–D9 are also router pins: by default, the TRIAC loads use **D5, D6 and D7** (`physicalLoadPin`). Only close the solder jumpers of pins that are free in your configuration. The compiler rejects a pin assigned twice in `config.h`, but it cannot know which jumpers are closed on the module.
+
+## `TEMP` jumper
+The `TEMP` jumper of the motherboard decides who reads the DS18B20 probes:
+- **3–centre**: the ESP32-C6 manages them (recommended for Home Assistant). Disable temperature management on the router: `TEMP_SENSOR_PRESENT{ false }`.
+- other position: the router reads them, as described in the temperature sensors section.
+
+Letting the ESP32-C6 manage the probes has several advantages:
+- Temperature visualization directly in Home Assistant
+- Ability to create temperature-based automations
+- More flexible probe configuration without having to reprogram the Mk2PVRouter
+
+## Recommended configuration
+The following example matches the gist's YAML: **D8** for routing stop, **D9** for boost. Close the D8 and D9 solder jumpers on the module.
+
+```cpp
+// Serial output for Home Assistant (9600 baud, 7E1)
+inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::IoT;
+
+// Routing stop on D8
+inline constexpr bool DIVERSION_PIN_PRESENT{ true };
+inline constexpr uint8_t diversionPin{ 8 };
+
+// Boost on D9
+inline constexpr bool OVERRIDE_PIN_PRESENT{ true };
+inline constexpr OverridePins overridePins{ { { 9, ALL_LOADS_AND_RELAYS() } } };
+
+// Probes managed by the ESP32-C6 (TEMP jumper on 3–centre)
+inline constexpr bool TEMP_SENSOR_PRESENT{ false };
+```
+
+> [!NOTE]
+> Configuring serial output to `SerialOutputType::IoT` is not strictly mandatory for router operation. However, it's necessary if you want to exploit router data in Home Assistant (instantaneous power, statistics, etc.). Without this configuration, only control functions (boost, routing stop) will be available in Home Assistant.
+>
+> In every mode, the router prints its configuration at startup, so you can check what it runs with. In `IoT` mode, it does so at 9600 baud 8N1 (the default of serial monitors), then switches to 7E1 for the Home Assistant data; in `JSON` mode, these lines come before the first JSON line. The status messages while running (relays, rotation, off-peak…) are only printed in `HumanReadable` mode.
+
+If you have more free pins, other functions can be added the same way, for example priority rotation:
+```cpp
+inline constexpr RotationModes PRIORITY_ROTATION{ RotationModes::PIN };
+inline constexpr uint8_t rotationPin{ 7 };  // only if D7 is not used by a load
+```
+
+## Home Assistant integration
+Once your Mk2PVRouter is configured with the mk2Wifi module, you'll be able to:
+- Remotely control routing activation/deactivation (ideal during absences)
+- Trigger boost remotely
+- Monitor temperatures in real time
+- Create advanced automation scenarios combining solar production data and temperatures
+
+# Configuration without the mk2Wifi module
+
+Without the mk2Wifi module, you can still connect any ESP32 to the router with your own wiring:
+- No connection is predefined between the ESP32 and the Mk2PVRouter
+- Make sure to configure coherently:
+  - The router program (`config.h` file)
+  - The ESPHome configuration on the ESP32
+
+Ensure particularly that the pin numbers used in each configuration correspond exactly to your physical connections. Don't forget to use logic level adapters if necessary between the Mk2PVRouter (5 V) and the ESP32 (3.3 V).
+
+For temperature probes, you can connect them directly to the ESP32 using a `GPIO` pin of your choice, which you'll then configure in ESPHome. **Don't forget to add a 4.7 kΩ pull-up resistor between the data line (DQ) and +3.3 V power supply** to ensure proper 1-Wire bus operation.
+
+> [!NOTE]
+> Even without the module, all Home Assistant integration features remain accessible, provided your wiring and software configurations are correctly implemented.
+
+The [gist](https://gist.github.com/FredM67/986e1cb0fc020fa6324ccc151006af99) describes the ESPHome configuration step by step, including a manual wiring example.
+
+# Troubleshooting
+- Ensure all required libraries are installed.
+- Verify correct configuration of pins and parameters.
+- Check serial output for error messages.
+
+# Contributing
+Contributions are welcome! Please submit issues, feature requests, and pull requests via GitHub.
+
+*unfinished doc*

@@ -4,3 +4,6 @@ inols*
 logs
 docs/.$*.drawio.*
 *.res.txt
+
+# Scratch of the agents
+.superpowers/
