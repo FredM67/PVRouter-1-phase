@@ -379,7 +379,7 @@ void updatePowerAndVoltageData()
   const uint16_t sampleSets{ Shared::copyOf_sampleSetsDuringThisDatalogPeriod };
 
   // import = +ve: the sum of the ISR is negative when importing
-  tx_data.power_L[0] = Datalog::watts(-Shared::copyOf_sumP_atSupplyPoint[0] / sampleSets,
+  tx_data.power_L[0] = Datalog::watts(static_cast< int32_t >(-Shared::copyOf_sumP_atSupplyPoint[0] / sampleSets),
                                       pgm_read_word(&powerCal.value[0]), powerCal.shift);
 
   tx_data.power = tx_data.power_L[0];

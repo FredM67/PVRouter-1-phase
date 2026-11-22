@@ -180,11 +180,11 @@ inline uint16_t squareRoot(uint32_t value, uint8_t& fractionBits)
   uint8_t bits;
   if constexpr (Normalise)
   {
-    asm(DATALOG_SQRT_NORMALISE DATALOG_SQRT_DIGITS:DATALOG_SQRT_OPERANDS : : "cc");
+    asm(DATALOG_SQRT_NORMALISE DATALOG_SQRT_DIGITS : DATALOG_SQRT_OPERANDS : : "cc");
   }
   else
   {
-    asm(DATALOG_SQRT_DIGITS:DATALOG_SQRT_OPERANDS : : "cc");
+    asm(DATALOG_SQRT_DIGITS : DATALOG_SQRT_OPERANDS : : "cc");
   }
 #else
   if constexpr (Normalise)
@@ -256,17 +256,33 @@ inline uint16_t sqrtScaled(const uint32_t meanSquare, uint8_t& fractionBits)
 }
 
 /**
- * @brief Scaling of the datalog voltage, Vrms_L_x100.
+ * @brief Whether processVoltage() scales V^2 down by 16 before summing it over the datalog period.
  *
- * @details Hundredths of a volt. For datalog periods over 10 s, processVoltage() scales V^2 down
- *          by 16 so that the sum cannot overflow: the root is then 4 times smaller, hence x4.
+ * @details One sample adds at most 2^18 to the 32-bit sum. At up to 68 sample sets per cycle
+ *          (single phase, 3 conversions per set), 4 s give at most 200 x 68 x 2^18 = 3.6e9 at
+ *          50 Hz (240 x 57 x 2^18 at 60 Hz), below 2^32; 5 s would not. processing.cpp checks it
+ *          against the real sample count.
  *
  * @param datalogPeriodInSeconds DATALOG_PERIOD_IN_SECONDS.
- * @return The factor for voltageCalibration(): 100, or 400 for periods over 10 s.
+ * @return true above 4 s.
+ */
+constexpr bool isVSquaredScaled(const uint8_t datalogPeriodInSeconds)
+{
+  return datalogPeriodInSeconds > 4;
+}
+
+/**
+ * @brief Scaling of the datalog voltage, Vrms_L_x100.
+ *
+ * @details Hundredths of a volt. When isVSquaredScaled(), processVoltage() scales V^2 down by 16
+ *          so that the sum cannot overflow: the root is then 4 times smaller, hence x4.
+ *
+ * @param datalogPeriodInSeconds DATALOG_PERIOD_IN_SECONDS.
+ * @return The factor for voltageCalibration(): 100, or 400 when V^2 is scaled.
  */
 constexpr uint16_t vrmsFactor(const uint8_t datalogPeriodInSeconds)
 {
-  return datalogPeriodInSeconds > 10 ? 400 : 100;
+  return isVSquaredScaled(datalogPeriodInSeconds) ? 400 : 100;
 }
 
 /**

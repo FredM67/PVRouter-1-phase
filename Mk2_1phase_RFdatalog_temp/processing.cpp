@@ -21,6 +21,8 @@
 #include "energy_bucket.h"
 #include "load_priorities.h"
 #include "adc_chain.h"
+#include "ct_filter.h"
+#include "datalog_math.h"
 
 // analogue input pins and ADC reference of the board: adc_chain.h
 // AVCC (= VCC, 5 V or 3.3 V) on the old boards, the internal 1.1 V on the new one (buffered from AREF).
@@ -48,6 +50,18 @@ constexpr uint8_t SAMPLE_SETS_PER_CYCLE{ 1000000UL / (SUPPLY_FREQUENCY * SAMPLE_
 constexpr uint8_t SAMPLE_SETS_MARGIN{ 4 };                                                                                                   /**< covers crossing jitter and frequency drift */
 constexpr uint8_t N_MIN{ SAMPLE_SETS_PER_CYCLE - SAMPLE_SETS_MARGIN };
 constexpr uint8_t N_MAX{ SAMPLE_SETS_PER_CYCLE + SAMPLE_SETS_MARGIN };
+
+// The sums of a datalog period cannot wrap, whatever DATALOG_PERIOD_IN_SECONDS: at most N_MAX
+// sample sets per mains cycle, each adding at most 2^18 (|V_ADC x I_ADC| or V_ADC^2, x1 scale).
+constexpr uint32_t MAX_SAMPLE_SETS_PER_DATALOG{ static_cast< uint32_t >(DATALOG_PERIOD_IN_MAINS_CYCLES) * N_MAX };
+constexpr uint64_t FULL_SCALE_PER_SAMPLE{ 1UL << 18 };
+// the sample sets, the divisor of the datalog power and voltage: 16 bits (19 s at most)
+static_assert(MAX_SAMPLE_SETS_PER_DATALOG <= UINT16_MAX, "******** DATALOG_PERIOD_IN_SECONDS too long: the sample sets of one datalog period must fit in 16 bits (19 s at most with 3 conversions per sample set) ! ********");
+// the power: 64 bits, summed once per mains cycle
+static_assert(MAX_SAMPLE_SETS_PER_DATALOG * FULL_SCALE_PER_SAMPLE <= static_cast< uint64_t >(INT64_MAX), "the datalog power would overflow");
+// V^2: 32 bits, scaled down by 16 when the period needs it
+static_assert(MAX_SAMPLE_SETS_PER_DATALOG * (FULL_SCALE_PER_SAMPLE >> (Datalog::isVSquaredScaled(DATALOG_PERIOD_IN_SECONDS) ? 4 : 0)) <= UINT32_MAX,
+              "******** The datalog V^2 sum would overflow: check Datalog::isVSquaredScaled() ! ********");
 
 /**< beyond 64 sample sets per cycle, sumP may exceed the 24 bits of Energy::contribution(): halved */
 constexpr uint8_t SUM_P_SHIFT{ N_MAX > 64 ? 1 : 0 };
@@ -91,7 +105,7 @@ int32_t l_sumP[NO_OF_PHASES]{};           /**< cumulative power per phase */
 int16_t i_sampleVminusDC[NO_OF_PHASES]{}; /**< current raw voltage sample filtered (left-aligned ADC) */
 uint32_t l_filterDC_V[NO_OF_PHASES]{};    /**< for the LPF which determines DC offset (voltage) */
 
-int32_t l_sumP_atSupplyPoint[NO_OF_PHASES]{}; /**< for summation of 'real power' values during datalog period */
+int64_t l_sumP_atSupplyPoint[NO_OF_PHASES]{}; /**< for summation of 'real power' values during datalog period, once per mains cycle */
 uint32_t l_sum_Vsquared[NO_OF_PHASES]{};      /**< for summation of V^2 values during datalog period */
 
 uint8_t n_samplesDuringThisMainsCycle[NO_OF_PHASES]{}; /**< number of sample sets for each phase during each mains cycle */
@@ -526,7 +540,7 @@ void processPolarity(const uint8_t phase, const uint16_t rawSample)
 void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample)
 {
   // extra items for an LPF to improve the processing of data samples from CT1
-  static int32_t lpf_long[NO_OF_PHASES]{};  // new LPF, for offsetting the behaviour of CTx as a HPF
+  static CtFilter::LowPassBoost ctFilter[NO_OF_PHASES];  // for offsetting the behaviour of CTx as a HPF
 
   // remove most of the DC offset from the current sample.
   // Use the voltage bias, it's most likely more accurate than the default mid-range.
@@ -537,9 +551,7 @@ void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample)
   // Using if constexpr ensures zero overhead when CT filtering is disabled
   if constexpr (lpf_gain != 0.0F && alpha != 0.0F)
   {
-    const auto last_lpf_long{ lpf_long[phase] };
-    lpf_long[phase] += alpha * (sampleIminusDC - last_lpf_long);
-    sampleIminusDC += (lpf_gain * lpf_long[phase]);
+    sampleIminusDC = ctFilter[phase].apply(sampleIminusDC, lpf_gain, alpha);  // Robin's filter, at x256, saturated
   }
 
   // calculate the "real power" in this sample pair and add to the accumulated sum
@@ -552,8 +564,7 @@ void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample)
   multS16x16_to32(instP, filtV_div4, filtI_div4);  // 32-bits (now x256, or 2^8)
   instP >>= 8;                                     // scaling is now x1, as for Mk2 (V_ADC x I_ADC)
 
-  l_sumP[phase] += instP;                // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
-  l_sumP_atSupplyPoint[phase] += instP;  // cumulative power, scaling as for Mk2 (V_ADC x I_ADC)
+  l_sumP[phase] += instP;  // cumulative power, scaling as for Mk2 (V_ADC x I_ADC); into the datalog sum once per cycle
 }
 
 /**
@@ -632,9 +643,9 @@ void processVoltage(const uint8_t phase)
   multS16x16_to32(inst_Vsquared_signed, filtV_div4, filtV_div4);
   uint32_t inst_Vsquared = static_cast< uint32_t >(inst_Vsquared_signed);
 
-  // Shift strategy verified safe by unit tests for all datalog periods and voltages.
-  // Datalog::vrmsFactor() compensates the x1/16 scaling: keep both conditions the same.
-  if constexpr (DATALOG_PERIOD_IN_SECONDS > 10)
+  // The sum cannot overflow: checked at compile time with the sample count (top of this file).
+  // Datalog::vrmsFactor() compensates the x1/16 scaling, on the same condition.
+  if constexpr (Datalog::isVSquaredScaled(DATALOG_PERIOD_IN_SECONDS))
   {
     inst_Vsquared >>= 12;  // scaling is now x1/16 (V_ADC x V_ADC)
   }
@@ -920,6 +931,8 @@ void processDataLogging()
 void processPlusHalfCycle(const uint8_t phase)
 {
   processLatestContribution(phase);  // runs at 6.6 ms intervals
+
+  l_sumP_atSupplyPoint[phase] += l_sumP[phase];  // the cycle's power into the datalog sum, 64 bits
 
   // A performance check to monitor and display the minimum number of sets of
   // ADC samples per mains cycle, the expected number being 20ms / (104us * 6) = 32.05
