@@ -141,7 +141,7 @@ Toutes les bibliothèques sont toujours incluses dans le code source. Cependant,
 - **relay_engine.h** : décisions de la *diversion par relais* (seuils, temps minimaux, ordre), sans Arduino
 - **rotation_groups.h** : les charges qui tournent dans la rotation des priorités
 - **sample_sets.h** : le compte des jeux d’échantillons d’une période d’enregistrement
-- **teleinfo.h**: code source de la fonctionnalité *Télémétrie IoT*
+- **teleinfo.h** : code source de la fonctionnalité *Télémétrie IoT*
 - **types.h** : définitions des types…
 - **type_traits.h** : quelques trucs STL qui ne sont pas encore disponibles dans le paquet avr
 - **type_traits** : contient des patrons STL manquants

@@ -30,7 +30,8 @@ The older sketches are kept as they are, for reference:
 
 He published his sketches on the OpenEnergyMonitor forum (summary page:
 www.openenergymonitor.org/emon/node/1757) and on www.mk2pvrouter.co.uk, for others to
-build PV routers with, without any license statement.
+build PV routers with, without any license statement. His sketches in Robin/ and dev/ are
+kept as he published them and carry no license tag.
 
 The changes made since 2020 are by Frédéric Metrich and the contributors listed on
 GitHub, under GPL-3.0-or-later.

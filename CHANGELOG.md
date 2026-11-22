@@ -71,8 +71,10 @@ shipped `config.h`:
 
 ### Changed
 
-- **License:** the whole repository, the older sketches and `dev/` included, moves from
-  LGPL-2.1 to GPL-3.0-or-later, as PVRouter-3-phase. The source files carry an SPDX tag.
+- **License:** Robin Emley's sketches in `Robin/` and `dev/` stay as he published them, without
+  a licence tag. The rest of the repository, `Mk2_fasterControl_Full` and the single-file
+  sketches included, moves from LGPL-2.1 to GPL-3.0-or-later, as PVRouter-3-phase; its source
+  files carry an SPDX tag.
 - **README:** the new firmware first; the older sketches are frozen. The single-file sketches
   `Mk2_fasterControl_twoLoads_temp_1` and `Mk2_fasterControl_threeLoads_temp_1` carry the
   two-load logic of Robin's version 4, which he archived as problematic.

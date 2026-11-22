@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
 /* balanceCheck_1kW.ino
  *
  * This sketch is based on the standard Mk2 code for my mature product.

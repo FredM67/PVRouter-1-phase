@@ -7,20 +7,20 @@
   - [Comprendre le Problème](#comprendre-le-problème)
     - [Installation Normale (Raccordée au Réseau Uniquement)](#installation-normale-raccordée-au-réseau-uniquement)
     - [Installation Batterie (Le Problème)](#installation-batterie-le-problème)
-  - [Exemples Visuels : Comportement des Systèmes Batterie](#exemples-visuels--comportement-des-systèmes-batterie)
-    - [Graphique Comparatif : Seuils Positifs vs Négatifs](#graphique-comparatif--seuils-positifs-vs-négatifs)
-    - [Graphique 2 : Analyse Détaillée Événement Nuageux (17:00-17:45)](#graphique-2--analyse-détaillée-événement-nuageux-1700-1745)
-    - [Graphique 3 : Système 2 Relais - Pompe à Chaleur \& Pompe Piscine (17:30-19:00)](#graphique-3--système-2-relais---pompe-à-chaleur--pompe-piscine-1730-1900)
+  - [Exemples Visuels : Comportement des Systèmes Batterie](#exemples-visuels--comportement-des-systèmes-batterie)
+    - [Graphique Comparatif : Seuils Positifs vs Négatifs](#graphique-comparatif--seuils-positifs-vs-négatifs)
+    - [Graphique 2 : Analyse Détaillée Événement Nuageux (17:00-17:45)](#graphique-2--analyse-détaillée-événement-nuageux-1700-1745)
+    - [Graphique 3 : Système 2 Relais - Pompe à Chaleur \& Pompe Piscine (17:30-19:00)](#graphique-3--système-2-relais---pompe-à-chaleur--pompe-piscine-1730-1900)
     - [Patterns Comportement Monde Réel](#patterns-comportement-monde-réel)
-    - [Insight Technique : Pourquoi Seuils Négatifs Fonctionnent](#insight-technique--pourquoi-seuils-négatifs-fonctionnent)
-  - [La Solution Correcte : Seuil d'Import Négatif](#la-solution-correcte--seuil-dimport-négatif)
+    - [Insight Technique : Pourquoi Seuils Négatifs Fonctionnent](#insight-technique--pourquoi-seuils-négatifs-fonctionnent)
+  - [La Solution Correcte : Seuil d'Import Négatif](#la-solution-correcte--seuil-dimport-négatif)
     - [Configuration Compatible Batterie](#configuration-compatible-batterie)
     - [Guide de Sélection des Seuils](#guide-de-sélection-des-seuils)
   - [Exemples de Configurations](#exemples-de-configurations)
     - [Batterie X + Pompe Piscine (1.5kW)](#batterie-x--pompe-piscine-15kw)
     - [Batterie Y + Chauffage Eau (2kW)](#batterie-y--chauffage-eau-2kw)
     - [Configuration Conservative (Gros Système Batterie)](#configuration-conservative-gros-système-batterie)
-  - [Comment Ça Fonctionne : Explication Technique](#comment-ça-fonctionne--explication-technique)
+  - [Comment Ça Fonctionne : Explication Technique](#comment-ça-fonctionne--explication-technique)
     - [L'Insight Clé](#linsight-clé)
     - [Comparaison des Approches](#comparaison-des-approches)
     - [Exemples de Sortie Série](#exemples-de-sortie-série)
@@ -73,7 +73,7 @@ relayOutput(pin, 1000, 0, 5, 5)   // ❌ PROBLÈME !
 **Ce qui arrive :**
 - ☀️ **Surplus > 1000W** → Le relais s'allume
 - 🔋 **La batterie compense** → Le réseau reste ≈ 0W peu importe ce que fait le relais
-- ❌ **Le relais a besoin d'import > 0W pour s'éteindre** → Mais la batterie l'empêche !
+- ❌ **Le relais a besoin d'import > 0W pour s'éteindre** → Mais la batterie l'empêche !
 - 🚨 **Le relais reste allumé indéfiniment**
 
 **Pourquoi augmenter le seuil d'import empire les choses :**
@@ -83,7 +83,7 @@ relayOutput(pin, 1000, 50, 5, 5)  // Encore pire !
 - Le relais s'éteint quand import > 50W
 - La batterie se décharge immédiatement pour ramener le réseau à 0W
 - Le relais se rallume
-- **Résultat : Relais qui claquette !**
+- **Résultat : Relais qui claquette !**
 
 ## Exemples Visuels : Comportement des Systèmes Batterie
 
@@ -94,24 +94,24 @@ Les graphiques suivants démontrent pourquoi les configurations de relais tradit
 ![Seuils Import Positifs vs Négatifs](battery_import_vs_surplus_thresholds.png)
 
 **Ce graphique démontre :**
-- **Graphique du haut (CASSÉ)** : Seuil d'import 0W
+- **Graphique du haut (CASSÉ)** : Seuil d'import 0W
   - Le relais s'allume mais **ne s'éteint JAMAIS**
   - La batterie compense les déficits → Puissance réseau ≈ 0W en permanence
   - Impossible de détecter l'import → Relais reste allumé 100% du temps
 
-- **Graphique du bas (FONCTIONNE)** : Seuil d'import négatif -50W
-  - Le relais cycle correctement : 1 commutation, 24% du temps
+- **Graphique du bas (FONCTIONNE)** : Seuil d'import négatif -50W
+  - Le relais cycle correctement : 1 commutation, 24% du temps
   - Surveille le surplus réel avant compensation batterie
   - Fonctionne car non affecté par le comportement de la batterie
 
 **Éléments visibles sur chaque graphique :**
-- 🟡 **Production solaire** : Déclin de 2,5kW en fin de journée
-- 🔴 **Consommation maison** : 350W constant
-- 🔵 **Bilan net (avant relais)** : Solaire - consommation
-- 🟣 **Bilan net (après relais)** : Après charge relais 1kW
-- 🟠 **Sortie batterie** : Compense les déficits
-- ⚫ **Puissance réseau** : Ce que voit le compteur
-- 🟢/🔴 **Arrière-plan** : Vert = relais ON, Rouge = relais OFF
+- 🟡 **Production solaire** : Déclin de 2,5kW en fin de journée
+- 🔴 **Consommation maison** : 350W constant
+- 🔵 **Bilan net (avant relais)** : Solaire - consommation
+- 🟣 **Bilan net (après relais)** : Après charge relais 1kW
+- 🟠 **Sortie batterie** : Compense les déficits
+- ⚫ **Puissance réseau** : Ce que voit le compteur
+- 🟢/🔴 **Arrière-plan** : Vert = relais ON, Rouge = relais OFF
 
 **Fonctionnalités de Visualisation Améliorées :**
 - **Lignes Balance Nette :** Les lignes vertes épaisses montrent la métrique clé (solaire - maison) avant et après charges relais
@@ -128,7 +128,7 @@ Les graphiques suivants démontrent pourquoi les configurations de relais tradit
 
 ![Analyse Événement Nuageux](cloud_event_analysis.png)
 
-**Vue Focalisée :** Ce graphique zoome sur événement nuageux pour montrer moment précis où :
+**Vue Focalisée :** Ce graphique zoome sur événement nuageux pour montrer moment précis où :
 - **Configuration Problème :** Relais reste ON malgré nuage réduisant surplus disponible
 - **Configuration Solution :** Relais s'éteint correctement quand surplus chute sous seuil 50W
 
@@ -139,9 +139,9 @@ Les graphiques suivants démontrent pourquoi les configurations de relais tradit
 **Visualisation Ultra-Optimisée :** Échelle logarithmique avec lignes de seuils POSITIVES (50W, 100W surplus) correspondant aux seuils négatifs d'import (-50W, -100W). Zone négative ultra-minimale (-10W) pour maximiser visibilité zone positive critique.
 
 **Configuration 2 Relais Réaliste :**
-- 🔴 **Pompe à Chaleur (2500W)** : Seuil -100W (priorité haute)
-- 🔵 **Pompe Piscine (1000W)** : Seuil -50W (priorité basse)
-- ⚡ **Chauffe-eau** : Contrôlé par triac du routeur PV (non par relais externe)
+- 🔴 **Pompe à Chaleur (2500W)** : Seuil -100W (priorité haute)
+- 🔵 **Pompe Piscine (1000W)** : Seuil -50W (priorité basse)
+- ⚡ **Chauffe-eau** : Contrôlé par triac du routeur PV (non par relais externe)
 
 **Résultats Comparatifs :**
 
@@ -152,16 +152,16 @@ Les graphiques suivants démontrent pourquoi les configurations de relais tradit
 | **Gestion Charge** | Progressive intelligente | Toutes charges collées ON | Critique |
 
 **Gestion Progressive Intelligente :**
-- **17:30-17:45** : Surplus élevé, **les deux relais s'allument** (démonstration complète)
-- **17:50-18:10** : Pompe à chaleur fonctionne 20min puis s'éteint (minimum ON respecté)
-- **17:30-18:56** : Pompe piscine continue 66min avec surplus modéré
-- **18:56-19:00** : Toutes charges éteintes, priorité charge batterie
+- **17:30-17:45** : Surplus élevé, **les deux relais s'allument** (démonstration complète)
+- **17:50-18:10** : Pompe à chaleur fonctionne 20min puis s'éteint (minimum ON respecté)
+- **17:30-18:56** : Pompe piscine continue 66min avec surplus modéré
+- **18:56-19:00** : Toutes charges éteintes, priorité charge batterie
 
 **Impact Seuils Cassés (0W) :**
-- ❌ **Toutes charges collées ON** : Les deux relais restent ON pendant 90min complètes
-- ❌ **5.25 kWh consommés** : 172% plus énergie batterie que nécessaire
-- ❌ **3.3 kWh gaspillés** : Épuisement prématuré batterie
-- ❌ **Aucune priorisation** : Impossible distinguer charges critiques/non-critiques
+- ❌ **Toutes charges collées ON** : Les deux relais restent ON pendant 90min complètes
+- ❌ **5.25 kWh consommés** : 172% plus énergie batterie que nécessaire
+- ❌ **3.3 kWh gaspillés** : Épuisement prématuré batterie
+- ❌ **Aucune priorisation** : Impossible distinguer charges critiques/non-critiques
 
 ### Patterns Comportement Monde Réel
 
@@ -183,7 +183,7 @@ Les graphiques suivants démontrent pourquoi les configurations de relais tradit
 
 ### Insight Technique : Pourquoi Seuils Négatifs Fonctionnent
 
-Les graphiques montrent clairement que **systèmes batterie maintiennent équilibre réseau mais ne peuvent cacher changements surplus** :
+Les graphiques montrent clairement que **systèmes batterie maintiennent équilibre réseau mais ne peuvent cacher changements surplus** :
 
 - **Puissance Réseau :** Reste près 0W grâce compensation batterie
 - **Production Solaire :** Varie avec météo et heure du jour
@@ -207,7 +207,7 @@ relayOutput(pin, 1000, -20, 5, 5)
 **Comment ça fonctionne :**
 - ☀️ **Surplus > 1000W** → Le relais s'allume
 - ☁️ **Le surplus tombe < 20W** → Le relais s'éteint
-- ✅ **La batterie ne peut pas empêcher cela** - on surveille le surplus, pas l'import !
+- ✅ **La batterie ne peut pas empêcher cela** - on surveille le surplus, pas l'import !
 
 ### Guide de Sélection des Seuils
 
@@ -358,7 +358,7 @@ relayOutput(pin, 1000, -20, 5, 5)   // S'éteint quand surplus < 20W
 
 ## Résumé
 
-Les problèmes de relais des systèmes batterie sont résolus avec **des seuils d'import négatifs** :
+Les problèmes de relais des systèmes batterie sont résolus avec **des seuils d'import négatifs** :
 
 1. **Cause racine :** Les systèmes batterie empêchent la détection d'import
 2. **Réalité physique :** Les batteries ne peuvent pas cacher les changements de surplus

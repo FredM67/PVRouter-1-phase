@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
 /* Transformer_Checker is based on Mk2_RF_datalog_3.ino
  *  
  * Every 1-phase Mk2 PV Router control board has a mains transformer with two secondary outputs.  One output provides 

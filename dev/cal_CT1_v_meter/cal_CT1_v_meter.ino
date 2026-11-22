@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
 /* cal_CT1_v_meter.ino 
  *
  * February 2018
