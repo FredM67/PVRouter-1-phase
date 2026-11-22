@@ -182,8 +182,8 @@ Robin's `twoLoads_5` logic, already in `Mk2_fasterControl_Full/processing.cpp`:
   are not counted at all, as `Full` does; the surplus diverted to the other loads during those
   cycles is lost (decided with the user). Remote loads are never counted, nor estimated. The
   simulator model has CT2 measure every local load and relay.
-- Reported: HumanReadable (datalog line), JSON (keys `PD` and `ED`, kept short), IoT. In the IoT frames, two new labels (my call):
-  `PD`, diverted power in W, and `ED`, diverted energy in Wh. The ESPHome `mk2pvrouter` component
+- Reported: HumanReadable (datalog line), JSON (keys `D` and `E`, kept short), IoT. In the IoT frames, two labels (chosen by the user,
+  already documented for single phase in `teleinfo.h`): `D`, diverted power in W, and `E`, diverted energy in Wh; `D1`…`Dn` stay the per-load ON-time %. The ESPHome `mk2pvrouter` component
   (esphome_components repo) publishes only the labels that have a sensor and ignores the others,
   with a 1048-byte frame buffer, so existing mk2Wifi installs are not affected; their sensors come
   with the second stage.

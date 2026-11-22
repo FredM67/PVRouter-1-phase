@@ -18,7 +18,7 @@
 - `TYPE_OF_DISPLAY`: `DisplayType::NONE`, `SEG`, `SEG_HW` (with the pin-saving chips), `OLED`. 7-segment only on `OLD_SEG`; OLED only on `OLD_OLED` and `NEW`.
 - `DIVERTED_CT_PRESENT` (`bool`, default `true`): without it nothing about diverted energy is reported or displayed; CT2 is sampled either way.
 - Diverted energy = the surplus the router diverts: the mains cycles during which any local load is forced or boosted are not counted (CT2 cannot tell the loads apart); remote loads never counted.
-- IoT labels: `PD` diverted power in W, `ED` diverted energy in Wh.
+- IoT labels: `D` diverted power in W, `E` diverted energy in Wh (the single-phase tags already documented in `teleinfo.h`; `D1`…`Dn` stay the per-load ON-time %).
 - CT1 filter interim values: `lpf_gain` 9, `alpha` 0.0011 on `OLD_SEG` and `OLD_OLED`; `lpf_gain` 0 on `NEW`.
 - Bucket: `WORKING_ZONE_IN_JOULES` as in the 3-phase firmware's `constants.h`/`config.h` (Robin's 360 J = 0.1 Wh range).
 - Must build for the ATmega328P with every feature on (32 KB flash, 2 KB RAM).
@@ -39,7 +39,7 @@ Commands (from Git Bash, tools in WSL):
 2. **Prediction and thresholds on the same value.** Robin's version 4 moved the thresholds on the measured energy and decided on the predicted one. Expected: one call per cycle, `onNewCycle(priorities, prediction, bucketLevels)`, nothing else touching the thresholds. Pinned by `test_decision_uses_prediction_only` (Task 3).
 3. **A half cycle with no or few samples** (start-up, a missing or distorted mains wave): the prediction divides by the sample count. Expected: no division by zero, a prediction equal to the bucket level when there are no samples. Pinned by `test_prediction_without_samples` (Task 3).
 4. **Board, display and RF pin conflicts.** The 7-segment display without pin-saving chips uses D2 and D10–D13, which the RFM69 also needs; the OLED needs A4/A5, which `OLD_SEG` uses as analog inputs. Expected: refused at compile time with a clear message. Pinned by compile-fail cases 70–73 (Task 7).
-5. **No CT2 fitted.** An unconnected CT2 input reads noise. Expected: with `DIVERTED_CT_PRESENT` false, no `PD`/`ED` labels, no diverted line in the datalog, nothing on the display; with it true, noise below the anti-creep limit adds nothing. Pinned by `test_anti_creep_drops_noise` (Task 4) and `test_no_diverted_labels_without_ct2` (Task 5).
+5. **No CT2 fitted.** An unconnected CT2 input reads noise. Expected: with `DIVERTED_CT_PRESENT` false, no `D`/`E` labels, no diverted line in the datalog, nothing on the display; with it true, noise below the anti-creep limit adds nothing. Pinned by `test_anti_creep_drops_noise` (Task 4) and `test_no_diverted_labels_without_ct2` (Task 5).
 
 ---
 
@@ -163,9 +163,9 @@ The decision moves from "2nd sample of the positive half, measured bucket" (3-ph
 
 **Interfaces:**
 - Consumes: `Shared::copyOf_divertedEnergyTotal_Wh`, `Shared::copyOf_divertedPower_W` (Task 4).
-- Produces: IoT labels `PD` (W) and `ED` (Wh), sent after `P`; JSON keys `"PD"` and `"ED"` (short, as the other JSON keys); HumanReadable: `, diverted <W> W, <Wh> Wh` appended to the datalog line; startup summary: `Diverted energy (CT2) is present` / `is NOT present` through `infolnPresence`.
+- Produces: IoT labels `D` (W) and `E` (Wh), sent after `P`; JSON keys `"D"` and `"E"` (short, as the other JSON keys); HumanReadable: `, diverted <W> W, <Wh> Wh` appended to the datalog line; startup summary: `Diverted energy (CT2) is present` / `is NOT present` through `infolnPresence`.
 
-- [ ] **Step 1: Write the failing test** `test_no_diverted_labels_without_ct2` and `test_diverted_labels_with_ct2` in the teleinfo test (whichever environment runs it today): the frame for a datalog with `DIVERTED_CT_PRESENT` true contains `PD` and `ED` with the given values; false contains neither.
+- [ ] **Step 1: Write the failing test** `test_no_diverted_labels_without_ct2` and `test_diverted_labels_with_ct2` in the teleinfo test (whichever environment runs it today): the frame for a datalog with `DIVERTED_CT_PRESENT` true contains `D` and `E` with the given values (and not confused with `D1`…`Dn`); false contains neither.
 - [ ] **Step 2: Run** it. Expected: FAIL.
 - [ ] **Step 3: Implement** the four outputs.
 - [ ] **Step 4: Run** native tests, the teleinfo test and the build. Expected: PASS, `SUCCESS`.
