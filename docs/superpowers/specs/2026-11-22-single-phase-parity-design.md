@@ -216,14 +216,20 @@ Robin's `twoLoads_5` logic, already in `Mk2_fasterControl_Full/processing.cpp`:
   of the voltage and of each CT around the step, and prints them as CSV.
 - A script fits the CT's time constant from the recording and gives `alpha` and `lpf_gain` for
   that CT type at that sample spacing.
+- Two CT types, both firmwares: the SCT-013-000 (current output, burden resistor) and the 333 mV
+  voltage-output CT. `calibration.h` of each firmware gets a pair of values per CT type, selected
+  by a setting of the CT type (my call), and the README says which pairs are measured. The 3-phase
+  firmware, which ships today with the filter off, gets these values in a PR of its own.
 
 ## Build order
 
 1. Firmware: copy, sampling and boards, control core, diverted energy, displays, settings,
    validation, native and compile-fail tests, CI. Simulator board models and scenarios.
-2. CT recording tool, both firmwares; filter defaults from the measurements. Open: which CT
-   types are measured (at least the SCT-013-000 and the universal board's default
-   voltage-output CT) and who records them; it sets when this step is done, not stage 1.
+2. CT recording tool, both firmwares; filter defaults from the measurements. Two CT types are
+   measured, each for both firmwares: the current-output YHDC SCT-013-000 with its burden (old
+   boards) and the 333 mV voltage-output CT (universal board default). The measured values ship
+   in the 3-phase firmware's `calibration.h` too, so existing 3-phase customers get a proper
+   filter by updating. Open: who records them, on which boards.
 3. Real-board tests by the testers.
 4. Second stage: configurator single-phase mode, ESPHome packages, docs.
 
