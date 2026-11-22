@@ -36,14 +36,13 @@
 // powerCal is the RECIPROCAL of the power conversion rate. A good value
 // to start with is therefore 1/20 = 0.05 (Watts per ADC-step squared)
 //
-// Values measured on a Mk2 board (as in Mk2_fasterControl_Full): a starting point for yours.
-inline constexpr float f_powerCalOldBoard{ 0.0436F };          /**< CT1, grid */
-inline constexpr float f_powerCalDivertedOldBoard{ 0.04446F }; /**< CT2, diverted */
+inline constexpr float f_powerCalOldBoard{ 0.05000F };         /**< CT1, grid */
+inline constexpr float f_powerCalDivertedOldBoard{ 0.05000F }; /**< CT2, diverted */
 //
 // For datalogging purposes, f_voltageCal has been added too. Because the range of ADC values is
 // similar to the actual range of volts, the optimal value for this cal factor is likely to be
 // close to unity.
-inline constexpr float f_voltageCalOldBoard{ 0.805653F }; /**< compared with Sentron PAC 4200 */
+inline constexpr float f_voltageCalOldBoard{ 0.805653F }; /**< measured on a Mk2 board (Mk2_fasterControl_Full), compared with Sentron PAC 4200 */
 //
 // CT1 filter: an IIR low-pass filter of the grid current, added back with a gain, offsets the CT
 // acting as a high-pass filter. Interim values for the SCT-013-000 (Dec. 2024, on real hardware).
