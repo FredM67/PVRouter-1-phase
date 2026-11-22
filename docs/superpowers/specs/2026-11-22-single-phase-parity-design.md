@@ -147,7 +147,7 @@ Robin's `twoLoads_5` logic, already in `Mk2_fasterControl_Full/processing.cpp`:
 - the energy bucket of 0.1 Wh (`WORKING_RANGE_IN_JOULES 360`);
 - at the first sample of the negative half cycle, the predicted energy at the end of the cycle
   (energy at its start plus the average power of the first half);
-- at the 3rd sample of the negative half cycle, the decision: above the middle of the bucket a
+- at sample set index 3 (counted from 0, i.e. the 4th) of the negative half cycle, the decision: above the middle of the bucket a
   load may be added, below it one may be removed, the opposite threshold reset to its default;
   after a switch, only the load just switched may change during the post-transition period, and
   the threshold follows the prediction;
