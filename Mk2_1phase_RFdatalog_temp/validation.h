@@ -15,6 +15,7 @@
 
 #include "config_system.h"
 #include "utils_pins.h"
+#include "utils_display.h"
 #include "utils_rf.h"
 
 #include "config_derived.h"
@@ -209,6 +210,10 @@ constexpr PinCheck check_pins()
     }
   }
 
+  // the pins the display takes (D2..D13 and A2, A4, A5: a 32-bit mask) belong to it alone
+  if ((static_cast< uint32_t >(used_pins) & displayPinMask) != 0)
+    return { false, 0 };
+
   return { true, used_pins };
 }
 
@@ -378,6 +383,12 @@ static_assert(!DUAL_TARIFF || targetsAreOutputs(boostSchedule), "******** A sche
 static_assert(!DUAL_TARIFF || targetsAreRemoteLoads(boostSchedule), "******** A scheduled boost forces a remote load that does not exist (REMOTE_LOAD() counts from 0). Please check scheduledBoosts in your config.h ! ********");
 
 static_assert(!(RF_CHIP_PRESENT && ((check_pins().used & 0x3C04) != 0)), "******** Pins from RF chip are reserved ! Please check your config ! ********");
+// the RF chip takes D2 and D10 to D13: the 7-segment display without the pin-saving chips takes D2, D10 and D13
+static_assert(!(RF_CHIP_PRESENT && ((displayPinMask & 0x3C04) != 0)), "******** Duplicate pin definition ! The display uses pins that the RF chip needs (D2, D10 to D13): use TYPE_OF_DISPLAY SEG_HW or no RF. Please check your config ! ********");
+
+static_assert((TYPE_OF_DISPLAY != DisplayType::SEG && TYPE_OF_DISPLAY != DisplayType::SEG_HW) || PCB_VERSION == PcbVersion::OLD_SEG, "******** The 7-segment display only exists on PcbVersion::OLD_SEG ! Please check PCB_VERSION and TYPE_OF_DISPLAY in your config.h ! ********");
+static_assert(TYPE_OF_DISPLAY != DisplayType::OLED || PCB_VERSION != PcbVersion::OLD_SEG, "******** The OLED needs A4/A5, which PcbVersion::OLD_SEG uses as analog inputs ! Please check PCB_VERSION and TYPE_OF_DISPLAY in your config.h ! ********");
+static_assert(DISPLAY_SHUTDOWN_IN_HOURS > 0, "******** DISPLAY_SHUTDOWN_IN_HOURS must be greater than 0 ! Please check your config.h ! ********");
 static_assert(!(RF_CHIP_PRESENT && (SharedRF::ROUTER_NODE_ID < 1 || SharedRF::ROUTER_NODE_ID > 30)), "******** RF node ID must be between 1 and 30 ! ********");
 static_assert(!(RF_CHIP_PRESENT && (SharedRF::NETWORK_ID < 1 || SharedRF::NETWORK_ID > 250)), "******** RF network ID must be between 1 and 250 ! ********");
 

@@ -80,7 +80,7 @@ static_assert(MAX_PREDICTION_ENERGY * SAMPLE_SETS_PER_CYCLE <= static_cast< uint
 // 3600 J, i.e. 3600 x SUPPLY_FREQUENCY cycles of 1 W: Energy::fromWatts(3600 x SUPPLY_FREQUENCY).
 // The anti-creep limit compares the cycle's average power with ANTI_CREEP_LIMIT W, as Robin's
 // (his IEU per cycle and his limit are both 1 / powerCal_diverted per W).
-constexpr float f_powerCalDivertedTable[NO_OF_PHASES]{ f_powerCalDiverted }; /**< for the per-sample table */
+constexpr float f_powerCalDivertedTable[NO_OF_PHASES]{ DIVERTED_CT_PRESENT ? f_powerCalDiverted : 1.0F }; /**< for the per-sample table (1 as a stand-in without CT2: its rating is not used) */
 /**< CT2 calibration over n, in fixed point: no division in the ISR */
 const Energy::PerSampleCalibration< N_MIN, N_MAX, NO_OF_PHASES > divertedCalPerSample PROGMEM{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCalDivertedTable) };
 constexpr uint8_t divertedCalPerSampleShift{ Energy::toFixedPerSample< N_MIN, N_MAX, SUM_P_SHIFT >(f_powerCalDivertedTable).shift };
@@ -94,10 +94,10 @@ constexpr uint32_t MAX_DIVERTED_CYCLE_ENERGY{ static_cast< uint32_t >(((((static
                                                                        >> (divertedCalPerSampleShift - Energy::FRACTION_BITS))
                                                                       + 1) };
 // a cycle carries one Wh at most (DivertedEnergy::addCycle())
-static_assert(MAX_DIVERTED_CYCLE_ENERGY < static_cast< uint32_t >(DIVERTED_IEU_PER_WH), "a mains cycle would divert more than 1 Wh: check f_powerCalDiverted");
+static_assert(!DIVERTED_CT_PRESENT || MAX_DIVERTED_CYCLE_ENERGY < static_cast< uint32_t >(DIVERTED_IEU_PER_WH), "a mains cycle would divert more than 1 Wh: check f_powerCalDiverted");
 // the energy counted over a datalog period, for its average power: 32 bits
 constexpr uint32_t MAX_DIVERTED_DATALOG_ENERGY{ MAX_DIVERTED_CYCLE_ENERGY * DATALOG_PERIOD_IN_MAINS_CYCLES };
-static_assert(static_cast< uint64_t >(MAX_DIVERTED_CYCLE_ENERGY) * DATALOG_PERIOD_IN_MAINS_CYCLES <= UINT32_MAX, "******** The diverted energy of a datalog period would overflow: shorten DATALOG_PERIOD_IN_SECONDS or check f_powerCalDiverted ! ********");
+static_assert(!DIVERTED_CT_PRESENT || static_cast< uint64_t >(MAX_DIVERTED_CYCLE_ENERGY) * DATALOG_PERIOD_IN_MAINS_CYCLES <= UINT32_MAX, "******** The diverted energy of a datalog period would overflow: shorten DATALOG_PERIOD_IN_SECONDS or check f_powerCalDiverted ! ********");
 /**< the average power over the period: sum / (cycles x 2^FRACTION_BITS), without a division */
 constexpr DivertedPower::Average divertedPowerAverage{ DivertedPower::averageOver(DATALOG_PERIOD_IN_MAINS_CYCLES, MAX_DIVERTED_DATALOG_ENERGY, Energy::FRACTION_BITS) };
 
@@ -778,7 +778,10 @@ void processStartUp(const uint8_t phase)
   beyondStartUpPeriod = true;
   l_sumP[phase] = 0;
   l_sumP_atSupplyPoint[phase] = 0;
-  l_sumP_diverted = 0;
+  if constexpr (DIVERTED_CT_PRESENT)
+  {
+    l_sumP_diverted = 0;
+  }
   n_samplesDuringThisMainsCycle[phase] = 0;
   i_sampleSetsDuringThisDatalogPeriod = 0;
 
