@@ -229,7 +229,7 @@ char* frameLine(uint8_t step, char* dst)
 
   if (step == 0)
   {
-    return line(dst, "V", Source::voltage());
+    return lineUnsigned(dst, "V", Source::voltage());
   }
   --step;
 
@@ -307,8 +307,8 @@ char* frameLine(uint8_t step, char* dst)
  * The data source is a type with these members:
  * - `static constexpr bool DIVERTED_CT`, `RELAY_DIVERSION`, `DUAL_TARIFF`;
  * - `static constexpr uint8_t RELAY_COUNT`, `LOAD_COUNT`, `TEMP_COUNT`;
- * - `static int16_t power()`, `divertedPower()`, `voltage()`, `relayAverage()`;
- * - `static uint16_t divertedEnergy()`, `absenceCount()`;
+ * - `static int16_t power()`, `divertedPower()`, `relayAverage()`;
+ * - `static uint16_t voltage()`, `divertedEnergy()`, `absenceCount()`;
  * - `static bool relayOn(uint8_t idx)`, `temperatureValid(uint8_t idx)`, `offPeak()`;
  * - `static int16_t loadOnPercent(uint8_t idx)`, `temperature(uint8_t idx)`;
  * - `static uint16_t sampleSets()`, or `static uint32_t sampleSets()` beyond 19 s;

@@ -25,3 +25,6 @@ expect isr_max 560
 expect admux_delay_max 620
 # no sample beyond the ADC's range
 expect clipped 0
+# the RMS voltage of every datalog line, the first included (the start-up period is not in it):
+# the mains of the board files is 230 V
+expect voltage 220 240

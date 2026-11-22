@@ -776,6 +776,7 @@ void processStartUp(const uint8_t phase)
   beyondStartUpPeriod = true;
   l_sumP[phase] = 0;
   l_sumP_atSupplyPoint[phase] = 0;
+  l_sum_Vsquared[phase] = 0;  // like the sample sets: the first datalog period holds its own samples only
   if constexpr (DIVERTED_CT_PRESENT)
   {
     l_sumP_diverted = 0;

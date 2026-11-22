@@ -65,9 +65,9 @@ struct TestSource
   {
     return values.divertedEnergy;
   }
-  static int16_t voltage()
+  static uint16_t voltage()
   {
-    return static_cast< int16_t >(values.voltage_x100);
+    return values.voltage_x100;
   }
   static int16_t relayAverage()
   {
@@ -228,7 +228,7 @@ static void referenceFrame(Reference& teleInfo)
     teleInfo.sendUnsigned("E", Source::divertedEnergy());
   }
 
-  teleInfo.send("V", Source::voltage());
+  teleInfo.sendUnsigned("V", Source::voltage());
 
   if constexpr (Source::RELAY_DIVERSION)
   {
@@ -509,6 +509,24 @@ void test_absence_count_unsigned(void)
   assertSameAsReference< Everything >("every feature, N = 65535");
 }
 
+/* V, the RMS voltage in hundredths of a volt, is unsigned: beyond 327.67 V (a datalog period that
+ * would hold more V^2 than samples) it no longer reads negative */
+void test_voltage_unsigned(void)
+{
+  typicalValues();
+  Line lines[32];
+
+  values.voltage_x100 = 46000;
+  uint8_t count{ parseFrame(streamFrame< Default >(), lines) };
+  TEST_ASSERT_EQUAL_STRING("46000", valueOf(lines, count, "V"));
+  assertSameAsReference< Default >("V = 46000");
+  assertSameAsReference< Everything >("every feature, V = 46000");
+
+  values.voltage_x100 = 65535;
+  count = parseFrame(streamFrame< Everything >(), lines);
+  TEST_ASSERT_EQUAL_STRING("65535", valueOf(lines, count, "V"));
+}
+
 /* with CT2: D (W) and E (Wh) right after P, apart from D1...Dn (the loads' ON time, %) */
 void test_diverted_labels_with_ct2(void)
 {
@@ -607,6 +625,7 @@ int main(int /* argc */, char** /* argv */)
   RUN_TEST(test_step_fits_serial_output);
   RUN_TEST(test_one_line_per_step);
   RUN_TEST(test_absence_count_unsigned);
+  RUN_TEST(test_voltage_unsigned);
   RUN_TEST(test_diverted_labels_with_ct2);
   RUN_TEST(test_no_diverted_labels_without_ct2);
 

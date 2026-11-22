@@ -107,6 +107,7 @@ typedef enum
   EXPECT_MIN_OFF,     /* expect min_off <pin> <s>  (shortest complete OFF period between two ON ones, at least) */
   EXPECT_EARLY_READS, /* expect ds18b20_early_reads <n>  (scratchpads read before the end of their conversion, at most) */
   EXPECT_TEMPERATURE, /* expect temperature <n> <min> <max>  (every T<n> the datalog reports, at least one) */
+  EXPECT_VOLTAGE,     /* expect voltage <min> <max>  (every V the datalog reports, the first line included, at least one) */
 } expect_kind_t;
 
 typedef struct
@@ -430,6 +431,8 @@ static void parse_scenario(const char *path, int depth)
         e->kind = EXPECT_MIN_OFF;
       else if (sscanf(args, " ds18b20_early_reads %lf", &e->hi) == 1)
         e->kind = EXPECT_EARLY_READS;
+      else if (sscanf(args, " voltage %lf %lf", &e->lo, &e->hi) == 2 && e->hi >= e->lo)
+        e->kind = EXPECT_VOLTAGE;
       else if (sscanf(args, " temperature %d %lf %lf", &e->node, &e->lo, &e->hi) == 3 && e->node >= 1
                && e->node <= MAX_TEMPERATURES && e->hi >= e->lo)
         e->kind = EXPECT_TEMPERATURE;
@@ -607,6 +610,8 @@ typedef struct
   int lines;
   double min, max;
 } reported_t;
+
+static reported_t reported_voltage;
 
 static struct
 {
@@ -1100,6 +1105,18 @@ static void serial_line(const char *line)
   if (d && sscanf(d, ", diverted %lf W, %lf Wh", &w, &wh) == 2 && serial.no_of_diverted < MAX_DATALOG)
     serial.diverted[serial.no_of_diverted++] = (datalog_t){ .t = now(), .w = w, .wh = wh };
 
+  /* ", V:<value>", the RMS voltage of every datalog line */
+  const char *v = strstr(line, ", V:");
+  double volts;
+  if (v && sscanf(v, ", V:%lf", &volts) == 1)
+  {
+    if (!reported_voltage.lines || volts < reported_voltage.min)
+      reported_voltage.min = volts;
+    if (!reported_voltage.lines || volts > reported_voltage.max)
+      reported_voltage.max = volts;
+    ++reported_voltage.lines;
+  }
+
   /* ", T<n>:<value>" (TEMP_SENSOR_PRESENT), for each valid temperature */
   for (const char *t = strstr(line, ", T"); t; t = strstr(t + 3, ", T"))
   {
@@ -1429,6 +1446,14 @@ static int report_expects(void)
                    e->hi, e->measured);
           break;
         }
+      case EXPECT_VOLTAGE:
+        e->passed = reported_voltage.lines && reported_voltage.min >= e->lo && reported_voltage.max <= e->hi;
+        if (reported_voltage.lines)
+          snprintf(what, sizeof what, "V in [%g, %g]: %.2f to %.2f, over %d datalog lines", e->lo, e->hi,
+                   reported_voltage.min, reported_voltage.max, reported_voltage.lines);
+        else
+          snprintf(what, sizeof what, "V in [%g, %g]: never reported", e->lo, e->hi);
+        break;
       case EXPECT_TEMPERATURE:
         {
           const reported_t *st = &serial.temperature[e->node - 1];
@@ -1652,6 +1677,8 @@ int main(int argc, char *argv[])
   if (serial.datalog_lines)
     printf("Datalog   %d lines, min sample sets per mains cycle %d-%d\n", serial.datalog_lines, serial.min_sets,
            serial.max_sets);
+  if (reported_voltage.lines)
+    printf("Datalog   V in %d lines, %.2f to %.2f\n", reported_voltage.lines, reported_voltage.min, reported_voltage.max);
   for (int n = 0; n < MAX_TEMPERATURES; ++n)
     if (serial.temperature[n].lines)
       printf("Datalog   T%d in %d lines, %.2f to %.2f C\n", n + 1, serial.temperature[n].lines, serial.temperature[n].min,

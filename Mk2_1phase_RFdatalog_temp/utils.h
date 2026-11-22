@@ -487,9 +487,9 @@ struct TeleInfoData
   {
     return Shared::copyOf_divertedEnergyTotal_Wh;
   }
-  static int16_t voltage()
+  static uint16_t voltage()
   {
-    return static_cast< int16_t >(tx_data.Vrms_L_x100[0]);
+    return tx_data.Vrms_L_x100[0];
   }
   static int16_t relayAverage()
   {
