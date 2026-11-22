@@ -14,6 +14,7 @@
 
 #include "../halt_after_tests.h"
 
+#include "serial_output.h"
 #include "teleinfo.h"
 
 void setUp(void)
@@ -59,7 +60,7 @@ void test_lineSize_calculation(void)
   TEST_ASSERT_EQUAL(5 + 4 + 2, TeleInfo::lineSize(4, 2));
 
   // a step fits the serial output's (SerialOutput::MAX_STEP_LENGTH)
-  TEST_ASSERT_LESS_OR_EQUAL(32, TeleInfo::MAX_STEP_LENGTH);
+  TEST_ASSERT_LESS_OR_EQUAL(SerialOutput::MAX_STEP_LENGTH, TeleInfo::MAX_STEP_LENGTH);
 }
 
 /* the values that used to be cut or wrong: a 5-character temperature, the sample count above
@@ -107,7 +108,7 @@ struct TestSource
   static int16_t loadOnPercent(uint8_t idx) { return idx == 0 ? 100 : 37; }
   static bool temperatureValid(uint8_t idx) { return idx == 0; }
   static int16_t temperature(uint8_t) { return 2137; }
-  static int16_t absenceCount() { return 731; }
+  static uint16_t absenceCount() { return 40000; }
   static bool offPeak() { return true; }
   static uint32_t sampleSets() { return 96000; }
   static uint8_t lowestSampleSetsPerCycle() { return 44; }
@@ -163,7 +164,7 @@ void test_diverted_labels_with_ct2(void)
   appendLine(expected, "D2\t37");
   appendLine(expected, "D1\t100");
   appendLine(expected, "T1\t2137");
-  appendLine(expected, "N\t731");
+  appendLine(expected, "N\t40000");
   appendLine(expected, "TA\t1");
   appendLine(expected, "S\t96000");
   appendLine(expected, "S_MC\t44");
@@ -187,7 +188,7 @@ void test_no_diverted_labels_without_ct2(void)
   appendLine(expected, "D2\t37");
   appendLine(expected, "D1\t100");
   appendLine(expected, "T1\t2137");
-  appendLine(expected, "N\t731");
+  appendLine(expected, "N\t40000");
   appendLine(expected, "TA\t1");
   appendLine(expected, "S\t96000");
   appendLine(expected, "S_MC\t44");

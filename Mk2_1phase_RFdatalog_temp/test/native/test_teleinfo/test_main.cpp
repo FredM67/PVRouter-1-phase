@@ -61,7 +61,7 @@ struct TestSource
   static int16_t loadOnPercent(uint8_t idx) { return values.loadOnPercent[idx]; }
   static bool temperatureValid(uint8_t idx) { return values.temperatureValid[idx]; }
   static int16_t temperature(uint8_t idx) { return values.temperature_x100[idx]; }
-  static int16_t absenceCount() { return static_cast< int16_t >(values.absenceCount); }
+  static uint16_t absenceCount() { return values.absenceCount; }
   static bool offPeak() { return values.offPeak; }
   static SampleSets sampleSets() { return static_cast< SampleSets >(values.sampleSets); }
   static uint8_t lowestSampleSetsPerCycle() { return values.lowestSampleSetsPerCycle; }
@@ -69,7 +69,8 @@ struct TestSource
 
 /**
  * @brief The buffered TeleInfo class of the firmware, as it was (utoa()/ultoa() aside): the
- *        reference of the frame.
+ *        reference of the frame. Its frame differs in one place only (referenceFrame()): N is
+ *        sent unsigned.
  */
 class Reference
 {
@@ -211,7 +212,7 @@ static void referenceFrame(Reference& teleInfo)
     teleInfo.send("T", Source::temperature(idx), idx + 1);
   }
 
-  teleInfo.send("N", Source::absenceCount());
+  teleInfo.sendUnsigned("N", Source::absenceCount());  // unsigned since Task 5b, was send() (negative beyond 32767 s)
 
   if constexpr (Source::DUAL_TARIFF)
   {
@@ -322,6 +323,8 @@ void test_streamed_frame_32_bit_sample_count(void)
 void test_step_fits_serial_output(void)
 {
   extremeValues();
+  // 32: SerialOutput::MAX_STEP_LENGTH, out of reach here (serial_output.h needs Arduino.h);
+  // utils.h checks it with a static_assert, the embedded test against the constant
   TEST_ASSERT_LESS_OR_EQUAL_UINT8(32, TeleInfo::MAX_STEP_LENGTH);
   TEST_ASSERT_LESS_OR_EQUAL_UINT8(TeleInfo::MAX_STEP_LENGTH, streamFrame< Everything >().longestStep);
 
@@ -441,6 +444,25 @@ static const char* valueOf(const Line (&lines)[32], uint8_t count, const char* t
   return "";
 }
 
+/* N, the seconds without diverted energy, is unsigned: beyond 32767 s (9.1 h) it no longer
+ * reads negative */
+void test_absence_count_unsigned(void)
+{
+  typicalValues();
+  Line lines[32];
+
+  values.absenceCount = 40000;
+  uint8_t count{ parseFrame(streamFrame< Default >(), lines) };
+  TEST_ASSERT_EQUAL_STRING("40000", valueOf(lines, count, "N"));
+  assertSameAsReference< Default >("N = 40000");
+  assertSameAsReference< Everything >("every feature, N = 40000");
+
+  values.absenceCount = 65535;
+  count = parseFrame(streamFrame< Everything >(), lines);
+  TEST_ASSERT_EQUAL_STRING("65535", valueOf(lines, count, "N"));
+  assertSameAsReference< Everything >("every feature, N = 65535");
+}
+
 /* with CT2: D (W) and E (Wh) right after P, apart from D1...Dn (the loads' ON time, %) */
 void test_diverted_labels_with_ct2(void)
 {
@@ -538,6 +560,7 @@ int main(int /* argc */, char** /* argv */)
   RUN_TEST(test_streamed_frame_32_bit_sample_count);
   RUN_TEST(test_step_fits_serial_output);
   RUN_TEST(test_one_line_per_step);
+  RUN_TEST(test_absence_count_unsigned);
   RUN_TEST(test_diverted_labels_with_ct2);
   RUN_TEST(test_no_diverted_labels_without_ct2);
 

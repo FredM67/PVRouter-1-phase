@@ -246,7 +246,7 @@ struct FrameSource
   static int16_t loadOnPercent(uint8_t) { return 37; }
   static bool temperatureValid(uint8_t) { return true; }
   static int16_t temperature(uint8_t) { return 2137; }
-  static int16_t absenceCount() { return 7; }
+  static uint16_t absenceCount() { return 7; }
   static bool offPeak() { return false; }
   static uint16_t sampleSets() { return 64000; }
   static uint8_t lowestSampleSetsPerCycle() { return 44; }

@@ -484,7 +484,7 @@ struct TeleInfoData
   static int16_t loadOnPercent(uint8_t idx) { return static_cast< int16_t >(Shared::copyOf_countLoadON[idx] * 100UL / DATALOG_PERIOD_IN_MAINS_CYCLES); }
   static bool temperatureValid(uint8_t idx) { return isValidTemperature(tx_data.temperature_x100[idx]); }
   static int16_t temperature(uint8_t idx) { return tx_data.temperature_x100[idx]; }
-  static int16_t absenceCount() { return static_cast< int16_t >(absenceCountAtDatalog); }
+  static uint16_t absenceCount() { return absenceCountAtDatalog; }
   static bool offPeak() { return datalogOffPeak; }
   static SampleSetCounter sampleSets() { return Shared::copyOf_sampleSetsDuringThisDatalogPeriod; }
   static uint8_t lowestSampleSetsPerCycle() { return Shared::copyOf_lowestNoOfSampleSetsPerMainsCycle; }
