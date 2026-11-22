@@ -49,6 +49,7 @@ pio check
 - `validation.h` - ~50+ compile-time safety assertions
 - `utils_relay.h` - Relay control: pins and printing; the decisions, with EWMA filtering, are in `relay_engine.h` (Arduino-free, native tests)
 - `utils_temp.h` - DS18B20 temperature sensor management
+- `utils_display.h` / `utils_oled.h` - The display (`TYPE_OF_DISPLAY`): the 7-segment display, multiplexed from the ADC ISR, and the OLED (U8x8), updated once per second from the loop; the pins, port images and content are in `display_core.h` (Arduino-free, native tests)
 
 ### Real-Time Constraints
 

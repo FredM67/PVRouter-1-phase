@@ -37,6 +37,8 @@ static_assert(__cplusplus >= 201703L, "See also : https://github.com/FredM67/PVR
 #include "shared_var.h"
 #include "types.h"
 #include "utils.h"
+#include "utils_display.h"
+#include "utils_oled.h"
 #include "utils_relay.h"
 #include "validation.h"
 #include "main.h"
@@ -336,6 +338,10 @@ void setup()
   // On start, display config info in the serial monitor (human-readable and IoT outputs)
   printConfiguration();
 
+  // the display before the ADC starts: the 7-segment display is multiplexed from its interrupt
+  setupOLED();
+  initializeDisplay();
+
   // initializes all loads to OFF at startup
   initializeProcessing();
 
@@ -480,6 +486,61 @@ void handlePerSecondTasks(bool &bOffPeak, int16_t &iTemperature_x100)
 }
 
 /**
+ * @brief Updates the display, once per second.
+ *
+ * @param energyWh the diverted energy, in Wh, as last sent (Shared::copyOf_divertedEnergyTotal_Wh)
+ *
+ * @details Each item of the turn shows DISPLAY_TURN_SECONDS: the energy slot (FORC, OFF, the
+ *          diverted energy, or the walking dots before any diversion; no energy without CT2),
+ *          then each temperature (Display::itemAt()). Forced and OFF come from the per-second
+ *          tasks just done (Shared::overrideBitmask..., written by the loop only).
+ *
+ * @ingroup GeneralProcessing
+ */
+void updateDisplay(const uint16_t energyWh)
+{
+  if constexpr (TYPE_OF_DISPLAY != DisplayType::NONE)
+  {
+    constexpr uint8_t noOfSensors{ TEMP_SENSOR_PRESENT ? tempSensors.size() : 0 };
+    static uint8_t seconds{ 0 };
+    static uint8_t step{ 0 };
+
+    const bool forced{ (Shared::overrideBitmask != 0) || (Shared::remoteOverrideBitmask != 0) };
+    Display::Content slot{ Display::Content::WAITING };
+    const bool hasSlot{ Display::energySlot(forced, Shared::b_diversionEnabled, DIVERTED_CT_PRESENT, Shared::EDD_isActive, SEVEN_SEGMENT_DISPLAY, slot) };
+
+    if (++seconds >= DISPLAY_TURN_SECONDS)
+    {
+      seconds = 0;
+      if (++step >= noOfSensors + (hasSlot ? 1 : 0))
+      {
+        step = 0;
+      }
+    }
+
+    const Display::Item item{ Display::itemAt(step, hasSlot, slot, noOfSensors) };
+
+    int16_t temperature_x100{ 0 };
+    if constexpr (TEMP_SENSOR_PRESENT)
+    {
+      if (item.content == Display::Content::TEMPERATURE)
+      {
+        temperature_x100 = tx_data.temperature_x100[item.sensor];
+      }
+    }
+
+    if constexpr (SEVEN_SEGMENT_DISPLAY)
+    {
+      showOn7SegmentDisplay(item, energyWh, temperature_x100);
+    }
+    else
+    {
+      updateOLED(item, energyWh, temperature_x100);
+    }
+  }
+}
+
+/**
  * @brief Main processor loop.
  *
  * This function handles non-time-critical tasks such as load management, telemetry updates,
@@ -499,6 +560,8 @@ void loop()
   static uint8_t perSecondTimer{ 0 };
   static bool bOffPeak{ false };
   static int16_t iTemperature_x100{ 0 };
+  static bool bDisplayStarted{ false };  // from the first datalog event, after the logo
+  static uint16_t displayedEnergy_Wh{ 0 };
 
   // Write the datalog output in progress, as far as the serial buffer allows (never waits)
   SerialOutput::poll();
@@ -518,12 +581,28 @@ void loop()
     {
       perSecondTimer = 0;
       handlePerSecondTasks(bOffPeak, iTemperature_x100);
+
+      if (bDisplayStarted)
+      {
+        updateDisplay(displayedEnergy_Wh);
+      }
     }
   }
 
   if (Shared::b_datalogEventPending)
   {
     Shared::b_datalogEventPending = false;
+
+    if constexpr (TYPE_OF_DISPLAY != DisplayType::NONE)
+    {
+      // The ISR writes the copy at the end of each datalog period only: reading it here, just
+      // after, cannot tear. The display shows the energy as sent, at most one period late.
+      if constexpr (DIVERTED_CT_PRESENT)
+      {
+        displayedEnergy_Wh = Shared::copyOf_divertedEnergyTotal_Wh;
+      }
+      bDisplayStarted = true;
+    }
 
     updatePowerAndVoltageData();
 

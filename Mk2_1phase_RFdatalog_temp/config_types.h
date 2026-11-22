@@ -43,6 +43,15 @@ enum class PcbVersion : uint8_t
   NEW       /**< the universal board (rev. 6.0 and later): V A0, CT1 A1, CT2 A3, internal 1.1 V ADC reference */
 };
 
+/** Display: none, the 4-digit 7-segment display (OLD_SEG only) or the OLED on I2C (OLD_OLED and NEW) */
+enum class DisplayType : uint8_t
+{
+  NONE,  /**< no display */
+  OLED,  /**< SSD1306 128x64 OLED on I2C (A4 SDA, A5 SCL): OLD_OLED and NEW */
+  SEG,   /**< 7-segment display driven directly, without the pin-saving logic chips: OLD_SEG */
+  SEG_HW /**< 7-segment display driven through the pin-saving logic chips (74HC4543, 74HC138): OLD_SEG */
+};
+
 /** Rotation modes */
 enum class RotationModes : uint8_t
 {

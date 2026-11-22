@@ -1,0 +1,329 @@
+/**
+ * @file utils_oled.h
+ * @author Frédéric Metrich (frederic.metrich@live.fr)
+ * @brief Some utility functions for OLED display
+ * @version 1.0
+ * @date 2026-11-22
+ *
+ * @copyright Copyright (c) 2024-2026
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ *
+ * @details From Mk2_fasterControl_Full/utils_oled.h: an SSD1306 128x64 OLED on the hardware I2C
+ *          (A4 SDA, A5 SCL), driven by U8x8 (the text-only part of U8g2: no frame buffer in
+ *          RAM, the screen is written in 8x8 tiles). The logo at startup, then:
+ *          - rows 0 to 5: the value in large digits, 5 characters (energy "1.234" or "12.34" kWh,
+ *            temperature " 23.5"), or FORCED / OFF;
+ *          - rows 6 and 7: the watchdog symbol (blinks each second), the sensor (T1, T2...) and
+ *            the unit (kWh, °C).
+ *          The value is written again only when it changes: the I2C transfer of the large
+ *          digits takes about 20 ms in the loop.
+ *
+ * @ingroup OLEDDisplay
+ */
+
+#ifndef UTILS_OLED_H
+#define UTILS_OLED_H
+
+#include <Arduino.h>
+#include <U8x8lib.h>
+
+#include "config_derived.h"
+#include "display_core.h"
+
+/**
+ * @brief This is a fake class in case there's no OLED display
+ *
+ * When declaring a variable with the real OLED class, even it's not used, it is
+ * loaded and partially initialized.
+ * This leads to "break" the ADC measurement on old boards and
+ * consumes memory on any board.
+ * This is to avoid the use of "#ifdef" in the code to activate/deactivate
+ * portions of code.
+ *
+ * @ingroup OLEDDisplay
+ */
+class u8x8_fake
+{
+public:
+  constexpr explicit u8x8_fake(uint8_t) {}
+
+  bool begin()
+  {
+    return true;
+  }
+  void clearDisplay() {}
+  void clearLine(uint8_t) {}
+  uint8_t getCols()
+  {
+    return 0;
+  }
+  uint8_t getRows()
+  {
+    return 0;
+  }
+
+  void setFont(const uint8_t *) {}
+  void drawString(uint8_t, uint8_t, const char *) {}
+  void drawGlyph(uint8_t, uint8_t, uint8_t) {}
+
+  void drawTile(uint8_t, uint8_t, uint8_t, uint8_t *) {}
+};
+
+inline conditional_t< TYPE_OF_DISPLAY == DisplayType::OLED, U8X8_SSD1306_128X64_NONAME_HW_I2C, u8x8_fake > u8x8(/* reset=*/U8X8_PIN_NONE); /**< The OLED display object */
+
+inline constexpr uint8_t LOGO_WIDTH{ 72 };  /**< The width of the object, in pixel */
+inline constexpr uint8_t LOGO_HEIGHT{ 64 }; /**< The Height of the object, in pixel */
+
+inline const unsigned char logo_xbm[] U8X8_PROGMEM = {
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+  0xef, 0xbf, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xef, 0xbf, 0xff,
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xcf, 0x9f, 0xff, 0xff, 0xff, 0xff,
+  0xff, 0xff, 0xfb, 0xcf, 0x9f, 0xff, 0xfe, 0xff, 0xff, 0xff, 0xff, 0xf3,
+  0xcf, 0x9f, 0x7f, 0xfe, 0xff, 0xff, 0xff, 0xff, 0xe7, 0xdf, 0xdf, 0x3f,
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xe7, 0xdf, 0xdf, 0x3f, 0xff, 0xff, 0xff,
+  0xff, 0xff, 0xcf, 0xdf, 0xdf, 0x9f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xcf,
+  0x9f, 0xcf, 0x9f, 0xff, 0xff, 0xff, 0xff, 0xff, 0x9f, 0xdf, 0xcf, 0xcf,
+  0xff, 0xff, 0xff, 0xff, 0xf3, 0xbf, 0x9f, 0xcf, 0xef, 0x7f, 0xfe, 0xff,
+  0xff, 0xe7, 0x3f, 0xbf, 0xef, 0xe7, 0x3f, 0xff, 0xff, 0xff, 0xcf, 0x7f,
+  0xbf, 0xef, 0xf7, 0x9f, 0xff, 0xff, 0xff, 0x1f, 0x7f, 0xbe, 0xef, 0xf3,
+  0xc7, 0xff, 0xff, 0xff, 0x3f, 0xfe, 0xbe, 0xef, 0xfb, 0xe7, 0xff, 0xff,
+  0xff, 0xff, 0xfc, 0x3d, 0xe7, 0xf9, 0xf1, 0xff, 0xff, 0xff, 0xff, 0xf9,
+  0x79, 0xf7, 0xfc, 0xfc, 0xff, 0xff, 0xff, 0xff, 0xf3, 0xfb, 0xff, 0x7e,
+  0xfe, 0xff, 0xff, 0xff, 0xff, 0xe7, 0xff, 0xff, 0x3f, 0xff, 0xff, 0xff,
+  0x1f, 0xff, 0xcf, 0xff, 0xff, 0x9f, 0xff, 0xc7, 0xff, 0x3f, 0xf8, 0x9f,
+  0xff, 0xff, 0xef, 0xff, 0xe0, 0xff, 0xff, 0xe1, 0xff, 0xff, 0xff, 0xef,
+  0x3f, 0xfc, 0xff, 0xff, 0x0f, 0xff, 0xff, 0xff, 0xff, 0x87, 0xff, 0xff,
+  0xff, 0x7f, 0xfc, 0xff, 0xff, 0xff, 0xf1, 0xff, 0xff, 0xff, 0xff, 0xe1,
+  0xff, 0xff, 0x3f, 0xfc, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xbf,
+  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x03, 0x00, 0xff, 0xff, 0xff, 0xff,
+  0xff, 0xff, 0xff, 0x43, 0x0b, 0xfe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+  0xc7, 0x3f, 0xfe, 0xff, 0xff, 0xff, 0x07, 0x00, 0xf0, 0xc7, 0x7f, 0x7e,
+  0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xc7, 0xff, 0xfe, 0xff, 0xff, 0xff,
+  0xff, 0xff, 0xff, 0xc7, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+  0xc7, 0xff, 0xa3, 0x45, 0xce, 0xe2, 0xff, 0xff, 0xff, 0xc7, 0xff, 0x3b,
+  0x32, 0xb4, 0xfa, 0xff, 0xff, 0xff, 0xc7, 0xbf, 0x23, 0x62, 0x92, 0xe2,
+  0xff, 0xff, 0xff, 0xc7, 0x9f, 0xab, 0x14, 0xa4, 0xfa, 0xff, 0xff, 0xff,
+  0x07, 0x80, 0xf7, 0xeb, 0xcd, 0xe6, 0x07, 0x00, 0xe0, 0xc7, 0x8f, 0xff,
+  0xff, 0xff, 0xff, 0xe7, 0x23, 0xfc, 0xc7, 0x9f, 0xe4, 0xff, 0xff, 0xff,
+  0xcf, 0x33, 0xfc, 0xc7, 0x1f, 0x00, 0xfc, 0xff, 0xff, 0x8f, 0x99, 0xf9,
+  0xc7, 0x3f, 0x3c, 0xf8, 0xff, 0xff, 0x9f, 0x99, 0xf1, 0xc7, 0x3f, 0xfc,
+  0xf0, 0xff, 0xff, 0x3f, 0xcc, 0xf3, 0xc7, 0x3f, 0xfc, 0xf0, 0xff, 0xff,
+  0x3f, 0xc4, 0xe7, 0xc7, 0x3f, 0xfc, 0xe1, 0xff, 0xff, 0x07, 0x00, 0xe0,
+  0xc7, 0x3f, 0xfc, 0xe1, 0xff, 0xff, 0x07, 0x00, 0xe8, 0xc7, 0x3f, 0xfc,
+  0xf1, 0xff, 0xff, 0xff, 0xff, 0xff, 0xc7, 0x3f, 0xfc, 0xf1, 0xff, 0xff,
+  0xff, 0xff, 0xff, 0x03, 0x00, 0xfc, 0xf0, 0xff, 0xff, 0xff, 0xff, 0xff,
+  0xff, 0x3f, 0x3c, 0xfc, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0x00,
+  0xfe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0x1c, 0xfe, 0xff, 0xff,
+  0xff, 0xff, 0xff, 0xff, 0x3f, 0x7c, 0xfc, 0xff, 0xff, 0xff, 0xff, 0xff,
+  0xff, 0x3f, 0x7c, 0xf8, 0xff, 0xff, 0xff, 0x18, 0x2b, 0x22, 0x3e, 0xfc,
+  0xf8, 0xff, 0xff, 0xff, 0x6a, 0x6a, 0x73, 0x3e, 0xfc, 0xf0, 0xff, 0xff,
+  0xff, 0xc8, 0x7a, 0x23, 0x3e, 0xfc, 0xf0, 0xff, 0xff, 0xff, 0x58, 0x6a,
+  0x2b, 0x3e, 0xfc, 0xf1, 0xff, 0xff, 0xff, 0x97, 0x77, 0xeb, 0x3d, 0xfc,
+  0xe1, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0xfc, 0xe3, 0xff, 0xff,
+  0xff, 0xff, 0xff, 0xff, 0x3f, 0xfc, 0xc3, 0xff, 0xff, 0xff, 0xff, 0xff,
+  0xff, 0x1f, 0xf8, 0x87, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0xfc,
+  0x0f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+}; /**< The logo, XBM */
+
+/**
+ * @brief Get the tile from xbm object
+ *
+ * @param tile The 8 bytes of the tile (columns, bit 0 at the top)
+ * @param tx Relative x position of the tile
+ * @param ty Relative y position of the tile
+ * @param xbm_byte_width Width of the xbm object
+ * @param xbm The xbm object
+ *
+ * @ingroup OLEDDisplay
+ */
+inline void get_tile_from_xbm(uint8_t (&tile)[8], uint8_t tx, uint8_t ty, uint8_t xbm_byte_width, const unsigned char *xbm)
+{
+  const auto *p{ xbm + tx + xbm_byte_width * (ty << 3) };
+
+  memset(tile, 0, sizeof(tile));
+
+  for (uint8_t i = 0; i < 8; ++i)
+  {
+    const uint8_t b = u8x8_pgm_read(p);
+    for (uint8_t bit = 0; bit < 8; ++bit)
+    {
+      if (b & (1 << bit))
+      {
+        tile[bit] |= (1 << i);
+      }
+    }
+    p += xbm_byte_width;
+  }
+}
+
+/**
+ * @brief Draw the xbm on the OLED display
+ *
+ * @param _tx x position for drawing the xbm
+ * @param _ty y position for drawing the xbm
+ * @param xbm_width Width of the xbm
+ * @param xbm_height Height of the xbm
+ * @param xbm The xbm object
+ *
+ * @ingroup OLEDDisplay
+ */
+inline void u8x8_draw_xbm(uint8_t _tx, uint8_t _ty, uint8_t xbm_width, uint8_t xbm_height, const unsigned char *xbm)
+{
+  uint8_t tile[8];
+  for (uint8_t y = 0; y < (xbm_height >> 3); ++y)
+  {
+    for (uint8_t x = 0; x < (xbm_width >> 3); ++x)
+    {
+      get_tile_from_xbm(tile, x, y, xbm_width >> 3, xbm);
+      u8x8.drawTile(_tx + x, _ty + y, 1, tile);
+    }
+  }
+}
+
+/**
+ * @brief Setup the OLED display: the logo, until the first update.
+ *
+ * @ingroup OLEDDisplay
+ */
+inline void setupOLED()
+{
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
+  {
+    u8x8.begin();
+    u8x8.clearDisplay();
+
+    u8x8_draw_xbm((u8x8.getCols() - (LOGO_WIDTH >> 3)) >> 1, (u8x8.getRows() - (LOGO_HEIGHT >> 3)) >> 1, LOGO_WIDTH, LOGO_HEIGHT, logo_xbm);
+  }
+}
+
+/**
+ * @brief Update the watchdog on the display: the symbol, then nothing, each second in turn.
+ *
+ * @ingroup OLEDDisplay
+ */
+inline void updateWatchdog()
+{
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
+  {
+    static bool watchdogState{ false };  // State of the blinking LED
+
+    // Toggle the watchdog state
+    watchdogState ^= true;
+
+    if (watchdogState)
+    {
+      u8x8.setFont(u8x8_font_open_iconic_embedded_2x2);
+      u8x8.drawGlyph(0, 6, 70);  // the symbol code
+    }
+    else
+    {
+      u8x8.setFont(u8x8_font_7x14B_1x2_r);
+      u8x8.drawString(0, 6, "  ");
+    }
+  }
+}
+
+/**
+ * @brief Shows item @p item of the turn on the OLED, once per second.
+ *
+ * @param item what to show (Display::itemAt())
+ * @param energyWh the diverted energy, in Wh
+ * @param temperature_x100 the temperature of the item, for TEMPERATURE
+ *
+ * @details Only what changed goes over I2C (about 20 ms for the 5 large digits at 400 kHz,
+ *          longer with the ADC interrupt): the labels when the item changes, a large digit when
+ *          it differs from the one shown. The large digits fill rows 0 to 5 of columns 0 to 14
+ *          with their background, so they write over whatever was there.
+ *
+ * @ingroup OLEDDisplay
+ */
+inline void updateOLED(const Display::Item &item, const uint16_t energyWh, const int16_t temperature_x100)
+{
+  if constexpr (TYPE_OF_DISPLAY == DisplayType::OLED)
+  {
+    static bool logoShown{ true };
+    static Display::Item shown{ Display::Content::WAITING, 0xFF };
+    static char shownText[Display::OLED_TEXT_SIZE]{};
+
+    char text[Display::OLED_TEXT_SIZE]{};
+    switch (item.content)
+    {
+      case Display::Content::ENERGY:
+        Display::oledEnergy(energyWh, text);
+        break;
+      case Display::Content::TEMPERATURE:
+        Display::oledTemperature(temperature_x100, text);
+        break;
+      default:
+        break;
+    }
+
+    const bool newItem{ logoShown || (item.content != shown.content) || (item.sensor != shown.sensor) };
+
+    if (logoShown)
+    {
+      logoShown = false;
+      u8x8.clearDisplay();
+    }
+    else if (newItem)
+    {
+      if (text[0] == '\0')
+      {
+        for (uint8_t row = 0; row != 6; ++row)  // no large digits to write over the previous ones
+        {
+          u8x8.clearLine(row);
+        }
+      }
+      u8x8.clearLine(6);  // the labels; the watchdog comes back below
+      u8x8.clearLine(7);
+    }
+
+    if (newItem)
+    {
+      u8x8.setFont(u8x8_font_7x14B_1x2_r);
+      switch (item.content)
+      {
+        case Display::Content::ENERGY:
+          u8x8.drawString(12, 6, "kWh");
+          break;
+        case Display::Content::TEMPERATURE:
+          {
+            const char sensor[]{ 'T', static_cast< char >('1' + item.sensor), 0 };
+            u8x8.drawString(3, 6, sensor);
+
+            uint8_t degree[8]{ 0x00, 0x06, 0x09, 0x09, 0x06, 0x00, 0x00, 0x00 };  // a small circle, top left
+            u8x8.drawTile(13, 6, 1, degree);
+            u8x8.drawString(14, 6, "C");
+            break;
+          }
+        case Display::Content::FORCED:
+          u8x8.drawString(5, 2, "FORCED");
+          break;
+        case Display::Content::OFF:
+          u8x8.drawString(6, 2, "OFF");
+          break;
+        default:
+          break;
+      }
+    }
+
+    if (text[0] != '\0')
+    {
+      u8x8.setFont(u8x8_font_inb33_3x6_n);
+      for (uint8_t i = 0; i != Display::OLED_TEXT_SIZE - 1; ++i)
+      {
+        if (newItem || (text[i] != shownText[i]))
+        {
+          u8x8.drawGlyph(3 * i, 0, static_cast< uint8_t >(text[i]));
+        }
+      }
+    }
+
+    shown = item;
+    memcpy(shownText, text, sizeof(text));
+
+    updateWatchdog();
+  }
+}
+
+#endif /* UTILS_OLED_H */

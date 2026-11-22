@@ -25,6 +25,7 @@
 #include "ct_filter.h"
 #include "datalog_math.h"
 #include "diverted_energy.h"
+#include "utils_display.h"
 
 // analogue input pins and ADC reference of the board: adc_chain.h
 // AVCC (= VCC, 5 V or 3.3 V) on the old boards, the internal 1.1 V on the new one (buffered from AREF).
@@ -1205,6 +1206,8 @@ void processVoltageRawSample(const uint8_t phase, const uint16_t rawSample)
   {
     ++i_sampleSetsDuringThisDatalogPeriod;
   }
+
+  refresh7SegDisplay();  // the 7-segment display, multiplexed once per sample set (as Full); nothing otherwise
 }
 
 /**
