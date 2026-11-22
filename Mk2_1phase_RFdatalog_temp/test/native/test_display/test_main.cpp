@@ -251,7 +251,7 @@ void test_seg_texts()
   assertChars(CHAR_BLANK | DP, CHAR_BLANK, CHAR_BLANK, CHAR_BLANK, chars, "position 4 is 0");
 }
 
-/** The temperature on 4 digits, rounded to 0.1 °C; 'C' and '-' blank on SEG_HW. */
+/** The temperature on 4 digits, rounded to 0.1 °C; on SEG_HW no 'C', and the DP of digit 0 instead of '-'. */
 void test_seg_temperature()
 {
   uint8_t chars[NO_OF_DIGITS]{};
@@ -285,8 +285,16 @@ void test_seg_temperature()
 
   segTemperature(2350, false, chars);
   assertChars(2, 3 | DP, 5, B, chars, "SEG_HW: no 'C'");
+  segTemperature(520, false, chars);
+  assertChars(B, 5 | DP, 2, B, chars, "SEG_HW: positive, no DP on digit 0");
   segTemperature(-520, false, chars);
-  assertChars(B, 5 | DP, 2, B, chars, "SEG_HW: no '-'");
+  assertChars(B | DP, 5 | DP, 2, B, chars, "SEG_HW: -5.2, negative marked by the DP of digit 0");
+  segTemperature(-1250, false, chars);
+  assertChars(B | DP, 1, 3, B, chars, "SEG_HW: -12.5 shown -13, DP of digit 0");
+  segTemperature(-40, false, chars);
+  assertChars(B | DP, 0 | DP, 4, B, chars, "SEG_HW: -0.4, DP of digit 0");
+  segTemperature(-4, false, chars);
+  assertChars(B, 0 | DP, 0, B, chars, "SEG_HW: -0.04 shown 0.0, no negative marker");
   segTemperature(DEVICE_DISCONNECTED_RAW, false, chars);
   assertChars(B, B, B, B, chars, "SEG_HW: invalid is blank");
 }

@@ -467,21 +467,24 @@ constexpr void segEnergy(const uint16_t wh, uint8_t (&chars)[NO_OF_DIGITS])
 /**
  * @brief Writes the temperature @p temperature_x100, rounded to 0.1 °C.
  *
- * @param letters SEG: 'C' and '-' can be shown; SEG_HW: they are blanks
+ * @param letters SEG: 'C' and '-' can be shown; SEG_HW: they cannot (the 74HC4543 shows 0 to 9
+ *                and a blank only)
  *
  * @details "23.5C", "-5.2C" (the DP after the units); from 100 °C and below -9.9 °C, whole
- *          degrees: "100C", "-12C". An invalid reading shows "----" (4 blanks on SEG_HW).
+ *          degrees: "100C", "-13C". An invalid reading shows "----". On SEG_HW, no 'C', and a
+ *          negative temperature lights the DP of digit 0 instead of the '-' (that DP is free in
+ *          every negative layout); an invalid reading is 4 blanks.
  */
 constexpr void segTemperature(const int16_t temperature_x100, const bool letters, uint8_t (&chars)[NO_OF_DIGITS])
 {
   const uint8_t unit{ letters ? CHAR_C : CHAR_BLANK };
-  const uint8_t minus{ letters ? CHAR_MINUS : CHAR_BLANK };
+  const uint8_t minus{ letters ? CHAR_MINUS : static_cast< uint8_t >(CHAR_BLANK | DP) };
 
   if (!isValidTemperature(temperature_x100))
   {
     for (auto& c : chars)
     {
-      c = minus;
+      c = letters ? CHAR_MINUS : CHAR_BLANK;
     }
     return;
   }

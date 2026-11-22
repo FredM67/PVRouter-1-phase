@@ -49,7 +49,7 @@ enum class DisplayType : uint8_t
   NONE,  /**< no display */
   OLED,  /**< SSD1306 128x64 OLED on I2C (A4 SDA, A5 SCL): OLD_OLED and NEW */
   SEG,   /**< 7-segment display driven directly, without the pin-saving logic chips: OLD_SEG */
-  SEG_HW /**< 7-segment display driven through the pin-saving logic chips (74HC4543, 74HC138): OLD_SEG */
+  SEG_HW /**< 7-segment display driven through the pin-saving logic chips (74HC4543, 74HC138): OLD_SEG; negative temperatures: decimal point lit on the first digit */
 };
 
 /** Rotation modes */

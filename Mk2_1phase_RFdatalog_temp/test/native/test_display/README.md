@@ -15,7 +15,7 @@ Tests for `display_core.h`, the part of the display that needs neither Arduino n
 | `test_turn` | The energy slot, then each sensor, then again; temperatures only without slot; WAITING with nothing to show |
 | `test_seg_energy` | "1.234" up to 9999 Wh, "12.34" above, as Full |
 | `test_seg_texts` | FORC, OFF and the walking dots, as Full |
-| `test_seg_temperature` | Rounded to 0.1 °C ("23.5C", "-5.2C"), whole degrees from 100 °C and below -9.9 °C, no "-0.0", "----" when invalid; no 'C' nor '-' on SEG_HW |
+| `test_seg_temperature` | Rounded to 0.1 °C ("23.5C", "-5.2C"), whole degrees from 100 °C and below -9.9 °C, no "-0.0", "----" when invalid; on SEG_HW no 'C', and the DP of digit 0 marks a negative temperature |
 | `test_oled_texts` | The 5 characters of the large OLED digits for the energy and the temperature |
 
 ## Running

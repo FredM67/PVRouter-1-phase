@@ -83,7 +83,7 @@ inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 }; /**< the diverted energ
 // - SEG:    the 4-digit 7-segment display of the OLD_SEG board, without the pin-saving chips:
 //           D2, D5 to D13, A0 and A2 - only D3 and D4 are left;
 // - SEG_HW: the same display through the pin-saving chips: D5 to D9 and A0 to A2 - D2 to D4
-//           and D10 to D13 are left;
+//           and D10 to D13 are left; negative temperatures: decimal point lit on the first digit;
 // - OLED:   the SSD1306 128x64 OLED on I2C (A4, A5) of the OLD_OLED and NEW boards.
 // It shows the diverted energy (with CT2) and each temperature in turn, OFF with the router or
 // the diversion OFF, and FORC instead of the energy while a load or relay is forced.
