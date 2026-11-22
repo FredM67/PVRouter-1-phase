@@ -5,9 +5,8 @@
  * @details Prints `BENCH|<name>|<value>|<unit>` on its own line. CI collects these lines from the
  *          verbose output of the embedded tests (scripts/ci/bench_to_json.py), measures the
  *          target branch of a pull request in the same run, and posts the comparison as a
- *          comment (scripts/ci/pr_report.py); each push to dev adds them to the history on
- *          GitHub Pages (scripts/ci/pages_update.py). Smaller is better. simavr is
- *          cycle-accurate, so the values are exact and the same from run to run.
+ *          comment (scripts/ci/pr_report.py). Smaller is better. simavr is cycle-accurate,
+ *          so the values are exact and the same from run to run.
  *
  *          The name must stay the same over time: it is the key of the comparison.
  */

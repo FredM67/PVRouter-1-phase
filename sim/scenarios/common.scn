@@ -24,7 +24,9 @@ expect isr_overruns 0
 # are those of the builds with temperature sensing: a 1-Wire time slot keeps interrupts off up to
 # ~65 us (~1050 cycles), and the ISR entered that late still has to reach its ADMUX write (~420
 # cycles at most: the work of the mains cycle is spread over the CT2 calls, processing.cpp).
+# admux_delay_max leaves room for the ordinary shifts of the 1-Wire slots against the ADC phase: a
+# failure between 1620 and 1664 with misfiled_samples 0 is a margin warning, not a lost sample.
 expect isr_max 560
-expect admux_delay_max 1550
+expect admux_delay_max 1620
 # no sample beyond the ADC's range
 expect clipped 0

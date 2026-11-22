@@ -1,4 +1,4 @@
-# CI workflow for PVRouter-3-phase
+# CI workflow for PVRouter-1-phase
 # Runs build and tests on pull requests and on the long-lived branches
 # Skips CI for documentation-only changes
 
@@ -35,19 +35,32 @@ env:
 
 jobs:
   # Build job: compiles firmware for embedded targets.
-  # RF telemetry and remote loads are chosen in config.h, like everything else (no environment
-  # of their own, since Arduino IDE users have no environments): the entries set config.h.
+  # The board, the display, RF telemetry and remote loads are chosen in config.h, like everything
+  # else (no environment of their own, since Arduino IDE users have no environments): the entries
+  # set config.h. The shipped config.h is the NEW board without display; the board entries build
+  # each board with its display (scripts/ci/select_board.sh: OLD_SEG with the 7-segment display
+  # through its pin-saving chips, the loads moved off its pins by sim/configs/seg_hw.patch).
   # The serial entries set its output: IoT for the mk2Wifi module, HumanReadable for the serial
   # monitor, whatever the default of config.h. The remote loads entry applies
   # sim/configs/remote_loads.patch, so that the RF code is built and measured.
+  # The labels must stay those of scripts/ci/measure.sh: the PR report pairs the builds by name.
   build:
-    name: Build Firmware (${{ matrix.environment }}${{ matrix.serial && format(', {0}', matrix.serial) || '' }}${{ matrix.remote && ', remote loads' || '' }})
+    name: Build Firmware (${{ matrix.environment }}${{ matrix.board && format(', {0}, {1}', matrix.board, matrix.display) || '' }}${{ matrix.serial && format(', {0}', matrix.serial) || '' }}${{ matrix.remote && ', remote loads' || '' }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
           - environment: basic
+          - environment: basic
+            board: OLD_SEG
+            display: SEG_HW
+          - environment: basic
+            board: OLD_OLED
+            display: OLED
+          - environment: basic
+            board: NEW
+            display: OLED
           - environment: basic
             remote: true
           - environment: basic
@@ -60,6 +73,10 @@ jobs:
           submodules: 'true'
 
       - uses: ./.github/actions/setup-platformio
+
+      - name: Select the ${{ matrix.board }} board and the ${{ matrix.display }} display
+        if: matrix.board
+        run: scripts/ci/select_board.sh . ${{ matrix.board }} ${{ matrix.display }}
 
       - name: Select the ${{ matrix.serial }} serial output
         if: matrix.serial
@@ -83,7 +100,7 @@ jobs:
           FLASH=$((TEXT + DATA))
           RAM=$((DATA + BSS))
           {
-            echo "### Firmware size: \`${{ matrix.environment }}\`${{ matrix.serial && format(' ({0} serial output)', matrix.serial) || '' }}${{ matrix.remote && ' (remote loads)' || '' }}"
+            echo "### Firmware size: \`${{ matrix.environment }}\`${{ matrix.board && format(' ({0} board, {1} display)', matrix.board, matrix.display) || '' }}${{ matrix.serial && format(' ({0} serial output)', matrix.serial) || '' }}${{ matrix.remote && ' (remote loads)' || '' }}"
             echo ""
             echo "| Memory | Used | Budget | % |"
             echo "|---|---:|---:|---:|"
@@ -91,7 +108,7 @@ jobs:
             echo "| RAM (static) | $RAM | 2048 | $((RAM * 100 / 2048)) |"
           } >> "$GITHUB_STEP_SUMMARY"
           # for the size history (job pages) and the PR report: smaller is better
-          LABEL="${{ matrix.environment }}${{ matrix.serial && format(', {0}', matrix.serial) || '' }}${{ matrix.remote && ', remote loads' || '' }}"
+          LABEL="${{ matrix.environment }}${{ matrix.board && format(', {0}, {1}', matrix.board, matrix.display) || '' }}${{ matrix.serial && format(', {0}', matrix.serial) || '' }}${{ matrix.remote && ', remote loads' || '' }}"
           mkdir -p bench
           printf '[{"name": "flash: %s", "value": %d, "unit": "bytes"}, {"name": "RAM: %s", "value": %d, "unit": "bytes"}]\n' \
             "$LABEL" "$FLASH" "$LABEL" "$RAM" > "bench/size-${{ strategy.job-index }}.json"
@@ -172,7 +189,7 @@ jobs:
           name: bench-speed
           path: bench/speed.json
 
-  # The older sketch of Robin Emley, kept building.
+  # The older sketch, Mk2_fasterControl_Full, frozen: kept building, not developed further.
   build-fastercontrol:
     name: Build Firmware (Mk2_fasterControl_Full)
     runs-on: ubuntu-latest
@@ -200,8 +217,8 @@ jobs:
       run: |
         pio run --project-dir Mk2_fasterControl_Full
 
-  # The production firmware on a simulated 3-phase grid (sim/README.md):
-  # regulation, load priorities, ISR timing and switching instants, no hardware needed.
+  # The production firmware on a simulated single-phase grid (sim/README.md): regulation, load
+  # priorities, diverted energy, ISR timing and switching instants, no hardware needed.
   grid-sim:
     name: Grid simulation (${{ matrix.part == 'rf' && 'RF' || matrix.part }})
     runs-on: ubuntu-latest
@@ -209,7 +226,7 @@ jobs:
     # the same banner length whatever the checkout: same code, same switching instants (sim/README.md)
     env:
       PVR_SIM_BUILD: 1
-    # the scenarios spread over jobs: each grid scenario on its three boards (sim/ci_targets.sh),
+    # the scenarios spread over jobs: each grid scenario on every board and variant (sim/ci_targets.sh),
     # and the RF ones, which run three microcontrollers each, in a job of their own
     strategy:
       fail-fast: false
@@ -222,36 +239,77 @@ jobs:
 
       - uses: ./.github/actions/setup-platformio
 
-      # the old board and the human-readable datalog, which grid_sim reads (sim/README.md)
-      - name: Build firmware (basic)
+      # Each firmware in a build directory of its own (sim/Makefile), its sources restored after
+      # the build: sim_config.sh and the patches change config.h, calibration.h, config_system.h.
+
+      # OLD_SEG and the human-readable datalog, which grid_sim reads (sim/README.md)
+      - name: Build firmware (OLD_SEG)
         if: matrix.part != 'rf'
         run: |
           sim/configs/sim_config.sh
           pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
 
-      # the same scenarios on the new board: internal 1.1 V reference, calibration from calibration.h
-      - name: Build firmware (new board)
+      # the same scenarios on the second old board: other analog inputs
+      - name: Build firmware (OLD_OLED)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh OLD_OLED
+          PLATFORMIO_BUILD_DIR=.pio/build-old-oled pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # and on the new board: internal 1.1 V reference, calibration from calibration.h
+      - name: Build firmware (NEW)
         if: matrix.part != 'rf'
         run: |
           sim/configs/sim_config.sh NEW
           PLATFORMIO_BUILD_DIR=.pio/build-new pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
-          git checkout ${{ env.PROJECT_DIR }}/config.h
+          git checkout ${{ env.PROJECT_DIR }}
 
-      # and with 20 A CTs, about the resolution of the old board
-      - name: Build firmware (new board, 20 A CTs)
+      # with 20 A CTs, about the resolution of the old boards
+      - name: Build firmware (NEW, 20 A CTs)
         if: matrix.part != 'rf'
         run: |
           sim/configs/sim_config.sh NEW 20
           PLATFORMIO_BUILD_DIR=.pio/build-new20 pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
-          git checkout ${{ env.PROJECT_DIR }}/config.h ${{ env.PROJECT_DIR }}/calibration.h
+          git checkout ${{ env.PROJECT_DIR }}
 
-      # the same grid, with the third load on a remote unit driven over RF
+      # OLD_SEG built for a 60 Hz mains
+      - name: Build firmware (OLD_SEG, 60 Hz)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh OLD_SEG 60Hz
+          PLATFORMIO_BUILD_DIR=.pio/build-60hz pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # NEW with temperature sensing: the 1-Wire time slots against the ADC deadline
+      - name: Build firmware (NEW, temperature sensing)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh NEW
+          git apply --unidiff-zero sim/configs/temperature.patch
+          PLATFORMIO_BUILD_DIR=.pio/build-new-temp pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # OLD_SEG with the 7-segment display (pin-saving chips) and temperature sensing:
+      # the tightest build for the ADC deadline
+      - name: Build firmware (OLD_SEG, 7-segment display, temperature sensing)
+        if: matrix.part != 'rf'
+        run: |
+          sim/configs/sim_config.sh OLD_SEG
+          git apply --unidiff-zero sim/configs/seg_hw.patch
+          git apply --unidiff-zero sim/configs/temperature.patch
+          PLATFORMIO_BUILD_DIR=.pio/build-seg-temp pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
+
+      # the same grid, with two loads on remote units driven over RF
       - name: Build firmware (remote loads)
         if: matrix.part == 'rf'
         run: |
           sim/configs/sim_config.sh
           git apply --unidiff-zero sim/configs/remote_loads.patch
           PLATFORMIO_BUILD_DIR=.pio/build-rf pio run --project-dir ${{ env.PROJECT_DIR }} -e basic
+          git checkout ${{ env.PROJECT_DIR }}
 
       - name: Install simavr
         run: pio pkg install --global --tool platformio/tool-simavr
@@ -267,11 +325,12 @@ jobs:
           echo "make $targets"
           make -C sim -j"$(nproc)" -k $targets
 
-      # old board, new board with 50 A CTs, new board with 20 A CTs: the same result
+      # OLD_SEG, OLD_OLED, NEW with 50 A CTs, NEW with 20 A CTs: the same result
       - name: Compare the boards
         if: matrix.part != 'rf'
         run: |
           make -C sim compare-boards
+          make -C sim compare-old-oled
           make -C sim compare-boards-20
           make -C sim compare-ct
 

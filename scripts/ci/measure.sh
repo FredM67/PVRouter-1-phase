@@ -33,6 +33,16 @@ measure() {
 {
   measure basic basic
   cp "$project/config.h" "$out/config.h.orig"
+  # each board with its display; a target the script or its patch no longer fits gets no figures
+  for board_display in "OLD_SEG SEG_HW" "OLD_OLED OLED" "NEW OLED"; do
+    # shellcheck disable=SC2086 # two words: the board and the display
+    if "$here/select_board.sh" "$tree" $board_display >&2; then
+      measure basic "basic, ${board_display% *}, ${board_display#* }"
+    else
+      echo "::warning::$tree does not take the board ${board_display% *} with the display ${board_display#* }, no figures" >&2
+    fi
+    cp "$out/config.h.orig" "$project/config.h"
+  done
   # a target whose config.h the patch no longer fits gets no remote loads figures
   if git -C "$tree" apply --unidiff-zero "$here/../../sim/configs/remote_loads.patch"; then
     measure basic "basic, remote loads"

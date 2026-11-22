@@ -17,8 +17,7 @@ import os
 import sys
 
 MARKER = "<!-- pvrouter-bench-report -->"
-THRESHOLD = 2.0  # %, as the alert threshold of the benchmark history
-HISTORY = "https://fredm67.github.io/PVRouter-3-phase/bench/"
+THRESHOLD = 2.0  # %, a regression beyond it is flagged 🚨
 
 
 def load(directory, name):
@@ -195,8 +194,7 @@ def main(target_dir, pr_dir, target, target_sha, pr_sha):
         f"<sub>Smaller is better. `{target}` at {target_sha[:8]} against this PR merged into it ({pr_sha[:8]}). "
         f"simavr is cycle-accurate: the figures are exact, only code changes move them. "
         f"Every benchmark is counted in CPU cycles, and shown in µs as well (cycles / 16); "
-        f"the change is that of the cycles. "
-        f"History of `dev`: [benchmarks]({HISTORY}).</sub>"
+        f"the change is that of the cycles.</sub>"
     )
     print("\n".join(out))
 

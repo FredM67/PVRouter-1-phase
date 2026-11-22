@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Install Git hooks for the PVRouter-3-phase project
+# Install Git hooks for the PVRouter-1-phase project
 #
 # This script copies all hooks from scripts/git-hooks/ to .git/hooks/
 # and makes them executable.
