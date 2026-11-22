@@ -5,7 +5,8 @@
 - the 3 ADC channels of the board - voltage, CT1 at the grid connection, CT2 on the diverted current - receive 50 Hz (or 60 Hz) waves on the board's analog inputs, computed at the exact CPU cycle of each conversion;
 - each load pin drives a load of known power through a **zero-crossing triac driver**: a pin change only takes effect at the next zero crossing;
 - the grid current (CT1) is the scenario's surplus minus the loads that conduct - which is what the firmware measures and regulates; the diverted current (CT2) is the sum of the local loads and relays that conduct, forced ones included - which the firmware turns into the diverted energy it reports;
-- an **RFM69 radio model** sits on the SPI bus (chip select D10). Remote loads follow the frames the router sends them, received by an ideal receiver or by the **`RemoteLoadReceiver` firmware** running in more simulated AVRs. Frames can be lost on purpose.
+- an **RFM69 radio model** sits on the SPI bus (chip select D10). Remote loads follow the frames the router sends them, received by an ideal receiver or by the **`RemoteLoadReceiver` firmware** running in more simulated AVRs. Frames can be lost on purpose;
+- **DS18B20 temperature sensors** can sit on a 1-Wire bus (`ds18b20.c`): the firmware reads them as on the board, and the timing of its bus I/O against the mains cycle is measured.
 
 No hardware, no sun: regulation, load priorities, diverted energy, ISR timing and switching instants can be checked on any Linux/WSL machine, and in CI.
 
@@ -27,6 +28,9 @@ No hardware, no sun: regulation, load priorities, diverted energy, ISR timing an
 | receiver, per remote unit | frames received, frames missed because the radio was not listening |
 | grid | import / export energy |
 | diverted | the energy through CT2 (every local load and relay that conducted, forced ones included), and the diverted energy and power the firmware last reported (`, diverted <W> W, <Wh> Wh` of its datalog line) |
+| 1-Wire | resets, presence pulses, slot errors (a low neither a 1, a 0 nor a reset); the bursts of bus activity (slots less than 2 ms apart) and the longest; where in the mains cycle the slots that keep interrupts off for long fall: a reset (70 µs from its release to its presence sample) and a 0 written (65 µs low) |
+| per DS18B20 | its conversions and scratchpad reads, and the reads made before the end of a conversion (750 ms) |
+| temperatures | each `T<n>` of the datalog: in how many lines, lowest and highest |
 
 The firmware's serial output is shown with the simulated time.
 
@@ -120,8 +124,8 @@ make -C sim compare-boards compare-old-oled compare-boards-20 compare-ct
 - `check-60hz`: `sim_config.sh ... 60Hz` sets `SUPPLY_FREQUENCY` to 60 in `config_system.h`, and the board file a 60 Hz mains (53 sample sets per cycle): the per-cycle constants of the firmware (the Wh of the diverted energy, the datalog period, the seconds) follow the frequency.
 - `compare-boards` / `compare-old-oled`: each scenario must give the same result as on `OLD_SEG`: grid import and export, and the energy of each load, within 1 % or 0.1 Wh. The boards only differ in resolution (with the 50 A CTs of `calibration.h`, the new board has 0.161 A per ADC step against 0.061 A on the old ones) and in analog inputs, which can move a switching instant by a half-cycle now and then. The diverted energy is not compared: the firmware counts whole Wh, which a few hundredths of a Wh can tip.
 - `compare-boards-20`: 20 A CTs against `OLD_SEG`, within 0.5 % or 0.1 Wh; `compare-ct`: 20 A against 50 A CTs, within 1 % or 0.1 Wh.
-- `check-new-temp`: `NEW` with temperature sensing on D3 (`configs/temperature.patch`, built in `.pio/build-new-temp`). No DS18B20 is simulated: with no device on the bus, each reset and each bit written still keeps interrupts off for its 1-Wire time slot (up to ~65 µs, ~1050 cycles), and the ADC interrupt waits meanwhile.
-- `check-seg-temp`: `OLD_SEG` with the 7-segment display through its pin-saving chips (`configs/seg_hw.patch`: `SEG_HW`, refreshed in the ADC interrupt with the CT1 sample, loads on D10-D12) and temperature sensing (`configs/temperature.patch`), built in `.pio/build-seg-temp`. Its board file remaps the scenarios' load pins D5-D7 onto D10-D12 (`remap`). The display is refreshed on the CT1 call. It is the tightest build for the ADC deadline: an ISR call entered up to ~1100 cycles late, after a 1-Wire time slot, still has to write ADMUX within the 1664 cycles of its conversion. It does (~1460 cycles at most), since no ISR call needs more than ~420 cycles to reach its ADMUX write: the work of the mains cycle is spread over the CT2 calls that follow the zero crossings (`processing.cpp`, `CycleTask`).
+- `check-new-temp`: `NEW` with temperature sensing on D3 (`configs/temperature.patch`, built in `.pio/build-new-temp`), and the two DS18B20 of `configs/ds18b20.scn` on the bus, at 21.50 and -3.25 °C: the datalog must report both, read after their conversion. A reset and each 0 written keep interrupts off for their 1-Wire time slot (70 and 65 µs, about 1100 cycles), and the ADC interrupt waits meanwhile.
+- `check-seg-temp`: `OLD_SEG` with the 7-segment display through its pin-saving chips (`configs/seg_hw.patch`: `SEG_HW`, refreshed in the ADC interrupt with the CT1 sample, loads on D10-D12) and temperature sensing (`configs/temperature.patch`) with the DS18B20 of `configs/ds18b20.scn`, built in `.pio/build-seg-temp`. Its board file remaps the scenarios' load pins D5-D7 onto D10-D12 (`remap`). The display is refreshed on the CT1 call. It is the tightest build for the ADC deadline: an ISR call entered up to ~1100 cycles late, after a 1-Wire time slot, still has to write ADMUX within the 1664 cycles of its conversion. It does (~1460 cycles at most), since no ISR call needs more than ~420 cycles to reach its ADMUX write: the work of the mains cycle is spread over the CT2 calls that follow the zero crossings (`processing.cpp`, `CycleTask`).
 
 ### Remote loads
 
@@ -199,6 +203,7 @@ Plain text, one command per line, `#` starts a comment.
 | `rf_drop <t0> <t1> [<node>]` | frames sent in this window (to this node, or to all) are lost |
 | `rf_loss <percent> [<max>]` | share of frames lost at random, over the whole run; at most `<max>` in a row per node |
 | `rf_absent` | the router's RFM69 does not answer (missing, unpowered or badly wired: every SPI read gives 0) |
+| `ds18b20 <pin> <°C> <ROM code>` | a DS18B20 on the 1-Wire bus of the pin, at that temperature; its ROM code in 8 hex bytes (`28 BE 41 6B 09 00 00 A4`). Until its first conversion, it holds the power-on value 85.00 °C |
 | `input <pin> <0\|1> [<t>]` | level of an input pin from time t on (default 0): the latest line at or before the current time wins; unconnected inputs read 1, like the pull-ups |
 | `at <t> <W>` | surplus in W (> 0 = export) at time t; linear in between, repeat a time for a step |
 | `expect <t> pin <p> on\|off` | state of an output pin at time t |
@@ -218,6 +223,8 @@ Plain text, one command per line, `#` starts a comment.
 | `expect admux_delay_min <cycles>` | the ISR never writes ADMUX sooner than this after its conversion started |
 | `expect admux_delay_max <cycles>` | ... nor later than this (the deadline is 1664) |
 | `expect clipped <n>` | at most n samples beyond the ADC's range |
+| `expect ds18b20_early_reads <n>` | at most n scratchpads read before the end of their conversion |
+| `expect temperature <n> <min> <max>` | every `T<n>` the datalog reports lies within [min, max], and at least one line reports it |
 
 `scenarios/common.scn` describes the installation of the default `config.h` (three local loads on D5-D7, override pin D4) and the timing expected on every run (no misfiled sample, ADMUX written 128 cycles or more after its conversion started, no ISR overrun, no clipped sample), with margins enforced: the longest ISR call and the latest ADMUX write must stay a little above the worst measured on the builds that run them (`isr_max`, `admux_delay_max`), so that a change eating the headroom fails before samples are lost; the other scenarios include it. The ADMUX margin of the grid scenarios, 1620 cycles, leaves room for the ordinary shifts of the 1-Wire time slots against the ADC phase in the temperature builds: a failure between 1620 and the 1664-cycle deadline, with `misfiled_samples` 0, is a margin warning, not a lost sample. `scenarios/rf/common.scn` and `scenarios/relays/common.scn` do the same for the remote-loads and relay configurations. The relay and RF scenarios are those of the 3-phase router, every power halved (relay thresholds included) to stay within the range of one CT.
 
@@ -231,6 +238,7 @@ The firmware's datalog starts about 11 s after power-up (banner, then the start-
 - **Ideal signals**: pure sine waves, no ADC noise, no CT phase error or high-pass behaviour (which the CT1 filter of the old boards offsets), no harmonics.
 - **Power stage**: an ideal zero-crossing triac driver, resistive loads; relays switch at once, with no bounce.
 - **Timing**: simavr executes the real instructions with their datasheet cycle counts; peripherals are modelled, not exact.
+- **DS18B20**: Skip ROM, Match ROM, Convert T and Read Scratchpad only, with a fixed temperature, a 750 ms conversion and no parasite power. The bus is ideal: no noise, no rise time. Search ROM (the calibration mode lists the sensors with it) is not modelled.
 - **ADC reference**: the board file's `avcc` cancels out (the simulator turns the counts it wants into millivolts on the reference the firmware selected, which the ADC turns back into the same counts), so a firmware that selects the wrong reference still reads the right counts: the simulator cannot catch it. The native tests of `adc_chain.h` check the ADMUX of each board.
 - **ADC pipeline**: the depth of the ADMUX pipeline (written for the conversion after next) is only checked through behaviour: a wrong depth files samples under the wrong channel (`misfiled_samples`) and breaks the regulation.
 - **Diverted energy bands**: the firmware counts whole Wh and `expect diverted_wh` floors both ends of its band, so a whole-run band is effectively about ±9 % around its middle on these short scenarios, wider than the ±5 % it is written with.

@@ -8,9 +8,11 @@
 #   make check-new20    the same with 20 A CTs: about the resolution of the old boards
 #   make check-60hz     the same against an OLD_SEG firmware built for 60 Hz, on a 60 Hz mains
 #   make check-seg-temp the same against OLD_SEG with the 7-segment display (SEG_HW, loads on D10-D12,
-#                       board file old_seg_hw_board.scn) and temperature sensing (configs/seg_hw.patch,
-#                       configs/temperature.patch): the tightest build for the ADC deadline
-#   make check-new-temp the same against NEW with temperature sensing (configs/temperature.patch)
+#                       board file old_seg_hw_temp_board.scn) and temperature sensing (configs/seg_hw.patch,
+#                       configs/temperature.patch), two DS18B20 on D3 (configs/ds18b20.scn): the
+#                       tightest build for the ADC deadline
+#   make check-new-temp the same against NEW with temperature sensing (configs/temperature.patch) and
+#                       the DS18B20 (board file new_temp_board.scn)
 #   make check-rf       run scenarios/rf against the remote-loads firmware (configs/remote_loads.patch),
 #                       with ideal receivers, or with the RemoteLoadReceiver firmware on the units
 #                       of RX_NODES (RX_NODES="15 16", its sources in RX_SRC)
@@ -69,13 +71,16 @@ SCENARIOS    := $(filter-out scenarios/common.scn,$(wildcard scenarios/*.scn))
 RF_SCENARIOS := $(filter-out scenarios/rf/common.scn,$(wildcard scenarios/rf/*.scn))
 RELAY_SCENARIOS := $(filter-out scenarios/relays/common.scn,$(wildcard scenarios/relays/*.scn))
 
-grid_sim: grid_sim.o rfm69.o avr_adc.o
+grid_sim: grid_sim.o rfm69.o ds18b20.o avr_adc.o
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-grid_sim.o: grid_sim.c rfm69.h
+grid_sim.o: grid_sim.c rfm69.h ds18b20.h
 	$(CC) $(CFLAGS) -Wall -Wextra -c -o $@ $<
 
 rfm69.o: rfm69.c rfm69.h
+	$(CC) $(CFLAGS) -Wall -Wextra -c -o $@ $<
+
+ds18b20.o: ds18b20.c ds18b20.h
 	$(CC) $(CFLAGS) -Wall -Wextra -c -o $@ $<
 
 # upstream code, built as is
@@ -130,10 +135,16 @@ $(OUT)/old_seg_60hz_board.scn: board_scn.sh $(CAL)
 	@mkdir -p $(OUT)
 	sh board_scn.sh OLD_SEG $(CAL) '' 60 > $@
 
-# OLD_SEG with SEG_HW: the loads of the scenarios (D5-D7) are on D10-D12 (configs/seg_hw.patch)
-$(OUT)/old_seg_hw_board.scn: board_scn.sh $(CAL)
+# NEW with temperature sensing: the DS18B20 of configs/temperature.patch on D3
+$(OUT)/new_temp_board.scn: board_scn.sh $(CAL) configs/ds18b20.scn
 	@mkdir -p $(OUT)
-	{ sh board_scn.sh OLD_SEG $(CAL); printf 'remap 5 10\nremap 6 11\nremap 7 12\n'; } > $@
+	{ sh board_scn.sh NEW $(CAL); cat configs/ds18b20.scn; } > $@
+
+# OLD_SEG with SEG_HW: the loads of the scenarios (D5-D7) are on D10-D12 (configs/seg_hw.patch);
+# temperature sensing, with the DS18B20 on D3
+$(OUT)/old_seg_hw_temp_board.scn: board_scn.sh $(CAL) configs/ds18b20.scn
+	@mkdir -p $(OUT)
+	{ sh board_scn.sh OLD_SEG $(CAL); printf 'remap 5 10\nremap 6 11\nremap 7 12\n'; cat configs/ds18b20.scn; } > $@
 
 # make run: the board file and the firmware of BOARD
 RUN_BOARD = $(OUT)/$(shell echo $(BOARD) | tr A-Z a-z)_board.scn
@@ -207,11 +218,11 @@ $(CHECK_NEW20): check-new20-%: grid_sim $(FW_NEW20) $(OUT)/new20_board.scn
 $(CHECK_60HZ): check-60hz-%: grid_sim $(FW_60HZ) $(OUT)/old_seg_60hz_board.scn
 	$(call scenario,-b $(OUT)/old_seg_60hz_board.scn $(FW_60HZ),scenarios/$*.scn,60hz-$*)
 
-$(CHECK_SEG_TEMP): check-seg-temp-%: grid_sim $(FW_SEG_TEMP) $(OUT)/old_seg_hw_board.scn
-	$(call scenario,-b $(OUT)/old_seg_hw_board.scn $(FW_SEG_TEMP),scenarios/$*.scn,seg_temp-$*)
+$(CHECK_SEG_TEMP): check-seg-temp-%: grid_sim $(FW_SEG_TEMP) $(OUT)/old_seg_hw_temp_board.scn
+	$(call scenario,-b $(OUT)/old_seg_hw_temp_board.scn $(FW_SEG_TEMP),scenarios/$*.scn,seg_temp-$*)
 
-$(CHECK_NEW_TEMP): check-new-temp-%: grid_sim $(FW_NEW_TEMP) $(OUT)/new_board.scn
-	$(call scenario,-b $(OUT)/new_board.scn $(FW_NEW_TEMP),scenarios/$*.scn,new_temp-$*)
+$(CHECK_NEW_TEMP): check-new-temp-%: grid_sim $(FW_NEW_TEMP) $(OUT)/new_temp_board.scn
+	$(call scenario,-b $(OUT)/new_temp_board.scn $(FW_NEW_TEMP),scenarios/$*.scn,new_temp-$*)
 
 $(CHECK_RF): check-rf-%: grid_sim $(FW_RF) $(OUT)/old_seg_board.scn $(if $(RX_NODES),receivers)
 	$(call scenario,-b $(OUT)/old_seg_board.scn $(RX_ARGS) $(FW_RF),scenarios/rf/$*.scn,rf-$*)

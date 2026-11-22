@@ -1,8 +1,9 @@
 Firmware for 'make check-seg-temp' and 'make check-new-temp' (with configs/seg_hw.patch for the
 first): temperature sensing on D3, a free pin on every board (below 14, as the firmware requires;
-not D2/D10-D13, for RF builds). No DS18B20 is simulated: with no device on the bus, every
-reset and every bit written still keeps interrupts off for its 1-Wire time slot (up to ~70 us),
-which is what these builds measure against the ADC interrupt's deadline.
+not D2/D10-D13, for RF builds). The two sensors of config.h sit on the bus (configs/ds18b20.scn,
+in the board files of these targets): each reset and each 0 written keeps interrupts off for its
+1-Wire time slot (70 and 65 us), which is what these builds measure against the ADC interrupt's
+deadline, and the datalog must report both temperatures.
 
   PVR_SIM_BUILD=1 sh sim/configs/sim_config.sh NEW
   sed -n '/^diff --git/,$p' sim/configs/temperature.patch | patch -p1    # or git apply --unidiff-zero

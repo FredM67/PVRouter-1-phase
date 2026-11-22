@@ -17,8 +17,12 @@
  * payload's bits once it has been sent, and they drop out when no frame arrives
  * within the receiver's link timeout, like RemoteLoadReceiver does.
  *
+ * DS18B20 temperature sensors can sit on a 1-Wire bus (ds18b20.c): the firmware reads them as on
+ * the board, and the timing of its bus I/O against the mains cycle is measured.
+ *
  * Measured: ADC conversion period, ADC ISR duration (cycle-exact), delay of its ADMUX write, load switching,
- * RF frames, grid import/export energy, diverted energy, and the firmware's own serial output.
+ * RF frames, grid import/export energy, diverted energy, 1-Wire bus timing, the temperatures reported, and
+ * the firmware's own serial output.
  *
  * Usage: grid_sim [-q] [-t trace.csv] [-e events.csv] firmware.elf scenario.scn
  *
@@ -39,6 +43,7 @@
 #include "avr_adc.h"
 #include "avr_ioport.h"
 #include "avr_uart.h"
+#include "ds18b20.h"
 #include "rfm69.h"
 #include "sim_avr.h"
 #include "sim_core.h"
@@ -66,6 +71,7 @@
 #define MAX_RECEIVERS 8
 #define MAX_RECEIVER_PINS 8
 #define MAX_RF_DROPS 16
+#define MAX_TEMPERATURES 8 /* T1 to T8 of the datalog */
 
 #define RF_CS_PORT 'B' /* D10 */
 #define RF_CS_BIT 2
@@ -99,6 +105,8 @@ typedef enum
   EXPECT_SWITCHES,    /* expect switches <pin> <min> <max>  (switch-ons of a load or relay) */
   EXPECT_MIN_ON,      /* expect min_on <pin> <s>  (shortest complete ON period, at least) */
   EXPECT_MIN_OFF,     /* expect min_off <pin> <s>  (shortest complete OFF period between two ON ones, at least) */
+  EXPECT_EARLY_READS, /* expect ds18b20_early_reads <n>  (scratchpads read before the end of their conversion, at most) */
+  EXPECT_TEMPERATURE, /* expect temperature <n> <min> <max>  (every T<n> the datalog reports, at least one) */
 } expect_kind_t;
 
 typedef struct
@@ -125,6 +133,12 @@ typedef struct
   double t0, t1;
   int node; /* 0: every node */
 } rf_drop_t;
+
+typedef struct
+{
+  double celsius;
+  uint8_t rom[8];
+} sensor_t;
 
 typedef struct
 {
@@ -172,6 +186,9 @@ static struct
   double rf_loss;      /* share of frames lost at random, in % */
   int rf_absent;       /* the router's RFM69 does not answer */
   int rf_loss_max_run; /* at most this many frames lost at random in a row, per node; 0: no limit */
+  sensor_t sensors[DS18B20_MAX]; /* DS18B20 on the 1-Wire bus */
+  int no_of_sensors;
+  int sensor_pin;
   char name[PATH_MAX];
 } scn = {
   .duration = 60.0,
@@ -344,6 +361,29 @@ static void parse_scenario(const char *path, int depth)
       if (ok)
         ++scn.no_of_inputs;
     }
+    else if (!strcmp(cmd, "ds18b20"))
+    {
+      /* ds18b20 <pin> <degrees C> <ROM code, 8 bytes in hex>: a sensor on the 1-Wire bus of <pin> */
+      if (scn.no_of_sensors == DS18B20_MAX)
+        die("%s:%d: too many DS18B20", path, lineno);
+      sensor_t *s = &scn.sensors[scn.no_of_sensors];
+      unsigned r[8];
+      int pin;
+      ok = sscanf(args, "%d %lf %x %x %x %x %x %x %x %x", &pin, &s->celsius, &r[0], &r[1], &r[2], &r[3], &r[4], &r[5],
+                  &r[6], &r[7])
+             == 10
+           && pin >= 0 && pin <= 13 && (!scn.no_of_sensors || pin == scn.sensor_pin);
+      for (int k = 0; ok && k < 8; ++k)
+      {
+        ok = r[k] <= 0xff;
+        s->rom[k] = (uint8_t)r[k];
+      }
+      if (ok)
+      {
+        scn.sensor_pin = pin;
+        ++scn.no_of_sensors;
+      }
+    }
     else if (!strcmp(cmd, "at"))
     {
       if (scn.no_of_points == MAX_POINTS)
@@ -388,6 +428,11 @@ static void parse_scenario(const char *path, int depth)
         e->kind = EXPECT_MIN_ON;
       else if (sscanf(args, " min_off %d %lf", &e->pin, &e->lo) == 2)
         e->kind = EXPECT_MIN_OFF;
+      else if (sscanf(args, " ds18b20_early_reads %lf", &e->hi) == 1)
+        e->kind = EXPECT_EARLY_READS;
+      else if (sscanf(args, " temperature %d %lf %lf", &e->node, &e->lo, &e->hi) == 3 && e->node >= 1
+               && e->node <= MAX_TEMPERATURES && e->hi >= e->lo)
+        e->kind = EXPECT_TEMPERATURE;
       else if (sscanf(args, "%lf pin %d %31s", &t, &e->pin, a) == 3 && (!strcmp(a, "on") || !strcmp(a, "off")))
       {
         e->kind = EXPECT_PIN;
@@ -457,6 +502,7 @@ static void check_board(void)
       scn.loads[i].pin = scn.remap[scn.loads[i].pin];
   for (int i = 0; i < scn.no_of_inputs; ++i)
     scn.inputs[i].pin = scn.remap[scn.inputs[i].pin];
+  scn.sensor_pin = scn.remap[scn.sensor_pin];
   for (int i = 0; i < scn.no_of_expects; ++i)
     if (scn.expects[i].pin >= 0 && scn.expects[i].pin <= 13)
       scn.expects[i].pin = scn.remap[scn.expects[i].pin];
@@ -555,6 +601,13 @@ typedef struct
   double w, wh;
 } datalog_t;
 
+/* the temperatures of the datalog (", T<n>:<value>"): lines with it, lowest, highest */
+typedef struct
+{
+  int lines;
+  double min, max;
+} reported_t;
+
 static struct
 {
   char line[256];
@@ -563,7 +616,10 @@ static struct
   int min_sets, max_sets;
   datalog_t diverted[MAX_DATALOG];
   int no_of_diverted;
+  reported_t temperature[MAX_TEMPERATURES];
 } serial = { .min_sets = INT_MAX, .max_sets = INT_MIN };
+
+static ds18b20_bus_t onewire;
 
 /* a remote unit running the receiver firmware in its own simulated AVR */
 typedef struct
@@ -1044,6 +1100,22 @@ static void serial_line(const char *line)
   if (d && sscanf(d, ", diverted %lf W, %lf Wh", &w, &wh) == 2 && serial.no_of_diverted < MAX_DATALOG)
     serial.diverted[serial.no_of_diverted++] = (datalog_t){ .t = now(), .w = w, .wh = wh };
 
+  /* ", T<n>:<value>" (TEMP_SENSOR_PRESENT), for each valid temperature */
+  for (const char *t = strstr(line, ", T"); t; t = strstr(t + 3, ", T"))
+  {
+    int n;
+    double c;
+    if (sscanf(t, ", T%d:%lf", &n, &c) == 2 && n >= 1 && n <= MAX_TEMPERATURES)
+    {
+      reported_t *st = &serial.temperature[n - 1];
+      if (!st->lines || c < st->min)
+        st->min = c;
+      if (!st->lines || c > st->max)
+        st->max = c;
+      ++st->lines;
+    }
+  }
+
   const char *p = strstr(line, "minSampleSets/MC ");
   if (p)
   {
@@ -1123,12 +1195,36 @@ static int bit_of(int pin)
   return (pin < 8) ? pin : pin - 8;
 }
 
+/* the levels the input pins read (PORTD, PORTB), and the pins the DS18B20 hold low */
+static uint8_t ext[2] = { 0xff, 0xff }, ext_held_low[2];
+
+static void set_external(void)
+{
+  avr_ioport_external_t ext_d = { .name = 'D', .mask = 0xff, .value = ext[0] & ~ext_held_low[0] };
+  avr_ioport_external_t ext_b = { .name = 'B', .mask = 0xff, .value = ext[1] & ~ext_held_low[1] };
+  avr_ioctl(avr, AVR_IOCTL_IOPORT_SET_EXTERNAL('D'), &ext_d);
+  avr_ioctl(avr, AVR_IOCTL_IOPORT_SET_EXTERNAL('B'), &ext_b);
+}
+
+/* the DS18B20 pull their bus low, or release it: the level of the pin as an input, at once */
+static void onewire_level(int low, void *param)
+{
+  (void)param;
+  const int pin = scn.sensor_pin;
+  uint8_t *held = &ext_held_low[port_of(pin) == 'B'];
+  const uint8_t mask = (uint8_t)(1U << bit_of(pin));
+  *held = low ? (*held | mask) : (*held & ~mask);
+  set_external();
+  const uint8_t level = ext[port_of(pin) == 'B'] & ~*held & mask;
+  avr_raise_irq(avr_io_getirq(avr, AVR_IOCTL_IOPORT_GETIRQ(port_of(pin)), bit_of(pin)), level ? 1 : 0);
+}
+
 /* Drives the input pins with their levels at time t: unconnected inputs read HIGH, like the
  * firmware's pull-ups; for each pin, the latest 'input' line at or before t wins.
  * Returns when the next level change is due. */
 static double apply_inputs(double t)
 {
-  uint8_t ext[2] = { 0xff, 0xff }; /* PORTD, PORTB */
+  ext[0] = ext[1] = 0xff;
   double since[14];
   double next = INFINITY;
 
@@ -1150,10 +1246,7 @@ static double apply_inputs(double t)
     const uint8_t mask = (uint8_t)(1U << bit_of(in->pin));
     *e = in->value ? (*e | mask) : (*e & ~mask);
   }
-  avr_ioport_external_t ext_d = { .name = 'D', .mask = 0xff, .value = ext[0] };
-  avr_ioport_external_t ext_b = { .name = 'B', .mask = 0xff, .value = ext[1] };
-  avr_ioctl(avr, AVR_IOCTL_IOPORT_SET_EXTERNAL('D'), &ext_d);
-  avr_ioctl(avr, AVR_IOCTL_IOPORT_SET_EXTERNAL('B'), &ext_b);
+  set_external();
   return next;
 }
 
@@ -1325,6 +1418,28 @@ static int report_expects(void)
           }
           break;
         }
+      case EXPECT_EARLY_READS:
+        {
+          unsigned early = 0;
+          for (int j = 0; j < onewire.no_of_devs; ++j)
+            early += onewire.dev[j].early_reads;
+          e->measured = early;
+          e->passed = onewire.no_of_devs && e->measured <= e->hi;
+          snprintf(what, sizeof what, "DS18B20 scratchpads read before the end of their conversion at most %.0f: %.0f",
+                   e->hi, e->measured);
+          break;
+        }
+      case EXPECT_TEMPERATURE:
+        {
+          const reported_t *st = &serial.temperature[e->node - 1];
+          e->passed = st->lines && st->min >= e->lo && st->max <= e->hi;
+          if (st->lines)
+            snprintf(what, sizeof what, "T%d reported in [%g, %g]: %.2f to %.2f, in %d of %d datalog lines", e->node,
+                     e->lo, e->hi, st->min, st->max, st->lines, serial.datalog_lines);
+          else
+            snprintf(what, sizeof what, "T%d reported in [%g, %g]: never reported", e->node, e->lo, e->hi);
+          break;
+        }
       case EXPECT_MIN_SETS:
         e->passed = serial.datalog_lines && serial.min_sets >= e->lo;
         snprintf(what, sizeof what, "min sample sets per mains cycle at least %.0f: %d", e->lo,
@@ -1425,6 +1540,13 @@ int main(int argc, char *argv[])
   }
   rfm69_init(&rf.chip, avr, RF_CS_PORT, RF_CS_BIT, rf_frame, &rf.chip);
   rf.chip.absent = scn.rf_absent;
+
+  if (scn.no_of_sensors)
+  {
+    ds18b20_init(&onewire, avr, port_of(scn.sensor_pin), bit_of(scn.sensor_pin), scn.frequency, onewire_level, NULL);
+    for (int i = 0; i < scn.no_of_sensors; ++i)
+      ds18b20_add(&onewire, scn.sensors[i].celsius, scn.sensors[i].rom);
+  }
 
   /* remote units running the receiver firmware: its load pins drive their remote loads */
   for (int r = 0; r < no_of_receivers; ++r)
@@ -1530,6 +1652,11 @@ int main(int argc, char *argv[])
   if (serial.datalog_lines)
     printf("Datalog   %d lines, min sample sets per mains cycle %d-%d\n", serial.datalog_lines, serial.min_sets,
            serial.max_sets);
+  for (int n = 0; n < MAX_TEMPERATURES; ++n)
+    if (serial.temperature[n].lines)
+      printf("Datalog   T%d in %d lines, %.2f to %.2f C\n", n + 1, serial.temperature[n].lines, serial.temperature[n].min,
+             serial.temperature[n].max);
+  ds18b20_report(&onewire);
   for (int i = 0; i < scn.no_of_loads; ++i)
   {
     const load_t *l = &scn.loads[i];
