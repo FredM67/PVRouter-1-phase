@@ -6,6 +6,8 @@
 [![doc](https://img.shields.io/github/actions/workflow/status/FredM67/PVRouter-1-phase/doxygen-gh-pages.yml?branch=main&label=doc&logo=github)](https://github.com/FredM67/PVRouter-1-phase/actions/workflows/doxygen-gh-pages.yml)
 <br/>
 [![Arduino Uno](https://img.shields.io/badge/Arduino%20Uno-ATmega328P-00878F?logo=arduino&logoColor=white)](https://docs.arduino.cc/hardware/uno-rev3/)
+[![flash](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffredm67.github.io%2FPVRouter-1-phase%2Fbench%2Fhistory.json&query=%24.entries%5B-1%3A%5D.sizes.basic.flash&label=flash&suffix=%20%2F%2032256%20B&color=blue)](https://fredm67.github.io/PVRouter-1-phase/bench/)
+[![RAM](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffredm67.github.io%2FPVRouter-1-phase%2Fbench%2Fhistory.json&query=%24.entries%5B-1%3A%5D.sizes.basic.ram&label=RAM&suffix=%20%2F%202048%20B&color=blue)](https://fredm67.github.io/PVRouter-1-phase/bench/)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C?logo=cplusplus&logoColor=white)](https://en.cppreference.com/w/cpp/17)
 [![PlatformIO](https://img.shields.io/badge/PlatformIO-ready-F5822A?logo=platformio&logoColor=white)](https://platformio.org/)
 <br/>
@@ -48,7 +50,7 @@ For a three-phase version, please see [PVRouter-3-phase](https://github.com/Fred
 > [!WARNING]
 > **Not yet tested on a real board.** This firmware passes its native tests, its compile-time checks and the grid simulator on the three boards, but it has not run on real hardware yet. Until it has, use `Mk2_fasterControl_Full` on an installation in service.
 
-Documentation: [English](Mk2_1phase_RFdatalog_temp/Readme.en.md), [français](Mk2_1phase_RFdatalog_temp/Readme.md). Changes: [CHANGELOG.md](CHANGELOG.md).
+Documentation: [English](Mk2_1phase_RFdatalog_temp/Readme.en.md), [français](Mk2_1phase_RFdatalog_temp/Readme.md). Changes: [CHANGELOG.md](CHANGELOG.md). Code documentation (Doxygen) and firmware size and speed history: [project site](https://fredm67.github.io/PVRouter-1-phase/).
 
 ## The older sketches, frozen
 
