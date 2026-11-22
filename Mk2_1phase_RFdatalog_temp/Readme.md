@@ -196,9 +196,9 @@ Les valeurs d’étalonnage se trouvent dans le fichier **calibration.h**, un je
 
 ```cpp
 // Anciennes cartes (OLD_SEG, OLD_OLED)
-inline constexpr float f_powerCalOldBoard{ 0.05000F };         // sonde 1, réseau
-inline constexpr float f_powerCalDivertedOldBoard{ 0.05000F }; // sonde 2, routée
-inline constexpr float f_voltageCalOldBoard{ 0.8151F };
+inline constexpr float f_powerCalOldBoard{ 0.0436F };          // sonde 1, réseau
+inline constexpr float f_powerCalDivertedOldBoard{ 0.04446F }; // sonde 2, routée
+inline constexpr float f_voltageCalOldBoard{ 0.805653F };
 inline constexpr float lpf_gainOldBoard{ 9 };                  // filtre de la sonde 1 (voir plus bas)
 inline constexpr float alphaOldBoard{ 0.0011 };
 // Nouvelle carte (NEW)
