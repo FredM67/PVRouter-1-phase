@@ -18,3 +18,12 @@ expect misfiled_samples 0
 expect admux_delay_min 128
 # The ISR must end within the 1664 cycles of one conversion
 expect isr_overruns 0
+# Margins, enforced: the longest ISR call and the latest ADMUX write (from the interrupt), a little
+# above the worst of the builds that pass them (OLD_SEG, OLD_OLED, NEW, 60 Hz, NEW with temperature
+# sensing: 1389 and 1373 cycles). The deadline is 1664 cycles: an ADMUX written later misses the
+# conversion after next, which then converts the wrong channel. OLD_SEG with temperature sensing
+# (make check-seg-temp) misses it: the 1-Wire time slots keep interrupts off up to ~65 us.
+expect isr_max 1450
+expect admux_delay_max 1400
+# no sample beyond the ADC's range
+expect clipped 0

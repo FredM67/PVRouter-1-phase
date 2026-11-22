@@ -92,6 +92,8 @@ typedef enum
   EXPECT_OVERRUNS,    /* expect isr_overruns <n>  (ISR calls longer than one conversion, at most) */
   EXPECT_MISFILED,    /* expect misfiled_samples <n>  (conversions filed under the wrong channel, at most) */
   EXPECT_ADMUX,       /* expect admux_delay_min <cycles>  (ADMUX written by the ISR this long after its conversion started, at least) */
+  EXPECT_ADMUX_MAX,   /* expect admux_delay_max <cycles>  (... at most: written later, it misses the conversion after next) */
+  EXPECT_CLIPPED,     /* expect clipped <n>  (samples beyond the ADC's range, at most) */
   EXPECT_RF_GAP,      /* expect rf_max_gap <node> <s>  (longest silence towards a node, once it got a frame) */
   EXPECT_RF_LOST,     /* expect rf_links_lost <node> <min> <max>  (times the node's receiver lost the link) */
   EXPECT_SWITCHES,    /* expect switches <pin> <min> <max>  (switch-ons of a load or relay) */
@@ -153,6 +155,7 @@ static struct
   double pcal, pcal2;        /* f_powerCal of CT1 (grid) and CT2 (diverted): W per ADC step squared */
   double avcc_mv;            /* AVCC, the ADC reference of the old boards */
   int adc_pin[ADC_CHANNELS]; /* analog input of V, I1 and I2 (A0 = 0), -1: not given */
+  int remap[14];             /* the firmware pin of each scenario pin (remap): loads, inputs, expectations */
   load_t loads[MAX_LOADS];
   int no_of_loads;
   point_t points[MAX_POINTS];
@@ -180,6 +183,7 @@ static struct
   .pcal2 = -1,
   .avcc_mv = -1,
   .adc_pin = { -1, -1, -1 },
+  .remap = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 },
 };
 
 static void die(const char *fmt, ...)
@@ -270,6 +274,14 @@ static void parse_scenario(const char *path, int depth)
           scn.adc_pin[ch] = pin;
         }
       }
+    }
+    else if (!strcmp(cmd, "remap"))
+    {
+      /* remap <scenario pin> <firmware pin>: the board's firmware drives that output on another pin */
+      int from, to;
+      ok = sscanf(args, "%d %d", &from, &to) == 2 && from >= 0 && from <= 13 && to >= 0 && to <= 13;
+      if (ok)
+        scn.remap[from] = to;
     }
     else if (!strcmp(cmd, "load") || !strcmp(cmd, "relay"))
     {
@@ -362,6 +374,10 @@ static void parse_scenario(const char *path, int depth)
         e->kind = EXPECT_MISFILED;
       else if (sscanf(args, " admux_delay_min %lf", &e->lo) == 1)
         e->kind = EXPECT_ADMUX;
+      else if (sscanf(args, " admux_delay_max %lf", &e->hi) == 1)
+        e->kind = EXPECT_ADMUX_MAX;
+      else if (sscanf(args, " clipped %lf", &e->hi) == 1)
+        e->kind = EXPECT_CLIPPED;
       else if (sscanf(args, " rf_max_gap %d %lf", &e->node, &e->hi) == 2)
         e->kind = EXPECT_RF_GAP;
       else if (sscanf(args, " rf_links_lost %d %lf %lf", &e->node, &e->lo, &e->hi) == 3 && e->hi >= e->lo)
@@ -432,9 +448,19 @@ static double surplus_at(double t)
   return scn.points[scn.no_of_points - 1].surplus;
 }
 
-/* the board's settings must be given: by the board file (board_scn.sh), or by the scenario */
+/* the board's settings must be given: by the board file (board_scn.sh), or by the scenario;
+ * then the pins of the scenario are remapped to those of the board's firmware */
 static void check_board(void)
 {
+  for (int i = 0; i < scn.no_of_loads; ++i)
+    if (!scn.loads[i].node)
+      scn.loads[i].pin = scn.remap[scn.loads[i].pin];
+  for (int i = 0; i < scn.no_of_inputs; ++i)
+    scn.inputs[i].pin = scn.remap[scn.inputs[i].pin];
+  for (int i = 0; i < scn.no_of_expects; ++i)
+    if (scn.expects[i].pin >= 0 && scn.expects[i].pin <= 13)
+      scn.expects[i].pin = scn.remap[scn.expects[i].pin];
+
   if (scn.adc_pin[0] < 0)
     die("no 'channels' setting: give the board's settings (board_scn.sh, grid_sim -b)");
   if (scn.avcc_mv < 0)
@@ -502,6 +528,7 @@ static struct
   uint64_t overruns; /* calls longer than one conversion: the next sample may use the wrong channel */
   int running, ch;
   double t_sample;
+  avr_cycle_count_t conversion_started; /* raise of the interrupt it serves: the conversion in progress started then */
 } isr = { .max_ch = -1 };
 
 /* ADMUX writes of the ADC ISR, timed from the start of the conversion in progress.
@@ -516,7 +543,9 @@ static struct
   uint64_t writes;
   uint64_t early; /* less than one ADC clock after the conversion started */
   avr_cycle_count_t min, max;
-  double min_at;
+  double min_at, max_at;
+  uint64_t late;                  /* past the next conversion's start: that conversion took the old channel */
+  uint64_t late_of[ADC_CHANNELS]; /* the same, per channel of the ISR's sample */
 } admux = { .min = UINT64_MAX };
 
 /* a datalog line with the diverted power and energy (DIVERTED_CT_PRESENT) */
@@ -774,6 +803,7 @@ static void isr_hook(struct avr_irq_t *irq, uint32_t value, void *param)
   if (value)
   {
     isr.started = avr->cycle;
+    isr.conversion_started = admux.conversion_started;
     isr.ch = adc.completed;
     isr.t_sample = adc.completed_t;
     return;
@@ -819,10 +849,12 @@ static void admux_write(struct avr_t *mcu, avr_io_addr_t addr, uint8_t v, void *
 {
   (void)param;
   avr_core_watch_write(mcu, addr, v);
-  /* setup() writes it too, before the ADC runs: only the ISR's writes count */
-  if (!isr.running || !admux.conversion_started)
+  /* setup() writes it too, before the ADC runs: only the ISR's writes count. Timed from the raise
+   * of the interrupt the ISR serves: a write delayed past the next raise (interrupts kept off
+   * too long, or a long ISR) counts as late, not as an early write for the next conversion */
+  if (!isr.running || !isr.conversion_started)
     return;
-  const avr_cycle_count_t delay = mcu->cycle - admux.conversion_started;
+  const avr_cycle_count_t delay = mcu->cycle - isr.conversion_started;
   ++admux.writes;
   if (delay < ADC_CLOCK_CYCLES)
     ++admux.early;
@@ -831,8 +863,23 @@ static void admux_write(struct avr_t *mcu, avr_io_addr_t addr, uint8_t v, void *
     admux.min = delay;
     admux.min_at = now();
   }
+  if (delay >= ADC_CYCLES_PER_CONVERSION)
+  {
+    static const char *const names[ADC_CHANNELS] = { "V", "I1", "I2" };
+    ++admux.late;
+    if (isr.ch >= 0)
+      ++admux.late_of[isr.ch];
+    /* the entry delay: how long the interrupt waited (interrupts off) before its ISR ran */
+    if (events_file)
+      fprintf(events_file, "%.6f,ADMUX,LATE after %s: %llu cycles, ISR entered %llu cycles after the interrupt\n", now(),
+              isr.ch >= 0 ? names[isr.ch] : "?", (unsigned long long)delay,
+              (unsigned long long)(isr.started - isr.conversion_started));
+  }
   if (delay > admux.max)
+  {
     admux.max = delay;
+    admux.max_at = now();
+  }
 }
 
 /* the input of a load's power stage changes: an output pin, or a remote receiver */
@@ -1218,6 +1265,15 @@ static int report_expects(void)
         snprintf(what, sizeof what, "ADMUX written at least %.0f cycles after its conversion started: %llu", e->lo,
                  admux.writes ? (unsigned long long)admux.min : 0ULL);
         break;
+      case EXPECT_ADMUX_MAX:
+        e->passed = admux.writes && admux.max <= e->hi;
+        snprintf(what, sizeof what, "ADMUX written at most %.0f cycles after its conversion started: %llu at %.3f s",
+                 e->hi, admux.writes ? (unsigned long long)admux.max : 0ULL, admux.max_at);
+        break;
+      case EXPECT_CLIPPED:
+        e->passed = adc.clipped <= e->hi;
+        snprintf(what, sizeof what, "samples beyond the ADC's range at most %.0f: %d", e->hi, adc.clipped);
+        break;
       case EXPECT_RF_GAP:
         {
           const struct rf_node *n = NULL;
@@ -1448,6 +1504,12 @@ int main(int argc, char *argv[])
     printf("ADC       ADMUX written %llu-%llu cycles after its conversion started (at least %d), min at %.3f s%s\n",
            (unsigned long long)admux.min, (unsigned long long)admux.max, ADC_CLOCK_CYCLES, admux.min_at,
            admux.early ? ", TOO EARLY" : "");
+  if (admux.late)
+    printf("ADC       ADMUX written %llu times past the start of the next conversion (%d cycles: after V %llu, I1 %llu, "
+           "I2 %llu), max %llu at %.3f s\n",
+           (unsigned long long)admux.late, ADC_CYCLES_PER_CONVERSION, (unsigned long long)admux.late_of[0],
+           (unsigned long long)admux.late_of[1], (unsigned long long)admux.late_of[2], (unsigned long long)admux.max,
+           admux.max_at);
   if (isr.count)
   {
     static const char *const ch_names[ADC_CHANNELS] = { "V", "I1", "I2" };

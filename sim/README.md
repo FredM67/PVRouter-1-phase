@@ -19,7 +19,7 @@ No hardware, no sun: regulation, load priorities, diverted energy, ISR timing an
 | ADC ISR average / max | cycle-exact duration of `ISR(ADC_vect)`; the longest call, with the channel of its sample (V, I1, I2) and where that sample was taken in the mains cycle (degrees from the rising zero crossing); and the longest call per channel and half cycle: the zero-crossing work runs with the V sample just after each crossing |
 | ISR overruns | ISR calls longer than one conversion (104 µs): the next sample may be taken on the wrong channel |
 | misfiled samples | conversions filed under the wrong channel (or on an input of no channel): the ISR writes ADMUX for the conversion after next, so an overrun leaves one conversion on the previous channel. The first two rounds after the ADC starts are ignored |
-| ADMUX delay | cycles from the start of a conversion to the ISR's ADMUX write. The datasheet only allows a change one ADC clock (128 cycles) or more after the conversion started: earlier, that conversion may take the new channel. The simulated ADC locks the channel at once, so misfiled samples cannot show it; this figure does |
+| ADMUX delay | cycles from the start of a conversion to the ISR's ADMUX write. The datasheet only allows a change one ADC clock (128 cycles) or more after the conversion started: earlier, that conversion may take the new channel. The simulated ADC locks the channel at once, so misfiled samples cannot show it; this figure does. The latest write counts too: it must come before the next conversion starts, 1664 cycles after the interrupt was raised, or the conversion after next takes the old channel. A late write (interrupts kept off too long before the ISR, or a long ISR) is listed in the events file with how long the ISR waited for its entry |
 | min sample sets | as reported by the firmware's own datalog (64 per mains cycle at 50 Hz) |
 | per load | switch-ons, time on, energy, and the **switching latency**: delay from the pin change to the zero crossing where the load follows, and whether it was a rising crossing (start of the measurement window) |
 | per relay | switch-ons, time on, energy, and the shortest complete ON and OFF periods |
@@ -81,7 +81,7 @@ simavr comes from the PlatformIO package `platformio/tool-simavr` (installed by 
 - `<scenario>-trace.csv`: one line per mains cycle - surplus, grid power, power through CT2, loads conducting (bit mask);
 - `<scenario>-events.csv`: every load change, RF frame (`RF<node>` and its payload in hex) and lost RF link, with its time.
 
-### The other boards, 20 A CTs, 60 Hz
+### The other boards, 20 A CTs, 60 Hz, temperature sensing, 7-segment display
 
 Each firmware is built in a build directory of its own:
 
@@ -96,7 +96,17 @@ git checkout Mk2_1phase_RFdatalog_temp/calibration.h
 sh sim/configs/sim_config.sh OLD_SEG 60Hz
 (cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-60hz pio run -e basic)
 git checkout Mk2_1phase_RFdatalog_temp/config.h Mk2_1phase_RFdatalog_temp/config_system.h Mk2_1phase_RFdatalog_temp/version.h
-make -C sim -j$(nproc) check check-old-oled check-new check-new20 check-60hz
+sh sim/configs/sim_config.sh NEW
+sed -n '/^diff --git/,$p' sim/configs/temperature.patch | patch -p1
+(cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-new-temp pio run -e basic)
+git checkout Mk2_1phase_RFdatalog_temp/config.h Mk2_1phase_RFdatalog_temp/version.h
+sh sim/configs/sim_config.sh OLD_SEG
+sed -n '/^diff --git/,$p' sim/configs/seg_hw.patch | patch -p1
+sed -n '/^diff --git/,$p' sim/configs/temperature.patch | patch -p1
+(cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-seg-temp pio run -e basic)
+git checkout Mk2_1phase_RFdatalog_temp/config.h Mk2_1phase_RFdatalog_temp/version.h
+make -C sim -j$(nproc) check check-old-oled check-new check-new20 check-60hz check-new-temp
+make -C sim check-seg-temp    # fails today: see below
 make -C sim compare-boards compare-old-oled compare-boards-20 compare-ct
 ```
 
@@ -104,6 +114,8 @@ make -C sim compare-boards compare-old-oled compare-boards-20 compare-ct
 - `check-60hz`: `sim_config.sh ... 60Hz` sets `SUPPLY_FREQUENCY` to 60 in `config_system.h`, and the board file a 60 Hz mains (53 sample sets per cycle): the per-cycle constants of the firmware (the Wh of the diverted energy, the datalog period, the seconds) follow the frequency.
 - `compare-boards` / `compare-old-oled`: each scenario must give the same result as on `OLD_SEG`: grid import and export, and the energy of each load, within 1 % or 0.1 Wh. The boards only differ in resolution (with the 50 A CTs of `calibration.h`, the new board has 0.161 A per ADC step against 0.061 A on the old ones) and in analog inputs, which can move a switching instant by a half-cycle now and then. The diverted energy is not compared: the firmware counts whole Wh, which a few hundredths of a Wh can tip.
 - `compare-boards-20`: 20 A CTs against `OLD_SEG`, within 0.5 % or 0.1 Wh; `compare-ct`: 20 A against 50 A CTs, within 1 % or 0.1 Wh.
+- `check-new-temp`: `NEW` with temperature sensing on D3 (`configs/temperature.patch`, built in `.pio/build-new-temp`). No DS18B20 is simulated: with no device on the bus, each reset and each bit written still keeps interrupts off for its 1-Wire time slot (up to ~65 µs, ~1050 cycles), and the ADC interrupt waits meanwhile.
+- `check-seg-temp`: `OLD_SEG` with the 7-segment display through its pin-saving chips (`configs/seg_hw.patch`: `SEG_HW`, refreshed in the ADC interrupt, loads on D10-D12) and temperature sensing (`configs/temperature.patch`), built in `.pio/build-seg-temp`. Its board file remaps the scenarios' load pins D5-D7 onto D10-D12 (`remap`). **It fails today**: at each temperature read, an I1 call (CT1 filter, ~1200-1370 cycles) entered up to ~1100 cycles late writes ADMUX up to ~2280 cycles after its interrupt, past the 1664-cycle deadline, and two samples are misfiled each time. It is not in CI (`ci_targets.sh`) until the firmware meets the deadline.
 
 ### Remote loads
 
@@ -149,7 +161,7 @@ A relay's contacts follow its pin at once. The firmware decides on the grid powe
 
 ### In CI
 
-The scenarios are spread over parallel jobs. `ci_targets.sh` gives the make targets of a job, from the scenarios it finds: job k of n takes every n-th scenario, starting from the k-th. A grid scenario runs on all its boards in the same job (`OLD_SEG`, `OLD_OLED`, `NEW`, `NEW` with 20 A CTs, `OLD_SEG` at 60 Hz), which then compares them.
+The scenarios are spread over parallel jobs. `ci_targets.sh` gives the make targets of a job, from the scenarios it finds: job k of n takes every n-th scenario, starting from the k-th. A grid scenario runs on all its boards in the same job (`OLD_SEG`, `OLD_OLED`, `NEW`, `NEW` with 20 A CTs, `OLD_SEG` at 60 Hz, `NEW` with temperature sensing), which then compares them.
 
 ```bash
 sim/ci_targets.sh grid 1/3      # check-clouds check-old-oled-clouds check-new-clouds check-new20-clouds check-60hz-clouds ...
@@ -168,6 +180,7 @@ Plain text, one command per line, `#` starts a comment.
 | `duration <s>` | simulated time |
 | `mains <Hz> <Vrms>` | grid frequency and voltage (board file) |
 | `channels V <pin> I1 <pin> I2 <pin>` | the analog input of the voltage, of CT1 (grid) and of CT2 (diverted), `A3` or `3` (board file) |
+| `remap <pin> <pin>` | the firmware drives the scenario's output or reads its input on another pin: loads, inputs and pin expectations follow (board file) |
 | `avcc <mV>` | AVCC, the ADC reference of the old boards (board file) |
 | `vcal <V per step>` / `pcal <CT1> [<CT2>]` | `f_voltageCal` / `f_powerCal` of each CT (CT2 as CT1 when not given) (board file) |
 | `load <pin> <W>` | a resistive load on a firmware output pin; CT2 measures it |
@@ -195,8 +208,10 @@ Plain text, one command per line, `#` starts a comment.
 | `expect misfiled_samples <n>` | at most n conversions filed under the wrong channel |
 | `expect isr_max <cycles>` | ISR duration never above this |
 | `expect admux_delay_min <cycles>` | the ISR never writes ADMUX sooner than this after its conversion started |
+| `expect admux_delay_max <cycles>` | ... nor later than this (the deadline is 1664) |
+| `expect clipped <n>` | at most n samples beyond the ADC's range |
 
-`scenarios/common.scn` describes the installation of the default `config.h` (three local loads on D5-D7, override pin D4) and the timing expected on every run (no misfiled sample, ADMUX written 128 cycles or more after its conversion started, no ISR overrun); the other scenarios include it. `scenarios/rf/common.scn` and `scenarios/relays/common.scn` do the same for the remote-loads and relay configurations. The relay and RF scenarios are those of the 3-phase router, every power halved (relay thresholds included) to stay within the range of one CT.
+`scenarios/common.scn` describes the installation of the default `config.h` (three local loads on D5-D7, override pin D4) and the timing expected on every run (no misfiled sample, ADMUX written 128 cycles or more after its conversion started, no ISR overrun, no clipped sample), with margins enforced: the longest ISR call and the latest ADMUX write must stay a little above the worst measured on the builds that run them (`isr_max`, `admux_delay_max`), so that a change eating the headroom fails before samples are lost; the other scenarios include it. `scenarios/rf/common.scn` and `scenarios/relays/common.scn` do the same for the remote-loads and relay configurations. The relay and RF scenarios are those of the 3-phase router, every power halved (relay thresholds included) to stay within the range of one CT.
 
 The firmware's datalog starts about 11 s after power-up (banner, then the start-up period), and reports every 5 s: a diverted energy is only seen once a line follows it. When the surplus comes, the energy bucket first fills up to half its 3600 J (exported, 0.5 Wh), and it empties when the surplus goes: the diverted energy is the surplus × time less the export target, within those half-bucket transients.
 

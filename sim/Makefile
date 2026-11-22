@@ -6,6 +6,9 @@
 #   make check-new      the same against the NEW firmware (internal 1.1 V reference)
 #   make check-new20    the same with 20 A CTs: about the resolution of the old boards
 #   make check-60hz     the same against an OLD_SEG firmware built for 60 Hz, on a 60 Hz mains
+#   make check-seg-temp the same against OLD_SEG with the 7-segment display (SEG_HW, loads on D10-D12)
+#                       and temperature sensing (configs/seg_hw.patch, configs/temperature.patch)
+#   make check-new-temp the same against NEW with temperature sensing (configs/temperature.patch)
 #   make check-rf       run scenarios/rf against the remote-loads firmware (configs/remote_loads.patch),
 #                       with ideal receivers, or with the RemoteLoadReceiver firmware on the units
 #                       of RX_NODES (RX_NODES="15 16", its sources in RX_SRC)
@@ -37,6 +40,8 @@ FW_OLD_OLED ?= $(PIO_DIR)/build-old-oled/basic/firmware.elf
 FW_NEW      ?= $(PIO_DIR)/build-new/basic/firmware.elf
 FW_NEW20    ?= $(PIO_DIR)/build-new20/basic/firmware.elf
 FW_60HZ     ?= $(PIO_DIR)/build-60hz/basic/firmware.elf
+FW_SEG_TEMP ?= $(PIO_DIR)/build-seg-temp/basic/firmware.elf
+FW_NEW_TEMP ?= $(PIO_DIR)/build-new-temp/basic/firmware.elf
 FW_RF       ?= $(PIO_DIR)/build-rf/basic/firmware.elf
 FW_RELAYS   ?= $(PIO_DIR)/build-relays/basic/firmware.elf
 CT_LOW  ?= 20
@@ -89,6 +94,12 @@ $(FW_NEW20):
 $(FW_60HZ):
 	$(error firmware not found: $(FW_60HZ) - see check-60hz in README.md)
 
+$(FW_SEG_TEMP):
+	$(error firmware not found: $(FW_SEG_TEMP) - see configs/seg_hw.patch)
+
+$(FW_NEW_TEMP):
+	$(error firmware not found: $(FW_NEW_TEMP) - see configs/temperature.patch)
+
 $(FW_RF):
 	$(error firmware not found: $(FW_RF) - apply configs/remote_loads.patch, then 'PLATFORMIO_BUILD_DIR=.pio/build-rf pio run -e basic' (README.md))
 
@@ -116,6 +127,11 @@ $(OUT)/old_seg_60hz_board.scn: board_scn.sh $(CAL)
 	@mkdir -p $(OUT)
 	sh board_scn.sh OLD_SEG $(CAL) '' 60 > $@
 
+# OLD_SEG with SEG_HW: the loads of the scenarios (D5-D7) are on D10-D12 (configs/seg_hw.patch)
+$(OUT)/old_seg_hw_board.scn: board_scn.sh $(CAL)
+	@mkdir -p $(OUT)
+	{ sh board_scn.sh OLD_SEG $(CAL); printf 'remap 5 10\nremap 6 11\nremap 7 12\n'; } > $@
+
 # make run: the board file and the firmware of BOARD
 RUN_BOARD = $(OUT)/$(shell echo $(BOARD) | tr A-Z a-z)_board.scn
 RUN_FW = $(if $(filter NEW,$(BOARD)),$(FW_NEW),$(if $(filter OLD_OLED,$(BOARD)),$(FW_OLD_OLED),$(FW)))
@@ -129,6 +145,8 @@ CHECK_OLD_OLED := $(SCENARIOS:scenarios/%.scn=check-old-oled-%)
 CHECK_NEW := $(SCENARIOS:scenarios/%.scn=check-new-%)
 CHECK_NEW20 := $(SCENARIOS:scenarios/%.scn=check-new20-%)
 CHECK_60HZ := $(SCENARIOS:scenarios/%.scn=check-60hz-%)
+CHECK_SEG_TEMP := $(SCENARIOS:scenarios/%.scn=check-seg-temp-%)
+CHECK_NEW_TEMP := $(SCENARIOS:scenarios/%.scn=check-new-temp-%)
 CHECK_RF := $(RF_SCENARIOS:scenarios/rf/%.scn=check-rf-%)
 CHECK_RELAYS := $(RELAY_SCENARIOS:scenarios/relays/%.scn=check-relays-%)
 
@@ -141,6 +159,10 @@ check-new: $(CHECK_NEW)
 check-new20: $(CHECK_NEW20)
 
 check-60hz: $(CHECK_60HZ)
+
+check-seg-temp: $(CHECK_SEG_TEMP)
+
+check-new-temp: $(CHECK_NEW_TEMP)
 
 check-rf: $(CHECK_RF)
 
@@ -182,6 +204,12 @@ $(CHECK_NEW20): check-new20-%: grid_sim $(FW_NEW20) $(OUT)/new20_board.scn
 $(CHECK_60HZ): check-60hz-%: grid_sim $(FW_60HZ) $(OUT)/old_seg_60hz_board.scn
 	$(call scenario,-b $(OUT)/old_seg_60hz_board.scn $(FW_60HZ),scenarios/$*.scn,60hz-$*)
 
+$(CHECK_SEG_TEMP): check-seg-temp-%: grid_sim $(FW_SEG_TEMP) $(OUT)/old_seg_hw_board.scn
+	$(call scenario,-b $(OUT)/old_seg_hw_board.scn $(FW_SEG_TEMP),scenarios/$*.scn,seg_temp-$*)
+
+$(CHECK_NEW_TEMP): check-new-temp-%: grid_sim $(FW_NEW_TEMP) $(OUT)/new_board.scn
+	$(call scenario,-b $(OUT)/new_board.scn $(FW_NEW_TEMP),scenarios/$*.scn,new_temp-$*)
+
 $(CHECK_RF): check-rf-%: grid_sim $(FW_RF) $(OUT)/old_seg_board.scn $(if $(RX_NODES),receivers)
 	$(call scenario,-b $(OUT)/old_seg_board.scn $(RX_ARGS) $(FW_RF),scenarios/rf/$*.scn,rf-$*)
 
@@ -194,6 +222,6 @@ receivers:
 clean:
 	rm -rf grid_sim *.o $(OUT)
 
-.PHONY: run check check-old-oled check-new check-new20 check-60hz check-rf check-relays compare-boards compare-old-oled \
-	compare-boards-20 compare-ct $(CHECK) $(CHECK_OLD_OLED) $(CHECK_NEW) $(CHECK_NEW20) $(CHECK_60HZ) $(CHECK_RF) \
+.PHONY: run check check-old-oled check-new check-new20 check-60hz check-seg-temp check-new-temp check-rf check-relays compare-boards compare-old-oled \
+	compare-boards-20 compare-ct $(CHECK) $(CHECK_OLD_OLED) $(CHECK_NEW) $(CHECK_NEW20) $(CHECK_60HZ) $(CHECK_SEG_TEMP) $(CHECK_NEW_TEMP) $(CHECK_RF) \
 	$(CHECK_RELAYS) receivers clean
