@@ -70,11 +70,18 @@ shipped `config.h`:
 - **CI:** builds of each board with its display, native, embedded and compile-fail tests, the grid
   and relay simulations, the size and speed report of the pull requests, the formatting check
   (clang-format 18).
+- **GitHub Pages** (<https://fredm67.github.io/PVRouter-1-phase/>), as PVRouter-3-phase: a landing
+  page, the flash and RAM of every build and the embedded benchmarks at each change of `dev`
+  (`bench/`, from the `pages` job of the CI), and the Doxygen documentation of
+  `Mk2_1phase_RFdatalog_temp` (`doc/`). Flash and RAM badges in the READMEs.
 - **NOTICE:** where the code comes from, the third-party code and the libraries used; the files
   that hold your settings are yours.
 
 ### Changed
 
+- **Doxygen and CodeQL:** both follow `Mk2_1phase_RFdatalog_temp` instead of `Mk2_fasterControl_Full`.
+  The documentation is deployed to `doc/` of `gh-pages`, no longer at its root: the old
+  `Mk2_fasterControl_Full` site is removed by the first update of the pages after that.
 - **License:** Robin Emley's sketches in `Robin/` and `dev/` stay as he published them, without
   a licence tag. The rest of the repository, `Mk2_fasterControl_Full` and the single-file
   sketches included, moves from LGPL-2.1 to GPL-3.0-or-later, as PVRouter-3-phase; its source
