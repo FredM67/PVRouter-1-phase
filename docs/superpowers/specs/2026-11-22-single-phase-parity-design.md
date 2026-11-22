@@ -171,7 +171,7 @@ Robin's `twoLoads_5` logic, already in `Mk2_fasterControl_Full/processing.cpp`:
 ### Diverted energy
 
 - Power on CT2 per mains cycle, energy accumulated in Wh with Robin's anti-creep limit
-  (`ANTI_CREEP_LIMIT`, joules per mains cycle), reset after `DISPLAY_SHUTDOWN_IN_HOURS` without
+  (`ANTI_CREEP_LIMIT`, in W: a mains cycle below that average power adds nothing, as in Robin's code), reset after `DISPLAY_SHUTDOWN_IN_HOURS` without
   diversion, as in Robin's sketches.
 - Calibration: on the two old boards (AVcc reference), `powerCal_diverted` as `f_powerCal` today;
   on the universal board,
