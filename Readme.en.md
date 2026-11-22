@@ -18,8 +18,8 @@
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 <br/>
 <br/>
-  [![en](https://img.shields.io/badge/lang-en-red.svg)](Mk2_1phase_RFdatalog_temp/Readme.en.md)
-  [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](Mk2_1phase_RFdatalog_temp/Readme.md)
+  [![en](https://img.shields.io/badge/lang-en-red.svg)](Readme.en.md)
+  [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](Readme.md)
 </div>
 
 # PVRouter (single-phase version)
