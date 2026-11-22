@@ -21,9 +21,10 @@ expect misfiled_samples 0
 expect admux_delay_min 128
 expect isr_overruns 0
 # Margins, enforced: the longest ISR call and the latest ADMUX write (from the interrupt), a little
-# above the worst measured (1393 and 1361 cycles). The deadline is 1664 cycles: an ADMUX written
-# later misses the conversion after next, which then converts the wrong channel.
-expect isr_max 1450
-expect admux_delay_max 1420
+# above the worst measured (495 and 540 cycles; no temperature sensing in this build). The deadline
+# is 1664 cycles: an ADMUX written later misses the conversion after next, which then converts the
+# wrong channel.
+expect isr_max 560
+expect admux_delay_max 620
 # no sample beyond the ADC's range
 expect clipped 0

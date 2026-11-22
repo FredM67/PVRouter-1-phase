@@ -53,7 +53,10 @@ filter of the old boards (gain 9) adds about 10 % to the current it sees. The sc
 within 3 kW per CT.
 
 `configs/sim_config.sh` sets the board and the human-readable datalog (which `grid_sim` reads) in
-`config.h`, whatever its defaults. Run it before every firmware build below.
+`config.h`, whatever its defaults, and, when asked, the CT rating in `calibration.h` and a 60 Hz
+mains in `config_system.h`. Run it before every firmware build below, and restore the sources after
+each build: `restore` below puts back every file that `sim_config.sh`, the patches of `configs/`
+and the build (`version.h`) change.
 
 Build with `PVR_SIM_BUILD` set, as CI does. The firmware prints its banner at 9600 baud before it
 starts sampling, so the banner's length shifts the whole run against the scenario: a different
@@ -63,9 +66,10 @@ name a CI checkout gives (`N/A`), and the same code gives the same result everyw
 ```bash
 # 1. build the firmware (OLD_SEG)
 export PVR_SIM_BUILD=1
+restore() { (cd Mk2_1phase_RFdatalog_temp && git checkout config.h calibration.h config_system.h version.h); }
 sh sim/configs/sim_config.sh
 (cd Mk2_1phase_RFdatalog_temp && pio run -e basic)
-git checkout Mk2_1phase_RFdatalog_temp/config.h Mk2_1phase_RFdatalog_temp/version.h
+restore
 
 # 2. run every scenario, fail on any unmet expectation
 make -C sim check
@@ -86,27 +90,29 @@ simavr comes from the PlatformIO package `platformio/tool-simavr` (installed by 
 Each firmware is built in a build directory of its own:
 
 ```bash
+export PVR_SIM_BUILD=1      # and restore() as above
 sh sim/configs/sim_config.sh OLD_OLED
 (cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-old-oled pio run -e basic)
+restore
 sh sim/configs/sim_config.sh NEW
 (cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-new pio run -e basic)
+restore
 sh sim/configs/sim_config.sh NEW 20
 (cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-new20 pio run -e basic)
-git checkout Mk2_1phase_RFdatalog_temp/calibration.h
+restore
 sh sim/configs/sim_config.sh OLD_SEG 60Hz
 (cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-60hz pio run -e basic)
-git checkout Mk2_1phase_RFdatalog_temp/config.h Mk2_1phase_RFdatalog_temp/config_system.h Mk2_1phase_RFdatalog_temp/version.h
+restore
 sh sim/configs/sim_config.sh NEW
 sed -n '/^diff --git/,$p' sim/configs/temperature.patch | patch -p1
 (cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-new-temp pio run -e basic)
-git checkout Mk2_1phase_RFdatalog_temp/config.h Mk2_1phase_RFdatalog_temp/version.h
+restore
 sh sim/configs/sim_config.sh OLD_SEG
 sed -n '/^diff --git/,$p' sim/configs/seg_hw.patch | patch -p1
 sed -n '/^diff --git/,$p' sim/configs/temperature.patch | patch -p1
 (cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-seg-temp pio run -e basic)
-git checkout Mk2_1phase_RFdatalog_temp/config.h Mk2_1phase_RFdatalog_temp/version.h
-make -C sim -j$(nproc) check check-old-oled check-new check-new20 check-60hz check-new-temp
-make -C sim check-seg-temp    # fails today: see below
+restore
+make -C sim -j$(nproc) check check-old-oled check-new check-new20 check-60hz check-new-temp check-seg-temp
 make -C sim compare-boards compare-old-oled compare-boards-20 compare-ct
 ```
 
@@ -115,17 +121,18 @@ make -C sim compare-boards compare-old-oled compare-boards-20 compare-ct
 - `compare-boards` / `compare-old-oled`: each scenario must give the same result as on `OLD_SEG`: grid import and export, and the energy of each load, within 1 % or 0.1 Wh. The boards only differ in resolution (with the 50 A CTs of `calibration.h`, the new board has 0.161 A per ADC step against 0.061 A on the old ones) and in analog inputs, which can move a switching instant by a half-cycle now and then. The diverted energy is not compared: the firmware counts whole Wh, which a few hundredths of a Wh can tip.
 - `compare-boards-20`: 20 A CTs against `OLD_SEG`, within 0.5 % or 0.1 Wh; `compare-ct`: 20 A against 50 A CTs, within 1 % or 0.1 Wh.
 - `check-new-temp`: `NEW` with temperature sensing on D3 (`configs/temperature.patch`, built in `.pio/build-new-temp`). No DS18B20 is simulated: with no device on the bus, each reset and each bit written still keeps interrupts off for its 1-Wire time slot (up to ~65 µs, ~1050 cycles), and the ADC interrupt waits meanwhile.
-- `check-seg-temp`: `OLD_SEG` with the 7-segment display through its pin-saving chips (`configs/seg_hw.patch`: `SEG_HW`, refreshed in the ADC interrupt, loads on D10-D12) and temperature sensing (`configs/temperature.patch`), built in `.pio/build-seg-temp`. Its board file remaps the scenarios' load pins D5-D7 onto D10-D12 (`remap`). **It fails today**: at each temperature read, an I1 call (CT1 filter, ~1200-1370 cycles) entered up to ~1100 cycles late writes ADMUX up to ~2280 cycles after its interrupt, past the 1664-cycle deadline, and two samples are misfiled each time. It is not in CI (`ci_targets.sh`) until the firmware meets the deadline.
+- `check-seg-temp`: `OLD_SEG` with the 7-segment display through its pin-saving chips (`configs/seg_hw.patch`: `SEG_HW`, refreshed in the ADC interrupt with the CT1 sample, loads on D10-D12) and temperature sensing (`configs/temperature.patch`), built in `.pio/build-seg-temp`. Its board file remaps the scenarios' load pins D5-D7 onto D10-D12 (`remap`). The display is refreshed on the CT1 call. It is the tightest build for the ADC deadline: an ISR call entered up to ~1100 cycles late, after a 1-Wire time slot, still has to write ADMUX within the 1664 cycles of its conversion. It does (~1460 cycles at most), since no ISR call needs more than ~420 cycles to reach its ADMUX write: the work of the mains cycle is spread over the CT2 calls that follow the zero crossings (`processing.cpp`, `CycleTask`).
 
 ### Remote loads
 
 The scenarios in `scenarios/rf` need a firmware with remote loads: `configs/remote_loads.patch` applied to `config.h`, built in a build directory of its own (loads 3 and 4 go to remote units 1 and 2, RF nodes 15 and 16; the RFM69 takes D2 and D10 to D13).
 
 ```bash
+export PVR_SIM_BUILD=1      # and restore() as above
 sh sim/configs/sim_config.sh
 sed -n '/^diff --git/,$p' sim/configs/remote_loads.patch | patch -p1   # or git apply --unidiff-zero
 (cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-rf pio run -e basic)
-git checkout Mk2_1phase_RFdatalog_temp/config.h Mk2_1phase_RFdatalog_temp/version.h
+restore
 make -C sim check-rf                                   # with ideal receivers
 make -C sim check-rf RX_NODES="15 16" RX_SRC=<path>/RemoteLoadReceiver   # with the receiver firmware
 ```
@@ -150,10 +157,11 @@ Frames get lost in `rf_drop` windows, and at random with `rf_loss`, from a fixed
 The scenarios in `scenarios/relays` need a firmware with relay diversion: `configs/relays.patch` puts two relays on D8 and D9 (surplus thresholds 500 and 1000 W, import threshold 100 W, 2 minutes minimum ON and OFF) with a 1-minute filter, override pins D4 (everything) and D13 (the relays). It is built in a build directory of its own, so the `basic` firmware of `make check` stays.
 
 ```bash
+export PVR_SIM_BUILD=1      # and restore() as above
 sh sim/configs/sim_config.sh
 sed -n '/^diff --git/,$p' sim/configs/relays.patch | patch -p1   # or git apply --unidiff-zero
 (cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-relays pio run -e basic)
-git checkout Mk2_1phase_RFdatalog_temp/config.h Mk2_1phase_RFdatalog_temp/version.h
+restore
 make -C sim check-relays
 ```
 

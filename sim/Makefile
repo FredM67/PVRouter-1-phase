@@ -6,8 +6,9 @@
 #   make check-new      the same against the NEW firmware (internal 1.1 V reference)
 #   make check-new20    the same with 20 A CTs: about the resolution of the old boards
 #   make check-60hz     the same against an OLD_SEG firmware built for 60 Hz, on a 60 Hz mains
-#   make check-seg-temp the same against OLD_SEG with the 7-segment display (SEG_HW, loads on D10-D12)
-#                       and temperature sensing (configs/seg_hw.patch, configs/temperature.patch)
+#   make check-seg-temp the same against OLD_SEG with the 7-segment display (SEG_HW, loads on D10-D12,
+#                       board file old_seg_hw_board.scn) and temperature sensing (configs/seg_hw.patch,
+#                       configs/temperature.patch): the tightest build for the ADC deadline
 #   make check-new-temp the same against NEW with temperature sensing (configs/temperature.patch)
 #   make check-rf       run scenarios/rf against the remote-loads firmware (configs/remote_loads.patch),
 #                       with ideal receivers, or with the RemoteLoadReceiver firmware on the units
@@ -31,6 +32,7 @@
 #   export PVR_SIM_BUILD=1
 #   sh sim/configs/sim_config.sh   # human-readable output (grid_sim reads it), OLD_SEG board
 #   (cd Mk2_1phase_RFdatalog_temp && pio run -e basic)
+#   (cd Mk2_1phase_RFdatalog_temp && git checkout config.h calibration.h config_system.h version.h)
 # The other firmwares are built in build directories of their own (README.md).
 
 SIMAVR ?= $(HOME)/.platformio/packages/tool-simavr
@@ -95,10 +97,10 @@ $(FW_60HZ):
 	$(error firmware not found: $(FW_60HZ) - see check-60hz in README.md)
 
 $(FW_SEG_TEMP):
-	$(error firmware not found: $(FW_SEG_TEMP) - see configs/seg_hw.patch)
+	$(error firmware not found: $(FW_SEG_TEMP) - apply configs/seg_hw.patch and configs/temperature.patch, then 'PLATFORMIO_BUILD_DIR=.pio/build-seg-temp pio run -e basic' (README.md))
 
 $(FW_NEW_TEMP):
-	$(error firmware not found: $(FW_NEW_TEMP) - see configs/temperature.patch)
+	$(error firmware not found: $(FW_NEW_TEMP) - sim_config.sh NEW, apply configs/temperature.patch, then 'PLATFORMIO_BUILD_DIR=.pio/build-new-temp pio run -e basic' (README.md))
 
 $(FW_RF):
 	$(error firmware not found: $(FW_RF) - apply configs/remote_loads.patch, then 'PLATFORMIO_BUILD_DIR=.pio/build-rf pio run -e basic' (README.md))

@@ -3,9 +3,8 @@
 #
 #   ci_targets.sh grid <k>/<n>     scenarios/*.scn, each on the three boards and their variants
 #                                  (check-, check-old-oled-, check-new-, check-new20-, check-60hz-,
-#                                  check-new-temp-): the boards of a scenario stay in the same
-#                                  job, which can then compare them. Not check-seg-temp-: OLD_SEG
-#                                  with temperature sensing misses the ADC deadline (README.md)
+#                                  check-new-temp-, check-seg-temp-): the boards of a scenario stay
+#                                  in the same job, which can then compare them
 #   ci_targets.sh relays <k>/<n>   scenarios/relays/*.scn
 #
 # Job k of n takes every n-th scenario, in alphabetical order, starting from the k-th. The
@@ -31,7 +30,7 @@ fi
 
 for name in $names; do
   case $set_name in
-    grid)   printf 'check-%s check-old-oled-%s check-new-%s check-new20-%s check-60hz-%s check-new-temp-%s\n' "$name" "$name" "$name" "$name" "$name" "$name" ;;
+    grid)   printf 'check-%s check-old-oled-%s check-new-%s check-new20-%s check-60hz-%s check-new-temp-%s check-seg-temp-%s\n' "$name" "$name" "$name" "$name" "$name" "$name" "$name" ;;
     relays) printf 'check-relays-%s\n' "$name" ;;
   esac
 done | tr '\n' ' '
