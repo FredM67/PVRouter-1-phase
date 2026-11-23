@@ -337,3 +337,24 @@ test('rotation delay: a hidden, invalid delay is written as the 8-hour default',
   Object.assign(m.rotation, { mode: 'AUTO', afterSeconds: 2 * 3600 });
   assert.match(delayLine(m), /ROTATION_AFTER_SECONDS\{ 2UL \* 3600UL \}/);
 });
+
+test('boards and display: OLD_SEG with SEG_HW', () => {
+  const m = M.defaults();
+  Object.assign(m, { pcbVersion: 'OLD_SEG', displayType: 'SEG_HW' });
+  m.loads[0].pin = 3;
+  const h = G.configH(m);
+  assert.match(h, /^inline constexpr PcbVersion PCB_VERSION\{ PcbVersion::OLD_SEG \};$/m);
+  assert.match(h, /^inline constexpr DisplayType TYPE_OF_DISPLAY\{ DisplayType::SEG_HW \};/m);
+});
+
+test('the shipped single-load notes only for one local load on pin 5', () => {
+  const shippedNotes = (h) => [h.includes('Shipped with one local load'), h.includes('by default, the load\n//   uses D5')];
+  assert.deepStrictEqual(shippedNotes(G.configH(M.defaults())), [true, true]);
+  const remote = M.defaults();
+  remote.loads = [{ type: 'remote', unit: 1, led: null }];
+  assert.deepStrictEqual(shippedNotes(G.configH(remote)), [false, false]);
+  const pin6 = M.defaults();
+  pin6.loads[0].pin = 6;
+  assert.deepStrictEqual(shippedNotes(G.configH(pin6)), [false, false]);
+  assert.match(G.configH(remote), /by default, the loads\n\/\/ {3}use D5, D6 and D7\./);
+});

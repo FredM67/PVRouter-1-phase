@@ -280,3 +280,89 @@ test('rotation delay: checked only when its field is shown (automatic, without d
   assert.ok(!delay((m) => Object.assign(m.rotation, { mode: 'PIN', pin: 4, groups: [[0, 1, 2]] }) && false));
   assert.ok(!delay(() => false));
 });
+
+// ---- the three single-phase boards, the display and its pins (validation.h) ----
+
+// the single-phase default (one load on D5, the override pin on D4), changed
+const board = (pcbVersion, displayType, change) => {
+  const m = M.defaults();
+  Object.assign(m, { pcbVersion, displayType });
+  if (change) change(m);
+  return m;
+};
+const find = (m, key) => V.validate(m).filter((p) => p.key === key);
+const fields = (m, key) => find(m, key).map((p) => p.field);
+
+test('display: the 7-segment display only on OLD_SEG', () => {
+  assert.deepStrictEqual(fields(board('NEW', 'SEG'), 'err.displayBoard'), ['displayType']);
+  assert.deepStrictEqual(fields(board('OLD_OLED', 'SEG_HW'), 'err.displayBoard'), ['displayType']);
+  assert.deepStrictEqual(fields(board('OLD_SEG', 'SEG_HW', (m) => (m.loads[0].pin = 3)), 'err.displayBoard'), []);
+});
+
+test('display: the OLED not on OLD_SEG, which uses A4/A5 as analog inputs', () => {
+  assert.deepStrictEqual(fields(board('OLD_SEG', 'OLED'), 'err.oledBoard'), ['displayType']);
+  assert.deepStrictEqual(fields(board('OLD_OLED', 'OLED'), 'err.oledBoard'), []);
+  assert.deepStrictEqual(errors(board('NEW', 'OLED')), []);
+});
+
+test('display: SEG takes pins of the RF chip, SEG_HW does not', () => {
+  assert.deepStrictEqual(fields(board('OLD_SEG', 'SEG', (m) => (m.rf.logging = true)), 'err.displayRf'), ['displayType']);
+  assert.deepStrictEqual(fields(board('OLD_SEG', 'SEG', (m) => m.loads.push({ type: 'remote', unit: 1, led: null }) && (m.priorities = [0, 1])), 'err.displayRf'), ['displayType']);
+  assert.deepStrictEqual(fields(board('OLD_SEG', 'SEG_HW', (m) => (m.rf.logging = true)), 'err.displayRf'), []);
+});
+
+test('display: a pin the display takes is refused, on the setting that uses it', () => {
+  assert.deepStrictEqual(fields(board('OLD_SEG', 'SEG'), 'err.displayPin'), ['loads.0']); // the default load on D5
+  const relay = board('OLD_SEG', 'SEG_HW', (m) => {
+    m.loads[0].pin = 3;
+    m.relays.enabled = true;
+    M.resizeRelays(m, 1);
+    m.relays.list[0].pin = 9;
+  });
+  assert.deepStrictEqual(fields(relay, 'err.displayPin'), ['relays.0']);
+  assert.deepStrictEqual(find(relay, 'err.displayPin')[0].params.pin, 9);
+  // SEG_HW leaves D2 to D4 and D10 to D13
+  assert.deepStrictEqual(V.validate(board('OLD_SEG', 'SEG_HW', (m) => (m.loads[0].pin = 4) && (m.overrides.list[0].pin = 3))), []);
+  // the OLED takes A4/A5 only: every digital pin stays free
+  assert.deepStrictEqual(errors(board('OLD_OLED', 'OLED')), []);
+});
+
+test('mk2Wifi: only on the new board', () => {
+  assert.deepStrictEqual(fields(board('OLD_OLED', 'NONE', (m) => (m.mk2wifi.enabled = true)), 'err.mk2wifiBoard'), ['mk2wifi']);
+  assert.deepStrictEqual(fields(board('OLD_SEG', 'NONE', (m) => (m.mk2wifi.enabled = true)), 'err.mk2wifiBoard'), ['mk2wifi']);
+  assert.deepStrictEqual(fields(board('NEW', 'NONE', (m) => (m.mk2wifi.enabled = true)), 'err.mk2wifiBoard'), []);
+  assert.ok(!M.mk2wifiAvailable(M.normalize({ pcbVersion: 'OLD_OLED' })));
+  assert.ok(M.mk2wifiAvailable(M.defaults()));
+});
+
+test('old boards: the probes on the chosen pin, unless the display takes it', () => {
+  const probes = (pin, displayType, change) =>
+    board('OLD_SEG', displayType, (m) => {
+      Object.assign(m.temperature, { mode: 'router', pin });
+      if (change) change(m);
+    });
+  assert.deepStrictEqual(V.validate(probes(4, 'NONE', (m) => (m.overrides.list[0].pin = 3))), []);
+  // validation.h: check_pins() finds D5 twice, "Duplicate pin definition"
+  const taken = probes(5, 'SEG', (m) => (m.loads[0].pin = 3));
+  assert.deepStrictEqual(fields(taken, 'err.displayPin'), ['temperature']);
+  assert.ok(!keys(taken).includes('err.tempPin'));
+});
+
+test('display pins: as utils_display.h, A0..A5 as 14..19', () => {
+  const pins = (displayType) => M.displayPins({ ...M.defaults(), displayType });
+  assert.deepStrictEqual(pins('NONE'), []);
+  assert.deepStrictEqual(pins('SEG'), [2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16]);
+  assert.deepStrictEqual(pins('SEG_HW'), [5, 6, 7, 8, 9, 14, 15, 16]);
+  assert.deepStrictEqual(pins('OLED'), [18, 19]);
+});
+
+test('temperature pin: D3 on the new board, the chosen pin on the old ones', () => {
+  const pin = (pcbVersion) => M.tempPin({ ...M.defaults(), pcbVersion, temperature: { ...M.defaults().temperature, pin: 7 } });
+  assert.strictEqual(pin('NEW'), 3);
+  assert.strictEqual(pin('OLD_SEG'), 7);
+  assert.strictEqual(pin('OLD_OLED'), 7);
+});
+
+test('an unknown display is refused', () => {
+  assert.deepStrictEqual(fields(board('NEW', 'LCD'), 'err.displayType'), ['displayType']);
+});

@@ -32,6 +32,13 @@
     if (!inRange(m.diversionStartThreshold, 0, 32767)) error('err.diversionStart', 'diversionStartThreshold');
     if (!M.SERIAL_OUTPUTS.includes(m.serialOutput)) error('err.serialOutput', 'serialOutput');
     if (!M.PCB_VERSIONS.includes(m.pcbVersion)) error('err.pcbVersion', 'pcbVersion');
+
+    // ---- the display (validation.h): the 7-segment display on OLD_SEG only, the OLED not there ----
+    if (!M.DISPLAY_TYPES.includes(m.displayType)) error('err.displayType', 'displayType');
+    else if (M.PCB_VERSIONS.includes(m.pcbVersion)) {
+      if ((m.displayType === 'SEG' || m.displayType === 'SEG_HW') && m.pcbVersion !== 'OLD_SEG') error('err.displayBoard', 'displayType');
+      if (m.displayType === 'OLED' && m.pcbVersion === 'OLD_SEG') error('err.oledBoard', 'displayType');
+    }
     if (m.calibrationMode) warning('warn.calibration', 'calibrationMode');
 
     // ---- calibration helper: readings that would give a wrong correction ----
@@ -212,20 +219,26 @@
 
     // ---- one pin, one use ----
     const uses = [];
-    const use = (p, what) => {
-      if (isRouterPin(p)) uses.push([p, what]);
+    const use = (p, what, field) => {
+      if (isRouterPin(p)) uses.push([p, what, field]);
     };
-    if (M.tempSensorPresent(m)) use(M.tempPin(m), 'temperature');
-    if (m.diversion.enabled) use(m.diversion.pin, 'diversion');
-    if (m.routerOff.enabled) use(m.routerOff.pin, 'routerOff');
-    if (m.rotation.mode === 'PIN') use(m.rotation.pin, 'rotation');
-    if (m.dualTariff.enabled) use(m.dualTariff.pin, 'dualTariff');
-    if (M.overridePresent(m)) m.overrides.list.forEach((o, i) => use(o.pin, `override ${i + 1}`));
-    if (m.watchdog.enabled) use(m.watchdog.pin, 'watchdog');
-    m.loads.forEach((l, i) => use(l.type === 'local' ? l.pin : l.led, `load ${i + 1}`));
-    relays.forEach((r, i) => use(r.pin, `relay ${i + 1}`));
+    if (M.tempSensorPresent(m)) use(M.tempPin(m), 'temperature', 'temperature');
+    if (m.diversion.enabled) use(m.diversion.pin, 'diversion', 'diversion');
+    if (m.routerOff.enabled) use(m.routerOff.pin, 'routerOff', 'routerOff');
+    if (m.rotation.mode === 'PIN') use(m.rotation.pin, 'rotation', 'rotation');
+    if (m.dualTariff.enabled) use(m.dualTariff.pin, 'dualTariff', 'dualTariff');
+    if (M.overridePresent(m)) m.overrides.list.forEach((o, i) => use(o.pin, `override ${i + 1}`, `overrides.${i}`));
+    if (m.watchdog.enabled) use(m.watchdog.pin, 'watchdog', 'watchdog');
+    m.loads.forEach((l, i) => use(l.type === 'local' ? l.pin : l.led, `load ${i + 1}`, `loads.${i}`));
+    relays.forEach((r, i) => use(r.pin, `relay ${i + 1}`, `relays.${i}`));
     const byPin = new Map();
     for (const [p, what] of uses) byPin.set(p, [...(byPin.get(p) || []), what]);
+    // the pins the display takes belong to it alone (validation.h check_pins(): "Duplicate pin
+    // definition"); its A0..A5 pins cannot be set anywhere else (2..13)
+    const displayPins = M.displayPins(m);
+    for (const [p, what, field] of uses) if (displayPins.includes(p)) error('err.displayPin', field, { pin: p, use: what, display: m.displayType });
+    // the RF chip takes D2 and D10 to D13, which SEG takes too
+    if (M.rfChipPresent(m) && displayPins.some((p) => M.RF_PINS.includes(p))) error('err.displayRf', 'displayType');
     for (const [p, whats] of byPin) if (whats.length > 1) error('err.duplicatePin', 'pins', { pin: p, uses: whats.join(', ') });
     if (M.rfChipPresent(m)) for (const [p, whats] of byPin) if (M.RF_PINS.includes(p)) error('err.rfPin', 'pins', { pin: p, uses: whats.join(', ') });
 
@@ -268,6 +281,7 @@
     }
 
     // ---- mk2Wifi ----
+    if (m.mk2wifi.enabled && !M.mk2wifiAvailable(m)) error('err.mk2wifiBoard', 'mk2wifi');
     if (m.mk2wifi.enabled) {
       if (!/^[a-z0-9-]{1,31}$/.test(m.mk2wifi.name || '')) error('err.deviceName', 'mk2wifi');
       if (M.serialOutputOf(m) !== 'IoT' && !m.calibrationMode) warning('warn.wifiNotIoT', 'serialOutput');

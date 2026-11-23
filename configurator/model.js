@@ -46,6 +46,20 @@
   const TEMP_MODES = ['off', 'router', 'esp'];
   const TEMP_PIN = 3; // the probes' bus on the new board, wired there with its pull-up (router mode)
   const isOldBoard = (m) => m.pcbVersion === 'OLD_SEG' || m.pcbVersion === 'OLD_OLED';
+  // The pins each display takes (display_core.h pinsOf()), A0..A5 as 14..19. SEG and SEG_HW only
+  // exist on OLD_SEG; the OLED is on I2C (A4, A5), not on OLD_SEG (analog inputs there).
+  const DISPLAY_PINS = {
+    NONE: [],
+    SEG: [2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16],
+    SEG_HW: [5, 6, 7, 8, 9, 14, 15, 16],
+    OLED: [18, 19],
+  };
+  const displayPins = (m) => DISPLAY_PINS[m.displayType] || [];
+  const DISPLAY_BOARDS = { NONE: PCB_VERSIONS, SEG: ['OLD_SEG'], SEG_HW: ['OLD_SEG'], OLED: ['OLD_OLED', 'NEW'] };
+  // the displays a board takes
+  const displayTypesOf = (m) => DISPLAY_TYPES.filter((t) => DISPLAY_BOARDS[t].includes(m.pcbVersion));
+  // the mk2Wifi module plugs into the universal board only
+  const mk2wifiAvailable = (m) => m.pcbVersion === 'NEW';
 
   function defaults() {
     return {
@@ -401,6 +415,7 @@
     while (m.loads.length < count) {
       const used = new Set(m.loads.filter((l) => l.type === 'local').map((l) => l.pin));
       if (tempSensorPresent(m)) used.add(tempPin(m)); // the probes' bus
+      for (const p of displayPins(m)) used.add(p);
       const pin = [5, 6, 7, 3, 4, 8, 9].find((p) => !used.has(p)) || 2;
       m.loads.push({ type: 'local', pin });
     }
@@ -428,6 +443,10 @@
     MK2WIFI_UART,
     PCB_VERSIONS,
     DISPLAY_TYPES,
+    DISPLAY_PINS,
+    displayPins,
+    displayTypesOf,
+    mk2wifiAvailable,
     isOldBoard,
     SERIAL_OUTPUTS,
     ROTATION_MODES,

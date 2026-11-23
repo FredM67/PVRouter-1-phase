@@ -127,7 +127,8 @@
   const pinLabel = (p) => (p >= 14 ? `A${p - 14}` : `D${p}`);
   const pinSelect = (get, set, opts) => {
     const o = opts || {};
-    const pins = o.pins || M.DIGITAL_PINS;
+    // the router's pins: those the display takes are not offered, unless already chosen (the error says so)
+    const pins = o.pins || M.DIGITAL_PINS.filter((p) => p === get() || !M.displayPins(m).includes(p));
     const options = pins.map((p) => [p, pinLabel(p)]);
     if (o.none || get() === null || get() === undefined) options.unshift([null, o.none ? T('none') : '—']);
     return select(get, set, options);
@@ -196,10 +197,28 @@
         'pcbVersion',
         select(
           () => m.pcbVersion,
-          (v) => (m.pcbVersion = v),
+          (v) => {
+            m.pcbVersion = v;
+            // what the new board cannot take: its display, the mk2Wifi module
+            if (!M.displayTypesOf(m).includes(m.displayType)) m.displayType = 'NONE';
+            if (!M.mk2wifiAvailable(m)) {
+              m.mk2wifi.enabled = false;
+              if (m.temperature.mode === 'esp') m.temperature.mode = 'off';
+            }
+          },
           M.PCB_VERSIONS.map((x) => [x, T(`pcb.${x}`)])
         ),
         'pcbVersionHelp'
+      ),
+      field(
+        'displayType',
+        select(
+          () => m.displayType,
+          (v) => (m.displayType = v),
+          // the displays of this board, and the current one if it does not fit (the error says so)
+          M.DISPLAY_TYPES.filter((x) => x === m.displayType || M.displayTypesOf(m).includes(x)).map((x) => [x, T(`display.${x}`)])
+        ),
+        'displayTypeHelp'
       ),
       check(
         () => m.calibrationMode,
@@ -861,7 +880,8 @@
         select(
           () => t.mode,
           (v) => (t.mode = v),
-          M.TEMP_MODES.map((x) => [x, T(`temp.${x}`)])
+          // the module's probes: on the new board only (kept if already chosen, the error says so)
+          M.TEMP_MODES.filter((x) => x !== 'esp' || t.mode === 'esp' || M.mk2wifiAvailable(m)).map((x) => [x, T(`temp.${x}`)])
         )
       ),
       // new board: the bus is wired on D3; old board: the user wires it, on a pin of their choice
@@ -1057,6 +1077,8 @@
 
   function mk2wifi(p) {
     const w = m.mk2wifi;
+    // the module plugs into the new board only: hidden on the old ones, unless enabled (the error says so)
+    if (!M.mk2wifiAvailable(m) && !w.enabled) return null;
     const jumpers = M.wifiInputs(m)
       .map((c) => `D${c.pin}`)
       .sort();

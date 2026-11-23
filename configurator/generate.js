@@ -172,9 +172,13 @@
 
   // ---- config.h ----
 
+  // The shipped load map: one local load, on pin 5. Its notes are written for it only; any other
+  // map gets the 3-phase wording.
+  const shippedLoadMap = (m) => m.loads.length === 1 && m.loads[0].type === 'local' && m.loads[0].pin === 5;
+
   // The note on adding loads, for the shipped single local load (the 3-phase wording has none)
   function loadMapNote(m) {
-    if (m.loads.length !== 1) return [];
+    if (!shippedLoadMap(m)) return [];
     return [
       '//',
       '// Shipped with one local load, on pin 5. To add loads, change three things together, so that',
@@ -315,7 +319,7 @@
       '// mk2Wifi module (ESP32-C6, Home Assistant):',
       '// - D5 to D9 can be wired to the module, each through a solder jumper (open by default), as',
       '//   inputs driven from Home Assistant: routing stop, router OFF, boost, priority rotation...',
-      ...(n === 1
+      ...(shippedLoadMap(m)
         ? ['// - Only close the jumpers of pins that are free in this configuration: by default, the load', '//   uses D5 (a second and a third load would use D6 and D7).']
         : ['// - Only close the jumpers of pins that are free in this configuration: by default, the loads', '//   use D5, D6 and D7.']),
       '',
