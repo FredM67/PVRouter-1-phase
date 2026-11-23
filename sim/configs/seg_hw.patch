@@ -12,13 +12,13 @@ diff --git a/Mk2_1phase_RFdatalog_temp/config.h b/Mk2_1phase_RFdatalog_temp/conf
 index 15de861..04b4549 100644
 --- a/Mk2_1phase_RFdatalog_temp/config.h
 +++ b/Mk2_1phase_RFdatalog_temp/config.h
-@@ -54,3 +54,3 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
+@@ -61,3 +61,3 @@ inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
 -  Load::local(5),
 -  Load::local(6),
 -  Load::local(7)
 +  Load::local(10),
 +  Load::local(11),
 +  Load::local(12)
-@@ -90 +90 @@ inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 }; /**< the diverted energ
+@@ -97 +97 @@ inline constexpr uint8_t DISPLAY_SHUTDOWN_IN_HOURS{ 8 }; /**< the diverted energ
 -inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE }; /**< the display fitted */
 +inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::SEG_HW }; /**< the display fitted */

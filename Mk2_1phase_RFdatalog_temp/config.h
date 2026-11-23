@@ -40,7 +40,7 @@ inline constexpr bool CALIBRATION_MODE{ false };
 //--------------------------------------------------------------------------------------------------
 // Basic Configuration
 //
-inline constexpr uint8_t NO_OF_DUMPLOADS{ 3 }; /**< TOTAL number of dump loads (local + remote) */
+inline constexpr uint8_t NO_OF_DUMPLOADS{ 1 }; /**< TOTAL number of dump loads (local + remote) */
 
 // ----------- Load map -----------
 //
@@ -50,11 +50,14 @@ inline constexpr uint8_t NO_OF_DUMPLOADS{ 3 }; /**< TOTAL number of dump loads (
 //   Load::remote(unit, ledPin) - same, plus a status LED on the router
 //
 // See the pinout notes further down for which pins are available.
-inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{
-  Load::local(5),
-  Load::local(6),
-  Load::local(7)
-}; /**< the load map: one packed entry per dump load */
+//
+// Shipped with one local load, on pin 5. To add loads, change three things together, so that
+// each has NO_OF_DUMPLOADS entries: NO_OF_DUMPLOADS here, the entries below, and
+// loadPrioritiesAtStartup further down. For a second and a third local load, on pins 6 and 7:
+//   NO_OF_DUMPLOADS{ 3 }
+//   physicalLoadPin[NO_OF_DUMPLOADS]{ Load::local(5), Load::local(6), Load::local(7) }
+//   loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2 }
+inline constexpr uint8_t physicalLoadPin[NO_OF_DUMPLOADS]{ Load::local(5) }; /**< the load map: one packed entry per dump load */
 
 // Feature toggles
 inline constexpr bool DIVERSION_PIN_PRESENT{ false };                   /**< set it to 'true' if you want to control diversion ON/OFF */
@@ -107,12 +110,12 @@ inline constexpr DisplayType TYPE_OF_DISPLAY{ DisplayType::NONE }; /**< the disp
 // mk2Wifi module (ESP32-C6, Home Assistant):
 // - D5 to D9 can be wired to the module, each through a solder jumper (open by default), as
 //   inputs driven from Home Assistant: routing stop, router OFF, boost, priority rotation...
-// - Only close the jumpers of pins that are free in this configuration: by default, the loads
-//   use D5, D6 and D7.
+// - Only close the jumpers of pins that are free in this configuration: by default, the load
+//   uses D5 (a second and a third load would use D6 and D7).
 
 // Load priority order at startup (array index = priority, 0 = highest)
 // Load indices refer to physicalLoadPin[] above, local and remote loads alike.
-inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2 }; /**< load priorities at startup (0=highest) */
+inline constexpr uint8_t loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0 }; /**< load priorities at startup (0=highest) */
 
 // Rotation groups: the loads that take turns at the top of the priority list, when
 // PRIORITY_ROTATION is not OFF. One group per appliance, e.g. the 3 elements of a water heater:

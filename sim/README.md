@@ -58,7 +58,11 @@ within 3 kW per CT.
 
 `configs/sim_config.sh` sets the board and the human-readable datalog (which `grid_sim` reads) in
 `config.h`, whatever its defaults, and, when asked, the CT rating in `calibration.h` and a 60 Hz
-mains in `config_system.h`. Run it before every firmware build below, and restore the sources after
+mains in `config_system.h`. It also gives `config.h` **three local loads** on D5, D6 and D7
+(`configs/three_loads.sh`): the shipped `config.h` has one load, but the scenarios and the patches
+of `configs/` assume three, so every simulator build has three. A build that applies a patch
+without `sim_config.sh` (the remote loads and SEG_HW builds of the CI matrix) runs
+`configs/three_loads.sh` first. Run it before every firmware build below, and restore the sources after
 each build: `restore` below puts back every file that `sim_config.sh`, the patches of `configs/`
 and the build (`version.h`) change.
 

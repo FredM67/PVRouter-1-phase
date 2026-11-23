@@ -49,6 +49,19 @@ replace() {
   printf '%s\n' "${content/"$old"/"$new"}" > "$target"
 }
 
+# The shipped config has one local load, on D5. 'loads N MAP [PRIORITIES]' sets N loads: MAP is the
+# content of physicalLoadPin, PRIORITIES that of loadPrioritiesAtStartup (default 0, 1, ... N-1).
+loads() {
+  local n=$1 map=$2 prio=${3:-} i
+  if [ -z "$prio" ]; then
+    prio=0
+    for ((i = 1; i < n; i++)); do prio+=", $i"; done
+  fi
+  replace 'NO_OF_DUMPLOADS{ 1 }' "NO_OF_DUMPLOADS{ $n }"
+  replace 'physicalLoadPin[NO_OF_DUMPLOADS]{ Load::local(5) }' "physicalLoadPin[NO_OF_DUMPLOADS]{ $map }"
+  replace 'loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0 }' "loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ $prio }"
+}
+
 dual_tariff_on() {
   replace 'DUAL_TARIFF{ false }' 'DUAL_TARIFF{ true }'
   replace 'dualTariffPin{ unused_pin }' 'dualTariffPin{ 8 }'

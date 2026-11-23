@@ -45,11 +45,12 @@ measure() {
     cp "$out/config.h.orig" "$project/config.h"
   done
   # a target whose config.h the patch no longer fits gets no remote loads figures
-  if git -C "$tree" apply --unidiff-zero "$here/../../sim/configs/remote_loads.patch"; then
+  if "$here/../../sim/configs/three_loads.sh" "$project/config.h" && git -C "$tree" apply --unidiff-zero "$here/../../sim/configs/remote_loads.patch"; then
     measure basic "basic, remote loads"
     cp "$out/config.h.orig" "$project/config.h"
   else
     echo "::warning::remote_loads.patch does not apply to $tree, no remote loads figures" >&2
+    cp "$out/config.h.orig" "$project/config.h"
   fi
   for serial in IoT HumanReadable; do
     sed -i -E "s/SERIAL_OUTPUT_TYPE = SerialOutputType::[A-Za-z]+;/SERIAL_OUTPUT_TYPE = SerialOutputType::$serial;/" "$project/config.h"

@@ -6,8 +6,10 @@
 #
 #   scripts/ci/select_board.sh <source tree> <OLD_SEG|OLD_OLED|NEW> [NONE|SEG|SEG_HW|OLED]
 #
-# SEG_HW also moves the loads off the display's pins, with sim/configs/seg_hw.patch (of this
-# script's tree: the target tree may predate it). Fails if config.h does not take the change.
+# SEG_HW also moves the loads off the display's pins: three loads first (sim/configs/three_loads.sh,
+# the shipped config.h has one, on D5, a display pin), then sim/configs/seg_hw.patch moves them to
+# D10-D12 (both of this script's tree: the target tree may predate them). Fails if config.h does
+# not take the change.
 set -eu
 
 tree=$1
@@ -17,6 +19,7 @@ here=$(dirname "$0")
 cfg=$tree/Mk2_1phase_RFdatalog_temp/config.h
 
 if [ "$display" = SEG_HW ]; then
+  "$here/../../sim/configs/three_loads.sh" "$cfg"
   sed -n '/^diff --git/,$p' "$here/../../sim/configs/seg_hw.patch" | patch -s -p1 -d "$tree" --forward
 fi
 sed -i -E "s/(PCB_VERSION\{ PcbVersion::)[A-Z_]+/\1$board/" "$cfg"

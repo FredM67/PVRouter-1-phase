@@ -1,3 +1,3 @@
 # The same priority twice.
-replace 'loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 2 }' 'loadPrioritiesAtStartup[NO_OF_DUMPLOADS]{ 0, 1, 1 }'
+loads 3 'Load::local(5), Load::local(6), Load::local(7)' '0, 1, 1'
 expect='Load Priorities wrong'
