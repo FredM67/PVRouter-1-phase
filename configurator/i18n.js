@@ -334,6 +334,15 @@
       'warn.sensorSomeAddresses': 'Temperatures: only some probes have an address, so none is used. Give one to each probe, or to none.',
       'err.tempEspNoWifi': 'Probes read by the mk2Wifi module: enable the module.',
       'err.duplicatePin': 'D{pin} is used more than once: {uses}.',
+      'use.temperature': 'temperature probes',
+      'use.diversion': 'diversion stop',
+      'use.routerOff': 'router off',
+      'use.rotation': 'priority rotation',
+      'use.dualTariff': 'dual tariff',
+      'use.override': 'override {n}',
+      'use.watchdog': 'watchdog LED',
+      'use.load': 'load {n}',
+      'use.relay': 'relay {n}',
       'err.rfPin': 'D{pin} belongs to the RFM69 module ({uses}).',
       'err.rfFrequency': 'Unknown RF band.',
       'err.networkId': 'The network ID must be between 1 and 250.',
@@ -675,6 +684,15 @@
       'warn.sensorSomeAddresses': 'Températures : seules certaines sondes ont une adresse, aucune n’est donc utilisée. Donnez-en une à chaque sonde, ou à aucune.',
       'err.tempEspNoWifi': 'Sondes lues par le module mk2Wifi : activer le module.',
       'err.duplicatePin': 'D{pin} est utilisée plusieurs fois : {uses}.',
+      'use.temperature': 'sondes de température',
+      'use.diversion': 'arrêt du routage',
+      'use.routerOff': 'routeur à l’arrêt',
+      'use.rotation': 'rotation des priorités',
+      'use.dualTariff': 'double tarif',
+      'use.override': 'forçage {n}',
+      'use.watchdog': 'LED de vie',
+      'use.load': 'charge {n}',
+      'use.relay': 'relais {n}',
       'err.rfPin': 'D{pin} appartient au module RFM69 ({uses}).',
       'err.rfFrequency': 'Bande radio inconnue.',
       'err.networkId': 'L’ID du réseau doit être compris entre 1 et 250.',
@@ -698,11 +716,19 @@
   // French typography: a no-break space before : ; ! ? and inside « » (typed as a plain space above)
   const typo = (lang, s) => (lang === 'fr' ? s.replace(/ ([:;!?»])/g, ' $1').replace(/« /g, '« ') : s);
 
-  function t(lang, key, params) {
+  // a parameter may be a text key with its own parameters ({ key: 'use.load', n: 2 }), or a list
+  // of them, named in the page's language
+  const show = (lang, v) => (Array.isArray(v) ? v.map((x) => show(lang, x)).join(', ') : v && typeof v === 'object' && v.key ? raw(lang, v.key, v) : String(v));
+
+  function raw(lang, key, params) {
     const table = STRINGS[lang] || STRINGS.en;
     let s = key in table ? table[key] : key in STRINGS.en ? STRINGS.en[key] : key;
-    for (const [k, v] of Object.entries(params || {})) s = s.split(`{${k}}`).join(String(v));
-    return typo(lang, s);
+    for (const [k, v] of Object.entries(params || {})) if (k !== 'key') s = s.split(`{${k}}`).join(show(lang, v));
+    return s;
+  }
+
+  function t(lang, key, params) {
+    return typo(lang, raw(lang, key, params));
   }
 
   return { STRINGS, t };

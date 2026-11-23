@@ -427,3 +427,10 @@ test('changing the board keeps the choices and the errors point at them (nothing
   const w = board('NEW', 'NONE', (x) => (x.mk2wifi.enabled = true) && (x.diversion = { enabled: true, pin: 5, wifi: true }));
   assert.ok(M.wifiInputs(w).length > 0);
 });
+
+test('pins: the uses of a pin are keys, translated by the page, not English text', () => {
+  const dup = find(variant((m) => (m.overrides.list[0].pin = 5)), 'err.duplicatePin')[0];
+  assert.deepStrictEqual(dup.params.uses, [{ key: 'use.override', n: 1 }, { key: 'use.load', n: 1 }]);
+  const shown = find(board('OLD_SEG', 'SEG'), 'err.displayPin')[0];
+  assert.deepStrictEqual(shown.params.use, { key: 'use.load', n: 1 });
+});
