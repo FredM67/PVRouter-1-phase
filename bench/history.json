@@ -113,6 +113,63 @@
     "fastdivision: divu10(12345) per call": 41.01,
     "fastdivision: divmod10(12345678) per call": 130.05
    }
+  },
+  {
+   "commit": "61b253ad34255473d0ada070bc374136dc036744",
+   "date": "2026-11-23T06:37:38+01:00",
+   "message": "feat: the shipped config.h has one load, on D5 (#31)\n\n* feat: the shipped config.h has one load, on D5\n\nMost single-phase users have a single water heater. config.h now ships with\nNO_OF_DUMPLOADS{ 1 }, Load::local(5) and priorities { 0 }; its comments show\nwhat to change for a second and a third load (D6, D7). Users keeping their own\nconfig.h are unaffected.\n\nThe grid simulator keeps three loads: sim_config.sh calls the new\nsim/configs/three_loads.sh, which the CI builds that apply a patch without\nsim_config.sh (remote loads, SEG_HW) and measure.sh run first. The patches'\nhunks move down by the seven comment lines. The compile-fail cases that need\nmore than one load set them with a new loads helper; case 03 builds the three\nloads of the comment.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* fix(sim): three_loads.sh is executable\n\nsim_config.sh, select_board.sh and measure.sh run it directly.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/61b253ad34255473d0ada070bc374136dc036744",
+   "sizes": {
+    "basic": {
+     "flash": 9984,
+     "ram": 386
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 11514,
+     "ram": 425
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 22856,
+     "ram": 852
+    },
+    "basic, NEW, OLED": {
+     "flash": 22380,
+     "ram": 849
+    },
+    "basic, remote loads": {
+     "flash": 14628,
+     "ram": 495
+    },
+    "basic, IoT": {
+     "flash": 9984,
+     "ram": 386
+    },
+    "basic, HumanReadable": {
+     "flash": 9870,
+     "ram": 366
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
   }
  ]
 }
