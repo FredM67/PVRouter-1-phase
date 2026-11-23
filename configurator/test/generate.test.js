@@ -358,3 +358,18 @@ test('the shipped single-load notes only for one local load on pin 5', () => {
   assert.deepStrictEqual(shippedNotes(G.configH(pin6)), [false, false]);
   assert.match(G.configH(remote), /by default, the loads\n\/\/ {3}use D5, D6 and D7\./);
 });
+
+test('CT2 absent and no anti-creep limit: the two constants change, the section stays', () => {
+  const m = M.defaults();
+  m.divertedCtPresent = false;
+  m.antiCreepLimit = 0;
+  const lines = (t) => t.split('\n').filter((l) => /DIVERTED_CT_PRESENT|ANTI_CREEP_LIMIT|DISPLAY_SHUTDOWN_IN_HOURS/.test(l));
+  const was = lines(G.configH(M.defaults()));
+  const now = lines(G.configH(m));
+  assert.strictEqual(now.length, was.length);
+  assert.ok(now[0].includes('DIVERTED_CT_PRESENT{ false }'));
+  assert.ok(now[1].includes('ANTI_CREEP_LIMIT{ 0 }'));
+  // the rest is the same, but for the alignment of the comments next to the two changed values
+  const squash = (t) => t.replace(/ +(?=\/\*\*<)/g, ' ').replace('DIVERTED_CT_PRESENT{ false }', 'DIVERTED_CT_PRESENT{ true }').replace('ANTI_CREEP_LIMIT{ 0 }', 'ANTI_CREEP_LIMIT{ 5 }');
+  assert.strictEqual(squash(G.configH(m)), squash(G.configH(M.defaults())));
+});

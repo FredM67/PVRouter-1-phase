@@ -181,6 +181,9 @@
       units: 'units',
       mk2wifi: 'mk2wifi',
       calibration: 'calibration',
+      antiCreepLimit: 'ct2',
+      divertedCtPresent: 'ct2',
+      displayShutdownInHours: 'ct2',
     };
     return map[head] || (head === 'pins' ? '' : 'general');
   }
@@ -294,6 +297,43 @@
     const l = m.loads[i];
     return `${T('load')} ${i + 1} (${l.type === 'local' ? pinLabel(l.pin || 0) : `${T('unit')} ${l.unit}`})`;
   };
+
+  // CT2: without it the anti-creep limit means nothing; the display shutdown stays (the display shows temperatures too)
+  function ct2(p) {
+    return section(
+      'ct2',
+      'sec.ct2',
+      p,
+      check(
+        () => m.divertedCtPresent,
+        (v) => (m.divertedCtPresent = v),
+        'divertedCtPresent',
+        'divertedCtPresentHelp'
+      ),
+      row(
+        m.divertedCtPresent
+          ? field(
+              'antiCreepLimit',
+              num(
+                () => m.antiCreepLimit,
+                (v) => (m.antiCreepLimit = v),
+                { min: 0, max: 255 }
+              ),
+              'antiCreepLimitHelp'
+            )
+          : null,
+        field(
+          'displayShutdownInHours',
+          num(
+            () => m.displayShutdownInHours,
+            (v) => (m.displayShutdownInHours = v),
+            { min: 1, max: 255 }
+          ),
+          'displayShutdownInHoursHelp'
+        )
+      )
+    );
+  }
 
   function loads(p) {
     const n = m.loads.length;
@@ -1455,7 +1495,7 @@
     const problems = V.validate(m);
     const scroll = window.scrollY;
     // In calibration mode, only what calibration needs, plus the sections with an error to fix
-    const all = [general, loads, relays, controls, temperature, dualTariff, mk2wifi, rf, units];
+    const all = [general, ct2, loads, relays, controls, temperature, dualTariff, mk2wifi, rf, units];
     const withError = (s) => problems.some((x) => x.level === 'error' && sectionOf(x.field) === s.name);
     const shown = m.calibrationMode ? [general, calibration, ...all.slice(1).filter(withError)] : all;
     document.getElementById('form').replaceChildren(...shown.map((s) => s(problems)).filter(Boolean));

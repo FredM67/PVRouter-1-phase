@@ -366,3 +366,22 @@ test('temperature pin: D3 on the new board, the chosen pin on the old ones', () 
 test('an unknown display is refused', () => {
   assert.deepStrictEqual(fields(board('NEW', 'LCD'), 'err.displayType'), ['displayType']);
 });
+
+// ---- CT2, the diverted energy (validation.h) ----
+
+test('CT2: the anti-creep limit is an integer 0..255', () => {
+  const at = (v) => fields(variant((m) => (m.antiCreepLimit = v)), 'err.antiCreep');
+  assert.deepStrictEqual(at(256), ['antiCreepLimit']);
+  assert.deepStrictEqual(at(-1), ['antiCreepLimit']);
+  assert.deepStrictEqual(at(1.5), ['antiCreepLimit']);
+  assert.deepStrictEqual(at(0), []);
+  assert.deepStrictEqual(at(255), []);
+});
+
+test('CT2: the display shutdown is an integer 1..255 hours', () => {
+  const at = (v) => fields(variant((m) => (m.displayShutdownInHours = v)), 'err.displayShutdown');
+  assert.deepStrictEqual(at(0), ['displayShutdownInHours']);
+  assert.deepStrictEqual(at(256), ['displayShutdownInHours']);
+  assert.deepStrictEqual(at(1), []);
+  assert.deepStrictEqual(at(255), []);
+});

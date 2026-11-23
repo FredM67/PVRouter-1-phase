@@ -39,6 +39,10 @@
       if ((m.displayType === 'SEG' || m.displayType === 'SEG_HW') && m.pcbVersion !== 'OLD_SEG') error('err.displayBoard', 'displayType');
       if (m.displayType === 'OLED' && m.pcbVersion === 'OLD_SEG') error('err.oledBoard', 'displayType');
     }
+
+    // ---- CT2, the diverted energy (config.h: uint8_t; validation.h: DISPLAY_SHUTDOWN_IN_HOURS > 0) ----
+    if (!inRange(m.antiCreepLimit, 0, 255)) error('err.antiCreep', 'antiCreepLimit');
+    if (!inRange(m.displayShutdownInHours, 1, 255)) error('err.displayShutdown', 'displayShutdownInHours');
     if (m.calibrationMode) warning('warn.calibration', 'calibrationMode');
 
     // ---- calibration helper: readings that would give a wrong correction ----
