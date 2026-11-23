@@ -1204,7 +1204,7 @@
     const c = m.calibration;
     const r = M.calibrationResult(m);
     const cal = M.calValuesOf(m);
-    const shown = (v, decimals) => (v > 0 ? v.toFixed(decimals) : '—');
+    const shown = (v, cal) => (v > 0 ? M.calNumber(cal, v) : '—');
     // one reading: as the human-readable serial output labels it, router and meter
     const readingFields = (kind, x) => [
       field(
@@ -1240,7 +1240,7 @@
             )
           ),
           ...readingFields(kind, c[kind]),
-          field('cal.new', h('output', { class: result !== c[v.key] ? 'changed' : '' }, shown(result, v.decimals)))
+          field('cal.new', h('output', { class: result !== c[v.key] ? 'changed' : '' }, shown(result, v)))
         ),
         h('small', { class: 'help' }, T(`cal.${kind}Help`)),
       ];

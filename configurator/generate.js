@@ -676,7 +676,7 @@
   // ---- calibration.h ----
 
   // As calibration.h writes them: 40.909F, 0.05000F, 0.00286405F
-  const calValue = (cal, v) => `${v.toFixed(cal.decimals)}F`;
+  const calValue = (cal, v) => `${M.calNumber(cal, v)}F`;
 
   // The values of the board for calibration.h, in its order: [{ name, decimals }, value].
   // f_ctRating (new board) as entered; CT2's value only with CT2.

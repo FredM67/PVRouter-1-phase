@@ -222,8 +222,8 @@ test('calibration, new board: f_powerCalPerAmp corrected, the CT ratings as ente
   const value = '0.00315046'; // 0.00286405 x 1.1 = 0.003150455
   assert.strictEqual(M.calibrationResult(m).power.toFixed(8), value);
   assert.deepStrictEqual(G.calibrationLines(m), [
-    'inline constexpr float f_ctRating{ 50.000F };',
-    'inline constexpr float f_ctRatingDiverted{ 50.000F };',
+    'inline constexpr float f_ctRating{ 50.0F };',
+    'inline constexpr float f_ctRatingDiverted{ 50.0F };',
     `inline constexpr float f_powerCalPerAmp{ ${value}F };`,
     'inline constexpr float f_voltageCalNewBoard{ 0.888065256F };',
   ]);
@@ -233,7 +233,7 @@ test('calibration, new board: f_powerCalPerAmp corrected, the CT ratings as ente
 
   m.calibration.power = { router: null, meter: null };
   m.calibration.ctRating = 30.3;
-  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRating', '30.300F'), 'a new CT rating');
+  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRating', '30.3F'), 'a new CT rating');
   m.pcbVersion = 'OLD_SEG';
   assert.strictEqual(G.calibrationH(m), null, 'no CT rating on the old boards');
 });
@@ -247,7 +247,7 @@ test('calibration, new board: the diverted power corrects f_ctRatingDiverted, ne
   assert.strictEqual(M.calibrationResult(m).diverted.toFixed(3), '40.909'); // 50 x 0.9 / 1.1
   const value = '0.00315046';
   assert.deepStrictEqual(G.calibrationLines(m), [
-    'inline constexpr float f_ctRating{ 50.000F };',
+    'inline constexpr float f_ctRating{ 50.0F };',
     'inline constexpr float f_ctRatingDiverted{ 40.909F };',
     `inline constexpr float f_powerCalPerAmp{ ${value}F };`,
     'inline constexpr float f_voltageCalNewBoard{ 0.888065256F };',
@@ -261,18 +261,18 @@ test('calibration, new board: the diverted power corrects f_ctRatingDiverted, ne
   // no grid reading: the diverted ratio alone
   m.calibration.power = { router: null, meter: null };
   assert.strictEqual(M.calibrationResult(m).diverted.toFixed(1), '45.0');
-  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRatingDiverted', '45.000F'));
+  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRatingDiverted', '45.0F'));
   // no current f_powerCalPerAmp: no grid correction either
   m.calibration.power = { router: 1000, meter: 1100 };
   m.calibration.powerCalPerAmp = null;
   assert.strictEqual(M.calibrationResult(m).diverted.toFixed(1), '45.0');
 });
 
-test('calibration: the CT ratings with 3 decimals, as typed or corrected', () => {
+test('calibration: the CT ratings with up to 3 decimals, trailing zeros dropped (50.0F stays 50.0F)', () => {
   const text = calibrationFile();
   const m = loaded('NEW', (m) => (m.calibration.ctRating = 4.44)); // 666 / 150 ohms
-  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRating', '4.440F'));
-  assert.ok(G.calibrationLines(m).includes('inline constexpr float f_ctRating{ 4.440F };'));
+  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRating', '4.44F'));
+  assert.ok(G.calibrationLines(m).includes('inline constexpr float f_ctRating{ 4.44F };'));
   m.calibration.ctRating = 50;
   m.calibration.ctRatingDiverted = 4.44;
   m.calibration.diverted = { router: 1000, meter: 1010 };
