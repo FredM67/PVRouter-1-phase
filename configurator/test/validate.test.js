@@ -434,3 +434,13 @@ test('pins: the uses of a pin are keys, translated by the page, not English text
   const shown = find(board('OLD_SEG', 'SEG'), 'err.displayPin')[0];
   assert.deepStrictEqual(shown.params.use, { key: 'use.load', n: 1 });
 });
+
+test('pins offered: neither the display pins nor, with the RF chip, D2 and D10 to D13; a chosen one stays', () => {
+  const rf = variant((m) => (m.rf.logging = true));
+  assert.deepStrictEqual(M.offeredPins(rf, 5).filter((p) => M.RF_PINS.includes(p)), []);
+  assert.ok(M.offeredPins(rf, 10).includes(10)); // already chosen: kept, err.rfPin says why
+  assert.ok(M.offeredPins(M.defaults(), 5).includes(10)); // no RF chip: D10 is free
+  const seg = board('OLD_SEG', 'SEG_HW');
+  assert.ok(!M.offeredPins(seg, 3).includes(9));
+  assert.ok(M.offeredPins(seg, 9).includes(9));
+});

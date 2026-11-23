@@ -373,6 +373,11 @@
     return w.open || (b.for > 0 && w.end <= periodMin);
   }
   const rfChipPresent = (m) => m.rf.logging || remoteLoadsPresent(m);
+
+  // the router pins a pin list offers: not those of the display, nor those of the RF chip when it
+  // is there; the pin already chosen stays, so the page shows it with the error that says why
+  const offeredPins = (m, current) =>
+    DIGITAL_PINS.filter((p) => p === current || !(displayPins(m).includes(p) || (rfChipPresent(m) && RF_PINS.includes(p))));
   const tempSensorPresent = (m) => m.temperature.mode === 'router';
   // The pin of the probes' bus: wired on the new board, chosen on the old one
   const tempPin = (m) => (isOldBoard(m) ? m.temperature.pin : TEMP_PIN);
@@ -510,6 +515,7 @@
     withStart,
     fitBoost,
     rfChipPresent,
+    offeredPins,
     tempSensorPresent,
     tempPin,
     removeSensor,

@@ -129,8 +129,7 @@
   const pinLabel = (p) => (p >= 14 ? `A${p - 14}` : `D${p}`);
   const pinSelect = (get, set, opts) => {
     const o = opts || {};
-    // the router's pins: those the display takes are not offered, unless already chosen (the error says so)
-    const pins = o.pins || M.DIGITAL_PINS.filter((p) => p === get() || !M.displayPins(m).includes(p));
+    const pins = o.pins || M.offeredPins(m, get());
     const options = pins.map((p) => [p, pinLabel(p)]);
     if (o.none || get() === null || get() === undefined) options.unshift([null, o.none ? T('none') : '—']);
     return select(get, set, options);
