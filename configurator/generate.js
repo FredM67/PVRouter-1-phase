@@ -675,7 +675,7 @@
 
   // ---- calibration.h ----
 
-  // As calibration.h writes them: 50.0F, 0.05000F, 0.00286405F
+  // As calibration.h writes them: 40.909F, 0.05000F, 0.00286405F
   const calValue = (cal, v) => `${v.toFixed(cal.decimals)}F`;
 
   // The values of the board for calibration.h, in its order: [{ name, decimals }, value].
@@ -702,7 +702,9 @@
     for (const [c, v] of calibrationEntries(m)) {
       const t = M.calibrationToken(text, c.name);
       if (!t) return null;
-      if (v > 0 && Math.abs(v - t.value) >= 1e-9) edits.push({ ...t, text: calValue(c, v) });
+      // an unchanged value, or the same text, keeps the bytes of the file (50.0F stays 50.0F)
+      if (!(v > 0) || Math.abs(v - t.value) < 1e-9 || calValue(c, v) === text.slice(t.start, t.end)) continue;
+      edits.push({ ...t, text: calValue(c, v) });
     }
     // from the last one, so the positions of the others stay valid
     for (const e of edits.sort((a, b) => b.start - a.start)) text = text.slice(0, e.start) + e.text + text.slice(e.end);

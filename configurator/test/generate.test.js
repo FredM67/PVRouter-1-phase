@@ -222,8 +222,8 @@ test('calibration, new board: f_powerCalPerAmp corrected, the CT ratings as ente
   const value = '0.00315046'; // 0.00286405 x 1.1 = 0.003150455
   assert.strictEqual(M.calibrationResult(m).power.toFixed(8), value);
   assert.deepStrictEqual(G.calibrationLines(m), [
-    'inline constexpr float f_ctRating{ 50.0F };',
-    'inline constexpr float f_ctRatingDiverted{ 50.0F };',
+    'inline constexpr float f_ctRating{ 50.000F };',
+    'inline constexpr float f_ctRatingDiverted{ 50.000F };',
     `inline constexpr float f_powerCalPerAmp{ ${value}F };`,
     'inline constexpr float f_voltageCalNewBoard{ 0.888065256F };',
   ]);
@@ -233,7 +233,7 @@ test('calibration, new board: f_powerCalPerAmp corrected, the CT ratings as ente
 
   m.calibration.power = { router: null, meter: null };
   m.calibration.ctRating = 30.3;
-  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRating', '30.3F'), 'a new CT rating');
+  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRating', '30.300F'), 'a new CT rating');
   m.pcbVersion = 'OLD_SEG';
   assert.strictEqual(G.calibrationH(m), null, 'no CT rating on the old boards');
 });
@@ -247,25 +247,52 @@ test('calibration, new board: the diverted power corrects f_ctRatingDiverted, ne
   assert.strictEqual(M.calibrationResult(m).diverted.toFixed(3), '40.909'); // 50 x 0.9 / 1.1
   const value = '0.00315046';
   assert.deepStrictEqual(G.calibrationLines(m), [
-    'inline constexpr float f_ctRating{ 50.0F };',
-    'inline constexpr float f_ctRatingDiverted{ 40.9F };',
+    'inline constexpr float f_ctRating{ 50.000F };',
+    'inline constexpr float f_ctRatingDiverted{ 40.909F };',
     `inline constexpr float f_powerCalPerAmp{ ${value}F };`,
     'inline constexpr float f_voltageCalNewBoard{ 0.888065256F };',
   ]);
   const text = calibrationFile();
   const out = G.calibrationH(m);
-  assert.strictEqual(out, withValue(withValue(text, 'f_ctRatingDiverted', '40.9F'), 'f_powerCalPerAmp', `${value}F`));
+  assert.strictEqual(out, withValue(withValue(text, 'f_ctRatingDiverted', '40.909F'), 'f_powerCalPerAmp', `${value}F`));
   assert.strictEqual(changedLines(text, out).length, 2, 'every other byte untouched');
   assert.strictEqual(M.calibrationValue(out, 'f_ctRating'), 50, 'CT1: never corrected');
 
   // no grid reading: the diverted ratio alone
   m.calibration.power = { router: null, meter: null };
   assert.strictEqual(M.calibrationResult(m).diverted.toFixed(1), '45.0');
-  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRatingDiverted', '45.0F'));
+  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRatingDiverted', '45.000F'));
   // no current f_powerCalPerAmp: no grid correction either
   m.calibration.power = { router: 1000, meter: 1100 };
   m.calibration.powerCalPerAmp = null;
   assert.strictEqual(M.calibrationResult(m).diverted.toFixed(1), '45.0');
+});
+
+test('calibration: the CT ratings with 3 decimals, as typed or corrected', () => {
+  const text = calibrationFile();
+  const m = loaded('NEW', (m) => (m.calibration.ctRating = 4.44)); // 666 / 150 ohms
+  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRating', '4.440F'));
+  assert.ok(G.calibrationLines(m).includes('inline constexpr float f_ctRating{ 4.440F };'));
+  m.calibration.ctRating = 50;
+  m.calibration.ctRatingDiverted = 4.44;
+  m.calibration.diverted = { router: 1000, meter: 1010 };
+  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRatingDiverted', '4.484F'), '4.44 x 1.01 = 4.4844');
+});
+
+test('calibration: a correction that leaves a value as it is leaves the file as it is', () => {
+  for (const board of ['NEW', 'OLD_SEG']) {
+    const m = loaded(board, (m) => {
+      m.calibration.power = { router: 1000, meter: 1000 };
+      m.calibration.diverted = { router: 500, meter: 500 };
+      m.calibration.voltage = { router: 230, meter: 230 };
+    });
+    assert.strictEqual(G.calibrationH(m), null, board);
+    assert.ok(!G.files(m).some((f) => f.path.endsWith('calibration.h')), board);
+  }
+  // a change too small for the decimals of the file: the same text, not rewritten
+  const m = loaded('OLD_SEG', (m) => (m.calibration.power = { router: 1000000, meter: 1000002 }));
+  assert.strictEqual(M.calibrationResult(m).power.toFixed(5), '0.05000');
+  assert.strictEqual(G.calibrationH(m), null);
 });
 
 test('calibration without CT2: no diverted reading, no CT2 line', () => {

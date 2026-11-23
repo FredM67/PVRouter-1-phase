@@ -236,13 +236,14 @@
 
   // The rated currents of the CTs, new board only. f_ctRating is what the user fitted, never
   // corrected; f_ctRatingDiverted is CT2's value, corrected by the diverted reading.
-  const CT_RATING = { name: 'f_ctRating', key: 'ctRating', decimals: 1 };
-  const CT_RATING_DIVERTED = { name: 'f_ctRatingDiverted', key: 'ctRatingDiverted', decimals: 1 };
+  // 3 decimals, not the 1 of the shipped 50.0F: 0.05 A is 1 % of a 4.44 A rating (666 / 150 ohms).
+  const CT_RATING = { name: 'f_ctRating', key: 'ctRating', decimals: 3 };
+  const CT_RATING_DIVERTED = { name: 'f_ctRatingDiverted', key: 'ctRatingDiverted', decimals: 3 };
 
   // The values calibration corrects, for each board: calibration.h has a set per board, and the
   // firmware uses the one of PCB_VERSION (config_derived.h). New board: f_powerCal is
   // f_powerCalPerAmp x f_ctRating for CT1 and f_powerCalPerAmp x f_ctRatingDiverted for CT2.
-  // The decimals are those of the shipped calibration.h.
+  // The decimals are those of the shipped calibration.h, the CT ratings aside.
   const CAL_VALUES = {
     NEW: {
       power: { name: 'f_powerCalPerAmp', key: 'powerCalPerAmp', decimals: 8 },
