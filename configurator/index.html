@@ -4,14 +4,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PVRouter configurator</title>
+    <title>Single-phase PVRouter configurator</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="doc-version.js" onerror="this.remove()"></script>
   </head>
   <body>
     <header>
       <div>
-        <h1 data-t="title">PVRouter configurator</h1>
+        <h1 data-t="title">Single-phase PVRouter configurator</h1>
         <p data-t="subtitle"></p>
+        <p id="switch" class="switch"></p>
       </div>
       <nav>
         <button type="button" id="lang"></button>
@@ -21,6 +23,7 @@
         <button type="button" id="reset" data-t="reset"></button>
       </nav>
     </header>
+    <div id="refused" class="refused" role="alert"></div>
     <main>
       <form id="form" autocomplete="off"></form>
       <aside>
@@ -36,8 +39,8 @@
     </main>
     <footer>
       <a href="https://fredm67.github.io/Mk2PVRouter/">Documentation</a> ·
-      <a href="https://github.com/FredM67/PVRouter-3-phase">PVRouter-3-phase</a> ·
-      <a href="https://github.com/FredM67/PVRouter-3-phase/blob/main/CHANGELOG.md">Changelog</a>
+      <a href="https://github.com/FredM67/PVRouter-1-phase">PVRouter-1-phase</a> ·
+      <a href="https://github.com/FredM67/PVRouter-1-phase/blob/main/CHANGELOG.md">Changelog</a>
     </footer>
     <script src="model.js"></script>
     <script src="timeline.js"></script>

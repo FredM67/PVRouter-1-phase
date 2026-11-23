@@ -46,7 +46,7 @@ test('trailing comments are aligned within runs of consecutive lines', () => {
   assert.strictEqual(text, 'int a;    /**< a */\nlong bb;  // b\n\nc; /**< c */\n');
 });
 
-test('files: RF and receiver files only when needed, YAML only with mk2Wifi', () => {
+test('files: RF and receiver files only when needed, never a YAML file', () => {
   const names = (m) => G.files(m, '2026-01-01').map((f) => f.path);
   assert.deepStrictEqual(names(M.defaults()), ['Mk2_1phase_RFdatalog_temp/config.h', 'Mk2_1phase_RFdatalog_temp/config_system.h']);
   const m = oneRemoteUnit();
@@ -57,7 +57,6 @@ test('files: RF and receiver files only when needed, YAML only with mk2Wifi', ()
     'Mk2_1phase_RFdatalog_temp/config_rf.h',
     'RemoteLoadReceiver-unit1/config.h',
     'RemoteLoadReceiver-unit1/config_rf.h',
-    'mk2pvrouter.yaml',
   ]);
 });
 
@@ -133,7 +132,7 @@ test('scheduled boosts: several, one per line, a comment says what each one forc
 });
 
 test('normalize: the former force list is dropped, the default boosts take its place', () => {
-  const m = M.normalize({ dualTariff: { enabled: true, pin: 3, force: [{ start: -3, duration: 2 }] } });
+  const m = M.normalize({ router: 1, dualTariff: { enabled: true, pin: 3, force: [{ start: -3, duration: 2 }] } });
   assert.ok(!('force' in m.dualTariff));
   assert.deepStrictEqual(m.dualTariff.boosts, M.defaults().dualTariff.boosts);
   assert.deepStrictEqual(M.defaults().dualTariff.boosts, [{ from: 'end', at: 180, for: 120, targets: [{ load: 0 }] }]);
@@ -275,7 +274,7 @@ test('calibration: no lines while a current value is missing', () => {
   assert.strictEqual(G.calibrationLines(m), null, 'no values of the old boards yet');
 });
 
-test('calibration mode: human-readable output and no YAML, the usual choice kept', () => {
+test('calibration mode: human-readable output, the usual choice kept', () => {
   const m = M.defaults();
   m.serialOutput = 'IoT';
   m.mk2wifi.enabled = true;
@@ -285,7 +284,7 @@ test('calibration mode: human-readable output and no YAML, the usual choice kept
   assert.strictEqual(m.serialOutput, 'IoT');
   m.calibrationMode = false;
   assert.match(G.configH(m), /SERIAL_OUTPUT_TYPE = SerialOutputType::IoT;/);
-  assert.ok(G.files(m).some((f) => f.path.endsWith('.yaml')));
+  assert.ok(!G.files(m).some((f) => f.path.endsWith('.yaml')));
 });
 
 test('calibration mode: config.h and the new calibration.h, nothing else', () => {
@@ -315,6 +314,7 @@ test('calibration mode: config.h and the new calibration.h, nothing else', () =>
 
 test('normalize: the calibration values are single numbers, per-phase arrays are not taken', () => {
   const m = M.normalize({
+    router: 1,
     calibration: { ctRating: [50, 50, 50], powerCalPerAmp: 0.003, power: [{ router: 1000, meter: 1100 }], voltage: { router: 230, meter: 232 } },
   });
   assert.strictEqual(m.calibration.ctRating, null);
@@ -351,7 +351,7 @@ test('removing a sensor: the boosts keep the same sensor, or fall back to the fi
 });
 
 test('temperature: D3 on the new board, wired there; the chosen pin on the old one', () => {
-  const m = M.normalize({ pcbVersion: 'NEW', temperature: { mode: 'router', pin: 4 } });
+  const m = M.normalize({ router: 1, pcbVersion: 'NEW', temperature: { mode: 'router', pin: 4 } });
   assert.match(G.configH(m), /^inline constexpr TemperatureSensing temperatureSensing\{ 3,$/m);
   m.pcbVersion = 'OLD_SEG';
   assert.match(G.configH(m), /^inline constexpr TemperatureSensing temperatureSensing\{ 4,$/m);

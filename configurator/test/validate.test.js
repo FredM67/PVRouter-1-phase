@@ -362,7 +362,7 @@ test('mk2Wifi: only on the new board', () => {
   assert.deepStrictEqual(fields(board('OLD_OLED', 'NONE', (m) => (m.mk2wifi.enabled = true)), 'err.mk2wifiBoard'), ['mk2wifi']);
   assert.deepStrictEqual(fields(board('OLD_SEG', 'NONE', (m) => (m.mk2wifi.enabled = true)), 'err.mk2wifiBoard'), ['mk2wifi']);
   assert.deepStrictEqual(fields(board('NEW', 'NONE', (m) => (m.mk2wifi.enabled = true)), 'err.mk2wifiBoard'), []);
-  assert.ok(!M.mk2wifiAvailable(M.normalize({ pcbVersion: 'OLD_OLED' })));
+  assert.ok(!M.mk2wifiAvailable(M.normalize({ router: 1, pcbVersion: 'OLD_OLED' })));
   assert.ok(M.mk2wifiAvailable(M.defaults()));
 });
 

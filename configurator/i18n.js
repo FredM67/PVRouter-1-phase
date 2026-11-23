@@ -12,8 +12,13 @@
 
   const STRINGS = {
     en: {
-      title: 'PVRouter configurator',
-      subtitle: 'Choose your installation, get the firmware configuration files (and the ESPHome YAML for the mk2Wifi module).',
+      title: 'Single-phase PVRouter configurator',
+      subtitle: 'Choose your installation, get the firmware configuration files.',
+      'router.label': 'Router:',
+      'router.one': 'single-phase',
+      'router.three': '3-phase',
+      'router.refused': 'This save is for the 3-phase router. Load it in the {link} configurator.',
+      'router.dismiss': 'Close',
       language: 'Français',
       save: 'Save choices',
       loadFile: 'Load choices',
@@ -213,7 +218,7 @@
       restoreHelp: 'Chrome or Edge: choose the firmware folder, the files as they were before the configurator\'s last save there come back.',
       'where.router': 'into the Mk2_1phase_RFdatalog_temp folder, replacing the files of the same name. Keep your calibration.h, unless it is listed here.',
       'where.unit': 'into a copy of the RemoteLoadReceiver folder per unit, named RemoteLoadReceiver-unitN, with its .ino renamed the same way (the Arduino IDE wants them to match).',
-      'where.yaml': 'into ESPHome (dashboard or command line), with a secrets.yaml.',
+      'where.yamlNext': 'The ESPHome YAML for the mk2Wifi module comes next: there is no file for it yet.',
 
       // problems (validate.js)
       'err.frequency': 'The grid frequency must be 50 or 60 Hz.',
@@ -232,7 +237,7 @@
       'err.mk2wifiBoard': 'The mk2Wifi module plugs into the universal board (NEW) only.',
       'warn.calibration': 'Calibration mode: the router will never switch anything.',
       'sec.calibration': 'Calibration',
-      'cal.intro': 'The router runs with the calibration mode: it measures, without switching anything. Put a strong resistive load on the supply (a water heater, without solar production), read the grid power at the same time on the router (P: on the serial monitor) and on a reference meter clamped on the same cable, and enter both. The voltage (V:) likewise. With CT2, the diverted power too (diverted … W), with a load running on the cable of CT2 and the meter clamped on it. New value = current value × meter / router.',
+      'cal.intro': 'The router runs with the calibration mode: it measures, without switching anything. Put a strong resistive load on the supply (a water heater, without solar production), read the grid power at the same time on the router (P on the serial monitor) and on a reference meter clamped on the same cable, and enter both. The voltage (V) likewise. New value = current value × meter / router. With CT2, the diverted power too (diverted … W), the meter clamped on the cable of CT2. Calibration mode never switches a load: the CT2 reading needs a resistive load wired through CT2 and running by other means, such as plugged in directly or switched by hand. On the old boards this reading corrects the CT2 value like the others; on the new board it is only a check of CT2.',
       'cal.loadFile': 'Load my calibration.h',
       'cal.fileLoaded': '{name} loaded: the files include it, with the new values.',
       'cal.noFile': 'Optional: from your calibration.h, the page writes it again with the new values. Without it, enter the current values and copy the lines below.',
@@ -259,6 +264,7 @@
       'cal.powerHelp': 'In W, at the same time. The router shows it after P: (the first number, with relay diversion). Leave empty to keep the value.',
       'cal.voltageHelp': 'In V, at the same time. The router shows it after V:. Leave empty to keep the value.',
       'cal.divertedHelp': 'In W, at the same time. The router shows it after diverted (the power in W, not the energy in Wh). Leave empty to keep the value.',
+      'cal.divertedReadHelp': 'In W, at the same time. The router shows it after diverted (the power in W, not the energy in Wh).',
       'cal.divertedCheckHelp': 'On this board CT2 has no factor of its own: it uses f_powerCalPerAmp, corrected with the grid power, times f_ctRatingDiverted, the rating you fitted. The diverted reading is a check: the error left after the grid correction.',
       'cal.ct2Error': 'Error left after the grid correction',
       'cal.lines': 'For calibration.h',
@@ -353,8 +359,13 @@
     },
 
     fr: {
-      title: 'Configurateur PVRouter',
-      subtitle: 'Décrivez votre installation, récupérez les fichiers de configuration du firmware (et le YAML ESPHome du module mk2Wifi).',
+      title: 'Configurateur PVRouter monophasé',
+      subtitle: 'Décrivez votre installation, récupérez les fichiers de configuration du firmware.',
+      'router.label': 'Routeur :',
+      'router.one': 'monophasé',
+      'router.three': 'triphasé',
+      'router.refused': 'Cette sauvegarde est celle du routeur triphasé. Chargez-la dans le configurateur {link}.',
+      'router.dismiss': 'Fermer',
       language: 'English',
       save: 'Enregistrer les choix',
       loadFile: 'Charger des choix',
@@ -554,7 +565,7 @@
       restoreHelp: 'Chrome ou Edge : choisissez le dossier du firmware, les fichiers redeviennent ce qu’ils étaient avant le dernier enregistrement du configurateur.',
       'where.router': 'dans le dossier Mk2_1phase_RFdatalog_temp, à la place des fichiers du même nom. Gardez votre calibration.h, sauf s’il figure ici.',
       'where.unit': 'dans une copie du dossier RemoteLoadReceiver par unité, nommée RemoteLoadReceiver-unitN, avec son .ino renommé de la même façon (l’Arduino IDE veut qu’ils correspondent).',
-      'where.yaml': 'dans ESPHome (tableau de bord ou ligne de commande), avec un secrets.yaml.',
+      'where.yamlNext': 'Le YAML ESPHome du module mk2Wifi viendra ensuite : il n’y a pas encore de fichier pour lui.',
 
       'err.frequency': 'La fréquence du réseau doit être de 50 ou 60 Hz.',
       'err.datalogPeriod': 'La période de journalisation doit être comprise entre 1 et 40 s.',
@@ -572,7 +583,7 @@
       'err.mk2wifiBoard': 'Le module mk2Wifi ne se branche que sur la carte universelle (NEW).',
       'warn.calibration': 'Mode étalonnage : le routeur ne commutera jamais rien.',
       'sec.calibration': 'Étalonnage',
-      'cal.intro': 'Le routeur tourne en mode étalonnage : il mesure, sans rien commuter. Mettez une forte charge résistive sur l’installation (un chauffe-eau, sans production solaire), relevez en même temps la puissance réseau sur le routeur (P: sur le moniteur série) et sur un appareil de référence pincé sur le même câble, et saisissez les deux. De même pour la tension (V:). Avec la sonde CT2, la puissance routée aussi (diverted … W), avec une charge en marche sur le câble de CT2 et l’appareil pincé dessus. Nouvelle valeur = valeur actuelle × appareil / routeur.',
+      'cal.intro': 'Le routeur tourne en mode étalonnage : il mesure, sans rien commuter. Mettez une forte charge résistive sur l’installation (un chauffe-eau, sans production solaire), relevez en même temps la puissance réseau sur le routeur (P sur le moniteur série) et sur un appareil de référence pincé sur le même câble, et saisissez les deux. De même pour la tension (V). Nouvelle valeur = valeur actuelle × appareil / routeur. Avec la sonde CT2, la puissance routée aussi (diverted … W), l’appareil pincé sur le câble de CT2. Le mode étalonnage ne commute jamais de charge : le relevé de CT2 demande une charge résistive câblée à travers CT2 et mise en marche autrement, par exemple branchée directement ou commutée à la main. Sur les anciennes cartes ce relevé corrige la valeur de CT2 comme les autres ; sur la nouvelle carte, c’est seulement une vérification de CT2.',
       'cal.loadFile': 'Charger mon calibration.h',
       'cal.fileLoaded': '{name} chargé : les fichiers le contiennent, avec les nouvelles valeurs.',
       'cal.noFile': 'Facultatif : à partir de votre calibration.h, la page le réécrit avec les nouvelles valeurs. Sinon, saisissez les valeurs actuelles et copiez les lignes plus bas.',
@@ -599,6 +610,7 @@
       'cal.powerHelp': 'En W, au même moment. Le routeur l’affiche après P: (le premier nombre, avec le routage par relais). Laissez vide pour garder la valeur.',
       'cal.voltageHelp': 'En V, au même moment. Le routeur l’affiche après V:. Laissez vide pour garder la valeur.',
       'cal.divertedHelp': 'En W, au même moment. Le routeur l’affiche après diverted (la puissance en W, pas l’énergie en Wh). Laissez vide pour garder la valeur.',
+      'cal.divertedReadHelp': 'En W, au même moment. Le routeur l’affiche après diverted (la puissance en W, pas l’énergie en Wh).',
       'cal.divertedCheckHelp': 'Sur cette carte, CT2 n’a pas de facteur propre : il utilise f_powerCalPerAmp, corrigé par la puissance réseau, multiplié par f_ctRatingDiverted, le calibre de la sonde montée. Le relevé de la puissance routée est une vérification : l’erreur qui reste après la correction réseau.',
       'cal.ct2Error': 'Erreur restante après la correction réseau',
       'cal.lines': 'Pour calibration.h',

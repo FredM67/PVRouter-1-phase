@@ -25,7 +25,7 @@
   try {
     const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
     if (saved) {
-      m = M.normalize(saved.model);
+      m = M.normalize(saved.model); // a 3-phase state throws: the defaults stay
       lang = saved.lang === 'fr' ? 'fr' : 'en';
     }
   } catch (e) {
@@ -33,6 +33,8 @@
   }
 
   const T = (key, params) => I.t(lang, key, params);
+  const threePhaseUrl = M.threePhaseUrl(window.location);
+  const devTag = window.PVR_DOC_VERSION === 'dev' ? ' (dev)' : ''; // set by the docs site's doc-version.js, if any
 
   // ---- DOM helpers ----
 
@@ -1172,6 +1174,7 @@
               h('dd', null, T(m.temperature.mode === 'esp' ? 'tempJumperEsp' : 'tempJumperRouter'))
             ),
             h('p', { class: 'note' }, T('vselNote')),
+            h('p', { class: 'note' }, T('where.yamlNext')),
           ]
         : null
     );
@@ -1255,7 +1258,7 @@
       return [
         h('h3', null, T('cal.divertedCheck', { name: `${cal.power.name} × ${M.CT_RATING_DIVERTED.name}` })),
         row(h('code', null, 'diverted'), ...readingFields('diverted', c.diverted), field('cal.ct2Error', h('output', { class: off ? 'changed' : '' }, e === null ? '—' : `${(e * 100).toFixed(1)} %`))),
-        h('small', { class: 'help' }, T('cal.divertedHelp')),
+        h('small', { class: 'help' }, T('cal.divertedReadHelp')),
         h('small', { class: 'help' }, T('cal.divertedCheckHelp')),
       ];
     };
@@ -1500,8 +1503,7 @@
           null,
           h('li', null, h('code', null, 'Mk2_1phase_RFdatalog_temp/'), ' ', T('where.router')),
           files.some((x) => x.path.endsWith('/calibration.h')) ? h('li', null, h('code', null, 'calibration.h'), ' ', T('where.calibration')) : null,
-          M.remoteUnitsUsed(m) ? h('li', null, h('code', null, 'RemoteLoadReceiver-unitN/'), ' ', T('where.unit')) : null,
-          m.mk2wifi.enabled ? h('li', null, h('code', null, '*.yaml'), ' ', T('where.yaml')) : null
+          M.remoteUnitsUsed(m) ? h('li', null, h('code', null, 'RemoteLoadReceiver-unitN/'), ' ', T('where.unit')) : null
         )
       )
     );
@@ -1511,7 +1513,10 @@
     document.documentElement.lang = lang;
     for (const el of document.querySelectorAll('[data-t]')) el.textContent = T(el.dataset.t);
     for (const el of document.querySelectorAll('[data-title]')) el.title = T(el.dataset.title);
-    document.title = T('title');
+    document.title = T('title') + devTag;
+    for (const el of document.querySelectorAll('[data-t="title"]')) el.textContent = T('title') + devTag;
+    const sw = document.getElementById('switch');
+    sw.replaceChildren(T('router.label'), ' ', h('strong', null, T('router.one')), ' / ', h('a', { href: threePhaseUrl }, T('router.three')));
     document.getElementById('lang').textContent = T('language');
     const problems = V.validate(m);
     const scroll = window.scrollY;
@@ -1544,9 +1549,16 @@
       activeFile = 0;
       changed();
     } catch (err) {
-      alert(T('loadError'));
+      if (err.message === 'router') showRefused();
+      else alert(T('loadError'));
     }
   });
+  // a save of the other router: a message with the link, in place of the problems
+  function showRefused() {
+    const box = document.getElementById('refused');
+    const [pre, post] = T('router.refused', { link: '' }).split('');
+    box.replaceChildren(pre, h('a', { href: threePhaseUrl }, T('router.three')), post, ' ', h('button', { type: 'button', onclick: () => box.replaceChildren() }, T('router.dismiss')));
+  }
   const restoreBtn = document.getElementById('restore');
   if (D.supported()) restoreBtn.addEventListener('click', restoreFromFolder);
   else restoreBtn.remove();

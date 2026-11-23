@@ -727,7 +727,7 @@
       out.push({ path: `RemoteLoadReceiver-unit${unit}/config.h`, text: receiverConfigH(m, unit, date) });
       out.push({ path: `RemoteLoadReceiver-unit${unit}/config_rf.h`, text: receiverConfigRfH(m, unit, date) });
     }
-    if (m.mk2wifi.enabled) out.push({ path: `${m.mk2wifi.name || 'mk2pvrouter'}.yaml`, text: Y.yaml(m) });
+    // no YAML file yet: the ESPHome one comes in a later step (yaml.js stays, unused)
     return out;
   }
 

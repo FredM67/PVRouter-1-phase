@@ -64,6 +64,7 @@
   function defaults() {
     return {
       formatVersion: FORMAT_VERSION,
+      router: 1, // 1: this page, 3: the 3-phase page (a save without it is a 3-phase one)
 
       // config.h - general
       pcbVersion: 'NEW', // one of PCB_VERSIONS
@@ -180,8 +181,19 @@
 
   const clone = (o) => JSON.parse(JSON.stringify(o));
 
+  // The router a save is for: a save without the field is a 3-phase one
+  const saveRouter = (data) => (data && data.router) ?? 3;
+
+  const THREE_PHASE_URL = 'https://fredm67.github.io/Mk2PVRouter/configurateur/';
+  // Where the "3-phase" link goes: relative on the docs site (it follows the version being read),
+  // absolute from a file or any other host. loc: { protocol, pathname }
+  function threePhaseUrl(loc) {
+    return loc && /^https?:$/.test(loc.protocol) && String(loc.pathname).includes('/Mk2PVRouter/') ? '../configurateur/' : THREE_PHASE_URL;
+  }
+
   // Fill what an older or hand-edited JSON lacks, keep the rest
   function normalize(input) {
+    if (saveRouter(input) !== 1) throw new Error('router');
     const base = defaults();
     const merge = (b, v) => {
       if (Array.isArray(b)) return Array.isArray(v) ? clone(v) : b;
@@ -484,6 +496,8 @@
     TEMP_PIN,
     defaults,
     normalize,
+    saveRouter,
+    threePhaseUrl,
     clone,
     remoteUnitsUsed,
     remoteLoadCount,
