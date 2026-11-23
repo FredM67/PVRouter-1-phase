@@ -10,6 +10,8 @@ The commit message is read from the COMMIT_MESSAGE environment variable (no quot
 - Publishes the configurator of dev as a preview, in configurator/ (without its tests): a banner
   says so and links to the released one, and it keeps its settings under a key of its own, since
   the released configurator (fredm67.github.io/Mk2PVRouter) shares the origin and its storage.
+  Both keys end in "-1p" (the 3-phase pages of fredm67.github.io use "pvrouter-configurator" and
+  "pvrouter-configurator-dev").
 - Appends the sizes of size.json (customSmallerIsBetter results named "flash: <build>" and
   "RAM: <build>", from the build jobs) to bench/history.json, as one entry per commit (a rerun
   replaces the entry of its commit).
@@ -36,8 +38,8 @@ KEEP_IN_BENCH = {"index.html", "history.json"}
 
 CONFIGURATOR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "configurator")
 RELEASED_CONFIGURATOR = "https://fredm67.github.io/Mk2PVRouter/configurateur-monophase/"
-STORE = "'pvrouter-configurator'"
-PREVIEW_STORE = "'pvrouter-configurator-dev'"
+STORE = "'pvrouter-configurator-1p'"
+PREVIEW_STORE = "'pvrouter-configurator-1p-dev'"
 PREVIEW_BANNER = (
     '<div style="background:#fff3cd;border-bottom:1px solid #e0c060;padding:.5rem 1rem;'
     'font:14px/1.4 system-ui,sans-serif;text-align:center">'

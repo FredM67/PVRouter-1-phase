@@ -476,7 +476,11 @@ test('the shipped single-load notes only for one local load on pin 5', () => {
   const pin6 = M.defaults();
   pin6.loads[0].pin = 6;
   assert.deepStrictEqual(shippedNotes(G.configH(pin6)), [false, false]);
-  assert.match(G.configH(remote), /by default, the loads\n\/\/ {3}use D5, D6 and D7\./);
+  // the 3-phase default (D5, D6, D7) is false for this firmware, whatever the map
+  for (const h of [G.configH(remote), G.configH(pin6)]) {
+    assert.ok(!/D5, D6 and D7/.test(h));
+    assert.match(h, /free in this configuration: the pins used by the loads, relays and\n\/\/ {3}inputs of this file are not\./);
+  }
 });
 
 test('CT2 absent and no anti-creep limit: the two constants change, the section stays', () => {

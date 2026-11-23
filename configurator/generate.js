@@ -321,7 +321,7 @@
       '//   inputs driven from Home Assistant: routing stop, router OFF, boost, priority rotation...',
       ...(shippedLoadMap(m)
         ? ['// - Only close the jumpers of pins that are free in this configuration: by default, the load', '//   uses D5 (a second and a third load would use D6 and D7).']
-        : ['// - Only close the jumpers of pins that are free in this configuration: by default, the loads', '//   use D5, D6 and D7.']),
+        : ['// - Only close the jumpers of pins that are free in this configuration: the pins used by the loads, relays and', '//   inputs of this file are not.']),
       '',
       '// Load priority order at startup (array index = priority, 0 = highest)',
       '// Load indices refer to physicalLoadPin[] above, local and remote loads alike.',

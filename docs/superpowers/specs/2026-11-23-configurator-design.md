@@ -133,10 +133,13 @@ voltage, and diverted power with CT2.
 | NEW | `f_ctRating`, `f_ctRatingDiverted`, `f_powerCalPerAmp`, `f_voltageCalNewBoard` |
 
 - Old boards: the diverted reading corrects `f_powerCalDivertedOldBoard`.
-- NEW: the diverted reading is a check only. CT2 has no factor of its own there
-  (`f_powerCalDiverted = f_powerCalPerAmp * f_ctRatingDiverted`, in `config_derived.h`), and a
-  rating is what the user fitted, never corrected. The page shows the error left after the grid
-  correction, and above a few percent it suggests checking `f_ctRatingDiverted`.
+- NEW: the diverted reading corrects `f_ctRatingDiverted` (a later decision of the user, as step 4
+  of the single-phase Readme's calibration says): new = old × kD / kGrid, with kD = meterD / routerD
+  and kGrid = meterP / routerP. CT2 has no factor of its own there
+  (`f_powerCalDiverted = f_powerCalPerAmp * f_ctRatingDiverted`, in `config_derived.h`), so
+  dividing by kGrid compensates the grid correction already applied to `f_powerCalPerAmp`. The
+  page also shows the error left, and above a few percent it suggests checking
+  `f_ctRatingDiverted`. Without a diverted reading the rating stays as it is.
 
 ### Checks (`validate.js`)
 

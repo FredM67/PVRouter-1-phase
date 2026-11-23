@@ -403,3 +403,27 @@ test('CT2: the display shutdown is an integer 1..255 hours', () => {
   assert.deepStrictEqual(at(1), []);
   assert.deepStrictEqual(at(255), []);
 });
+
+test('changing the board keeps the choices and the errors point at them (nothing dropped silently)', () => {
+  // NEW with the OLED, mk2Wifi and a temperature through the module -> OLD_SEG: all refused, all kept
+  const m = board('NEW', 'OLED', (x) => {
+    x.mk2wifi.enabled = true;
+    x.temperature.mode = 'esp';
+  });
+  m.pcbVersion = 'OLD_SEG';
+  assert.deepStrictEqual(fields(m, 'err.oledBoard'), ['displayType']);
+  assert.deepStrictEqual(fields(m, 'err.mk2wifiBoard'), ['mk2wifi']);
+  assert.strictEqual(m.displayType, 'OLED');
+  assert.ok(m.mk2wifi.enabled);
+  assert.strictEqual(m.temperature.mode, 'esp');
+  // the 7-segment display on the new board
+  const seg = board('OLD_SEG', 'SEG');
+  seg.pcbVersion = 'NEW';
+  assert.deepStrictEqual(fields(seg, 'err.displayBoard'), ['displayType']);
+  // and back: the first setup is whole again
+  m.pcbVersion = 'NEW';
+  assert.deepStrictEqual(find(m, 'err.oledBoard').concat(find(m, 'err.mk2wifiBoard'), find(m, 'err.tempEspNoWifi')), []);
+  // a wifi input flag stays set but is only written when the module is enabled and available
+  const w = board('NEW', 'NONE', (x) => (x.mk2wifi.enabled = true) && (x.diversion = { enabled: true, pin: 5, wifi: true }));
+  assert.ok(M.wifiInputs(w).length > 0);
+});

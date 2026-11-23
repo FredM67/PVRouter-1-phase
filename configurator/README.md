@@ -13,7 +13,8 @@ open `index.html` in a browser.
 The Mk2PVRouter documentation site publishes it at
 <https://fredm67.github.io/Mk2PVRouter/configurateur-monophase/>. A link on the page switches to the
 3-phase configurator (<https://fredm67.github.io/Mk2PVRouter/configurateur/>), and the other way round; each
-refuses the saves of the other router (a save carries `router`: `1` here, `3` there).
+will refuse the saves of the other router (a save carries `router`: `1` here, `3` there); the 3-phase page
+does not yet, a coming 3-phase change adds it.
 
 No build step, no dependency: plain scripts that also load in Node for the tests.
 

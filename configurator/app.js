@@ -15,7 +15,7 @@
   const D = window.PVRFolder;
   const TL = window.PVRTimeline;
 
-  const STORE = 'pvrouter-configurator';
+  const STORE = 'pvrouter-configurator-1p';
   let m = M.defaults();
   let lang = (navigator.language || 'en').toLowerCase().startsWith('fr') ? 'fr' : 'en';
   let activeFile = 0;
@@ -202,15 +202,9 @@
         'pcbVersion',
         select(
           () => m.pcbVersion,
-          (v) => {
-            m.pcbVersion = v;
-            // what the new board cannot take: its display, the mk2Wifi module
-            if (!M.displayTypesOf(m).includes(m.displayType)) m.displayType = 'NONE';
-            if (!M.mk2wifiAvailable(m)) {
-              m.mk2wifi.enabled = false;
-              if (m.temperature.mode === 'esp') m.temperature.mode = 'off';
-            }
-          },
+          // a choice the new board cannot take stays (the selects keep it) and the error points at it:
+          // nothing is dropped silently, and going back restores a working setup
+          (v) => (m.pcbVersion = v),
           M.PCB_VERSIONS.map((x) => [x, T(`pcb.${x}`)])
         ),
         'pcbVersionHelp'
@@ -313,7 +307,8 @@
         'divertedCtPresentHelp'
       ),
       row(
-        m.divertedCtPresent
+        // an invalid value stays visible without CT2, or its error could not be fixed
+        m.divertedCtPresent || p.some((x) => x.field === 'antiCreepLimit')
           ? field(
               'antiCreepLimit',
               num(
@@ -1554,7 +1549,7 @@
   function renderRefused() {
     const box = document.getElementById('refused');
     if (!refusedShown) return box.replaceChildren();
-    const [pre, post] = T('router.refused', { link: '' }).split('');
+    const [pre, post] = T('router.refused', { link: '\u0001' }).split('\u0001');
     box.replaceChildren(pre, h('a', { href: threePhaseUrl }, T('router.three')), post, ' ', h('button', { type: 'button', onclick: () => showRefused(false) }, T('router.dismiss')));
   }
   const restoreBtn = document.getElementById('restore');
