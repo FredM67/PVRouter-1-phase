@@ -1198,51 +1198,70 @@
     const cal = M.calValuesOf(m);
     c[cal.power.key] = r.power;
     c[cal.voltage.key] = r.voltage;
-    for (const x of [...c.power, ...c.voltage]) x.router = x.meter = null;
+    if (r.diverted !== null) c[cal.diverted.key] = r.diverted;
+    for (const x of [c.power, c.voltage, c.diverted]) x.router = x.meter = null;
     changed();
   }
 
   function calibration(p) {
     const c = m.calibration;
     const r = M.calibrationResult(m);
+    const cal = M.calValuesOf(m);
     const shown = (v, decimals) => (v > 0 ? v.toFixed(decimals) : '—');
-    const block = (kind, titleKey, currentKey, readings, current, result, decimals, unit) => [
-      h('h3', null, T(titleKey, { name: M.calValuesOf(m)[kind].name })),
-      ...readings.map((x, i) =>
+    // one reading: as the human-readable serial output labels it, router and meter
+    const readingFields = (kind, x) => [
+      field(
+        `cal.router.${kind}`,
+        num(
+          () => x.router,
+          (v) => (x.router = v),
+          { step: 'any' }
+        )
+      ),
+      field(
+        `cal.meter.${kind}`,
+        num(
+          () => x.meter,
+          (v) => (x.meter = v),
+          { step: 'any' }
+        )
+      ),
+    ];
+    // a value corrected by its reading: current value, readings, new value
+    const block = (kind, label, result) => {
+      const v = cal[kind];
+      return [
+        h('h3', null, T(`cal.${kind}`, { name: v.name })),
         row(
-          h('strong', null, `${T('cal.phase')} ${i + 1}`),
+          h('code', null, label),
           field(
-            currentKey,
+            `cal.current.${kind}`,
             num(
-              () => current[i],
-              (v) => (current[i] = v),
+              () => c[v.key],
+              (x) => (c[v.key] = x),
               { step: 'any', min: 0 }
             )
           ),
-          field(
-            `cal.router.${kind}`,
-            num(
-              () => x.router,
-              (v) => (x.router = v),
-              { step: 'any' }
-            )
-          ),
-          field(
-            `cal.meter.${kind}`,
-            num(
-              () => x.meter,
-              (v) => (x.meter = v),
-              { step: 'any' }
-            )
-          ),
-          field('cal.new', h('output', { class: result[i] !== current[i] ? 'changed' : '' }, shown(result[i], decimals)))
-        )
-      ),
-      h('small', { class: 'help' }, T(`cal.${kind}Help`, { unit })),
-    ];
+          ...readingFields(kind, c[kind]),
+          field('cal.new', h('output', { class: result !== c[v.key] ? 'changed' : '' }, shown(result, v.decimals)))
+        ),
+        h('small', { class: 'help' }, T(`cal.${kind}Help`)),
+      ];
+    };
+    // new board: the diverted reading checks CT2, which has no factor of its own
+    const divertedCheck = () => {
+      const e = r.divertedError;
+      const off = e !== null && Math.abs(e) >= M.CT2_CHECK_LIMIT - 1e-9;
+      return [
+        h('h3', null, T('cal.divertedCheck', { name: `${cal.power.name} × ${M.CT_RATING_DIVERTED.name}` })),
+        row(h('code', null, 'diverted'), ...readingFields('diverted', c.diverted), field('cal.ct2Error', h('output', { class: off ? 'changed' : '' }, e === null ? '—' : `${(e * 100).toFixed(1)} %`))),
+        h('small', { class: 'help' }, T('cal.divertedHelp')),
+        h('small', { class: 'help' }, T('cal.divertedCheckHelp')),
+      ];
+    };
+    const diverted = !m.divertedCtPresent ? [] : cal.diverted ? block('diverted', 'diverted', r.diverted) : divertedCheck();
     const lines = G.calibrationLines(m);
-    const cal = M.calValuesOf(m);
-    const changedValues = r.power.some((v, i) => v !== c[cal.power.key][i]) || r.voltage.some((v, i) => v !== c[cal.voltage.key][i]);
+    const changedValues = r.power !== c[cal.power.key] || r.voltage !== c[cal.voltage.key] || (r.diverted !== null && r.diverted !== c[cal.diverted.key]);
     return section(
       'calibration',
       'sec.calibration',
@@ -1254,8 +1273,9 @@
         h('small', { class: 'help' }, c.fileName ? T('cal.fileLoaded', { name: c.fileName }) : T('cal.noFile'))
       ),
       ...ctRatings(),
-      ...block('power', 'cal.power', 'cal.current.power', c.power, c[cal.power.key], r.power, cal.power.decimals, 'W'),
-      ...block('voltage', 'cal.voltage', 'cal.current.voltage', c.voltage, c[cal.voltage.key], r.voltage, cal.voltage.decimals, 'V'),
+      ...block('power', 'P:', r.power),
+      ...diverted,
+      ...block('voltage', 'V:', r.voltage),
       ...calibrationChecks(p),
       h('h3', null, T('cal.lines')),
       lines ? h('pre', { class: 'lines' }, h('code', null, lines.join('\n'))) : h('small', { class: 'help' }, T('cal.linesMissing')),
@@ -1265,21 +1285,22 @@
     );
   }
 
-  // The rated current of the CTs, new board: f_powerCal = f_powerCalPerAmp x f_ctRating
+  // The rated currents of the CTs, new board: f_powerCal = f_powerCalPerAmp x f_ctRating (CT1),
+  // f_powerCalPerAmp x f_ctRatingDiverted (CT2, when fitted)
   function ctRatings() {
-    if (!M.ctRatingUsed(m)) return [];
+    const ratings = M.ctRatingsOf(m);
+    if (!ratings.length) return [];
     const c = m.calibration;
+    const label = { ctRating: 'cal.ctGrid', ctRatingDiverted: 'cal.ctDiverted' };
     return [
       h('h3', null, T('cal.ctRatingTitle')),
       row(
-        ...c.ctRating.map((_, i) =>
-          h(
-            'label',
-            { class: 'field' },
-            h('span', null, `${T('cal.phase')} ${i + 1} (A)`),
+        ...ratings.map(({ key }) =>
+          field(
+            label[key],
             num(
-              () => c.ctRating[i],
-              (v) => (c.ctRating[i] = v),
+              () => c[key],
+              (v) => (c[key] = v),
               { step: 'any', min: 0 }
             )
           )

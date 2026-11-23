@@ -46,29 +46,33 @@
     if (m.calibrationMode) warning('warn.calibration', 'calibrationMode');
 
     // ---- calibration helper: readings that would give a wrong correction ----
+    // (reading: as the human-readable serial output shows it, 'P:', 'V:' or 'diverted')
     if (m.calibrationMode) {
       const c = m.calibration;
-      for (const [kind, readings, current] of [
-        ['power', c.power, c[M.calValuesOf(m).power.key]],
-        ['voltage', c.voltage, c[M.calValuesOf(m).voltage.key]],
-      ]) {
-        readings.forEach(({ router, meter }, i) => {
-          const params = { phase: i + 1 };
-          if (router === null || meter === null) return;
-          if (kind === 'power' && router <= 0) return warning('warn.calProbe', 'calibration', params);
-          if (router <= 0 || meter <= 0) return warning('warn.calReading', 'calibration', params);
-          if (!(current[i] > 0)) return warning('warn.calCurrent', 'calibration', params);
-          if (kind === 'power' && router < 300) warning('warn.calLowPower', 'calibration', params);
-          const ratio = meter / router;
-          if (ratio < 0.5 || ratio > 2) warning('warn.calRatio', 'calibration', { ...params, ratio: ratio.toFixed(2) });
-        });
-      }
-    }
+      const cal = M.calValuesOf(m);
+      const check = (power, { router, meter }, current, reading) => {
+        const params = { reading };
+        if (router === null || meter === null) return;
+        if (power && router <= 0) return warning('warn.calProbe', 'calibration', params);
+        if (router <= 0 || meter <= 0) return warning('warn.calReading', 'calibration', params);
+        if (!(current > 0)) return warning('warn.calCurrent', 'calibration', params);
+        if (power && router < 300) warning('warn.calLowPower', 'calibration', params);
+        const ratio = meter / router;
+        if (ratio < 0.5 || ratio > 2) warning('warn.calRatio', 'calibration', { ...params, ratio: ratio.toFixed(2) });
+      };
+      check(true, c.power, c[cal.power.key], 'P:');
+      check(false, c.voltage, c[cal.voltage.key], 'V:');
+      // new board: CT2 has no factor of its own, it uses f_powerCalPerAmp
+      if (m.divertedCtPresent) check(true, c.diverted, c[(cal.diverted || cal.power).key], 'diverted');
 
-    if (m.calibrationMode && M.ctRatingUsed(m) && m.calibration.file)
-      m.calibration.ctRating.forEach((a, i) => {
-        if (!(a > 0)) warning('warn.calCtRating', 'calibration', { phase: i + 1 });
-      });
+      if (M.ctRatingUsed(m) && c.file)
+        for (const r of M.ctRatingsOf(m)) if (!(c[r.key] > 0)) warning('warn.calCtRating', 'calibration', { name: r.name });
+
+      // new board: the diverted reading only checks CT2, whose rating is never corrected
+      const { divertedError } = M.calibrationResult(m);
+      if (divertedError !== null && Math.abs(divertedError) >= M.CT2_CHECK_LIMIT - 1e-9)
+        warning('warn.calCt2', 'calibration', { error: (divertedError * 100).toFixed(1), name: M.CT_RATING_DIVERTED.name });
+    }
 
     // ---- load map ----
     const n = m.loads.length;

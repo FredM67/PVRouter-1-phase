@@ -134,12 +134,15 @@ const CASES = [
   ['err.wifiPin', (m) => (m.mk2wifi.enabled = true) && (m.diversion = { enabled: true, pin: 3, wifi: true })],
   ['warn.wifiKeepOpen', (m) => (m.mk2wifi.enabled = true) && (m.serialOutput = 'IoT')],
   ['warn.calibration', (m) => (m.calibrationMode = true)],
-  ['warn.calProbe', (m) => (m.calibrationMode = true) && (m.calibration.power[0] = { router: -1500, meter: 1500 })],
-  ['warn.calCurrent', (m) => (m.calibrationMode = true) && (m.calibration.power[0] = { router: 1500, meter: 1500 })],
-  ['warn.calLowPower', (m) => (m.calibrationMode = true) && (m.calibration.powerCalPerAmp = [0.0029225, 0.0029225, 0.0029225]) && (m.calibration.power[1] = { router: 100, meter: 105 })],
-  ['warn.calRatio', (m) => (m.calibrationMode = true) && (m.calibration.voltageCalNewBoard = [0.8952, 0.8952, 0.8952]) && (m.calibration.voltage[2] = { router: 100, meter: 230 })],
-  ['warn.calReading', (m) => (m.calibrationMode = true) && (m.calibration.voltage[0] = { router: 230, meter: 0 })],
-  ['warn.calCtRating', (m) => (m.calibrationMode = true) && Object.assign(m.calibration, { file: 'x', ctRating: [50, 0, 50] })],
+  ['warn.calProbe', (m) => (m.calibrationMode = true) && (m.calibration.power = { router: -1500, meter: 1500 })],
+  ['warn.calProbe', (m) => (m.calibrationMode = true) && (m.calibration.diverted = { router: -1500, meter: 1500 })],
+  ['warn.calCurrent', (m) => (m.calibrationMode = true) && (m.calibration.power = { router: 1500, meter: 1500 })],
+  ['warn.calLowPower', (m) => (m.calibrationMode = true) && (m.calibration.powerCalPerAmp = 0.00286405) && (m.calibration.power = { router: 100, meter: 105 })],
+  ['warn.calRatio', (m) => (m.calibrationMode = true) && (m.calibration.voltageCalNewBoard = 0.888065256) && (m.calibration.voltage = { router: 100, meter: 230 })],
+  ['warn.calReading', (m) => (m.calibrationMode = true) && (m.calibration.voltage = { router: 230, meter: 0 })],
+  ['warn.calCtRating', (m) => (m.calibrationMode = true) && Object.assign(m.calibration, { file: 'x', ctRating: 0, ctRatingDiverted: 50 })],
+  ['warn.calCtRating', (m) => (m.calibrationMode = true) && Object.assign(m.calibration, { file: 'x', ctRating: 50, ctRatingDiverted: null })],
+  ['warn.calCt2', (m) => (m.calibrationMode = true) && Object.assign(m.calibration, { powerCalPerAmp: 0.00286405, ctRatingDiverted: 50, diverted: { router: 500, meter: 450 } })],
 ];
 
 CASES.forEach(([key, change], i) => {
@@ -195,6 +198,34 @@ test('mk2Wifi: inputs on D5-D9 driven by the module are accepted', () => {
     m.serialOutput = 'IoT';
   });
   assert.deepStrictEqual(V.validate(m), []);
+});
+
+// New board, calibration mode, the CT values in: the CT2 check from the diverted reading
+const ct2Check = (change) =>
+  keys(
+    variant((m) => {
+      m.calibrationMode = true;
+      Object.assign(m.calibration, { file: 'x', ctRating: 50, ctRatingDiverted: 50, powerCalPerAmp: 0.00286405 });
+      change(m);
+    })
+  ).filter((k) => k === 'warn.calCt2' || k === 'warn.calCtRating');
+
+test('calibration, new board: the CT2 check from 5 % of error left after the grid correction', () => {
+  assert.deepStrictEqual(ct2Check((m) => (m.calibration.diverted = { router: 500, meter: 476 })), [], '-4.8 %');
+  assert.deepStrictEqual(ct2Check((m) => (m.calibration.diverted = { router: 500, meter: 475 })), ['warn.calCt2'], '-5 %');
+  assert.deepStrictEqual(ct2Check((m) => (m.calibration.diverted = { router: 500, meter: 530 })), ['warn.calCt2'], '+6 %');
+  // the grid reads 10 % high too: corrected with f_powerCalPerAmp, CT2 included
+  assert.deepStrictEqual(
+    ct2Check((m) => Object.assign(m.calibration, { power: { router: 1000, meter: 900 }, diverted: { router: 500, meter: 450 } })),
+    []
+  );
+});
+
+test('calibration: no CT2 check on the old boards, nothing about CT2 without it', () => {
+  assert.deepStrictEqual(ct2Check((m) => (m.pcbVersion = 'OLD_SEG') && (m.calibration.diverted = { router: 500, meter: 450 })), []);
+  const without = (m) => (m.divertedCtPresent = false) && Object.assign(m.calibration, { ctRatingDiverted: null, diverted: { router: -500, meter: 450 } });
+  assert.deepStrictEqual(ct2Check(without), []);
+  assert.ok(!keys(variant((m) => (m.calibrationMode = true) && without(m))).includes('warn.calProbe'));
 });
 
 test('calibration mode: the IoT rules and the mk2Wifi output warning do not apply', () => {

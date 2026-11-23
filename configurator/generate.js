@@ -675,15 +675,25 @@
 
   // ---- calibration.h ----
 
-  // As calibration.h writes them: 1.0000F, 0.05000F, 0.8151F
+  // As calibration.h writes them: 50.0F, 0.05000F, 0.00286405F
   const calValue = (cal, v) => `${v.toFixed(cal.decimals)}F`;
+
+  // The values of the board for calibration.h, in its order: [{ name, decimals }, value]. The
+  // CT ratings (new board) as entered; CT2's only with CT2 (old boards: its own factor).
+  function calibrationEntries(m) {
+    const r = M.calibrationResult(m);
+    const cal = M.calValuesOf(m);
+    return [
+      ...M.ctRatingsOf(m).map((c) => [c, m.calibration[c.key]]),
+      [cal.power, r.power],
+      ...(cal.diverted && m.divertedCtPresent ? [[cal.diverted, r.diverted]] : []),
+      [cal.voltage, r.voltage],
+    ];
+  }
 
   // The lines to paste into calibration.h, or null while a current value is missing
   function calibrationLines(m) {
-    const r = M.calibrationResult(m);
-    const cal = M.calValuesOf(m);
-    const line = (c, values) => (values.every((v) => v > 0) ? `inline constexpr float ${c.name}[NO_OF_PHASES]{ ${values.map((v) => calValue(c, v)).join(', ')} };` : null);
-    const lines = [...(M.ctRatingUsed(m) ? [line(M.CT_RATING, m.calibration.ctRating)] : []), line(cal.power, r.power), line(cal.voltage, r.voltage)];
+    const lines = calibrationEntries(m).map(([c, v]) => (v > 0 ? `inline constexpr float ${c.name}{ ${calValue(c, v)} };` : null));
     return lines.every(Boolean) ? lines : null;
   }
 
@@ -692,24 +702,15 @@
   function calibrationH(m) {
     let text = m.calibration.file;
     if (!text) return null;
-    const r = M.calibrationResult(m);
-    let changed = false;
-    const cal = M.calValuesOf(m);
-    for (const [c, values] of [
-      [cal.voltage, r.voltage],
-      [cal.power, r.power],
-      ...(M.ctRatingUsed(m) ? [[M.CT_RATING, m.calibration.ctRating]] : []),
-    ]) {
-      const a = M.calibrationArray(text, c.name);
-      if (!a) return null;
-      // from the last token, so the positions of the others stay valid
-      for (let i = a.tokens.length - 1; i >= 0; --i) {
-        if (!(values[i] > 0) || Math.abs(values[i] - a.values[i]) < 1e-9) continue;
-        text = text.slice(0, a.tokens[i].start) + calValue(c, values[i]) + text.slice(a.tokens[i].end);
-        changed = true;
-      }
+    const edits = [];
+    for (const [c, v] of calibrationEntries(m)) {
+      const t = M.calibrationToken(text, c.name);
+      if (!t) return null;
+      if (v > 0 && Math.abs(v - t.value) >= 1e-9) edits.push({ ...t, text: calValue(c, v) });
     }
-    return changed ? text : null;
+    // from the last one, so the positions of the others stay valid
+    for (const e of edits.sort((a, b) => b.start - a.start)) text = text.slice(0, e.start) + e.text + text.slice(e.end);
+    return edits.length ? text : null;
   }
 
   function files(m, date) {

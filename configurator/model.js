@@ -76,13 +76,17 @@
         file: null, // the user's calibration.h, as loaded: the new values are written into it
         fileName: '',
         // the values the router runs with, as in calibration.h
-        ctRating: [null, null, null], // f_ctRating, A, new board
-        powerCalPerAmp: [null, null, null], // f_powerCalPerAmp, new board
-        voltageCalNewBoard: [null, null, null], // f_voltageCalNewBoard
-        powerCalOldBoard: [null, null, null], // f_powerCalOldBoard
-        voltageCalOldBoard: [null, null, null], // f_voltageCalOldBoard
-        power: [0, 1, 2].map(() => ({ router: null, meter: null })), // W, P1..P3
-        voltage: [0, 1, 2].map(() => ({ router: null, meter: null })), // V, V1..V3
+        powerCalOldBoard: null, // f_powerCalOldBoard, old boards, CT1 (grid)
+        powerCalDivertedOldBoard: null, // f_powerCalDivertedOldBoard, old boards, CT2 (diverted)
+        voltageCalOldBoard: null, // f_voltageCalOldBoard
+        ctRating: null, // f_ctRating, A, new board, CT1 (grid)
+        ctRatingDiverted: null, // f_ctRatingDiverted, A, new board, CT2 (diverted)
+        powerCalPerAmp: null, // f_powerCalPerAmp, new board
+        voltageCalNewBoard: null, // f_voltageCalNewBoard
+        // the readings, router (human-readable serial output) and reference meter
+        power: { router: null, meter: null }, // W, 'P:', the grid power (CT1)
+        voltage: { router: null, meter: null }, // V, 'V:'
+        diverted: { router: null, meter: null }, // W, 'diverted <W> W', with CT2
       },
 
       // config_system.h
@@ -190,6 +194,8 @@
     };
     const m = merge(base, input || {});
     m.formatVersion = FORMAT_VERSION;
+    // a single value each (the per-phase arrays of a 3-phase save are not taken)
+    for (const { key } of CAL_NAMES) if (!Number.isFinite(m.calibration[key])) m.calibration[key] = null;
     while (m.units.length < LIMITS.MAX_REMOTE_UNITS) m.units.push(clone(base.units[0]));
     while (m.rf.remoteIds.length < LIMITS.MAX_REMOTE_UNITS) m.rf.remoteIds.push(15 + m.rf.remoteIds.length);
     return m;
@@ -197,64 +203,86 @@
 
   // ---- calibration.h ----
 
-  // The active (not commented out) 'name[NO_OF_PHASES]{ a, b, c }' of calibration.h:
-  // { values, tokens: [{ start, end }] } with positions in the text, or null
-  function calibrationArray(text, name) {
-    const re = new RegExp(`\\b${name}\\s*\\[\\s*NO_OF_PHASES\\s*\\]\\s*\\{([^}]*)\\}`, 'g');
+  // The active (not commented out) 'name{ v }' of calibration.h, a single number:
+  // { value, start, end } with the position of v in the text, or null
+  function calibrationToken(text, name) {
+    const re = new RegExp(`\\b${name}\\s*\\{\\s*([^}]*?)\\s*\\}`, 'g');
     for (let r; (r = re.exec(text)); ) {
       const lineStart = text.lastIndexOf('\n', r.index) + 1;
       if (text.slice(lineStart, r.index).includes('//')) continue;
-      const tokens = [];
-      const listStart = r.index + r[0].indexOf('{') + 1;
-      const tokenRe = /[^,\s][^,]*?(?=\s*(,|$))/g;
-      for (let t; (t = tokenRe.exec(r[1])); ) tokens.push({ start: listStart + t.index, end: listStart + t.index + t[0].length, text: t[0] });
-      const values = tokens.map((t) => parseFloat(t.text));
-      if (values.length !== 1 || !values.every(Number.isFinite)) return null;
-      return { values, tokens };
+      if (!/^[-+]?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?[fF]?$/.test(r[1])) return null;
+      const start = r.index + r[0].indexOf(r[1], r[0].indexOf('{'));
+      return { value: parseFloat(r[1]), start, end: start + r[1].length };
     }
     return null;
   }
+  // The active 'inline constexpr float name{ v }' of calibration.h: v, or null
+  function calibrationValue(text, name) {
+    const t = calibrationToken(text, name);
+    return t ? t.value : null;
+  }
 
   // The values calibration corrects, for each board: calibration.h has a set per board, and the
-  // firmware uses the one of PCB_VERSION (new board: f_powerCal = f_powerCalPerAmp x f_ctRating)
+  // firmware uses the one of PCB_VERSION (config_derived.h). New board: f_powerCal is
+  // f_powerCalPerAmp x f_ctRating for CT1 and f_powerCalPerAmp x f_ctRatingDiverted for CT2, so
+  // CT2 has no factor of its own there. The decimals are those of the shipped calibration.h.
   const CAL_VALUES = {
     NEW: {
-      power: { name: 'f_powerCalPerAmp', key: 'powerCalPerAmp', decimals: 7 },
-      voltage: { name: 'f_voltageCalNewBoard', key: 'voltageCalNewBoard', decimals: 4 },
+      power: { name: 'f_powerCalPerAmp', key: 'powerCalPerAmp', decimals: 8 },
+      diverted: null,
+      voltage: { name: 'f_voltageCalNewBoard', key: 'voltageCalNewBoard', decimals: 9 },
     },
     OLD: {
       power: { name: 'f_powerCalOldBoard', key: 'powerCalOldBoard', decimals: 5 },
-      voltage: { name: 'f_voltageCalOldBoard', key: 'voltageCalOldBoard', decimals: 4 },
+      diverted: { name: 'f_powerCalDivertedOldBoard', key: 'powerCalDivertedOldBoard', decimals: 5 },
+      voltage: { name: 'f_voltageCalOldBoard', key: 'voltageCalOldBoard', decimals: 6 },
     },
   };
   const calValuesOf = (m) => (isOldBoard(m) ? CAL_VALUES.OLD : CAL_VALUES.NEW);
-  // The rated current of the CTs, new board only: set by the user, not corrected by calibration
+  // The rated currents of the CTs, new board only: what the user fitted, never corrected
   const CT_RATING = { name: 'f_ctRating', key: 'ctRating', decimals: 1 };
+  const CT_RATING_DIVERTED = { name: 'f_ctRatingDiverted', key: 'ctRatingDiverted', decimals: 1 };
   const ctRatingUsed = (m) => m.pcbVersion === 'NEW';
-  const CAL_NAMES = [CT_RATING, ...Object.values(CAL_VALUES).flatMap((b) => [b.power, b.voltage])];
+  const ctRatingsOf = (m) => (ctRatingUsed(m) ? [CT_RATING, ...(m.divertedCtPresent ? [CT_RATING_DIVERTED] : [])] : []);
+  // in the order of calibration.h
+  const CAL_NAMES = [CAL_VALUES.OLD.power, CAL_VALUES.OLD.diverted, CAL_VALUES.OLD.voltage, CT_RATING, CT_RATING_DIVERTED, CAL_VALUES.NEW.power, CAL_VALUES.NEW.voltage];
+  // On the new board, the CT2 check suggests looking at f_ctRatingDiverted from this error on
+  const CT2_CHECK_LIMIT = 0.05;
 
-  // { ctRating, powerCalPerAmp, voltageCalNewBoard, powerCalOldBoard, voltageCalOldBoard }, or null
+  // { powerCalOldBoard, powerCalDivertedOldBoard, voltageCalOldBoard, ctRating, ctRatingDiverted,
+  //   powerCalPerAmp, voltageCalNewBoard }, or null when one is missing
   function parseCalibration(text) {
     const out = {};
     for (const { name, key } of CAL_NAMES) {
-      const a = calibrationArray(text, name);
-      if (!a) return null;
-      out[key] = a.values;
+      const v = calibrationValue(text, name);
+      if (v === null) return null;
+      out[key] = v;
     }
     return out;
   }
 
-  // The corrected values: current x meter / router, for each phase with both readings.
-  // { power, voltage }: the new values of calValuesOf(m).power and .voltage
+  // meter / router for a reading with both values positive, else null
+  const readingRatio = ({ router, meter }) => (router > 0 && meter > 0 ? meter / router : null);
+
+  // The corrected values: current x meter / router, for each reading with both values.
+  // { power, voltage, diverted, divertedError }:
+  // - power, voltage: the new values of calValuesOf(m).power and .voltage;
+  // - diverted: the new f_powerCalDivertedOldBoard, old boards with CT2, else null;
+  // - divertedError: new board with CT2, the error of the diverted power left after the grid
+  //   correction (meter / corrected router - 1, -0.1 for -10 %), else null.
   function calibrationResult(m) {
     const c = m.calibration;
     const cal = calValuesOf(m);
-    const fix = (current, readings) =>
-      current.map((cur, i) => {
-        const { router, meter } = readings[i];
-        return cur > 0 && router > 0 && meter > 0 ? (cur * meter) / router : cur;
-      });
-    return { power: fix(c[cal.power.key], c.power), voltage: fix(c[cal.voltage.key], c.voltage) };
+    const fix = (current, reading) => {
+      const k = readingRatio(reading);
+      return current > 0 && k !== null ? current * k : current;
+    };
+    const ct2 = Boolean(m.divertedCtPresent);
+    const diverted = ct2 && cal.diverted ? fix(c[cal.diverted.key], c.diverted) : null;
+    let divertedError = null;
+    const kDiverted = readingRatio(c.diverted);
+    if (ct2 && !cal.diverted && kDiverted !== null) divertedError = kDiverted / (readingRatio(c.power) || 1) - 1;
+    return { power: fix(c[cal.power.key], c.power), voltage: fix(c[cal.voltage.key], c.voltage), diverted, divertedError };
   }
 
   // ---- derived values, shared by the validator, the generator and the page ----
@@ -345,7 +373,7 @@
     else if (d.tempSensor > i) --d.tempSensor;
   }
   const overridePresent = (m) => m.overrides.enabled && m.overrides.list.length > 0;
-  // calibration reads P1..P3 on the serial monitor: human-readable, whatever the usual choice
+  // calibration reads 'P:', 'V:' and 'diverted' on the serial monitor: human-readable, whatever the usual choice
   const serialOutputOf = (m) => (m.calibrationMode ? 'HumanReadable' : m.serialOutput);
 
   // Router inputs that the mk2Wifi module may drive, with their default (fail-safe) role
@@ -477,13 +505,17 @@
     wifiInputs,
     parseAddress,
     crc8,
-    calibrationArray,
+    calibrationToken,
+    calibrationValue,
     parseCalibration,
     calibrationResult,
     calValuesOf,
     CT_RATING,
+    CT_RATING_DIVERTED,
     ctRatingUsed,
+    ctRatingsOf,
     CAL_NAMES,
+    CT2_CHECK_LIMIT,
     rotationChoices,
     rotationDelayShown,
     rotationDelayValid,
