@@ -75,8 +75,18 @@ shipped `config.h`:
   page, the flash and RAM of every build and the embedded benchmarks at each change of `dev`
   (`bench/`, from the `pages` job of the CI), and the Doxygen documentation of
   `Mk2_1phase_RFdatalog_temp` (`doc/`). Flash and RAM badges in the READMEs.
+- **Configurator** (`configurator/`,
+  <https://fredm67.github.io/Mk2PVRouter/configurateur-monophase/>): a web page that checks the
+  settings and writes `config.h`, `config_system.h` and `config_rf.h` of the router and the files of
+  the remote units: the board, the display with its pin checks, the CT2 settings, the loads, relays,
+  rotation groups, remote units, mk2Wifi inputs and dual tariff, and a calibration helper. It is
+  copied from the one of PVRouter-3-phase and kept in sync with `Mk2_1phase_RFdatalog_temp` by a
+  byte-for-byte test. CI runs its tests and builds its presets; the `pages` job publishes a preview
+  of `dev` (`configurator/` on the GitHub Pages). It writes no ESPHome YAML yet.
 - **NOTICE:** where the code comes from, the third-party code and the libraries used; the files
   that hold your settings are yours.
+- **RemoteLoadReceiver** is now in this repository (`RemoteLoadReceiver/`, copied from
+  PVRouter-3-phase), built in CI; the READMEs link to it.
 
 ### Changed
 

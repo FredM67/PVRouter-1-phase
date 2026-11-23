@@ -1,0 +1,23 @@
+{
+  "router": 1,
+  "pcbVersion": "NEW",
+  "serialOutput": "IoT",
+  "loads": [
+    { "type": "local", "pin": 2 },
+    { "type": "local", "pin": 3 }
+  ],
+  "priorities": [0, 1],
+  "diversion": { "enabled": true, "pin": 9, "wifi": true },
+  "routerOff": { "enabled": true, "pin": 8, "wifi": true },
+  "rotation": { "mode": "PIN", "pin": 7, "wifi": true, "afterSeconds": 28800, "groups": [[0, 1]] },
+  "overrides": { "enabled": true, "list": [{ "pin": 6, "wifi": true, "targets": "ALL_LOADS" }] },
+  "dualTariff": {
+    "enabled": true,
+    "pin": 5,
+    "wifi": true,
+    "offPeakHours": 8,
+    "boosts": [{ "from": "end", "at": 180, "for": 120, "targets": [{ "load": 0 }] }],
+    "tempThreshold": 100
+  },
+  "mk2wifi": { "enabled": true, "name": "routeur-garage", "friendlyName": "Routeur garage", "language": "en" }
+}

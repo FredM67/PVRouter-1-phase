@@ -164,6 +164,8 @@ The end-user should ONLY edit the **calibration.h** and **config.h** files.
 > [!NOTE]
 > **config.h** only holds settings: it includes `config_types.h` and nothing else. Its settings have the names, the meaning and the syntax of the 3-phase firmware's. The **config.h** of `Mk2_fasterControl_Full` does not fit: start from the shipped one. A **config.h** with `#include` lines, `NO_OF_REMOTE_LOADS` or `remoteLoads` (the former layout of the 3-phase firmware) stops the build with *This config.h has the former layout*.
 
+> The [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur-monophase/) does it for you: choose the board, the display, your loads, relays, remote units, control pins and options, and it checks them and writes `config.h`, `config_system.h`, `config_rf.h` and the remote units' files. Keep your `calibration.h`.
+
 # Development documentation
 
 The **[docs/](docs/)** folder holds the technical documentation: [architecture](docs/architecture.md), [interrupts](docs/interrupts.md), [power calculation](docs/power-calculation.md), [calibration values](docs/calibration.md), [performance](docs/performance.md), [tests](docs/testing.md). The tests themselves are described in [test/README.md](test/README.md), and the grid simulator, which runs this firmware on a simulated single-phase installation, in [sim/README.md](../sim/README.md).
@@ -574,7 +576,7 @@ inline constexpr uint8_t NETWORK_ID{ 210 };               // Network ID (1-255)
 
 ### Remote receiver configuration
 
-The **RemoteLoadReceiver** sketch is in the `RemoteLoadReceiver/` folder of [PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase/tree/main/RemoteLoadReceiver): the single-phase router sends the same frames. It needs no modification to support several units: build and upload it once per unit, changing only `REMOTE_NODE_ID` and the load list.
+The **RemoteLoadReceiver** sketch is in the `RemoteLoadReceiver/` folder of this repository ([RemoteLoadReceiver](../RemoteLoadReceiver/)): the single-phase router sends the same frames. It needs no modification to support several units: build and upload it once per unit, changing only `REMOTE_NODE_ID` and the load list.
 
 **Minimum configuration (in receiver's config_rf.h):**
 

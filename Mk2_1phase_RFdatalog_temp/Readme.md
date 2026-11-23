@@ -166,6 +166,8 @@ L’utilisateur final ne doit éditer QUE les fichiers **calibration.h** et **co
 > [!NOTE]
 > **config.h** ne contient que des réglages : il n’inclut que `config_types.h`. Ses réglages ont les noms, le sens et la syntaxe de ceux du firmware triphasé. Le **config.h** de `Mk2_fasterControl_Full` ne convient pas : partez de celui fourni. Un **config.h** avec des lignes `#include`, `NO_OF_REMOTE_LOADS` ou `remoteLoads` (l’ancienne forme du firmware triphasé) arrête la compilation sur *This config.h has the former layout*.
 
+> Le [configurateur](https://fredm67.github.io/Mk2PVRouter/configurateur-monophase/) fait ce travail pour vous : choisissez la carte, l’afficheur, les charges, les relais, les unités distantes, les broches de commande et les options, il les vérifie et écrit `config.h`, `config_system.h`, `config_rf.h` et les fichiers des unités distantes. Gardez votre `calibration.h`.
+
 ## Documentation technique
 Le dossier **[docs/](docs/)** contient la documentation technique détaillée (en anglais) :
 - **[Architecture logicielle](docs/architecture.md)** - Conception et organisation des modules
@@ -582,7 +584,7 @@ inline constexpr uint8_t NETWORK_ID{ 210 };               // ID du réseau (1-25
 
 ### Configuration du récepteur distant
 
-Le sketch **RemoteLoadReceiver** est dans le dossier `RemoteLoadReceiver/` de [PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase/tree/main/RemoteLoadReceiver) : le routeur monophasé envoie les mêmes trames. Il n’a besoin d'aucune modification pour gérer plusieurs unités : compilez-le et téléversez-le une fois par unité, en ne changeant que `REMOTE_NODE_ID` et la liste des charges.
+Le sketch **RemoteLoadReceiver** est dans le dossier `RemoteLoadReceiver/` de ce dépôt ([RemoteLoadReceiver](../RemoteLoadReceiver/)) : le routeur monophasé envoie les mêmes trames. Il n’a besoin d'aucune modification pour gérer plusieurs unités : compilez-le et téléversez-le une fois par unité, en ne changeant que `REMOTE_NODE_ID` et la liste des charges.
 
 **Configuration minimale (dans config_rf.h du récepteur) :**
 

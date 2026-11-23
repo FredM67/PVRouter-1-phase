@@ -3,7 +3,7 @@
  * @brief Router configuration: loads, relays, control pins and features
  *
  * Edit it by hand, or create it with the configurator:
- * https://fredm67.github.io/Mk2PVRouter/configurateur/
+ * https://fredm67.github.io/Mk2PVRouter/configurateur-monophase/
  *
  * Settings only: no #include line but the one below, nothing computed. The firmware builds
  * what it needs from these settings in config_derived.h.

@@ -1,0 +1,39 @@
+{
+  "router": 1,
+  "pcbVersion": "NEW",
+  "serialOutput": "IoT",
+  "loads": [
+    { "type": "local", "pin": 5 },
+    { "type": "remote", "unit": 1, "led": null },
+    { "type": "remote", "unit": 1, "led": 7 }
+  ],
+  "priorities": [0, 1, 2],
+  "relays": {
+    "enabled": true,
+    "filterDelay": 3,
+    "list": [
+      { "pin": 8, "surplus": 1000, "import": 200, "minOn": 5, "minOff": 5 },
+      { "pin": 9, "surplus": 1500, "import": -50, "minOn": 10, "minOff": 5 }
+    ]
+  },
+  "overrides": { "enabled": true, "list": [{ "pin": 6, "wifi": false, "targets": [{ "load": 0 }, { "relay": 1 }] }] },
+  "dualTariff": {
+    "enabled": true,
+    "pin": 4,
+    "offPeakHours": 8,
+    "boosts": [
+      { "from": "end", "at": 180, "for": 120, "targets": [{ "load": 0 }] },
+      { "from": "start", "at": 120, "for": null, "targets": [{ "load": 1 }] }
+    ],
+    "tempThreshold": 70
+  },
+  "temperature": {
+    "mode": "router",
+    "sensors": [
+      { "address": "28BE416B090000A4", "name": "" },
+      { "address": "281BD76A090000B7", "name": "" }
+    ]
+  },
+  "rf": { "logging": true, "networkId": 100, "routerId": 5, "gatewayId": 1, "remoteIds": [20, 21, 22] },
+  "units": [{ "loadPins": [4, 3], "statusLeds": true, "greenLed": 5, "redLed": 7 }]
+}
