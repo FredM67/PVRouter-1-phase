@@ -678,17 +678,13 @@
   // As calibration.h writes them: 50.0F, 0.05000F, 0.00286405F
   const calValue = (cal, v) => `${v.toFixed(cal.decimals)}F`;
 
-  // The values of the board for calibration.h, in its order: [{ name, decimals }, value]. The
-  // CT ratings (new board) as entered; CT2's only with CT2 (old boards: its own factor).
+  // The values of the board for calibration.h, in its order: [{ name, decimals }, value].
+  // f_ctRating (new board) as entered; CT2's value only with CT2.
   function calibrationEntries(m) {
     const r = M.calibrationResult(m);
     const cal = M.calValuesOf(m);
-    return [
-      ...M.ctRatingsOf(m).map((c) => [c, m.calibration[c.key]]),
-      [cal.power, r.power],
-      ...(cal.diverted && m.divertedCtPresent ? [[cal.diverted, r.diverted]] : []),
-      [cal.voltage, r.voltage],
-    ];
+    const entries = [...M.ctRatingsOf(m).map((c) => [c, m.calibration[c.key]]), [cal.power, r.power], ...(m.divertedCtPresent ? [[cal.diverted, r.diverted]] : []), [cal.voltage, r.voltage]];
+    return entries.sort(([a], [b]) => M.CAL_NAMES.indexOf(a) - M.CAL_NAMES.indexOf(b));
   }
 
   // The lines to paste into calibration.h, or null while a current value is missing

@@ -1251,18 +1251,8 @@
         h('small', { class: 'help' }, T(`cal.${kind}Help`)),
       ];
     };
-    // new board: the diverted reading checks CT2, which has no factor of its own
-    const divertedCheck = () => {
-      const e = r.divertedError;
-      const off = e !== null && Math.abs(e) >= M.CT2_CHECK_LIMIT - 1e-9;
-      return [
-        h('h3', null, T('cal.divertedCheck', { name: `${cal.power.name} × ${M.CT_RATING_DIVERTED.name}` })),
-        row(h('code', null, 'diverted'), ...readingFields('diverted', c.diverted), field('cal.ct2Error', h('output', { class: off ? 'changed' : '' }, e === null ? '—' : `${(e * 100).toFixed(1)} %`))),
-        h('small', { class: 'help' }, T('cal.divertedReadHelp')),
-        h('small', { class: 'help' }, T('cal.divertedCheckHelp')),
-      ];
-    };
-    const diverted = !m.divertedCtPresent ? [] : cal.diverted ? block('diverted', 'diverted', r.diverted) : divertedCheck();
+    // CT2: f_powerCalDivertedOldBoard, or f_ctRatingDiverted on the new board
+    const diverted = !m.divertedCtPresent ? [] : [...block('diverted', 'diverted', r.diverted), ...(M.ctRatingUsed(m) ? [h('small', { class: 'help' }, T('cal.divertedNewHelp'))] : [])];
     const lines = G.calibrationLines(m);
     const changedValues = r.power !== c[cal.power.key] || r.voltage !== c[cal.voltage.key] || (r.diverted !== null && r.diverted !== c[cal.diverted.key]);
     return section(
@@ -1288,13 +1278,13 @@
     );
   }
 
-  // The rated currents of the CTs, new board: f_powerCal = f_powerCalPerAmp x f_ctRating (CT1),
-  // f_powerCalPerAmp x f_ctRatingDiverted (CT2, when fitted)
+  // The rated current of CT1, new board: f_powerCal = f_powerCalPerAmp x f_ctRating. CT2's,
+  // f_ctRatingDiverted, is corrected by the diverted reading (calibration block)
   function ctRatings() {
     const ratings = M.ctRatingsOf(m);
     if (!ratings.length) return [];
     const c = m.calibration;
-    const label = { ctRating: 'cal.ctGrid', ctRatingDiverted: 'cal.ctDiverted' };
+    const label = { ctRating: 'cal.ctGrid' };
     return [
       h('h3', null, T('cal.ctRatingTitle')),
       row(
@@ -1536,6 +1526,7 @@
   document.getElementById('lang').addEventListener('click', () => {
     lang = lang === 'fr' ? 'en' : 'fr';
     changed();
+    renderRefused(); // in the new language
   });
   document.getElementById('save').addEventListener('click', () => download('pvrouter-config.json', JSON.stringify(m, null, 2) + '\n', 'application/json'));
   document.getElementById('load').addEventListener('change', async (e) => {
@@ -1547,17 +1538,24 @@
       if (typeof data !== 'object' || data === null || !('formatVersion' in data)) throw new Error('not a save');
       m = M.normalize(data);
       activeFile = 0;
+      showRefused(false); // a good save: the message of a refused one goes
       changed();
     } catch (err) {
-      if (err.message === 'router') showRefused();
+      if (err.message === 'router') showRefused(true);
       else alert(T('loadError'));
     }
   });
   // a save of the other router: a message with the link, in place of the problems
-  function showRefused() {
+  let refusedShown = false;
+  function showRefused(shown) {
+    refusedShown = shown;
+    renderRefused();
+  }
+  function renderRefused() {
     const box = document.getElementById('refused');
+    if (!refusedShown) return box.replaceChildren();
     const [pre, post] = T('router.refused', { link: '' }).split('');
-    box.replaceChildren(pre, h('a', { href: threePhaseUrl }, T('router.three')), post, ' ', h('button', { type: 'button', onclick: () => box.replaceChildren() }, T('router.dismiss')));
+    box.replaceChildren(pre, h('a', { href: threePhaseUrl }, T('router.three')), post, ' ', h('button', { type: 'button', onclick: () => showRefused(false) }, T('router.dismiss')));
   }
   const restoreBtn = document.getElementById('restore');
   if (D.supported()) restoreBtn.addEventListener('click', restoreFromFolder);
@@ -1566,6 +1564,7 @@
     if (!confirm(T('resetConfirm'))) return;
     m = M.defaults();
     activeFile = 0;
+    showRefused(false);
     changed();
   });
 

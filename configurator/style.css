@@ -44,8 +44,7 @@ header h1 {
 
 .refused:not(:empty) {
   max-width: 70rem;
-  margin-inline: auto;
-  margin: 0 0 1rem;
+  margin: 0 auto 1rem;
   padding: 0.6rem 0.9rem;
   border: 1px solid #c0392b;
   border-radius: 6px;

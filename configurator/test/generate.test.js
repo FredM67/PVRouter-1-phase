@@ -203,7 +203,6 @@ test('calibration, old boards: the grid and the diverted power correct their own
   assert.strictEqual(r.power.toFixed(5), '0.05500');
   assert.strictEqual(r.diverted.toFixed(5), '0.04500');
   assert.strictEqual(r.voltage.toFixed(6), '0.812659');
-  assert.strictEqual(r.divertedError, null, 'old boards: corrected, not checked');
   assert.deepStrictEqual(G.calibrationLines(m), [
     'inline constexpr float f_powerCalOldBoard{ 0.05500F };',
     'inline constexpr float f_powerCalDivertedOldBoard{ 0.04500F };',
@@ -239,16 +238,34 @@ test('calibration, new board: f_powerCalPerAmp corrected, the CT ratings as ente
   assert.strictEqual(G.calibrationH(m), null, 'no CT rating on the old boards');
 });
 
-test('calibration, new board: the diverted power checks CT2, no CT2 line changes', () => {
-  const m = loaded('NEW', (m) => (m.calibration.diverted = { router: 500, meter: 450 }));
-  const r = M.calibrationResult(m);
-  assert.strictEqual(r.diverted, null, 'CT2 has no factor of its own');
-  assert.strictEqual((r.divertedError * 100).toFixed(1), '-10.0');
-  assert.strictEqual(G.calibrationH(m), null, 'nothing to write');
-  assert.ok(G.calibrationLines(m).includes('inline constexpr float f_ctRatingDiverted{ 50.0F };'));
-  // the error left after the grid correction, which CT2 shares (f_powerCalPerAmp)
-  m.calibration.power = { router: 1000, meter: 900 };
-  assert.strictEqual((M.calibrationResult(m).divertedError * 100).toFixed(1), '0.0');
+test('calibration, new board: the diverted power corrects f_ctRatingDiverted, net of the grid correction', () => {
+  // f_powerCalDiverted = f_powerCalPerAmp x f_ctRatingDiverted, and f_powerCalPerAmp takes the grid ratio
+  const m = loaded('NEW', (m) => {
+    m.calibration.power = { router: 1000, meter: 1100 };
+    m.calibration.diverted = { router: 500, meter: 450 };
+  });
+  assert.strictEqual(M.calibrationResult(m).diverted.toFixed(3), '40.909'); // 50 x 0.9 / 1.1
+  const value = '0.00315046';
+  assert.deepStrictEqual(G.calibrationLines(m), [
+    'inline constexpr float f_ctRating{ 50.0F };',
+    'inline constexpr float f_ctRatingDiverted{ 40.9F };',
+    `inline constexpr float f_powerCalPerAmp{ ${value}F };`,
+    'inline constexpr float f_voltageCalNewBoard{ 0.888065256F };',
+  ]);
+  const text = calibrationFile();
+  const out = G.calibrationH(m);
+  assert.strictEqual(out, withValue(withValue(text, 'f_ctRatingDiverted', '40.9F'), 'f_powerCalPerAmp', `${value}F`));
+  assert.strictEqual(changedLines(text, out).length, 2, 'every other byte untouched');
+  assert.strictEqual(M.calibrationValue(out, 'f_ctRating'), 50, 'CT1: never corrected');
+
+  // no grid reading: the diverted ratio alone
+  m.calibration.power = { router: null, meter: null };
+  assert.strictEqual(M.calibrationResult(m).diverted.toFixed(1), '45.0');
+  assert.strictEqual(G.calibrationH(m), withValue(text, 'f_ctRatingDiverted', '45.0F'));
+  // no current f_powerCalPerAmp: no grid correction either
+  m.calibration.power = { router: 1000, meter: 1100 };
+  m.calibration.powerCalPerAmp = null;
+  assert.strictEqual(M.calibrationResult(m).diverted.toFixed(1), '45.0');
 });
 
 test('calibration without CT2: no diverted reading, no CT2 line', () => {
@@ -259,7 +276,6 @@ test('calibration without CT2: no diverted reading, no CT2 line', () => {
     });
     const r = M.calibrationResult(m);
     assert.strictEqual(r.diverted, null, board);
-    assert.strictEqual(r.divertedError, null, board);
     assert.ok(!G.calibrationLines(m).some((l) => /Diverted/.test(l)), board);
     assert.strictEqual(G.calibrationH(m), null, board);
   }

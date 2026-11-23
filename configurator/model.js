@@ -234,14 +234,19 @@
     return t ? t.value : null;
   }
 
+  // The rated currents of the CTs, new board only. f_ctRating is what the user fitted, never
+  // corrected; f_ctRatingDiverted is CT2's value, corrected by the diverted reading.
+  const CT_RATING = { name: 'f_ctRating', key: 'ctRating', decimals: 1 };
+  const CT_RATING_DIVERTED = { name: 'f_ctRatingDiverted', key: 'ctRatingDiverted', decimals: 1 };
+
   // The values calibration corrects, for each board: calibration.h has a set per board, and the
   // firmware uses the one of PCB_VERSION (config_derived.h). New board: f_powerCal is
-  // f_powerCalPerAmp x f_ctRating for CT1 and f_powerCalPerAmp x f_ctRatingDiverted for CT2, so
-  // CT2 has no factor of its own there. The decimals are those of the shipped calibration.h.
+  // f_powerCalPerAmp x f_ctRating for CT1 and f_powerCalPerAmp x f_ctRatingDiverted for CT2.
+  // The decimals are those of the shipped calibration.h.
   const CAL_VALUES = {
     NEW: {
       power: { name: 'f_powerCalPerAmp', key: 'powerCalPerAmp', decimals: 8 },
-      diverted: null,
+      diverted: CT_RATING_DIVERTED,
       voltage: { name: 'f_voltageCalNewBoard', key: 'voltageCalNewBoard', decimals: 9 },
     },
     OLD: {
@@ -251,15 +256,11 @@
     },
   };
   const calValuesOf = (m) => (isOldBoard(m) ? CAL_VALUES.OLD : CAL_VALUES.NEW);
-  // The rated currents of the CTs, new board only: what the user fitted, never corrected
-  const CT_RATING = { name: 'f_ctRating', key: 'ctRating', decimals: 1 };
-  const CT_RATING_DIVERTED = { name: 'f_ctRatingDiverted', key: 'ctRatingDiverted', decimals: 1 };
   const ctRatingUsed = (m) => m.pcbVersion === 'NEW';
-  const ctRatingsOf = (m) => (ctRatingUsed(m) ? [CT_RATING, ...(m.divertedCtPresent ? [CT_RATING_DIVERTED] : [])] : []);
+  // the values entered as they are, never corrected: f_ctRating on the new board
+  const ctRatingsOf = (m) => (ctRatingUsed(m) ? [CT_RATING] : []);
   // in the order of calibration.h
   const CAL_NAMES = [CAL_VALUES.OLD.power, CAL_VALUES.OLD.diverted, CAL_VALUES.OLD.voltage, CT_RATING, CT_RATING_DIVERTED, CAL_VALUES.NEW.power, CAL_VALUES.NEW.voltage];
-  // On the new board, the CT2 check suggests looking at f_ctRatingDiverted from this error on
-  const CT2_CHECK_LIMIT = 0.05;
 
   // { powerCalOldBoard, powerCalDivertedOldBoard, voltageCalOldBoard, ctRating, ctRatingDiverted,
   //   powerCalPerAmp, voltageCalNewBoard }, or null when one is missing
@@ -277,24 +278,22 @@
   const readingRatio = ({ router, meter }) => (router > 0 && meter > 0 ? meter / router : null);
 
   // The corrected values: current x meter / router, for each reading with both values.
-  // { power, voltage, diverted, divertedError }:
+  // { power, voltage, diverted }:
   // - power, voltage: the new values of calValuesOf(m).power and .voltage;
-  // - diverted: the new f_powerCalDivertedOldBoard, old boards with CT2, else null;
-  // - divertedError: new board with CT2, the error of the diverted power left after the grid
-  //   correction (meter / corrected router - 1, -0.1 for -10 %), else null.
+  // - diverted: with CT2, the new value of calValuesOf(m).diverted, else null. New board:
+  //   f_ctRatingDiverted x kD / kGrid, as f_powerCalPerAmp, which CT2 shares, already takes the
+  //   grid ratio kGrid (1 when the grid correction does not apply).
   function calibrationResult(m) {
     const c = m.calibration;
     const cal = calValuesOf(m);
-    const fix = (current, reading) => {
+    const fix = (current, reading, shared = 1) => {
       const k = readingRatio(reading);
-      return current > 0 && k !== null ? current * k : current;
+      return current > 0 && k !== null ? (current * k) / shared : current;
     };
-    const ct2 = Boolean(m.divertedCtPresent);
-    const diverted = ct2 && cal.diverted ? fix(c[cal.diverted.key], c.diverted) : null;
-    let divertedError = null;
-    const kDiverted = readingRatio(c.diverted);
-    if (ct2 && !cal.diverted && kDiverted !== null) divertedError = kDiverted / (readingRatio(c.power) || 1) - 1;
-    return { power: fix(c[cal.power.key], c.power), voltage: fix(c[cal.voltage.key], c.voltage), diverted, divertedError };
+    const power = fix(c[cal.power.key], c.power);
+    const kGrid = isOldBoard(m) || !(c[cal.power.key] > 0) ? 1 : readingRatio(c.power) || 1;
+    const diverted = m.divertedCtPresent ? fix(c[cal.diverted.key], c.diverted, kGrid) : null;
+    return { power, voltage: fix(c[cal.voltage.key], c.voltage), diverted };
   }
 
   // ---- derived values, shared by the validator, the generator and the page ----
@@ -529,7 +528,6 @@
     ctRatingUsed,
     ctRatingsOf,
     CAL_NAMES,
-    CT2_CHECK_LIMIT,
     rotationChoices,
     rotationDelayShown,
     rotationDelayValid,

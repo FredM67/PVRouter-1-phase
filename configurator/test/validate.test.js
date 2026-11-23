@@ -142,7 +142,7 @@ const CASES = [
   ['warn.calReading', (m) => (m.calibrationMode = true) && (m.calibration.voltage = { router: 230, meter: 0 })],
   ['warn.calCtRating', (m) => (m.calibrationMode = true) && Object.assign(m.calibration, { file: 'x', ctRating: 0, ctRatingDiverted: 50 })],
   ['warn.calCtRating', (m) => (m.calibrationMode = true) && Object.assign(m.calibration, { file: 'x', ctRating: 50, ctRatingDiverted: null })],
-  ['warn.calCt2', (m) => (m.calibrationMode = true) && Object.assign(m.calibration, { powerCalPerAmp: 0.00286405, ctRatingDiverted: 50, diverted: { router: 500, meter: 450 } })],
+  ['warn.calCurrent', (m) => (m.calibrationMode = true) && Object.assign(m.calibration, { powerCalPerAmp: 0.00286405, diverted: { router: 500, meter: 450 } })],
 ];
 
 CASES.forEach(([key, change], i) => {
@@ -200,32 +200,19 @@ test('mk2Wifi: inputs on D5-D9 driven by the module are accepted', () => {
   assert.deepStrictEqual(V.validate(m), []);
 });
 
-// New board, calibration mode, the CT values in: the CT2 check from the diverted reading
-const ct2Check = (change) =>
-  keys(
-    variant((m) => {
-      m.calibrationMode = true;
-      Object.assign(m.calibration, { file: 'x', ctRating: 50, ctRatingDiverted: 50, powerCalPerAmp: 0.00286405 });
-      change(m);
-    })
-  ).filter((k) => k === 'warn.calCt2' || k === 'warn.calCtRating');
-
-test('calibration, new board: the CT2 check from 5 % of error left after the grid correction', () => {
-  assert.deepStrictEqual(ct2Check((m) => (m.calibration.diverted = { router: 500, meter: 476 })), [], '-4.8 %');
-  assert.deepStrictEqual(ct2Check((m) => (m.calibration.diverted = { router: 500, meter: 475 })), ['warn.calCt2'], '-5 %');
-  assert.deepStrictEqual(ct2Check((m) => (m.calibration.diverted = { router: 500, meter: 530 })), ['warn.calCt2'], '+6 %');
-  // the grid reads 10 % high too: corrected with f_powerCalPerAmp, CT2 included
-  assert.deepStrictEqual(
-    ct2Check((m) => Object.assign(m.calibration, { power: { router: 1000, meter: 900 }, diverted: { router: 500, meter: 450 } })),
-    []
-  );
-});
-
-test('calibration: no CT2 check on the old boards, nothing about CT2 without it', () => {
-  assert.deepStrictEqual(ct2Check((m) => (m.pcbVersion = 'OLD_SEG') && (m.calibration.diverted = { router: 500, meter: 450 })), []);
-  const without = (m) => (m.divertedCtPresent = false) && Object.assign(m.calibration, { ctRatingDiverted: null, diverted: { router: -500, meter: 450 } });
-  assert.deepStrictEqual(ct2Check(without), []);
-  assert.ok(!keys(variant((m) => (m.calibrationMode = true) && without(m))).includes('warn.calProbe'));
+test('calibration, new board: the diverted reading corrects f_ctRatingDiverted, its current value', () => {
+  const ct2 = (change) =>
+    keys(
+      variant((m) => {
+        m.calibrationMode = true;
+        Object.assign(m.calibration, { ctRating: 50, ctRatingDiverted: 50, diverted: { router: 500, meter: 450 } });
+        change(m);
+      })
+    ).filter((k) => k.startsWith('warn.cal') && k !== 'warn.calibration');
+  assert.deepStrictEqual(ct2(() => {}), [], 'f_powerCalPerAmp is not needed');
+  assert.deepStrictEqual(ct2((m) => (m.calibration.ctRatingDiverted = null)), ['warn.calCurrent']);
+  // without CT2: nothing about it
+  assert.deepStrictEqual(ct2((m) => (m.divertedCtPresent = false) && Object.assign(m.calibration, { file: 'x', ctRatingDiverted: null, diverted: { router: -500, meter: 450 } })), []);
 });
 
 test('calibration mode: the IoT rules and the mk2Wifi output warning do not apply', () => {

@@ -48,5 +48,9 @@ test('texts: single-phase page, YAML to come, calibration needs a load running b
     assert.ok(!/3-phase|triphas/i.test(I.t(lang, 'title')));
     assert.match(I.t(lang, 'cal.intro'), lang === 'en' ? /never switches/ : /ne commute jamais/);
   }
-  assert.ok(!/Leave empty/.test(I.t('en', 'cal.divertedCheckHelp')));
+  for (const lang of ['en', 'fr']) {
+    assert.match(I.t(lang, 'cal.divertedNewHelp'), /f_ctRatingDiverted/);
+    assert.ok(!/only a check|seulement une vérification/.test(I.t(lang, 'cal.intro')), lang);
+  }
+  assert.ok(!('cal.divertedCheckHelp' in I.STRINGS.en) && !('warn.calCt2' in I.STRINGS.en));
 });

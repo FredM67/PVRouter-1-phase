@@ -62,16 +62,12 @@
       };
       check(true, c.power, c[cal.power.key], 'P');
       check(false, c.voltage, c[cal.voltage.key], 'V');
-      // new board: CT2 has no factor of its own, it uses f_powerCalPerAmp
-      if (m.divertedCtPresent) check(true, c.diverted, c[(cal.diverted || cal.power).key], 'diverted');
+      // CT2's value: f_powerCalDivertedOldBoard, or f_ctRatingDiverted on the new board
+      if (m.divertedCtPresent) check(true, c.diverted, c[cal.diverted.key], 'diverted');
 
-      if (M.ctRatingUsed(m) && c.file)
-        for (const r of M.ctRatingsOf(m)) if (!(c[r.key] > 0)) warning('warn.calCtRating', 'calibration', { name: r.name });
-
-      // new board: the diverted reading only checks CT2, whose rating is never corrected
-      const { divertedError } = M.calibrationResult(m);
-      if (divertedError !== null && Math.abs(divertedError) >= M.CT2_CHECK_LIMIT - 1e-9)
-        warning('warn.calCt2', 'calibration', { error: (divertedError * 100).toFixed(1), name: M.CT_RATING_DIVERTED.name });
+      // the CT ratings of the new board, from a loaded calibration.h
+      const ratings = [...M.ctRatingsOf(m), ...(M.ctRatingUsed(m) && m.divertedCtPresent ? [M.CT_RATING_DIVERTED] : [])];
+      if (c.file) for (const r of ratings) if (!(c[r.key] > 0)) warning('warn.calCtRating', 'calibration', { name: r.name });
     }
 
     // ---- load map ----
