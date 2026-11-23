@@ -1,11 +1,19 @@
 # Configurator
 
-A static web page that writes the firmware configuration of the single-phase router
-(`Mk2_1phase_RFdatalog_temp`): `config.h`, `config_system.h` and `config_rf.h` for the router, `config.h` and `config_rf.h` for each remote unit
-(`RemoteLoadReceiver`), and the ESPHome YAML for the mk2Wifi module.
+A static web page that writes the firmware configuration of the **single-phase** router
+(`Mk2_1phase_RFdatalog_temp`): `config.h`, `config_system.h` and `config_rf.h` for the router, and `config.h` and
+`config_rf.h` for each remote unit (`RemoteLoadReceiver`). It does not write the ESPHome YAML for the mk2Wifi
+module yet: that is the next step (`yaml.js` and its tests are in the repository, not used).
 
-It started as a copy of the one of PVRouter-3-phase, adapted to this firmware: each configurator is
-tested against its own firmware only. It works offline: open `index.html` in a browser.
+It is kept in sync with `Mk2_1phase_RFdatalog_temp` by a byte-for-byte test (see below). It started as a copy
+of the configurator of PVRouter-3-phase and was adapted to this firmware; each configurator is tested against its
+own firmware only, and the fixes of the 3-phase one are carried over by hand when they apply. It works offline:
+open `index.html` in a browser.
+
+The Mk2PVRouter documentation site publishes it at
+<https://fredm67.github.io/Mk2PVRouter/configurateur-monophase/>. A link on the page switches to the
+3-phase configurator (<https://fredm67.github.io/Mk2PVRouter/configurateur/>), and the other way round; each
+refuses the saves of the other router (a save carries `router`: `1` here, `3` there).
 
 No build step, no dependency: plain scripts that also load in Node for the tests.
 

@@ -243,6 +243,25 @@ jobs:
           arduino-cli lib install RFM69_LowPowerLab
           arduino-cli compile --fqbn arduino:avr:uno --warnings default             --build-property compiler.cpp.extra_flags=-std=gnu++17 RemoteLoadReceiver
 
+  # The configurator (configurator/, published by the Mk2PVRouter documentation): its default choices must give
+  # back the shipped config files, and the files it generates must build and be clang-format clean.
+  configurator:
+    name: Configurator
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup-platformio
+
+      - name: Unit tests
+        run: node --test configurator/test/*.test.js
+
+      - name: Install clang-format
+        run: pip install clang-format==18.1.8
+
+      - name: Build the presets
+        run: bash configurator/test/compile-presets.sh
+
   # The production firmware on a simulated single-phase grid (sim/README.md): regulation, load
   # priorities, diverted energy, ISR timing and switching instants, no hardware needed.
   grid-sim:
@@ -378,11 +397,11 @@ jobs:
           path: sim/out/
 
   # GitHub Pages (https://fredm67.github.io/PVRouter-1-phase/): each push to dev publishes the
-  # landing page and the size and speed history (pages/), and adds the flash and RAM of every
-  # build and the embedded benchmarks to bench/history.json (scripts/ci/pages_update.py). Failed
-  # embedded tests do not hold back the sizes: the entry then has no speed. The doc (doc/) is
-  # deployed by doxygen-gh-pages.yml, in the same concurrency group. Regressions are reported on
-  # pull requests, by the pr-report job.
+  # landing page and the size and speed history (pages/), the configurator as a preview
+  # (configurator/), and adds the flash and RAM of every build and the embedded benchmarks to
+  # bench/history.json (scripts/ci/pages_update.py). Failed embedded tests do not hold back the
+  # sizes: the entry then has no speed. The doc (doc/) is deployed by doxygen-gh-pages.yml, in
+  # the same concurrency group. Regressions are reported on pull requests, by the pr-report job.
   pages:
     name: GitHub Pages
     needs: [ build, test-embedded ]

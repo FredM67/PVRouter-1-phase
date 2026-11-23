@@ -1,0 +1,14 @@
+{
+  "router": 1,
+  "pcbVersion": "OLD_SEG",
+  "displayType": "SEG_HW",
+  "serialOutput": "HumanReadable",
+  "loads": [
+    { "type": "local", "pin": 2 },
+    { "type": "local", "pin": 3 }
+  ],
+  "priorities": [1, 0],
+  "overrides": { "enabled": true, "list": [{ "pin": 4, "wifi": false, "targets": "ALL_LOADS" }] },
+  "antiCreepLimit": 10,
+  "displayShutdownInHours": 4
+}

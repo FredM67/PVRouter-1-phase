@@ -1,0 +1,21 @@
+{
+  "router": 1,
+  "pcbVersion": "OLD_OLED",
+  "displayType": "OLED",
+  "serialOutput": "HumanReadable",
+  "loads": [
+    { "type": "local", "pin": 5 },
+    { "type": "local", "pin": 6 }
+  ],
+  "priorities": [0, 1],
+  "divertedCtPresent": true,
+  "temperature": {
+    "mode": "router",
+    "pin": 3,
+    "sensors": [
+      { "address": "28BE416B090000A4", "name": "" },
+      { "address": "281BD76A090000B7", "name": "" }
+    ]
+  },
+  "watchdog": { "enabled": true, "pin": 13 }
+}
