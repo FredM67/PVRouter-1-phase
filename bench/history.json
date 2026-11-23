@@ -170,6 +170,63 @@
     "fastdivision: divu10(12345) per call": 41.01,
     "fastdivision: divmod10(12345678) per call": 130.05
    }
+  },
+  {
+   "commit": "4186c5dbda6a345b72a05e519af5f5d1e80b6805",
+   "date": "2026-11-23T19:58:19+01:00",
+   "message": "feat: configurator for the single-phase router (#33)\n\n* docs: design of the single-phase configurator\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: plan of the single-phase configurator\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* feat: RemoteLoadReceiver in this repository, built in CI\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* feat: configurator, copied from PVRouter-3-phase; its defaults give back the single-phase config files\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* feat(configurator): the three single-phase boards, the display and their pins\n\n- model: displayPins() (display_core.h pinsOf(), A0..A5 as 14..19),\n  displayTypesOf(), mk2wifiAvailable() (NEW only); a new load avoids the\n  display's pins.\n- checks, as validation.h: the 7-segment display on OLD_SEG only, the OLED\n  not on OLD_SEG, SEG with the RF chip, a pin the display takes (on the\n  setting that uses it); mk2Wifi refused on the old boards; unknown display.\n- page: the display select next to the board, with the types the board\n  takes; the display's pins not offered; mk2Wifi and the module's probes\n  with NEW only; the board's help lists the three boards; EN and FR texts.\n- generate: the shipped single-load notes only for one local load on pin 5.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* feat(configurator): CT2, the diverted energy\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* feat(configurator): calibration helper for the single-phase boards and CT2\n\nThe helper reads and rewrites the scalars of the single-phase calibration.h,\none set per board:\n- OLD_SEG, OLD_OLED: f_powerCalOldBoard, f_powerCalDivertedOldBoard and\n  f_voltageCalOldBoard, each corrected by its reading (P:, diverted, V:);\n- NEW: f_ctRating and f_ctRatingDiverted as entered, f_powerCalPerAmp and\n  f_voltageCalNewBoard corrected. CT2 has no factor of its own there: the\n  diverted reading is a check, and from 5 % of error left after the grid\n  correction the page suggests checking f_ctRatingDiverted.\n\nWithout CT2, no diverted reading and no CT2 line. calibrationArray becomes\ncalibrationToken / calibrationValue; a save with per-phase arrays loads\nwithout them.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* feat(configurator): single-phase page, switch to the 3-phase one, saves of the other router refused\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* feat(configurator): CT2 on the new board corrects f_ctRatingDiverted\n\nAs the router's Readme says (calibration, step 4): on the new board the\ndiverted reading corrects f_ctRatingDiverted, net of the grid correction\nthat f_powerCalPerAmp, shared by CT2, already takes:\n  new f_ctRatingDiverted = old x kD / kGrid\nwith kGrid = 1 when the grid correction does not apply. f_ctRating is still\nnever corrected. The CT2 check (divertedError, warn.calCt2) goes.\n\nAlso, from the review of the single-phase page: the message of a refused\nsave goes after a good load or a reset, follows a language change, and its\nbox is centred.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* fix(configurator): CT ratings written with 3 decimals\n\nf_ctRatingDiverted is now a corrected value, and f_ctRating a typed one\nsuch as 4.44 (666 / 150 ohms): with 1 decimal, the rounding could reach\n1 %, as large as the corrections. Both are written with 3 decimals, on\nthe page and in calibration.h. A value left unchanged, or giving the same\ntext, keeps the bytes of the file (50.0F stays 50.0F).\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* feat(configurator): single-phase presets, CI and Pages preview\n\nFive presets (old boards with their displays, remote units with relays and dual tariff,\nmk2Wifi inputs, 60 Hz), a Configurator CI job, the configurator preview in the Pages job,\nthe READMEs, landing page and CHANGELOG, and the shipped config.h pointing to the\nsingle-phase page.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* fix(configurator): final review — board change keeps choices, own storage key, ...\n\n- Changing the board no longer drops the display, mk2Wifi or esp temperature: the\n  errors point at them.\n- Own localStorage keys (pvrouter-configurator-1p, -1p-dev), distinct from the\n  3-phase pages on the same origin.\n- config.h: no 3-phase \"D5, D6 and D7\" note for other load maps.\n- The anti-creep field stays visible while it holds an error.\n- README: the 3-phase refusal of saves is still to come.\n- Spec: CT2 on the new board corrects f_ctRatingDiverted.\n- app.js: U+0001 written as an escape.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* fix(configurator): pin uses named in the page's language\n\nThe pin errors named their users in English (\"load 1\", \"temperature\"),\nin French too. The validator now passes keys, and t() renders them, so a\nFrench page reads « charge 1 », « sondes de température ».\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* fix(configurator): pin lists no longer offer the RF chip's pins\n\nWith the RFM69 present, D2 and D10 to D13 were offered and then refused\n(err.rfPin). M.offeredPins() now leaves them out, as the display's pins; a\npin already chosen stays, with the error that says why.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* fix(configurator): CT ratings without trailing zeros, 50.0F stays 50.0F\n\nThe CT ratings were written with 3 decimals even when round (50.000F where\ncalibration.h has 50.0F). Their trailing zeros are now dropped, one decimal\nkept: 4.44F, 40.909F, 50.0F. The page's preview uses the same format.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* style: receiver job lines split again, CHANGELOG entries wrapped\n\nThe copy of the receiver job had lost its line continuations. The new\nCHANGELOG entries and a CI comment are wrapped at 100 columns, as the rest.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/4186c5dbda6a345b72a05e519af5f5d1e80b6805",
+   "sizes": {
+    "basic": {
+     "flash": 9984,
+     "ram": 386
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 11514,
+     "ram": 425
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 22856,
+     "ram": 852
+    },
+    "basic, NEW, OLED": {
+     "flash": 22380,
+     "ram": 849
+    },
+    "basic, remote loads": {
+     "flash": 14628,
+     "ram": 495
+    },
+    "basic, IoT": {
+     "flash": 9984,
+     "ram": 386
+    },
+    "basic, HumanReadable": {
+     "flash": 9870,
+     "ram": 366
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
   }
  ]
 }
