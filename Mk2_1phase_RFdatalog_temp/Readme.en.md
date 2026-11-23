@@ -574,7 +574,7 @@ inline constexpr uint8_t NETWORK_ID{ 210 };               // Network ID (1-255)
 
 ### Remote receiver configuration
 
-The **RemoteLoadReceiver** sketch is in the `RemoteLoadReceiver/` folder of [PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase/tree/main/RemoteLoadReceiver): the single-phase router sends the same frames. It needs no modification to support several units: build and upload it once per unit, changing only `REMOTE_NODE_ID` and the load list.
+The **RemoteLoadReceiver** sketch is in the `RemoteLoadReceiver/` folder of this repository ([RemoteLoadReceiver](../RemoteLoadReceiver/)): the single-phase router sends the same frames. It needs no modification to support several units: build and upload it once per unit, changing only `REMOTE_NODE_ID` and the load list.
 
 **Minimum configuration (in receiver's config_rf.h):**
 

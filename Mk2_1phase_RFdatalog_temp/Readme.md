@@ -582,7 +582,7 @@ inline constexpr uint8_t NETWORK_ID{ 210 };               // ID du réseau (1-25
 
 ### Configuration du récepteur distant
 
-Le sketch **RemoteLoadReceiver** est dans le dossier `RemoteLoadReceiver/` de [PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase/tree/main/RemoteLoadReceiver) : le routeur monophasé envoie les mêmes trames. Il n’a besoin d'aucune modification pour gérer plusieurs unités : compilez-le et téléversez-le une fois par unité, en ne changeant que `REMOTE_NODE_ID` et la liste des charges.
+Le sketch **RemoteLoadReceiver** est dans le dossier `RemoteLoadReceiver/` de ce dépôt ([RemoteLoadReceiver](../RemoteLoadReceiver/)) : le routeur monophasé envoie les mêmes trames. Il n’a besoin d'aucune modification pour gérer plusieurs unités : compilez-le et téléversez-le une fois par unité, en ne changeant que `REMOTE_NODE_ID` et la liste des charges.
 
 **Configuration minimale (dans config_rf.h du récepteur) :**
 

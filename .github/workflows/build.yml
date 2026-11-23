@@ -219,6 +219,30 @@ jobs:
       run: |
         pio run --project-dir Mk2_fasterControl_Full
 
+  # The remote load receiver as the Arduino IDE builds it: only the files of its folder, in C++17.
+  # utils_pins.h and utils_bits.h are copies of the router's, since the IDE sees nothing else.
+  remote-load-receiver:
+    name: Remote Load Receiver (Arduino CLI)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: The receiver's copies match the router's files
+        run: |
+          for f in utils_pins.h utils_bits.h; do
+            diff <(grep -v '@date' Mk2_1phase_RFdatalog_temp/$f) <(grep -v '@date' RemoteLoadReceiver/$f)               || { echo "::error file=RemoteLoadReceiver/$f::out of date, copy Mk2_1phase_RFdatalog_temp/$f here"; exit 1; }
+          done
+
+      # arduino-cli directly: arduino/compile-sketches pins a Python that newer runners lack.
+      - uses: arduino/setup-arduino-cli@v2
+
+      - name: Build with the Arduino CLI
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+          arduino-cli lib install RFM69_LowPowerLab
+          arduino-cli compile --fqbn arduino:avr:uno --warnings default             --build-property compiler.cpp.extra_flags=-std=gnu++17 RemoteLoadReceiver
+
   # The production firmware on a simulated single-phase grid (sim/README.md): regulation, load
   # priorities, diverted energy, ISR timing and switching instants, no hardware needed.
   grid-sim:

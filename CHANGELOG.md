@@ -77,6 +77,7 @@ shipped `config.h`:
   `Mk2_1phase_RFdatalog_temp` (`doc/`). Flash and RAM badges in the READMEs.
 - **NOTICE:** where the code comes from, the third-party code and the libraries used; the files
   that hold your settings are yours.
+- **RemoteLoadReceiver** is now in this repository (`RemoteLoadReceiver/`, copied from PVRouter-3-phase), built in CI; the READMEs link to it.
 
 ### Changed
 
