@@ -15,7 +15,7 @@
 <area shape="rect" id="Node000026" href="$embedded_2test__mult__asm__perf_2test__main_8cpp.html" title="Performance benchmarks for assembly multiplication functions." alt="" coords="2714,98,2936,160"/>
 <area shape="poly" id="edge56_Node000001_Node000026" title=" " alt="" coords="2357,40,2520,64,2703,95,2716,100,2711,100,2702,101,2519,69,2357,45"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1984,480,1910,530,1908,525,1979,481"/>
-<area shape="rect" id="Node000004" href="$native_2test__ct__filter_2test__main_8cpp.html" title="Native tests for ct_filter.h: the CT1 filter, in fixed point." alt="" coords="1988,520,2164,581"/>
+<area shape="rect" id="Node000004" href="$native_2test__ct__filter_2test__main_8cpp.html" title="Native tests for ct_filter.h: the CT filter, in fixed point." alt="" coords="1988,520,2164,581"/>
 <area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="2045,483,2063,521,2059,518,2043,488"/>
 <area shape="rect" id="Node000005" href="$validation_8h.html" title="Compile&#45;time validations." alt="" coords="760,528,936,573"/>
 <area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="1920,462,1825,474,1512,499,1199,522,937,544,936,539,1198,517,1512,494,1825,469,1925,462"/>

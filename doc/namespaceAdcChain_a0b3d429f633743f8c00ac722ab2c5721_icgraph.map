@@ -1,9 +1,16 @@
 <map id="AdcChain::channelAfterNext" name="AdcChain::channelAfterNext">
-<area shape="rect" id="Node000001" title="The channel two steps after another one in the chain V &#45;&gt; I_GRID &#45;&gt; I_DIVERTED." alt="" coords="564,5,768,33"/>
-<area shape="rect" id="Node000002" href="$namespaceAdcChain.html#a6d2f12ba9de9b28a2c36a59b29648c80" title="The ADMUX value the interrupt writes after the conversion of a channel." alt="" coords="302,5,516,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="546,19,517,22,517,17,551,19"/>
-<area shape="rect" id="Node000003" href="$native_2test__adc__chain_2test__main_8cpp.html#adbd8519294ba2d17c4899393d2a00753" title=" " alt="" coords="108,5,254,33"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="284,19,254,22,254,17,289,19"/>
-<area shape="rect" id="Node000004" href="$native_2test__adc__chain_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,5,60,33"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="89,20,60,22,60,17,94,18"/>
+<area shape="rect" id="Node000001" title="The channel two steps after another one in the chain V &#45;&gt; I_GRID &#45;&gt; I_DIVERTED." alt="" coords="615,76,819,103"/>
+<area shape="rect" id="Node000002" href="$namespaceAdcChain.html#a6d2f12ba9de9b28a2c36a59b29648c80" title="The ADMUX value the interrupt writes after the conversion of a channel." alt="" coords="353,76,567,103"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="597,90,568,92,567,87,602,89"/>
+<area shape="rect" id="Node000003" href="$native_2test__adc__chain_2test__main_8cpp.html#a966cc06df498917065b27d6b18629775" title=" " alt="" coords="108,5,305,67"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="621,73,567,67,430,53,306,44,305,39,431,48,568,62,627,72"/>
+<area shape="rect" id="Node000006" href="$native_2test__adc__chain_2test__main_8cpp.html#a8285378a9512cb896dfdb1bf6f8fe834" title=" " alt="" coords="390,130,530,174"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="645,107,531,138,530,133,640,108"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="374,72,305,60,305,54,379,72"/>
+<area shape="rect" id="Node000005" href="$native_2test__adc__chain_2test__main_8cpp.html#adbd8519294ba2d17c4899393d2a00753" title=" " alt="" coords="133,92,280,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="335,98,280,104,280,98,340,97"/>
+<area shape="rect" id="Node000004" href="$native_2test__adc__chain_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,92,60,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="112,75,61,97,59,93,115,71"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="116,107,61,108,60,103,120,104"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="372,154,248,151,177,144,107,133,60,119,60,114,108,128,178,139,248,146,378,153"/>
 </map>

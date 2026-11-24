@@ -17,8 +17,9 @@ var searchData=
   ['testname_14',['testName',['../structTestStats.html#a4e5d7c23909cc8b99d97a64ae0e9880c',1,'TestStats']]],
   ['testrelays_15',['testRelays',['../embedded_2test__utils__relay_2test__main_8cpp.html#a74b51f3e2c4893613e30a0746db95480',1,'test_main.cpp']]],
   ['text_16',['text',['../classCapturePrint.html#a8a6218383c2ed5031c71705249362492',1,'CapturePrint::text'],['../classFramePrint.html#a68ceff0e949df8685a7c2068970448a4',1,'FramePrint::text'],['../structStreamed.html#a776d0b9b379d7498a48f56de67987af5',1,'Streamed::text']]],
-  ['total_17',['total',['../classDivertedEnergy.html#a35a3ee04cd51e25dde4ba61793900397',1,'DivertedEnergy']]],
-  ['tx_5fdata_18',['tx_data',['../structRemoteUnitState.html#a2a63cd7c63c944acd0eb8dcd19483adf',1,'RemoteUnitState::tx_data'],['../processing_8h.html#a8ec565b9a7fd6f95b6e94dec25032ed5',1,'tx_data:&#160;processing.h']]],
-  ['type_5fof_5fdisplay_19',['TYPE_OF_DISPLAY',['../config_8h.html#aafcac713aa3c8d41ebacbf9cd1acc35b',1,'config.h']]],
-  ['typicalcal_20',['typicalCal',['../native_2test__energy__bucket_2test__main_8cpp.html#a367cef6ae57864a128f838455833118a',1,'test_main.cpp']]]
+  ['tolerance_17',['TOLERANCE',['../native_2test__ct__filter_2test__main_8cpp.html#a3b61e96fe7ebffbff80f90df8e76fb6d',1,'test_main.cpp']]],
+  ['total_18',['total',['../classDivertedEnergy.html#a35a3ee04cd51e25dde4ba61793900397',1,'DivertedEnergy']]],
+  ['tx_5fdata_19',['tx_data',['../structRemoteUnitState.html#a2a63cd7c63c944acd0eb8dcd19483adf',1,'RemoteUnitState::tx_data'],['../processing_8h.html#a8ec565b9a7fd6f95b6e94dec25032ed5',1,'tx_data:&#160;processing.h']]],
+  ['type_5fof_5fdisplay_20',['TYPE_OF_DISPLAY',['../config_8h.html#aafcac713aa3c8d41ebacbf9cd1acc35b',1,'config.h']]],
+  ['typicalcal_21',['typicalCal',['../native_2test__energy__bucket_2test__main_8cpp.html#a367cef6ae57864a128f838455833118a',1,'test_main.cpp']]]
 ];
