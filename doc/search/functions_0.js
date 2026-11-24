@@ -23,5 +23,6 @@ var searchData=
   ['assertsameasreference_20',['assertSameAsReference',['../native_2test__teleinfo_2test__main_8cpp.html#a93d29d98543146f8457ae77079e5a41d',1,'test_main.cpp']]],
   ['availableforwrite_21',['availableForWrite',['../classCapturePrint.html#a814feef980c3c487fabc15158adbac0a',1,'CapturePrint']]],
   ['average_22',['average',['../structCycles.html#a87b29654ad420a8bb7b0ce7a04543abc',1,'Cycles']]],
-  ['averageover_23',['averageOver',['../namespaceDivertedPower.html#ad5d547d5958e42a9c969e36ae4d7f701',1,'DivertedPower']]]
+  ['averageover_23',['averageOver',['../namespaceDivertedPower.html#ad5d547d5958e42a9c969e36ae4d7f701',1,'DivertedPower']]],
+  ['averagepower_24',['averagePower',['../namespaceDatalog.html#ae6899e75179f0cbe5f4bfbbf4de61a45',1,'Datalog']]]
 ];

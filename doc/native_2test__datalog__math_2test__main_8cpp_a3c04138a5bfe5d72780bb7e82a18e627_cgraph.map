@@ -1,118 +1,136 @@
 <map id="main" name="main">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,641,60,669"/>
-<area shape="rect" id="Node000002" href="$native_2test__datalog__math_2test__main_8cpp.html#a1a95cf9cb6097b2aa13a7d4c13876d84" title="Every rounding boundary of every root: round(sqrt(x)) changes from r to r + 1 between r^2 + r and r^2..." alt="" coords="133,332,279,377"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="31,640,34,594,44,529,66,458,84,425,106,394,121,382,119,387,110,398,88,427,71,460,49,531,39,595,36,641"/>
-<area shape="rect" id="Node000005" href="$native_2test__datalog__math_2test__main_8cpp.html#a62639b67fb026dc90d2b67c1e7f31129" title=" " alt="" coords="123,142,288,170"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="31,641,34,549,45,410,54,338,67,272,84,217,106,180,112,176,109,181,110,183,89,219,72,273,60,339,50,411,40,549,37,641"/>
-<area shape="rect" id="Node000006" href="$native_2test__datalog__math_2test__main_8cpp.html#a596162fe63abc92ae448fdf35de07862" title="2 million values over the whole 32&#45;bit range, against sqrt() in double precision (exact here)." alt="" coords="133,194,278,238"/>
-<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="32,641,38,561,50,444,72,328,87,281,106,249,121,237,119,242,110,252,92,283,77,329,56,445,43,562,37,641"/>
-<area shape="rect" id="Node000007" href="$native_2test__datalog__math_2test__main_8cpp.html#a936de034d5bd89732f5f519af8aba799" title=" " alt="" coords="115,263,297,308"/>
-<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="33,640,40,573,55,477,76,382,90,345,106,319,111,315,109,320,110,322,95,347,81,384,60,478,45,573,38,641"/>
-<area shape="rect" id="Node000008" href="$native_2test__datalog__math_2test__main_8cpp.html#a1c461334033550878986251f956644ad" title=" " alt="" coords="352,787,521,832"/>
-<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="35,666,43,701,56,743,77,784,91,802,109,817,137,831,167,841,231,849,294,845,355,835,350,838,295,850,231,854,166,846,135,836,106,821,88,806,72,787,51,744,38,702,35,672"/>
-<area shape="rect" id="Node000014" href="$native_2test__datalog__math_2test__main_8cpp.html#a6ac8c95fea0d385112f1ee5aa6d4b482" title=" " alt="" coords="608,108,774,153"/>
-<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="31,640,31,538,38,382,46,301,60,228,79,168,92,145,106,129,142,109,192,97,253,92,321,91,465,99,595,115,590,118,464,104,321,96,253,97,193,103,143,114,109,133,96,149,84,170,65,229,52,302,43,383,36,538,36,640"/>
-<area shape="rect" id="Node000016" href="$native_2test__datalog__math_2test__main_8cpp.html#ae55363a1531796c3f85a781ef3e67ba5" title=" " alt="" coords="603,46,779,74"/>
-<area shape="poly" id="edge21_Node000001_Node000016" title=" " alt="" coords="32,640,40,525,55,350,77,183,90,124,106,92,134,68,165,49,233,22,305,7,379,3,451,6,519,15,632,40,627,43,518,20,451,11,379,8,305,12,234,27,168,54,138,73,110,95,95,125,82,184,60,350,45,525,37,640"/>
-<area shape="rect" id="Node000017" href="$native_2test__datalog__math_2test__main_8cpp.html#aea6e42e807a4b058b8203b454a476a21" title=" " alt="" coords="135,762,276,806"/>
-<area shape="poly" id="edge23_Node000001_Node000017" title=" " alt="" coords="41,666,70,707,88,729,109,747,124,757,119,759,106,752,84,732,65,710,42,672"/>
-<area shape="rect" id="Node000020" href="$native_2test__datalog__math_2test__main_8cpp.html#a01e17a2fc8513f2bc000122e1021fc21" title=" " alt="" coords="117,692,295,737"/>
-<area shape="poly" id="edge28_Node000001_Node000020" title=" " alt="" coords="59,662,127,685,123,688,61,666"/>
-<area shape="rect" id="Node000022" href="$native_2test__datalog__math_2test__main_8cpp.html#ad615f0fd21c9a28543ca5b7ac0c42280" title=" " alt="" coords="360,478,513,506"/>
-<area shape="poly" id="edge32_Node000001_Node000022" title=" " alt="" coords="31,640,33,599,43,543,52,513,66,485,83,459,106,438,142,419,181,411,221,410,262,416,339,440,401,469,396,471,337,444,261,421,221,415,182,416,144,424,109,442,87,463,70,487,57,515,48,544,38,599,36,641"/>
-<area shape="rect" id="Node000026" href="$native_2test__datalog__math_2test__main_8cpp.html#ad04da3b136338e85aaf517de4bce1c3c" title=" " alt="" coords="113,882,298,926"/>
-<area shape="poly" id="edge38_Node000001_Node000026" title=" " alt="" coords="35,666,43,706,55,757,76,812,91,838,110,861,122,872,117,874,106,865,87,841,72,815,50,759,38,707,35,672"/>
-<area shape="rect" id="Node000029" href="$native_2test__datalog__math_2test__main_8cpp.html#ad30fa6b75976b4414fe06c2b879385b8" title=" " alt="" coords="117,522,294,566"/>
-<area shape="poly" id="edge42_Node000001_Node000029" title=" " alt="" coords="44,639,71,611,106,583,130,571,127,576,109,588,75,615,49,642"/>
-<area shape="rect" id="Node000031" href="$native_2test__datalog__math_2test__main_8cpp.html#a22f10cd5da84e299cd5f9888b7ffe933" title=" " alt="" coords="117,452,295,497"/>
-<area shape="poly" id="edge47_Node000001_Node000031" title=" " alt="" coords="35,640,57,577,78,540,106,508,113,503,111,508,110,511,82,543,62,579,40,641"/>
-<area shape="rect" id="Node000032" href="$native_2test__datalog__math_2test__main_8cpp.html#a51023150d9622eab57e3ea3cc9ce3d24" title=" " alt="" coords="366,582,507,610"/>
-<area shape="poly" id="edge49_Node000001_Node000032" title=" " alt="" coords="58,644,107,631,235,611,353,600,349,604,235,616,108,636,62,648"/>
-<area shape="rect" id="Node000033" href="$native_2test__datalog__math_2test__main_8cpp.html#af9b5108c4d1521ec80c69999e3f3cebd" title=" " alt="" coords="360,634,514,662"/>
-<area shape="poly" id="edge52_Node000001_Node000033" title=" " alt="" coords="59,652,345,647,342,652,61,657"/>
-<area shape="rect" id="Node000034" href="$native_2test__datalog__math_2test__main_8cpp.html#a578ea20110b03dfeaaa1650ede366523" title=" " alt="" coords="356,1027,517,1088"/>
-<area shape="poly" id="edge55_Node000001_Node000034" title=" " alt="" coords="35,666,44,738,58,837,79,933,93,970,109,994,139,1006,197,1019,343,1044,339,1047,196,1025,138,1011,106,998,89,972,74,934,52,838,39,739,35,672"/>
-<area shape="rect" id="Node000037" href="$native_2test__datalog__math_2test__main_8cpp.html#ab5a7b02b8adb8d9557265033571b8146" title=" " alt="" coords="366,1112,507,1157"/>
-<area shape="poly" id="edge59_Node000001_Node000037" title=" " alt="" coords="35,666,43,746,55,859,77,970,92,1013,110,1042,132,1062,153,1073,175,1078,197,1080,246,1080,274,1082,305,1088,359,1107,354,1108,303,1093,273,1087,246,1085,197,1085,174,1084,151,1078,129,1066,106,1046,87,1016,72,972,50,860,37,747,34,672"/>
-<area shape="rect" id="Node000038" href="$native_2test__datalog__math_2test__main_8cpp.html#a52da7c35d23613031adcd8302d3d3d96" title=" " alt="" coords="112,1242,300,1286"/>
-<area shape="poly" id="edge62_Node000001_Node000038" title=" " alt="" coords="34,666,38,778,46,945,55,1033,68,1115,86,1182,97,1208,110,1228,112,1232,106,1231,106,1231,93,1210,81,1184,63,1116,50,1034,41,946,32,778,34,672"/>
-<area shape="rect" id="Node000041" href="$native_2test__datalog__math_2test__main_8cpp.html#ad1d9ca0e83f814162007f1bb6e6774c2" title=" " alt="" coords="108,1103,304,1148"/>
-<area shape="poly" id="edge67_Node000001_Node000041" title=" " alt="" coords="35,667,43,753,55,876,77,1000,92,1049,110,1083,119,1093,114,1094,106,1086,87,1051,72,1001,50,877,37,753,34,672"/>
-<area shape="rect" id="Node000042" href="$native_2test__datalog__math_2test__main_8cpp.html#ab91d88e52653d6cc84fc0bec8f5e5ffe" title=" " alt="" coords="111,1172,300,1217"/>
-<area shape="poly" id="edge69_Node000001_Node000042" title=" " alt="" coords="34,667,40,766,50,913,59,990,72,1060,89,1119,110,1159,112,1162,107,1162,105,1162,84,1121,67,1062,54,991,45,914,34,767,34,672"/>
-<area shape="rect" id="Node000043" href="$native_2test__datalog__math_2test__main_8cpp.html#a25f4c01ffcf91fb7c58c5ce958fed656" title=" " alt="" coords="358,958,515,1002"/>
-<area shape="poly" id="edge71_Node000001_Node000043" title=" " alt="" coords="35,667,46,728,61,809,82,888,95,917,110,937,134,955,162,969,222,987,284,993,345,993,340,995,284,998,221,992,160,974,132,960,106,941,91,920,77,889,56,811,41,729,36,672"/>
-<area shape="rect" id="Node000003" href="$namespaceDatalog.html#a5c242aed104cfb700b6fc57675ae10b9" title="Integer square root, rounded to the nearest integer." alt="" coords="382,202,491,230"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="277,330,303,318,361,279,411,238,408,243,364,283,305,322,281,334"/>
-<area shape="rect" id="Node000004" href="$namespaceDatalog.html#a2c37cce8c19e81c1cb2f1f7e95237446" title="Square root, rounded to the nearest integer, of the value or of the value normalised." alt="" coords="1080,165,1234,193"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="491,211,1066,182,1063,186,493,216"/>
-<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="261,168,305,179,370,197,365,200,303,184,264,173"/>
-<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="277,214,368,214,364,218,280,218"/>
-<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="281,261,375,233,371,237,284,265"/>
-<area shape="rect" id="Node000009" href="$namespaceEnergy.html#a3d00254b7d0089c630b2f863f97a7abe" title="Largest shift that keeps every calibration value within 16 bits." alt="" coords="861,840,1032,867"/>
-<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="521,814,848,843,843,846,522,819"/>
-<area shape="rect" id="Node000012" href="$namespaceDatalog.html#a7704334869b4be2aef18346b7c201ce5" title="The power calibration in fixed point, for watts(), built at compile time." alt="" coords="595,966,787,994"/>
-<area shape="poly" id="edge14_Node000008_Node000012" title=" " alt="" coords="461,830,525,893,571,935,622,961,617,961,568,940,521,897,460,835"/>
-<area shape="rect" id="Node000013" href="$namespaceEnergy.html#a44bfabeeca8fe61512b44b54519707f5" title="A calibration value as a 16&#45;bit fixed&#45;point constant." alt="" coords="886,788,1006,815"/>
-<area shape="poly" id="edge17_Node000008_Node000013" title=" " alt="" coords="521,806,873,801,869,804,522,811"/>
-<area shape="rect" id="Node000010" href="$namespaceEnergy.html#ab6b5951d040a1d99b3f1f1deecc2da77" title="Largest of the calibration values." alt="" coords="1090,814,1224,842"/>
-<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="1032,841,1078,837,1073,839,1033,846"/>
-<area shape="rect" id="Node000011" href="$namespaceEnergy.html#a8b5cc27275819b07610576e86d2f009b" title="Largest shift that keeps a value within 16 bits once scaled by 2^shift." alt="" coords="1096,749,1218,777"/>
-<area shape="poly" id="edge13_Node000009_Node000011" title=" " alt="" coords="997,837,1031,824,1113,785,1118,783,1033,829,999,842"/>
-<area shape="poly" id="edge15_Node000012_Node000009" title=" " alt="" coords="740,963,812,935,865,905,911,878,916,875,868,910,814,940,742,968"/>
-<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="762,963,788,952,811,935,822,922,828,909,834,882,839,854,847,840,859,826,870,821,874,818,862,830,851,843,844,856,839,883,834,911,826,925,814,939,790,956,764,968"/>
-<area shape="rect" id="Node000015" href="$namespaceDatalog.html#afd0552388cd9274ac59cb71b8d460df0" title="The square root of a mean square, with as many fractional bits as fit." alt="" coords="872,132,1020,159"/>
-<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="774,133,859,139,854,142,776,138"/>
-<area shape="poly" id="edge20_Node000015_Node000004" title=" " alt="" coords="1020,155,1067,163,1062,165,1022,160"/>
-<area shape="poly" id="edge22_Node000016_Node000015" title=" " alt="" coords="743,72,814,94,897,125,892,126,812,99,744,77"/>
-<area shape="rect" id="Node000018" href="$namespaceDatalog.html#a976dddd63a52b0e01e42b764fb416928" title="Check that the voltage calibration values can be represented." alt="" coords="569,736,813,763"/>
-<area shape="poly" id="edge24_Node000017_Node000018" title=" " alt="" coords="276,777,556,757,552,761,278,782"/>
-<area shape="rect" id="Node000019" href="$namespaceDatalog.html#a1dc0bffd09a9dedb477b5ca807afdb7e" title="Largest shift that keeps every (factor x calibration value) within 16 bits." alt="" coords="867,736,1026,763"/>
-<area shape="poly" id="edge25_Node000018_Node000019" title=" " alt="" coords="812,747,854,749,849,750,814,752"/>
-<area shape="poly" id="edge26_Node000019_Node000010" title=" " alt="" coords="996,761,1033,774,1113,808,1108,808,1031,779,996,767"/>
-<area shape="poly" id="edge27_Node000019_Node000011" title=" " alt="" coords="1025,752,1084,757,1079,759,1026,757"/>
-<area shape="rect" id="Node000021" href="$namespaceDatalog.html#a05836e3079ae85aebb1cf019c3fe4d4c" title="The voltage calibration in fixed point, for vrms(), built at compile time." alt="" coords="591,634,791,662"/>
-<area shape="poly" id="edge29_Node000020_Node000021" title=" " alt="" coords="294,701,521,671,583,663,579,666,522,676,297,706"/>
-<area shape="poly" id="edge30_Node000021_Node000013" title=" " alt="" coords="719,660,766,687,814,722,838,749,847,761,862,773,875,781,870,781,859,777,844,765,834,752,811,726,763,692,719,665"/>
-<area shape="poly" id="edge31_Node000021_Node000019" title=" " alt="" coords="728,660,898,729,893,730,728,665"/>
-<area shape="poly" id="edge34_Node000022_Node000021" title=" " alt="" coords="496,504,523,517,538,529,548,541,571,567,612,598,654,626,648,626,609,602,568,571,544,545,535,533,520,521,497,509"/>
-<area shape="rect" id="Node000023" href="$native_2test__datalog__math_2test__main_8cpp.html#a27596db0488e6b5a1e7e0d16a03a3d33" title="The float arithmetic being replaced, in hundredths of a volt (x4 for long periods)." alt="" coords="632,478,750,506"/>
-<area shape="poly" id="edge33_Node000022_Node000023" title=" " alt="" coords="513,490,619,491,614,494,515,495"/>
-<area shape="rect" id="Node000024" href="$namespaceDatalog.html#af8ed1ad7ceb8ed44e3efa7b6353327a8" title="The RMS voltage of a phase." alt="" coords="634,530,748,558"/>
-<area shape="poly" id="edge35_Node000022_Node000024" title=" " alt="" coords="507,504,621,528,617,531,509,509"/>
-<area shape="poly" id="edge37_Node000024_Node000015" title=" " alt="" coords="747,541,781,533,811,515,846,478,874,434,896,386,913,338,933,245,943,177,945,173,939,246,918,339,901,388,879,436,850,481,814,520,783,537,749,546"/>
-<area shape="rect" id="Node000025" href="$group__TimeCritical.html#ga1c7cf312d47fe59d0ca5be3844bd9320" title="Optimized 16×16→32 unsigned multiplication with assembly." alt="" coords="878,530,1015,558"/>
-<area shape="poly" id="edge36_Node000024_Node000025" title=" " alt="" coords="747,542,864,543,860,545,749,547"/>
-<area shape="rect" id="Node000027" href="$namespaceDatalog.html#aea01a5691922006e60d64261626d177a" title="Whether processVoltage() scales V^2 down by 16 before summing it over the datalog period." alt="" coords="593,898,789,926"/>
-<area shape="poly" id="edge39_Node000026_Node000027" title=" " alt="" coords="298,895,352,892,437,890,521,892,580,898,575,900,521,897,437,895,352,897,300,900"/>
-<area shape="rect" id="Node000028" href="$namespaceDatalog.html#a0034ed8f35f1cd9b05161e370ac4d6ca" title="Scaling of the datalog voltage, Vrms_L_x100." alt="" coords="360,906,513,934"/>
-<area shape="poly" id="edge40_Node000026_Node000028" title=" " alt="" coords="298,908,347,913,343,915,300,913"/>
-<area shape="poly" id="edge41_Node000028_Node000027" title=" " alt="" coords="512,915,580,915,575,917,514,920"/>
-<area shape="rect" id="Node000030" href="$native_2test__datalog__math_2test__main_8cpp.html#ae9d50cea49541d6a3b6d566e8e34dd54" title="Largest error of vrms() against the reference, from 0 to the largest ADC voltage, beyond what the 16&#45;..." alt="" coords="376,530,498,558"/>
-<area shape="poly" id="edge43_Node000029_Node000030" title=" " alt="" coords="293,542,362,543,358,546,296,546"/>
-<area shape="poly" id="edge45_Node000030_Node000021" title=" " alt="" coords="486,556,522,568,650,626,645,628,520,573,487,561"/>
-<area shape="poly" id="edge44_Node000030_Node000023" title=" " alt="" coords="497,529,620,505,615,509,500,534"/>
-<area shape="poly" id="edge46_Node000030_Node000024" title=" " alt="" coords="497,542,621,543,616,546,499,547"/>
-<area shape="poly" id="edge48_Node000031_Node000030" title=" " alt="" coords="282,495,375,524,371,527,283,500"/>
-<area shape="poly" id="edge50_Node000032_Node000021" title=" " alt="" coords="507,608,608,630,603,632,508,613"/>
-<area shape="poly" id="edge51_Node000032_Node000024" title=" " alt="" coords="506,579,621,557,617,560,509,584"/>
-<area shape="poly" id="edge53_Node000033_Node000021" title=" " alt="" coords="513,646,578,647,573,649,515,651"/>
-<area shape="poly" id="edge54_Node000033_Node000024" title=" " alt="" coords="485,632,520,619,649,563,645,567,522,624,488,636"/>
-<area shape="poly" id="edge56_Node000034_Node000012" title=" " alt="" coords="517,1030,630,998,625,1000,519,1035"/>
-<area shape="rect" id="Node000035" href="$namespaceDatalog.html#a47c7340a7476be8d077ce05dc1043aaf" title="The average power of a phase, in watts." alt="" coords="633,1082,749,1110"/>
-<area shape="poly" id="edge57_Node000034_Node000035" title=" " alt="" coords="518,1067,620,1085,615,1085,518,1072"/>
-<area shape="rect" id="Node000036" href="$group__TimeCritical.html#gabc318f6984145cb3265035f62e21c4d8" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="864,1082,1028,1110"/>
-<area shape="poly" id="edge58_Node000035_Node000036" title=" " alt="" coords="749,1093,851,1096,846,1096,750,1099"/>
-<area shape="poly" id="edge60_Node000037_Node000012" title=" " alt="" coords="496,1110,520,1098,597,1049,658,1005,663,1003,600,1053,523,1102,499,1114"/>
-<area shape="poly" id="edge61_Node000037_Node000035" title=" " alt="" coords="507,1121,620,1107,615,1108,508,1127"/>
-<area shape="rect" id="Node000039" href="$native_2test__datalog__math_2test__main_8cpp.html#a5b095c845a7e0e82675725fbf0dbcdeb" title="Largest error of watts() against the reference, over the full input range, beyond what the 16&#45;bit cal..." alt="" coords="374,1181,499,1209"/>
-<area shape="poly" id="edge63_Node000038_Node000039" title=" " alt="" coords="282,1239,371,1214,376,1213,283,1244"/>
-<area shape="poly" id="edge64_Node000039_Node000012" title=" " alt="" coords="499,1180,520,1167,538,1145,545,1122,551,1097,567,1069,607,1030,648,1004,653,1001,611,1034,571,1072,556,1099,550,1123,542,1147,523,1171,501,1185"/>
-<area shape="poly" id="edge66_Node000039_Node000035" title=" " alt="" coords="488,1178,520,1167,644,1117,649,1116,522,1172,490,1183"/>
-<area shape="rect" id="Node000040" href="$native_2test__datalog__math_2test__main_8cpp.html#a5051172495ce28cb0d7a4ef8a8d07c27" title="The float arithmetic being replaced, in watts (import = +ve)." alt="" coords="631,1181,751,1209"/>
-<area shape="poly" id="edge65_Node000039_Node000040" title=" " alt="" coords="499,1192,618,1194,613,1195,500,1197"/>
-<area shape="poly" id="edge68_Node000041_Node000039" title=" " alt="" coords="283,1146,376,1175,371,1176,282,1151"/>
-<area shape="poly" id="edge70_Node000042_Node000039" title=" " alt="" coords="300,1192,361,1194,356,1195,301,1197"/>
-<area shape="poly" id="edge72_Node000043_Node000012" title=" " alt="" coords="515,978,583,979,577,981,516,983"/>
-<area shape="poly" id="edge73_Node000043_Node000035" title=" " alt="" coords="494,1000,522,1012,650,1075,645,1075,520,1017,494,1006"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,776,60,804"/>
+<area shape="rect" id="Node000002" href="$native_2test__datalog__math_2test__main_8cpp.html#a48ca6b9e84f67a99af964a52633a4084" title=" " alt="" coords="619,13,781,74"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="32,776,38,641,52,430,74,227,89,154,97,129,106,114,131,90,158,69,219,38,284,17,353,6,422,3,489,5,606,21,602,24,488,10,422,8,354,12,286,23,221,43,161,74,134,94,110,117,102,131,94,155,80,227,58,430,44,641,37,776"/>
+<area shape="rect" id="Node000004" href="$native_2test__datalog__math_2test__main_8cpp.html#a7b6c0ddd95cea905208bd66a651b40cc" title=" " alt="" coords="602,98,798,143"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="32,776,39,652,53,461,76,278,89,213,97,191,106,178,158,137,216,108,279,90,345,79,411,76,475,78,591,94,586,97,475,83,411,81,346,85,281,95,218,113,160,142,110,181,102,194,95,215,81,279,59,462,44,653,37,776"/>
+<area shape="rect" id="Node000005" href="$native_2test__datalog__math_2test__main_8cpp.html#a1a95cf9cb6097b2aa13a7d4c13876d84" title="Every rounding boundary of every root: round(sqrt(x)) changes from r to r + 1 between r^2 + r and r^2..." alt="" coords="133,1162,279,1207"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="35,802,44,876,58,979,80,1081,94,1121,110,1148,122,1160,117,1162,106,1152,89,1123,75,1083,53,980,39,876,35,807"/>
+<area shape="rect" id="Node000008" href="$native_2test__datalog__math_2test__main_8cpp.html#a62639b67fb026dc90d2b67c1e7f31129" title=" " alt="" coords="123,1231,288,1259"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="34,802,41,888,53,1013,62,1078,75,1137,90,1185,110,1218,113,1222,108,1223,106,1221,86,1187,70,1138,57,1079,48,1014,36,889,34,807"/>
+<area shape="rect" id="Node000009" href="$native_2test__datalog__math_2test__main_8cpp.html#a596162fe63abc92ae448fdf35de07862" title="2 million values over the whole 32&#45;bit range, against sqrt() in double precision (exact here)." alt="" coords="133,1024,278,1068"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="34,802,41,844,52,899,74,958,90,985,110,1010,122,1021,117,1023,106,1013,86,988,69,960,47,900,36,845,34,807"/>
+<area shape="rect" id="Node000010" href="$native_2test__datalog__math_2test__main_8cpp.html#a936de034d5bd89732f5f519af8aba799" title=" " alt="" coords="115,1093,297,1138"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="33,802,36,855,44,929,53,969,67,1008,85,1046,110,1079,113,1083,107,1084,106,1083,81,1049,62,1010,48,970,39,929,31,856,33,807"/>
+<area shape="rect" id="Node000011" href="$native_2test__datalog__math_2test__main_8cpp.html#a1c461334033550878986251f956644ad" title=" " alt="" coords="356,553,526,598"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="32,776,36,739,48,690,70,640,86,617,106,599,133,582,161,570,222,555,284,551,343,555,339,559,284,556,223,560,163,575,135,587,109,603,90,621,74,643,53,692,42,740,37,776"/>
+<area shape="rect" id="Node000017" href="$native_2test__datalog__math_2test__main_8cpp.html#a097542ea474ed61efe4b5e20fd533c98" title=" " alt="" coords="115,1384,297,1428"/>
+<area shape="poly" id="edge22_Node000001_Node000017" title=" " alt="" coords="34,802,38,912,47,1080,56,1168,69,1249,87,1317,98,1343,110,1363,119,1374,114,1375,106,1366,93,1345,82,1318,64,1250,51,1168,42,1080,33,913,34,807"/>
+<area shape="rect" id="Node000019" href="$native_2test__datalog__math_2test__main_8cpp.html#adaa8d92c6fe90650f91ec8cb63ae0525" title=" " alt="" coords="119,1453,293,1514"/>
+<area shape="poly" id="edge24_Node000001_Node000019" title=" " alt="" coords="34,802,36,925,44,1115,52,1215,66,1308,85,1386,96,1416,110,1439,111,1441,105,1441,105,1442,92,1418,80,1387,60,1309,47,1216,38,1115,31,925,34,807"/>
+<area shape="rect" id="Node000020" href="$native_2test__datalog__math_2test__main_8cpp.html#ac8e485fd132889705dfb67b770d235f1" title=" " alt="" coords="609,168,791,212"/>
+<area shape="poly" id="edge26_Node000001_Node000020" title=" " alt="" coords="31,776,30,667,37,499,45,411,59,331,79,265,91,239,106,220,140,199,190,184,250,174,318,169,463,170,595,178,591,182,463,175,319,175,251,179,191,189,142,203,109,224,96,242,84,267,64,332,51,412,42,499,36,667,36,776"/>
+<area shape="rect" id="Node000021" href="$native_2test__datalog__math_2test__main_8cpp.html#a6ac8c95fea0d385112f1ee5aa6d4b482" title=" " alt="" coords="617,1238,783,1283"/>
+<area shape="poly" id="edge28_Node000001_Node000021" title=" " alt="" coords="34,802,37,899,46,1041,55,1114,68,1181,86,1234,97,1254,109,1268,144,1287,195,1298,256,1303,326,1303,472,1292,604,1276,599,1278,472,1297,326,1308,256,1308,194,1303,142,1292,106,1272,93,1257,81,1236,63,1182,49,1115,41,1041,32,899,34,807"/>
+<area shape="rect" id="Node000023" href="$native_2test__datalog__math_2test__main_8cpp.html#ae55363a1531796c3f85a781ef3e67ba5" title=" " alt="" coords="612,1327,788,1355"/>
+<area shape="poly" id="edge31_Node000001_Node000023" title=" " alt="" coords="34,802,36,906,44,1060,53,1140,66,1213,85,1272,96,1294,109,1309,143,1329,193,1343,253,1352,322,1357,466,1356,599,1350,594,1352,466,1361,322,1362,253,1357,191,1348,141,1334,106,1314,92,1297,80,1274,61,1214,47,1141,39,1060,31,906,33,807"/>
+<area shape="rect" id="Node000024" href="$native_2test__datalog__math_2test__main_8cpp.html#aea6e42e807a4b058b8203b454a476a21" title=" " alt="" coords="135,954,276,999"/>
+<area shape="poly" id="edge33_Node000001_Node000024" title=" " alt="" coords="37,802,63,866,83,902,110,934,124,946,119,948,106,937,79,905,58,868,38,807"/>
+<area shape="rect" id="Node000027" href="$native_2test__datalog__math_2test__main_8cpp.html#a01e17a2fc8513f2bc000122e1021fc21" title=" " alt="" coords="352,732,530,776"/>
+<area shape="poly" id="edge38_Node000001_Node000027" title=" " alt="" coords="58,786,107,781,338,761,335,765,108,786,62,790"/>
+<area shape="rect" id="Node000029" href="$native_2test__datalog__math_2test__main_8cpp.html#ad615f0fd21c9a28543ca5b7ac0c42280" title=" " alt="" coords="364,800,518,828"/>
+<area shape="poly" id="edge42_Node000001_Node000029" title=" " alt="" coords="59,789,351,807,347,811,61,794"/>
+<area shape="rect" id="Node000033" href="$native_2test__datalog__math_2test__main_8cpp.html#ad04da3b136338e85aaf517de4bce1c3c" title=" " alt="" coords="113,1538,298,1583"/>
+<area shape="poly" id="edge48_Node000001_Node000033" title=" " alt="" coords="34,802,44,949,58,1179,80,1402,94,1482,102,1508,110,1525,112,1528,106,1527,105,1528,97,1510,89,1483,75,1402,52,1180,38,950,34,807"/>
+<area shape="rect" id="Node000036" href="$native_2test__datalog__math_2test__main_8cpp.html#ad30fa6b75976b4414fe06c2b879385b8" title=" " alt="" coords="117,613,294,658"/>
+<area shape="poly" id="edge52_Node000001_Node000036" title=" " alt="" coords="36,775,61,723,81,694,106,668,114,664,112,668,109,672,85,697,66,726,42,776"/>
+<area shape="rect" id="Node000038" href="$native_2test__datalog__math_2test__main_8cpp.html#a22f10cd5da84e299cd5f9888b7ffe933" title=" " alt="" coords="117,682,295,727"/>
+<area shape="poly" id="edge57_Node000001_Node000038" title=" " alt="" coords="54,774,106,744,135,732,132,736,109,749,58,777"/>
+<area shape="rect" id="Node000039" href="$native_2test__datalog__math_2test__main_8cpp.html#a51023150d9622eab57e3ea3cc9ce3d24" title=" " alt="" coords="370,852,512,880"/>
+<area shape="poly" id="edge59_Node000001_Node000039" title=" " alt="" coords="59,796,108,809,238,834,357,853,353,857,237,839,107,814,62,801"/>
+<area shape="rect" id="Node000040" href="$native_2test__datalog__math_2test__main_8cpp.html#af9b5108c4d1521ec80c69999e3f3cebd" title=" " alt="" coords="364,904,518,932"/>
+<area shape="poly" id="edge62_Node000001_Node000040" title=" " alt="" coords="46,802,75,827,109,849,169,873,231,890,293,902,351,911,346,913,292,907,230,895,167,878,106,854,71,831,47,807"/>
+<area shape="rect" id="Node000041" href="$native_2test__datalog__math_2test__main_8cpp.html#a578ea20110b03dfeaaa1650ede366523" title=" " alt="" coords="360,205,522,266"/>
+<area shape="poly" id="edge65_Node000001_Node000041" title=" " alt="" coords="31,776,32,675,39,521,48,441,62,367,80,307,92,284,106,267,131,247,159,232,190,221,221,214,285,210,347,215,343,218,285,215,222,220,191,226,161,237,134,251,110,271,97,287,85,309,67,368,54,441,45,521,37,675,36,776"/>
+<area shape="rect" id="Node000044" href="$native_2test__datalog__math_2test__main_8cpp.html#ab5a7b02b8adb8d9557265033571b8146" title=" " alt="" coords="370,290,512,335"/>
+<area shape="poly" id="edge70_Node000001_Node000044" title=" " alt="" coords="31,776,32,681,40,538,49,464,63,397,81,343,93,322,106,307,134,287,166,275,199,267,233,264,302,270,365,284,361,287,301,275,233,270,200,272,167,280,137,292,109,311,97,325,86,345,68,399,55,465,46,539,37,681,36,776"/>
+<area shape="rect" id="Node000045" href="$native_2test__datalog__math_2test__main_8cpp.html#a52da7c35d23613031adcd8302d3d3d96" title=" " alt="" coords="112,493,300,538"/>
+<area shape="poly" id="edge73_Node000001_Node000045" title=" " alt="" coords="32,776,36,734,47,676,69,612,85,582,106,555,120,544,117,549,110,559,90,585,74,614,52,677,41,735,37,776"/>
+<area shape="rect" id="Node000048" href="$native_2test__datalog__math_2test__main_8cpp.html#ad1d9ca0e83f814162007f1bb6e6774c2" title=" " alt="" coords="108,354,304,399"/>
+<area shape="poly" id="edge78_Node000001_Node000048" title=" " alt="" coords="32,776,38,700,52,591,74,483,88,440,106,410,111,407,108,412,110,413,93,442,79,484,57,592,44,701,37,776"/>
+<area shape="rect" id="Node000049" href="$native_2test__datalog__math_2test__main_8cpp.html#ab91d88e52653d6cc84fc0bec8f5e5ffe" title=" " alt="" coords="111,424,300,468"/>
+<area shape="poly" id="edge80_Node000001_Node000049" title=" " alt="" coords="33,776,41,713,56,624,78,537,91,503,106,479,111,476,109,481,110,482,96,505,83,539,61,625,46,713,38,776"/>
+<area shape="rect" id="Node000050" href="$native_2test__datalog__math_2test__main_8cpp.html#a25f4c01ffcf91fb7c58c5ce958fed656" title=" " alt="" coords="362,360,520,404"/>
+<area shape="poly" id="edge82_Node000001_Node000050" title=" " alt="" coords="31,776,33,687,43,554,52,486,65,424,83,373,93,354,106,340,130,323,154,314,176,311,199,314,247,326,305,340,363,353,359,356,303,345,246,332,198,319,176,317,155,319,133,328,109,344,98,357,87,376,70,425,57,487,48,555,39,687,37,776"/>
+<area shape="rect" id="Node000003" href="$namespaceDatalog.html#ae6899e75179f0cbe5f4bfbbf4de61a45" title="The average power of a datalog period, back at the x1 scale of V_ADC x I_ADC." alt="" coords="870,142,1043,169"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="780,67,823,84,919,133,914,135,821,89,782,72"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="797,132,857,141,852,143,799,136"/>
+<area shape="rect" id="Node000006" href="$namespaceDatalog.html#a5c242aed104cfb700b6fc57675ae10b9" title="Integer square root, rounded to the nearest integer." alt="" coords="386,1171,496,1199"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="279,1182,373,1183,369,1186,280,1187"/>
+<area shape="rect" id="Node000007" href="$namespaceDatalog.html#a2c37cce8c19e81c1cb2f1f7e95237446" title="Square root, rounded to the nearest integer, of the value or of the value normalised." alt="" coords="1091,1202,1245,1229"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="496,1184,1077,1210,1074,1214,497,1190"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="262,1228,373,1201,369,1204,264,1233"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="278,1067,305,1078,366,1118,416,1160,411,1161,363,1123,303,1083,280,1072"/>
+<area shape="poly" id="edge13_Node000010_Node000006" title=" " alt="" coords="283,1136,379,1165,374,1167,285,1141"/>
+<area shape="rect" id="Node000012" href="$namespaceEnergy.html#a3d00254b7d0089c630b2f863f97a7abe" title="Largest shift that keeps every calibration value within 16 bits." alt="" coords="871,562,1042,589"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="525,573,857,574,853,577,527,578"/>
+<area shape="rect" id="Node000015" href="$namespaceDatalog.html#a7704334869b4be2aef18346b7c201ce5" title="The power calibration in fixed point, for watts(), built at compile time." alt="" coords="604,406,796,433"/>
+<area shape="poly" id="edge18_Node000011_Node000015" title=" " alt="" coords="457,551,507,497,540,468,577,444,596,437,592,441,580,448,543,472,511,500,462,554"/>
+<area shape="rect" id="Node000016" href="$namespaceEnergy.html#a44bfabeeca8fe61512b44b54519707f5" title="A calibration value as a 16&#45;bit fixed&#45;point constant." alt="" coords="896,614,1016,641"/>
+<area shape="poly" id="edge21_Node000011_Node000016" title=" " alt="" coords="525,581,883,618,878,622,527,587"/>
+<area shape="rect" id="Node000013" href="$namespaceEnergy.html#ab6b5951d040a1d99b3f1f1deecc2da77" title="Largest of the calibration values." alt="" coords="1102,738,1235,765"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="1019,587,1045,600,1149,726,1143,726,1041,604,1019,592"/>
+<area shape="rect" id="Node000014" href="$namespaceEnergy.html#a8b5cc27275819b07610576e86d2f009b" title="Largest shift that keeps a value within 16 bits once scaled by 2^shift." alt="" coords="1108,620,1229,648"/>
+<area shape="poly" id="edge17_Node000012_Node000014" title=" " alt="" coords="1008,587,1103,615,1098,616,1009,592"/>
+<area shape="poly" id="edge19_Node000015_Node000012" title=" " alt="" coords="791,431,823,444,858,467,890,494,938,549,933,549,886,498,855,471,820,449,793,436"/>
+<area shape="poly" id="edge20_Node000015_Node000016" title=" " alt="" coords="796,428,823,444,839,463,847,483,849,523,851,561,858,580,872,599,885,610,880,611,868,603,853,583,846,563,844,523,842,484,835,466,820,448,797,433"/>
+<area shape="rect" id="Node000018" href="$namespaceDatalog.html#ad98710f158fff6d1719707c86249c754" title="The shift by which the ISR scales the power down before adding it to the datalog sum." alt="" coords="366,1426,516,1453"/>
+<area shape="poly" id="edge23_Node000017_Node000018" title=" " alt="" coords="297,1416,353,1426,348,1427,297,1422"/>
+<area shape="poly" id="edge25_Node000019_Node000018" title=" " alt="" coords="292,1465,354,1455,349,1457,294,1470"/>
+<area shape="poly" id="edge27_Node000020_Node000003" title=" " alt="" coords="790,176,857,168,852,171,793,180"/>
+<area shape="rect" id="Node000022" href="$namespaceDatalog.html#afd0552388cd9274ac59cb71b8d460df0" title="The square root of a mean square, with as many fractional bits as fit." alt="" coords="882,1236,1030,1264"/>
+<area shape="poly" id="edge29_Node000021_Node000022" title=" " alt="" coords="783,1255,869,1253,864,1255,784,1260"/>
+<area shape="poly" id="edge30_Node000022_Node000007" title=" " alt="" coords="1030,1235,1078,1230,1073,1231,1031,1241"/>
+<area shape="poly" id="edge32_Node000023_Node000022" title=" " alt="" coords="741,1324,898,1271,903,1269,742,1329"/>
+<area shape="rect" id="Node000025" href="$namespaceDatalog.html#a976dddd63a52b0e01e42b764fb416928" title="Check that the voltage calibration values can be represented." alt="" coords="578,931,822,959"/>
+<area shape="poly" id="edge34_Node000024_Node000025" title=" " alt="" coords="276,970,564,952,561,956,278,975"/>
+<area shape="rect" id="Node000026" href="$namespaceDatalog.html#a1dc0bffd09a9dedb477b5ca807afdb7e" title="Largest shift that keeps every (factor x calibration value) within 16 bits." alt="" coords="877,770,1036,797"/>
+<area shape="poly" id="edge35_Node000025_Node000026" title=" " alt="" coords="722,928,922,804,918,808,725,933"/>
+<area shape="poly" id="edge36_Node000026_Node000013" title=" " alt="" coords="1035,769,1089,763,1084,765,1037,774"/>
+<area shape="poly" id="edge37_Node000026_Node000014" title=" " alt="" coords="1015,767,1042,755,1072,733,1101,707,1145,662,1149,659,1104,711,1076,737,1044,759,1018,771"/>
+<area shape="rect" id="Node000028" href="$namespaceDatalog.html#a05836e3079ae85aebb1cf019c3fe4d4c" title="The voltage calibration in fixed point, for vrms(), built at compile time." alt="" coords="600,770,800,797"/>
+<area shape="poly" id="edge39_Node000027_Node000028" title=" " alt="" coords="530,762,587,769,582,772,532,767"/>
+<area shape="poly" id="edge40_Node000028_Node000016" title=" " alt="" coords="733,767,820,723,876,685,928,649,924,653,880,689,823,727,736,771"/>
+<area shape="poly" id="edge41_Node000028_Node000026" title=" " alt="" coords="800,781,864,782,859,785,801,786"/>
+<area shape="poly" id="edge44_Node000029_Node000028" title=" " alt="" coords="517,803,587,796,582,799,520,807"/>
+<area shape="rect" id="Node000030" href="$native_2test__datalog__math_2test__main_8cpp.html#a27596db0488e6b5a1e7e0d16a03a3d33" title="The float arithmetic being replaced, in hundredths of a volt (x4 for long periods)." alt="" coords="641,686,759,713"/>
+<area shape="poly" id="edge43_Node000029_Node000030" title=" " alt="" coords="500,798,529,786,553,772,577,756,655,718,651,722,580,760,556,776,531,791,503,802"/>
+<area shape="rect" id="Node000031" href="$namespaceDatalog.html#af8ed1ad7ceb8ed44e3efa7b6353327a8" title="The RMS voltage of a phase." alt="" coords="643,826,757,853"/>
+<area shape="poly" id="edge45_Node000029_Node000031" title=" " alt="" coords="517,819,630,831,626,834,519,824"/>
+<area shape="poly" id="edge47_Node000031_Node000022" title=" " alt="" coords="733,851,780,878,803,897,824,918,851,956,875,997,912,1082,937,1161,952,1222,947,1220,932,1162,907,1084,870,999,847,959,820,921,800,901,777,883,733,856"/>
+<area shape="rect" id="Node000032" href="$group__TimeCritical.html#ga1c7cf312d47fe59d0ca5be3844bd9320" title="Optimized 16×16→32 unsigned multiplication with assembly." alt="" coords="888,718,1025,745"/>
+<area shape="poly" id="edge46_Node000031_Node000032" title=" " alt="" coords="756,830,789,821,820,807,835,795,844,782,853,769,868,756,883,750,879,753,871,760,857,773,848,785,839,798,823,811,791,826,758,834"/>
+<area shape="rect" id="Node000034" href="$namespaceDatalog.html#aea01a5691922006e60d64261626d177a" title="Whether processVoltage() scales V^2 down by 16 before summing it over the datalog period." alt="" coords="602,1534,798,1561"/>
+<area shape="poly" id="edge49_Node000033_Node000034" title=" " alt="" coords="299,1548,352,1545,473,1542,589,1545,584,1545,473,1547,352,1550,299,1554"/>
+<area shape="rect" id="Node000035" href="$namespaceDatalog.html#a0034ed8f35f1cd9b05161e370ac4d6ca" title="Scaling of the datalog voltage, Vrms_L_x100." alt="" coords="365,1559,517,1587"/>
+<area shape="poly" id="edge50_Node000033_Node000035" title=" " alt="" coords="299,1563,352,1568,347,1568,299,1568"/>
+<area shape="poly" id="edge51_Node000035_Node000034" title=" " alt="" coords="518,1563,584,1559,589,1558,518,1568"/>
+<area shape="rect" id="Node000037" href="$native_2test__datalog__math_2test__main_8cpp.html#ae9d50cea49541d6a3b6d566e8e34dd54" title="Largest error of vrms() against the reference, from 0 to the largest ADC voltage, beyond what the 16&#45;..." alt="" coords="380,680,502,708"/>
+<area shape="poly" id="edge53_Node000036_Node000037" title=" " alt="" coords="294,655,370,675,365,677,296,660"/>
+<area shape="poly" id="edge55_Node000037_Node000028" title=" " alt="" coords="494,706,531,717,652,763,647,765,529,722,496,711"/>
+<area shape="poly" id="edge54_Node000037_Node000030" title=" " alt="" coords="501,693,628,697,623,699,504,698"/>
+<area shape="poly" id="edge56_Node000037_Node000031" title=" " alt="" coords="502,702,532,717,550,740,557,764,563,786,580,807,603,820,631,831,626,833,601,825,577,811,558,788,552,765,545,743,529,722,503,707"/>
+<area shape="poly" id="edge58_Node000038_Node000037" title=" " alt="" coords="294,699,367,696,363,699,297,703"/>
+<area shape="poly" id="edge60_Node000039_Node000028" title=" " alt="" coords="494,850,529,837,553,824,577,812,618,800,613,803,579,817,556,829,531,842,498,854"/>
+<area shape="poly" id="edge61_Node000039_Node000031" title=" " alt="" coords="511,856,630,845,626,848,514,861"/>
+<area shape="poly" id="edge63_Node000040_Node000028" title=" " alt="" coords="507,902,529,889,544,871,552,852,559,831,577,812,598,802,594,805,580,816,564,834,557,853,549,874,532,894,511,906"/>
+<area shape="poly" id="edge64_Node000040_Node000031" title=" " alt="" coords="489,901,530,889,640,857,636,860,531,894,492,906"/>
+<area shape="poly" id="edge66_Node000041_Node000015" title=" " alt="" coords="513,264,532,276,548,292,557,306,566,320,580,336,621,369,662,397,657,398,618,373,576,340,562,324,553,309,543,295,529,280,515,269"/>
+<area shape="rect" id="Node000042" href="$namespaceDatalog.html#a47c7340a7476be8d077ce05dc1043aaf" title="The average power of a phase, in watts." alt="" coords="642,299,758,327"/>
+<area shape="poly" id="edge67_Node000041_Node000042" title=" " alt="" coords="522,257,639,293,634,295,523,262"/>
+<area shape="poly" id="edge68_Node000042_Node000003" title=" " alt="" coords="722,297,921,176,917,180,726,301"/>
+<area shape="rect" id="Node000043" href="$group__TimeCritical.html#gabc318f6984145cb3265035f62e21c4d8" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="874,299,1038,327"/>
+<area shape="poly" id="edge69_Node000042_Node000043" title=" " alt="" coords="757,310,861,311,856,314,759,315"/>
+<area shape="poly" id="edge71_Node000044_Node000015" title=" " alt="" coords="500,333,531,345,654,398,649,400,529,350,502,338"/>
+<area shape="poly" id="edge72_Node000044_Node000042" title=" " alt="" coords="511,311,628,311,624,314,514,315"/>
+<area shape="rect" id="Node000046" href="$native_2test__datalog__math_2test__main_8cpp.html#a5b095c845a7e0e82675725fbf0dbcdeb" title="Largest error of watts() against the reference, over the full input range, beyond what the 16&#45;bit cal..." alt="" coords="378,431,504,459"/>
+<area shape="poly" id="edge74_Node000045_Node000046" title=" " alt="" coords="281,491,379,462,376,466,285,495"/>
+<area shape="poly" id="edge75_Node000046_Node000015" title=" " alt="" coords="502,437,591,429,587,432,505,441"/>
+<area shape="poly" id="edge77_Node000046_Node000042" title=" " alt="" coords="493,428,529,414,603,374,668,334,665,338,606,379,531,419,497,432"/>
+<area shape="rect" id="Node000047" href="$native_2test__datalog__math_2test__main_8cpp.html#a5051172495ce28cb0d7a4ef8a8d07c27" title="The float arithmetic being replaced, in watts (import = +ve)." alt="" coords="640,458,760,485"/>
+<area shape="poly" id="edge76_Node000046_Node000047" title=" " alt="" coords="503,449,627,462,623,465,505,454"/>
+<area shape="poly" id="edge79_Node000048_Node000046" title=" " alt="" coords="284,397,378,425,374,428,286,402"/>
+<area shape="poly" id="edge81_Node000049_Node000046" title=" " alt="" coords="300,443,365,444,361,447,303,448"/>
+<area shape="poly" id="edge83_Node000050_Node000015" title=" " alt="" coords="519,391,591,402,587,405,522,396"/>
+<area shape="poly" id="edge84_Node000050_Node000042" title=" " alt="" coords="519,359,633,329,629,333,522,363"/>
 </map>

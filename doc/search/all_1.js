@@ -57,5 +57,6 @@ var searchData=
   ['average_54',['Average',['../structDivertedPower_1_1Average.html',1,'DivertedPower']]],
   ['average_55',['average',['../structCycles.html#a87b29654ad420a8bb7b0ce7a04543abc',1,'Cycles']]],
   ['averageover_56',['averageOver',['../namespaceDivertedPower.html#ad5d547d5958e42a9c969e36ae4d7f701',1,'DivertedPower']]],
-  ['averagepowers_57',['averagePowers',['../embedded_2test__datalog__math__avr_2test__main_8cpp.html#a549d4e8ed11b8f623af0c822b28a8777',1,'test_main.cpp']]]
+  ['averagepower_57',['averagePower',['../namespaceDatalog.html#ae6899e75179f0cbe5f4bfbbf4de61a45',1,'Datalog']]],
+  ['averagepowers_58',['averagePowers',['../embedded_2test__datalog__math__avr_2test__main_8cpp.html#a549d4e8ed11b8f623af0c822b28a8777',1,'test_main.cpp']]]
 ];

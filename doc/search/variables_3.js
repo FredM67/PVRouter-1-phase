@@ -25,7 +25,7 @@ var searchData=
   ['copyof_5flowestnoofsamplesetspermainscycle_22',['copyOf_lowestNoOfSampleSetsPerMainsCycle',['../namespaceShared.html#aa51aa67f87e09e015629b84904bba01f',1,'Shared']]],
   ['copyof_5fsamplesetsduringthisdatalogperiod_23',['copyOf_sampleSetsDuringThisDatalogPeriod',['../namespaceShared.html#a32f26cf3238761e198ca572f4792de66',1,'Shared']]],
   ['copyof_5fsum_5fvsquared_24',['copyOf_sum_Vsquared',['../namespaceShared.html#ae23e7bcb455f6a22b0d36a71a2da79a2',1,'Shared']]],
-  ['copyof_5fsump_5fatsupplypoint_25',['copyOf_sumP_atSupplyPoint',['../namespaceShared.html#afed588c6edf641ece696b5240f7133e8',1,'Shared']]],
+  ['copyof_5fsump_5fatsupplypoint_25',['copyOf_sumP_atSupplyPoint',['../namespaceShared.html#a97382a0bf73f64b26260a5829cdb7611',1,'Shared']]],
   ['count_26',['count',['../structPinList.html#a7969ec092ecd8e3ca47f5ca63a3d4e54',1,'PinList::count'],['../structDisplay_1_1PinList.html#a29642decf5fdaffe3541719b002485c8',1,'Display::PinList::count'],['../structRecordingRadio.html#a85cb12305a94753304256812a5e5763e',1,'RecordingRadio::count']]],
   ['countloadon_27',['countLoadON',['../processing_8cpp.html#a2f61fd181a2806e678e5473eaad03891',1,'processing.cpp']]],
   ['cr_28',['CR',['../classReference.html#ad6e971ed46573c2c33766755b41037b4',1,'Reference::CR'],['../namespaceTeleInfo.html#aa77c385f6a35cd13c3d06b520d0bcb4d',1,'TeleInfo::CR']]],

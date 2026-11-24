@@ -191,7 +191,7 @@ Functions</h2></td></tr>
 <dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2026-11-22</dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2026-2026 SPDX-License-Identifier: GPL-3.0-or-later</dd></dl>
-<p>One sample set is 3 conversions (V, CT1, CT2), about 312 us: 64 sets per mains cycle at 50 Hz, 53 at 60 Hz. The number of sets of a datalog period is the divisor of the datalog power and voltage. Its counter is chosen at compile time, as the V^2 scaling: 16 bits while the largest count fits (up to 19 s), 32 bits above (up to the 40 s allowed), so that the default 5 s period keeps a 16-bit counter.</p>
+<p>One sample set is 3 conversions (V, CT1, CT2), about 312 us: 64 sets per mains cycle at 50 Hz, 53 at 60 Hz. The number of sets of a datalog period is the divisor of the datalog power and voltage. Its counter is chosen at compile time, as the V^2 scaling: 16 bits while the largest count fits (up to 19 s), 32 bits above (up to the 30 s allowed), so that the default 5 s period keeps a 16-bit counter.</p>
 <p>Pure C++, no Arduino: the native tests include it. </p>
 
 <p class="definition">Definition in file <a class="el" href="sample__sets_8h_source.html">sample_sets.h</a>.</p>

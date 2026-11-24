@@ -71,7 +71,7 @@ var searchData=
   ['copyof_5flowestnoofsamplesetspermainscycle_68',['copyOf_lowestNoOfSampleSetsPerMainsCycle',['../namespaceShared.html#aa51aa67f87e09e015629b84904bba01f',1,'Shared']]],
   ['copyof_5fsamplesetsduringthisdatalogperiod_69',['copyOf_sampleSetsDuringThisDatalogPeriod',['../namespaceShared.html#a32f26cf3238761e198ca572f4792de66',1,'Shared']]],
   ['copyof_5fsum_5fvsquared_70',['copyOf_sum_Vsquared',['../namespaceShared.html#ae23e7bcb455f6a22b0d36a71a2da79a2',1,'Shared']]],
-  ['copyof_5fsump_5fatsupplypoint_71',['copyOf_sumP_atSupplyPoint',['../namespaceShared.html#afed588c6edf641ece696b5240f7133e8',1,'Shared']]],
+  ['copyof_5fsump_5fatsupplypoint_71',['copyOf_sumP_atSupplyPoint',['../namespaceShared.html#a97382a0bf73f64b26260a5829cdb7611',1,'Shared']]],
   ['count_72',['count',['../structPinList.html#a7969ec092ecd8e3ca47f5ca63a3d4e54',1,'PinList::count'],['../structDisplay_1_1PinList.html#a29642decf5fdaffe3541719b002485c8',1,'Display::PinList::count'],['../structRecordingRadio.html#a85cb12305a94753304256812a5e5763e',1,'RecordingRadio::count']]],
   ['countdivertedenergy_73',['countDivertedEnergy',['../group__TimeCritical.html#ga2db5f0533b47f46807c24bcf89ee9fb6',1,'countDivertedEnergy():&#160;processing.cpp'],['../group__TimeCritical.html#ga2db5f0533b47f46807c24bcf89ee9fb6',1,'countDivertedEnergy():&#160;processing.cpp']]],
   ['countedenergy_74',['countedEnergy',['../classDivertedEnergy.html#ac470512dac5de2fcbc68ff2e581d319a',1,'DivertedEnergy']]],
