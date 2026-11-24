@@ -59,8 +59,8 @@ shipped `config.h`:
   5 s, `FORC` and `OFF` in the energy's turn. The display's pins enter the pin checks.
 - **CT1 filter** of the old boards (`lpf_gainOldBoard`, `alphaOldBoard`), Robin's, in fixed point;
   off on the new board. The values shipped (9 and 0.0011) are interim, to be measured per CT type.
-- **Datalog period** up to 40 s (30 s with relays): the sample set counter widens to 32 bits
-  beyond 19 s.
+- **Datalog period** up to 30 s: the sample set counter widens to 32 bits beyond 19 s; the power
+  is summed in 32 bits, scaled down by 16 from 5 s on, as V².
 - **Tests:** native tests (prediction, decision, diverted energy, CT1 filter, ADC chain,
   display, and those of the 3-phase firmware that apply), embedded tests in simavr, compile-fail
   cases (displays, CT2, analog pins), and the grid simulator with a model of each board (CT2

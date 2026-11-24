@@ -45,8 +45,8 @@ void test_largest_count_of_a_period(void)
   static_assert(SampleSets::maxPerDatalog(250, N_MAX_50HZ) == 17000UL, "must be constexpr");
   TEST_ASSERT_EQUAL_UINT32(64600UL, SampleSets::maxPerDatalog(19 * 50, N_MAX_50HZ));
   TEST_ASSERT_EQUAL_UINT32(64980UL, SampleSets::maxPerDatalog(19 * 60, N_MAX_60HZ));
-  TEST_ASSERT_EQUAL_UINT32(136000UL, SampleSets::maxPerDatalog(40 * 50, N_MAX_50HZ));
-  TEST_ASSERT_EQUAL_UINT32(136800UL, SampleSets::maxPerDatalog(40 * 60, N_MAX_60HZ));
+  TEST_ASSERT_EQUAL_UINT32(102000UL, SampleSets::maxPerDatalog(30 * 50, N_MAX_50HZ));
+  TEST_ASSERT_EQUAL_UINT32(102600UL, SampleSets::maxPerDatalog(30 * 60, N_MAX_60HZ));
 }
 
 void test_16_bits_up_to_19_s(void)
@@ -65,33 +65,34 @@ void test_16_bits_up_to_19_s(void)
   assertHolds< UINT16_MAX >();
 }
 
-void test_32_bits_from_20_s_to_40_s(void)
+void test_32_bits_from_20_s_to_30_s(void)
 {
   constexpr uint32_t at20s50Hz{ SampleSets::maxPerDatalog(20 * 50, N_MAX_50HZ) };
   constexpr uint32_t at20s60Hz{ SampleSets::maxPerDatalog(20 * 60, N_MAX_60HZ) };
-  constexpr uint32_t at40s50Hz{ SampleSets::maxPerDatalog(40 * 50, N_MAX_50HZ) };
-  constexpr uint32_t at40s60Hz{ SampleSets::maxPerDatalog(40 * 60, N_MAX_60HZ) };
+  constexpr uint32_t at30s50Hz{ SampleSets::maxPerDatalog(30 * 50, N_MAX_50HZ) };
+  constexpr uint32_t at30s60Hz{ SampleSets::maxPerDatalog(30 * 60, N_MAX_60HZ) };
 
   TEST_ASSERT_TRUE((same< SampleSets::Counter< UINT16_MAX + 1UL >, uint32_t >::value));
   TEST_ASSERT_TRUE((same< SampleSets::Counter< at20s50Hz >, uint32_t >::value));
   TEST_ASSERT_TRUE((same< SampleSets::Counter< at20s60Hz >, uint32_t >::value));
-  TEST_ASSERT_TRUE((same< SampleSets::Counter< at40s50Hz >, uint32_t >::value));
-  TEST_ASSERT_TRUE((same< SampleSets::Counter< at40s60Hz >, uint32_t >::value));
+  TEST_ASSERT_TRUE((same< SampleSets::Counter< at30s50Hz >, uint32_t >::value));
+  TEST_ASSERT_TRUE((same< SampleSets::Counter< at30s60Hz >, uint32_t >::value));
 
   assertHolds< at20s50Hz >();
-  assertHolds< at40s50Hz >();
-  assertHolds< at40s60Hz >();
+  assertHolds< at30s50Hz >();
+  assertHolds< at30s60Hz >();
 }
 
-void test_datalog_sums_hold_40_s(void)
+void test_datalog_sums_hold_30_s(void)
 {
-  // each sample adds at most 2^18 (|V_ADC x I_ADC| or V_ADC^2): the power sum is 64 bits,
-  // the V^2 sum 32 bits, scaled down by 16 for long periods (Datalog::isVSquaredScaled())
+  // each sample adds at most 2^18 (|V_ADC x I_ADC| or V_ADC^2); for long periods both 32-bit sums
+  // are scaled down by 16 (Datalog::powerShift(), Datalog::isVSquaredScaled()), the power rounded
+  // once per cycle (+ 1 per cycle at most). Checked in 64 bits, here only.
   constexpr uint64_t fullScale{ 1ULL << 18 };
-  constexpr uint64_t at40s{ SampleSets::maxPerDatalog(40 * 60, N_MAX_60HZ) };  // the larger of 50/60 Hz
+  constexpr uint64_t at30s{ SampleSets::maxPerDatalog(30 * 60, N_MAX_60HZ) };  // the larger of 50/60 Hz
 
-  TEST_ASSERT_TRUE(at40s * (fullScale >> 4) <= UINT32_MAX);
-  TEST_ASSERT_TRUE(at40s * fullScale <= static_cast< uint64_t >(INT64_MAX));
+  TEST_ASSERT_TRUE(at30s * (fullScale >> 4) <= UINT32_MAX);
+  TEST_ASSERT_TRUE(at30s * (fullScale >> 4) + 30 * 60 <= static_cast< uint64_t >(INT32_MAX));
 }
 
 int main(int /* argc */, char** /* argv */)
@@ -100,8 +101,8 @@ int main(int /* argc */, char** /* argv */)
 
   RUN_TEST(test_largest_count_of_a_period);
   RUN_TEST(test_16_bits_up_to_19_s);
-  RUN_TEST(test_32_bits_from_20_s_to_40_s);
-  RUN_TEST(test_datalog_sums_hold_40_s);
+  RUN_TEST(test_32_bits_from_20_s_to_30_s);
+  RUN_TEST(test_datalog_sums_hold_30_s);
 
   return UNITY_END();
 }

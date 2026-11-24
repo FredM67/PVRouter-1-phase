@@ -20,6 +20,9 @@ The float expressions, evaluated in double precision, are the reference. The cal
 | `test_watts_is_sign_symmetric` | Import and export weigh the same |
 | `test_watts_saturates_beyond_int16` | Out-of-range powers saturate to ±32767 W instead of wrapping |
 | `test_watts_differs_from_the_float_code_by_at_most_1_W` | The former code truncated, the new one rounds |
+| `test_power_shift_*` | The datalog power is scaled down by 16 from 16384 sample sets on (full-span sines averaging 2^17 per sample): from 5 s on here; shifted, 30 s of any signal fit in 32 bits |
+| `test_average_power_*` | The average of the sum, scaled back up: the quotient when unshifted, exactly `sum × 16 / n` truncated toward zero when shifted, with a 16- or 32-bit count |
+| `test_shifted_sum_keeps_the_average_over_30_s` | 30 s of cycles, each rounded and ÷16 as `addToDatalogSum()` does: the exact average within 1 step², even for a constant |
 | `test_voltage_calibration_is_constexpr` | The fixed-point voltage calibration is built at compile time and fills 16 bits |
 | `test_vrms_matches_the_reference_*` | Vrms matches the float reference up to the largest ADC voltage, short and long datalog periods |
 | `test_vrms_at_230_V` / `test_vrms_of_zero` / `test_vrms_saturates` | A typical value, no voltage, and saturation at 655.35 V |

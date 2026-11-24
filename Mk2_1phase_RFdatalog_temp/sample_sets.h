@@ -12,7 +12,7 @@
  *          at 50 Hz, 53 at 60 Hz. The number of sets of a datalog period is the divisor of the
  *          datalog power and voltage. Its counter is chosen at compile time, as the V^2
  *          scaling: 16 bits while the largest count fits (up to 19 s), 32 bits above (up to the
- *          40 s allowed), so that the default 5 s period keeps a 16-bit counter.
+ *          30 s allowed), so that the default 5 s period keeps a 16-bit counter.
  *
  *          Pure C++, no Arduino: the native tests include it.
  */

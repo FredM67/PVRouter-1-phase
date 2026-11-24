@@ -33,7 +33,7 @@
 
 static_assert(SUPPLY_FREQUENCY == 50 || SUPPLY_FREQUENCY == 60, "******** SUPPLY_FREQUENCY must be 50 or 60 Hz ! ********");
 
-static_assert(DATALOG_PERIOD_IN_SECONDS <= 40, "**** Data log duration is too long and will lead to overflow ! ****");
+static_assert(DATALOG_PERIOD_IN_SECONDS <= 30, "**** Data log duration is too long and will lead to overflow ! 30 s at most. ****");
 
 static_assert(Energy::isValidCalibration(f_powerCal), "******** Wrong power calibration ! Each value of f_powerCal must be positive and below 8. Please check your calibration.h ! ********");
 static_assert(!DIVERTED_CT_PRESENT || ((f_powerCalDiverted > 0.0F) && (Energy::shiftFor(f_powerCalDiverted) >= Energy::FRACTION_BITS + 9)), "******** Wrong CT2 power calibration ! f_powerCalDiverted must be positive and below 8. Please check your calibration.h ! ********");

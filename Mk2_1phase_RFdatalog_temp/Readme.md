@@ -286,7 +286,7 @@ inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::HumanRe
 ```
 Remplacez `HumanReadable` par `IoT` ou `JSON` selon vos besoins.
 
-À chaque période d’enregistrement (5 s par défaut, `DATALOG_PERIOD_IN_SECONDS` dans **config_system.h**, jusqu’à 40 s, ou 30 s avec des relais, qui demandent un diviseur de 60), le routeur envoie :
+À chaque période d’enregistrement (5 s par défaut, `DATALOG_PERIOD_IN_SECONDS` dans **config_system.h**, jusqu’à 30 s ; avec des relais, un diviseur de 60), le routeur envoie :
 - **HumanReadable** : le niveau du réservoir, `P:` la puissance réseau (et la moyenne des relais), `V:` la tension, `, diverted <W> W, <Wh> Wh` avec la sonde 2, chaque température, et des diagnostics ;
 - **JSON** : `{"P":-25,"R":0,"D":1850,"E":4012,"T1":21.37,"TA":"low"}` : `D` et `E` sont la puissance et l’énergie routées, avec la sonde 2 ;
 - **IoT** (pour le module mk2Wifi), une trame envoyée ligne par ligne : `P` la puissance réseau, `D` la puissance routée en W et `E` l’énergie routée en Wh (avec la sonde 2), `V` la tension, `R` et `R1`…`Rn` (relais), `D1`…`Dn` le temps de marche de chaque charge en %, `T1`…`Tn` les températures, `N` les secondes sans énergie routée, `TA` le tarif, `S` et `S_MC` les jeux d’échantillons. Ne confondez pas `D` avec `D1`…`Dn`.
