@@ -455,6 +455,63 @@
     "mult_asm: mult16x8_q8 per op": 27.16,
     "mult_asm: ISR simulation per sample": 132.09
    }
+  },
+  {
+   "commit": "d12a58febc81d1cff417946e16c4b897e80152f5",
+   "date": "2026-11-24T16:21:48+01:00",
+   "message": "fix!: the datalog period at most 30 s, its power summed in 32 bits (#40)\n\nNo 64-bit arithmetic on the ATmega328P: the power of the datalog period is\nsummed in 32 bits again, scaled down by 16 when the period needs it, as\nV^2 already was. Port of FredM67/PVRouter-3-phase#259.\n\n- Datalog::powerShift() (as in the 3-phase firmware): in ADC steps, a\n  full-span sine averages 2^17 per sample; while the sample sets of the\n  period times 2^17 fit in 31 bits, no shift, else a shift by 4. With 68\n  sets per cycle at most, that is from 5 s on, the default included.\n- The shift is applied where each cycle's power is added to the datalog\n  sum (addToDatalogSum()), rounded: once per cycle, not per sample, so the\n  ISR does not change and the average stays within 1 step^2.\n- Datalog::averagePower<SHIFT>(): the average scaled back up, quotient and\n  remainder apart, in 32 bits, with a 16- or 32-bit count.\n- At most 30 s (validation.h, configurator, Readmes): up to 102600 sample\n  sets; the counter keeps widening to 32 bits from 20 s on.\n- compile-fail: 31 s refused; 30 s builds at 50 and 60 Hz.\n\nFlash 580 bytes smaller, RAM 8 bytes; ISR unchanged in the simulator.\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/d12a58febc81d1cff417946e16c4b897e80152f5",
+   "sizes": {
+    "basic": {
+     "flash": 9146,
+     "ram": 378
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 10692,
+     "ram": 417
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 21986,
+     "ram": 844
+    },
+    "basic, NEW, OLED": {
+     "flash": 21556,
+     "ram": 841
+    },
+    "basic, remote loads": {
+     "flash": 13688,
+     "ram": 487
+    },
+    "basic, IoT": {
+     "flash": 9146,
+     "ram": 378
+    },
+    "basic, HumanReadable": {
+     "flash": 9030,
+     "ram": 358
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
   }
  ]
 }
