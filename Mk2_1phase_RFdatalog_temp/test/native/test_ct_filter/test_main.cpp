@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 /**
  * @file test_main.cpp
- * @brief Native tests for ct_filter.h: the CT1 filter, in fixed point
+ * @brief Native tests for ct_filter.h: the CT filter, in fixed point
  *
  * @details The current sample reaches the filter DC-removed, left-aligned (x64 scale, int16).
- *          The filter is Robin's (Mk2_fasterControl_Full), with the float maths replaced by
- *          fixed point: these tests hold it to his time constant, his output and his dead zone.
+ *          The reference is Robin's filter (Mk2_fasterControl_Full), verbatim, in float at his
+ *          x256 resolution: the fixed-point filter must track it within TOLERANCE of its output
+ *          on a step, a sine and noise, for the settings of the old boards (alpha 0.0011, gain 9),
+ *          the shipped alpha (0.002) and a few gains.
  */
 
 #include <unity.h>
@@ -18,11 +20,8 @@
 void setUp(void) {}
 void tearDown(void) {}
 
-inline constexpr float GAIN{ 9 };        /**< interim value of the old boards */
-inline constexpr float ALPHA{ 0.0011F }; /**< interim value of the old boards */
-
-inline constexpr CtFilter::Coefficients COEFFS{ CtFilter::coefficientsOf(GAIN, ALPHA) };
-inline constexpr CtFilter::Coefficients NO_GAIN{ CtFilter::coefficientsOf(0.0F, ALPHA) };
+/** @brief Output tolerance against Robin's float, in x64 units: one ADC count (see the README). */
+inline constexpr int32_t TOLERANCE{ 64 };
 
 /** @brief Robin's filter, verbatim from Mk2_fasterControl_Full/processing.cpp (x256 scale). */
 struct Robin
@@ -51,8 +50,70 @@ static float lowPassCounts(const CtFilter::LowPassBoost &filter)
   return static_cast< float >(static_cast< double >(filter.lowPass()) / (64.0 * (1L << CtFilter::LPF_FRACTION_BITS)));
 }
 
+/** @brief The shape of an input, in ADC counts. */
+enum class Shape : uint8_t
+{
+  STEP,
+  SINE,
+  NOISE
+};
+
+/** @brief A 50 Hz sine of 64 samples per cycle (the single-phase rate, twice the 3-phase one), quarter wave table, 100 peak. */
+static int16_t sineCounts(const uint16_t i, const int16_t dcResidual, const int16_t amplitudeFactor)
+{
+  static constexpr int16_t sine64[16]{ 0, 20, 39, 56, 71, 83, 92, 98, 100, 98, 92, 83, 71, 56, 39, 20 };
+  const uint8_t k{ static_cast< uint8_t >(i % 64) };
+  const int16_t quarter{ sine64[k % 16] };
+  return static_cast< int16_t >(dcResidual + amplitudeFactor * ((k < 32) ? quarter : -quarter));
+}
+
+/** @brief Input sample i, in ADC counts; noise is a fixed linear congruential sequence. The step
+ *         is sized so that the filter output stays within int16 (saturation has its own test). */
+static int16_t inputCounts(const Shape shape, const uint16_t i, uint32_t &seed, const float gain)
+{
+  switch (shape)
+  {
+    case Shape::STEP:
+      return (i < 100) ? 0 : static_cast< int16_t >(30000.0F / (64.0F * (1.0F + gain)));  // output within int16
+    case Shape::SINE:
+      return sineCounts(i, 5, 2);  // 200 counts peak, 5 counts of DC residual
+    default:
+      seed = seed * 1664525UL + 1013904223UL;
+      return static_cast< int16_t >(static_cast< int16_t >((seed >> 16) % 301U) - 150 + 3);  // -147..153
+  }
+}
+
+/** @brief Largest |fixed - float| at the output (x64) over `samples` of the input. */
+static int32_t maxOutputError(const Shape shape, const float gain, const float alpha, const uint16_t samples)
+{
+  const CtFilter::Coefficients coefficients{ CtFilter::coefficientsOf(gain, alpha) };
+  CtFilter::LowPassBoost filter;
+  Robin robin;
+  uint32_t seed{ 12345 };
+  int32_t worst{ 0 };
+
+  for (uint16_t i = 0; i != samples; ++i)
+  {
+    const int16_t counts{ inputCounts(shape, i, seed, gain) };
+    const int32_t expected{ robin.apply(counts, gain, alpha) >> 2 };  // back to x64
+    const int32_t actual{ filter.apply(x64(counts), coefficients) };
+    const int32_t error{ (actual > expected) ? actual - expected : expected - actual };
+    if (error > worst)
+    {
+      worst = error;
+    }
+  }
+  return worst;
+}
+
+static void checkTracksFloat(const Shape shape, const float gain, const float alpha, const uint16_t samples)
+{
+  TEST_ASSERT_INT32_WITHIN(TOLERANCE, 0, maxOutputError(shape, gain, alpha, samples));
+}
+
 void test_gain_zero_is_identity(void)
 {
+  const CtFilter::Coefficients noGain{ CtFilter::coefficientsOf(0.0F, 0.002F) };
   CtFilter::LowPassBoost filter;
   static constexpr int16_t samples[]{ 0, 1, -1, 63, -64, 1000, -1000, 32704, -32768, 32767, 12345, -23456 };
 
@@ -60,82 +121,119 @@ void test_gain_zero_is_identity(void)
   {
     for (const int16_t sample : samples)
     {
-      TEST_ASSERT_EQUAL_INT16(sample, filter.apply(sample, NO_GAIN));
+      TEST_ASSERT_EQUAL_INT16(sample, filter.apply(sample, noGain));
     }
   }
 }
 
-void test_full_scale_with_a_dc_residual_saturates(void)
+void test_saturates_at_the_int16_limits(void)
 {
+  const CtFilter::Coefficients coefficients{ CtFilter::coefficientsOf(9.0F, 0.0011F) };
   // a DC residual of 6 counts builds up the low-pass state...
   CtFilter::LowPassBoost positive;
   CtFilter::LowPassBoost negative;
   for (uint16_t i = 0; i != 20000; ++i)
   {
-    positive.apply(x64(6), COEFFS);
-    negative.apply(x64(-6), COEFFS);
+    positive.apply(x64(6), coefficients);
+    negative.apply(x64(-6), coefficients);
   }
   TEST_ASSERT_TRUE(positive.lowPass() > 0);
   TEST_ASSERT_TRUE(negative.lowPass() < 0);
 
   // ... then a current peak at full scale: beyond int16, it saturates with its sign kept
-  TEST_ASSERT_EQUAL_INT16(INT16_MAX, positive.apply(x64(511), COEFFS));
-  TEST_ASSERT_EQUAL_INT16(INT16_MIN, negative.apply(x64(-512), COEFFS));
+  TEST_ASSERT_EQUAL_INT16(INT16_MAX, positive.apply(x64(511), coefficients));
+  TEST_ASSERT_EQUAL_INT16(INT16_MIN, negative.apply(x64(-512), coefficients));
 }
 
 void test_a_small_steady_input_moves_the_state(void)
 {
   // 4 ADC counts: alpha x 4 x 256 = 1.13 > 1, the state moves (at x64 it would not: 0.28)
+  const CtFilter::Coefficients coefficients{ CtFilter::coefficientsOf(9.0F, 0.0011F) };
   CtFilter::LowPassBoost filter;
-  filter.apply(x64(4), COEFFS);
+  filter.apply(x64(4), coefficients);
   TEST_ASSERT_EQUAL_INT32(1, filter.lowPass());
 
   CtFilter::LowPassBoost negativeFilter;
-  negativeFilter.apply(x64(-4), COEFFS);
+  negativeFilter.apply(x64(-4), coefficients);
   TEST_ASSERT_EQUAL_INT32(-1, negativeFilter.lowPass());
 }
 
 void test_time_constant_within_2_percent_of_robins(void)
 {
-  // Robin's low-pass, in float: lpf += alpha x (x - lpf). After a step, it reaches 1 - 1/e of
-  // the step in -1 / ln(1 - alpha) samples (908.6 with alpha 0.0011).
-  const float expected{ static_cast< float >(-1.0 / log(1.0 - static_cast< double >(ALPHA))) };
-
-  static constexpr int16_t STEP{ 200 };  // counts
-  CtFilter::LowPassBoost filter;
-  uint16_t samples{ 0 };
-  while (lowPassCounts(filter) < static_cast< float >(STEP * (1.0 - exp(-1.0))))
+  // After a step, the low-pass reaches 1 - 1/e of it in -1 / ln(1 - alpha) samples
+  static constexpr float alphas[]{ 0.0011F, 0.002F };
+  for (const float alpha : alphas)
   {
-    filter.apply(x64(STEP), COEFFS);
-    ++samples;
-    TEST_ASSERT_TRUE(samples < 10000);
-  }
+    const CtFilter::Coefficients coefficients{ CtFilter::coefficientsOf(9.0F, alpha) };
+    const float expected{ static_cast< float >(-1.0 / log(1.0 - static_cast< double >(alpha))) };
 
-  TEST_ASSERT_FLOAT_WITHIN(expected * 0.02F, expected, static_cast< float >(samples));
+    static constexpr int16_t STEP{ 200 };  // counts
+    CtFilter::LowPassBoost filter;
+    uint16_t samples{ 0 };
+    while (lowPassCounts(filter) < static_cast< float >(STEP * (1.0 - exp(-1.0))))
+    {
+      filter.apply(x64(STEP), coefficients);
+      ++samples;
+      TEST_ASSERT_TRUE(samples < 10000);
+    }
+    TEST_ASSERT_FLOAT_WITHIN(expected * 0.02F, expected, static_cast< float >(samples));
+  }
 }
 
-void test_steady_state_within_one_count_of_robins(void)
+void test_old_board_settings_track_robins_float(void)
 {
-  // a 50 Hz current of 200 counts peak with a DC residual of 5 counts, 64 samples per cycle
-  static constexpr int16_t sine64[16]{ 0, 20, 39, 56, 71, 83, 92, 98, 100, 98, 92, 83, 71, 56, 39, 20 };
+  checkTracksFloat(Shape::STEP, 9.0F, 0.0011F, 6000);
+  checkTracksFloat(Shape::SINE, 9.0F, 0.0011F, 64U * 100U);  // two seconds
+  checkTracksFloat(Shape::NOISE, 9.0F, 0.0011F, 6000);
+}
 
+void test_shipped_alpha_tracks_robins_float(void)
+{
+  checkTracksFloat(Shape::STEP, 9.0F, 0.002F, 6000);
+  checkTracksFloat(Shape::SINE, 9.0F, 0.002F, 64U * 100U);
+  checkTracksFloat(Shape::NOISE, 9.0F, 0.002F, 6000);
+}
+
+void test_other_gains_track_robins_float(void)
+{
+  static constexpr float gains[]{ 0.5F, 1.0F, 4.5F, 20.0F };
+  static constexpr float alphas[]{ 0.0011F, 0.002F };
+  for (const float alpha : alphas)
+  {
+    for (const float gain : gains)
+    {
+      checkTracksFloat(Shape::STEP, gain, alpha, 6000);
+      checkTracksFloat(Shape::SINE, gain, alpha, 64U * 100U);
+      checkTracksFloat(Shape::NOISE, gain, alpha, 6000);
+    }
+  }
+}
+
+void test_state_settles_on_the_dc_residual_as_robins(void)
+{
+  const CtFilter::Coefficients coefficients{ CtFilter::coefficientsOf(9.0F, 0.0011F) };
   CtFilter::LowPassBoost filter;
   Robin robin;
-
-  for (uint16_t i = 0; i != 64U * 50U; ++i)  // one second
+  for (uint16_t i = 0; i != 64U * 50U; ++i)
   {
-    const uint8_t k{ static_cast< uint8_t >(i % 64) };
-    const int16_t quarter{ sine64[k % 16] };
-    const int16_t counts{ static_cast< int16_t >(5 + 2 * ((k < 32) ? quarter : -quarter)) };
-
-    const int32_t expected{ robin.apply(counts, GAIN, ALPHA) >> 2 };  // back to x64
-    const int16_t actual{ filter.apply(x64(counts), COEFFS) };
-
-    TEST_ASSERT_INT32_WITHIN(64, expected, actual);  // one ADC count
+    const int16_t counts{ sineCounts(i, 5, 2) };
+    robin.apply(counts, 9.0F, 0.0011F);
+    filter.apply(x64(counts), coefficients);
   }
-
-  // and the state has settled on the DC residual as Robin's has
   TEST_ASSERT_FLOAT_WITHIN(1.0F, static_cast< float >(robin.lpf_long) / 256.0F, lowPassCounts(filter));
+}
+
+void test_valid_range_of_the_settings(void)
+{
+  TEST_ASSERT_TRUE(CtFilter::isAccurate(9.0F, 0.0011F));
+  TEST_ASSERT_TRUE(CtFilter::isAccurate(9.0F, 0.002F));
+  TEST_ASSERT_TRUE(CtFilter::isAccurate(63.0F, 0.06F));
+  TEST_ASSERT_TRUE(CtFilter::isAccurate(0.0F, 0.002F));  // gain 0: nothing to filter, still a valid pair
+  TEST_ASSERT_FALSE(CtFilter::isAccurate(9.0F, 0.0F));
+  TEST_ASSERT_FALSE(CtFilter::isAccurate(9.0F, 0.0625F));
+  TEST_ASSERT_FALSE(CtFilter::isAccurate(9.0F, 0.00001F));
+  TEST_ASSERT_FALSE(CtFilter::isAccurate(64.0F, 0.002F));
+  TEST_ASSERT_FALSE(CtFilter::isAccurate(-1.0F, 0.002F));
 }
 
 int main(int /* argc */, char ** /* argv */)
@@ -143,10 +241,14 @@ int main(int /* argc */, char ** /* argv */)
   UNITY_BEGIN();
 
   RUN_TEST(test_gain_zero_is_identity);
-  RUN_TEST(test_full_scale_with_a_dc_residual_saturates);
+  RUN_TEST(test_saturates_at_the_int16_limits);
   RUN_TEST(test_a_small_steady_input_moves_the_state);
   RUN_TEST(test_time_constant_within_2_percent_of_robins);
-  RUN_TEST(test_steady_state_within_one_count_of_robins);
+  RUN_TEST(test_old_board_settings_track_robins_float);
+  RUN_TEST(test_shipped_alpha_tracks_robins_float);
+  RUN_TEST(test_other_gains_track_robins_float);
+  RUN_TEST(test_state_settles_on_the_dc_residual_as_robins);
+  RUN_TEST(test_valid_range_of_the_settings);
 
   return UNITY_END();
 }

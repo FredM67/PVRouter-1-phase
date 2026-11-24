@@ -68,7 +68,7 @@ inline constexpr float alpha{ NEW_BOARD_CALIBRATION ? alphaNewBoard : alphaOldBo
 // at F_CPU / 128 (104 us at 16 MHz); a sample set is one conversion of each channel: V, CT1, CT2.
 inline constexpr uint8_t ADC_CLOCKS_PER_CONVERSION{ 13 };
 inline constexpr uint8_t ADC_PRESCALER{ 128 };
-inline constexpr uint32_t SAMPLE_SET_PERIOD_US{ 1UL * AdcChain::NO_OF_CHANNELS * ADC_CLOCKS_PER_CONVERSION * ADC_PRESCALER / (F_CPU / 1000000UL) }; /**< 312 us */
+inline constexpr uint32_t SAMPLE_SET_PERIOD_US{ 1UL * AdcChain::NO_OF_CONVERSIONS * ADC_CLOCKS_PER_CONVERSION * ADC_PRESCALER / (F_CPU / 1000000UL) }; /**< 312 us */
 inline constexpr uint8_t SAMPLE_SETS_PER_CYCLE{ 1000000UL / (SUPPLY_FREQUENCY * SAMPLE_SET_PERIOD_US) };                                            /**< 64 at 50 Hz, 53 at 60 Hz */
 inline constexpr uint8_t SAMPLE_SETS_MARGIN{ 4 };                                                                                                   /**< covers crossing jitter and frequency drift */
 inline constexpr uint8_t N_MIN{ SAMPLE_SETS_PER_CYCLE - SAMPLE_SETS_MARGIN };

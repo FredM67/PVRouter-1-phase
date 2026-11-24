@@ -37,7 +37,7 @@ enum class Channel : uint8_t
   I_DIVERTED /**< CT2, the current diverted to the loads */
 };
 
-inline constexpr uint8_t NO_OF_CHANNELS{ 3 }; /**< channels in the chain */
+inline constexpr uint8_t NO_OF_CONVERSIONS{ 3 }; /**< conversions in the chain: V, CT1 (grid), CT2 (diverted) */
 
 // ADMUX bit numbers of the ATmega328P, as plain constants (avr/io.h defines REFS1... as macros)
 inline constexpr uint8_t BIT_REFS1{ 7 }; /**< REFS1: with REFS0, the internal 1.1 V reference */
@@ -92,7 +92,7 @@ constexpr uint8_t admuxOf(const PcbVersion board, const Channel ch)
  */
 constexpr Channel channelAfterNext(const Channel ch)
 {
-  return static_cast< Channel >((static_cast< uint8_t >(ch) + 2) % NO_OF_CHANNELS);
+  return static_cast< Channel >((static_cast< uint8_t >(ch) + 2) % NO_OF_CONVERSIONS);
 }
 
 /**
@@ -118,7 +118,7 @@ constexpr uint8_t admuxWrittenAfter(const PcbVersion board, const Channel conver
  */
 constexpr Channel channelConverted(const uint8_t round)
 {
-  return static_cast< Channel >(round % NO_OF_CHANNELS);
+  return static_cast< Channel >(round % NO_OF_CONVERSIONS);
 }
 }  // namespace AdcChain
 
