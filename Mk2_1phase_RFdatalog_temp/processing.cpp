@@ -44,14 +44,17 @@ constexpr int32_t l_midPointOfEnergyBucket_main{ l_capacityOfEnergyBucket_main /
 /**< threshold in anti-flicker mode - must not exceed 0.4 */
 constexpr float f_offsetOfEnergyThresholdsInAFmode{ 0.1F };
 
-// The sums of a datalog period cannot wrap, whatever DATALOG_PERIOD_IN_SECONDS (40 s at most,
-// validation.h): at most N_MAX sample sets per mains cycle (config_derived.h), each adding at
-// most 2^18 (|V_ADC x I_ADC| or V_ADC^2, x1 scale).
-constexpr uint64_t FULL_SCALE_PER_SAMPLE{ 1UL << 18 };
+// The sums of a datalog period cannot wrap, whatever DATALOG_PERIOD_IN_SECONDS (30 s at most,
+// validation.h), in ADC steps: at most N_MAX sample sets per mains cycle (config_derived.h), each
+// adding at most 2^18 (|V_ADC x I_ADC| or V_ADC^2, x1 scale).
+constexpr uint32_t FULL_SCALE_PER_SAMPLE{ 1UL << 18 };
 // the sample sets, the divisor of the datalog power and voltage: 16 or 32 bits, as needed
 static_assert(static_cast< SampleSetCounter >(MAX_SAMPLE_SETS_PER_DATALOG) == MAX_SAMPLE_SETS_PER_DATALOG, "******** The counter of the sample sets of a datalog period is too narrow ! ********");
-// the power: 64 bits, summed once per mains cycle
-static_assert(MAX_SAMPLE_SETS_PER_DATALOG * FULL_SCALE_PER_SAMPLE <= static_cast< uint64_t >(INT64_MAX), "the datalog power would overflow");
+// the power: 32 bits, added once per mains cycle, scaled down by 16 (rounded: + 1 per cycle at
+// most) when the period needs it; without the shift, it holds full-span sines (2^17 on average
+// per sample, Datalog::powerShift()), with it any signal
+static_assert(DATALOG_POWER_SHIFT == 0 || MAX_SAMPLE_SETS_PER_DATALOG * (FULL_SCALE_PER_SAMPLE >> DATALOG_POWER_SHIFT) + DATALOG_PERIOD_IN_MAINS_CYCLES <= static_cast< uint32_t >(INT32_MAX),
+              "******** The datalog power sum would overflow ! ********");
 // V^2: 32 bits, scaled down by 16 when the period needs it
 static_assert(MAX_SAMPLE_SETS_PER_DATALOG * (FULL_SCALE_PER_SAMPLE >> (Datalog::isVSquaredScaled(DATALOG_PERIOD_IN_SECONDS) ? 4 : 0)) <= UINT32_MAX,
               "******** The datalog V^2 sum would overflow: check Datalog::isVSquaredScaled() ! ********");
@@ -162,7 +165,7 @@ int32_t l_sumP[NO_OF_PHASES]{};           /**< cumulative power per phase */
 int16_t i_sampleVminusDC[NO_OF_PHASES]{}; /**< current raw voltage sample filtered (left-aligned ADC) */
 uint32_t l_filterDC_V[NO_OF_PHASES]{};    /**< for the LPF which determines DC offset (voltage) */
 
-int64_t l_sumP_atSupplyPoint[NO_OF_PHASES]{}; /**< for summation of 'real power' values during datalog period, once per mains cycle */
+int32_t l_sumP_atSupplyPoint[NO_OF_PHASES]{}; /**< for summation of 'real power' values during datalog period, once per mains cycle */
 uint32_t l_sum_Vsquared[NO_OF_PHASES]{};      /**< for summation of V^2 values during datalog period */
 
 int32_t l_sumP_diverted{ 0 };          /**< cumulative power on CT2 during the mains cycle (V_ADC x I_ADC) */
@@ -1164,7 +1167,16 @@ void processDivertedDataLogging()
  */
 void addToDatalogSum()
 {
-  l_sumP_atSupplyPoint[0] += l_sumP_lastCycle;  // the cycle's power into the datalog sum, 64 bits
+  // the cycle's power into the datalog sum: scaled down by 16, rounded, when the period needs it
+  // (DATALOG_POWER_SHIFT); the main code scales the average back up (Datalog::averagePower())
+  if constexpr (DATALOG_POWER_SHIFT != 0)
+  {
+    l_sumP_atSupplyPoint[0] += (l_sumP_lastCycle + (1L << (DATALOG_POWER_SHIFT - 1))) >> DATALOG_POWER_SHIFT;
+  }
+  else
+  {
+    l_sumP_atSupplyPoint[0] += l_sumP_lastCycle;
+  }
 
   // A performance check to monitor and display the minimum number of sets of
   // ADC samples per mains cycle, the expected number being 20ms / (104us * 3) = 64

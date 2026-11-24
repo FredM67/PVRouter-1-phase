@@ -222,7 +222,7 @@
 
       // problems (validate.js)
       'err.frequency': 'The grid frequency must be 50 or 60 Hz.',
-      'err.datalogPeriod': 'The datalog period must be between 1 and 40 s.',
+      'err.datalogPeriod': 'The datalog period must be between 1 and 30 s.',
       'err.requiredExport': 'The required export must be between -32768 and 32767 W.',
       'err.diversionStart': 'The diversion start threshold must be between 0 and 32767 W.',
       'err.antiCreep': 'The anti-creep limit must be a whole number between 0 and 255 W.',
@@ -572,7 +572,7 @@
       'where.yamlNext': 'Le YAML ESPHome du module mk2Wifi viendra ensuite : il n’y a pas encore de fichier pour lui.',
 
       'err.frequency': 'La fréquence du réseau doit être de 50 ou 60 Hz.',
-      'err.datalogPeriod': 'La période de journalisation doit être comprise entre 1 et 40 s.',
+      'err.datalogPeriod': 'La période de journalisation doit être comprise entre 1 et 30 s.',
       'err.requiredExport': 'L’export requis doit être compris entre -32768 et 32767 W.',
       'err.diversionStart': 'Le seuil de démarrage doit être compris entre 0 et 32767 W.',
       'err.antiCreep': 'La limite anti-fluage doit être un nombre entier compris entre 0 et 255 W.',
