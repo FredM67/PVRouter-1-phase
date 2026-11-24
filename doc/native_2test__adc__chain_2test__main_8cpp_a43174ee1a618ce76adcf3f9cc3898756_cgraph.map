@@ -1,0 +1,5 @@
+<map id="test_pins_per_board" name="test_pins_per_board">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,158,33"/>
+<area shape="rect" id="Node000002" href="$namespaceAdcChain.html#a7190fa715bd30855c015b6b64a5e403b" title="The analog input of a channel on a board (A0 = 0)." alt="" coords="206,5,331,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,17,193,19,188,19,158,22"/>
+</map>

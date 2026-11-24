@@ -1,0 +1,7 @@
+<map id="Mk2_1phase_RFdatalog_temp/fast_control.h" name="Mk2_1phase_RFdatalog_temp/fast_control.h">
+<area shape="rect" id="Node000001" title="Faster control: the load decision on the predicted energy, at mid&#45;cycle." alt="" coords="112,5,288,50"/>
+<area shape="rect" id="Node000002" href="$processing_8cpp.html" title="Implements the processing engine." alt="" coords="5,106,182,151"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,60,118,108,115,104,163,62"/>
+<area shape="rect" id="Node000003" href="$native_2test__fast__control_2test__main_8cpp.html" title="Native unit tests for fast_control.h: the decision on the predicted energy." alt="" coords="206,98,408,160"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,58,277,98,272,97,234,63"/>
+</map>

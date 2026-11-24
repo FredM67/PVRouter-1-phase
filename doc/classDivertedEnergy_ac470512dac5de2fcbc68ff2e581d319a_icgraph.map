@@ -1,0 +1,15 @@
+<map id="DivertedEnergy::countedEnergy" name="DivertedEnergy::countedEnergy">
+<area shape="rect" id="Node000001" title="The energy of a cycle that counts: 0 when forced, or below the anti&#45;creep limit." alt="" coords="584,74,811,102"/>
+<area shape="rect" id="Node000002" href="$classDivertedEnergy.html#aa93ab415ee426c1275c577165a365569" title="Adds one mains cycle." alt="" coords="347,74,536,102"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="566,88,537,90,537,85,571,87"/>
+<area shape="rect" id="Node000003" href="$native_2test__diverted__energy_2test__main_8cpp.html#a7df8128f3861e02ff46d3d84e60300e2" title=" " alt="" coords="121,5,286,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="367,70,286,51,286,46,372,69"/>
+<area shape="rect" id="Node000005" href="$native_2test__diverted__energy_2test__main_8cpp.html#a6d5572c590bf3711f29517f888fb0691" title=" " alt="" coords="108,74,299,102"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="329,88,300,90,299,85,334,87"/>
+<area shape="rect" id="Node000006" href="$native_2test__diverted__energy_2test__main_8cpp.html#acff10015d77ea724dc2936d573171352" title=" " alt="" coords="118,126,288,154"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="362,105,271,128,270,123,357,106"/>
+<area shape="rect" id="Node000004" href="$native_2test__diverted__energy_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,74,60,102"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="122,58,61,81,59,76,125,53"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="90,89,61,90,59,85,94,86"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="132,122,107,116,60,100,60,94,108,110,137,121"/>
+</map>

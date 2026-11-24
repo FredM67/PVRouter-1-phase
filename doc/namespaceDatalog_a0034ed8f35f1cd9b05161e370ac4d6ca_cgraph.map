@@ -1,0 +1,5 @@
+<map id="Datalog::vrmsFactor" name="Datalog::vrmsFactor">
+<area shape="rect" id="Node000001" title="Scaling of the datalog voltage, Vrms_L_x100." alt="" coords="5,5,158,33"/>
+<area shape="rect" id="Node000002" href="$namespaceDatalog.html#aea01a5691922006e60d64261626d177a" title="Whether processVoltage() scales V^2 down by 16 before summing it over the datalog period." alt="" coords="206,5,402,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,17,193,19,188,19,158,22"/>
+</map>

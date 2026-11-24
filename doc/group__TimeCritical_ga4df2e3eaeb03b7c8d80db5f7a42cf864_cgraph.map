@@ -1,0 +1,11 @@
+<map id="applyDecision" name="applyDecision">
+<area shape="rect" id="Node000001" title="Applies the decision: the ports of the local loads, the RF payloads, the absence count." alt="" coords="5,57,119,85"/>
+<area shape="rect" id="Node000002" href="$group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249" title="Updates the control ports for each of the physical loads." alt="" coords="167,57,307,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,69,153,70,148,72,120,74"/>
+<area shape="rect" id="Node000003" href="$namespaceLoad.html#a0684e53aa0eae096cef354f171c08724" title="True if the entry describes a locally driven load." alt="" coords="355,5,460,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="284,54,343,39,348,37,286,59"/>
+<area shape="rect" id="Node000004" href="$namespaceLoad.html#a846d844f03b72ddda22516ea20e81799" title="The pin of the entry: TRIAC pin if local, status LED (0 = none) if remote." alt="" coords="360,57,455,85"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="307,69,347,71,342,71,308,74"/>
+<area shape="rect" id="Node000005" href="$utils__pins_8h.html#a0fa63a07c88e4eefdd46ea2b7deb4d65" title="Switch pins ON and OFF, with one write per port." alt="" coords="356,109,459,137"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="285,83,348,104,343,104,285,88"/>
+</map>

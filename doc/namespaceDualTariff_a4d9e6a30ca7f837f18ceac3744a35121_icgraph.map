@@ -1,0 +1,30 @@
+<map id="DualTariff::inWindow" name="DualTariff::inWindow">
+<area shape="rect" id="Node000001" title="Whether the boost is in its window." alt="" coords="1029,187,1184,214"/>
+<area shape="rect" id="Node000002" href="$namespaceForcing.html#a3b89513ed1a630712a3132079cfa6410" title="The targets of the scheduled boosts whose window is open." alt="" coords="798,117,957,145"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1041,182,926,148,926,143,1047,182"/>
+<area shape="rect" id="Node000011" href="$native_2test__dual__tariff_2test__main_8cpp.html#a5b4db7d8ea556cda25c63680c804c30f" title=" " alt="" coords="780,178,975,223"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="1011,201,976,203,975,198,1016,200"/>
+<area shape="rect" id="Node000013" href="$native_2test__dual__tariff_2test__main_8cpp.html#a2e0c8e70f9fd9dc171c13b4b38075d4c" title=" " alt="" coords="774,247,981,309"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="1051,219,971,249,970,244,1046,220"/>
+<area shape="rect" id="Node000003" href="$group__DualTariff.html#gaf02bde0d44c73c6a662d2adc64d17092" title="Calculates the dual tariff forcing bitmasks based on current conditions." alt="" coords="520,5,726,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="840,109,788,79,725,48,689,36,689,31,727,43,790,74,845,109"/>
+<area shape="rect" id="Node000007" href="$native_2test__override__masks_2test__main_8cpp.html#a10730fbc0339fe8325fc42208be49415" title=" " alt="" coords="545,57,701,85"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="798,113,685,88,685,83,804,113"/>
+<area shape="rect" id="Node000009" href="$native_2test__override__masks_2test__main_8cpp.html#a5e241261a6212cad1083e4825e5bcfa7" title=" " alt="" coords="535,109,711,154"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="780,132,712,134,711,129,785,131"/>
+<area shape="rect" id="Node000010" href="$native_2test__override__masks_2test__main_8cpp.html#aa8e3b1a48197ea83b537f253ad07050a" title=" " alt="" coords="535,178,711,239"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="817,149,712,184,710,179,812,151"/>
+<area shape="rect" id="Node000004" href="$group__GeneralProcessing.html#ga138363324cdfb878a017c41a0d33bcf3" title="Gets the combined bitmasks of all active override pins and dual tariff forcing." alt="" coords="320,5,472,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="502,20,473,22,472,17,508,18"/>
+<area shape="rect" id="Node000005" href="$group__GeneralProcessing.html#ga143b5ab1cc611c04c761240ce5687fdd" title="Handles tasks that need to be executed every second." alt="" coords="103,5,272,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="302,20,273,22,271,17,307,18"/>
+<area shape="rect" id="Node000006" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,5,55,33"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="85,21,57,21,54,17,89,17"/>
+<area shape="rect" id="Node000008" href="$native_2test__override__masks_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="369,117,423,145"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="546,90,521,99,425,126,423,121,520,94,551,88"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="517,132,424,134,423,129,522,131"/>
+<area shape="poly" id="edge11_Node000010_Node000008" title=" " alt="" coords="518,174,424,143,424,138,524,173"/>
+<area shape="rect" id="Node000012" href="$native_2test__dual__tariff_2test__main_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="596,264,650,292"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="797,228,726,254,651,274,650,269,725,249,791,229"/>
+<area shape="poly" id="edge15_Node000013_Node000012" title=" " alt="" coords="756,278,650,280,650,275,761,278"/>
+</map>

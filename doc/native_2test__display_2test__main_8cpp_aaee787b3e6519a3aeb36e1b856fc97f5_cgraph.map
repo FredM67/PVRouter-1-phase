@@ -1,0 +1,11 @@
+<map id="test_oled_texts" name="test_oled_texts">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,32,127,60"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a67a63a9d807fa90bb7dc38874f2e4d8f" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above." alt="" coords="193,5,344,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,35,180,30,175,32,128,40"/>
+<area shape="rect" id="Node000004" href="$namespaceDisplay.html#a3dca1ea3c46b8f5049678f2230e08b04" title="Writes the temperature temperature_x100, rounded to 0.1 °C, right&#45;aligned on 5 characters: &quot; 23...." alt="" coords="175,57,362,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="127,51,162,57,157,58,127,56"/>
+<area shape="rect" id="Node000003" href="$namespaceDisplay.html#a7f81200a2bdcccf34ba2cd7c43d8aa95" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above (as Full)." alt="" coords="410,5,556,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="344,17,398,19,392,19,344,22"/>
+<area shape="rect" id="Node000005" href="$ds18b20_8h.html#ad55adf4c2798fb2203dd07c6954856fe" title="Whether a temperature reading is valid, and so worth sending." alt="" coords="410,57,556,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="362,69,397,71,392,71,362,74"/>
+</map>

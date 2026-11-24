@@ -1,0 +1,13 @@
+<map id="AdcChain::admuxOf" name="AdcChain::admuxOf">
+<area shape="rect" id="Node000001" title="The ADMUX value that converts a channel: reference, left&#45;adjusted result, analog input." alt="" coords="564,32,715,60"/>
+<area shape="rect" id="Node000002" href="$namespaceAdcChain.html#a6d2f12ba9de9b28a2c36a59b29648c80" title="The ADMUX value the interrupt writes after the conversion of a channel." alt="" coords="302,5,516,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="547,35,517,34,517,29,552,35"/>
+<area shape="rect" id="Node000005" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="336,57,483,85"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="552,56,483,66,483,60,547,56"/>
+<area shape="rect" id="Node000003" href="$native_2test__adc__chain_2test__main_8cpp.html#adbd8519294ba2d17c4899393d2a00753" title=" " alt="" coords="108,5,254,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="284,20,255,22,254,17,289,19"/>
+<area shape="rect" id="Node000004" href="$native_2test__adc__chain_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,5,60,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="90,21,61,22,59,17,94,18"/>
+<area shape="rect" id="Node000006" href="$group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="152,57,210,85"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="318,71,210,74,210,69,323,71"/>
+</map>

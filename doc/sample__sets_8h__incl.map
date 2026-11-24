@@ -1,0 +1,7 @@
+<map id="Mk2_1phase_RFdatalog_temp/sample_sets.h" name="Mk2_1phase_RFdatalog_temp/sample_sets.h">
+<area shape="rect" id="Node000001" title="The counter of the sample sets of a datalog period, as wide as the period needs." alt="" coords="31,5,207,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,98,76,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,49,66,88,62,84,96,52"/>
+<area shape="rect" id="Node000003" href="$conditional_8hpp.html" title=" " alt="" coords="100,98,296,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="141,48,177,86,172,86,139,53"/>
+</map>

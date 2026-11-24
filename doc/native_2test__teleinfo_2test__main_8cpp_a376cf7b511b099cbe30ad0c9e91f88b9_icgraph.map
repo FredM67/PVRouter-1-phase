@@ -1,0 +1,14 @@
+<map id="parseFrame" name="parseFrame">
+<area shape="rect" id="Node000001" title="Splits a frame into its lines, as a receiver does, checking STX, ETX and every line&#39;s format and chec..." alt="" coords="332,118,430,146"/>
+<area shape="rect" id="Node000002" href="$native_2test__teleinfo_2test__main_8cpp.html#a7199e20d34ee2a9f648670035b077d0c" title=" " alt="" coords="121,5,271,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="348,108,283,65,260,53,260,48,285,60,354,108"/>
+<area shape="rect" id="Node000004" href="$native_2test__teleinfo_2test__main_8cpp.html#a0d0ebe41506881d432837362dd94fca4" title=" " alt="" coords="119,75,272,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="314,120,273,114,273,109,319,119"/>
+<area shape="rect" id="Node000005" href="$native_2test__teleinfo_2test__main_8cpp.html#a7aa4fc3004294abada26810f408d5b4d" title=" " alt="" coords="108,144,284,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="314,144,285,152,284,147,319,143"/>
+<area shape="rect" id="Node000006" href="$native_2test__teleinfo_2test__main_8cpp.html#aad7dd778241bc17fc1da19ac8c06f10a" title=" " alt="" coords="112,212,280,240"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="355,154,322,181,285,203,257,215,256,209,283,199,319,177,350,156"/>
+<area shape="rect" id="Node000003" href="$native_2test__teleinfo_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,114,60,142"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,59,109,65,75,90,49,115,45,112,72,86,106,60,118,56"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="115,206,106,203,69,174,44,144,45,139,73,170,109,199,120,206"/>
+</map>

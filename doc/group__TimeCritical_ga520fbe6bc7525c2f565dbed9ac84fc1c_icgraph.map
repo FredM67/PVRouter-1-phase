@@ -1,0 +1,71 @@
+<map id="multS16x16_to32" name="multS16x16_to32">
+<area shape="rect" id="Node000001" title="Optimized 16×16→32 signed multiplication with assembly." alt="" coords="658,536,794,564"/>
+<area shape="rect" id="Node000002" href="$structCtFilter_1_1LowPassBoost.html#a10df09b866e7a13b17fbedf3141ba5df" title="Filters one sample." alt="" coords="398,195,566,239"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="711,522,671,436,642,384,608,335,560,283,514,242,513,237,564,279,612,331,646,381,676,433,716,523"/>
+<area shape="rect" id="Node000003" href="$group__TimeCritical.html#gabaad87b294f3321a64479a46d8a0eeed" title="Processes the current raw sample for the specified phase." alt="" coords="108,350,304,378"/>
+<area shape="poly" id="edge14_Node000001_Node000003" title=" " alt="" coords="713,521,698,488,676,448,647,409,609,379,567,360,523,348,477,340,431,337,343,341,271,351,268,347,342,336,431,332,477,335,524,342,569,355,612,375,650,405,681,445,703,486,718,523"/>
+<area shape="rect" id="Node000011" href="$group__TimeCritical.html#ga61483079e6f65238edd8429bd234fe9c" title="Processes the raw sample of CT2, the current diverted to the loads." alt="" coords="380,389,583,434"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="700,525,661,486,609,449,584,437,583,431,612,444,664,482,706,525"/>
+<area shape="rect" id="Node000012" href="$group__TimeCritical.html#gaed3b88c01657f322f7b985574a3427fd" title="Processes the current voltage sample for the specified phase." alt="" coords="422,458,542,486"/>
+<area shape="poly" id="edge17_Node000001_Node000012" title=" " alt="" coords="682,530,609,501,542,484,542,479,611,496,687,529"/>
+<area shape="rect" id="Node000014" href="$embedded_2test__mult__asm_2test__main_8cpp.html#a79005d5a7ff720b94615c9c31ac5e7dc" title="Compare assembly results with standard multiplication." alt="" coords="380,510,583,538"/>
+<area shape="poly" id="edge20_Node000001_Node000014" title=" " alt="" coords="640,542,584,537,583,532,646,541"/>
+<area shape="rect" id="Node000016" href="$embedded_2test__mult__asm_2test__main_8cpp.html#a28f0e2ea7b3c26680655edccb0ec238e" title="Test edge cases and potential overflow scenarios." alt="" coords="417,562,546,590"/>
+<area shape="poly" id="edge22_Node000001_Node000016" title=" " alt="" coords="641,560,548,571,546,566,645,558"/>
+<area shape="rect" id="Node000017" href="$embedded_2test__mult__asm_2test__main_8cpp.html#ae06483def99fe9d3eade5b4aac5d9a43" title="Test basic functionality of multS16x16_to32." alt="" coords="398,613,565,658"/>
+<area shape="poly" id="edge24_Node000001_Node000017" title=" " alt="" coords="679,572,611,604,567,618,565,613,609,598,684,570"/>
+<area shape="rect" id="Node000018" href="$embedded_2test__mult__asm_2test__main_8cpp.html#afe635d3d8214d539d82722e2097430a8" title="ISR&#45;like performance test simulating real&#45;world usage." alt="" coords="402,683,561,727"/>
+<area shape="poly" id="edge26_Node000001_Node000018" title=" " alt="" coords="709,575,668,627,641,651,612,673,563,693,561,688,609,668,638,647,664,623,704,578"/>
+<area shape="rect" id="Node000019" href="$embedded_2test__mult__asm_2test__main_8cpp.html#a61d362737dc4e6078cf74deff55b1ef7" title="Performance comparison between assembly and standard multiplication." alt="" coords="353,751,610,779"/>
+<area shape="poly" id="edge28_Node000001_Node000019" title=" " alt="" coords="718,577,704,617,681,661,651,705,612,742,592,753,590,748,609,738,647,702,677,659,699,615,714,581"/>
+<area shape="rect" id="Node000020" href="$embedded_2test__voltage__accumulation_2test__main_8cpp.html#aeeaffbde156096f6543dce5943b0e172" title="Generic test function for voltage accumulation with different parameters." alt="" coords="383,803,580,831"/>
+<area shape="poly" id="edge30_Node000001_Node000020" title=" " alt="" coords="721,577,710,627,689,684,657,743,636,770,612,792,581,809,579,804,609,788,632,766,653,740,684,682,705,625,718,581"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="440,251,381,296,306,339,274,351,270,347,304,335,378,292,444,247"/>
+<area shape="rect" id="Node000005" href="$native_2test__ct__filter_2test__main_8cpp.html#aee73d7095085deccabbc3c6222fe3081" title=" " alt="" coords="116,5,296,50"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="447,184,384,124,345,93,304,65,282,53,280,48,306,60,348,88,388,120,452,182"/>
+<area shape="rect" id="Node000007" href="$native_2test__ct__filter_2test__main_8cpp.html#a1cf11289221d4ba3092fab9dae34e074" title=" " alt="" coords="114,75,299,119"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="421,188,304,134,276,122,274,117,306,129,426,186"/>
+<area shape="rect" id="Node000008" href="$native_2test__ct__filter_2test__main_8cpp.html#aabf66e40a3cf0ab9484cd9e67f8660b1" title=" " alt="" coords="111,143,302,171"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="380,197,274,174,272,169,385,194"/>
+<area shape="rect" id="Node000009" href="$native_2test__ct__filter_2test__main_8cpp.html#a1ff4bcde92334bd0d8882819ee70deee" title=" " alt="" coords="114,195,298,239"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="380,219,300,219,298,215,384,215"/>
+<area shape="rect" id="Node000010" href="$native_2test__ct__filter_2test__main_8cpp.html#a9a32961b0fc47c71be3df59d97e020f6" title=" " alt="" coords="127,264,286,325"/>
+<area shape="poly" id="edge12_Node000002_Node000010" title=" " alt="" coords="383,246,288,274,285,270,387,242"/>
+<area shape="rect" id="Node000004" href="$processing_8cpp.html#a05c2e5b588ced1cd7312f5b0edc5b295" title=" " alt="" coords="11,400,54,428"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="141,384,56,410,52,406,144,380"/>
+<area shape="rect" id="Node000006" href="$native_2test__ct__filter_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,143,60,171"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="113,60,109,64,88,83,70,105,44,144,39,142,65,101,84,79,106,60,116,56"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="124,127,62,150,58,146,127,123"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="93,159,62,159,58,155,97,155"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="124,191,61,169,59,164,128,188"/>
+<area shape="poly" id="edge13_Node000010_Node000006" title=" " alt="" coords="111,257,106,254,85,234,66,212,42,174,41,169,70,209,89,230,109,250,116,255"/>
+<area shape="poly" id="edge16_Node000011_Node000004" title=" " alt="" coords="363,415,55,417,53,412,366,410"/>
+<area shape="rect" id="Node000013" href="$group__TimeCritical.html#gac1f07cd36657d61affe4642911ad27c1" title="Processes the current voltage raw sample for the specified phase." alt="" coords="108,455,305,483"/>
+<area shape="poly" id="edge18_Node000012_Node000013" title=" " alt="" coords="404,472,306,472,304,467,408,469"/>
+<area shape="poly" id="edge19_Node000013_Node000004" title=" " alt="" coords="143,452,55,423,53,418,148,448"/>
+<area shape="rect" id="Node000015" href="$embedded_2test__mult__asm_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="182,622,231,650"/>
+<area shape="poly" id="edge21_Node000014_Node000015" title=" " alt="" coords="376,544,354,553,284,588,229,623,226,619,281,583,352,548,380,540"/>
+<area shape="poly" id="edge23_Node000016_Node000015" title=" " alt="" coords="400,592,354,604,232,632,230,627,352,598,404,589"/>
+<area shape="poly" id="edge25_Node000017_Node000015" title=" " alt="" coords="380,637,232,638,230,633,384,634"/>
+<area shape="poly" id="edge27_Node000018_Node000015" title=" " alt="" coords="385,683,232,644,231,639,389,680"/>
+<area shape="poly" id="edge29_Node000019_Node000015" title=" " alt="" coords="359,745,351,742,335,726,326,709,318,693,303,676,267,656,232,644,231,639,269,651,307,672,322,690,331,707,339,723,355,738,364,744"/>
+<area shape="rect" id="Node000021" href="$embedded_2test__voltage__accumulation_2test__main_8cpp.html#ac09865f3ca06a7bf578a1339b394ed9b" title=" " alt="" coords="127,686,286,714"/>
+<area shape="poly" id="edge31_Node000020_Node000021" title=" " alt="" coords="366,799,351,792,335,777,326,760,319,744,303,728,281,717,281,711,307,724,323,741,331,757,339,774,355,788,371,799"/>
+<area shape="rect" id="Node000023" href="$embedded_2test__voltage__accumulation_2test__main_8cpp.html#ae77c1178fb2cc0712e65479ded7c3999" title=" " alt="" coords="123,738,290,766"/>
+<area shape="poly" id="edge33_Node000020_Node000023" title=" " alt="" coords="390,800,352,793,259,769,259,763,354,788,395,799"/>
+<area shape="rect" id="Node000024" href="$embedded_2test__voltage__accumulation_2test__main_8cpp.html#aa0c9ea550b198ed4f9906898b8de80ce" title=" " alt="" coords="115,790,298,818"/>
+<area shape="poly" id="edge35_Node000020_Node000024" title=" " alt="" coords="365,812,298,811,297,805,370,811"/>
+<area shape="rect" id="Node000025" href="$embedded_2test__voltage__accumulation_2test__main_8cpp.html#a7354eeea461bd0c9c368a60963346238" title=" " alt="" coords="123,842,290,870"/>
+<area shape="poly" id="edge37_Node000020_Node000025" title=" " alt="" coords="365,834,291,847,290,841,370,832"/>
+<area shape="rect" id="Node000026" href="$embedded_2test__voltage__accumulation_2test__main_8cpp.html#aa5635ac718436e40827742d85af6c051" title=" " alt="" coords="131,894,282,922"/>
+<area shape="poly" id="edge39_Node000020_Node000026" title=" " alt="" coords="432,836,306,884,264,896,263,891,304,878,427,838"/>
+<area shape="rect" id="Node000027" href="$embedded_2test__voltage__accumulation_2test__main_8cpp.html#a4848fffa6b9ba6d7331494cf44f6bdb1" title=" " alt="" coords="131,946,282,974"/>
+<area shape="poly" id="edge41_Node000020_Node000027" title=" " alt="" coords="453,840,388,889,306,935,272,948,271,943,304,931,385,885,449,842"/>
+<area shape="rect" id="Node000022" href="$embedded_2test__voltage__accumulation_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="8,815,57,843"/>
+<area shape="poly" id="edge32_Node000021_Node000022" title=" " alt="" coords="115,723,109,728,87,749,68,772,43,816,38,814,63,769,83,745,106,724,119,719"/>
+<area shape="poly" id="edge34_Node000023_Node000022" title=" " alt="" coords="124,773,109,781,78,798,53,816,49,813,75,794,107,776,128,769"/>
+<area shape="poly" id="edge36_Node000024_Node000022" title=" " alt="" coords="98,821,59,828,56,823,102,817"/>
+<area shape="poly" id="edge38_Node000025_Node000022" title=" " alt="" coords="105,842,58,835,57,830,109,839"/>
+<area shape="poly" id="edge40_Node000026_Node000022" title=" " alt="" coords="123,889,106,883,75,865,51,846,50,841,78,860,109,879,128,888"/>
+<area shape="poly" id="edge42_Node000027_Node000022" title=" " alt="" coords="114,939,106,935,82,914,63,889,39,846,41,841,67,886,86,910,109,931,120,939"/>
+</map>

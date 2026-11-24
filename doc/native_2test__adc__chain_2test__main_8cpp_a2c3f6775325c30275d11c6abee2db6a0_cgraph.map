@@ -1,0 +1,28 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,136,60,164"/>
+<area shape="rect" id="Node000002" href="$native_2test__adc__chain_2test__main_8cpp.html#a43174ee1a618ce76adcf3f9cc3898756" title=" " alt="" coords="590,8,742,36"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="53,134,97,107,157,74,227,43,301,19,372,8,445,4,577,10,572,12,445,9,373,13,303,24,229,48,159,79,100,111,57,137"/>
+<area shape="rect" id="Node000004" href="$native_2test__adc__chain_2test__main_8cpp.html#adbd8519294ba2d17c4899393d2a00753" title=" " alt="" coords="108,136,254,164"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="59,148,94,148,90,152,62,152"/>
+<area shape="rect" id="Node000011" href="$native_2test__adc__chain_2test__main_8cpp.html#a004ee700c02dc503e76cbd2548986778" title=" " alt="" coords="109,260,252,304"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="50,162,145,247,141,250,49,167"/>
+<area shape="rect" id="Node000003" href="$namespaceAdcChain.html#a7190fa715bd30855c015b6b64a5e403b" title="The analog input of a channel on a board (A0 = 0)." alt="" coords="820,111,945,138"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="698,34,840,103,834,104,697,39"/>
+<area shape="poly" id="edge12_Node000004_Node000003" title=" " alt="" coords="254,145,805,125,804,130,255,150"/>
+<area shape="rect" id="Node000005" href="$namespaceAdcChain.html#a6d2f12ba9de9b28a2c36a59b29648c80" title="The ADMUX value the interrupt writes after the conversion of a channel." alt="" coords="302,187,516,214"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="246,162,331,182,326,184,246,167"/>
+<area shape="rect" id="Node000007" href="$namespaceAdcChain.html#a49994e50fa1e55e1cbd23ea74cc14ea6" title="The reference bits of ADMUX on a board." alt="" coords="816,289,949,317"/>
+<area shape="poly" id="edge13_Node000004_Node000007" title=" " alt="" coords="200,162,246,193,303,223,368,246,435,264,571,288,698,299,803,305,798,305,697,304,571,293,434,269,366,251,301,228,243,198,200,167"/>
+<area shape="rect" id="Node000009" href="$namespaceAdcChain.html#a3df7dc8dd51b782cfee692540327eb1f" title="The channel round round converts, once the pipeline is full." alt="" coords="305,33,513,61"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="199,133,244,102,301,71,325,65,320,68,303,76,247,107,202,138"/>
+<area shape="rect" id="Node000010" href="$native_2test__adc__chain_2test__main_8cpp.html#ae94817b39f505f03cad6583f51e7f41e" title="The channel an ADMUX value selects on a board, from its analog input." alt="" coords="342,85,476,113"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="245,133,331,116,327,118,247,138"/>
+<area shape="rect" id="Node000006" href="$namespaceAdcChain.html#a3f992a5e4ee47876cb5765bf267c27f5" title="The ADMUX value that converts a channel: reference, left&#45;adjusted result, analog input." alt="" coords="591,187,741,214"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="517,198,578,200,573,201,517,203"/>
+<area shape="rect" id="Node000008" href="$namespaceAdcChain.html#a0b3d429f633743f8c00ac722ab2c5721" title="The channel two steps after another one in the chain V &#45;&gt; I_GRID &#45;&gt; I_DIVERTED." alt="" coords="564,239,768,266"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="481,212,582,235,576,235,481,218"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="714,184,767,166,829,145,834,144,769,171,715,189"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="735,212,769,225,814,250,854,280,849,279,812,255,767,230,734,218"/>
+<area shape="poly" id="edge11_Node000010_Node000003" title=" " alt="" coords="476,100,806,119,802,122,477,105"/>
+<area shape="poly" id="edge15_Node000011_Node000007" title=" " alt="" coords="239,302,303,319,432,336,534,338,636,331,767,319,798,318,803,318,768,325,637,336,534,343,432,341,301,325,238,308"/>
+</map>

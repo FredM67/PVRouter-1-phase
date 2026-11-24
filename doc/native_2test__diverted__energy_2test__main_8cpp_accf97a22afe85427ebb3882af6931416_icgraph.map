@@ -1,0 +1,22 @@
+<map id="addCycles" name="addCycles">
+<area shape="rect" id="Node000001" title="Adds &#39;count&#39; cycles of the same energy and states." alt="" coords="347,187,435,215"/>
+<area shape="rect" id="Node000002" href="$native_2test__diverted__energy_2test__main_8cpp.html#a7df8128f3861e02ff46d3d84e60300e2" title=" " alt="" coords="121,5,286,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="375,172,345,118,323,89,297,64,281,53,280,48,301,60,327,86,349,116,381,173"/>
+<area shape="rect" id="Node000004" href="$native_2test__diverted__energy_2test__main_8cpp.html#adb49aba0e01a77812e35559a6ccba405" title=" " alt="" coords="122,75,285,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="360,177,331,156,298,134,274,123,274,117,300,129,335,151,365,177"/>
+<area shape="rect" id="Node000005" href="$native_2test__diverted__energy_2test__main_8cpp.html#a5262f4ef7429d4844c197d2febf9ee8e" title=" " alt="" coords="122,144,285,189"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="329,191,286,184,285,179,334,189"/>
+<area shape="rect" id="Node000006" href="$native_2test__diverted__energy_2test__main_8cpp.html#aa59d468743726c8195b1668fcdf1f6f0" title=" " alt="" coords="122,213,284,258"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="329,213,286,223,284,218,334,211"/>
+<area shape="rect" id="Node000007" href="$native_2test__diverted__energy_2test__main_8cpp.html#a6d5572c590bf3711f29517f888fb0691" title=" " alt="" coords="108,282,299,310"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="366,224,335,251,300,273,272,284,270,279,298,268,332,247,361,227"/>
+<area shape="rect" id="Node000008" href="$native_2test__diverted__energy_2test__main_8cpp.html#afc96c9c7c613c990817a25428f6a7a3f" title=" " alt="" coords="128,334,279,362"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="378,227,347,278,325,302,300,323,276,336,275,331,298,319,322,298,343,275,374,230"/>
+<area shape="rect" id="Node000003" href="$native_2test__diverted__energy_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,187,60,215"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,61,110,64,83,94,63,128,40,187,35,186,58,126,79,91,106,60,114,56"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="115,129,109,134,74,161,48,188,43,186,71,157,106,129,118,125"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="105,188,62,198,59,193,108,184"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="105,218,61,209,59,204,109,214"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="116,276,106,273,70,245,45,218,45,213,74,241,109,268,121,275"/>
+<area shape="poly" id="edge12_Node000008_Node000003" title=" " alt="" coords="113,326,106,323,80,298,60,268,38,218,39,213,65,266,85,294,109,319,118,327"/>
+</map>

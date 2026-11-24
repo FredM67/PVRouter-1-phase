@@ -1,0 +1,8 @@
+<map id="test_pins_of_each_type" name="test_pins_of_each_type">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,180,58"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#ad6ccdcf285f13aaad9ca03a4817ddab4" title="The pins display type type takes as a mask: bit n is pin n (D0 = bit 0 ... A5 = bit 19)." alt="" coords="228,5,375,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,31,215,30,210,30,180,37"/>
+<area shape="rect" id="Node000003" href="$namespaceDisplay.html#a04da503999c16d7a0ddca5d8303d5eb0" title="The pins display type type takes, for the pin checks." alt="" coords="423,31,542,58"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="180,42,408,42,407,47,180,47"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="375,27,410,34,405,34,375,32"/>
+</map>

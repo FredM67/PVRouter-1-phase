@@ -1,0 +1,49 @@
+<map id="runNextCycleTask" name="runNextCycleTask">
+<area shape="rect" id="Node000001" title="Runs the first pending cycle task (CycleTask), on a CT2 call." alt="" coords="5,240,144,268"/>
+<area shape="rect" id="Node000002" href="$group__TimeCritical.html#ga0b7173789a81cd1d33ba540622eba2ae" title="The rest of the cycle&#39;s bookkeeping, the task after the CT2 energy." alt="" coords="227,5,366,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,239,89,200,112,147,145,91,166,66,190,44,214,32,210,36,193,48,170,69,149,94,117,149,94,202,82,240"/>
+<area shape="rect" id="Node000003" href="$group__TimeCritical.html#ga4df2e3eaeb03b7c8d80db5f7a42cf864" title="Applies the decision: the ports of the local loads, the RF payloads, the absence count." alt="" coords="240,57,353,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="80,239,95,208,119,170,151,130,190,96,227,80,223,84,193,100,155,133,124,173,100,211,85,241"/>
+<area shape="rect" id="Node000008" href="$group__TimeCritical.html#ga2db5f0533b47f46807c24bcf89ee9fb6" title="Counts the cycle&#39;s CT2 energy, the task after processDivertedEnergy()." alt="" coords="217,109,376,137"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="86,238,129,193,158,168,190,147,209,141,205,145,193,152,161,173,132,197,90,241"/>
+<area shape="rect" id="Node000009" href="$group__TimeCritical.html#ga7b3e259831c07547d2a8ac378d8eedde" title="Predicts the bucket at the end of the cycle, from the first half (fast_control.h)." alt="" coords="226,161,367,189"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="103,237,191,199,220,192,215,195,193,204,106,242"/>
+<area shape="rect" id="Node000012" href="$group__TimeCritical.html#gaabf10592d01250ef862370d26c5a382b" title="Copies the sums of the datalog period that just ended for the main code." alt="" coords="220,213,373,241"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="143,243,206,237,202,240,145,248"/>
+<area shape="rect" id="Node000013" href="$group__TimeCritical.html#ga74b3ca56697213060168c75dee666839" title="Copies the CT2 figures of the datalog period that just ended, then signals the main code." alt="" coords="192,265,401,293"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="143,259,178,264,174,267,145,264"/>
+<area shape="rect" id="Node000016" href="$group__TimeCritical.html#ga5f4786479cad73963c64110c777c79f7" title="Turns the cycle&#39;s CT2 sum into energy, the task after the contribution." alt="" coords="210,317,382,345"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="105,266,193,302,220,312,215,313,191,307,105,271"/>
+<area shape="rect" id="Node000018" href="$group__TimeCritical.html#gac31343a7bf773ef82723f61a0c0b6856" title="Process the latest contribution, the task after each positive crossing." alt="" coords="201,369,392,397"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="88,265,132,310,161,334,193,354,210,363,204,364,190,359,158,338,129,314,88,271"/>
+<area shape="rect" id="Node000021" href="$group__TimeCritical.html#ga5a8b9dce34e44a69a46344e8ee1c0dd6" title="Decides the loads of the next mains cycle, on the prediction." alt="" coords="213,421,380,449"/>
+<area shape="poly" id="edge22_Node000001_Node000021" title=" " alt="" coords="83,265,124,334,155,373,193,406,205,415,200,415,190,411,151,377,119,337,82,270"/>
+<area shape="rect" id="Node000022" href="$group__TimeCritical.html#ga1950a35c4c210dae480943adca0a3c88" title="Updates the physical load states based on logical load priorities and states." alt="" coords="200,473,392,501"/>
+<area shape="poly" id="edge23_Node000001_Node000022" title=" " alt="" coords="80,265,95,306,117,358,149,412,170,437,193,458,203,467,197,466,190,463,166,441,145,415,112,360,90,307,79,271"/>
+<area shape="rect" id="Node000004" href="$group__TimeCritical.html#ga44ac46a7ff4e0717bd668d5907b38249" title="Updates the control ports for each of the physical loads." alt="" coords="493,57,633,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="352,69,479,70,475,73,354,74"/>
+<area shape="rect" id="Node000005" href="$namespaceLoad.html#a0684e53aa0eae096cef354f171c08724" title="True if the entry describes a locally driven load." alt="" coords="755,5,860,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="631,54,742,32,737,35,633,59"/>
+<area shape="rect" id="Node000006" href="$namespaceLoad.html#a846d844f03b72ddda22516ea20e81799" title="The pin of the entry: TRIAC pin if local, status LED (0 = none) if remote." alt="" coords="760,57,855,85"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="633,69,747,70,742,72,634,74"/>
+<area shape="rect" id="Node000007" href="$utils__pins_8h.html#a0fa63a07c88e4eefdd46ea2b7deb4d65" title="Switch pins ON and OFF, with one write per port." alt="" coords="756,109,859,137"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="632,83,743,108,738,110,632,88"/>
+<area shape="rect" id="Node000010" href="$namespaceFastControl.html#aaec9e64c36a923731420a40f831af5bc" title="The energy in the bucket predicted at the end of the mains cycle." alt="" coords="470,126,656,171"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="367,166,457,158,452,161,368,171"/>
+<area shape="rect" id="Node000011" href="$namespaceFastControl.html#a57be1a4100f154bda9bdbea0ed23611d" title="The entry of the per&#45;sample calibration table that turns the first half into a whole cycle&#39;s energy w..." alt="" coords="449,195,677,222"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="367,181,436,191,431,193,368,187"/>
+<area shape="rect" id="Node000014" href="$namespaceDivertedPower.html#adff755a613e9ef25cfc9d56959607a0b" title="The average power over the period, in W." alt="" coords="482,265,644,293"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="401,277,470,278,464,280,402,282"/>
+<area shape="rect" id="Node000015" href="$group__TimeCritical.html#gabc318f6984145cb3265035f62e21c4d8" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="725,291,890,318"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="644,285,713,294,707,295,644,290"/>
+<area shape="rect" id="Node000017" href="$namespaceEnergy.html#a5c6a3eeab8203be8c21f0dcd70f1b1c0" title="Contribution of one mains cycle of one phase to the bucket." alt="" coords="488,317,639,345"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="383,329,474,330,469,332,383,334"/>
+<area shape="poly" id="edge17_Node000017_Node000015" title=" " alt="" coords="639,320,712,315,707,316,639,326"/>
+<area shape="poly" id="edge19_Node000018_Node000017" title=" " alt="" coords="371,366,476,348,471,349,372,371"/>
+<area shape="rect" id="Node000019" href="$namespaceEnergy.html#aeae61ea16953d9d9b692f8bb2c8b5f6a" title="A power in watts, in bucket units per mains cycle." alt="" coords="492,369,634,397"/>
+<area shape="poly" id="edge20_Node000018_Node000019" title=" " alt="" coords="392,381,480,383,474,384,393,386"/>
+<area shape="rect" id="Node000020" href="$processing_8cpp.html#add35090335f84f8956573b63306eb061" title="Rescales the sum of a cycle of an unexpected length to N_MIN sample sets." alt="" coords="505,421,621,449"/>
+<area shape="poly" id="edge21_Node000018_Node000020" title=" " alt="" coords="371,395,492,421,487,421,371,400"/>
+<area shape="rect" id="Node000023" href="$namespaceLoadPriorities.html#a47aea1ccecee86d6d769f85e0ec56772" title="Maps the logical load states to the physical ones." alt="" coords="470,473,656,501"/>
+<area shape="poly" id="edge24_Node000022_Node000023" title=" " alt="" coords="393,485,458,487,453,487,393,490"/>
+</map>

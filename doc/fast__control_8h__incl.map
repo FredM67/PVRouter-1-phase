@@ -1,0 +1,15 @@
+<map id="Mk2_1phase_RFdatalog_temp/fast_control.h" name="Mk2_1phase_RFdatalog_temp/fast_control.h">
+<area shape="rect" id="Node000001" title="Faster control: the load decision on the predicted energy, at mid&#45;cycle." alt="" coords="5,5,182,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="33,249,103,277"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,53,71,99,65,172,68,234,63,234,60,171,66,97,84,48"/>
+<area shape="rect" id="Node000003" href="$energy__bucket_8h.html" title="Integer arithmetic of the energy bucket." alt="" coords="80,98,208,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="107,48,131,84,125,85,107,53"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="140,124,84,236,79,234,136,128"/>
+<area shape="rect" id="Node000004" href="$mult__asm_8h.html" title="Assembly&#45;optimized multiplication functions for AVR microcontrollers." alt="" coords="131,174,229,201"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="151,124,170,160,164,160,150,129"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="158,204,102,243,99,239,162,200"/>
+<area shape="rect" id="Node000005" href="$is__same_8hpp.html" title=" " alt="" coords="128,249,305,277"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="188,199,206,236,200,235,186,204"/>
+<area shape="rect" id="Node000006" href="$integral__constant_8hpp.html" title=" " alt="" coords="135,325,297,353"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="218,276,218,311,214,308,214,279"/>
+</map>

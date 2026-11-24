@@ -1,0 +1,15 @@
+<map id="test_steady_state_within_one_count_of_robins" name="test_steady_state_within_one_count_of_robins">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,92,190,137"/>
+<area shape="rect" id="Node000002" href="$structCtFilter_1_1LowPassBoost.html#a10df09b866e7a13b17fbedf3141ba5df" title="Filters one sample." alt="" coords="238,5,406,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,89,250,54,246,58,159,94"/>
+<area shape="rect" id="Node000004" href="$structRobin.html#a6fb351d4e59a86c1d556e8057482d2e6" title=" " alt="" coords="271,74,373,102"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="190,101,258,94,253,97,191,106"/>
+<area shape="rect" id="Node000005" href="$native_2test__ct__filter_2test__main_8cpp.html#a6fc1aff038a4cf3ba928f348a3a86bb2" title="The low&#45;pass state of the filter, in ADC counts." alt="" coords="263,126,381,154"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="190,122,250,131,245,132,190,127"/>
+<area shape="rect" id="Node000007" href="$native_2test__ct__filter_2test__main_8cpp.html#ab22ab0f95f0afee6d34745548c195f52" title="A DC&#45;removed sample in ADC counts, at the x64 scale of the firmware." alt="" coords="299,178,344,206"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="161,135,239,162,287,180,281,180,237,168,160,140"/>
+<area shape="rect" id="Node000003" href="$group__TimeCritical.html#ga520fbe6bc7525c2f565dbed9ac84fc1c" title="Optimized 16×16→32 signed multiplication with assembly." alt="" coords="470,14,606,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="406,25,458,27,452,28,407,30"/>
+<area shape="rect" id="Node000006" href="$structCtFilter_1_1LowPassBoost.html#a9c5345543b4137f98bf2e8db4acff17b" title="The low&#45;pass state, x256 scale (Robin&#39;s lpf_long)." alt="" coords="454,117,622,162"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="381,137,441,139,436,140,382,142"/>
+</map>

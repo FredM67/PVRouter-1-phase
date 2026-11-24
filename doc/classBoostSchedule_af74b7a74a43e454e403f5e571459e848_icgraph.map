@@ -1,0 +1,14 @@
+<map id="BoostSchedule::getLocalBitmask" name="BoostSchedule::getLocalBitmask">
+<area shape="rect" id="Node000001" title="The local bitmask of boost i, or 0 if out of bounds." alt="" coords="508,57,743,85"/>
+<area shape="rect" id="Node000002" href="$namespaceDualTariff.html#a0a0695c296e5eb740ea51bae242d9e80" title="Boost i of boosts, for an off&#45;peak period of offPeakHours." alt="" coords="321,57,460,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="490,71,461,74,461,69,495,71"/>
+<area shape="rect" id="Node000003" href="$group__DualTariff.html#ga3009ccb36d1f122143901eb20b4d06de" title="Resolves each scheduled boost, at compile time." alt="" coords="134,5,247,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="317,53,247,36,247,31,322,52"/>
+<area shape="rect" id="Node000004" href="$native_2test__dual__tariff_2test__main_8cpp.html#ac66fbaa26fb5dfae17aac4d9d53baed6" title=" " alt="" coords="140,57,241,85"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="303,72,242,74,241,69,308,71"/>
+<area shape="rect" id="Node000006" href="$native_2test__dual__tariff_2test__main_8cpp.html#a2f801e0f8bec0105196434dd673a4a0f" title=" " alt="" coords="108,109,273,154"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="330,89,268,111,267,106,325,90"/>
+<area shape="rect" id="Node000005" href="$native_2test__dual__tariff_2test__main_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,88,60,116"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="123,86,61,99,59,94,126,82"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="90,114,60,109,60,104,95,112"/>
+</map>

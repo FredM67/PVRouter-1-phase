@@ -1,0 +1,21 @@
+<map id="Mk2_1phase_RFdatalog_temp/test/embedded/test_teleinfo/test_main.cpp" name="Mk2_1phase_RFdatalog_temp/test/embedded/test_teleinfo/test_main.cpp">
+<area shape="rect" id="Node000001" title="Embedded tests for teleinfo.h: the IoT frame on the ATmega328P (16&#45;bit int)" alt="" coords="75,5,268,67"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="114,191,197,218"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,66,41,87,14,116,9,129,10,141,17,152,28,161,61,178,101,191,96,193,59,182,25,166,13,155,5,143,3,129,9,114,37,83,75,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="23,115,88,143"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="131,70,86,107,82,103,134,65"/>
+<area shape="rect" id="Node000004" href="$halt__after__tests_8h.html" title="Stops the MCU once an embedded test suite has run." alt="" coords="254,115,401,143"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="224,65,294,106,289,107,223,70"/>
+<area shape="rect" id="Node000007" href="$serial__output_8h.html" title="Non&#45;blocking serial output of the datalog." alt="" coords="112,115,231,143"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="173,65,174,100,169,98,170,70"/>
+<area shape="rect" id="Node000008" href="$teleinfo_8h.html" title="The telemetry frame of the IoT output, written a line at a time." alt="" coords="455,115,538,143"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="269,62,442,111,438,113,268,67"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="299,143,201,187,199,182,294,144"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="221,191,335,218"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="321,142,297,180,294,176,316,144"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="359,191,453,218"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="342,141,384,180,378,179,340,146"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="171,141,164,177,159,174,166,145"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="476,191,547,218"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="501,141,508,177,504,174,498,145"/>
+</map>

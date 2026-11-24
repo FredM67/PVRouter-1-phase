@@ -1,0 +1,19 @@
+<map id="test_no_drift_over_one_minute" name="test_no_drift_over_one_minute">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,153,144,198"/>
+<area shape="rect" id="Node000002" href="$namespaceEnergy.html#a3d00254b7d0089c630b2f863f97a7abe" title="Largest shift that keeps every calibration value within 16 bits." alt="" coords="192,57,363,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,150,144,122,190,95,210,89,206,92,193,100,146,127,107,154"/>
+<area shape="rect" id="Node000005" href="$namespaceEnergy.html#a5c6a3eeab8203be8c21f0dcd70f1b1c0" title="Contribution of one mains cycle of one phase to the bucket." alt="" coords="202,109,353,137"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="143,155,208,140,204,143,145,160"/>
+<area shape="rect" id="Node000007" href="$native_2test__remote__loads_2test__main_8cpp.html#aaec8897a0d016b7a6930a2b2ca2654b3" title="Run one mains cycle: feed the states to the core, for the given map." alt="" coords="250,161,305,189"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="144,173,236,174,232,177,145,178"/>
+<area shape="rect" id="Node000008" href="$native_2test__energy__bucket_2test__main_8cpp.html#a6daf045ca0cf4c7885ee70a055efcbf0" title="The float arithmetic being replaced, in bucket units." alt="" coords="236,213,319,241"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="144,190,223,212,218,214,144,196"/>
+<area shape="rect" id="Node000009" href="$namespaceEnergy.html#a44bfabeeca8fe61512b44b54519707f5" title="A calibration value as a 16&#45;bit fixed&#45;point constant." alt="" coords="217,265,338,293"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="105,195,146,224,193,250,211,260,206,259,190,255,144,228,104,201"/>
+<area shape="rect" id="Node000003" href="$namespaceEnergy.html#ab6b5951d040a1d99b3f1f1deecc2da77" title="Largest of the calibration values." alt="" coords="426,5,560,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="337,54,420,36,415,38,339,59"/>
+<area shape="rect" id="Node000004" href="$namespaceEnergy.html#a8b5cc27275819b07610576e86d2f009b" title="Largest shift that keeps a value within 16 bits once scaled by 2^shift." alt="" coords="432,57,554,85"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="363,69,420,70,415,72,364,74"/>
+<area shape="rect" id="Node000006" href="$group__TimeCritical.html#gabc318f6984145cb3265035f62e21c4d8" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="411,109,575,137"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="353,121,398,122,393,124,354,126"/>
+</map>

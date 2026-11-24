@@ -1,0 +1,19 @@
+<map id="test_before_end_from_3_to_12_hours" name="test_before_end_from_3_to_12_hours">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,131,170,176"/>
+<area shape="rect" id="Node000002" href="$config__types_8h.html#a1443b40bba36a2678456b87bae0ba5e1" title="A start m before the end of the off&#45;peak period." alt="" coords="271,5,380,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,129,155,85,185,63,217,43,258,30,254,33,219,48,188,67,158,89,112,133"/>
+<area shape="rect" id="Node000003" href="$namespaceDualTariff.html#af268903010691999860dcb9ac66353b2" title="Whether a window with FOR() ends within the off&#45;peak period (its end may be the end of the period): a..." alt="" coords="218,57,433,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="135,129,217,95,247,88,243,91,219,100,138,133"/>
+<area shape="rect" id="Node000005" href="$config__types_8h.html#a29ce77d1007e49cacadbead00f25d579" title="A boost lasting m." alt="" coords="301,109,350,137"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="169,141,288,126,284,130,170,146"/>
+<area shape="rect" id="Node000006" href="$namespaceDualTariff.html#ae2105eacb3986a4906a94761d1da14d7" title="Whether the window starts within the off&#45;peak period: otherwise, it would never open." alt="" coords="240,161,410,206"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="169,161,227,170,222,172,170,167"/>
+<area shape="rect" id="Node000007" href="$namespaceDualTariff.html#a7887d6725a84027160f98854c86836b4" title="The end of the boost window (excluded), in ms from the start of the off&#45;peak period." alt="" coords="243,229,408,257"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="129,174,172,196,219,215,242,225,237,225,217,220,170,201,129,179"/>
+<area shape="rect" id="Node000008" href="$namespaceDualTariff.html#ac37cb69f5f3e1d32bb27064242c13887" title="The start of the boost window, in ms from the start of the off&#45;peak period." alt="" coords="488,255,660,282"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="106,174,153,224,184,248,219,266,286,284,357,290,425,289,484,285,489,285,426,294,357,296,285,289,217,271,181,252,150,228,104,179"/>
+<area shape="rect" id="Node000004" href="$namespaceDualTariff.html#add1fd2c084fbdde86e4fba396c547c5f" title="The start of the window, in minutes from the start of the off&#45;peak period: negative if before it." alt="" coords="481,113,666,141"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="390,83,497,109,492,110,390,88"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="410,161,497,144,491,146,412,167"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="409,249,475,258,469,258,408,254"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="x64" name="x64">
+<area shape="rect" id="Node000001" title="A DC&#45;removed sample in ADC counts, at the x64 scale of the firmware." alt="" coords="341,118,386,146"/>
+<area shape="rect" id="Node000002" href="$native_2test__ct__filter_2test__main_8cpp.html#aee73d7095085deccabbc3c6222fe3081" title=" " alt="" coords="110,5,290,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="339,106,318,85,292,65,272,53,271,48,294,60,321,81,344,106"/>
+<area shape="rect" id="Node000004" href="$native_2test__ct__filter_2test__main_8cpp.html#a1cf11289221d4ba3092fab9dae34e074" title=" " alt="" coords="108,75,293,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="323,124,294,119,293,114,328,123"/>
+<area shape="rect" id="Node000005" href="$native_2test__ct__filter_2test__main_8cpp.html#a1ff4bcde92334bd0d8882819ee70deee" title=" " alt="" coords="108,144,292,189"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="323,140,294,149,292,144,328,139"/>
+<area shape="rect" id="Node000006" href="$native_2test__ct__filter_2test__main_8cpp.html#a9a32961b0fc47c71be3df59d97e020f6" title=" " alt="" coords="121,213,280,274"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="343,156,320,182,295,203,276,215,274,210,291,199,317,178,338,159"/>
+<area shape="rect" id="Node000003" href="$native_2test__ct__filter_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,118,60,146"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,59,109,65,74,92,48,119,43,116,71,88,106,60,118,55"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="91,121,62,128,59,124,94,117"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="91,146,61,140,59,135,95,143"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="111,205,106,203,71,175,46,148,47,143,75,171,109,199,116,205"/>
+</map>

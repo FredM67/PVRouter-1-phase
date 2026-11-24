@@ -1,0 +1,9 @@
+<map id="test_seg_texts" name="test_seg_texts">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,57,122,85"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a6aa97be3c8a08d1ba3812589a8d33a0d" title="Writes &quot;FORC&quot;." alt="" coords="189,5,332,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,54,193,36,188,39,120,59"/>
+<area shape="rect" id="Node000003" href="$namespaceDisplay.html#a7f0baecb7d5e7c1c797b01aa237e12dc" title="Writes &quot; OFF&quot;." alt="" coords="201,57,320,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,69,188,70,183,72,123,74"/>
+<area shape="rect" id="Node000004" href="$namespaceDisplay.html#a172dddc8916a84f58f7a3c625cb858e4" title="Writes the walking dots: 4 blanks, the DP of digit position (0 to 3) on." alt="" coords="170,109,352,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="119,83,193,104,188,106,119,88"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="Display::segEnergy" name="Display::segEnergy">
+<area shape="rect" id="Node000001" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above (as Full)." alt="" coords="679,71,824,98"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a67a63a9d807fa90bb7dc38874f2e4d8f" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above." alt="" coords="461,71,612,98"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="660,85,612,87,612,82,666,84"/>
+<area shape="rect" id="Node000008" href="$utils__display_8h.html#ac0ef306a29083e9c6915800038b0c8e4" title="Shows item item of the turn on the 7&#45;segment display, once per second." alt="" coords="442,135,631,162"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="691,103,586,137,585,131,685,104"/>
+<area shape="rect" id="Node000009" href="$native_2test__display_2test__main_8cpp.html#aff693ccc4ade2186d2de783425f1e53c" title=" " alt="" coords="266,5,394,33"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="669,67,630,62,395,29,395,24,631,57,674,67"/>
+<area shape="rect" id="Node000003" href="$native_2test__display_2test__main_8cpp.html#aaee787b3e6519a3aeb36e1b856fc97f5" title=" " alt="" coords="270,57,391,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="443,79,391,78,391,72,448,78"/>
+<area shape="rect" id="Node000005" href="$utils__oled_8h.html#aa2280d1881dc5c362dd647d3b5f6d660" title="Shows item item of the turn on the OLED, once per second." alt="" coords="280,109,381,137"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="449,101,382,116,381,111,444,102"/>
+<area shape="rect" id="Node000004" href="$native_2test__display_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="133,32,188,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="252,61,188,52,188,47,257,59"/>
+<area shape="rect" id="Node000006" href="$group__GeneralProcessing.html#ga64c5b9d14eb62b90506c0ee1b2ff3e2c" title="Updates the display, once per second." alt="" coords="103,135,218,162"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="267,133,219,143,218,137,262,133"/>
+<area shape="rect" id="Node000007" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,135,55,162"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="85,149,55,151,55,146,90,148"/>
+<area shape="poly" id="edge8_Node000008_Node000006" title=" " alt="" coords="425,150,218,151,218,146,429,147"/>
+<area shape="poly" id="edge10_Node000009_Node000004" title=" " alt="" coords="248,33,189,44,187,39,253,30"/>
+</map>

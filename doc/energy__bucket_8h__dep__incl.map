@@ -1,0 +1,29 @@
+<map id="Mk2_1phase_RFdatalog_temp/energy_bucket.h" name="Mk2_1phase_RFdatalog_temp/energy_bucket.h">
+<area shape="rect" id="Node000001" title="Integer arithmetic of the energy bucket." alt="" coords="660,5,836,50"/>
+<area shape="rect" id="Node000002" href="$datalog__math_8h.html" title="Integer arithmetic of the datalog: power and RMS voltage per phase." alt="" coords="525,106,702,151"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="709,58,644,108,641,104,704,61"/>
+<area shape="rect" id="Node000004" href="$processing_8cpp.html" title="Implements the processing engine." alt="" coords="785,216,962,261"/>
+<area shape="poly" id="edge11_Node000001_Node000004" title=" " alt="" coords="750,63,758,112,765,136,776,158,803,190,836,216,831,215,799,193,771,161,760,138,752,113,747,68"/>
+<area shape="rect" id="Node000007" href="$validation_8h.html" title="Compile&#45;time validations." alt="" coords="31,216,207,261"/>
+<area shape="poly" id="edge16_Node000001_Node000007" title=" " alt="" coords="654,56,514,101,329,163,178,218,176,213,328,158,513,95,659,54"/>
+<area shape="rect" id="Node000008" href="$fast__control_8h.html" title="Faster control: the load decision on the predicted energy, at mid&#45;cycle." alt="" coords="785,106,962,151"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="788,57,849,106,844,106,787,62"/>
+<area shape="rect" id="Node000009" href="$native_2test__fast__control_2test__main_8cpp.html" title="Native unit tests for fast_control.h: the decision on the predicted energy." alt="" coords="986,208,1188,269"/>
+<area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="852,44,915,65,975,96,1065,208,1060,207,972,100,913,70,851,50"/>
+<area shape="rect" id="Node000010" href="$native_2test__energy__bucket_2test__main_8cpp.html" title="Native unit tests for energy_bucket.h." alt="" coords="1036,98,1255,160"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="850,52,1038,100,1033,101,850,57"/>
+<area shape="rect" id="Node000011" href="$utils_8h.html" title="Some utility functions." alt="" coords="5,106,182,151"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="644,47,182,117,181,112,645,42"/>
+<area shape="rect" id="Node000003" href="$main_8cpp.html" title="Main code for the PVRouter single&#45;phase project." alt="" coords="31,317,207,362"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="676,157,704,179,725,206,737,240,735,255,725,271,699,285,651,297,513,316,351,329,208,337,207,332,350,324,512,311,650,292,697,280,721,267,730,254,732,240,720,209,700,182,675,162"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="680,155,824,215,818,216,679,160"/>
+<area shape="rect" id="Node000005" href="$embedded_2test__datalog__math__avr_2test__main_8cpp.html" title="The integer datalog arithmetic on the target: exact results, and cycle counts against the float code ..." alt="" coords="231,208,473,269"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="549,157,427,210,425,205,544,159"/>
+<area shape="rect" id="Node000006" href="$native_2test__datalog__math_2test__main_8cpp.html" title="Native unit tests for datalog_math.h." alt="" coords="497,208,711,269"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="612,165,609,209,605,205,609,169"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="507,149,372,177,219,210,190,218,188,213,218,205,371,171,512,147"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="121,274,121,318,116,316,117,278"/>
+<area shape="poly" id="edge9_Node000008_Node000004" title=" " alt="" coords="875,165,876,217,871,214,872,169"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="931,156,1029,207,1024,207,930,161"/>
+<area shape="poly" id="edge15_Node000011_Node000003" title=" " alt="" coords="51,164,35,184,21,209,13,239,15,252,21,268,43,295,72,316,67,318,39,299,17,271,9,254,8,239,16,207,31,181,54,159"/>
+</map>

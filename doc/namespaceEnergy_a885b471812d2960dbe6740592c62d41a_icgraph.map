@@ -1,0 +1,40 @@
+<map id="Energy::toFixedPerSample" name="Energy::toFixedPerSample">
+<area shape="rect" id="Node000001" title="Build the per&#45;sample calibration table at compile time." alt="" coords="582,351,773,379"/>
+<area shape="rect" id="Node000002" href="$native_2test__fast__control_2test__main_8cpp.html#ac3e8f0fb7bef90da9ba98b5ac7db4557" title="Every in&#45;range n gives the division form, within the rounding of the table." alt="" coords="344,48,484,76"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="668,335,652,283,626,216,587,147,562,116,533,90,510,77,485,69,484,64,512,72,536,86,566,113,591,144,631,213,657,281,673,337"/>
+<area shape="rect" id="Node000006" href="$native_2test__energy__bucket_2test__main_8cpp.html#a9e67a1ace529d58b51e79a6a82d55d57" title=" " alt="" coords="324,100,504,145"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="662,336,643,298,614,249,578,201,533,159,505,143,504,138,536,155,582,197,619,247,647,295,667,338"/>
+<area shape="rect" id="Node000008" href="$native_2test__energy__bucket_2test__main_8cpp.html#a3ca4a828cf491ad87ec6a75a658a0276" title=" " alt="" coords="302,169,526,214"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="654,339,603,284,570,254,533,229,510,217,510,212,536,224,573,250,607,280,659,339"/>
+<area shape="rect" id="Node000009" href="$native_2test__energy__bucket_2test__main_8cpp.html#aa906764364e552678675262a3f150512" title=" " alt="" coords="293,239,534,283"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="634,344,533,298,501,286,500,281,535,293,640,343"/>
+<area shape="rect" id="Node000010" href="$native_2test__energy__bucket_2test__main_8cpp.html#afdf70396c1a35806c14d2ff163eb55d4" title=" " alt="" coords="318,308,509,353"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="564,351,510,346,509,340,569,350"/>
+<area shape="rect" id="Node000011" href="$native_2test__energy__bucket_2test__main_8cpp.html#adb5dd98988bfc8217410ea8b1b0907eb" title=" " alt="" coords="316,377,512,422"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="564,380,513,389,511,384,569,379"/>
+<area shape="rect" id="Node000012" href="$native_2test__energy__bucket_2test__main_8cpp.html#a383be0a3210cdb19283a29b0d0df84a7" title=" " alt="" coords="323,447,504,491"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="635,388,535,437,501,449,499,444,533,432,639,385"/>
+<area shape="rect" id="Node000013" href="$native_2test__energy__bucket_2test__main_8cpp.html#ac96d872defcc165612e2798944d1cbd5" title=" " alt="" coords="326,516,501,561"/>
+<area shape="poly" id="edge18_Node000001_Node000013" title=" " alt="" coords="659,390,607,450,573,480,536,506,502,521,500,516,533,501,570,476,603,446,654,393"/>
+<area shape="rect" id="Node000014" href="$native_2test__energy__bucket_2test__main_8cpp.html#a5d5f43ba325b50021b4ce88f6aedb8ad" title=" " alt="" coords="332,585,496,630"/>
+<area shape="poly" id="edge20_Node000001_Node000014" title=" " alt="" coords="667,391,647,435,619,483,582,533,536,575,497,595,495,590,533,571,578,529,614,481,643,432,663,395"/>
+<area shape="rect" id="Node000015" href="$native_2test__energy__bucket_2test__main_8cpp.html#a2dc07eb885986a9879b8ee6b79feeac8" title=" " alt="" coords="332,655,496,699"/>
+<area shape="poly" id="edge22_Node000001_Node000015" title=" " alt="" coords="671,392,656,448,629,515,590,585,565,617,536,644,518,657,497,666,496,660,515,652,533,640,561,613,585,582,625,513,651,446,668,396"/>
+<area shape="rect" id="Node000003" href="$native_2test__fast__control_2test__main_8cpp.html#ae13fd133024b003ecf6a56a6737c84f0" title=" " alt="" coords="108,5,245,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="326,51,247,40,244,35,330,48"/>
+<area shape="rect" id="Node000005" href="$native_2test__fast__control_2test__main_8cpp.html#a64d546bc31dbc6383bff964252ad971f" title=" " alt="" coords="108,75,245,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="326,77,247,89,244,85,330,73"/>
+<area shape="rect" id="Node000004" href="$native_2test__fast__control_2test__main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,48,60,76"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="91,50,62,58,58,54,94,46"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="90,78,62,71,59,67,95,75"/>
+<area shape="rect" id="Node000007" href="$native_2test__energy__bucket_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="149,386,204,414"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="308,147,295,159,269,185,247,215,214,281,193,342,183,387,178,385,188,341,209,279,243,212,265,182,291,155,312,143"/>
+<area shape="poly" id="edge9_Node000008_Node000007" title=" " alt="" coords="298,224,295,228,255,267,223,311,200,354,185,387,181,384,195,352,219,308,251,263,291,224,301,220"/>
+<area shape="poly" id="edge11_Node000009_Node000007" title=" " alt="" coords="302,292,294,298,263,319,234,343,192,387,188,384,231,339,260,315,292,293,306,288"/>
+<area shape="poly" id="edge13_Node000010_Node000007" title=" " alt="" coords="317,359,294,368,205,394,202,389,292,362,321,356"/>
+<area shape="poly" id="edge15_Node000011_Node000007" title=" " alt="" coords="297,401,205,402,203,397,302,398"/>
+<area shape="poly" id="edge17_Node000012_Node000007" title=" " alt="" coords="316,443,292,437,204,410,203,405,294,432,321,441"/>
+<area shape="poly" id="edge19_Node000013_Node000007" title=" " alt="" coords="310,513,292,506,260,485,231,460,189,417,190,411,234,456,263,480,294,501,315,513"/>
+<area shape="poly" id="edge21_Node000014_Node000007" title=" " alt="" coords="315,587,291,575,251,536,219,491,195,448,183,416,183,411,200,445,223,488,255,533,295,571,320,587"/>
+<area shape="poly" id="edge23_Node000015_Node000007" title=" " alt="" coords="315,657,291,644,265,618,243,587,209,521,188,459,179,416,181,411,193,457,214,519,247,584,269,614,295,640,320,658"/>
+</map>

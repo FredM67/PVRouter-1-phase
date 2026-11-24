@@ -1,0 +1,5 @@
+<map id="Display::oledEnergy" name="Display::oledEnergy">
+<area shape="rect" id="Node000001" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above." alt="" coords="5,5,156,33"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a7f81200a2bdcccf34ba2cd7c43d8aa95" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above (as Full)." alt="" coords="204,5,349,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,17,191,19,186,19,156,22"/>
+</map>

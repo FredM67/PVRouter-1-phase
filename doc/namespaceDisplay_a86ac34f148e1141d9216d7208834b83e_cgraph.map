@@ -1,0 +1,5 @@
+<map id="Display::blankHighOf" name="Display::blankHighOf">
+<area shape="rect" id="Node000001" title="The pins to set HIGH before a digit changes, so that nothing shows while the ports change: SEG,..." alt="" coords="5,5,164,33"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a20918209eef8c1ede99f4f69afbec5ca" title="The bit of pin pin in its port." alt="" coords="212,5,345,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,17,199,19,193,19,164,22"/>
+</map>

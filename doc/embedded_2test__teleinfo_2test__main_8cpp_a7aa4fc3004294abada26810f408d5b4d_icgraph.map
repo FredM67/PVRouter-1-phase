@@ -1,0 +1,7 @@
+<map id="test_no_diverted_labels_without_ct2" name="test_no_diverted_labels_without_ct2">
+<area shape="rect" id="Node000001" title=" " alt="" coords="108,24,284,68"/>
+<area shape="rect" id="Node000002" href="$embedded_2test__teleinfo_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="8,5,57,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,30,58,26,57,20,95,27"/>
+<area shape="rect" id="Node000003" href="$native_2test__teleinfo_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,57,60,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="90,63,61,70,60,64,95,61"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="test_negative_energy_is_not_counted" name="test_negative_energy_is_not_counted">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,24,168,68"/>
+<area shape="rect" id="Node000002" href="$native_2test__diverted__energy_2test__main_8cpp.html#accf97a22afe85427ebb3882af6931416" title="Adds &#39;count&#39; cycles of the same energy and states." alt="" coords="262,5,350,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,33,249,26,244,27,168,39"/>
+<area shape="rect" id="Node000003" href="$classDivertedEnergy.html#aa622a3c541eec21addd11eb9d003e6cd" title="The diverted energy since the last reset, in Wh, saturated to 65535." alt="" coords="216,57,396,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,53,203,59,197,59,168,58"/>
+</map>

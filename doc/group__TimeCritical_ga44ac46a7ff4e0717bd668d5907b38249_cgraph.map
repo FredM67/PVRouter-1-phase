@@ -1,0 +1,9 @@
+<map id="updatePortsStates" name="updatePortsStates">
+<area shape="rect" id="Node000001" title="Updates the control ports for each of the physical loads." alt="" coords="5,57,146,85"/>
+<area shape="rect" id="Node000002" href="$namespaceLoad.html#a0684e53aa0eae096cef354f171c08724" title="True if the entry describes a locally driven load." alt="" coords="194,5,299,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,54,187,37,182,39,125,59"/>
+<area shape="rect" id="Node000003" href="$namespaceLoad.html#a846d844f03b72ddda22516ea20e81799" title="The pin of the entry: TRIAC pin if local, status LED (0 = none) if remote." alt="" coords="199,57,294,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="146,69,186,70,180,72,147,74"/>
+<area shape="rect" id="Node000004" href="$utils__pins_8h.html#a0fa63a07c88e4eefdd46ea2b7deb4d65" title="Switch pins ON and OFF, with one write per port." alt="" coords="195,109,298,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="124,83,187,104,182,105,123,88"/>
+</map>

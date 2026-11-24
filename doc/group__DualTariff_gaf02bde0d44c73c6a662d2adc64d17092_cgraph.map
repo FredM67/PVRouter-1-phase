@@ -1,0 +1,10 @@
+<map id="getDualTariffForcingBitmask" name="getDualTariffForcingBitmask">
+<area shape="rect" id="Node000001" title="Calculates the dual tariff forcing bitmasks based on current conditions." alt="" coords="5,32,211,60"/>
+<area shape="rect" id="Node000002" href="$namespaceForcing.html#a3b89513ed1a630712a3132079cfa6410" title="The targets of the scheduled boosts whose window is open." alt="" coords="259,7,418,34"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,32,246,30,240,31,212,37"/>
+<area shape="rect" id="Node000004" href="$group__DualTariff.html#ga686c4ecdf9da4efb37be3fe956774d83" title="Reads scheduled boost i from flash." alt="" coords="500,57,587,85"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="211,49,486,65,484,70,211,54"/>
+<area shape="rect" id="Node000003" href="$namespaceDualTariff.html#a4d9e6a30ca7f837f18ceac3744a35121" title="Whether the boost is in its window." alt="" coords="466,5,621,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="418,17,454,20,448,20,419,23"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="398,32,488,57,482,57,397,38"/>
+</map>

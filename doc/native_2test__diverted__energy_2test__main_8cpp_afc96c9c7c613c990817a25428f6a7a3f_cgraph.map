@@ -1,0 +1,7 @@
+<map id="test_total_saturates" name="test_total_saturates">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,32,157,60"/>
+<area shape="rect" id="Node000002" href="$native_2test__diverted__energy_2test__main_8cpp.html#accf97a22afe85427ebb3882af6931416" title="Adds &#39;count&#39; cycles of the same energy and states." alt="" coords="251,5,339,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,34,238,26,233,27,157,39"/>
+<area shape="rect" id="Node000003" href="$classDivertedEnergy.html#aa622a3c541eec21addd11eb9d003e6cd" title="The diverted energy since the last reset, in Wh, saturated to 65535." alt="" coords="205,57,385,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="157,52,192,58,187,59,157,57"/>
+</map>

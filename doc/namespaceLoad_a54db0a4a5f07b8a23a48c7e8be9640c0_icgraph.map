@@ -1,0 +1,30 @@
+<map id="Load::remoteOrdinal" name="Load::remoteOrdinal">
+<area shape="rect" id="Node000001" title="Rank of a remote load among the remote loads, in ascending map order." alt="" coords="753,120,908,148"/>
+<area shape="rect" id="Node000002" href="$namespaceLoad.html#a9679d070377ade53a8315b4ec5bbece6" title="Build the override bits of a load map." alt="" coords="521,95,677,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="735,125,678,120,678,115,741,124"/>
+<area shape="rect" id="Node000005" href="$native_2test__remote__loads_2test__main_8cpp.html#ac86822dc7a27827952067d504d333e08" title=" " alt="" coords="264,129,432,190"/>
+<area shape="poly" id="edge14_Node000001_Node000005" title=" " alt="" coords="736,141,433,158,433,153,741,138"/>
+<area shape="rect" id="Node000006" href="$utils__override_8h.html#ab72aa66577de637d07a6d3bb1b809108" title="Override pin of a load: its physical pin if local, a virtual pin if remote." alt="" coords="544,258,654,286"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="795,156,626,260,623,255,790,157"/>
+<area shape="rect" id="Node000012" href="$native_2test__remote__loads_2test__main_8cpp.html#a22f96dcf5229ee5ef61e6dc61a1498a8" title=" " alt="" coords="493,5,705,50"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="782,114,649,53,650,48,788,113"/>
+<area shape="rect" id="Node000003" href="$native_2test__remote__loads_2test__main_8cpp.html#aa55babe91a241e1902b369c04265f5ea" title=" " alt="" coords="261,44,436,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="503,97,436,89,435,84,508,95"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="510,127,434,145,432,140,515,125"/>
+<area shape="rect" id="Node000004" href="$native_2test__remote__loads_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="77,146,132,174"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="245,112,133,153,131,148,248,108"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="246,162,133,162,131,157,250,158"/>
+<area shape="rect" id="Node000007" href="$classTargetMap.html#a464414e7658c5db11e79ceeb7fe42cf2" title="The pin that a single code stands for (any code but ALL_...())." alt="" coords="282,352,414,380"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="559,292,505,320,446,344,411,354,410,349,444,338,503,315,554,294"/>
+<area shape="rect" id="Node000010" href="$native_2test__remote__loads_2test__main_8cpp.html#ac7648d1668efa6a99495b61260ce0cf3" title=" " alt="" coords="252,215,445,259"/>
+<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="526,262,446,253,445,248,531,262"/>
+<area shape="rect" id="Node000011" href="$native_2test__remote__loads_2test__main_8cpp.html#afdfeabe1158cf24b64eee1cc4910b668" title=" " alt="" coords="256,284,440,329"/>
+<area shape="poly" id="edge12_Node000006_Node000011" title=" " alt="" coords="526,282,442,296,441,291,531,281"/>
+<area shape="rect" id="Node000008" href="$classTargetMap.html#addc13e5c41027c9794828390352a3691" title="The local loads and relays that targets force, as a bitmask of pins." alt="" coords="13,378,196,406"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="264,375,196,385,196,380,269,374"/>
+<area shape="rect" id="Node000009" href="$classTargetMap.html#a569944af2a4592b46e252e6f7814f0dd" title="The remote loads that targets force, as a bitmask (bit 0 = remote load 0)." alt="" coords="5,326,204,354"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="264,358,204,353,204,348,269,357"/>
+<area shape="poly" id="edge11_Node000010_Node000004" title=" " alt="" coords="259,211,132,171,132,165,263,208"/>
+<area shape="poly" id="edge13_Node000011_Node000004" title=" " alt="" coords="260,277,250,274,211,250,175,223,121,176,121,171,178,219,214,245,253,269,265,277"/>
+<area shape="poly" id="edge16_Node000012_Node000004" title=" " alt="" coords="475,10,423,9,366,11,308,18,253,34,209,58,171,89,140,121,119,147,114,144,136,117,167,85,206,53,251,29,307,13,365,5,423,4,480,8"/>
+</map>

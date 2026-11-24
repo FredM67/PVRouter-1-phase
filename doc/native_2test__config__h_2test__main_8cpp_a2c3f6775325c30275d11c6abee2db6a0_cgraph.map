@@ -1,0 +1,11 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,83,60,111"/>
+<area shape="rect" id="Node000002" href="$native_2test__config__h_2test__main_8cpp.html#a052c2bc2a86ee68195382600d3bca132" title=" " alt="" coords="118,5,277,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="59,82,107,60,124,55,120,58,109,65,62,86"/>
+<area shape="rect" id="Node000004" href="$native_2test__config__h_2test__main_8cpp.html#aff20a292d8cea2a46acc75d35edfd092" title=" " alt="" coords="122,75,272,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="60,94,109,95,105,99,61,100"/>
+<area shape="rect" id="Node000005" href="$native_2test__config__h_2test__main_8cpp.html#ac6d5e1bab501f74a3509ad4831e27b46" title=" " alt="" coords="108,144,287,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="61,107,109,129,125,137,119,138,107,134,60,113"/>
+<area shape="rect" id="Node000003" href="$namespaceAdcChain.html#a7190fa715bd30855c015b6b64a5e403b" title="The analog input of a channel on a board (A0 = 0)." alt="" coords="335,14,460,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="277,25,322,27,317,28,278,30"/>
+</map>

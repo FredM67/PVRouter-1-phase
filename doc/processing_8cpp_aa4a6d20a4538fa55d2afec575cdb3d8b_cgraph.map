@@ -1,0 +1,9 @@
+<map id="getDivertedOutputPins" name="getDivertedOutputPins">
+<area shape="rect" id="Node000001" title="The pins of the local outputs that CT2 measures: the local loads&#39; TRIACs and the relays." alt="" coords="5,57,175,85"/>
+<area shape="rect" id="Node000002" href="$utils__bits_8h.html#a23ed26b879b65f5ddf07facc1e4b18bc" title="Set the specified bit to 1." alt="" coords="243,5,308,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,54,230,31,226,34,143,59"/>
+<area shape="rect" id="Node000003" href="$namespaceLoad.html#a0684e53aa0eae096cef354f171c08724" title="True if the entry describes a locally driven load." alt="" coords="223,57,328,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="175,69,210,71,205,72,176,74"/>
+<area shape="rect" id="Node000004" href="$namespaceLoad.html#a846d844f03b72ddda22516ea20e81799" title="The pin of the entry: TRIAC pin if local, status LED (0 = none) if remote." alt="" coords="228,109,323,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="143,83,215,105,210,106,142,88"/>
+</map>

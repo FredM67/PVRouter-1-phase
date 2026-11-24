@@ -1,0 +1,11 @@
+<map id="test_masks_feed_the_override_config" name="test_masks_feed_the_override_config">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,76,166,120"/>
+<area shape="rect" id="Node000002" href="$config__types_8h.html#aad6aa9352a63d75d3ac6ea162d333bf1" title="Every load, local and remote." alt="" coords="220,5,315,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,73,221,38,217,41,140,77"/>
+<area shape="rect" id="Node000003" href="$config__types_8h.html#ad3d911e42f0df1219bb1754477a8db98" title="Load loadNum of physicalLoadPin[], local or remote (0, no load, if out of range)." alt="" coords="239,57,296,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="165,83,226,76,221,79,167,89"/>
+<area shape="rect" id="Node000004" href="$namespaceLoad.html#a3c4a0ef2578d140feed4d9e1fa474671" title="Declares a load driven locally by the router." alt="" coords="222,109,313,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="166,106,209,114,203,115,166,112"/>
+<area shape="rect" id="Node000005" href="$namespaceLoad.html#adb9797ea49459ec57cf3641aee0d7bd6" title="Declares a load driven by a remote unit over RF." alt="" coords="214,161,321,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="141,118,222,154,216,156,140,123"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="test_forced_cycle_not_counted" name="test_forced_cycle_not_counted">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,49,169,94"/>
+<area shape="rect" id="Node000002" href="$native_2test__diverted__energy_2test__main_8cpp.html#accf97a22afe85427ebb3882af6931416" title="Adds &#39;count&#39; cycles of the same energy and states." alt="" coords="263,5,352,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,49,251,32,246,34,170,54"/>
+<area shape="rect" id="Node000003" href="$classDivertedEnergy.html#a33d9582e8e46d502a9db0919b969a3c3" title="Whether some energy was counted since the last reset (Robin&#39;s EDD_isActive)." alt="" coords="217,57,398,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="168,69,204,71,198,72,169,74"/>
+<area shape="rect" id="Node000004" href="$classDivertedEnergy.html#aa622a3c541eec21addd11eb9d003e6cd" title="The diverted energy since the last reset, in Wh, saturated to 65535." alt="" coords="217,109,398,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="169,88,233,105,228,106,169,93"/>
+</map>

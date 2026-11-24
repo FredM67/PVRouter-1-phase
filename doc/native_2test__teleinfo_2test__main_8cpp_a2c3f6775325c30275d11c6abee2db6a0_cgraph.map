@@ -1,0 +1,97 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,294,60,321"/>
+<area shape="rect" id="Node000002" href="$native_2test__teleinfo_2test__main_8cpp.html#a7199e20d34ee2a9f648670035b077d0c" title=" " alt="" coords="121,5,271,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="31,293,35,249,45,188,67,121,84,89,106,61,111,58,108,63,110,64,89,92,72,123,50,189,40,250,37,294"/>
+<area shape="rect" id="Node000026" href="$embedded_2test__teleinfo_2test__main_8cpp.html#a0d0ebe41506881d432837362dd94fca4" title=" " alt="" coords="119,384,272,429"/>
+<area shape="poly" id="edge28_Node000001_Node000026" title=" " alt="" coords="47,319,76,345,109,369,119,376,114,378,106,374,72,349,48,325"/>
+<area shape="rect" id="Node000028" href="$native_2test__teleinfo_2test__main_8cpp.html#a9595ab1dc4aefe40e384ca6445f011b6" title=" " alt="" coords="350,483,494,511"/>
+<area shape="poly" id="edge31_Node000001_Node000028" title=" " alt="" coords="34,319,40,361,50,413,59,440,72,466,88,489,109,508,140,525,173,535,208,539,244,540,312,530,368,517,373,516,313,535,244,545,208,545,172,540,138,530,106,513,84,493,67,469,54,442,45,414,34,361,34,324"/>
+<area shape="rect" id="Node000029" href="$native_2test__teleinfo_2test__main_8cpp.html#a0767da6d2b4cf84548d9d1d286e0f601" title=" " alt="" coords="1016,551,1093,579"/>
+<area shape="poly" id="edge33_Node000001_Node000029" title=" " alt="" coords="34,319,37,366,46,428,56,460,69,492,86,521,109,546,148,573,183,589,217,597,252,598,328,590,421,584,628,584,835,578,998,569,1004,569,835,583,628,589,421,589,328,596,252,603,217,602,181,594,145,578,106,550,82,524,64,495,50,462,41,429,32,367,33,324"/>
+<area shape="rect" id="Node000031" href="$embedded_2test__teleinfo_2test__main_8cpp.html#a7aa4fc3004294abada26810f408d5b4d" title=" " alt="" coords="108,453,284,498"/>
+<area shape="poly" id="edge37_Node000001_Node000031" title=" " alt="" coords="38,319,64,378,84,410,110,439,114,444,109,445,106,443,80,413,59,380,38,324"/>
+<area shape="rect" id="Node000032" href="$native_2test__teleinfo_2test__main_8cpp.html#abd16c7cc57d696e4508201665db10ae0" title=" " alt="" coords="110,263,282,291"/>
+<area shape="poly" id="edge40_Node000001_Node000032" title=" " alt="" coords="58,301,106,292,102,296,62,305"/>
+<area shape="rect" id="Node000033" href="$native_2test__teleinfo_2test__main_8cpp.html#a16591a53c527da293250678e3464978f" title=" " alt="" coords="120,315,272,359"/>
+<area shape="poly" id="edge43_Node000001_Node000033" title=" " alt="" coords="59,310,107,319,103,322,61,315"/>
+<area shape="rect" id="Node000035" href="$native_2test__teleinfo_2test__main_8cpp.html#a4a6b2ac56bc4fd65ae8adecce55b3536" title=" " alt="" coords="113,125,279,170"/>
+<area shape="poly" id="edge46_Node000001_Node000035" title=" " alt="" coords="36,292,61,239,81,208,106,180,114,176,111,181,109,184,85,211,65,241,41,294"/>
+<area shape="rect" id="Node000036" href="$native_2test__teleinfo_2test__main_8cpp.html#aecd3a467a7010b9877fd6b3984b1a735" title=" " alt="" coords="115,195,276,239"/>
+<area shape="poly" id="edge49_Node000001_Node000036" title=" " alt="" coords="48,292,75,270,106,249,119,244,116,248,109,254,78,275,52,295"/>
+<area shape="rect" id="Node000037" href="$native_2test__teleinfo_2test__main_8cpp.html#aad7dd778241bc17fc1da19ac8c06f10a" title=" " alt="" coords="112,74,280,102"/>
+<area shape="poly" id="edge53_Node000001_Node000037" title=" " alt="" coords="32,293,38,257,50,208,72,156,87,132,106,111,112,108,110,113,110,115,91,135,76,159,55,210,43,258,38,294"/>
+<area shape="rect" id="Node000003" href="$native_2test__teleinfo_2test__main_8cpp.html#a93d29d98543146f8457ae77079e5a41d" title=" " alt="" coords="332,130,512,158"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="262,48,286,60,301,73,310,86,319,98,333,109,357,123,352,124,331,114,315,101,306,89,297,77,282,65,264,53"/>
+<area shape="rect" id="Node000021" href="$native_2test__teleinfo_2test__main_8cpp.html#a376cf7b511b099cbe30ad0c9e91f88b9" title="Splits a frame into its lines, as a receiver does, checking STX, ETX and every line&#39;s format and chec..." alt="" coords="373,16,471,44"/>
+<area shape="poly" id="edge22_Node000002_Node000021" title=" " alt="" coords="270,26,359,28,355,31,273,31"/>
+<area shape="rect" id="Node000022" href="$embedded_2test__teleinfo_2test__main_8cpp.html#a2e201a718c88dabe4d99e51339d60b4b" title=" " alt="" coords="368,323,476,351"/>
+<area shape="poly" id="edge23_Node000002_Node000022" title=" " alt="" coords="271,48,286,61,305,91,314,121,314,149,312,178,309,206,309,234,317,263,334,293,360,316,355,316,330,296,312,265,304,235,303,206,306,177,309,149,308,121,300,93,282,64,271,53"/>
+<area shape="rect" id="Node000024" href="$native_2test__teleinfo_2test__main_8cpp.html#a2ae503c90a9f56b23646d1e87accdc99" title="A datalog with every value set, temperature 2 invalid." alt="" coords="368,182,476,210"/>
+<area shape="poly" id="edge26_Node000002_Node000024" title=" " alt="" coords="268,48,286,60,297,74,304,88,310,116,316,142,322,155,334,167,356,182,351,183,330,171,318,158,311,144,305,117,299,90,293,77,282,64,269,53"/>
+<area shape="rect" id="Node000025" href="$native_2test__teleinfo_2test__main_8cpp.html#a9734f6526e3bc7f586312185a6333f62" title="The value of the line with exactly this tag." alt="" coords="386,72,458,100"/>
+<area shape="poly" id="edge27_Node000002_Node000025" title=" " alt="" coords="271,45,373,72,369,75,272,50"/>
+<area shape="rect" id="Node000004" href="$native_2test__energy__bucket_2test__main_8cpp.html#a6daf045ca0cf4c7885ee70a055efcbf0" title="The float arithmetic being replaced, in bucket units." alt="" coords="585,104,669,132"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="512,130,572,124,568,126,514,135"/>
+<area shape="rect" id="Node000005" href="$native_2test__teleinfo_2test__main_8cpp.html#acabd39310a490a711ff019d8be8718ef" title="The frame of sendTelemetryData() as it was, D and E sent after P with CT2." alt="" coords="565,156,689,184"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="512,153,552,159,547,161,513,158"/>
+<area shape="rect" id="Node000013" href="$native_2test__teleinfo_2test__main_8cpp.html#ace1eebb5d0b30b9b2107b037d706f1b1" title=" " alt="" coords="573,447,681,475"/>
+<area shape="poly" id="edge13_Node000003_Node000013" title=" " alt="" coords="497,155,514,169,536,199,545,229,547,258,545,288,541,317,541,347,547,378,563,411,587,439,582,438,558,415,542,380,536,348,536,317,539,287,542,258,540,230,531,202,510,172,497,161"/>
+<area shape="rect" id="Node000006" href="$classReference.html#a5612002fbeddb53078db92158087c617" title=" " alt="" coords="755,183,916,211"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="689,176,742,184,737,185,690,181"/>
+<area shape="rect" id="Node000007" href="$classReference.html#a07329c5bac682f7a84f4793712f9253f" title=" " alt="" coords="772,235,898,263"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="657,182,743,220,767,230,762,230,741,225,657,187"/>
+<area shape="rect" id="Node000011" href="$classReference.html#ac3cbaffb5bc1e2cb72b28b35e317c186" title=" " alt="" coords="742,79,929,107"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="664,154,693,141,741,117,766,111,761,113,743,122,695,146,666,158"/>
+<area shape="rect" id="Node000012" href="$classReference.html#a8e950af29386803bc87cbbd1671a288a" title=" " alt="" coords="752,131,918,159"/>
+<area shape="poly" id="edge12_Node000005_Node000012" title=" " alt="" coords="689,160,739,156,735,158,690,165"/>
+<area shape="rect" id="Node000008" href="$classReference.html#a174f8d6c6e98b63471d40d122f15b444" title=" " alt="" coords="977,158,1132,186"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="889,232,928,220,1010,191,1005,193,930,225,891,237"/>
+<area shape="rect" id="Node000009" href="$classReference.html#af12f023888bbbe42be58fa98b27acf57" title=" " alt="" coords="1180,183,1403,211"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1132,177,1167,183,1162,184,1133,183"/>
+<area shape="rect" id="Node000010" href="$classReference.html#a446ace7c0e2cd02aa3b1c967c992556f" title=" " alt="" coords="1216,131,1367,159"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="1132,160,1203,155,1198,156,1133,166"/>
+<area shape="poly" id="edge11_Node000011_Node000008" title=" " alt="" coords="891,105,930,117,1010,151,1005,151,928,122,891,110"/>
+<area shape="rect" id="Node000014" href="$namespaceTeleInfo.html#a1ada410c6d97aa6b44e403d583f46480" title="Writes a step of the frame: one line, STX before the first one, ETX after the last." alt="" coords="744,447,927,475"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="682,458,731,461,725,461,682,464"/>
+<area shape="rect" id="Node000015" href="$namespaceTeleInfo.html#a7587a7c6cf35dbbad31cfddc9d0526da" title="Writes the line of a step." alt="" coords="982,447,1128,475"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="927,458,968,461,963,461,927,464"/>
+<area shape="rect" id="Node000020" href="$namespaceTeleInfo.html#ad667795b4250f603604afc9b30c0a017" title="The number of steps of a frame: one per line, invalid temperatures included (they write nothing)." alt="" coords="977,499,1132,527"/>
+<area shape="poly" id="edge21_Node000014_Node000020" title=" " alt="" coords="897,473,981,495,975,495,897,478"/>
+<area shape="rect" id="Node000016" href="$namespaceTeleInfo.html#af4144be70a1141bccb67583aa9730635" title="Writes the line of a signed value." alt="" coords="1239,447,1344,475"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="1128,458,1226,461,1221,461,1128,464"/>
+<area shape="rect" id="Node000019" href="$namespaceTeleInfo.html#ada40c7e9e0669e578837d47e7fc7b30e" title="Writes the line of an unsigned value (above 32767, line() would wrap)." alt="" coords="1209,499,1374,527"/>
+<area shape="poly" id="edge19_Node000015_Node000019" title=" " alt="" coords="1121,473,1213,495,1207,495,1121,478"/>
+<area shape="rect" id="Node000017" href="$namespaceTeleInfo.html#aa320bab0fa34c1a67a8b331a25feaa64" title="Writes a whole line: LF, tag and index, TAB, value, TAB, checksum and CR." alt="" coords="1451,474,1591,502"/>
+<area shape="poly" id="edge17_Node000016_Node000017" title=" " alt="" coords="1344,464,1438,478,1432,478,1344,470"/>
+<area shape="rect" id="Node000018" href="$namespaceTeleInfo.html#a63c0181b4bbd7764f9215d1b11e3424d" title="Writes the decimal digits of a value." alt="" coords="1639,474,1790,502"/>
+<area shape="poly" id="edge18_Node000017_Node000018" title=" " alt="" coords="1591,485,1626,488,1621,488,1591,490"/>
+<area shape="poly" id="edge20_Node000019_Node000017" title=" " alt="" coords="1374,501,1433,497,1438,497,1375,507"/>
+<area shape="poly" id="edge25_Node000022_Node000014" title=" " alt="" coords="476,331,579,335,638,344,695,360,728,375,759,395,811,437,806,436,756,399,725,380,693,365,637,349,579,340,477,337"/>
+<area shape="rect" id="Node000023" href="$classFramePrint.html#af7c0d3f36da0ff389957c5bba6663cc8" title=" " alt="" coords="560,374,694,402"/>
+<area shape="poly" id="edge24_Node000022_Node000023" title=" " alt="" coords="477,348,556,369,551,370,477,353"/>
+<area shape="poly" id="edge30_Node000026_Node000022" title=" " alt="" coords="270,381,362,355,357,357,272,386"/>
+<area shape="rect" id="Node000027" href="$embedded_2test__teleinfo_2test__main_8cpp.html#a2a68a15b365d99047b738628d77bd56b" title=" " alt="" coords="374,427,470,455"/>
+<area shape="poly" id="edge29_Node000026_Node000027" title=" " alt="" coords="273,415,361,430,356,432,273,421"/>
+<area shape="poly" id="edge32_Node000028_Node000013" title=" " alt="" coords="494,482,560,473,555,474,495,487"/>
+<area shape="poly" id="edge34_Node000029_Node000016" title=" " alt="" coords="1093,553,1131,536,1145,524,1154,511,1163,498,1179,485,1222,471,1227,470,1182,490,1167,502,1158,514,1149,527,1134,541,1094,558"/>
+<area shape="poly" id="edge36_Node000029_Node000019" title=" " alt="" coords="1093,554,1208,531,1213,530,1094,559"/>
+<area shape="rect" id="Node000030" href="$namespaceTeleInfo.html#a21be106ef3cd93e0553b4e423b8f038a" title="The size of a line: LF, tag, TAB, value, TAB, checksum and CR." alt="" coords="1226,551,1357,579"/>
+<area shape="poly" id="edge35_Node000029_Node000030" title=" " alt="" coords="1094,562,1213,565,1207,565,1094,568"/>
+<area shape="poly" id="edge39_Node000031_Node000022" title=" " alt="" coords="259,450,283,439,343,399,391,363,396,360,346,403,285,443,262,455"/>
+<area shape="poly" id="edge38_Node000031_Node000027" title=" " alt="" coords="284,460,362,450,357,452,285,465"/>
+<area shape="poly" id="edge41_Node000032_Node000022" title=" " alt="" coords="250,289,355,318,351,320,251,294"/>
+<area shape="poly" id="edge42_Node000032_Node000024" title=" " alt="" coords="248,260,283,249,377,214,373,218,285,254,251,265"/>
+<area shape="poly" id="edge45_Node000033_Node000022" title=" " alt="" coords="271,334,355,336,350,338,272,340"/>
+<area shape="rect" id="Node000034" href="$native_2test__teleinfo_2test__main_8cpp.html#aa94d98ad37a0eacb9f407dc27893a2e7" title="The extremes of every value." alt="" coords="362,255,482,283"/>
+<area shape="poly" id="edge44_Node000033_Node000034" title=" " alt="" coords="270,312,361,286,357,289,273,317"/>
+<area shape="poly" id="edge47_Node000035_Node000003" title=" " alt="" coords="278,144,319,144,314,147,280,149"/>
+<area shape="poly" id="edge48_Node000035_Node000024" title=" " alt="" coords="278,163,355,180,350,182,280,168"/>
+<area shape="poly" id="edge50_Node000036_Node000003" title=" " alt="" coords="260,192,331,168,359,161,355,164,333,173,263,196"/>
+<area shape="poly" id="edge52_Node000036_Node000024" title=" " alt="" coords="276,207,355,201,350,204,278,212"/>
+<area shape="poly" id="edge51_Node000036_Node000034" title=" " alt="" coords="276,233,350,251,345,253,277,238"/>
+<area shape="poly" id="edge54_Node000037_Node000003" title=" " alt="" coords="254,100,351,124,346,127,255,105"/>
+<area shape="poly" id="edge55_Node000037_Node000021" title=" " alt="" coords="252,71,360,45,356,48,255,75"/>
+<area shape="poly" id="edge56_Node000037_Node000022" title=" " alt="" coords="269,99,286,111,303,134,311,157,313,202,313,247,320,269,334,293,362,316,356,316,330,296,315,272,308,248,307,202,306,158,298,137,282,115,270,105"/>
+<area shape="poly" id="edge57_Node000037_Node000024" title=" " alt="" coords="261,99,286,111,301,125,310,140,319,154,334,167,356,179,351,180,330,171,315,157,306,142,297,128,282,115,263,105"/>
+<area shape="poly" id="edge58_Node000037_Node000025" title=" " alt="" coords="279,85,372,85,368,88,282,90"/>
+</map>

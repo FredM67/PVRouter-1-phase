@@ -1,0 +1,5 @@
+<map id="updateWatchdog" name="updateWatchdog">
+<area shape="rect" id="Node000001" title="Update the watchdog on the display: the symbol, then nothing, each second in turn." alt="" coords="5,5,136,33"/>
+<area shape="rect" id="Node000002" href="$utils__oled_8h.html#a0a74e5172424d4519b0fb1119b5b379b" title=" " alt="" coords="184,5,237,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,17,171,19,165,19,136,22"/>
+</map>

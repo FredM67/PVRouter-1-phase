@@ -1,0 +1,5 @@
+<map id="processDivertedCurrentRawSample" name="processDivertedCurrentRawSample">
+<area shape="rect" id="Node000001" title="Processes the raw sample of CT2, the current diverted to the loads." alt="" coords="96,5,299,50"/>
+<area shape="rect" id="Node000002" href="$processing_8cpp.html#a05c2e5b588ced1cd7312f5b0edc5b295" title=" " alt="" coords="5,14,48,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,29,48,30,48,25,82,26"/>
+</map>

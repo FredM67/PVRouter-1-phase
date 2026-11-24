@@ -1,0 +1,11 @@
+<map id="processLatestContribution" name="processLatestContribution">
+<area shape="rect" id="Node000001" title="Process the latest contribution, the task after each positive crossing." alt="" coords="5,57,197,85"/>
+<area shape="rect" id="Node000002" href="$namespaceEnergy.html#a5c6a3eeab8203be8c21f0dcd70f1b1c0" title="Contribution of one mains cycle of one phase to the bucket." alt="" coords="245,5,396,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,54,246,36,241,38,163,59"/>
+<area shape="rect" id="Node000004" href="$namespaceEnergy.html#aeae61ea16953d9d9b692f8bb2c8b5f6a" title="A power in watts, in bucket units per mains cycle." alt="" coords="250,57,391,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="196,69,236,71,231,72,197,74"/>
+<area shape="rect" id="Node000005" href="$processing_8cpp.html#add35090335f84f8956573b63306eb061" title="Rescales the sum of a cycle of an unexpected length to N_MIN sample sets." alt="" coords="262,109,378,137"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="163,83,249,105,244,107,162,88"/>
+<area shape="rect" id="Node000003" href="$group__TimeCritical.html#gabc318f6984145cb3265035f62e21c4d8" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="444,5,608,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="396,17,431,19,426,20,397,22"/>
+</map>

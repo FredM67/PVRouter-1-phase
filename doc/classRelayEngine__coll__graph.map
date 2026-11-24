@@ -1,0 +1,5 @@
+<map id="RelayEngine&lt; N, D &gt;" name="RelayEngine&lt; N, D &gt;">
+<area shape="rect" id="Node000001" title="The relays, as in config.h: the sliding average and the settings of each relay." alt="" coords="5,98,166,126"/>
+<area shape="rect" id="Node000002" href="$structRelaySetting.html" title="The settings of one relay, as in config.h: { pin, surplus, import, minON, minOFF }..." alt="" coords="33,5,138,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,47,88,98,83,97,83,50"/>
+</map>

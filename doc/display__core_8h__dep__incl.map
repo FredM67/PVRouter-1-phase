@@ -1,0 +1,17 @@
+<map id="Mk2_1phase_RFdatalog_temp/display_core.h" name="Mk2_1phase_RFdatalog_temp/display_core.h">
+<area shape="rect" id="Node000001" title="The display, without Arduino: its pins, what it shows when, and the text it shows." alt="" coords="205,5,382,50"/>
+<area shape="rect" id="Node000002" href="$native_2test__display_2test__main_8cpp.html" title="Native tests for display_core.h: the pins, port images and content of the display." alt="" coords="5,98,182,160"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="234,59,156,99,153,95,238,55"/>
+<area shape="rect" id="Node000003" href="$utils__display_8h.html" title="7&#45;segment display functions" alt="" coords="205,106,382,151"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="295,63,296,107,291,105,292,68"/>
+<area shape="rect" id="Node000007" href="$utils__oled_8h.html" title="Some utility functions for OLED display." alt="" coords="537,208,714,252"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="343,56,592,206,587,208,341,61"/>
+<area shape="rect" id="Node000004" href="$main_8cpp.html" title="Main code for the PVRouter single&#45;phase project." alt="" coords="337,300,514,345"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="203,159,166,178,134,200,124,212,119,224,120,237,128,251,140,262,160,272,212,289,275,302,340,313,334,313,274,307,211,294,157,277,137,266,123,254,115,238,114,223,120,209,131,196,163,173,207,155"/>
+<area shape="rect" id="Node000005" href="$processing_8cpp.html" title="Implements the processing engine." alt="" coords="137,208,314,252"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="272,162,242,209,238,205,268,166"/>
+<area shape="rect" id="Node000006" href="$validation_8h.html" title="Compile&#45;time validations." alt="" coords="337,208,514,252"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="335,158,400,207,394,207,334,163"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="427,266,428,302,423,299,424,270"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="566,259,474,302,473,297,561,260"/>
+</map>

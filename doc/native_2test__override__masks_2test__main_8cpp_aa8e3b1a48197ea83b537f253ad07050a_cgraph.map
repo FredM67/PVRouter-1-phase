@@ -1,0 +1,9 @@
+<map id="test_the_table_is_not_read_outside_off_peak_or_when_too_hot" name="test_the_table_is_not_read_outside_off_peak_or_when_too_hot">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,15,181,77"/>
+<area shape="rect" id="Node000002" href="$namespaceForcing.html#a3b89513ed1a630712a3132079cfa6410" title="The targets of the scheduled boosts whose window is open." alt="" coords="229,32,388,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,43,216,45,210,46,181,48"/>
+<area shape="rect" id="Node000003" href="$namespaceDualTariff.html#a4d9e6a30ca7f837f18ceac3744a35121" title="Whether the boost is in its window." alt="" coords="436,5,591,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="388,33,418,32,424,31,389,38"/>
+<area shape="rect" id="Node000004" href="$group__DualTariff.html#ga686c4ecdf9da4efb37be3fe956774d83" title="Reads scheduled boost i from flash." alt="" coords="470,57,557,85"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="389,53,457,64,452,64,388,58"/>
+</map>

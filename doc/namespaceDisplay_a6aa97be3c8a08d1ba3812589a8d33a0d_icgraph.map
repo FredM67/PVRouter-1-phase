@@ -1,0 +1,13 @@
+<map id="Display::segForced" name="Display::segForced">
+<area shape="rect" id="Node000001" title="Writes &quot;FORC&quot;." alt="" coords="502,32,646,60"/>
+<area shape="rect" id="Node000002" href="$utils__display_8h.html#ac0ef306a29083e9c6915800038b0c8e4" title="Shows item item of the turn on the 7&#45;segment display, once per second." alt="" coords="266,5,454,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="484,35,455,34,455,28,489,35"/>
+<area shape="rect" id="Node000005" href="$native_2test__display_2test__main_8cpp.html#a952c4f438bbfadc1c2d5c79f3b1d5686" title=" " alt="" coords="302,57,418,85"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="490,56,419,67,419,62,484,56"/>
+<area shape="rect" id="Node000003" href="$group__GeneralProcessing.html#ga64c5b9d14eb62b90506c0ee1b2ff3e2c" title="Updates the display, once per second." alt="" coords="103,5,218,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="248,20,219,22,218,17,253,19"/>
+<area shape="rect" id="Node000004" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,5,55,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="85,21,56,22,55,17,89,18"/>
+<area shape="rect" id="Node000006" href="$native_2test__display_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="133,57,188,85"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="284,71,188,74,188,69,290,71"/>
+</map>

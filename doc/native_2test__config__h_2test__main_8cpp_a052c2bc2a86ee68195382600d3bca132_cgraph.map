@@ -1,0 +1,5 @@
+<map id="test_board_is_one_of_the_three" name="test_board_is_one_of_the_three">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,165,50"/>
+<area shape="rect" id="Node000002" href="$namespaceAdcChain.html#a7190fa715bd30855c015b6b64a5e403b" title="The analog input of a channel on a board (A0 = 0)." alt="" coords="213,14,338,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,25,200,27,194,28,165,30"/>
+</map>

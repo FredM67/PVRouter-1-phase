@@ -1,0 +1,16 @@
+<map id="test_images_stay_within_the_pins" name="test_images_stay_within_the_pins">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,73,189,118"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a86ac34f148e1141d9216d7208834b83e" title="The pins to set HIGH before a digit changes, so that nothing shows while the ports change: SEG,..." alt="" coords="238,5,396,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,70,262,37,258,40,165,75"/>
+<area shape="rect" id="Node000003" href="$namespaceDisplay.html#a20918209eef8c1ede99f4f69afbec5ca" title="The bit of pin pin in its port." alt="" coords="445,81,578,109"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="189,93,431,93,428,97,189,98"/>
+<area shape="rect" id="Node000004" href="$namespaceDisplay.html#aa3eff0e2e7e76e2226bcfe09bedf2289" title="The pins to set LOW before a digit changes: SEG_HW, the DP (the 74HC4543 does not drive it)...." alt="" coords="240,107,394,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="189,103,227,109,222,110,189,108"/>
+<area shape="rect" id="Node000005" href="$namespaceDisplay.html#a75e6544c84f416cfa138b4366d629c54" title="The bits of every pin of display type type: what the interrupt writes." alt="" coords="237,159,397,186"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="160,115,238,143,260,153,255,153,236,148,159,121"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="355,31,463,75,457,76,354,36"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="394,108,433,105,427,106,395,113"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="362,156,396,143,464,116,469,115,398,148,364,161"/>
+<area shape="rect" id="Node000006" href="$namespaceDisplay.html#a04da503999c16d7a0ddca5d8303d5eb0" title="The pins display type type takes, for the pin checks." alt="" coords="452,159,571,186"/>
+<area shape="poly" id="edge8_Node000005_Node000006" title=" " alt="" coords="397,170,439,172,434,173,397,175"/>
+</map>

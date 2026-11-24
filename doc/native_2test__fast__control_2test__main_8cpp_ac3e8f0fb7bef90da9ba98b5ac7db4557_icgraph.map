@@ -1,0 +1,10 @@
+<map id="checkDivisionFree" name="checkDivisionFree">
+<area shape="rect" id="Node000001" title="Every in&#45;range n gives the division form, within the rounding of the table." alt="" coords="293,48,433,76"/>
+<area shape="rect" id="Node000002" href="$native_2test__fast__control_2test__main_8cpp.html#ae13fd133024b003ecf6a56a6737c84f0" title=" " alt="" coords="108,5,245,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="275,47,245,43,245,38,281,46"/>
+<area shape="rect" id="Node000004" href="$native_2test__fast__control_2test__main_8cpp.html#a64d546bc31dbc6383bff964252ad971f" title=" " alt="" coords="108,75,245,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="281,78,246,87,245,82,275,79"/>
+<area shape="rect" id="Node000003" href="$native_2test__fast__control_2test__main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,48,60,76"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="90,50,61,58,59,53,94,46"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="90,78,60,72,60,66,95,76"/>
+</map>

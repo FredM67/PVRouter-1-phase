@@ -1,0 +1,7 @@
+<map id="Display::pinsImageOf" name="Display::pinsImageOf">
+<area shape="rect" id="Node000001" title="The bits of every pin of display type type: what the interrupt writes." alt="" coords="5,32,166,60"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a20918209eef8c1ede99f4f69afbec5ca" title="The bit of pin pin in its port." alt="" coords="214,5,347,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,32,201,30,196,31,167,37"/>
+<area shape="rect" id="Node000003" href="$namespaceDisplay.html#a04da503999c16d7a0ddca5d8303d5eb0" title="The pins display type type takes, for the pin checks." alt="" coords="221,57,340,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,54,208,61,203,62,166,59"/>
+</map>

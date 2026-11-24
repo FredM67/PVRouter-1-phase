@@ -1,0 +1,11 @@
+<map id="Display::energySlot" name="Display::energySlot">
+<area shape="rect" id="Node000001" title="The energy slot: what comes first in the turn, or WAITING for no slot." alt="" coords="285,32,432,60"/>
+<area shape="rect" id="Node000002" href="$native_2test__display_2test__main_8cpp.html#a764dbc8a96247916d35a64d54ff2364a" title=" " alt="" coords="108,5,237,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="267,33,237,31,237,26,273,33"/>
+<area shape="rect" id="Node000004" href="$group__GeneralProcessing.html#ga64c5b9d14eb62b90506c0ee1b2ff3e2c" title="Updates the display, once per second." alt="" coords="115,57,230,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="272,58,231,66,230,61,267,58"/>
+<area shape="rect" id="Node000003" href="$native_2test__display_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,5,60,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="90,21,61,22,59,17,94,18"/>
+<area shape="rect" id="Node000005" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="8,57,57,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="97,72,58,74,58,69,101,70"/>
+</map>

@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['f_5fctrating_0',['f_ctRating',['../calibration_8h.html#a00ab136e18b91dc408f1cda701484406',1,'calibration.h']]],
+  ['f_5fctratingdiverted_1',['f_ctRatingDiverted',['../calibration_8h.html#a19038c4afa8cf006ecfc172cae4ccb73',1,'calibration.h']]],
+  ['f_5foffsetofenergythresholdsinafmode_2',['f_offsetOfEnergyThresholdsInAFmode',['../processing_8cpp.html#a43212c58ded1ca3978ab206d531a7f7c',1,'processing.cpp']]],
+  ['f_5fphasecal_3',['f_phaseCal',['../calibration_8h.html#a1d63b22231b730d0f9d9fd4971a0fd35',1,'calibration.h']]],
+  ['f_5fpowercal_4',['f_powerCal',['../config__derived_8h.html#aa04530439c9232df689568f4a6cd64d9',1,'config_derived.h']]],
+  ['f_5fpowercaldiverted_5',['f_powerCalDiverted',['../config__derived_8h.html#a2ea75a7da95a8fc43a495b8f408729c5',1,'config_derived.h']]],
+  ['f_5fpowercaldivertedoldboard_6',['f_powerCalDivertedOldBoard',['../calibration_8h.html#a5c5094063300982c5059df521946f9d9',1,'calibration.h']]],
+  ['f_5fpowercaldivertedtable_7',['f_powerCalDivertedTable',['../processing_8cpp.html#a41fa9e5d6d364c302782ae6e118cdb14',1,'processing.cpp']]],
+  ['f_5fpowercaloldboard_8',['f_powerCalOldBoard',['../calibration_8h.html#ae1acc2d362ca162d09626f301c6506ee',1,'calibration.h']]],
+  ['f_5fpowercalperamp_9',['f_powerCalPerAmp',['../calibration_8h.html#a6d7967cc7ad958c4f2b7ca737b3ebc8a',1,'calibration.h']]],
+  ['f_5fvoltagecal_10',['f_voltageCal',['../config__derived_8h.html#a4c3b8983185a9bc5d78bcd2cccbac15d',1,'config_derived.h']]],
+  ['f_5fvoltagecalnewboard_11',['f_voltageCalNewBoard',['../calibration_8h.html#a4fc2a1ac997c4166e3626e825ca03fb5',1,'calibration.h']]],
+  ['f_5fvoltagecaloldboard_12',['f_voltageCalOldBoard',['../calibration_8h.html#a91d9c295d4bddef5cd1e75b0ad1c0663',1,'calibration.h']]],
+  ['factor_13',['factor',['../structDivertedPower_1_1Average.html#acb3e4f5553d306a0c503415baf5364a3',1,'DivertedPower::Average']]],
+  ['forceofftestrelays_14',['forceOffTestRelays',['../embedded_2test__utils__relay_2test__main_8cpp.html#ae8cf0d5b72da6e0a7d8b63896c4d0277',1,'test_main.cpp']]],
+  ['fraction_5fbits_15',['FRACTION_BITS',['../namespaceEnergy.html#a480667b6648415c7734c85e0ec321373',1,'Energy']]],
+  ['frequency_16',['FREQUENCY',['../namespaceRFConfig.html#a4c4086ea28d64aa51843cf607685ce55',1,'RFConfig']]],
+  ['from_5f_17',['from_',['../structis__convertible.html#a367d66d7c0e4549dc09333f294c69b72',1,'is_convertible']]],
+  ['fromend_18',['fromEnd',['../structBoostStart.html#a425c2438e323764ad1eeb174e5c50376',1,'BoostStart']]],
+  ['full_5fscale_19',['FULL_SCALE',['../native_2test__datalog__math_2test__main_8cpp.html#a943fb37f466c4f90d352496c353d89a9',1,'FULL_SCALE:&#160;test_main.cpp'],['../native_2test__energy__bucket_2test__main_8cpp.html#a943fb37f466c4f90d352496c353d89a9',1,'FULL_SCALE:&#160;test_main.cpp']]],
+  ['full_5fscale_5fper_5fsample_20',['FULL_SCALE_PER_SAMPLE',['../processing_8cpp.html#ad6b1b063bed8c93ee5bf3e98280a36ce',1,'processing.cpp']]]
+];

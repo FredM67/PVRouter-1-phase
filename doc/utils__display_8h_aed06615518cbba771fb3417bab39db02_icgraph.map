@@ -1,0 +1,5 @@
+<map id="refresh7SegDisplay" name="refresh7SegDisplay">
+<area shape="rect" id="Node000001" title="Multiplexes the 7&#45;segment display: the next digit, every MAX_DISPLAY_TIME_COUNT calls." alt="" coords="96,5,244,33"/>
+<area shape="rect" id="Node000002" href="$processing_8cpp.html#a05c2e5b588ced1cd7312f5b0edc5b295" title=" " alt="" coords="5,5,48,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,20,48,22,48,17,82,18"/>
+</map>

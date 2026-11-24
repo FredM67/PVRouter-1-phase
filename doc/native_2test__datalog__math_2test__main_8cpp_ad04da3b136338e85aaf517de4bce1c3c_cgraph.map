@@ -1,0 +1,8 @@
+<map id="test_vrms_factor_follows_the_scaling_of_the_isr" name="test_vrms_factor_follows_the_scaling_of_the_isr">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,191,50"/>
+<area shape="rect" id="Node000002" href="$namespaceDatalog.html#aea01a5691922006e60d64261626d177a" title="Whether processVoltage() scales V^2 down by 16 before summing it over the datalog period." alt="" coords="439,14,635,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,25,424,25,422,30,191,30"/>
+<area shape="rect" id="Node000003" href="$namespaceDatalog.html#a0034ed8f35f1cd9b05161e370ac4d6ca" title="Scaling of the datalog voltage, Vrms_L_x100." alt="" coords="239,39,391,67"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="191,36,226,42,221,42,191,41"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="391,42,421,41,426,40,391,47"/>
+</map>

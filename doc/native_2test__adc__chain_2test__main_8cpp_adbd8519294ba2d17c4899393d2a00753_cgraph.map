@@ -1,0 +1,20 @@
+<map id="test_pipeline_order" name="test_pipeline_order">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,134,152,161"/>
+<area shape="rect" id="Node000002" href="$namespaceAdcChain.html#a6d2f12ba9de9b28a2c36a59b29648c80" title="The ADMUX value the interrupt writes after the conversion of a channel." alt="" coords="200,83,414,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,131,229,113,224,116,145,136"/>
+<area shape="rect" id="Node000004" href="$namespaceAdcChain.html#a7190fa715bd30855c015b6b64a5e403b" title="The analog input of a channel on a board (A0 = 0)." alt="" coords="717,134,843,161"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="152,145,702,145,702,150,152,150"/>
+<area shape="rect" id="Node000005" href="$namespaceAdcChain.html#a49994e50fa1e55e1cbd23ea74cc14ea6" title="The reference bits of ADMUX on a board." alt="" coords="713,31,847,59"/>
+<area shape="poly" id="edge10_Node000001_Node000005" title=" " alt="" coords="96,131,141,99,199,69,324,25,377,12,427,5,478,3,533,4,666,17,714,27,708,27,665,22,532,10,478,8,428,10,378,18,326,30,201,74,144,104,99,135"/>
+<area shape="rect" id="Node000007" href="$namespaceAdcChain.html#a3df7dc8dd51b782cfee692540327eb1f" title="The channel round round converts, once the pipeline is full." alt="" coords="203,184,411,212"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="144,159,229,179,224,181,144,164"/>
+<area shape="rect" id="Node000008" href="$native_2test__adc__chain_2test__main_8cpp.html#ae94817b39f505f03cad6583f51e7f41e" title="The channel an ADMUX value selects on a board, from its analog input." alt="" coords="497,210,630,237"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="97,159,142,193,170,209,200,221,273,235,348,241,419,239,479,236,484,236,419,244,348,246,272,241,199,226,168,214,139,197,95,164"/>
+<area shape="rect" id="Node000003" href="$namespaceAdcChain.html#a3f992a5e4ee47876cb5765bf267c27f5" title="The ADMUX value that converts a channel: reference, left&#45;adjusted result, analog input." alt="" coords="488,83,639,111"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="414,94,476,96,471,97,415,99"/>
+<area shape="rect" id="Node000006" href="$namespaceAdcChain.html#a0b3d429f633743f8c00ac722ab2c5721" title="The channel two steps after another one in the chain V &#45;&gt; I_GRID &#45;&gt; I_DIVERTED." alt="" coords="462,31,665,59"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="378,80,479,61,474,63,380,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="626,108,706,129,701,130,626,114"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="624,80,707,62,702,63,625,85"/>
+<area shape="poly" id="edge8_Node000008_Node000004" title=" " alt="" coords="605,206,721,167,727,166,606,212"/>
+</map>

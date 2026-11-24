@@ -1,0 +1,26 @@
+<map id="Mk2_1phase_RFdatalog_temp/test/native/test_fast_control/test_main.cpp" name="Mk2_1phase_RFdatalog_temp/test/native/test_fast_control/test_main.cpp">
+<area shape="rect" id="Node000001" title="Native unit tests for fast_control.h: the decision on the predicted energy." alt="" coords="85,5,287,67"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="39,115,104,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,70,102,107,98,104,149,65"/>
+<area shape="rect" id="Node000003" href="$energy__bucket_8h.html" title="Integer arithmetic of the energy bucket." alt="" coords="71,191,200,218"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,65,146,177,141,175,176,70"/>
+<area shape="rect" id="Node000008" href="$fast__control_8h.html" title="Faster control: the load decision on the predicted energy, at mid&#45;cycle." alt="" coords="178,115,288,143"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="202,65,222,101,216,101,201,70"/>
+<area shape="rect" id="Node000009" href="$load__priorities_8h.html" title="The load priority state machine: which load to switch at each mains cycle." alt="" coords="274,191,400,218"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="243,65,275,87,301,113,320,144,332,177,327,176,315,146,297,117,271,91,243,70"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="207,342,277,370"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="146,216,226,329,221,330,143,221"/>
+<area shape="rect" id="Node000005" href="$mult__asm_8h.html" title="Assembly&#45;optimized multiplication functions for AVR microcontrollers." alt="" coords="50,266,148,294"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="130,217,115,253,110,251,128,221"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="125,292,206,334,201,336,125,297"/>
+<area shape="rect" id="Node000006" href="$is__same_8hpp.html" title=" " alt="" coords="5,342,183,370"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="99,292,99,327,93,326,97,297"/>
+<area shape="rect" id="Node000007" href="$integral__constant_8hpp.html" title=" " alt="" coords="13,418,175,445"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="96,368,97,403,91,401,92,372"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="214,145,166,183,163,179,217,141"/>
+<area shape="poly" id="edge9_Node000008_Node000004" title=" " alt="" coords="235,141,243,327,238,326,231,145"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="331,217,260,330,256,327,326,220"/>
+<area shape="rect" id="Node000010" href="$load__map_8h.html" title="Encoding of the load map: one packed byte per dump load." alt="" coords="325,266,423,294"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="344,216,363,253,358,252,342,221"/>
+<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="353,293,280,337,278,332,348,296"/>
+</map>

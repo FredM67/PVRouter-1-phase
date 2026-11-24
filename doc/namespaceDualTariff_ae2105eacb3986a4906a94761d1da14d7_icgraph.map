@@ -1,0 +1,12 @@
+<map id="DualTariff::startsWithinOffPeak" name="DualTariff::startsWithinOffPeak">
+<area shape="rect" id="Node000001" title="Whether the window starts within the off&#45;peak period: otherwise, it would never open." alt="" coords="322,57,492,102"/>
+<area shape="rect" id="Node000002" href="$validation_8h.html#ac657fb7fd4827c6201b89c53e7448a41" title="Every scheduled boost lies within the off&#45;peak period and lasts: otherwise, it never runs (LAST(HOURS..." alt="" coords="108,5,274,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="308,53,244,36,244,31,313,52"/>
+<area shape="rect" id="Node000003" href="$native_2test__dual__tariff_2test__main_8cpp.html#a83b550f36cec01efb6849c0b931e77de" title=" " alt="" coords="109,57,273,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="303,80,274,82,273,77,309,79"/>
+<area shape="rect" id="Node000005" href="$native_2test__dual__tariff_2test__main_8cpp.html#ac90d8a567fc4cb2b7b9d17370e0a8d91" title=" " alt="" coords="122,126,260,171"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="323,106,261,129,259,124,318,107"/>
+<area shape="rect" id="Node000004" href="$native_2test__dual__tariff_2test__main_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,100,60,128"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="91,102,61,110,59,106,95,99"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="105,132,60,122,60,117,109,129"/>
+</map>

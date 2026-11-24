@@ -1,0 +1,13 @@
+<map id="SevenSegment::makeCharImages" name="SevenSegment::makeCharImages">
+<area shape="rect" id="Node000001" title="Builds CharImages from display_core.h, at compile time." alt="" coords="5,57,247,85"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a06d8b2d7ab61bf8a16f0835ad7c75be0" title="The image of character character alone (no DP, no digit line): SEG, its segments; SEG_HW,..." alt="" coords="295,5,456,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,54,293,36,288,38,197,59"/>
+<area shape="rect" id="Node000004" href="$namespaceDisplay.html#a7bae21731d566b21a38cb00b3ddb1d2e" title="The image of the digit lines with digit digit on: SEG, every digit line HIGH but that of digit; SEG_H..." alt="" coords="295,57,457,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="247,69,282,71,276,72,248,74"/>
+<area shape="rect" id="Node000005" href="$namespaceDisplay.html#a93638ba0d7caa6e6222f893a99225cfb" title="The image of the DP on: SEG, its segment; SEG_HW, its line." alt="" coords="301,109,450,137"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="196,83,293,105,288,106,196,88"/>
+<area shape="rect" id="Node000003" href="$namespaceDisplay.html#a20918209eef8c1ede99f4f69afbec5ca" title="The bit of pin pin in its port." alt="" coords="505,57,638,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="431,31,505,53,500,53,431,36"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="457,69,492,71,487,71,458,74"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="430,106,500,90,505,89,431,111"/>
+</map>

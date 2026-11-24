@@ -1,0 +1,84 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,437,60,465"/>
+<area shape="rect" id="Node000002" href="$native_2test__display_2test__main_8cpp.html#a764dbc8a96247916d35a64d54ff2364a" title=" " alt="" coords="135,19,264,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="32,437,39,361,53,252,75,143,89,100,106,69,129,52,127,56,110,73,94,102,80,145,58,253,44,362,38,437"/>
+<area shape="rect" id="Node000004" href="$native_2test__display_2test__main_8cpp.html#a628086dd801ee4d72d02719954cc868b" title=" " alt="" coords="121,699,278,726"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="39,463,67,529,110,608,142,650,175,687,170,688,138,654,105,611,63,531,39,468"/>
+<area shape="rect" id="Node000006" href="$native_2test__display_2test__main_8cpp.html#a8e1c43e40f86d6bec849541fca9febc2" title=" " alt="" coords="108,429,291,474"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="59,449,94,449,90,453,62,453"/>
+<area shape="rect" id="Node000011" href="$native_2test__display_2test__main_8cpp.html#aaee787b3e6519a3aeb36e1b856fc97f5" title=" " alt="" coords="139,159,260,186"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="32,436,38,396,50,340,72,279,87,250,106,223,124,205,148,191,145,196,127,209,110,226,91,253,77,281,55,342,43,397,38,437"/>
+<area shape="rect" id="Node000016" href="$native_2test__display_2test__main_8cpp.html#a7dc3d382cb7142550da084656febb821" title=" " alt="" coords="112,313,286,341"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="51,435,168,348,166,353,55,439"/>
+<area shape="rect" id="Node000018" href="$native_2test__display_2test__main_8cpp.html#aff693ccc4ade2186d2de783425f1e53c" title=" " alt="" coords="135,83,264,110"/>
+<area shape="poly" id="edge23_Node000001_Node000018" title=" " alt="" coords="31,437,32,385,41,309,51,266,64,224,82,183,106,146,122,129,145,115,142,120,126,133,110,149,87,186,69,226,56,268,47,310,38,385,36,437"/>
+<area shape="rect" id="Node000019" href="$native_2test__display_2test__main_8cpp.html#abef758512ebddd53ca314f59bf368e1c" title=" " alt="" coords="121,519,278,546"/>
+<area shape="poly" id="edge25_Node000001_Node000019" title=" " alt="" coords="59,462,158,510,153,513,61,467"/>
+<area shape="rect" id="Node000023" href="$native_2test__display_2test__main_8cpp.html#ab59609e3232405545be3af3939130904" title=" " alt="" coords="134,571,265,598"/>
+<area shape="poly" id="edge35_Node000001_Node000023" title=" " alt="" coords="40,463,67,510,86,535,109,556,122,564,117,566,106,560,82,538,63,513,40,468"/>
+<area shape="rect" id="Node000024" href="$native_2test__display_2test__main_8cpp.html#ad39a7413bac9eacdb12e19d94cd7623c" title=" " alt="" coords="117,236,282,264"/>
+<area shape="poly" id="edge43_Node000001_Node000024" title=" " alt="" coords="35,436,59,373,79,335,106,300,126,283,151,269,148,273,129,287,110,304,84,338,64,375,40,437"/>
+<area shape="rect" id="Node000026" href="$native_2test__display_2test__main_8cpp.html#a952c4f438bbfadc1c2d5c79f3b1d5686" title=" " alt="" coords="141,852,258,880"/>
+<area shape="poly" id="edge46_Node000001_Node000026" title=" " alt="" coords="36,463,59,580,81,659,110,737,143,793,178,840,173,840,138,796,105,739,75,661,54,581,36,468"/>
+<area shape="rect" id="Node000030" href="$native_2test__display_2test__main_8cpp.html#a57d4f0ded9d9c9188b5dc013745e1245" title=" " alt="" coords="160,956,239,984"/>
+<area shape="poly" id="edge50_Node000001_Node000030" title=" " alt="" coords="35,463,45,550,60,675,82,801,95,853,110,890,134,920,164,947,158,947,130,924,105,893,90,855,76,803,55,675,40,550,35,468"/>
+<area shape="rect" id="Node000003" href="$namespaceDisplay.html#a5ac6b704eebb8a5f336cc82776460f31" title="The energy slot: what comes first in the turn, or WAITING for no slot." alt="" coords="359,5,506,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="263,27,345,22,341,26,266,31"/>
+<area shape="rect" id="Node000005" href="$namespaceDisplay.html#a20918209eef8c1ede99f4f69afbec5ca" title="The bit of pin pin in its port." alt="" coords="581,571,714,598"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="234,724,293,744,368,759,408,763,448,762,488,755,525,741,562,715,593,680,616,644,633,614,637,610,621,646,597,683,566,718,528,746,489,760,449,767,408,768,367,765,292,749,235,730"/>
+<area shape="poly" id="edge10_Node000006_Node000005" title=" " alt="" coords="243,426,303,402,376,384,415,379,454,380,492,386,528,401,549,415,569,433,601,474,624,518,640,556,634,555,619,520,596,477,565,437,546,419,525,406,490,392,453,385,415,384,377,389,305,407,247,430"/>
+<area shape="rect" id="Node000007" href="$namespaceDisplay.html#a86ac34f148e1141d9216d7208834b83e" title="The pins to set HIGH before a digit changes, so that nothing shows while the ports change: SEG,..." alt="" coords="354,467,512,494"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="290,460,340,467,336,470,292,465"/>
+<area shape="rect" id="Node000008" href="$namespaceDisplay.html#aa3eff0e2e7e76e2226bcfe09bedf2289" title="The pins to set LOW before a digit changes: SEG_HW, the DP (the 74HC4543 does not drive it)...." alt="" coords="356,519,510,546"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="254,471,340,503,367,513,362,515,338,508,255,477"/>
+<area shape="rect" id="Node000009" href="$namespaceDisplay.html#a75e6544c84f416cfa138b4366d629c54" title="The bits of every pin of display type type: what the interrupt writes." alt="" coords="352,415,513,442"/>
+<area shape="poly" id="edge11_Node000006_Node000009" title=" " alt="" coords="290,440,339,436,335,439,293,445"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="493,492,527,505,576,531,618,561,613,562,573,536,525,510,494,498"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="493,544,575,566,570,567,494,550"/>
+<area shape="poly" id="edge12_Node000009_Node000005" title=" " alt="" coords="500,440,528,453,559,476,587,504,631,558,625,557,584,507,556,480,525,457,501,446"/>
+<area shape="rect" id="Node000010" href="$namespaceDisplay.html#a04da503999c16d7a0ddca5d8303d5eb0" title="The pins display type type takes, for the pin checks." alt="" coords="588,313,707,341"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="462,412,604,346,600,350,465,416"/>
+<area shape="rect" id="Node000012" href="$namespaceDisplay.html#a67a63a9d807fa90bb7dc38874f2e4d8f" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above." alt="" coords="358,107,508,134"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="258,157,354,136,350,140,262,161"/>
+<area shape="rect" id="Node000014" href="$namespaceDisplay.html#a3dca1ea3c46b8f5049678f2230e08b04" title="Writes the temperature temperature_x100, rounded to 0.1 °C, right&#45;aligned on 5 characters: &quot; 23...." alt="" coords="339,159,526,186"/>
+<area shape="poly" id="edge17_Node000011_Node000014" title=" " alt="" coords="259,170,326,171,321,174,262,175"/>
+<area shape="rect" id="Node000013" href="$namespaceDisplay.html#a7f81200a2bdcccf34ba2cd7c43d8aa95" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above (as Full)." alt="" coords="575,81,720,109"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="507,109,562,104,558,107,510,114"/>
+<area shape="rect" id="Node000015" href="$ds18b20_8h.html#ad55adf4c2798fb2203dd07c6954856fe" title="Whether a temperature reading is valid, and so worth sending." alt="" coords="574,185,721,213"/>
+<area shape="poly" id="edge18_Node000014_Node000015" title=" " alt="" coords="525,182,561,187,557,189,528,187"/>
+<area shape="poly" id="edge22_Node000016_Node000010" title=" " alt="" coords="286,325,575,325,571,329,288,330"/>
+<area shape="rect" id="Node000017" href="$namespaceDisplay.html#ad6ccdcf285f13aaad9ca03a4817ddab4" title="The pins display type type takes as a mask: bit n is pin n (D0 = bit 0 ... A5 = bit 19)." alt="" coords="359,263,506,290"/>
+<area shape="poly" id="edge20_Node000016_Node000017" title=" " alt="" coords="265,311,353,292,349,296,268,315"/>
+<area shape="poly" id="edge21_Node000017_Node000010" title=" " alt="" coords="493,288,575,309,570,311,495,293"/>
+<area shape="poly" id="edge24_Node000018_Node000013" title=" " alt="" coords="263,94,339,93,561,93,557,97,339,98,265,98"/>
+<area shape="poly" id="edge26_Node000019_Node000007" title=" " alt="" coords="264,516,354,497,350,500,266,520"/>
+<area shape="poly" id="edge27_Node000019_Node000008" title=" " alt="" coords="277,530,342,531,337,534,279,535"/>
+<area shape="poly" id="edge34_Node000019_Node000009" title=" " alt="" coords="229,516,290,484,313,467,338,453,360,446,356,449,340,458,316,472,292,488,232,520"/>
+<area shape="rect" id="Node000020" href="$namespaceDisplay.html#a06d8b2d7ab61bf8a16f0835ad7c75be0" title="The image of character character alone (no DP, no digit line): SEG, its segments; SEG_HW,..." alt="" coords="352,571,513,598"/>
+<area shape="poly" id="edge28_Node000019_Node000020" title=" " alt="" coords="264,544,354,565,350,568,266,550"/>
+<area shape="rect" id="Node000021" href="$namespaceDisplay.html#a7bae21731d566b21a38cb00b3ddb1d2e" title="The image of the digit lines with digit digit on: SEG, every digit line HIGH but that of digit; SEG_H..." alt="" coords="352,623,514,650"/>
+<area shape="poly" id="edge30_Node000019_Node000021" title=" " alt="" coords="264,544,292,557,308,570,317,583,326,596,340,608,354,616,349,617,338,612,322,599,313,586,304,573,290,561,266,550"/>
+<area shape="rect" id="Node000022" href="$namespaceDisplay.html#a93638ba0d7caa6e6222f893a99225cfb" title="The image of the DP on: SEG, its segment; SEG_HW, its line." alt="" coords="358,675,507,702"/>
+<area shape="poly" id="edge32_Node000019_Node000022" title=" " alt="" coords="271,544,293,557,305,570,312,584,318,610,323,636,330,648,341,660,348,666,343,667,337,664,325,651,318,638,312,611,307,585,300,573,289,561,272,550"/>
+<area shape="poly" id="edge29_Node000020_Node000005" title=" " alt="" coords="513,582,568,584,563,585,514,587"/>
+<area shape="poly" id="edge31_Node000021_Node000005" title=" " alt="" coords="492,620,575,601,570,604,494,624"/>
+<area shape="poly" id="edge33_Node000022_Node000005" title=" " alt="" coords="492,672,525,659,573,633,614,609,618,606,576,638,527,664,495,676"/>
+<area shape="poly" id="edge41_Node000023_Node000005" title=" " alt="" coords="210,596,232,624,261,656,298,688,340,711,391,729,433,735,475,730,525,711,558,691,587,665,628,614,633,610,591,669,561,696,527,716,476,735,433,740,390,734,338,716,295,692,258,660,228,627,210,601"/>
+<area shape="poly" id="edge36_Node000023_Node000007" title=" " alt="" coords="263,568,290,556,304,544,313,531,322,518,338,505,353,499,349,502,340,509,326,521,317,534,308,547,292,560,267,572"/>
+<area shape="poly" id="edge37_Node000023_Node000008" title=" " alt="" coords="264,568,354,549,350,552,266,572"/>
+<area shape="poly" id="edge42_Node000023_Node000009" title=" " alt="" coords="264,571,289,556,300,544,307,532,312,506,318,479,325,466,337,453,347,448,344,452,341,457,330,469,323,481,318,507,312,533,305,547,293,560,267,575"/>
+<area shape="poly" id="edge38_Node000023_Node000020" title=" " alt="" coords="264,582,339,583,334,586,267,587"/>
+<area shape="poly" id="edge39_Node000023_Node000021" title=" " alt="" coords="264,596,354,617,350,620,266,602"/>
+<area shape="poly" id="edge40_Node000023_Node000022" title=" " alt="" coords="222,596,276,628,340,659,362,669,357,670,338,664,273,632,223,601"/>
+<area shape="rect" id="Node000025" href="$namespaceDisplay.html#a1e0f7a1594ea89e78f11980ca8b1b1ea" title="Writes the temperature temperature_x100, rounded to 0.1 °C." alt="" coords="342,211,524,238"/>
+<area shape="poly" id="edge44_Node000024_Node000025" title=" " alt="" coords="280,239,328,234,324,238,284,243"/>
+<area shape="poly" id="edge45_Node000025_Node000015" title=" " alt="" coords="523,211,561,208,557,211,525,216"/>
+<area shape="rect" id="Node000027" href="$namespaceDisplay.html#a6aa97be3c8a08d1ba3812589a8d33a0d" title="Writes &quot;FORC&quot;." alt="" coords="361,827,504,854"/>
+<area shape="poly" id="edge47_Node000026_Node000027" title=" " alt="" coords="257,857,348,849,343,851,258,862"/>
+<area shape="rect" id="Node000028" href="$namespaceDisplay.html#a7f0baecb7d5e7c1c797b01aa237e12dc" title="Writes &quot; OFF&quot;." alt="" coords="373,879,492,906"/>
+<area shape="poly" id="edge48_Node000026_Node000028" title=" " alt="" coords="258,870,360,883,355,885,258,875"/>
+<area shape="rect" id="Node000029" href="$namespaceDisplay.html#a172dddc8916a84f58f7a3c625cb858e4" title="Writes the walking dots: 4 blanks, the DP of digit position (0 to 3) on." alt="" coords="342,931,524,958"/>
+<area shape="poly" id="edge49_Node000026_Node000029" title=" " alt="" coords="237,878,340,915,367,926,362,926,338,920,236,883"/>
+<area shape="rect" id="Node000031" href="$namespaceDisplay.html#aee20e1a1bf99bc2aa85f9f611139db4b" title="What step step of the turn shows: the energy slot, if any, then each sensor." alt="" coords="372,983,493,1010"/>
+<area shape="poly" id="edge51_Node000030_Node000031" title=" " alt="" coords="239,972,359,987,354,988,239,977"/>
+</map>

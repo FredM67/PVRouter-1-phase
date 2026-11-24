@@ -1,0 +1,51 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,287,60,315"/>
+<area shape="rect" id="Node000002" href="$native_2test__fast__control_2test__main_8cpp.html#a0eb157b89b740f975ecdbca646ff65a5" title=" " alt="" coords="123,100,267,145"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="37,286,62,231,82,199,106,170,132,151,129,155,110,174,86,202,66,234,42,287"/>
+<area shape="rect" id="Node000009" href="$native_2test__fast__control_2test__main_8cpp.html#a144653c634b52ccc6a8e6cbe7ee08d7d" title=" " alt="" coords="343,448,499,493"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="35,312,42,349,54,393,76,437,91,456,109,472,134,486,161,495,219,504,277,502,328,497,334,496,277,508,219,510,160,501,132,491,106,477,87,460,71,440,49,395,37,350,35,318"/>
+<area shape="rect" id="Node000011" href="$native_2test__fast__control_2test__main_8cpp.html#ae13fd133024b003ecf6a56a6737c84f0" title=" " alt="" coords="126,348,264,393"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="60,311,109,333,124,341,119,343,107,338,61,316"/>
+<area shape="rect" id="Node000019" href="$native_2test__fast__control_2test__main_8cpp.html#a64d546bc31dbc6383bff964252ad971f" title=" " alt="" coords="126,417,264,462"/>
+<area shape="poly" id="edge20_Node000001_Node000019" title=" " alt="" coords="41,313,69,358,87,382,109,403,116,409,110,409,106,407,83,385,64,361,40,318"/>
+<area shape="rect" id="Node000020" href="$native_2test__fast__control_2test__main_8cpp.html#a4727512af6ce46189ab8d9c92cd0a8a4" title=" " alt="" coords="343,160,499,221"/>
+<area shape="poly" id="edge22_Node000001_Node000020" title=" " alt="" coords="45,285,72,260,106,239,162,218,219,204,330,191,326,194,220,210,163,223,109,243,75,265,49,288"/>
+<area shape="rect" id="Node000021" href="$native_2test__fast__control_2test__main_8cpp.html#a9fd5bdb54e4e439ce0530db3a1bdeb49" title=" " alt="" coords="330,245,512,290"/>
+<area shape="poly" id="edge24_Node000001_Node000021" title=" " alt="" coords="56,285,80,273,107,264,160,255,213,251,317,254,312,257,214,256,160,260,108,269,82,278,59,288"/>
+<area shape="rect" id="Node000022" href="$native_2test__fast__control_2test__main_8cpp.html#aed1670df500699719f9e5ed10de0d3d0" title=" " alt="" coords="108,279,282,323"/>
+<area shape="poly" id="edge26_Node000001_Node000022" title=" " alt="" coords="59,299,94,299,90,303,62,303"/>
+<area shape="rect" id="Node000003" href="$structLoadPriorities_1_1Switching.html#a7d79ced5e64eedf2731796d021807a9b" title="The decision of one mains cycle: may switch one load ON or OFF." alt="" coords="330,40,512,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="266,101,322,88,318,91,269,105"/>
+<area shape="rect" id="Node000008" href="$namespaceFastControl.html#aaec9e64c36a923731420a40f831af5bc" title="The energy in the bucket predicted at the end of the mains cycle." alt="" coords="581,245,768,290"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="266,115,322,114,385,117,450,127,513,145,550,163,585,185,643,234,638,234,582,190,548,167,511,150,449,132,384,123,322,119,268,119"/>
+<area shape="rect" id="Node000004" href="$structLoadPriorities_1_1Switching.html#acf8c0c8a19301b3d209ae5bbb363359b" title="The energy level is high: may switch the next load ON." alt="" coords="584,5,765,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="511,47,571,41,566,43,513,52"/>
+<area shape="rect" id="Node000006" href="$structLoadPriorities_1_1Switching.html#a8cb972b6750de408b20de11579739d3c" title="The energy level is low: may switch the last load ON to OFF." alt="" coords="584,75,765,119"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="512,72,571,82,566,83,513,77"/>
+<area shape="rect" id="Node000005" href="$namespaceLoadPriorities.html#a36125f3d6722a8bc0307afc39deee588" title="The next logical load to switch ON: the first one OFF, in priority order." alt="" coords="851,14,1038,42"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="765,25,838,27,833,28,766,30"/>
+<area shape="rect" id="Node000007" href="$namespaceLoadPriorities.html#a1258efcfb93fd5721c9b43d3711daa58" title="The next logical load to switch OFF: the last one ON, in priority order." alt="" coords="837,83,1052,111"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="765,94,824,96,819,98,766,100"/>
+<area shape="rect" id="Node000010" href="$namespaceFastControl.html#a57be1a4100f154bda9bdbea0ed23611d" title="The entry of the per&#45;sample calibration table that turns the first half into a whole cycle&#39;s energy w..." alt="" coords="560,423,789,451"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="499,457,547,454,552,453,500,463"/>
+<area shape="rect" id="Node000012" href="$native_2test__fast__control_2test__main_8cpp.html#ac3e8f0fb7bef90da9ba98b5ac7db4557" title="Every in&#45;range n gives the division form, within the rounding of the table." alt="" coords="351,366,491,394"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="264,371,338,375,333,377,264,376"/>
+<area shape="poly" id="edge14_Node000012_Node000008" title=" " alt="" coords="471,363,511,344,525,333,534,323,544,312,559,301,572,297,577,295,562,306,548,316,538,327,528,337,514,349,473,368"/>
+<area shape="poly" id="edge19_Node000012_Node000010" title=" " alt="" coords="486,391,598,419,593,419,486,397"/>
+<area shape="rect" id="Node000013" href="$namespaceEnergy.html#a5c6a3eeab8203be8c21f0dcd70f1b1c0" title="Contribution of one mains cycle of one phase to the bucket." alt="" coords="599,315,750,343"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="491,363,589,346,584,347,492,368"/>
+<area shape="rect" id="Node000015" href="$namespaceEnergy.html#a885b471812d2960dbe6740592c62d41a" title="Build the per&#45;sample calibration table at compile time." alt="" coords="579,368,770,396"/>
+<area shape="poly" id="edge15_Node000012_Node000015" title=" " alt="" coords="491,378,566,381,561,382,492,383"/>
+<area shape="rect" id="Node000014" href="$group__TimeCritical.html#gabc318f6984145cb3265035f62e21c4d8" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="862,290,1026,318"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="750,319,849,312,844,313,751,325"/>
+<area shape="rect" id="Node000016" href="$namespaceEnergy.html#ab6b5951d040a1d99b3f1f1deecc2da77" title="Largest of the calibration values." alt="" coords="878,342,1011,370"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="770,370,865,363,859,364,770,376"/>
+<area shape="rect" id="Node000017" href="$namespaceEnergy.html#a8b5cc27275819b07610576e86d2f009b" title="Largest shift that keeps a value within 16 bits once scaled by 2^shift." alt="" coords="884,394,1005,422"/>
+<area shape="poly" id="edge17_Node000015_Node000017" title=" " alt="" coords="770,389,871,400,866,401,770,394"/>
+<area shape="rect" id="Node000018" href="$namespaceEnergy.html#a44bfabeeca8fe61512b44b54519707f5" title="A calibration value as a 16&#45;bit fixed&#45;point constant." alt="" coords="884,446,1004,474"/>
+<area shape="poly" id="edge18_Node000015_Node000018" title=" " alt="" coords="739,394,790,409,838,431,872,443,866,443,836,435,788,414,739,399"/>
+<area shape="poly" id="edge21_Node000019_Node000012" title=" " alt="" coords="263,419,354,397,349,399,265,424"/>
+<area shape="poly" id="edge23_Node000020_Node000008" title=" " alt="" coords="500,212,587,240,582,241,500,217"/>
+<area shape="poly" id="edge25_Node000021_Node000008" title=" " alt="" coords="513,265,568,267,563,268,513,270"/>
+<area shape="poly" id="edge27_Node000022_Node000008" title=" " alt="" coords="282,299,330,300,421,303,461,303,512,300,571,293,566,294,513,305,461,309,421,308,330,305,283,305"/>
+</map>

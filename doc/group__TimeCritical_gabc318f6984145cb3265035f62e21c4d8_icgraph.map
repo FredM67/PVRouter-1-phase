@@ -1,0 +1,123 @@
+<map id="multU24x16_to32_hi8" name="multU24x16_to32_hi8">
+<area shape="rect" id="Node000001" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="1721,1008,1885,1036"/>
+<area shape="rect" id="Node000002" href="$namespaceEnergy.html#a5c6a3eeab8203be8c21f0dcd70f1b1c0" title="Contribution of one mains cycle of one phase to the bucket." alt="" coords="1513,550,1664,578"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1786,994,1595,580,1598,575,1792,995"/>
+<area shape="rect" id="Node000032" href="$embedded_2test__mult__asm_2test__main_8cpp.html#a693f3438716b7b4ef481243837f33cc1" title="Test multU24x16_to32_hi8: (a x b) &gt;&gt; 8, a on 24 bits (energy bucket, #120)" alt="" coords="1504,969,1673,1014"/>
+<area shape="poly" id="edge47_Node000001_Node000032" title=" " alt="" coords="1703,1009,1674,1006,1673,1001,1708,1008"/>
+<area shape="rect" id="Node000034" href="$namespaceDatalog.html#a47c7340a7476be8d077ce05dc1043aaf" title="The average power of a phase, in watts." alt="" coords="1530,1326,1646,1354"/>
+<area shape="poly" id="edge49_Node000001_Node000034" title=" " alt="" coords="1786,1048,1601,1328,1597,1323,1781,1051"/>
+<area shape="rect" id="Node000047" href="$namespaceDivertedPower.html#adff755a613e9ef25cfc9d56959607a0b" title="The average power over the period, in W." alt="" coords="1508,1038,1669,1066"/>
+<area shape="poly" id="edge67_Node000001_Node000047" title=" " alt="" coords="1703,1036,1670,1043,1669,1038,1708,1035"/>
+<area shape="rect" id="Node000003" href="$native_2test__energy__bucket_2test__main_8cpp.html#a0f3801aa789750b4d56cf88b9996bf95" title="Every average power from &#45;FULL_SCALE to +FULL_SCALE, in uneven steps." alt="" coords="1248,550,1422,578"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1494,565,1423,566,1422,561,1499,563"/>
+<area shape="rect" id="Node000007" href="$native_2test__fast__control_2test__main_8cpp.html#ac3e8f0fb7bef90da9ba98b5ac7db4557" title="Every in&#45;range n gives the division form, within the rounding of the table." alt="" coords="1265,822,1405,850"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="1581,591,1566,640,1541,698,1505,756,1483,783,1457,806,1433,820,1407,829,1405,825,1431,815,1454,802,1479,779,1501,753,1536,695,1561,638,1578,595"/>
+<area shape="rect" id="Node000011" href="$namespaceFastControl.html#a5ef2f866970e1bba2006ccb904e7b78f" title="The energy in the bucket predicted at the end of the mains cycle, without a division." alt="" coords="1242,703,1428,747"/>
+<area shape="poly" id="edge12_Node000002_Node000011" title=" " alt="" coords="1567,587,1519,639,1489,664,1457,686,1418,705,1415,700,1454,681,1486,660,1516,635,1563,591"/>
+<area shape="rect" id="Node000012" href="$group__TimeCritical.html#ga5f4786479cad73963c64110c777c79f7" title="Turns the cycle&#39;s CT2 sum into energy, the task after the contribution." alt="" coords="1249,874,1421,902"/>
+<area shape="poly" id="edge13_Node000002_Node000012" title=" " alt="" coords="1584,591,1573,651,1550,724,1533,762,1513,799,1487,833,1457,863,1423,881,1421,877,1454,859,1483,830,1508,796,1529,760,1545,722,1568,650,1581,595"/>
+<area shape="rect" id="Node000020" href="$group__TimeCritical.html#gac31343a7bf773ef82723f61a0c0b6856" title="Process the latest contribution, the task after each positive crossing." alt="" coords="1239,926,1431,954"/>
+<area shape="poly" id="edge23_Node000002_Node000020" title=" " alt="" coords="1587,591,1579,660,1557,747,1541,793,1519,838,1491,879,1457,915,1432,930,1430,926,1454,911,1487,876,1514,835,1536,791,1552,746,1573,659,1584,595"/>
+<area shape="rect" id="Node000021" href="$native_2test__energy__bucket_2test__main_8cpp.html#a4bfecf3319b8ded51b2c0f051eef4f34" title=" " alt="" coords="976,656,1132,717"/>
+<area shape="poly" id="edge25_Node000002_Node000021" title=" " alt="" coords="1502,582,1215,649,1134,669,1132,664,1214,644,1507,580"/>
+<area shape="rect" id="Node000022" href="$native_2test__energy__bucket_2test__main_8cpp.html#a6bc5274010c35b32a85df60352a1dcf4" title=" " alt="" coords="980,741,1129,786"/>
+<area shape="poly" id="edge27_Node000002_Node000022" title=" " alt="" coords="1559,586,1512,621,1457,649,1421,660,1389,666,1334,669,1280,673,1250,680,1216,693,1201,701,1192,711,1182,721,1168,731,1131,747,1128,743,1165,727,1179,717,1188,707,1198,697,1213,688,1248,674,1279,667,1334,663,1389,661,1420,655,1455,644,1509,616,1555,589"/>
+<area shape="rect" id="Node000023" href="$native_2test__energy__bucket_2test__main_8cpp.html#ab6eaf8c774cce9517d06cedcd474b4c6" title=" " alt="" coords="978,811,1130,855"/>
+<area shape="poly" id="edge29_Node000002_Node000023" title=" " alt="" coords="1578,590,1561,632,1535,678,1501,724,1457,762,1409,777,1324,794,1131,825,1129,820,1323,789,1408,772,1454,757,1497,720,1531,675,1557,630,1575,594"/>
+<area shape="rect" id="Node000024" href="$native_2test__energy__bucket_2test__main_8cpp.html#a3c9406087ec379a7daf52839723763c6" title=" " alt="" coords="956,5,1152,50"/>
+<area shape="poly" id="edge31_Node000002_Node000024" title=" " alt="" coords="1580,534,1563,438,1536,309,1518,245,1498,187,1477,139,1454,108,1421,83,1385,63,1347,48,1307,37,1226,25,1154,23,1151,18,1226,20,1308,32,1348,43,1388,59,1424,79,1458,104,1481,137,1503,185,1523,243,1541,308,1569,437,1585,536"/>
+<area shape="rect" id="Node000025" href="$native_2test__energy__bucket_2test__main_8cpp.html#a2c724726fb3468265a80715094ec73cd" title=" " alt="" coords="985,75,1123,119"/>
+<area shape="poly" id="edge33_Node000002_Node000025" title=" " alt="" coords="1585,533,1579,459,1572,410,1561,358,1544,305,1522,253,1492,206,1454,166,1417,140,1376,120,1332,106,1287,96,1199,89,1125,91,1123,86,1200,84,1288,91,1334,100,1378,115,1420,135,1457,162,1496,203,1526,251,1549,303,1566,357,1577,409,1584,458,1589,535"/>
+<area shape="rect" id="Node000026" href="$native_2test__energy__bucket_2test__main_8cpp.html#a9e67a1ace529d58b51e79a6a82d55d57" title=" " alt="" coords="964,144,1144,189"/>
+<area shape="poly" id="edge35_Node000002_Node000026" title=" " alt="" coords="1583,533,1575,468,1555,380,1538,335,1516,291,1488,251,1454,218,1419,195,1381,178,1341,166,1300,158,1218,152,1146,155,1144,150,1218,147,1301,153,1343,161,1383,173,1422,190,1457,214,1493,248,1521,289,1543,333,1560,379,1580,467,1588,535"/>
+<area shape="rect" id="Node000027" href="$native_2test__energy__bucket_2test__main_8cpp.html#a3ca4a828cf491ad87ec6a75a658a0276" title=" " alt="" coords="942,213,1166,258"/>
+<area shape="poly" id="edge37_Node000002_Node000027" title=" " alt="" coords="1582,533,1571,475,1549,400,1533,361,1512,324,1486,291,1454,263,1422,244,1387,230,1350,220,1312,214,1237,211,1168,216,1166,211,1237,205,1313,209,1351,215,1388,225,1424,239,1457,259,1489,287,1516,321,1538,359,1554,398,1576,474,1587,535"/>
+<area shape="rect" id="Node000028" href="$native_2test__energy__bucket_2test__main_8cpp.html#aa906764364e552678675262a3f150512" title=" " alt="" coords="1214,273,1456,318"/>
+<area shape="poly" id="edge39_Node000002_Node000028" title=" " alt="" coords="1576,534,1560,491,1535,436,1500,380,1478,355,1454,332,1437,321,1437,316,1457,328,1482,351,1504,377,1539,433,1565,489,1581,536"/>
+<area shape="rect" id="Node000029" href="$native_2test__energy__bucket_2test__main_8cpp.html#afdf70396c1a35806c14d2ff163eb55d4" title=" " alt="" coords="1239,343,1431,387"/>
+<area shape="poly" id="edge41_Node000002_Node000029" title=" " alt="" coords="1570,536,1524,469,1492,433,1454,402,1432,389,1431,384,1457,397,1495,429,1528,466,1575,537"/>
+<area shape="rect" id="Node000030" href="$native_2test__energy__bucket_2test__main_8cpp.html#adb5dd98988bfc8217410ea8b1b0907eb" title=" " alt="" coords="1237,412,1433,457"/>
+<area shape="poly" id="edge43_Node000002_Node000030" title=" " alt="" coords="1557,540,1511,506,1454,471,1428,460,1427,455,1457,467,1514,501,1562,540"/>
+<area shape="rect" id="Node000031" href="$native_2test__energy__bucket_2test__main_8cpp.html#ac96d872defcc165612e2798944d1cbd5" title=" " alt="" coords="1248,481,1422,526"/>
+<area shape="poly" id="edge45_Node000002_Node000031" title=" " alt="" coords="1510,546,1423,527,1422,522,1515,545"/>
+<area shape="rect" id="Node000004" href="$native_2test__energy__bucket_2test__main_8cpp.html#af72c1396fe3d1230a5d9339ef4d0c16b" title=" " alt="" coords="950,485,1159,546"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1232,547,1160,536,1159,531,1237,546"/>
+<area shape="rect" id="Node000006" href="$native_2test__energy__bucket_2test__main_8cpp.html#a0a7fc5b3150cdce32bfb361da22a3e0d" title=" " alt="" coords="952,570,1157,632"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="1230,578,1158,590,1156,585,1235,576"/>
+<area shape="rect" id="Node000005" href="$native_2test__energy__bucket_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="803,383,857,411"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="962,478,941,469,853,414,852,409,943,464,967,477"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="943,562,940,560,903,524,873,482,837,414,838,409,877,479,907,520,944,556,949,561"/>
+<area shape="rect" id="Node000008" href="$native_2test__fast__control_2test__main_8cpp.html#ae13fd133024b003ecf6a56a6737c84f0" title=" " alt="" coords="986,949,1123,994"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="1247,847,1216,864,1200,882,1192,900,1185,920,1168,939,1147,952,1124,961,1122,956,1144,947,1165,935,1180,917,1187,898,1195,879,1213,860,1252,844"/>
+<area shape="rect" id="Node000010" href="$native_2test__fast__control_2test__main_8cpp.html#a64d546bc31dbc6383bff964252ad971f" title=" " alt="" coords="986,880,1123,925"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="1250,854,1215,865,1124,887,1122,882,1214,860,1255,853"/>
+<area shape="rect" id="Node000009" href="$native_2test__fast__control_2test__main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="803,923,857,951"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="968,959,858,944,857,938,973,958"/>
+<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="968,916,858,935,857,930,973,914"/>
+<area shape="rect" id="Node000013" href="$group__TimeCritical.html#gaaaac1dcdeb7140c8bf76e07ce793bb01" title="Runs the first pending cycle task (CycleTask), on a CT2 call." alt="" coords="985,1018,1123,1046"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="1237,901,1216,916,1205,927,1199,938,1193,961,1187,985,1179,997,1168,1008,1147,1021,1124,1028,1122,1023,1145,1016,1165,1004,1175,994,1182,983,1188,960,1194,936,1201,924,1213,912,1232,904"/>
+<area shape="rect" id="Node000014" href="$group__TimeCritical.html#ga8c1dfaeee6d2643328dadd3011def04b" title="Runs every pending cycle task at once, before new snapshots replace theirs." alt="" coords="766,996,894,1024"/>
+<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="967,1024,895,1019,894,1014,972,1023"/>
+<area shape="rect" id="Node000018" href="$processing_8cpp.html#a05c2e5b588ced1cd7312f5b0edc5b295" title=" " alt="" coords="5,1022,48,1050"/>
+<area shape="poly" id="edge22_Node000013_Node000018" title=" " alt="" coords="967,1042,813,1057,632,1064,417,1064,308,1061,201,1054,49,1040,47,1035,201,1049,308,1056,417,1058,632,1058,813,1052,972,1040"/>
+<area shape="rect" id="Node000015" href="$group__TimeCritical.html#ga7449a97209a4b56151de6fc5197a9daf" title="Processes the start of a new negative half cycle for the specified phase." alt="" coords="544,944,718,972"/>
+<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="757,993,687,975,687,970,762,991"/>
+<area shape="rect" id="Node000019" href="$group__TimeCritical.html#gaab63947d9b9f7f49dbb62a8ceada3d30" title="Process the start of a new positive half cycle for the specified phase." alt="" coords="550,996,712,1024"/>
+<area shape="poly" id="edge20_Node000014_Node000019" title=" " alt="" coords="748,1011,713,1013,711,1008,753,1009"/>
+<area shape="rect" id="Node000016" href="$group__TimeCritical.html#ga8cff922940989b7edaa8bd0347f9becc" title="Processes raw voltage and current samples for the specified phase." alt="" coords="341,996,496,1024"/>
+<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="554,978,480,998,477,994,559,975"/>
+<area shape="rect" id="Node000017" href="$group__TimeCritical.html#gac1f07cd36657d61affe4642911ad27c1" title="Processes the current voltage raw sample for the specified phase." alt="" coords="96,996,293,1024"/>
+<area shape="poly" id="edge18_Node000016_Node000017" title=" " alt="" coords="323,1012,295,1013,292,1008,328,1009"/>
+<area shape="poly" id="edge19_Node000017_Node000018" title=" " alt="" coords="82,1029,50,1034,46,1031,86,1025"/>
+<area shape="poly" id="edge21_Node000019_Node000016" title=" " alt="" coords="532,1011,498,1013,496,1008,537,1009"/>
+<area shape="poly" id="edge24_Node000020_Node000013" title=" " alt="" coords="1230,960,1216,969,1202,978,1192,988,1183,999,1168,1009,1124,1024,1122,1019,1165,1004,1179,995,1188,985,1198,974,1213,964,1235,958"/>
+<area shape="poly" id="edge26_Node000021_Node000005" title=" " alt="" coords="959,659,940,646,915,618,894,586,862,519,841,457,833,414,834,409,846,455,866,517,898,583,919,614,944,642,965,658"/>
+<area shape="poly" id="edge28_Node000022_Node000005" title=" " alt="" coords="962,745,940,731,908,692,883,649,864,602,850,555,834,470,831,414,832,409,839,469,855,554,869,600,888,646,913,689,944,727,968,745"/>
+<area shape="poly" id="edge30_Node000023_Node000005" title=" " alt="" coords="962,815,940,800,903,753,875,699,855,641,842,584,829,480,830,414,831,409,834,480,847,583,860,640,880,697,908,750,944,796,967,815"/>
+<area shape="poly" id="edge32_Node000024_Node000005" title=" " alt="" coords="943,62,944,64,912,102,887,146,868,192,855,239,839,324,834,383,829,382,834,324,849,237,863,190,883,143,908,99,940,61,947,57"/>
+<area shape="poly" id="edge34_Node000025_Node000005" title=" " alt="" coords="968,116,944,134,917,163,895,196,877,232,863,269,844,336,835,384,830,382,839,335,858,267,872,230,890,194,913,160,940,130,972,112"/>
+<area shape="poly" id="edge36_Node000026_Node000005" title=" " alt="" coords="949,197,944,203,922,224,903,247,872,298,850,347,838,384,833,382,845,345,867,296,898,244,918,220,940,199,953,193"/>
+<area shape="poly" id="edge38_Node000027_Node000005" title=" " alt="" coords="962,266,943,279,912,305,883,334,843,384,839,381,879,330,908,301,941,275,965,263"/>
+<area shape="poly" id="edge40_Node000028_Node000005" title=" " alt="" coords="1197,309,1074,328,943,356,898,371,859,387,856,382,896,366,941,350,1073,322,1201,306"/>
+<area shape="poly" id="edge42_Node000029_Node000005" title=" " alt="" coords="1221,366,1089,371,942,381,859,394,856,389,942,376,1089,366,1226,364"/>
+<area shape="poly" id="edge44_Node000030_Node000005" title=" " alt="" coords="1219,427,858,402,857,396,1223,425"/>
+<area shape="poly" id="edge46_Node000031_Node000005" title=" " alt="" coords="1230,486,941,429,858,407,857,402,943,424,1235,483"/>
+<area shape="rect" id="Node000033" href="$embedded_2test__mult__asm_2test__main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title=" " alt="" coords="1310,978,1360,1006"/>
+<area shape="poly" id="edge48_Node000032_Node000033" title=" " alt="" coords="1486,992,1360,994,1359,989,1491,991"/>
+<area shape="rect" id="Node000035" href="$native_2test__datalog__math_2test__main_8cpp.html#a578ea20110b03dfeaaa1650ede366523" title=" " alt="" coords="1254,1386,1416,1448"/>
+<area shape="poly" id="edge50_Node000034_Node000035" title=" " alt="" coords="1529,1358,1417,1395,1416,1390,1523,1359"/>
+<area shape="rect" id="Node000037" href="$embedded_2test__datalog__math__avr_2test__main_8cpp.html#a59dd75a991aeada8deda93cc89af6218" title=" " alt="" coords="1255,1317,1415,1362"/>
+<area shape="poly" id="edge52_Node000034_Node000037" title=" " alt="" coords="1512,1340,1416,1342,1415,1337,1518,1339"/>
+<area shape="rect" id="Node000039" href="$native_2test__datalog__math_2test__main_8cpp.html#ab5a7b02b8adb8d9557265033571b8146" title=" " alt="" coords="1264,1472,1406,1517"/>
+<area shape="poly" id="edge54_Node000034_Node000039" title=" " alt="" coords="1568,1364,1520,1415,1490,1440,1457,1462,1407,1482,1405,1477,1454,1457,1486,1436,1516,1412,1563,1367"/>
+<area shape="rect" id="Node000040" href="$native_2test__datalog__math_2test__main_8cpp.html#a25f4c01ffcf91fb7c58c5ce958fed656" title=" " alt="" coords="1256,1159,1414,1203"/>
+<area shape="poly" id="edge56_Node000034_Node000040" title=" " alt="" coords="1554,1316,1454,1249,1381,1207,1382,1201,1457,1244,1559,1317"/>
+<area shape="rect" id="Node000041" href="$group__GeneralProcessing.html#ga09f681954987d95f85831ca82365f987" title="Updates power and voltage data." alt="" coords="1229,1540,1441,1568"/>
+<area shape="poly" id="edge58_Node000034_Node000041" title=" " alt="" coords="1578,1366,1560,1406,1534,1450,1499,1494,1457,1531,1435,1543,1434,1537,1454,1527,1496,1491,1529,1447,1555,1403,1574,1369"/>
+<area shape="rect" id="Node000043" href="$native_2test__datalog__math_2test__main_8cpp.html#a5b095c845a7e0e82675725fbf0dbcdeb" title="Largest error of watts() against the reference, over the full input range, beyond what the 16&#45;bit cal..." alt="" coords="1272,1258,1398,1286"/>
+<area shape="poly" id="edge60_Node000034_Node000043" title=" " alt="" coords="1517,1321,1389,1289,1390,1283,1522,1321"/>
+<area shape="rect" id="Node000036" href="$native_2test__datalog__math_2test__main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="803,1290,857,1318"/>
+<area shape="poly" id="edge51_Node000035_Node000036" title=" " alt="" coords="1241,1440,1171,1452,1095,1456,1016,1448,978,1439,941,1426,905,1404,875,1374,838,1320,840,1315,879,1371,909,1400,943,1421,979,1434,1017,1443,1095,1450,1171,1447,1236,1440"/>
+<area shape="rect" id="Node000038" href="$embedded_2test__datalog__math__avr_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title=" " alt="" coords="1026,1384,1083,1412"/>
+<area shape="poly" id="edge53_Node000037_Node000038" title=" " alt="" coords="1243,1359,1084,1395,1083,1390,1237,1360"/>
+<area shape="poly" id="edge55_Node000039_Node000036" title=" " alt="" coords="1246,1506,1179,1512,1099,1508,1017,1492,978,1479,941,1461,901,1429,870,1389,848,1350,835,1320,838,1316,853,1347,875,1386,905,1425,943,1456,980,1474,1019,1487,1100,1502,1179,1506,1251,1506"/>
+<area shape="poly" id="edge57_Node000040_Node000036" title=" " alt="" coords="1242,1155,1176,1144,1098,1138,1058,1139,1018,1144,980,1153,943,1167,906,1193,876,1228,854,1263,839,1292,835,1288,849,1260,872,1224,903,1189,941,1163,978,1148,1018,1139,1058,1134,1098,1133,1176,1139,1247,1154"/>
+<area shape="rect" id="Node000042" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="1030,1540,1079,1568"/>
+<area shape="poly" id="edge59_Node000041_Node000042" title=" " alt="" coords="1211,1554,1079,1557,1079,1552,1217,1554"/>
+<area shape="rect" id="Node000044" href="$native_2test__datalog__math_2test__main_8cpp.html#a52da7c35d23613031adcd8302d3d3d96" title=" " alt="" coords="960,1247,1148,1291"/>
+<area shape="poly" id="edge61_Node000043_Node000044" title=" " alt="" coords="1254,1271,1149,1273,1148,1267,1260,1271"/>
+<area shape="rect" id="Node000045" href="$native_2test__datalog__math_2test__main_8cpp.html#ad1d9ca0e83f814162007f1bb6e6774c2" title=" " alt="" coords="956,1316,1152,1361"/>
+<area shape="poly" id="edge63_Node000043_Node000045" title=" " alt="" coords="1261,1289,1152,1318,1151,1313,1256,1290"/>
+<area shape="rect" id="Node000046" href="$native_2test__datalog__math_2test__main_8cpp.html#ab91d88e52653d6cc84fc0bec8f5e5ffe" title=" " alt="" coords="960,1177,1149,1222"/>
+<area shape="poly" id="edge65_Node000043_Node000046" title=" " alt="" coords="1261,1254,1144,1225,1144,1220,1266,1253"/>
+<area shape="poly" id="edge62_Node000044_Node000036" title=" " alt="" coords="943,1286,858,1302,857,1297,948,1285"/>
+<area shape="poly" id="edge64_Node000045_Node000036" title=" " alt="" coords="938,1321,858,1310,858,1305,943,1321"/>
+<area shape="poly" id="edge66_Node000046_Node000036" title=" " alt="" coords="960,1227,943,1237,893,1264,852,1292,850,1287,890,1260,941,1232,955,1229"/>
+<area shape="rect" id="Node000048" href="$group__TimeCritical.html#ga74b3ca56697213060168c75dee666839" title="Copies the CT2 figures of the datalog period that just ended, then signals the main code." alt="" coords="1230,1030,1440,1058"/>
+<area shape="poly" id="edge68_Node000047_Node000048" title=" " alt="" coords="1489,1049,1441,1050,1440,1044,1495,1048"/>
+<area shape="rect" id="Node000049" href="$native_2test__diverted__energy_2test__main_8cpp.html#af81afe3c04e97f4109979b0cc0e04921" title=" " alt="" coords="1260,1082,1410,1110"/>
+<area shape="poly" id="edge70_Node000047_Node000049" title=" " alt="" coords="1490,1069,1411,1085,1410,1080,1495,1068"/>
+<area shape="poly" id="edge69_Node000048_Node000013" title=" " alt="" coords="1212,1039,1124,1037,1123,1032,1217,1038"/>
+<area shape="rect" id="Node000050" href="$native_2test__diverted__energy_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="1027,1075,1081,1103"/>
+<area shape="poly" id="edge71_Node000049_Node000050" title=" " alt="" coords="1242,1094,1082,1092,1081,1087,1247,1093"/>
+</map>

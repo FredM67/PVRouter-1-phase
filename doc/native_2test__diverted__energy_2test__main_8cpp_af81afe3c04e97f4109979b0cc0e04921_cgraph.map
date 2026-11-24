@@ -1,0 +1,9 @@
+<map id="test_average_watts" name="test_average_watts">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,32,155,60"/>
+<area shape="rect" id="Node000002" href="$namespaceDivertedPower.html#ad5d547d5958e42a9c969e36ae4d7f701" title="The fixed&#45;point division for an average power over a datalog period." alt="" coords="203,5,412,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,34,190,33,185,34,155,40"/>
+<area shape="rect" id="Node000003" href="$namespaceDivertedPower.html#adff755a613e9ef25cfc9d56959607a0b" title="The average power over the period, in W." alt="" coords="227,57,388,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="155,51,214,60,209,61,155,57"/>
+<area shape="rect" id="Node000004" href="$group__TimeCritical.html#gabc318f6984145cb3265035f62e21c4d8" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="460,57,624,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="389,69,447,71,442,71,389,74"/>
+</map>

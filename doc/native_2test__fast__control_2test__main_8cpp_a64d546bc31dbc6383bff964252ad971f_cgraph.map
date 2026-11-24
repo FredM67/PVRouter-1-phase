@@ -1,0 +1,21 @@
+<map id="test_division_free_prediction_60Hz" name="test_division_free_prediction_60Hz">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,88,143,132"/>
+<area shape="rect" id="Node000002" href="$native_2test__fast__control_2test__main_8cpp.html#ac3e8f0fb7bef90da9ba98b5ac7db4557" title="Every in&#45;range n gives the division form, within the rounding of the table." alt="" coords="191,96,331,124"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,107,178,109,173,111,143,112"/>
+<area shape="rect" id="Node000003" href="$namespaceEnergy.html#a5c6a3eeab8203be8c21f0dcd70f1b1c0" title="Contribution of one mains cycle of one phase to the bucket." alt="" coords="418,5,569,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="282,93,325,67,378,42,405,36,400,38,380,47,328,72,284,98"/>
+<area shape="rect" id="Node000005" href="$namespaceFastControl.html#aaec9e64c36a923731420a40f831af5bc" title="The energy in the bucket predicted at the end of the mains cycle." alt="" coords="400,57,586,102"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="331,98,387,93,382,94,332,103"/>
+<area shape="rect" id="Node000006" href="$namespaceEnergy.html#a885b471812d2960dbe6740592c62d41a" title="Build the per&#45;sample calibration table at compile time." alt="" coords="398,125,588,153"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="331,116,385,125,380,126,331,121"/>
+<area shape="rect" id="Node000010" href="$namespaceFastControl.html#a57be1a4100f154bda9bdbea0ed23611d" title="The entry of the per&#45;sample calibration table that turns the first half into a whole cycle&#39;s energy w..." alt="" coords="379,177,607,205"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="289,122,332,142,380,162,409,173,404,173,378,167,330,147,288,127"/>
+<area shape="rect" id="Node000004" href="$group__TimeCritical.html#gabc318f6984145cb3265035f62e21c4d8" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="655,5,820,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="569,17,642,19,637,20,569,22"/>
+<area shape="rect" id="Node000007" href="$namespaceEnergy.html#ab6b5951d040a1d99b3f1f1deecc2da77" title="Largest of the calibration values." alt="" coords="671,73,804,101"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="561,122,653,105,658,104,562,127"/>
+<area shape="rect" id="Node000008" href="$namespaceEnergy.html#a8b5cc27275819b07610576e86d2f009b" title="Largest shift that keeps a value within 16 bits once scaled by 2^shift." alt="" coords="677,125,798,153"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="589,137,664,139,658,139,589,142"/>
+<area shape="rect" id="Node000009" href="$namespaceEnergy.html#a44bfabeeca8fe61512b44b54519707f5" title="A calibration value as a 16&#45;bit fixed&#45;point constant." alt="" coords="677,177,798,205"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="562,151,665,175,660,175,562,156"/>
+</map>

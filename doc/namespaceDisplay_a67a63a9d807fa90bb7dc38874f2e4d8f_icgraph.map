@@ -1,0 +1,13 @@
+<map id="Display::oledEnergy" name="Display::oledEnergy">
+<area shape="rect" id="Node000001" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above." alt="" coords="435,32,586,60"/>
+<area shape="rect" id="Node000002" href="$native_2test__display_2test__main_8cpp.html#aaee787b3e6519a3aeb36e1b856fc97f5" title=" " alt="" coords="266,5,387,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="417,33,388,31,388,25,422,33"/>
+<area shape="rect" id="Node000004" href="$utils__oled_8h.html#aa2280d1881dc5c362dd647d3b5f6d660" title="Shows item item of the turn on the OLED, once per second." alt="" coords="276,57,377,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="423,58,378,67,377,62,417,59"/>
+<area shape="rect" id="Node000003" href="$native_2test__display_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="133,5,188,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="248,20,188,22,188,17,253,19"/>
+<area shape="rect" id="Node000005" href="$group__GeneralProcessing.html#ga64c5b9d14eb62b90506c0ee1b2ff3e2c" title="Updates the display, once per second." alt="" coords="103,57,218,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="257,71,218,74,218,69,263,71"/>
+<area shape="rect" id="Node000006" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,57,55,85"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="85,72,55,74,55,69,90,70"/>
+</map>

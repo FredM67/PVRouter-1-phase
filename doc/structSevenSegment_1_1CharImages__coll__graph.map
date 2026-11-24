@@ -1,0 +1,5 @@
+<map id="SevenSegment::CharImages" name="SevenSegment::CharImages">
+<area shape="rect" id="Node000001" title="The image of each character, without the DP and the digit lines, in flash." alt="" coords="5,132,211,160"/>
+<area shape="rect" id="Node000002" href="$structDisplay_1_1PortImage.html" title="The bits of pins in the ports B, C and D of the ATmega328P." alt="" coords="36,5,180,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,47,111,132,105,131,106,50"/>
+</map>

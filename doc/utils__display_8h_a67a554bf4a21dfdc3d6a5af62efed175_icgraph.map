@@ -1,0 +1,13 @@
+<map id="setDisplayCharacters" name="setDisplayCharacters">
+<area shape="rect" id="Node000001" title="Shows these 4 characters (left to right, DP bit included) from the next digit on." alt="" coords="502,32,663,60"/>
+<area shape="rect" id="Node000002" href="$utils__display_8h.html#a3533a6f04780d5ed82d704bf39cebb69" title="Sets the pins of the 7&#45;segment display as outputs, nothing shown." alt="" coords="297,5,423,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="485,35,424,29,424,24,490,34"/>
+<area shape="rect" id="Node000004" href="$utils__display_8h.html#ac0ef306a29083e9c6915800038b0c8e4" title="Shows item item of the turn on the 7&#45;segment display, once per second." alt="" coords="266,57,454,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="489,57,455,63,455,58,484,57"/>
+<area shape="rect" id="Node000003" href="$group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="132,5,189,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="279,20,190,22,189,17,284,18"/>
+<area shape="rect" id="Node000005" href="$group__GeneralProcessing.html#ga64c5b9d14eb62b90506c0ee1b2ff3e2c" title="Updates the display, once per second." alt="" coords="103,57,218,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="248,71,218,74,218,69,253,71"/>
+<area shape="rect" id="Node000006" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,57,55,85"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="85,72,55,74,55,69,90,70"/>
+</map>

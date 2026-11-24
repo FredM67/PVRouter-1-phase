@@ -1,0 +1,5 @@
+<map id="test_seg_energy" name="test_seg_energy">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,134,33"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a7f81200a2bdcccf34ba2cd7c43d8aa95" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above (as Full)." alt="" coords="182,5,327,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,17,169,19,163,19,134,22"/>
+</map>

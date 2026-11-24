@@ -1,0 +1,48 @@
+<map id="isValidTemperature" name="isValidTemperature">
+<area shape="rect" id="Node000001" title="Whether a temperature reading is valid, and so worth sending." alt="" coords="743,256,889,284"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a3dca1ea3c46b8f5049678f2230e08b04" title="Writes the temperature temperature_x100, rounded to 0.1 °C, right&#45;aligned on 5 characters: &quot; 23...." alt="" coords="505,109,692,137"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="792,243,750,197,723,173,693,152,668,140,667,135,696,148,726,169,754,194,798,244"/>
+<area shape="rect" id="Node000008" href="$structDS18B20_1_1PowerOnFilter.html#a06e2fdc5e886b6c603e5882de4bc5ca0" title="The reading to keep." alt="" coords="509,213,688,258"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="725,256,689,252,688,247,730,255"/>
+<area shape="rect" id="Node000009" href="$group__Telemetry.html#ga0018bc6f3f3b53571428522d11575051" title="One step of the datalog in JSON format." alt="" coords="545,5,652,33"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="805,240,790,199,767,146,735,93,715,69,693,48,674,36,653,29,652,23,676,31,696,44,719,65,740,90,772,144,795,197,810,242"/>
+<area shape="rect" id="Node000011" href="$group__Telemetry.html#ga678079c20f2260c02b6d805a3252fdb8" title="One step of the datalog in text format." alt="" coords="545,57,652,85"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="800,241,783,210,759,171,729,133,693,100,673,89,653,82,652,77,675,84,696,96,733,129,764,168,788,207,805,243"/>
+<area shape="rect" id="Node000012" href="$namespaceDisplay.html#a1e0f7a1594ea89e78f11980ca8b1b1ea" title="Writes the temperature temperature_x100, rounded to 0.1 °C." alt="" coords="507,161,690,189"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="778,247,739,225,694,203,664,192,663,187,696,198,742,221,784,247"/>
+<area shape="rect" id="Node000015" href="$structTeleInfoData.html#a54f7ddea8fc89477f2cef795b3b2efdd" title=" " alt="" coords="502,282,695,327"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="725,285,696,292,694,287,730,283"/>
+<area shape="rect" id="Node000016" href="$native_2test__ds18b20_2test__main_8cpp.html#a165314ef3361e87cc41f63e4ccdd6524" title=" " alt="" coords="514,490,683,535"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="807,297,792,340,768,388,737,437,696,480,678,492,676,487,693,476,732,434,764,385,787,337,803,300"/>
+<area shape="rect" id="Node000018" href="$native_2test__ds18b20_2test__main_8cpp.html#a0697280e0a6043c38f01ff4f0b2a6024" title=" " alt="" coords="518,560,679,604"/>
+<area shape="poly" id="edge21_Node000001_Node000018" title=" " alt="" coords="812,297,800,352,778,419,745,488,722,520,696,549,680,561,678,556,693,545,718,517,740,486,773,417,795,351,808,301"/>
+<area shape="rect" id="Node000019" href="$native_2test__ds18b20_2test__main_8cpp.html#ab5c5615d9462e0142f247fa3d8c0968b" title=" " alt="" coords="503,352,694,396"/>
+<area shape="poly" id="edge23_Node000001_Node000019" title=" " alt="" coords="782,291,696,342,668,353,666,348,693,337,777,293"/>
+<area shape="rect" id="Node000020" href="$native_2test__ds18b20_2test__main_8cpp.html#aa248647a3d45fa22d3a08bcec6cf8048" title=" " alt="" coords="524,421,673,466"/>
+<area shape="poly" id="edge25_Node000001_Node000020" title=" " alt="" coords="800,295,757,355,728,385,696,411,674,423,672,418,693,406,725,381,753,351,795,298"/>
+<area shape="rect" id="Node000003" href="$native_2test__display_2test__main_8cpp.html#aaee787b3e6519a3aeb36e1b856fc97f5" title=" " alt="" coords="300,57,421,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="515,107,422,87,421,82,519,104"/>
+<area shape="rect" id="Node000005" href="$utils__oled_8h.html#aa2280d1881dc5c362dd647d3b5f6d660" title="Shows item item of the turn on the OLED, once per second." alt="" coords="310,109,411,137"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="487,124,412,126,411,121,492,122"/>
+<area shape="rect" id="Node000004" href="$native_2test__display_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="133,57,188,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="282,73,189,74,187,69,286,69"/>
+<area shape="rect" id="Node000006" href="$group__GeneralProcessing.html#ga64c5b9d14eb62b90506c0ee1b2ff3e2c" title="Updates the display, once per second." alt="" coords="103,109,218,137"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="292,125,220,126,217,121,296,122"/>
+<area shape="rect" id="Node000007" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,59,55,86"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="107,105,56,84,54,80,111,102"/>
+<area shape="rect" id="Node000010" href="$group__GeneralProcessing.html#gade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="310,5,410,33"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="527,21,412,22,410,17,531,18"/>
+<area shape="poly" id="edge10_Node000010_Node000007" title=" " alt="" coords="293,23,203,32,103,48,57,64,53,60,102,43,203,26,296,20"/>
+<area shape="poly" id="edge12_Node000011_Node000010" title=" " alt="" coords="527,57,412,33,410,27,532,55"/>
+<area shape="rect" id="Node000013" href="$utils__display_8h.html#ac0ef306a29083e9c6915800038b0c8e4" title="Shows item item of the turn on the 7&#45;segment display, once per second." alt="" coords="266,213,454,241"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="514,194,428,215,426,210,519,192"/>
+<area shape="rect" id="Node000014" href="$native_2test__display_2test__main_8cpp.html#ad39a7413bac9eacdb12e19d94cd7623c" title=" " alt="" coords="278,161,442,189"/>
+<area shape="poly" id="edge16_Node000012_Node000014" title=" " alt="" coords="489,176,444,178,442,173,494,174"/>
+<area shape="poly" id="edge15_Node000013_Node000006" title=" " alt="" coords="280,208,265,203,214,171,178,140,177,135,217,167,267,198,285,207"/>
+<area shape="poly" id="edge17_Node000014_Node000004" title=" " alt="" coords="276,156,265,151,249,138,239,126,230,113,216,100,189,84,187,79,220,96,234,109,244,122,253,134,267,146,281,154"/>
+<area shape="rect" id="Node000017" href="$native_2test__ds18b20_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="333,464,387,492"/>
+<area shape="poly" id="edge20_Node000016_Node000017" title=" " alt="" coords="497,499,388,484,388,479,502,498"/>
+<area shape="poly" id="edge22_Node000018_Node000017" title=" " alt="" coords="515,553,501,550,387,494,388,489,503,545,520,554"/>
+<area shape="poly" id="edge24_Node000019_Node000017" title=" " alt="" coords="520,401,503,411,389,466,386,462,501,406,515,403"/>
+<area shape="poly" id="edge26_Node000020_Node000017" title=" " alt="" coords="506,457,388,477,387,471,511,455"/>
+</map>

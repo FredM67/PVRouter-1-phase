@@ -1,0 +1,16 @@
+<map id="SampleSets::maxPerDatalog" name="SampleSets::maxPerDatalog">
+<area shape="rect" id="Node000001" title="The largest number of sample sets in a datalog period." alt="" coords="372,96,579,124"/>
+<area shape="rect" id="Node000002" href="$native_2test__sample__sets_2test__main_8cpp.html#a236f517bbbfd48f0f8983512faf1bf82" title=" " alt="" coords="126,5,306,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="429,89,380,69,323,47,286,36,286,31,325,42,382,64,435,89"/>
+<area shape="rect" id="Node000004" href="$native_2test__sample__sets_2test__main_8cpp.html#a3a14f1fa4d810a7081ecc74cef50ada5" title=" " alt="" coords="135,57,296,102"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="354,96,297,91,297,86,359,95"/>
+<area shape="rect" id="Node000005" href="$native_2test__sample__sets_2test__main_8cpp.html#a051d72ca12bea938a1f6431d247f18d7" title=" " alt="" coords="108,125,324,153"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="354,124,325,130,324,124,359,123"/>
+<area shape="rect" id="Node000006" href="$native_2test__sample__sets_2test__main_8cpp.html#a5470c727eebd10bad1ee3589eb69677a" title=" " alt="" coords="145,177,286,222"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="424,129,325,167,288,180,286,174,323,162,419,130"/>
+<area shape="rect" id="Node000003" href="$native_2test__sample__sets_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,96,60,124"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,41,109,47,74,71,48,97,44,94,71,67,106,42,122,37"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="119,97,61,108,59,103,122,93"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="108,124,61,117,60,111,112,121"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="128,175,106,167,74,147,50,127,50,121,78,142,109,162,133,174"/>
+</map>

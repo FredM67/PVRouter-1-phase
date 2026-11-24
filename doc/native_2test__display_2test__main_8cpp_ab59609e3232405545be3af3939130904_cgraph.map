@@ -1,0 +1,25 @@
+<map id="test_seg_images" name="test_seg_images">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,159,137,186"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a86ac34f148e1141d9216d7208834b83e" title="The pins to set HIGH before a digit changes, so that nothing shows while the ports change: SEG,..." alt="" coords="187,5,345,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,157,121,105,151,75,183,49,207,38,203,42,186,53,154,79,125,109,84,160"/>
+<area shape="rect" id="Node000003" href="$namespaceDisplay.html#a20918209eef8c1ede99f4f69afbec5ca" title="The bit of pin pin in its port." alt="" coords="395,159,528,186"/>
+<area shape="poly" id="edge11_Node000001_Node000003" title=" " alt="" coords="85,156,127,122,154,105,184,93,229,81,266,76,303,81,348,93,397,116,437,148,432,148,394,121,346,98,302,86,266,82,230,86,186,98,157,110,130,126,89,160"/>
+<area shape="rect" id="Node000004" href="$namespaceDisplay.html#aa3eff0e2e7e76e2226bcfe09bedf2289" title="The pins to set LOW before a digit changes: SEG_HW, the DP (the 74HC4543 does not drive it)...." alt="" coords="189,107,343,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="125,156,198,137,194,141,127,160"/>
+<area shape="rect" id="Node000005" href="$namespaceDisplay.html#a06d8b2d7ab61bf8a16f0835ad7c75be0" title="The image of character character alone (no DP, no digit line): SEG, its segments; SEG_HW,..." alt="" coords="185,159,346,186"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="136,170,172,171,167,174,138,175"/>
+<area shape="rect" id="Node000006" href="$namespaceDisplay.html#a7bae21731d566b21a38cb00b3ddb1d2e" title="The image of the digit lines with digit digit on: SEG, every digit line HIGH but that of digit; SEG_H..." alt="" coords="185,211,347,238"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="126,184,198,205,194,207,126,190"/>
+<area shape="rect" id="Node000007" href="$namespaceDisplay.html#a93638ba0d7caa6e6222f893a99225cfb" title="The image of the DP on: SEG, its segment; SEG_HW, its line." alt="" coords="191,263,340,290"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="90,184,133,216,186,247,203,257,197,257,183,252,130,220,89,189"/>
+<area shape="rect" id="Node000008" href="$namespaceDisplay.html#a75e6544c84f416cfa138b4366d629c54" title="The bits of every pin of display type type: what the interrupt writes." alt="" coords="186,315,346,342"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="82,184,123,241,153,272,186,300,197,308,192,307,183,304,149,276,119,244,80,189"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="313,31,348,49,377,71,403,96,444,146,439,146,399,100,373,75,346,53,313,36"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="321,132,395,154,390,155,321,138"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="346,170,382,172,376,173,347,175"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="320,207,395,190,390,192,322,213"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="317,260,346,247,391,221,429,197,433,195,394,226,348,252,318,265"/>
+<area shape="poly" id="edge13_Node000008_Node000003" title=" " alt="" coords="322,312,346,300,375,276,401,249,441,200,446,198,405,253,378,280,348,304,324,317"/>
+<area shape="rect" id="Node000009" href="$namespaceDisplay.html#a04da503999c16d7a0ddca5d8303d5eb0" title="The pins display type type takes, for the pin checks." alt="" coords="402,315,521,342"/>
+<area shape="poly" id="edge14_Node000008_Node000009" title=" " alt="" coords="346,326,389,328,384,329,346,331"/>
+</map>

@@ -1,0 +1,29 @@
+<map id="showOn7SegmentDisplay" name="showOn7SegmentDisplay">
+<area shape="rect" id="Node000001" title="Shows item item of the turn on the 7&#45;segment display, once per second." alt="" coords="5,136,194,164"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a7f81200a2bdcccf34ba2cd7c43d8aa95" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above (as Full)." alt="" coords="260,5,406,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,134,168,89,203,65,240,43,260,37,256,40,243,48,206,69,171,94,118,137"/>
+<area shape="rect" id="Node000003" href="$namespaceDisplay.html#a6aa97be3c8a08d1ba3812589a8d33a0d" title="Writes &quot;FORC&quot;." alt="" coords="261,57,404,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="136,133,241,95,269,88,265,91,243,100,139,138"/>
+<area shape="rect" id="Node000004" href="$namespaceDisplay.html#a7f0baecb7d5e7c1c797b01aa237e12dc" title="Writes &quot; OFF&quot;." alt="" coords="273,109,392,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="193,137,260,130,256,133,195,142"/>
+<area shape="rect" id="Node000005" href="$namespaceDisplay.html#a1e0f7a1594ea89e78f11980ca8b1b1ea" title="Writes the temperature temperature_x100, rounded to 0.1 °C." alt="" coords="242,161,424,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="193,157,229,163,224,165,195,163"/>
+<area shape="rect" id="Node000007" href="$namespaceDisplay.html#a172dddc8916a84f58f7a3c625cb858e4" title="Writes the walking dots: 4 blanks, the DP of digit position (0 to 3) on." alt="" coords="242,213,424,241"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="139,162,243,198,269,208,264,209,241,203,139,167"/>
+<area shape="rect" id="Node000008" href="$utils__display_8h.html#a67a554bf4a21dfdc3d6a5af62efed175" title="Shows these 4 characters (left to right, DP bit included) from the next digit on." alt="" coords="253,265,413,293"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="117,161,171,205,206,229,243,250,261,260,256,260,240,255,203,234,168,209,116,167"/>
+<area shape="rect" id="Node000006" href="$ds18b20_8h.html#ad55adf4c2798fb2203dd07c6954856fe" title="Whether a temperature reading is valid, and so worth sending." alt="" coords="520,161,666,189"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="424,173,506,175,501,176,425,178"/>
+<area shape="rect" id="Node000009" href="$namespaceSevenSegment.html#ae610499d949648c6e866614adefed3fd" title="Builds CharImages from display_core.h, at compile time." alt="" coords="472,265,713,293"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="413,277,459,279,454,279,414,282"/>
+<area shape="rect" id="Node000010" href="$namespaceDisplay.html#a06d8b2d7ab61bf8a16f0835ad7c75be0" title="The image of character character alone (no DP, no digit line): SEG, its segments; SEG_HW,..." alt="" coords="762,213,923,241"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="662,262,755,245,760,244,663,267"/>
+<area shape="rect" id="Node000012" href="$namespaceDisplay.html#a7bae21731d566b21a38cb00b3ddb1d2e" title="The image of the digit lines with digit digit on: SEG, every digit line HIGH but that of digit; SEG_H..." alt="" coords="761,265,924,293"/>
+<area shape="poly" id="edge11_Node000009_Node000012" title=" " alt="" coords="714,277,748,279,743,279,714,282"/>
+<area shape="rect" id="Node000013" href="$namespaceDisplay.html#a93638ba0d7caa6e6222f893a99225cfb" title="The image of the DP on: SEG, its segment; SEG_HW, its line." alt="" coords="768,317,917,345"/>
+<area shape="poly" id="edge13_Node000009_Node000013" title=" " alt="" coords="663,291,760,314,755,313,663,296"/>
+<area shape="rect" id="Node000011" href="$namespaceDisplay.html#a20918209eef8c1ede99f4f69afbec5ca" title="The bit of pin pin in its port." alt="" coords="972,265,1105,293"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="898,239,972,261,966,261,897,244"/>
+<area shape="poly" id="edge12_Node000012_Node000011" title=" " alt="" coords="924,277,959,279,953,279,924,282"/>
+<area shape="poly" id="edge14_Node000013_Node000011" title=" " alt="" coords="897,314,966,298,972,297,898,319"/>
+</map>

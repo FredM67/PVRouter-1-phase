@@ -1,0 +1,18 @@
+<map id="resolveBoosts" name="resolveBoosts">
+<area shape="rect" id="Node000001" title="Resolves each scheduled boost, at compile time." alt="" coords="5,125,119,153"/>
+<area shape="rect" id="Node000002" href="$namespaceDualTariff.html#a0a0695c296e5eb740ea51bae242d9e80" title="Boost i of boosts, for an off&#45;peak period of offPeakHours." alt="" coords="167,125,306,153"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,137,153,138,149,140,120,142"/>
+<area shape="rect" id="Node000003" href="$classBoostSchedule.html#af74b7a74a43e454e403f5e571459e848" title="The local bitmask of boost i, or 0 if out of bounds." alt="" coords="354,5,588,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="249,123,292,82,321,61,353,42,370,37,365,40,355,47,324,65,296,86,252,127"/>
+<area shape="rect" id="Node000004" href="$classBoostSchedule.html#a2d80f27fc86f59b66bac9ad3f16cba66" title="The remote bitmask of boost i, or 0 if out of bounds." alt="" coords="372,57,570,101"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="293,122,369,105,364,107,294,127"/>
+<area shape="rect" id="Node000005" href="$classBoostSchedule.html#ae4b536fa549bf44daa7fd2682e7725ef" title="The window of boost i, or a window of length 0 if out of bounds." alt="" coords="372,125,570,153"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="306,137,359,139,354,140,306,142"/>
+<area shape="rect" id="Node000007" href="$namespaceDualTariff.html#a7887d6725a84027160f98854c86836b4" title="The end of the boost window (excluded), in ms from the start of the off&#45;peak period." alt="" coords="388,177,554,205"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="303,151,393,173,388,174,302,156"/>
+<area shape="rect" id="Node000008" href="$namespaceDualTariff.html#ac37cb69f5f3e1d32bb27064242c13887" title="The start of the boost window, in ms from the start of the off&#45;peak period." alt="" coords="636,203,809,230"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="253,151,297,185,325,202,355,214,422,229,492,234,560,234,618,232,624,232,560,239,492,240,422,234,353,219,323,206,294,190,252,156"/>
+<area shape="rect" id="Node000006" href="$config__types_8h.html#a68fc652a2abfa341df092d301f4f9a7c" title="A start m after the beginning of the off&#45;peak period." alt="" coords="669,125,776,153"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="571,137,656,139,650,139,571,142"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="554,197,623,206,618,206,554,202"/>
+</map>

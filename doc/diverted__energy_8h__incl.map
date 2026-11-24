@@ -1,0 +1,12 @@
+<map id="Mk2_1phase_RFdatalog_temp/diverted_energy.h" name="Mk2_1phase_RFdatalog_temp/diverted_energy.h">
+<area shape="rect" id="Node000001" title="The diverted energy measured on CT2: Wh total, anti&#45;creep limit, reset after inactivity." alt="" coords="5,5,188,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="19,174,89,201"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,48,64,159,59,158,89,52"/>
+<area shape="rect" id="Node000003" href="$mult__asm_8h.html" title="Assembly&#45;optimized multiplication functions for AVR microcontrollers." alt="" coords="91,98,190,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="108,48,129,84,123,84,108,53"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="123,128,82,166,79,162,127,124"/>
+<area shape="rect" id="Node000004" href="$is__same_8hpp.html" title=" " alt="" coords="113,174,290,201"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="152,124,184,162,179,162,151,129"/>
+<area shape="rect" id="Node000005" href="$integral__constant_8hpp.html" title=" " alt="" coords="121,249,283,277"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="204,200,204,235,200,232,200,204"/>
+</map>

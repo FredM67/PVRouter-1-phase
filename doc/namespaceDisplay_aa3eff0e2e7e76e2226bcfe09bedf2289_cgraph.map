@@ -1,0 +1,5 @@
+<map id="Display::blankLowOf" name="Display::blankLowOf">
+<area shape="rect" id="Node000001" title="The pins to set LOW before a digit changes: SEG_HW, the DP (the 74HC4543 does not drive it)...." alt="" coords="5,5,160,33"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a20918209eef8c1ede99f4f69afbec5ca" title="The bit of pin pin in its port." alt="" coords="208,5,341,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,17,195,19,189,19,160,22"/>
+</map>

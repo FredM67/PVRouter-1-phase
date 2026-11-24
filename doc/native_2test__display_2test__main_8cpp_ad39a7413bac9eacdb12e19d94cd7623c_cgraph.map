@@ -1,0 +1,7 @@
+<map id="test_seg_temperature" name="test_seg_temperature">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,170,33"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a1e0f7a1594ea89e78f11980ca8b1b1ea" title="Writes the temperature temperature_x100, rounded to 0.1 °C." alt="" coords="218,5,400,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,17,205,19,199,19,170,22"/>
+<area shape="rect" id="Node000003" href="$ds18b20_8h.html#ad55adf4c2798fb2203dd07c6954856fe" title="Whether a temperature reading is valid, and so worth sending." alt="" coords="448,5,594,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="400,17,435,19,430,19,400,22"/>
+</map>

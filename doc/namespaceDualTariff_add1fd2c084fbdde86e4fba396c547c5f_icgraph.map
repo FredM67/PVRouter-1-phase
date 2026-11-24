@@ -1,0 +1,24 @@
+<map id="DualTariff::startInMinutes" name="DualTariff::startInMinutes">
+<area shape="rect" id="Node000001" title="The start of the window, in minutes from the start of the off&#45;peak period: negative if before it." alt="" coords="613,174,799,202"/>
+<area shape="rect" id="Node000002" href="$namespaceDualTariff.html#af268903010691999860dcb9ac66353b2" title="Whether a window with FOR() ends within the off&#45;peak period (its end may be the end of the period): a..." alt="" coords="350,144,565,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="595,175,566,173,566,168,601,175"/>
+<area shape="rect" id="Node000008" href="$namespaceDualTariff.html#ae2105eacb3986a4906a94761d1da14d7" title="Whether the window starts within the off&#45;peak period: otherwise, it would never open." alt="" coords="372,195,543,240"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="595,201,544,210,543,205,600,201"/>
+<area shape="rect" id="Node000003" href="$validation_8h.html#ac657fb7fd4827c6201b89c53e7448a41" title="Every scheduled boost lies within the off&#45;peak period and lasts: otherwise, it never runs (LAST(HOURS..." alt="" coords="122,144,288,171"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="332,158,289,160,288,155,337,157"/>
+<area shape="rect" id="Node000004" href="$native_2test__dual__tariff_2test__main_8cpp.html#a83b550f36cec01efb6849c0b931e77de" title=" " alt="" coords="123,195,287,240"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="378,176,351,185,288,200,287,195,349,180,383,175"/>
+<area shape="rect" id="Node000006" href="$native_2test__dual__tariff_2test__main_8cpp.html#a3712af81a72f2405d7988a4cdd90b820" title=" " alt="" coords="108,92,302,119"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="369,141,276,123,276,117,374,139"/>
+<area shape="rect" id="Node000007" href="$native_2test__dual__tariff_2test__main_8cpp.html#ad78379b1ce2e6636b1403570651b3837" title=" " alt="" coords="123,5,286,67"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="413,137,301,83,276,70,275,65,303,78,418,136"/>
+<area shape="rect" id="Node000005" href="$native_2test__dual__tariff_2test__main_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe" title=" " alt="" coords="5,148,60,175"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="118,191,61,173,60,168,122,188"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="131,126,109,135,62,152,59,148,107,130,135,122"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="113,77,109,82,73,116,46,149,42,146,69,113,106,78,117,73"/>
+<area shape="poly" id="edge10_Node000008_Node000003" title=" " alt="" coords="355,194,266,175,266,169,360,193"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="354,218,288,220,287,215,360,217"/>
+<area shape="rect" id="Node000009" href="$native_2test__dual__tariff_2test__main_8cpp.html#ac90d8a567fc4cb2b7b9d17370e0a8d91" title=" " alt="" coords="136,264,274,309"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="361,244,275,271,273,265,356,245"/>
+<area shape="poly" id="edge13_Node000009_Node000005" title=" " alt="" coords="119,261,106,254,85,236,66,215,41,178,43,173,70,212,89,232,109,250,125,261"/>
+</map>

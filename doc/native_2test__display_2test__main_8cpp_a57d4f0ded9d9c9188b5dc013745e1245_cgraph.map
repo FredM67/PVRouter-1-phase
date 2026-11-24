@@ -1,0 +1,5 @@
+<map id="test_turn" name="test_turn">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,85,33"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#aee20e1a1bf99bc2aa85f9f611139db4b" title="What step step of the turn shows: the energy slot, if any, then each sensor." alt="" coords="133,5,254,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,17,120,19,115,20,85,22"/>
+</map>

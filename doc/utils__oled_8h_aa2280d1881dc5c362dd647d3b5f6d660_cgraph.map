@@ -1,0 +1,16 @@
+<map id="updateOLED" name="updateOLED">
+<area shape="rect" id="Node000001" title="Shows item item of the turn on the OLED, once per second." alt="" coords="5,83,107,110"/>
+<area shape="rect" id="Node000002" href="$namespaceDisplay.html#a67a63a9d807fa90bb7dc38874f2e4d8f" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above." alt="" coords="173,5,324,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,80,154,43,178,37,173,40,156,48,83,84"/>
+<area shape="rect" id="Node000004" href="$namespaceDisplay.html#a3dca1ea3c46b8f5049678f2230e08b04" title="Writes the temperature temperature_x100, rounded to 0.1 °C, right&#45;aligned on 5 characters: &quot; 23...." alt="" coords="155,57,342,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="106,87,141,84,137,87,108,92"/>
+<area shape="rect" id="Node000006" href="$utils__oled_8h.html#a0a74e5172424d4519b0fb1119b5b379b" title=" " alt="" coords="436,133,490,161"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="107,100,422,140,420,145,107,105"/>
+<area shape="rect" id="Node000007" href="$utils__oled_8h.html#a1c38ae281a8a132599b5619660e7d306" title="Update the watchdog on the display: the symbol, then nothing, each second in turn." alt="" coords="183,159,314,186"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="88,108,156,138,191,153,185,153,154,143,87,114"/>
+<area shape="rect" id="Node000003" href="$namespaceDisplay.html#a7f81200a2bdcccf34ba2cd7c43d8aa95" title="Writes the energy wh in kWh: &quot;1.234&quot; up to 9999 Wh, &quot;12.34&quot; above (as Full)." alt="" coords="390,5,536,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="323,17,377,18,372,20,324,22"/>
+<area shape="rect" id="Node000005" href="$ds18b20_8h.html#ad55adf4c2798fb2203dd07c6954856fe" title="Whether a temperature reading is valid, and so worth sending." alt="" coords="390,57,536,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="342,69,377,71,372,72,342,74"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="314,162,418,152,423,152,314,167"/>
+</map>

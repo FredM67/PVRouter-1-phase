@@ -1,0 +1,7 @@
+<map id="processDivertedEnergy" name="processDivertedEnergy">
+<area shape="rect" id="Node000001" title="Turns the cycle&#39;s CT2 sum into energy, the task after the contribution." alt="" coords="5,5,178,33"/>
+<area shape="rect" id="Node000002" href="$namespaceEnergy.html#a5c6a3eeab8203be8c21f0dcd70f1b1c0" title="Contribution of one mains cycle of one phase to the bucket." alt="" coords="226,5,377,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,17,213,19,207,19,178,22"/>
+<area shape="rect" id="Node000003" href="$group__TimeCritical.html#gabc318f6984145cb3265035f62e21c4d8" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="425,5,589,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="377,17,412,19,407,19,377,22"/>
+</map>

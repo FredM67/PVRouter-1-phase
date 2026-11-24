@@ -1,0 +1,19 @@
+<map id="DivertedEnergy::isActive" name="DivertedEnergy::isActive">
+<area shape="rect" id="Node000001" title="Whether some energy was counted since the last reset (Robin&#39;s EDD_isActive)." alt="" coords="347,152,528,180"/>
+<area shape="rect" id="Node000002" href="$native_2test__diverted__energy_2test__main_8cpp.html#a7df8128f3861e02ff46d3d84e60300e2" title=" " alt="" coords="121,5,286,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="407,142,358,104,298,65,274,53,274,48,300,60,361,100,412,142"/>
+<area shape="rect" id="Node000004" href="$native_2test__diverted__energy_2test__main_8cpp.html#adb49aba0e01a77812e35559a6ccba405" title=" " alt="" coords="122,75,285,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="371,148,281,123,281,117,377,147"/>
+<area shape="rect" id="Node000005" href="$native_2test__diverted__energy_2test__main_8cpp.html#a5262f4ef7429d4844c197d2febf9ee8e" title=" " alt="" coords="122,144,285,189"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="329,167,286,169,285,164,334,166"/>
+<area shape="rect" id="Node000006" href="$native_2test__diverted__energy_2test__main_8cpp.html#a6d5572c590bf3711f29517f888fb0691" title=" " alt="" coords="108,212,299,240"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="364,185,261,214,260,209,369,184"/>
+<area shape="rect" id="Node000007" href="$native_2test__diverted__energy_2test__main_8cpp.html#acff10015d77ea724dc2936d573171352" title=" " alt="" coords="118,264,288,292"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="407,189,358,224,300,254,266,266,265,261,298,249,355,219,402,190"/>
+<area shape="rect" id="Node000003" href="$native_2test__diverted__energy_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,152,60,180"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,60,109,64,87,85,68,110,43,153,38,151,64,107,83,82,106,60,116,56"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="121,127,109,134,62,155,59,151,107,129,125,124"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="104,168,61,169,59,164,108,165"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="125,208,107,203,60,183,60,177,109,199,130,207"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="116,258,106,254,85,237,67,218,42,183,43,178,71,215,89,233,109,249,122,258"/>
+</map>

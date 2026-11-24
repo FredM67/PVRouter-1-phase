@@ -1,0 +1,7 @@
+<map id="FastControl::predictEndOfCycle" name="FastControl::predictEndOfCycle">
+<area shape="rect" id="Node000001" title="The energy in the bucket predicted at the end of the mains cycle, without a division." alt="" coords="5,5,192,50"/>
+<area shape="rect" id="Node000002" href="$namespaceEnergy.html#a5c6a3eeab8203be8c21f0dcd70f1b1c0" title="Contribution of one mains cycle of one phase to the bucket." alt="" coords="240,14,391,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,25,227,27,222,28,192,30"/>
+<area shape="rect" id="Node000003" href="$group__TimeCritical.html#gabc318f6984145cb3265035f62e21c4d8" title="Optimized 24×16→40 unsigned multiplication, returning bits 8..39." alt="" coords="439,14,603,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="391,25,426,28,421,28,391,30"/>
+</map>

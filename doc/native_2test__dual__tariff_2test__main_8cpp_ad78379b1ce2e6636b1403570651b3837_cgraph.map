@@ -1,0 +1,11 @@
+<map id="test_for_the_largest_minutes_is_not_until_the_end" name="test_for_the_largest_minutes_is_not_until_the_end">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,40,169,102"/>
+<area shape="rect" id="Node000002" href="$namespaceDualTariff.html#af268903010691999860dcb9ac66353b2" title="Whether a window with FOR() ends within the off&#45;peak period (its end may be the end of the period): a..." alt="" coords="217,5,432,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,51,245,36,240,38,170,56"/>
+<area shape="rect" id="Node000004" href="$config__types_8h.html#a29ce77d1007e49cacadbead00f25d579" title="A boost lasting m." alt="" coords="300,57,348,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="169,69,287,70,283,72,169,74"/>
+<area shape="rect" id="Node000005" href="$config__types_8h.html#a68fc652a2abfa341df092d301f4f9a7c" title="A start m after the beginning of the off&#45;peak period." alt="" coords="271,109,378,137"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="169,86,258,107,253,109,169,92"/>
+<area shape="rect" id="Node000003" href="$namespaceDualTariff.html#add1fd2c084fbdde86e4fba396c547c5f" title="The start of the window, in minutes from the start of the off&#45;peak period: negative if before it." alt="" coords="480,5,665,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="432,17,467,19,461,20,433,22"/>
+</map>

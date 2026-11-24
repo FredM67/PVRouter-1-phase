@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['wait_5ffor_5frelay_5fchange_5fallowed_0',['wait_for_relay_change_allowed',['../embedded_2test__utils__relay_2test__main_8cpp.html#a56ba279270473eeb7f393825880bffa0',1,'test_main.cpp']]],
+  ['waiting_1',['WAITING',['../namespaceDisplay.html#a3de5ebb92c28eb0d41050ec013896cc1a1869d56535e8b1449a6da54ff5e11f50',1,'Display']]],
+  ['watchdog_5fpin_5fpresent_2',['WATCHDOG_PIN_PRESENT',['../config_8h.html#ade0710fc9c69b9177ecf06974f7e811d',1,'config.h']]],
+  ['watchdogpin_3',['watchDogPin',['../config_8h.html#afe190da9e3f78f2466d2f5aaf549c12d',1,'config.h']]],
+  ['watts_4',['watts',['../namespaceDatalog.html#a47c7340a7476be8d077ce05dc1043aaf',1,'Datalog::watts()'],['../namespaceDivertedPower.html#adff755a613e9ef25cfc9d56959607a0b',1,'DivertedPower::watts()']]],
+  ['wholecycleindexof_5',['wholeCycleIndexOf',['../namespaceFastControl.html#a57be1a4100f154bda9bdbea0ed23611d',1,'FastControl']]],
+  ['window_6',['window',['../structBoostEntry.html#a55338d988a3a1053108e3c4e45f18280',1,'BoostEntry::window'],['../structBoostSchedule_1_1Entry.html#a225d3ae90bcf8890dab291550e294ad5',1,'BoostSchedule::Entry::window']]],
+  ['windowend_7',['windowEnd',['../namespaceDualTariff.html#a7887d6725a84027160f98854c86836b4',1,'DualTariff']]],
+  ['windowstart_8',['windowStart',['../namespaceDualTariff.html#ac37cb69f5f3e1d32bb27064242c13887',1,'DualTariff']]],
+  ['working_5fzone_5fin_5fjoules_9',['WORKING_ZONE_IN_JOULES',['../config__system_8h.html#a2f4f8d6e2c9a435b9afc85bb326a30c0',1,'config_system.h']]],
+  ['worstvrmserror_10',['worstVrmsError',['../native_2test__datalog__math_2test__main_8cpp.html#ae9d50cea49541d6a3b6d566e8e34dd54',1,'test_main.cpp']]],
+  ['worstwattserror_11',['worstWattsError',['../native_2test__datalog__math_2test__main_8cpp.html#a5b095c845a7e0e82675725fbf0dbcdeb',1,'test_main.cpp']]],
+  ['write_12',['write',['../classCapturePrint.html#ae86b53fe153762fcadbdfb2549b21892',1,'CapturePrint::write()'],['../classFramePrint.html#af7c0d3f36da0ff389957c5bba6663cc8',1,'FramePrint::write()']]],
+  ['write_5fscratch_13',['WRITE_SCRATCH',['../ds18b20_8h.html#a0458b58c11eaa575984924d2a27a91ab',1,'ds18b20.h']]],
+  ['writedigits_14',['writeDigits',['../namespaceTeleInfo.html#a63c0181b4bbd7764f9215d1b11e3424d',1,'TeleInfo']]],
+  ['writeframestep_15',['writeFrameStep',['../namespaceTeleInfo.html#a1ada410c6d97aa6b44e403d583f46480',1,'TeleInfo']]],
+  ['writeline_16',['writeLine',['../classReference.html#a174f8d6c6e98b63471d40d122f15b444',1,'Reference::writeLine()'],['../namespaceTeleInfo.html#aa320bab0fa34c1a67a8b331a25feaa64',1,'TeleInfo::writeLine()']]],
+  ['writetag_17',['writeTag',['../classReference.html#a446ace7c0e2cd02aa3b1c967c992556f',1,'Reference']]],
+  ['writeteleinfostep_18',['writeTeleInfoStep',['../group__Telemetry.html#gab51e8b51241c993237fc1badfa8466bf',1,'utils.h']]]
+];

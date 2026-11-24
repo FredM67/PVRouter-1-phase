@@ -1,0 +1,11 @@
+<map id="initialize_rf" name="initialize_rf">
+<area shape="rect" id="Node000001" title="Initialize the shared RF module." alt="" coords="306,32,400,60"/>
+<area shape="rect" id="Node000002" href="$group__Initialization.html#gadeeaa08a0a50d8535fdf2c8a92d4aebc" title="Initializes the processing engine, including ports, load states, and ADC setup." alt="" coords="111,5,258,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="288,36,258,34,259,28,293,36"/>
+<area shape="rect" id="Node000004" href="$group__GeneralProcessing.html#gade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="134,57,234,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="293,55,235,66,234,61,288,55"/>
+<area shape="rect" id="Node000003" href="$group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,63,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,21,64,22,62,17,97,18"/>
+<area shape="rect" id="Node000005" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="9,57,59,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="117,73,59,74,59,69,120,69"/>
+</map>

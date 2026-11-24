@@ -1,0 +1,25 @@
+<map id="DivertedEnergy::totalWh" name="DivertedEnergy::totalWh">
+<area shape="rect" id="Node000001" title="The diverted energy since the last reset, in Wh, saturated to 65535." alt="" coords="347,222,527,250"/>
+<area shape="rect" id="Node000002" href="$native_2test__diverted__energy_2test__main_8cpp.html#a7df8128f3861e02ff46d3d84e60300e2" title=" " alt="" coords="121,5,286,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="418,208,370,138,336,99,297,64,280,53,279,48,301,60,340,95,375,135,424,209"/>
+<area shape="rect" id="Node000004" href="$native_2test__diverted__energy_2test__main_8cpp.html#adb49aba0e01a77812e35559a6ccba405" title=" " alt="" coords="122,75,285,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="407,212,358,174,298,134,275,123,274,117,300,129,361,169,412,211"/>
+<area shape="rect" id="Node000005" href="$native_2test__diverted__energy_2test__main_8cpp.html#a5262f4ef7429d4844c197d2febf9ee8e" title=" " alt="" coords="122,144,285,189"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="371,218,281,192,281,187,376,216"/>
+<area shape="rect" id="Node000006" href="$native_2test__diverted__energy_2test__main_8cpp.html#aa59d468743726c8195b1668fcdf1f6f0" title=" " alt="" coords="122,213,284,258"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="329,237,286,238,285,233,334,235"/>
+<area shape="rect" id="Node000007" href="$native_2test__diverted__energy_2test__main_8cpp.html#a6d5572c590bf3711f29517f888fb0691" title=" " alt="" coords="108,282,299,310"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="363,255,261,284,260,279,368,253"/>
+<area shape="rect" id="Node000008" href="$native_2test__diverted__energy_2test__main_8cpp.html#afc96c9c7c613c990817a25428f6a7a3f" title=" " alt="" coords="128,334,279,362"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="407,258,357,293,300,323,266,336,265,331,298,319,355,288,402,260"/>
+<area shape="rect" id="Node000009" href="$native_2test__diverted__energy_2test__main_8cpp.html#acff10015d77ea724dc2936d573171352" title=" " alt="" coords="118,386,288,414"/>
+<area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="419,261,369,320,336,350,300,375,273,388,271,383,298,371,333,346,365,316,414,263"/>
+<area shape="rect" id="Node000003" href="$native_2test__diverted__energy_2test__main_8cpp.html#a2c3f6775325c30275d11c6abee2db6a0" title=" " alt="" coords="5,222,60,250"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,62,110,64,79,103,59,148,45,190,39,222,33,221,40,188,54,146,75,100,106,61,112,57"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="112,129,109,134,87,155,68,179,43,223,38,220,64,176,83,151,106,130,115,125"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="121,197,109,203,62,225,58,221,107,199,125,193"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="105,238,61,238,59,233,109,234"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="125,278,107,273,60,252,60,247,109,268,130,276"/>
+<area shape="poly" id="edge12_Node000008_Node000003" title=" " alt="" coords="116,328,106,323,85,307,67,287,42,253,43,247,71,284,89,303,109,319,122,327"/>
+<area shape="poly" id="edge14_Node000009_Node000003" title=" " alt="" coords="112,378,106,375,78,345,58,311,37,253,38,248,63,309,83,342,109,371,118,378"/>
+</map>

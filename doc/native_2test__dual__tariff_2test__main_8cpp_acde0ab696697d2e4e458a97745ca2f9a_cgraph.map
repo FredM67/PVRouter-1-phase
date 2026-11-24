@@ -1,0 +1,9 @@
+<map id="test_a_start_before_the_period_wraps_to_a_large_value" name="test_a_start_before_the_period_wraps_to_a_large_value">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,40,169,102"/>
+<area shape="rect" id="Node000002" href="$config__types_8h.html#a1443b40bba36a2678456b87bae0ba5e1" title="A start m before the end of the off&#45;peak period." alt="" coords="249,5,357,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,49,236,35,232,37,170,54"/>
+<area shape="rect" id="Node000003" href="$config__types_8h.html#a29ce77d1007e49cacadbead00f25d579" title="A boost lasting m." alt="" coords="279,57,327,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,69,266,70,261,72,169,74"/>
+<area shape="rect" id="Node000004" href="$namespaceDualTariff.html#ac37cb69f5f3e1d32bb27064242c13887" title="The start of the boost window, in ms from the start of the off&#45;peak period." alt="" coords="217,109,389,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="169,88,230,105,225,105,169,93"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="u8x8" name="u8x8">
+<area shape="rect" id="Node000001" title=" " alt="" coords="594,53,647,81"/>
+<area shape="rect" id="Node000002" href="$utils__oled_8h.html#a513f8a3bd4cc3304364bb4e550d576b9" title="Setup the OLED display: the logo, until the first update." alt="" coords="270,16,363,43"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="590,43,569,30,545,19,498,10,449,9,403,13,364,20,363,15,403,8,449,3,498,4,546,14,572,25,595,44"/>
+<area shape="rect" id="Node000004" href="$utils__oled_8h.html#af69ae4d19d4208b4251600c01284a14f" title="Draw the xbm on the OLED display." alt="" coords="416,28,545,55"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="576,59,545,56,545,51,581,59"/>
+<area shape="rect" id="Node000005" href="$utils__oled_8h.html#aa2280d1881dc5c362dd647d3b5f6d660" title="Shows item item of the turn on the OLED, once per second." alt="" coords="266,92,367,119"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="576,73,368,102,367,97,581,72"/>
+<area shape="rect" id="Node000008" href="$utils__oled_8h.html#a1c38ae281a8a132599b5619660e7d306" title="Update the watchdog on the display: the symbol, then nothing, each second in turn." alt="" coords="415,129,546,157"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="586,89,547,113,512,131,511,126,544,109,581,90"/>
+<area shape="rect" id="Node000003" href="$group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="132,16,189,43"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="252,31,190,32,189,27,257,29"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="398,36,363,36,363,30,403,35"/>
+<area shape="rect" id="Node000006" href="$group__GeneralProcessing.html#ga64c5b9d14eb62b90506c0ee1b2ff3e2c" title="Updates the display, once per second." alt="" coords="103,92,218,119"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="248,106,218,108,218,103,253,105"/>
+<area shape="rect" id="Node000007" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="5,92,55,119"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="85,107,56,108,55,103,89,104"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="399,125,367,120,368,114,405,125"/>
+</map>

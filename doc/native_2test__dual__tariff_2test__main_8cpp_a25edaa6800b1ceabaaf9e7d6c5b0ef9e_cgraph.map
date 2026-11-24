@@ -1,0 +1,12 @@
+<map id="test_from_start_for" name="test_from_start_for">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,84,152,112"/>
+<area shape="rect" id="Node000002" href="$config__types_8h.html#a29ce77d1007e49cacadbead00f25d579" title="A boost lasting m." alt="" coords="258,5,306,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,81,199,43,245,30,241,32,201,48,112,86"/>
+<area shape="rect" id="Node000003" href="$config__types_8h.html#a68fc652a2abfa341df092d301f4f9a7c" title="A start m after the beginning of the off&#45;peak period." alt="" coords="229,57,336,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="151,86,216,79,211,81,152,91"/>
+<area shape="rect" id="Node000004" href="$namespaceDualTariff.html#a7887d6725a84027160f98854c86836b4" title="The end of the boost window (excluded), in ms from the start of the off&#45;peak period." alt="" coords="200,109,365,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="152,104,187,110,181,111,152,110"/>
+<area shape="rect" id="Node000005" href="$namespaceDualTariff.html#ac37cb69f5f3e1d32bb27064242c13887" title="The start of the boost window, in ms from the start of the off&#45;peak period." alt="" coords="413,135,585,162"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="106,110,150,130,200,146,250,153,301,157,395,158,400,158,301,162,249,159,199,151,148,135,105,115"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="365,130,400,137,395,137,365,135"/>
+</map>

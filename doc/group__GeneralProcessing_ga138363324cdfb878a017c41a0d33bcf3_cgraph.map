@@ -1,0 +1,18 @@
+<map id="getOverrideBitmask" name="getOverrideBitmask">
+<area shape="rect" id="Node000001" title="Gets the combined bitmasks of all active override pins and dual tariff forcing." alt="" coords="5,108,158,136"/>
+<area shape="rect" id="Node000002" href="$group__DualTariff.html#gaf02bde0d44c73c6a662d2adc64d17092" title="Calculates the dual tariff forcing bitmasks based on current conditions." alt="" coords="206,56,411,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,105,232,86,227,89,146,110"/>
+<area shape="rect" id="Node000006" href="$utils__pins_8h.html#a410a7bdd300104398ce91797bd936cdb" title="Get the Pin State." alt="" coords="260,108,356,136"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="158,119,247,121,242,123,158,124"/>
+<area shape="rect" id="Node000008" href="$namespaceForcing.html#ae53199beda3c60c5a7c552c4eb7e42f2" title="The targets of the override pins that are active (held LOW)." alt="" coords="237,160,380,188"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="146,134,232,155,227,157,145,139"/>
+<area shape="rect" id="Node000003" href="$namespaceForcing.html#a3b89513ed1a630712a3132079cfa6410" title="The targets of the scheduled boosts whose window is open." alt="" coords="459,7,618,34"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="375,53,459,37,454,39,377,58"/>
+<area shape="rect" id="Node000005" href="$group__DualTariff.html#ga686c4ecdf9da4efb37be3fe956774d83" title="Reads scheduled boost i from flash." alt="" coords="700,57,788,85"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="411,67,688,70,683,72,411,73"/>
+<area shape="rect" id="Node000004" href="$namespaceDualTariff.html#a4d9e6a30ca7f837f18ceac3744a35121" title="Whether the boost is in its window." alt="" coords="666,5,822,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="619,17,654,19,649,20,619,23"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="598,32,688,57,683,57,597,38"/>
+<area shape="rect" id="Node000007" href="$utils__bits_8h.html#abaa54130a12679d0dcc0e7578e0e4d37" title="Read the specified bit." alt="" coords="502,108,576,136"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="357,119,489,121,483,122,357,124"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="countDivertedEnergy" name="countDivertedEnergy">
+<area shape="rect" id="Node000001" title="Counts the cycle&#39;s CT2 energy, the task after processDivertedEnergy()." alt="" coords="1128,83,1287,110"/>
+<area shape="rect" id="Node000002" href="$group__TimeCritical.html#gaaaac1dcdeb7140c8bf76e07ce793bb01" title="Runs the first pending cycle task (CycleTask), on a CT2 call." alt="" coords="942,83,1080,110"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1110,97,1080,99,1080,94,1115,96"/>
+<area shape="rect" id="Node000003" href="$group__TimeCritical.html#ga8c1dfaeee6d2643328dadd3011def04b" title="Runs every pending cycle task at once, before new snapshots replace theirs." alt="" coords="766,57,894,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="924,85,894,83,894,77,929,85"/>
+<area shape="rect" id="Node000007" href="$processing_8cpp.html#a05c2e5b588ced1cd7312f5b0edc5b295" title=" " alt="" coords="5,83,48,110"/>
+<area shape="poly" id="edge9_Node000002_Node000007" title=" " alt="" coords="929,105,789,119,632,124,417,124,308,122,201,115,48,101,48,96,201,110,308,116,417,119,632,119,788,114,924,105"/>
+<area shape="rect" id="Node000004" href="$group__TimeCritical.html#ga7449a97209a4b56151de6fc5197a9daf" title="Processes the start of a new negative half cycle for the specified phase." alt="" coords="544,5,718,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="756,53,687,36,687,31,762,53"/>
+<area shape="rect" id="Node000008" href="$group__TimeCritical.html#gaab63947d9b9f7f49dbb62a8ceada3d30" title="Process the start of a new positive half cycle for the specified phase." alt="" coords="550,57,712,85"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="748,71,712,74,712,69,753,71"/>
+<area shape="rect" id="Node000005" href="$group__TimeCritical.html#ga8cff922940989b7edaa8bd0347f9becc" title="Processes raw voltage and current samples for the specified phase." alt="" coords="341,57,496,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="559,37,479,59,478,54,554,38"/>
+<area shape="rect" id="Node000006" href="$group__TimeCritical.html#gac1f07cd36657d61affe4642911ad27c1" title="Processes the current voltage raw sample for the specified phase." alt="" coords="96,57,293,85"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="323,71,294,74,293,69,328,71"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="82,90,49,96,48,91,86,86"/>
+<area shape="poly" id="edge8_Node000008_Node000005" title=" " alt="" coords="532,71,497,74,497,69,537,71"/>
+</map>

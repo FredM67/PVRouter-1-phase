@@ -1,0 +1,7 @@
+<map id="processVoltage" name="processVoltage">
+<area shape="rect" id="Node000001" title="Processes the current voltage sample for the specified phase." alt="" coords="5,32,126,60"/>
+<area shape="rect" id="Node000002" href="$namespaceDatalog.html#aea01a5691922006e60d64261626d177a" title="Whether processVoltage() scales V^2 down by 16 before summing it over the datalog period." alt="" coords="174,5,370,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,35,161,33,156,35,127,41"/>
+<area shape="rect" id="Node000003" href="$group__TimeCritical.html#ga520fbe6bc7525c2f565dbed9ac84fc1c" title="Optimized 16×16→32 signed multiplication with assembly." alt="" coords="204,57,340,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="126,51,191,60,186,62,126,56"/>
+</map>
