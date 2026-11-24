@@ -227,6 +227,63 @@
     "fastdivision: divu10(12345) per call": 41.01,
     "fastdivision: divmod10(12345678) per call": 130.05
    }
+  },
+  {
+   "commit": "78dc1d03e8cb7c743d9f6b605ff0aab5c94f1c3c",
+   "date": "2026-11-24T07:40:52+01:00",
+   "message": "refactor: the ADC set up in two register writes, each bit named once (#34)\n\nPort of PVRouter-3-phase#255. ADCSRA (0x7A, outside the sbi/cbi range) was\nbuilt with eight volatile read-modify-writes; it is now cleared, then\nwritten once with ADEN, ADSC (allowed together), ADATE, ADIE and the /128\nprescaler. Same register values; 26 bytes less flash locally. Simulator\nverdicts unchanged against dev. CLAUDE.md: every change is ported to the\n3-phase firmware when it applies.\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/78dc1d03e8cb7c743d9f6b605ff0aab5c94f1c3c",
+   "sizes": {
+    "basic": {
+     "flash": 9942,
+     "ram": 386
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 11470,
+     "ram": 425
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 22814,
+     "ram": 852
+    },
+    "basic, NEW, OLED": {
+     "flash": 22338,
+     "ram": 849
+    },
+    "basic, remote loads": {
+     "flash": 14554,
+     "ram": 495
+    },
+    "basic, IoT": {
+     "flash": 9942,
+     "ram": 386
+    },
+    "basic, HumanReadable": {
+     "flash": 9828,
+     "ram": 366
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
   }
  ]
 }
