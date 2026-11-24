@@ -50,15 +50,15 @@ RFM69 radio(RFConfig::RF_CS_PIN, RFConfig::RF_IRQ_PIN, RFConfig::IS_RFM69HW);
 void initializeReceiver()
 {
   // Configure load pins as outputs and set to OFF (fast direct port manipulation)
-  setPinsAsOutput(loadPinMask);
-  setPinsOFF(loadPinMask);
+  setPinsAsOutput< loadPinMask >();
+  setPinsState< loadPinMask >(0, loadPinMask);
 
   // Configure status LEDs if present
   if constexpr (STATUS_LEDS_PRESENT)
   {
     constexpr uint16_t ledPinMask = bit(GREEN_LED_PIN) | bit(RED_LED_PIN);
-    setPinsAsOutput(ledPinMask);
-    setPinsOFF(ledPinMask);
+    setPinsAsOutput< ledPinMask >();
+    setPinsState< ledPinMask >(0, ledPinMask);
   }
 
   // Initialize serial for debugging
