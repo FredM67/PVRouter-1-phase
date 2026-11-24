@@ -512,6 +512,63 @@
     "fastdivision: divu10(12345) per call": 41.01,
     "fastdivision: divmod10(12345678) per call": 130.05
    }
+  },
+  {
+   "commit": "b3b038dde91b880a06a53335220870d93509fd2b",
+   "date": "2026-11-24T16:35:05+01:00",
+   "message": "refactor: the single-phase code aligned with the 3-phase one (#39)\n\n* fix: the CT filter checked in validation.h, runNextCycleTask() a call, doc slips\n\n- The CT1 filter settings are checked in validation.h with the 3-phase message, whatever the\n  board, instead of in processing.cpp, where only an enabled filter was checked; compile-fail\n  cases 88-92 (alpha too large or too small, gain of 64 or negative refused, the old-board\n  values build), as the 3-phase 70-74.\n- runNextCycleTask() is no longer always_inline: it has two callers (the ADC ISR and\n  finishCycleTasks()), so it was there twice. Flash -176 bytes; grid simulator: ISR max 500\n  cycles (495) on the old board, 447 (443) on the new one, ADMUX written at most 517 (507).\n- calibration.h: alpha \"from 0.00005 to below 0.0625\", as ct_filter.h accepts it.\n- shared_var.h: b_newMainsCycle states its own timing (the DATALOG_SUM cycle task).\n- The history of the .ino: the October 2019 entry is the 3-phase sketch, Mk2_3phase_RFdatalog_temp.\n- test/README.md: every test folder in the tree and the table (ten were missing), and the right\n  firmware name.\n- CLAUDE.md: the cycle tasks are in \"What differs\", and why they are not ported.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* refactor: the single-phase code aligned with the 3-phase one (shapes, names, wording, tests)\n\n- processStartUp(phase): the phase starts its sums and its sample count afresh at each of its\n  crossings during the start-up period, before the end-of-start-up check, the shape of the\n  3-phase fix FredM67/PVRouter-3-phase#258 (one phase here, so no change of behaviour).\n- AdcChain::NO_OF_CHANNELS is NO_OF_CONVERSIONS, the 3-phase name.\n- The CT1 filter state lives inside the if constexpr that uses it, with the 3-phase comment.\n- Wording as in the 3-phase firmware: the ADC reference comment, the cycle budget of the ADC\n  interrupt (1664 CPU cycles per call), the start-up comment; the tick of the main code says\n  when it comes and why a 1-Wire time slot cannot push an ADMUX write past its deadline.\n- sample_sets.h: the generic doc of the 3-phase copy; the file is now the same in both.\n- test_ct_filter: the same file and README in both firmwares (the 3-phase set: tracking of\n  Robin's float on a step, a sine and noise for several gains and alphas, the valid range of the\n  settings; the two single-phase tests were the same checks under other names).\n- test_adc_chain: the finer tests of the 3-phase one (order of the chain, ADMUX of each channel,\n  channel after next, ADMUX written after, channel by round).\n\nGrid simulator: ISR and ADMUX figures unchanged.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* refactor: sample_sets.h stays the single-phase one\n\nThe 3-phase firmware no longer has it (FredM67/PVRouter-3-phase#259: at 30 s\nat most, its counter is 16 bits); only the single-phase counter needs to\nwiden to 32 bits, from 20 s on.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/b3b038dde91b880a06a53335220870d93509fd2b",
+   "sizes": {
+    "basic": {
+     "flash": 9146,
+     "ram": 378
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 10692,
+     "ram": 417
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 21986,
+     "ram": 844
+    },
+    "basic, NEW, OLED": {
+     "flash": 21556,
+     "ram": 841
+    },
+    "basic, remote loads": {
+     "flash": 13688,
+     "ram": 487
+    },
+    "basic, IoT": {
+     "flash": 9146,
+     "ram": 378
+    },
+    "basic, HumanReadable": {
+     "flash": 9030,
+     "ram": 358
+    }
+   },
+   "speed": {
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05,
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09
+   }
   }
  ]
 }
