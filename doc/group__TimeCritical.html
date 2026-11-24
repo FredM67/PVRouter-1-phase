@@ -226,7 +226,7 @@ Functions</h2></td></tr>
 <li>Counts the seconds without diversion, and signals a new mains cycle to the main code. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01166">1166</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01165">1165</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -272,7 +272,7 @@ Here is the caller graph for this function:</div>
 <p>Applies the decision: the ports of the local loads, the RF payloads, the absence count. </p>
 <p>The task after <a class="el" href="#ga1950a35c4c210dae480943adca0a3c88" title="Updates the physical load states based on logical load priorities and states.">updatePhysicalLoadStates()</a>, on the next CT2 call. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00872">872</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00871">871</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -353,7 +353,7 @@ Here is the caller graph for this function:</div>
 <li>Once the persistence counter exceeds a predefined threshold, the polarity is confirmed. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00699">699</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00698">698</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -390,7 +390,7 @@ Here is the caller graph for this function:</div>
 <li>The energy counted goes into the datalog sum too, for the average diverted power. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01086">1086</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01085">1085</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -436,7 +436,7 @@ Here is the caller graph for this function:</div>
 <p>Runs every pending cycle task at once, before new snapshots replace theirs. </p>
 <p>Only with a half cycle shorter than its tasks (a few sample sets), which a proper mains never gives. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01272">1272</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01271">1271</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1038,7 +1038,7 @@ Here is the caller graph for this function:</div>
 <p>The task posted at the negative crossing. As <a class="el" href="structRobin.html" title="Robin&#39;s filter, verbatim from Mk2_fasterControl_Full/processing.cpp (x256 scale).">Robin</a>'s "energyInBucket_long +
          averagePower": the first half's average power as one cycle's energy, in bucket units, through the table entry for 2n sample sets (no division). Outside N_MIN..N_MAX for 2n (no proper half cycle), no prediction: the bucket as it is. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00950">950</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00949">949</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1126,17 +1126,14 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__TimeCritical_gabaad87b294f3321a64479a46d8a0eeed_cgraph.png" border="0" usemap="#agroup__TimeCritical_gabaad87b294f3321a64479a46d8a0eeed_cgraph" alt=""/></div>
 <map name="agroup__TimeCritical_gabaad87b294f3321a64479a46d8a0eeed_cgraph" id="agroup__TimeCritical_gabaad87b294f3321a64479a46d8a0eeed_cgraph">
-<area shape="rect" title="Processes the current raw sample for the specified phase." alt="" coords="5,99,202,127"/>
+<area shape="rect" title="Processes the current raw sample for the specified phase." alt="" coords="5,74,202,102"/>
 <area shape="rect" href="structCtFilter_1_1LowPassBoost.html#a10df09b866e7a13b17fbedf3141ba5df" title="Filters one sample." alt="" coords="250,5,418,50"/>
-<area shape="poly" title=" " alt="" coords="142,96,259,54,255,58,145,101"/>
-<area shape="rect" href="group__TimeCritical.html#ga520fbe6bc7525c2f565dbed9ac84fc1c" title="Optimized 16×16→32 signed multiplication with assembly." alt="" coords="482,62,617,90"/>
-<area shape="poly" title=" " alt="" coords="202,102,467,80,465,85,202,107"/>
-<area shape="rect" href="namespaceCtFilter.html#ab9ffad2517588975b04987dfa01da104" title="Converts the float settings to fixed point, at compile time." alt="" coords="466,138,632,166"/>
-<area shape="poly" title=" " alt="" coords="202,119,452,141,449,145,202,124"/>
-<area shape="rect" href="namespaceCtFilter.html#afb49ba33d8d170851bb6e7807b5adffd" title="Whether the settings fit the fixed point, the coefficients within 1 % of them." alt="" coords="262,175,406,203"/>
-<area shape="poly" title=" " alt="" coords="149,125,277,168,273,171,148,130"/>
-<area shape="poly" title=" " alt="" coords="419,44,472,58,466,58,419,49"/>
-<area shape="poly" title=" " alt="" coords="406,174,448,169,453,168,407,179"/>
+<area shape="poly" title=" " alt="" coords="159,71,237,52,232,55,160,76"/>
+<area shape="rect" href="group__TimeCritical.html#ga520fbe6bc7525c2f565dbed9ac84fc1c" title="Optimized 16×16→32 signed multiplication with assembly." alt="" coords="466,44,601,72"/>
+<area shape="poly" title=" " alt="" coords="202,78,452,61,450,66,202,84"/>
+<area shape="rect" href="namespaceCtFilter.html#ab9ffad2517588975b04987dfa01da104" title="Converts the float settings to fixed point, at compile time." alt="" coords="251,124,417,152"/>
+<area shape="poly" title=" " alt="" coords="170,99,255,120,250,121,169,105"/>
+<area shape="poly" title=" " alt="" coords="418,38,453,45,448,46,418,43"/>
 </map>
 </div>
 <div class="dynheader">
@@ -1170,7 +1167,7 @@ Here is the caller graph for this function:</div>
 <p>Copies the sums of the datalog period that just ended for the main code. </p>
 <p>The task after the cycle's power is in the datalog sum: the power, V^2 and the sample sets (taken on the last sample of the period), the ON counts of the loads and the diagnostics. Without CT2, it signals the main code that logging data are available. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01109">1109</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01108">1108</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1231,7 +1228,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00662">662</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00661">661</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1272,7 +1269,7 @@ Here is the caller graph for this function:</div>
 
 <p>Copies the CT2 figures of the datalog period that just ended, then signals the main code. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01143">1143</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01142">1142</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1335,7 +1332,7 @@ Here is the caller graph for this function:</div>
 <li><a class="el" href="#ga2db5f0533b47f46807c24bcf89ee9fb6" title="Counts the cycle&#39;s CT2 energy, the task after processDivertedEnergy().">countDivertedEnergy()</a> counts it on the next CT2 call. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01059">1059</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01058">1058</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1398,7 +1395,7 @@ Here is the caller graph for this function:</div>
 <li>Limits the bucket to its range, once the cycle's contribution is in. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00990">990</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00989">989</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1480,7 +1477,7 @@ Here is the caller graph for this function:</div>
 <li>On phase 0, beyond the start-up period, the sum of the first half is taken for the prediction (<a class="el" href="fast__control_8h.html" title="Faster control: the load decision on the predicted energy, at mid-cycle.">fast_control.h</a>), which the next CT2 call computes (<a class="el" href="#ga7b3e259831c07547d2a8ac378d8eedde" title="Predicts the bucket at the end of the cycle, from the first half (fast_control.h).">predictEndOfCycle()</a>), for the decision a few sample sets later. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00916">916</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00915">915</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1593,7 +1590,7 @@ Here is the caller graph for this function:</div>
 <li>Posts the contribution, the CT2 energy, the rest of the bookkeeping and, at the end of a period, the copies. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01299">1299</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01298">1298</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1763,7 +1760,7 @@ Here is the caller graph for this function:</div>
 <li>For phase 0, it triggers the start of a new mains cycle and handles startup logic. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01352">1352</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01351">1351</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1867,7 +1864,7 @@ Here is the caller graph for this function:</div>
 <li>Adjusts energy thresholds and determines whether to add or remove loads. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00859">859</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00858">858</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1931,7 +1928,7 @@ Here is the caller graph for this function:</div>
 <li>Once the startup period is over, it resets key variables and flags to prepare for normal operation. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00779">779</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00778">778</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1987,7 +1984,7 @@ Here is the caller graph for this function:</div>
 <li>The number of samples during the current mains cycle is incremented. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00733">733</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l00732">732</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -2057,7 +2054,7 @@ Here is the caller graph for this function:</div>
 <li>Updates voltage-related metrics and increments the sample set count for phase 0. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01420">1420</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01419">1419</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -2153,9 +2150,6 @@ Here is the caller graph for this function:</div>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void runNextCycleTask </td>
@@ -2164,17 +2158,12 @@ Here is the caller graph for this function:</div>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Runs the first pending cycle task (<a class="el" href="namespaceCycleTask.html">CycleTask</a>), on a CT2 call. </p>
 <p>The dispatch only: each task is a call of its own (<a class="el" href="processing_8h.html" title="Public functions/variables of processing engine.">processing.h</a>), which saves only the registers it uses. </p>
 
-<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01208">1208</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="processing_8cpp_source.html#l01207">1207</a> of file <a class="el" href="processing_8cpp_source.html">processing.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">

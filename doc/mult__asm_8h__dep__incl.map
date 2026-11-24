@@ -1,47 +1,48 @@
 <map id="Mk2_1phase_RFdatalog_temp/mult_asm.h" name="Mk2_1phase_RFdatalog_temp/mult_asm.h">
-<area shape="rect" id="Node000001" title="Assembly&#45;optimized multiplication functions for AVR microcontrollers." alt="" coords="633,5,809,50"/>
-<area shape="rect" id="Node000002" href="$ct__filter_8h.html" title="The CT1 filter: a low&#45;pass of the grid current added back with a gain." alt="" coords="153,106,329,151"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="615,46,487,71,343,101,313,108,310,104,342,95,486,65,620,44"/>
-<area shape="rect" id="Node000003" href="$processing_8cpp.html" title="Implements the processing engine." alt="" coords="144,326,320,370"/>
-<area shape="poly" id="edge25_Node000001_Node000003" title=" " alt="" coords="615,35,494,45,357,58,231,76,180,88,142,100,99,121,66,141,41,168,18,209,8,240,10,253,18,268,43,294,74,314,109,327,145,338,141,340,107,332,72,318,40,298,14,271,5,255,3,239,13,207,37,165,63,137,96,116,140,96,179,82,230,71,356,53,494,40,620,33"/>
-<area shape="rect" id="Node000005" href="$datalog__math_8h.html" title="Integer arithmetic of the datalog: power and RMS voltage per phase." alt="" coords="633,216,809,261"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="723,64,724,217,719,215,719,68"/>
-<area shape="rect" id="Node000010" href="$diverted__energy_8h.html" title="The diverted energy measured on CT2: Wh total, anti&#45;creep limit, reset after inactivity." alt="" coords="354,106,536,151"/>
-<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="644,57,507,108,504,104,649,54"/>
-<area shape="rect" id="Node000012" href="$energy__bucket_8h.html" title="Integer arithmetic of the energy bucket." alt="" coords="758,106,935,151"/>
-<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="761,57,822,106,817,106,760,62"/>
-<area shape="rect" id="Node000017" href="$embedded_2test__mult__asm_2test__main_8cpp.html" title="Unity&#45;based unit tests for assembly multiplication functions." alt="" coords="959,98,1152,160"/>
-<area shape="poly" id="edge26_Node000001_Node000017" title=" " alt="" coords="809,52,962,99,956,99,809,58"/>
-<area shape="rect" id="Node000018" href="$embedded_2test__mult__asm__perf_2test__main_8cpp.html" title="Performance benchmarks for assembly multiplication functions." alt="" coords="1177,98,1399,160"/>
-<area shape="poly" id="edge27_Node000001_Node000018" title=" " alt="" coords="824,40,986,64,1166,95,1179,100,1174,100,1165,101,985,69,825,45"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="241,165,235,326,230,325,238,169"/>
-<area shape="rect" id="Node000004" href="$native_2test__ct__filter_2test__main_8cpp.html" title="Native tests for ct_filter.h: the CT1 filter, in fixed point." alt="" coords="28,208,204,269"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="203,164,153,209,149,205,206,160"/>
-<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="629,266,615,272,536,287,474,296,412,304,334,320,303,328,301,323,333,315,411,299,473,290,535,282,614,267,635,264"/>
-<area shape="rect" id="Node000006" href="$main_8cpp.html" title="Main code for the PVRouter single&#45;phase project." alt="" coords="900,427,1076,472"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="668,268,642,293,623,319,613,350,615,363,623,377,640,391,666,403,737,422,820,434,902,444,896,444,819,440,736,427,665,408,638,396,619,381,610,365,607,349,619,316,638,289,663,271"/>
-<area shape="rect" id="Node000007" href="$embedded_2test__datalog__math__avr_2test__main_8cpp.html" title="The integer datalog arithmetic on the target: exact results, and cycle counts against the float code ..." alt="" coords="633,317,876,379"/>
-<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="734,274,747,318,743,315,731,278"/>
-<area shape="rect" id="Node000008" href="$native_2test__datalog__math_2test__main_8cpp.html" title="Native unit tests for datalog_math.h." alt="" coords="345,317,559,379"/>
-<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="655,266,529,319,527,314,650,268"/>
-<area shape="rect" id="Node000009" href="$validation_8h.html" title="Compile&#45;time validations." alt="" coords="900,326,1076,370"/>
-<area shape="poly" id="edge9_Node000005_Node000009" title=" " alt="" coords="790,265,937,325,931,325,789,270"/>
-<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="990,384,990,428,986,425,986,388"/>
-<area shape="poly" id="edge12_Node000010_Node000003" title=" " alt="" coords="383,160,351,183,319,210,294,238,273,270,243,327,239,324,268,267,290,235,315,206,348,179,387,157"/>
-<area shape="rect" id="Node000011" href="$native_2test__diverted__energy_2test__main_8cpp.html" title="Native tests for diverted_energy.h: the diverted energy measured on CT2." alt="" coords="329,208,559,269"/>
-<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="446,165,447,208,442,206,443,169"/>
-<area shape="poly" id="edge19_Node000012_Node000003" title=" " alt="" coords="741,154,682,178,623,210,607,225,599,241,589,257,572,272,539,289,510,299,457,307,402,309,334,320,304,328,302,323,333,315,401,304,456,302,508,294,537,284,569,267,585,253,594,238,603,222,620,206,679,173,746,152"/>
-<area shape="poly" id="edge15_Node000012_Node000005" title=" " alt="" coords="812,160,748,218,745,213,807,163"/>
-<area shape="poly" id="edge24_Node000012_Node000009" title=" " alt="" coords="847,164,854,217,862,244,874,268,904,300,941,326,936,325,901,304,870,271,857,246,849,218,844,169"/>
-<area shape="rect" id="Node000013" href="$fast__control_8h.html" title="Faster control: the load decision on the predicted energy, at mid&#45;cycle." alt="" coords="884,216,1060,261"/>
-<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="884,159,949,216,944,215,883,164"/>
-<area shape="rect" id="Node000014" href="$native_2test__fast__control_2test__main_8cpp.html" title="Native unit tests for fast_control.h: the decision on the predicted energy." alt="" coords="1100,317,1302,379"/>
-<area shape="poly" id="edge21_Node000012_Node000014" title=" " alt="" coords="930,154,1019,183,1073,205,1091,220,1101,235,1124,268,1172,318,1167,316,1120,271,1097,238,1087,224,1070,210,1017,188,930,159"/>
-<area shape="rect" id="Node000015" href="$native_2test__energy__bucket_2test__main_8cpp.html" title="Native unit tests for energy_bucket.h." alt="" coords="1134,208,1353,269"/>
-<area shape="poly" id="edge20_Node000012_Node000015" title=" " alt="" coords="934,153,948,157,1136,209,1131,209,947,162,934,159"/>
-<area shape="rect" id="Node000016" href="$utils_8h.html" title="Some utility functions." alt="" coords="1326,326,1503,370"/>
-<area shape="poly" id="edge22_Node000012_Node000016" title=" " alt="" coords="929,153,948,157,989,162,1041,164,1163,166,1225,169,1282,176,1331,187,1367,206,1390,232,1405,265,1413,297,1416,327,1411,324,1407,298,1399,267,1385,235,1363,210,1329,192,1281,181,1225,174,1163,171,1041,169,989,167,947,162,929,158"/>
-<area shape="poly" id="edge17_Node000013_Node000003" title=" " alt="" coords="866,262,821,272,684,287,577,292,470,300,334,320,300,328,299,323,333,315,469,294,576,287,684,282,821,267,871,261"/>
-<area shape="poly" id="edge18_Node000013_Node000014" title=" " alt="" coords="1032,265,1139,317,1134,316,1031,271"/>
-<area shape="poly" id="edge23_Node000016_Node000006" title=" " alt="" coords="1332,375,1315,382,1077,434,1076,429,1314,376,1326,376"/>
+<area shape="rect" id="Node000001" title="Assembly&#45;optimized multiplication functions for AVR microcontrollers." alt="" coords="709,5,886,50"/>
+<area shape="rect" id="Node000002" href="$ct__filter_8h.html" title="The CT1 filter: a low&#45;pass of the grid current added back with a gain." alt="" coords="333,216,510,261"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="743,59,461,218,459,213,748,56"/>
+<area shape="rect" id="Node000003" href="$processing_8cpp.html" title="Implements the processing engine." alt="" coords="401,326,578,370"/>
+<area shape="poly" id="edge26_Node000001_Node000003" title=" " alt="" coords="691,37,422,61,289,79,235,89,194,101,136,119,91,136,71,148,53,163,36,183,20,209,12,225,8,240,10,253,19,267,47,286,88,298,138,305,194,308,305,309,352,310,390,315,424,325,419,325,389,320,352,316,305,314,193,313,138,310,87,303,45,291,15,271,5,255,3,240,7,224,15,206,32,179,50,159,68,143,88,132,135,114,193,95,234,84,288,74,421,56,695,34"/>
+<area shape="rect" id="Node000007" href="$datalog__math_8h.html" title="Integer arithmetic of the datalog: power and RMS voltage per phase." alt="" coords="1128,216,1304,261"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="846,56,899,96,915,113,924,129,934,143,951,157,993,179,1030,189,1068,194,1117,205,1146,216,1140,215,1115,210,1067,200,1029,194,991,184,948,162,930,147,920,132,910,117,896,100,846,61"/>
+<area shape="rect" id="Node000010" href="$diverted__energy_8h.html" title="The diverted energy measured on CT2: Wh total, anti&#45;creep limit, reset after inactivity." alt="" coords="205,106,387,151"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="692,51,389,112,387,107,696,47"/>
+<area shape="rect" id="Node000012" href="$energy__bucket_8h.html" title="Integer arithmetic of the energy bucket." alt="" coords="709,106,886,151"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="799,63,800,108,795,105,796,68"/>
+<area shape="rect" id="Node000017" href="$embedded_2test__mult__asm_2test__main_8cpp.html" title="Unity&#45;based unit tests for assembly multiplication functions." alt="" coords="961,98,1154,160"/>
+<area shape="poly" id="edge27_Node000001_Node000017" title=" " alt="" coords="869,53,980,97,975,98,868,59"/>
+<area shape="rect" id="Node000018" href="$embedded_2test__mult__asm__perf_2test__main_8cpp.html" title="Performance benchmarks for assembly multiplication functions." alt="" coords="1178,98,1401,160"/>
+<area shape="poly" id="edge28_Node000001_Node000018" title=" " alt="" coords="901,44,1167,95,1180,100,1175,101,1166,101,901,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="444,272,478,326,473,325,442,277"/>
+<area shape="rect" id="Node000004" href="$native_2test__ct__filter_2test__main_8cpp.html" title="Native tests for ct_filter.h: the CT1 filter, in fixed point." alt="" coords="201,317,378,379"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="385,270,328,319,325,314,381,272"/>
+<area shape="rect" id="Node000005" href="$validation_8h.html" title="Compile&#45;time validations." alt="" coords="828,326,1004,370"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="525,257,817,315,848,325,843,325,815,320,525,263"/>
+<area shape="rect" id="Node000006" href="$main_8cpp.html" title="Main code for the PVRouter single&#45;phase project." alt="" coords="953,427,1130,472"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="956,378,1017,427,1012,426,954,383"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="1137,265,1117,272,1037,285,969,292,854,296,738,300,670,307,591,320,558,328,556,323,590,315,670,302,737,295,853,291,969,287,1036,280,1116,267,1132,266"/>
+<area shape="poly" id="edge11_Node000007_Node000005" title=" " alt="" coords="1144,266,977,328,976,323,1139,267"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="1134,267,1098,291,1069,319,1055,345,1047,374,1042,429,1038,425,1042,373,1050,343,1065,316,1094,287,1129,269"/>
+<area shape="rect" id="Node000008" href="$embedded_2test__datalog__math__avr_2test__main_8cpp.html" title="The integer datalog arithmetic on the target: exact results, and cycle counts against the float code ..." alt="" coords="1316,317,1559,379"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="1275,265,1378,317,1372,316,1274,271"/>
+<area shape="rect" id="Node000009" href="$native_2test__datalog__math_2test__main_8cpp.html" title="Native unit tests for datalog_math.h." alt="" coords="1078,317,1293,379"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="1208,274,1196,319,1192,315,1204,278"/>
+<area shape="poly" id="edge13_Node000010_Node000003" title=" " alt="" coords="295,164,302,218,310,244,323,268,340,281,365,296,431,325,425,326,363,301,337,286,319,271,305,246,297,219,293,169"/>
+<area shape="rect" id="Node000011" href="$native_2test__diverted__energy_2test__main_8cpp.html" title="Native tests for diverted_energy.h: the diverted energy measured on CT2." alt="" coords="29,208,259,269"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="251,162,189,209,185,205,255,158"/>
+<area shape="poly" id="edge20_Node000012_Node000003" title=" " alt="" coords="692,150,632,175,602,190,574,210,548,237,526,268,499,327,495,323,522,266,543,233,570,206,599,186,630,170,697,148"/>
+<area shape="poly" id="edge25_Node000012_Node000005" title=" " alt="" coords="817,162,876,268,907,327,902,325,871,271,815,167"/>
+<area shape="poly" id="edge16_Node000012_Node000007" title=" " alt="" coords="888,153,905,157,1011,181,1117,205,1148,216,1143,216,1115,210,1010,186,903,162,888,158"/>
+<area shape="rect" id="Node000013" href="$fast__control_8h.html" title="Faster control: the load decision on the predicted energy, at mid&#45;cycle." alt="" coords="584,216,760,261"/>
+<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="763,160,699,218,696,213,758,163"/>
+<area shape="rect" id="Node000014" href="$native_2test__fast__control_2test__main_8cpp.html" title="Native unit tests for fast_control.h: the decision on the predicted energy." alt="" coords="602,317,803,379"/>
+<area shape="poly" id="edge22_Node000012_Node000014" title=" " alt="" coords="798,165,792,217,774,270,758,296,738,319,735,315,754,293,770,268,787,216,794,169"/>
+<area shape="rect" id="Node000015" href="$native_2test__energy__bucket_2test__main_8cpp.html" title="Native unit tests for energy_bucket.h." alt="" coords="885,208,1104,269"/>
+<area shape="poly" id="edge21_Node000012_Node000015" title=" " alt="" coords="851,156,942,207,936,207,850,162"/>
+<area shape="rect" id="Node000016" href="$utils_8h.html" title="Some utility functions." alt="" coords="1433,216,1610,261"/>
+<area shape="poly" id="edge23_Node000012_Node000016" title=" " alt="" coords="901,148,950,157,1133,183,1316,205,1436,224,1430,224,1316,210,1132,188,949,162,901,154"/>
+<area shape="poly" id="edge18_Node000013_Node000003" title=" " alt="" coords="625,268,527,328,525,323,620,270"/>
+<area shape="poly" id="edge19_Node000013_Node000014" title=" " alt="" coords="684,274,696,318,692,315,681,278"/>
+<area shape="poly" id="edge24_Node000016_Node000006" title=" " alt="" coords="1551,271,1569,297,1581,325,1585,354,1581,368,1573,381,1550,393,1510,404,1394,422,1255,436,1130,445,1130,440,1255,431,1393,417,1509,399,1548,388,1569,377,1576,366,1579,354,1576,327,1564,299,1549,275"/>
 </map>
