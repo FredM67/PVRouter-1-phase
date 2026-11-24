@@ -398,6 +398,63 @@
     "fastdivision: divu10(12345) per call": 41.01,
     "fastdivision: divmod10(12345678) per call": 130.05
    }
+  },
+  {
+   "commit": "0e35f11672dff33be8489a1a5d24c46e0f41292f",
+   "date": "2026-11-24T16:20:59+01:00",
+   "message": "fix: the CT filter checked in validation.h, runNextCycleTask() a call, doc slips (#38)\n\n- The CT1 filter settings are checked in validation.h with the 3-phase message, whatever the\n  board, instead of in processing.cpp, where only an enabled filter was checked; compile-fail\n  cases 88-92 (alpha too large or too small, gain of 64 or negative refused, the old-board\n  values build), as the 3-phase 70-74.\n- runNextCycleTask() is no longer always_inline: it has two callers (the ADC ISR and\n  finishCycleTasks()), so it was there twice. Flash -176 bytes; grid simulator: ISR max 500\n  cycles (495) on the old board, 447 (443) on the new one, ADMUX written at most 517 (507).\n- calibration.h: alpha \"from 0.00005 to below 0.0625\", as ct_filter.h accepts it.\n- shared_var.h: b_newMainsCycle states its own timing (the DATALOG_SUM cycle task).\n- The history of the .ino: the October 2019 entry is the 3-phase sketch, Mk2_3phase_RFdatalog_temp.\n- test/README.md: every test folder in the tree and the table (ten were missing), and the right\n  firmware name.\n- CLAUDE.md: the cycle tasks are in \"What differs\", and why they are not ported.\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/0e35f11672dff33be8489a1a5d24c46e0f41292f",
+   "sizes": {
+    "basic": {
+     "flash": 9716,
+     "ram": 386
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 11240,
+     "ram": 425
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 22542,
+     "ram": 852
+    },
+    "basic, NEW, OLED": {
+     "flash": 22108,
+     "ram": 849
+    },
+    "basic, remote loads": {
+     "flash": 14274,
+     "ram": 495
+    },
+    "basic, IoT": {
+     "flash": 9716,
+     "ram": 386
+    },
+    "basic, HumanReadable": {
+     "flash": 9600,
+     "ram": 366
+    }
+   },
+   "speed": {
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05,
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09
+   }
   }
  ]
 }
