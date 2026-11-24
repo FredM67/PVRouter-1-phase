@@ -276,7 +276,7 @@ inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::HumanRe
 ```
 Replace `HumanReadable` with `IoT` or `JSON` according to your needs.
 
-Every datalog period (5 s by default, `DATALOG_PERIOD_IN_SECONDS` in **config_system.h**, up to 40 s, or 30 s with relays, which need a divisor of 60), the router prints:
+Every datalog period (5 s by default, `DATALOG_PERIOD_IN_SECONDS` in **config_system.h**, up to 30 s; with relays, a divisor of 60), the router prints:
 - **HumanReadable**: the bucket level, `P:` the grid power (and the relays' average), `V:` the voltage, `, diverted <W> W, <Wh> Wh` with CT2, each temperature, and diagnostics;
 - **JSON**: `{"P":-25,"R":0,"D":1850,"E":4012,"T1":21.37,"TA":"low"}`: `D` and `E` are the diverted power and energy, with CT2;
 - **IoT** (for the mk2Wifi module), one frame line by line: `P` the grid power, `D` the diverted power in W and `E` the diverted energy in Wh (with CT2), `V` the voltage, `R` and `R1`…`Rn` (relays), `D1`…`Dn` the ON time of each load in %, `T1`…`Tn` the temperatures, `N` the seconds without diverted energy, `TA` the tariff, `S` and `S_MC` the sample sets. Do not confuse `D` with `D1`…`Dn`.

@@ -242,6 +242,82 @@ void test_watts_differs_from_the_float_code_by_at_most_1_W(void)
 // RMS voltage
 // ============================================================================
 
+void test_power_shift_follows_the_sample_count(void)
+{
+  // full-span sines average 2^17 per sample: up to 16383 sample sets fit in 31 bits unshifted
+  TEST_ASSERT_EQUAL_UINT8(0, Datalog::powerShift(16383));
+  TEST_ASSERT_EQUAL_UINT8(4, Datalog::powerShift(16384));
+  // single phase, 68 sets per cycle at most at 50 Hz: 4 s unshifted, 5 s (the default) and 30 s shifted
+  TEST_ASSERT_EQUAL_UINT8(0, Datalog::powerShift(4UL * 50 * 68));
+  TEST_ASSERT_EQUAL_UINT8(4, Datalog::powerShift(5UL * 50 * 68));
+  TEST_ASSERT_EQUAL_UINT8(4, Datalog::powerShift(30UL * 50 * 68));
+}
+
+void test_power_shift_keeps_30_s_of_any_signal_in_32_bits(void)
+{
+  // shifted by 4, a sample adds at most 2^14 (and the rounding 1 per cycle): the 102000 sets of
+  // 30 s stay below 2^31
+  const uint32_t sets{ 30UL * 50 * 68 };
+  TEST_ASSERT_TRUE(static_cast< uint64_t >(sets) * ((1UL << 18) >> Datalog::powerShift(sets)) + 30 * 50 <= INT32_MAX);
+}
+
+void test_average_power_unshifted_is_the_quotient(void)
+{
+  TEST_ASSERT_EQUAL_INT32(-142, Datalog::averagePower< 0 >(-1000, static_cast< uint16_t >(7)));
+  TEST_ASSERT_EQUAL_INT32(142, Datalog::averagePower< 0 >(1000, static_cast< uint32_t >(7)));
+  TEST_ASSERT_EQUAL_INT32(0, Datalog::averagePower< 0 >(0, static_cast< uint16_t >(9000)));
+}
+
+void test_average_power_shifted_is_the_exact_average(void)
+{
+  // sum x 16 / n truncated toward zero, over the whole range of a 30 s period, 16- and 32-bit counts
+  const int32_t sums[]{ 0, 1, -1, 15, -15, 123456789, -123456789, 102000L * 16384, -(102000L * 16384), 3374, -3374 };
+  const uint32_t counts[]{ 1, 7, 17000, 65535, 65536, 102000 };
+  for (const int32_t sum : sums)
+  {
+    for (const uint32_t n : counts)
+    {
+      const auto exact{ static_cast< int32_t >(static_cast< int64_t >(sum) * 16 / n) };
+      TEST_ASSERT_EQUAL_INT32(exact, Datalog::averagePower< 4 >(sum, n));
+      if (n <= UINT16_MAX)
+      {
+        TEST_ASSERT_EQUAL_INT32(exact, Datalog::averagePower< 4 >(sum, static_cast< uint16_t >(n)));
+      }
+    }
+  }
+}
+
+void test_shifted_sum_keeps_the_average_over_30_s(void)
+{
+  // 30 s at 50 Hz, 64 sample sets per cycle: each cycle's sum rounded and scaled down by 16, as
+  // addToDatalogSum() does, against the exact average (64-bit sum, here only). The rounding, once
+  // per cycle, weighs 8 / 64 step^2 at most per sample: within 1 step^2, even for a constant
+  const uint16_t cycles{ 30U * 50 };
+  const uint8_t perCycle{ 64 };
+  const int32_t amplitudes[]{ 0, 1, 7, 100, 5000, 131072 };
+  const int32_t offsets[]{ 0, 3, -3, 1000, -77777, 131071 };
+  for (const int32_t amplitude : amplitudes)
+  {
+    for (const int32_t offset : offsets)
+    {
+      int32_t scaled{ 0 };
+      int64_t exact{ 0 };
+      for (uint16_t c = 0; c != cycles; ++c)
+      {
+        int32_t cycleSum{ 0 };
+        for (uint8_t i = 0; i != perCycle; ++i)
+        {
+          cycleSum += static_cast< int32_t >(lround(offset + amplitude * sin(2.0 * M_PI * i / perCycle + 0.1)));
+        }
+        scaled += (cycleSum + 8) >> 4;
+        exact += cycleSum;
+      }
+      const uint32_t n{ static_cast< uint32_t >(cycles) * perCycle };
+      TEST_ASSERT_INT32_WITHIN(1, static_cast< int32_t >(exact / n), Datalog::averagePower< 4 >(scaled, n));
+    }
+  }
+}
+
 void test_voltage_calibration_is_constexpr(void)
 {
   constexpr auto fixed{ Datalog::voltageCalibration(100, oldBoardVCal) };  // must be constexpr
@@ -332,6 +408,12 @@ int main(int argc, char** argv)
   RUN_TEST(test_watts_is_sign_symmetric);
   RUN_TEST(test_watts_saturates_beyond_int16);
   RUN_TEST(test_watts_differs_from_the_float_code_by_at_most_1_W);
+
+  RUN_TEST(test_power_shift_follows_the_sample_count);
+  RUN_TEST(test_power_shift_keeps_30_s_of_any_signal_in_32_bits);
+  RUN_TEST(test_average_power_unshifted_is_the_quotient);
+  RUN_TEST(test_average_power_shifted_is_the_exact_average);
+  RUN_TEST(test_shifted_sum_keeps_the_average_over_30_s);
 
   RUN_TEST(test_voltage_calibration_is_constexpr);
   RUN_TEST(test_vrms_matches_the_reference_short_period);
