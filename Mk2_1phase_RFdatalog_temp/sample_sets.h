@@ -3,16 +3,16 @@
  * @author Frédéric Metrich (frederic.metrich@live.fr)
  * @brief The counter of the sample sets of a datalog period, as wide as the period needs
  * @version 1.0
- * @date 2026-11-24
+ * @date 2026-11-22
  *
  * @copyright Copyright (c) 2026-2026
  * SPDX-License-Identifier: GPL-3.0-or-later
  *
- * @details A sample set is one conversion of each channel of the ADC chain (adc_chain.h). The
- *          number of sets of a datalog period is the divisor of the datalog power and voltage.
- *          Its counter is chosen at compile time, as the V^2 scaling: 16 bits while the largest
- *          count fits, 32 bits above, so that the default 5 s period keeps a 16-bit counter
- *          (config_derived.h says up to which period).
+ * @details One sample set is 3 conversions (V, CT1, CT2), about 312 us: 64 sets per mains cycle
+ *          at 50 Hz, 53 at 60 Hz. The number of sets of a datalog period is the divisor of the
+ *          datalog power and voltage. Its counter is chosen at compile time, as the V^2
+ *          scaling: 16 bits while the largest count fits (up to 19 s), 32 bits above (up to the
+ *          40 s allowed), so that the default 5 s period keeps a 16-bit counter.
  *
  *          Pure C++, no Arduino: the native tests include it.
  */
