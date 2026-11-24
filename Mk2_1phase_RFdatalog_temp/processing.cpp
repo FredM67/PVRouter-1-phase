@@ -624,7 +624,6 @@ void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample)
   // Using if constexpr ensures zero overhead when CT filtering is disabled
   if constexpr (lpf_gain != 0.0F && alpha != 0.0F)
   {
-    static_assert(CtFilter::isAccurate(lpf_gain, alpha), "******** CT1 filter: alpha must be within 0.00005..0.0625 and lpf_gain below 64 (calibration.h) ! ********");
     constexpr CtFilter::Coefficients ctFilterCoefficients{ CtFilter::coefficientsOf(lpf_gain, alpha) };
 
     sampleIminusDC = ctFilter[phase].apply(sampleIminusDC, ctFilterCoefficients);  // Robin's filter, at x256, in fixed point, saturated

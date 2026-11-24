@@ -162,7 +162,7 @@
  * - rotation of load priorities made switchable at compile-time
  * - enhanced configuration for override specific loads during off-peak period
  *
- * __October 2019, renamed as Mk2_1phase_RFdatalog_temp with these changes:__
+ * __October 2019, renamed as Mk2_3phase_RFdatalog_temp with these changes:__
  * - This sketch has been restructured in order to make better use of the ISR.
  * - All of the time-critical code is now contained within the ISR and its helper functions.
  * - Values for datalogging are transferred to the main code using a flag-based handshake mechanism.

@@ -46,7 +46,7 @@ inline constexpr float f_voltageCalOldBoard{ 0.805653F }; /**< measured on a Mk2
 //
 // CT1 filter: an IIR low-pass filter of the grid current, added back with a gain, offsets the CT
 // acting as a high-pass filter. Interim values for the SCT-013-000 (Dec. 2024, on real hardware).
-// Turned into fixed point at compile time (ct_filter.h): alpha from 0.00005 to 0.0625, gain below 64.
+// Turned into fixed point at compile time (ct_filter.h): alpha from 0.00005 to below 0.0625, gain below 64.
 inline constexpr float lpf_gainOldBoard{ 9 }; /**< setting this to 0 disables this extra processing */
 inline constexpr float alphaOldBoard{ 0.0011 };
 //
