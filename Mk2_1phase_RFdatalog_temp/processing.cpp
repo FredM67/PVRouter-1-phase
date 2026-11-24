@@ -27,9 +27,9 @@
 #include "diverted_energy.h"
 #include "utils_display.h"
 
-// analogue input pins and ADC reference of the board: adc_chain.h
-// AVCC (= VCC, 5 V or 3.3 V) on the old boards, the internal 1.1 V on the new one (buffered from AREF).
-// ADLAR=1 enables left-aligned ADC for efficient fixed-point math.
+// Analogue input pins, ADC reference and left-aligned result of each conversion: adc_chain.h.
+// The reference is AVCC (= VCC, 5 V or 3.3 V) on the old boards, the internal 1.1 V on the new one
+// (buffered from AREF). ADLAR=1 enables left-aligned ADC for efficient fixed-point math.
 static_assert(AdcChain::BIT_REFS1 == REFS1 && AdcChain::BIT_REFS0 == REFS0 && AdcChain::BIT_ADLAR == ADLAR, "adc_chain.h: ADMUX bits differ from avr/io.h");
 // ------------------------------------------
 
@@ -411,7 +411,7 @@ void initializeProcessing()
   }
 
   // The ADC runs free: each conversion starts the next one, and each end of conversion
-  // raises the ADC interrupt, where the samples are processed.
+  // raises the ADC interrupt, where the samples are processed (1664 CPU cycles per call).
   ADCSRA = 0;  // ADC off while it is set up
   ADCSRB = 0;  // ADTS2:0 = 0: the auto-trigger source is the ADC itself (free running)
 
@@ -615,9 +615,6 @@ void processPolarity(const uint8_t phase, const uint16_t rawSample)
  */
 void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample)
 {
-  // extra items for an LPF to improve the processing of data samples from CT1
-  static CtFilter::LowPassBoost ctFilter[NO_OF_PHASES];  // for offsetting the behaviour of CTx as a HPF
-
   // remove most of the DC offset from the current sample.
   // Use the voltage bias, it's most likely more accurate than the default mid-range.
   // Add 0.5 for the rounding, +32 when 10-bits left aligned `1<<(15-10)`
@@ -627,9 +624,11 @@ void processCurrentRawSample(const uint8_t phase, const uint16_t rawSample)
   // Using if constexpr ensures zero overhead when CT filtering is disabled
   if constexpr (lpf_gain != 0.0F && alpha != 0.0F)
   {
+    // Robin's filter in fixed point, one state per phase (ct_filter.h); the settings are checked in validation.h
+    static CtFilter::LowPassBoost ctFilter[NO_OF_PHASES];  // for offsetting the behaviour of CTx as a HPF
     constexpr CtFilter::Coefficients ctFilterCoefficients{ CtFilter::coefficientsOf(lpf_gain, alpha) };
 
-    sampleIminusDC = ctFilter[phase].apply(sampleIminusDC, ctFilterCoefficients);  // Robin's filter, at x256, in fixed point, saturated
+    sampleIminusDC = ctFilter[phase].apply(sampleIminusDC, ctFilterCoefficients);  // at x256, saturated to int16
   }
 
   // calculate the "real power" in this sample pair and add to the accumulated sum
@@ -772,30 +771,35 @@ void processVoltage(const uint8_t phase)
  * @param phase The phase number [0..NO_OF_PHASES[.
  *
  * @details
- * - During the startup period, the function waits until the filters have settled.
- * - Once the startup period is over, it resets key variables and flags to prepare
- *   for normal operation.
+ * - At each crossing of the phase during the startup period, the phase starts its sums and its
+ *   sample count afresh.
+ * - Once the filters have settled, the startup period is over: the flags are set for normal
+ *   operation.
  *
  * @ingroup TimeCritical
  */
 void processStartUp(const uint8_t phase)
 {
-  // wait until the DC-blocking filters have had time to settle
-  if (millis() <= (initialDelay + startUpPeriod))
-  {
-    return;  // still settling, do nothing
-  }
-
-  // the DC-blocking filters have had time to settle
-  beyondStartUpPeriod = true;
+  // Every phase starts afresh at each of its crossings during the start-up period, as in the
+  // 3-phase firmware (where the first phase to cross ends it, and the others then hold one cycle
+  // at most); one phase here.
   l_sumP[phase] = 0;
   l_sumP_atSupplyPoint[phase] = 0;
-  l_sum_Vsquared[phase] = 0;  // like the sample sets: the first datalog period holds its own samples only
+  l_sum_Vsquared[phase] = 0;  // with the sample set count: the first datalog period holds its own samples
   if constexpr (DIVERTED_CT_PRESENT)
   {
     l_sumP_diverted = 0;
   }
   n_samplesDuringThisMainsCycle[phase] = 0;
+
+  // wait until the DC-blocking filters have had time to settle
+  if (millis() <= (initialDelay + startUpPeriod))
+  {
+    return;  // still settling
+  }
+
+  // the DC-blocking filters have had time to settle
+  beyondStartUpPeriod = true;
   i_sampleSetsDuringThisDatalogPeriod = 0;
 
   n_lowestNoOfSampleSetsPerMainsCycle = UINT8_MAX;
@@ -1205,7 +1209,10 @@ void addToDatalogSum()
       Shared::absenceOfDivertedEnergyCountInSeconds = 0;
   }
 
-  Shared::b_newMainsCycle = true;  //  a 50 Hz 'tick' for use by the main code
+  // one 'tick' per mains cycle for use by the main code, once the cycle's bookkeeping is done: the
+  // 1-Wire transactions start when the loop sees it; every call stays within about 450 cycles of
+  // its ADMUX write (CycleTask above), so a time slot cannot push a write past its deadline
+  Shared::b_newMainsCycle = true;
 }
 
 /**
@@ -1531,7 +1538,7 @@ struct adc_ctx_t
 
 // ADC optimization: circular linked list for channel management
 // The ADMUX written after a conversion applies to the conversion after next (adc_chain.h)
-static adc_ctx_t _channels[AdcChain::NO_OF_CHANNELS] = {
+static adc_ctx_t _channels[AdcChain::NO_OF_CONVERSIONS] = {
   { .next = &_channels[1], .index = AdcChain::Channel::V, .admux = AdcChain::admuxWrittenAfter(PCB_VERSION, AdcChain::Channel::V) },                   // V -> setup for I_DIVERTED
   { .next = &_channels[2], .index = AdcChain::Channel::I_GRID, .admux = AdcChain::admuxWrittenAfter(PCB_VERSION, AdcChain::Channel::I_GRID) },         // I_GRID -> setup for V
   { .next = &_channels[0], .index = AdcChain::Channel::I_DIVERTED, .admux = AdcChain::admuxWrittenAfter(PCB_VERSION, AdcChain::Channel::I_DIVERTED) }  // I_DIVERTED -> setup for I_GRID
