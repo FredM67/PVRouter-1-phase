@@ -383,7 +383,7 @@ Variables</h2></td></tr>
 <dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2026-11-22</dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2024-2026 SPDX-License-Identifier: GPL-3.0-or-later</dd></dl>
-<p>From Mk2_fasterControl_Full/utils_oled.h: an SSD1306 128x64 OLED on the hardware I2C (A4 SDA, A5 SCL), driven by U8x8 (the text-only part of U8g2: no frame buffer in RAM, the screen is written in 8x8 tiles). The logo at startup, then:</p><ul>
+<p>From obsolete/Mk2_fasterControl_Full/utils_oled.h: an SSD1306 128x64 OLED on the hardware I2C (A4 SDA, A5 SCL), driven by U8x8 (the text-only part of U8g2: no frame buffer in RAM, the screen is written in 8x8 tiles). The logo at startup, then:</p><ul>
 <li>rows 0 to 5: the value in large digits, 5 characters (energy "1.234" or "12.34" kWh, temperature " 23.5"), or FORCED / OFF;</li>
 <li>rows 6 and 7: the watchdog symbol (blinks each second), the sensor (T1, T2...) and the unit (kWh, °C). The value is written again only when it changes: the I2C transfer of the large digits takes about 20 ms in the loop. </li>
 </ul>
