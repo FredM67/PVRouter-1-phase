@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2024-2026
  * SPDX-License-Identifier: GPL-3.0-or-later
  *
- * @details From Mk2_fasterControl_Full/utils_oled.h: an SSD1306 128x64 OLED on the hardware I2C
+ * @details From obsolete/Mk2_fasterControl_Full/utils_oled.h: an SSD1306 128x64 OLED on the hardware I2C
  *          (A4 SDA, A5 SCL), driven by U8x8 (the text-only part of U8g2: no frame buffer in
  *          RAM, the screen is written in 8x8 tiles). The logo at startup, then:
  *          - rows 0 to 5: the value in large digits, 5 characters (energy "1.234" or "12.34" kWh,

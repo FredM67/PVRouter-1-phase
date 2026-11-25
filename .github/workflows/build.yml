@@ -191,34 +191,6 @@ jobs:
           name: bench-speed
           path: bench/speed.json
 
-  # The older sketch, Mk2_fasterControl_Full, frozen: kept building, not developed further.
-  build-fastercontrol:
-    name: Build Firmware (Mk2_fasterControl_Full)
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v7
-      with:
-        submodules: 'true'
-    - uses: actions/cache@v6
-      with:
-        path: |
-          ~/.cache/pip
-          ~/.platformio/.cache
-        key: ${{ runner.os }}-pio
-    - name: Set up Python
-      uses: actions/setup-python@v7
-      with:
-        python-version: '>=3.11'
-    - name: Install PlatformIO Core
-      run: |
-        python -m pip install --upgrade pip
-        pip install --upgrade platformio
-    - name: Install platformIO libraries
-      run: pio pkg install --project-dir Mk2_fasterControl_Full
-    - name: Run PlatformIO
-      run: |
-        pio run --project-dir Mk2_fasterControl_Full
-
   # The remote load receiver as the Arduino IDE builds it: only the files of its folder, in C++17.
   # utils_pins.h and utils_bits.h are copies of the router's, since the IDE sees nothing else.
   remote-load-receiver:

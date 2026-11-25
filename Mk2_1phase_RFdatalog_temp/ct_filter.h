@@ -10,7 +10,7 @@
  *
  * @details A current transformer acts as a high-pass filter. Robin's sketches offset it with
  *          an IIR low-pass filter of the current, added back with a gain (lpf_gain, alpha in
- *          calibration.h). This is his filter, Mk2_fasterControl_Full/processing.cpp, in fixed
+ *          calibration.h). This is his filter, obsolete/Mk2_fasterControl_Full/processing.cpp, in fixed
  *          point instead of his float maths (two float multiplies and four conversions took
  *          ~1100 cycles of the ADC interrupt; this takes ~210):
  *          - his state, at x256 scale (one ADC count = 256): it moves as soon as alpha x the

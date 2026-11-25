@@ -17,20 +17,20 @@ Emley's single-phase sketch Mk2_fasterControl_twoLoads_5.ino (July 2023), whose 
 logic comes from his Mk2_multiLoad_wired_7a.ino (not in this repository), as ported in
 Mk2_fasterControl_Full; its displays come from Mk2_fasterControl_Full as well.
 
-The older sketches are kept as they are, for reference:
+The older sketches are kept as they are, for reference, in obsolete/:
 
-- Robin/ holds two of his single-phase sketches, Mk2_fasterControl_twoLoads_5 and
+- obsolete/Robin/ holds two of his single-phase sketches, Mk2_fasterControl_twoLoads_5 and
   Mk2_fasterControl_RFdatalog_1.
 - Mk2_fasterControl_Full, Mk2_fasterControl_twoLoads_temp_1 and
   Mk2_fasterControl_threeLoads_temp_1 are Frédéric Metrich's versions of his
   fasterControl sketches.
-- dev/ holds his test and calibration tools: RST_104us_dev, RST_375us_dev,
+- dev/ (not obsolete) holds his test and calibration tools: RST_104us_dev, RST_375us_dev,
   RawSamplesTool_2chan, Transformer_Checker, balanceCheck_1kW, blink_dig4,
   cal_CT1_v_meter, cal_CT2_v_CT1, cal_bothDisplays_3 and segCheck_bothDisplays.
 
 He published his sketches on the OpenEnergyMonitor forum (summary page:
 www.openenergymonitor.org/emon/node/1757) and on www.mk2pvrouter.co.uk, for others to
-build PV routers with, without any license statement. His sketches in Robin/ and dev/ are
+build PV routers with, without any license statement. His sketches in obsolete/Robin/ and dev/ are
 kept as he published them and carry no license tag.
 
 The changes made since 2020 are by Frédéric Metrich and the contributors listed on
@@ -49,13 +49,13 @@ you edit them by hand or a tool writes them. They carry no license tag for that 
 Third-party code in this repository
 -----------------------------------
 
-- type_traits/ (in Mk2_1phase_RFdatalog_temp and Mk2_fasterControl_Full): from
+- type_traits/ (in Mk2_1phase_RFdatalog_temp and obsolete/Mk2_fasterControl_Full): from
   ArduinoJson, Copyright (c) 2014-2024 Benoit Blanchon, MIT License (stated in each file).
 - sim/avr_adc.c: from simavr, Copyright 2008, 2010 Michel Pollet, GPL-3.0-or-later.
 - run-clang-format.py: from run-clang-format (github.com/Sarcasm/run-clang-format) by
   Guillaume Papin, MIT License; it carries no license tag.
 - FastDivision.cpp and FastDivision.h (in Mk2_1phase_RFdatalog_temp and
-  Mk2_fasterControl_Full): division by 10 in AVR assembly; their origin is not recorded
+  obsolete/Mk2_fasterControl_Full): division by 10 in AVR assembly; their origin is not recorded
   here, so they carry no license tag.
 
 

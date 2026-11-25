@@ -23,7 +23,7 @@ void tearDown(void) {}
 /** @brief Output tolerance against Robin's float, in x64 units: one ADC count (see the README). */
 inline constexpr int32_t TOLERANCE{ 64 };
 
-/** @brief Robin's filter, verbatim from Mk2_fasterControl_Full/processing.cpp (x256 scale). */
+/** @brief Robin's filter, verbatim from obsolete/Mk2_fasterControl_Full/processing.cpp (x256 scale). */
 struct Robin
 {
   int32_t lpf_long{};

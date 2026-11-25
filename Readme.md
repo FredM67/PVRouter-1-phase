@@ -35,7 +35,7 @@ Il est issu du [Mk2PVRouter](https://web.archive.org/web/20231115123017/https://
 > Pour une installation triphasée, voir [PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase).
 
 > [!WARNING]
-> **Pas encore testé sur une vraie carte.** Ce firmware passe ses tests natifs, ses vérifications à la compilation et le simulateur de réseau sur les trois cartes, mais il n’a pas encore tourné sur du vrai matériel. En attendant, utilisez `Mk2_fasterControl_Full` sur une installation en service.
+> **Pas encore testé sur une vraie carte.** Ce firmware passe ses tests natifs, ses vérifications à la compilation et le simulateur de réseau sur les trois cartes, mais il n’a pas encore tourné sur du vrai matériel. En attendant, utilisez `Mk2_fasterControl_Full` (dans `obsolete/`) sur une installation en service.
 
 - [PVRouter (version monophasée)](#pvrouter-version-monophasée)
   - [Fonctionnalités](#fonctionnalités)
@@ -83,8 +83,7 @@ Ce que le routeur fait pour vous :
 | [`configurator`](configurator/)                            | la page web qui écrit les fichiers de configuration                                         |
 | [`sim`](sim/)                                              | le simulateur de réseau : le firmware tourne sur une installation monophasée simulée (simavr) |
 | [`dev`](dev/)                                              | programmes de test et d’étalonnage : échantillons bruts, test de transformateur, test des afficheurs, ... |
-| [`Robin`](Robin/)                                          | deux sketches de Robin Emley                                                                |
-| `Mk2_fasterControl_*`                                      | les anciens sketches, figés ([plus bas](#les-anciens-sketches-figés))                        |
+| [`obsolete`](obsolete/)                                    | les anciens sketches, figés ([plus bas](#les-anciens-sketches-figés))                        |
 | [`docs`](docs/)                                            | notice d’installation, schémas de câblage                                                   |
 
 ## Documentation de développement
@@ -109,11 +108,11 @@ Testé sur une installation réelle avec le firmware triphasé, qui traite ce r�
 
 ## Les anciens sketches, figés
 
-Ces sketches restent tels quels, pour référence ; ils n’évoluent plus :
+Ces sketches, dans [`obsolete/`](obsolete/), restent tels quels, pour référence ; ils n’évoluent plus :
 
 - ***Mk2_fasterControl_Full*** est une version remaniée du sketch d’origine ***Mk2_fasterControl_twoLoads_x*** de Robin Emley : traitements critiques dans l’interruption, journal série, sonde de température, relais, télémétrie pour Home Assistant, carte universelle, démarrage différé du routage, et affichage de l’énergie routée (la température sur l’afficheur est une nouveauté de `Mk2_1phase_RFdatalog_temp`).
 - ***Mk2_fasterControl_twoLoads_temp_1*** et ***Mk2_fasterControl_threeLoads_temp_1*** sont des sketches en un seul fichier. Ils portent la logique deux charges de la version 4 de Robin, qu’il a archivée comme problématique : préférez `Mk2_1phase_RFdatalog_temp`, qui a la logique de sa version 5.
-- ***Robin/*** contient deux sketches de Robin Emley, ***dev/*** ses outils de test et d’étalonnage.
+- ***Robin/*** contient deux sketches de Robin Emley. Ses outils de test et d’étalonnage restent dans ***dev/***.
 
 ## Prochainement
 
