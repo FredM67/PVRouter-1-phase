@@ -24,7 +24,12 @@ description: Use when changing anything the ADC interrupt runs in the single-pha
 - The simulated ADC locks the channel at once: an ADMUX write that is too early shows only in the
   `ADMUX delay` figure, never as misfiled samples. The ADC reference cancels out in the
   simulator: a wrong reference is caught by the native tests of `adc_chain.h`, not by the sim.
-- A change must not add flash or RAM without a reason worth it (2 KB RAM, 32 KB flash).
+- The bar: a change must not add flash, lengthen the **slowest** call (`ADC ISR max`), or bring
+  the ADMUX write closer to 128 or to its margins. Gains on the average call alone are not
+  wanted: `loop()` is not short of CPU.
+- Measured on the 3-phase ISR and turned down there (2026-11): a `switch` with a constant
+  channel per case (+912 B flash, ADMUX only 27 cycles above 128) and the rare paths `noinline`
+  (slowest call +40 cycles, +64 B). Do not propose them here without a real need.
 
 ## Measure: dev first, same procedure for the change
 
@@ -54,8 +59,8 @@ nothing can be compared.
 
 Table per target, dev against the change: ISR average and max (with the channel and angle of the
 longest call), ADMUX delay min and max, misfiled samples, overruns, flash and RAM (`avr-size`),
-scenario results. Drop the change when a margin fails, a scenario that passed fails, flash or RAM
-grow for nothing, or a warning appears. Then also `pio test -e native` and `pio test -e uno_sim`
+scenario results. Drop the change when a margin fails, a scenario that passed fails, flash grows,
+the slowest call gets longer, only the average improves, or a warning appears. Then also `pio test -e native` and `pio test -e uno_sim`
 (WSL) and clang-format 18.1.8. Update `Mk2_1phase_RFdatalog_temp/docs/performance.md` and the
 figures in `CLAUDE.md` / `sim/README.md` if they moved. Port to PVRouter-3-phase only after
 measuring there, with its own `isr-change` skill: its ISR is different.
