@@ -98,6 +98,8 @@ pio check
 - Two-branch model: `main` (stable) + `dev` (development)
 - PRs target `dev` branch
 - Conventional commits: `fix:`, `feat:`, `docs:`, `chore:`
+- Formatting: a fresh clone has no pre-commit hook until `scripts/install-hooks.sh` (or `pre-commit install`) runs; without it, run `clang-format -i` (18.1.8, as CI) on the changed files before committing, or the formatting check fails
+- A setting users see also needs its page in the documentation repository (FredM67/Mk2PVRouter, French docs), in a PR there or an issue that the PR links to
 - **Port every change to the 3-phase firmware** (PVRouter-3-phase, `Mk2_3phase_RFdatalog_temp`), when it applies there: the two firmwares share their settings, names, files and interfaces. A fix, feature or refactor here gets a matching PR there, unless it touches what only this firmware has (see "What differs" above: the fasterControl core, CT2's diverted energy, the displays, the old boards and their CT1 filter). Each PR says whether it was ported, with a link to the other PR, or why not.
 
 ## Test Structure
