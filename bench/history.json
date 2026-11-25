@@ -569,6 +569,63 @@
     "mult_asm: mult16x8_q8 per op": 27.16,
     "mult_asm: ISR simulation per sample": 132.09
    }
+  },
+  {
+   "commit": "56af7e665cf86f495b6018ed74fe0ddbd81ac7d1",
+   "date": "2026-11-25T21:28:51+01:00",
+   "message": "chore: the older sketches move to obsolete/ (#43)\n\nMk2_fasterControl_Full, Mk2_fasterControl_twoLoads_temp_1, Mk2_fasterControl_threeLoads_temp_1\nand Robin/ go to obsolete/, as in the 3-phase repository; dev/ stays. CI no longer builds\nMk2_fasterControl_Full, the hooks leave obsolete/ alone, and the Readmes, NOTICE, CHANGELOG,\nVS Code workspace and code comments point to the new paths.\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/56af7e665cf86f495b6018ed74fe0ddbd81ac7d1",
+   "sizes": {
+    "basic": {
+     "flash": 9146,
+     "ram": 378
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 10692,
+     "ram": 417
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 21986,
+     "ram": 844
+    },
+    "basic, NEW, OLED": {
+     "flash": 21556,
+     "ram": 841
+    },
+    "basic, remote loads": {
+     "flash": 13688,
+     "ram": 487
+    },
+    "basic, IoT": {
+     "flash": 9146,
+     "ram": 378
+    },
+    "basic, HumanReadable": {
+     "flash": 9030,
+     "ram": 358
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
   }
  ]
 }
