@@ -90,7 +90,7 @@ pio check
 
 - All load control must include safety validation
 - Never modify power routing logic without understanding the energy bucket algorithm
-- Test timing on real hardware with oscilloscope for ISR changes
+- Measure every ISR change in the grid simulator against dev, as the `isr-change` skill (`.claude/skills/isr-change/`) describes; test timing on real hardware with oscilloscope when the change is risky
 - Compile-time validation via `static_assert` is preferred over runtime checks
 
 ## Git Workflow
