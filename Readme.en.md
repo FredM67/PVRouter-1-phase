@@ -35,7 +35,7 @@ It derives from Robin Emley's single-phase [Mk2PVRouter](https://web.archive.org
 > For a 3-phase installation, see [PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase).
 
 > [!WARNING]
-> **Not yet tested on a real board.** This firmware passes its native tests, its compile-time checks and the grid simulator on the three boards, but it has not run on real hardware yet. Until it has, use `Mk2_fasterControl_Full` on an installation in service.
+> **Not yet tested on a real board.** This firmware passes its native tests, its compile-time checks and the grid simulator on the three boards, but it has not run on real hardware yet. Until it has, use `Mk2_fasterControl_Full` (in `obsolete/`) on an installation in service.
 
 - [PVRouter (single-phase version)](#pvrouter-single-phase-version)
   - [Features](#features)
@@ -83,8 +83,7 @@ What the router does for you:
 | [`configurator`](configurator/)                            | the web page that writes the configuration files                                        |
 | [`sim`](sim/)                                              | the grid simulator: the firmware runs on a simulated single-phase installation (simavr) |
 | [`dev`](dev/)                                              | test and calibration sketches: raw samples, transformer checker, display checks, ...    |
-| [`Robin`](Robin/)                                          | two of Robin Emley's sketches                                                           |
-| `Mk2_fasterControl_*`                                      | the older sketches, frozen ([below](#the-older-sketches-frozen))                        |
+| [`obsolete`](obsolete/)                                    | the older sketches, frozen ([below](#the-older-sketches-frozen))                        |
 | [`docs`](docs/)                                            | installation guide, wiring diagrams                                                     |
 
 ## Developer documentation
@@ -109,11 +108,11 @@ Tested on a real installation with the 3-phase firmware, which handles this sett
 
 ## The older sketches, frozen
 
-These sketches are kept as they are, for reference; they are no longer developed:
+These sketches, in [`obsolete/`](obsolete/), are kept as they are, for reference; they are no longer developed:
 
 - ***Mk2_fasterControl_Full*** is a refactored version of the original sketch ***Mk2_fasterControl_twoLoads_x*** from Robin Emley: time-critical work in the ISR, serial data logging, temperature sensor, relays, telemetry for Home Assistant, universal PCB, delayed diversion start, and a display of the diverted energy (the temperature on the display is new in `Mk2_1phase_RFdatalog_temp`).
 - ***Mk2_fasterControl_twoLoads_temp_1*** and ***Mk2_fasterControl_threeLoads_temp_1*** are single-file sketches. They carry the two-load logic of Robin's version 4, which he archived as problematic: prefer `Mk2_1phase_RFdatalog_temp`, which has the logic of his version 5.
-- ***Robin/*** holds two of Robin Emley's sketches, ***dev/*** his test and calibration tools.
+- ***Robin/*** holds two of Robin Emley's sketches. His test and calibration tools stay in ***dev/***.
 
 ## Coming soon
 

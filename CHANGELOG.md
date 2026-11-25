@@ -7,7 +7,7 @@ tooling. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 Changes on `dev`, not yet on `main`.
 
-> **Not yet tested on a real board:** `Mk2_1phase_RFdatalog_temp` passes the native tests, the compile-time checks and the grid simulator, but has not run on real hardware yet. Keep `Mk2_fasterControl_Full` on an installation in service until it has.
+> **Not yet tested on a real board:** `Mk2_1phase_RFdatalog_temp` passes the native tests, the compile-time checks and the grid simulator, but has not run on real hardware yet. Keep `Mk2_fasterControl_Full` (now in `obsolete/`) on an installation in service until it has.
 
 ### Upgrading from `Mk2_fasterControl_Full`
 
@@ -90,10 +90,14 @@ shipped `config.h`:
 
 ### Changed
 
+- **Older sketches in `obsolete/`:** `Mk2_fasterControl_Full`, `Mk2_fasterControl_twoLoads_temp_1`,
+  `Mk2_fasterControl_threeLoads_temp_1` and `Robin/` move to `obsolete/`, as in the 3-phase repository.
+  CI no longer builds `Mk2_fasterControl_Full`; `dev/` stays where it is.
+
 - **Doxygen and CodeQL:** both follow `Mk2_1phase_RFdatalog_temp` instead of `Mk2_fasterControl_Full`.
   The documentation is deployed to `doc/` of `gh-pages`, no longer at its root: the old
   `Mk2_fasterControl_Full` site is removed by the first update of the pages after that.
-- **License:** Robin Emley's sketches in `Robin/` and `dev/` stay as he published them, without
+- **License:** Robin Emley's sketches in `obsolete/Robin/` and `dev/` stay as he published them, without
   a licence tag. The rest of the repository, `Mk2_fasterControl_Full` and the single-file
   sketches included, moves from LGPL-2.1 to GPL-3.0-or-later, as PVRouter-3-phase; its source
   files carry an SPDX tag.

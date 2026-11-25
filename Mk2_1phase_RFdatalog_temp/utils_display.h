@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2024-2026
  * SPDX-License-Identifier: GPL-3.0-or-later
  *
- * @details From Mk2_fasterControl_Full/utils_display.h. The display is multiplexed from the ADC
+ * @details From obsolete/Mk2_fasterControl_Full/utils_display.h. The display is multiplexed from the ADC
  *          interrupt, as in Full: one digit after another, every MAX_DISPLAY_TIME_COUNT sample
  *          sets (10 x 312 us, so each digit for about 3 ms and the whole display 80 times a
  *          second). Unlike Full, the interrupt does not look up the characters nor write the
