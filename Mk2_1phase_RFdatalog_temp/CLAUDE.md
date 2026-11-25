@@ -68,6 +68,7 @@ pio check
 - Free-running ADC: the ADMUX written in the ISR applies to the conversion after next (`adc_chain.h`)
 - Every ISR call must end within one ADC conversion; the grid simulator enforces it (`sim/scenarios/common.scn`): longest call `isr_max` 560 cycles, latest ADMUX write `admux_delay_max` 1620 cycles (1480 for `check-new-temp`, 1600 for `check-seg-temp`: the temperature builds, after a 1-Wire slot). The once-per-cycle work is spread over the CT2 calls that follow the zero crossings (`CycleTask` in processing.cpp) to keep each call short; the 1-Wire transactions start right after the positive crossing's work (`temp_schedule.h`), one per mains cycle, so that their slots miss those calls
 - No blocking calls, no dynamic allocation in ISR
+- An ISR change must not add flash, lengthen the slowest call or bring the ADMUX write closer to its limits; gains on the average call alone are not wanted (`loop()` is not short of CPU)
 - Volatile shared variables for ISR-main loop communication
 
 ## Critical Development Rules
@@ -90,7 +91,7 @@ pio check
 
 - All load control must include safety validation
 - Never modify power routing logic without understanding the energy bucket algorithm
-- Test timing on real hardware with oscilloscope for ISR changes
+- Measure every ISR change in the grid simulator against dev, as the `isr-change` skill (`.claude/skills/isr-change/`) describes; test timing on real hardware with oscilloscope when the change is risky
 - Compile-time validation via `static_assert` is preferred over runtime checks
 
 ## Git Workflow
