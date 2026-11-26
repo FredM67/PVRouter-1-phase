@@ -105,4 +105,13 @@ shipped `config.h`:
   `Mk2_fasterControl_twoLoads_temp_1` and `Mk2_fasterControl_threeLoads_temp_1` carry the
   two-load logic of Robin's version 4, which he archived as problematic.
 
+### Fixed
+
+- **Start-up banner:** the calibration is printed as `calibration.h` has it, under its names
+  there: `f_ctRating`, `f_powerCalPerAmp` and `f_voltageCalNewBoard` on the new board,
+  `f_powerCalOldBoard` and `f_voltageCalOldBoard` on the old ones, and for CT2, when present,
+  `f_ctRatingDiverted` or `f_powerCalDivertedOldBoard`; the voltage with 6 decimals instead of 5.
+  The banner printed `f_powerCal`, which the router computes (on the new board, from the CT
+  rating), and which could not be compared with `calibration.h`.
+
 [PVRouter-3-phase]: https://github.com/FredM67/PVRouter-3-phase
