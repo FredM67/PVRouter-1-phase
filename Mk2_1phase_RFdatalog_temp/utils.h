@@ -3,7 +3,7 @@
  * @author Frédéric Metrich (frederic.metrich@live.fr)
  * @brief Some utility functions
  * @version 0.1
- * @date 2026-11-21
+ * @date 2026-11-26
  *
  * @copyright Copyright (c) 2023-2026
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -67,6 +67,86 @@ inline void printRotationGroups()
 inline void infolnPresence(const bool present)
 {
   infoln(present ? F("is present") : F("is NOT present"));
+}
+
+/**
+ * @brief Print the power calibration of CT1 (grid) as calibration.h has it
+ *
+ * @details The new board: f_ctRating and f_powerCalPerAmp; the old boards: f_powerCalOldBoard.
+ *          The f_powerCal the router computes from them is not printed: what can be checked is
+ *          what was typed. A template, so that each build compiles only its board's branch
+ *          (its strings included).
+ *
+ * @tparam newBoard whether the router runs with the new board's calibration
+ */
+template< bool newBoard >
+inline void printCt1Calibration()
+{
+  if constexpr (newBoard)
+  {
+    info(F("\tf_ctRating =    "));
+    infolnDecimals(SerialOutput::toDecimals(f_ctRating, 2), 2);
+
+    info(F("\tf_powerCalPerAmp =    "));
+    infolnDecimals(SerialOutput::toDecimals(f_powerCalPerAmp, 8), 8);
+  }
+  else
+  {
+    info(F("\tf_powerCalOldBoard =    "));
+    infolnDecimals(SerialOutput::toDecimals(f_powerCalOldBoard, 6), 6);
+  }
+}
+
+/**
+ * @brief Print the power calibration of CT2 (diverted energy) as calibration.h has it, when CT2
+ *        is fitted
+ *
+ * @details The new board: f_ctRatingDiverted (f_powerCalPerAmp is CT1's, printed before); the old
+ *          boards: f_powerCalDivertedOldBoard. A template, so that a build without CT2 compiles
+ *          none of it.
+ *
+ * @tparam ct2 whether CT2 is fitted (DIVERTED_CT_PRESENT)
+ * @tparam newBoard whether the router runs with the new board's calibration
+ */
+template< bool ct2, bool newBoard >
+inline void printCt2Calibration()
+{
+  if constexpr (ct2)
+  {
+    if constexpr (newBoard)
+    {
+      info(F("\tf_ctRatingDiverted =    "));
+      infolnDecimals(SerialOutput::toDecimals(f_ctRatingDiverted, 2), 2);
+    }
+    else
+    {
+      info(F("\tf_powerCalDivertedOldBoard =    "));
+      infolnDecimals(SerialOutput::toDecimals(f_powerCalDivertedOldBoard, 6), 6);
+    }
+  }
+}
+
+/**
+ * @brief Print the voltage calibration as calibration.h has it
+ *
+ * @details The new board: f_voltageCalNewBoard; the old boards: f_voltageCalOldBoard. A template,
+ *          so that each build compiles only its board's branch (its strings included).
+ *
+ * @tparam newBoard whether the router runs with the new board's calibration
+ */
+template< bool newBoard >
+inline void printVoltageCalibration()
+{
+  if constexpr (newBoard)
+  {
+    info(F("\tf_voltageCalNewBoard =    "));
+    infolnDecimals(SerialOutput::toDecimals(f_voltageCalNewBoard, 6), 6);
+  }
+  else
+  {
+    info(F("\tf_voltageCalOldBoard =    "));
+    infolnDecimals(SerialOutput::toDecimals(f_voltageCalOldBoard, 6), 6);
+  }
 }
 
 /**
@@ -142,16 +222,12 @@ inline void printConfiguration()
   }
 
   // the calibration constants, converted at compile time: no float printing code in the firmware
-  static constexpr auto powerCal_x1e6 PROGMEM{ SerialOutput::toDecimals(f_powerCal, 6) };
-  static constexpr auto voltageCal_x1e5 PROGMEM{ SerialOutput::toDecimals(f_voltageCal, 5) };
   constexpr int32_t phaseCal_x100{ SerialOutput::toDecimals(f_phaseCal, 2) };
 
   infoln(F("Electrical settings"));
-  info(F("\tf_powerCal =    "));
-  infolnDecimals_P(&powerCal_x1e6.value[0], 6);
-
-  info(F("\tf_voltageCal, for Vrms =    "));
-  infolnDecimals_P(&voltageCal_x1e5.value[0], 5);
+  printCt1Calibration< NEW_BOARD_CALIBRATION >();
+  printCt2Calibration< DIVERTED_CT_PRESENT, NEW_BOARD_CALIBRATION >();
+  printVoltageCalibration< NEW_BOARD_CALIBRATION >();
 
   info(F("\tf_phaseCal =     "));
   infolnDecimals(phaseCal_x100, 2);
