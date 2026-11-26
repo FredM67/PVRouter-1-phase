@@ -1,84 +1,85 @@
-# Welcome to GitHub docs contributing guide <!-- omit in toc -->
+# Contributing
 
-Thank you for investing your time in contributing to our project! Any contribution you make will be reflected on [docs.github.com](https://docs.github.com/en) :sparkles:. 
+Thank you for your interest in the project. Read the [Code of Conduct](./CODE_OF_CONDUCT.md) first.
 
-Read our [Code of Conduct](./CODE_OF_CONDUCT.md) to keep our community approachable and respectable.
+The code standards (style, types, real-time rules, tests) are in
+[`Mk2_1phase_RFdatalog_temp/docs/contributing.md`](Mk2_1phase_RFdatalog_temp/docs/contributing.md).
+This page covers the workflow.
 
-In this guide you will get an overview of the contribution workflow from opening an issue, creating a PR, reviewing, and merging the PR.
+## Branches
 
-Use the table of contents icon <img src="./assets/images/table-of-contents.png" width="25" height="25" /> on the top left corner of this document to get to a specific section of this guide quickly.
+| Branch | Purpose |
+|--------|---------|
+| `main` | Stable releases (default branch) |
+| `dev` | Integration of the next release |
 
-## New contributor guide
+Both are protected by GitHub rulesets: nobody pushes to them directly. The `no-commit-to-branch`
+pre-commit hook also refuses local commits on `main` and `dev`.
 
-To get an overview of the project, read the [README](Readme.md). Here are some resources to help you get started with open source contributions:
+Work on a topic branch made from `dev`, named after the kind of change: `feat/…`, `fix/…`,
+`docs/…`, `ci/…`, … Personal branches go under `users/`.
 
-- [Finding ways to contribute to open source on GitHub](https://docs.github.com/en/get-started/exploring-projects-on-github/finding-ways-to-contribute-to-open-source-on-github)
-- [Set up Git](https://docs.github.com/en/get-started/quickstart/set-up-git)
-- [GitHub flow](https://docs.github.com/en/get-started/quickstart/github-flow)
-- [Collaborating with pull requests](https://docs.github.com/en/github/collaborating-with-pull-requests)
+```bash
+git checkout dev
+git pull origin dev
+git checkout -b feat/my-feature
+```
 
+## Commits
 
-## Getting started
+Use [conventional commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `docs:`,
+`test:`, `ci:`, `refactor:`, `chore:`. A `!` (for example `feat!:`) marks a change that breaks
+existing settings.
 
-To navigate our codebase with confidence, see [the introduction to working in the docs repository](/contributing/working-in-docs-repository.md) :confetti_ball:. For more information on how we write our markdown files, see [the GitHub Markdown reference](contributing/content-markup-reference.md).
+## Pull requests
 
-Check to see what [types of contributions](/contributing/types-of-contributions.md) we accept before making changes. Some of them don't even require writing a single line of code :sparkles:.
+Pull requests target `dev`, never `main`:
 
-### Issues
+```bash
+git push -u origin feat/my-feature
+gh pr create --base dev --title "feat: my feature"
+```
 
-#### Create a new issue
+Fill in the [pull request template](.github/pull_request_template.md) and link the issue you fix,
+if any. CI builds the firmware, runs the tests, the compile checks and the grid simulator, and
+checks the formatting.
 
-If you spot a problem with the docs, [search if an issue already exists](https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-issues-and-pull-requests#search-by-the-title-body-or-comments). If a related issue doesn't exist, you can open a new issue using a relevant [issue form](https://github.com/github/docs/issues/new/choose). 
+The firmware derives from the 3-phase firmware of
+[PVRouter-3-phase](https://github.com/FredM67/PVRouter-3-phase) and keeps its setting names,
+meaning and syntax. Say in the pull request when a change is not ported, or cannot be ported, to
+the other repository.
 
-#### Solve an issue
+A release is a pull request from `dev` to `main`.
 
-Scan through our [existing issues](https://github.com/github/docs/issues) to find one that interests you. You can narrow down the search using `labels` as filters. See [Labels](/contributing/how-to-use-labels.md) for more information. As a general rule, we don’t assign issues to anyone. If you find an issue to work on, you are welcome to open a PR with a fix.
+## Pre-commit hooks
 
-### Make Changes
+The hooks are described in [`scripts/README.md`](scripts/README.md). Install them once per clone
+with the [pre-commit](https://pre-commit.com/) framework, configured by `.pre-commit-config.yaml`:
 
-#### Make changes in the UI
+```bash
+pip install pre-commit
+pre-commit install
+```
 
-Click **Make a contribution** at the bottom of any docs page to make small changes such as a typo, sentence fix, or a broken link. This takes you to the `.md` file where you can make your changes and [create a pull request](#pull-request) for a review. 
+On each commit they:
 
- <img src="./assets/images/contribution_cta.png" width="300" height="150" /> 
+- refuse a commit on `main` or `dev`;
+- format C/C++ files with clang-format 18 (`.clang-format`);
+- refresh the `@date` / `@copyright` fields of the Doxygen file headers
+  (`scripts/hooks/update-metadata.sh`), only when the change touches other lines too;
+- rebuild the [graphify](scripts/README.md#code-graph-graphify-optional) code graph
+  `graphify-out/graph.json` when code changes (skipped when graphify is not installed);
+- fix trailing whitespace, final newlines and line endings (LF), check YAML files and refuse files
+  above 500 KB.
 
-#### Make changes in a codespace
+To run all hooks on all files:
 
-For more information about using a codespace for working on GitHub documentation, see "[Working in a codespace](https://github.com/github/docs/blob/main/contributing/codespace.md)."
+```bash
+pre-commit run --all-files
+```
 
-#### Make changes locally
+If a hook modifies files, add them again and commit again.
 
-1. [Install Git LFS](https://docs.github.com/en/github/managing-large-files/versioning-large-files/installing-git-large-file-storage).
-
-2. Fork the repository.
-- Using GitHub Desktop:
-  - [Getting started with GitHub Desktop](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/getting-started-with-github-desktop) will guide you through setting up Desktop.
-  - Once Desktop is set up, you can use it to [fork the repo](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/cloning-and-forking-repositories-from-github-desktop)!
-
-- Using the command line:
-  - [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
-
-3. Create a working branch and start with your changes!
-
-### Commit your update
-
-Commit the changes once you are happy with them. Don't forget to [self-review](/contributing/self-review.md) to speed up the review process:zap:.
-
-### Pull Request
-
-When you're finished with the changes, create a pull request, also known as a PR.
-- Fill the "Ready for review" template so that we can review your PR. This template helps reviewers understand your changes as well as the purpose of your pull request. 
-- Don't forget to [link PR to issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue) if you are solving one.
-- Enable the checkbox to [allow maintainer edits](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork) so the branch can be updated for a merge.
-Once you submit your PR, a Docs team member will review your proposal. We may ask questions or request additional information.
-- We may ask for changes to be made before a PR can be merged, either using [suggested changes](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/incorporating-feedback-in-your-pull-request) or pull request comments. You can apply suggested changes directly through the UI. You can make any other changes in your fork, then commit them to your branch.
-- As you update your PR and apply changes, mark each conversation as [resolved](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/commenting-on-a-pull-request#resolving-conversations).
-- If you run into any merge issues, checkout this [git tutorial](https://github.com/skills/resolve-merge-conflicts) to help you resolve merge conflicts and other issues.
-
-### Your PR is merged!
-
-Congratulations :tada::tada: The GitHub team thanks you :sparkles:. 
-
-Once your PR is merged, your contributions will be publicly visible on the [GitHub docs](https://docs.github.com/en). 
-
-Now that you are part of the GitHub docs community, see how else you can [contribute to the docs](/contributing/types-of-contributions.md).
+Without Python, `./scripts/install-hooks.sh` (Linux, macOS, Git Bash) or `scripts\install-hooks.bat`
+(Windows command prompt) installs a plain git hook, `scripts/git-hooks/pre-commit`: clang-format,
+the `@date` / `@copyright` update and the graphify code graph.
