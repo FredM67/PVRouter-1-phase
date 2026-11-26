@@ -9,7 +9,7 @@
  * what it needs from these settings in config_derived.h.
  *
  * @version 2.0
- * @date 2026-11-21
+ * @date 2026-11-26
  */
 
 #pragma once
@@ -145,7 +145,7 @@ inline constexpr uint8_t watchDogPin{ unused_pin };   /**< watch dog LED */
 // - Frequently cloudy (coastal):         3 minutes (enhanced stability)
 // - Very cloudy (mountain, tropical):    4 minutes (maximum stability)
 //
-// 📖 Full guide: docs/Cloud_Pattern_Tuning_Guide.md, at the root of the repository
+// 📖 Full guide: https://github.com/FredM67/PVRouter-3-phase/blob/dev/docs/Cloud_Pattern_Tuning_Guide.md (same setting)
 //--------------------------------------------------------------------------------------------------
 inline constexpr uint8_t RELAY_FILTER_DELAY{ 2 }; /**< EWMA filter delay in minutes for relay control */
 
