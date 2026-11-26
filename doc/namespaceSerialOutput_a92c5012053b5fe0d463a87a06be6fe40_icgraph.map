@@ -1,16 +1,25 @@
 <map id="SerialOutput::toDecimals" name="SerialOutput::toDecimals">
-<area shape="rect" id="Node000001" title="A float constant as an integer with the given number of decimals, rounded." alt="" coords="600,62,785,89"/>
-<area shape="rect" id="Node000002" href="$group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee" title="Print the configuration during startup." alt="" coords="111,6,249,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="648,54,604,37,552,22,471,12,390,8,250,14,249,9,390,3,472,6,553,17,605,32,654,55"/>
-<area shape="rect" id="Node000004" href="$group__Initialization.html#gaa2b3b1d496e37e5f29af6a766743dc8b" title="Print the settings used for the selected output mode." alt="" coords="297,31,552,59"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="582,63,551,62,551,57,588,63"/>
-<area shape="rect" id="Node000005" href="$embedded_2test__serial__output_2test__main_8cpp.html#a65218dd97cd5257ddbf898fe11218a92" title=" " alt="" coords="351,83,498,127"/>
-<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="582,88,499,99,498,94,588,87"/>
-<area shape="rect" id="Node000007" href="$namespaceSerialOutput.html#a5816467c6da976cf57b717e6f40ce0f4" title="A float array constant as integers with the given number of decimals, rounded." alt="" coords="332,151,517,179"/>
-<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="654,96,606,122,553,142,513,153,512,148,552,137,603,117,649,98"/>
-<area shape="rect" id="Node000003" href="$group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,6,63,33"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,21,64,22,62,17,97,18"/>
-<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="279,31,250,29,249,24,284,29"/>
-<area shape="rect" id="Node000006" href="$embedded_2test__serial__output_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title=" " alt="" coords="151,91,208,119"/>
-<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="333,106,209,108,209,102,338,104"/>
+<area shape="rect" id="Node000001" title="A float constant as an integer with the given number of decimals, rounded." alt="" coords="600,149,785,177"/>
+<area shape="rect" id="Node000002" href="$group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee" title="Print the configuration during startup." alt="" coords="111,97,249,125"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="670,136,622,83,589,56,551,36,483,14,426,9,368,17,298,36,268,49,241,65,198,99,194,95,238,61,266,44,296,31,367,11,426,3,484,9,553,31,592,52,625,79,676,137"/>
+<area shape="rect" id="Node000004" href="$utils_8h.html#ac12e51aa41c49833077797b32733aea9" title="Print the power calibration of CT1 (grid) as calibration.h has it." alt="" coords="352,45,497,73"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="655,140,608,114,551,88,497,73,497,68,553,83,610,110,660,141"/>
+<area shape="rect" id="Node000005" href="$utils_8h.html#a418c7b4c97af7d5e52928b7ec2067225" title="Print the power calibration of CT2 (diverted energy) as calibration.h has it, when CT2 is fitted." alt="" coords="352,97,497,125"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="600,146,497,128,497,122,605,145"/>
+<area shape="rect" id="Node000006" href="$group__Initialization.html#gaa2b3b1d496e37e5f29af6a766743dc8b" title="Print the settings used for the selected output mode." alt="" coords="297,149,552,177"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="582,164,553,166,552,161,587,163"/>
+<area shape="rect" id="Node000007" href="$utils_8h.html#a6e82cd94dcf6b2127c3805870291bda0" title="Print the voltage calibration as calibration.h has it." alt="" coords="339,201,510,229"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="600,181,501,203,499,198,605,180"/>
+<area shape="rect" id="Node000008" href="$embedded_2test__serial__output_2test__main_8cpp.html#a65218dd97cd5257ddbf898fe11218a92" title=" " alt="" coords="351,253,498,297"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="659,185,609,216,553,243,499,261,498,256,551,238,607,211,654,186"/>
+<area shape="rect" id="Node000010" href="$namespaceSerialOutput.html#a5816467c6da976cf57b717e6f40ce0f4" title="A float array constant as integers with the given number of decimals, rounded." alt="" coords="332,321,517,349"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="676,189,626,253,592,285,554,312,518,326,517,321,551,307,589,281,622,250,671,191"/>
+<area shape="rect" id="Node000003" href="$group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,97,63,125"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,113,64,113,62,109,97,109"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="337,78,298,88,248,99,246,94,296,83,342,75"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="334,112,250,114,249,109,339,110"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="337,146,296,139,247,128,246,123,298,134,342,145"/>
+<area shape="poly" id="edge10_Node000007_Node000002" title=" " alt="" coords="321,198,296,191,240,160,198,128,198,123,243,155,298,186,326,198"/>
+<area shape="rect" id="Node000009" href="$embedded_2test__serial__output_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title=" " alt="" coords="151,261,208,289"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="333,276,209,278,209,272,338,274"/>
 </map>

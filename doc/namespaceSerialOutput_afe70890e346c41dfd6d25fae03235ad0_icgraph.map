@@ -1,28 +1,36 @@
 <map id="SerialOutput::printDecimals" name="SerialOutput::printDecimals">
-<area shape="rect" id="Node000001" title="Print a value given as an integer with a fixed number of decimals (see toDecimals())" alt="" coords="808,175,1009,202"/>
-<area shape="rect" id="Node000002" href="$debug_8h.html#aee87d72abd6349f18c91e48447af3d1a" title="Print a value given as an integer with a fixed number of decimals, and a line end." alt="" coords="620,71,740,98"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="859,168,712,101,713,96,865,168"/>
-<area shape="rect" id="Node000007" href="$group__Telemetry.html#ga678079c20f2260c02b6d805a3252fdb8" title="One step of the datalog in text format." alt="" coords="626,144,734,172"/>
-<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="790,173,734,168,734,162,795,173"/>
-<area shape="rect" id="Node000010" href="$embedded_2test__serial__output_2test__main_8cpp.html#aae27f1312bc163c3eb9f5309b9fdf7dd" title=" " alt="" coords="601,196,759,240"/>
-<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="790,204,759,210,759,205,795,203"/>
-<area shape="rect" id="Node000012" href="$embedded_2test__serial__output_2test__main_8cpp.html#ae4661fa1d0daf8ee1282ebe4e9e68a60" title=" " alt="" coords="600,264,760,326"/>
-<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="866,209,749,266,747,261,860,210"/>
+<area shape="rect" id="Node000001" title="Print a value given as an integer with a fixed number of decimals (see toDecimals())" alt="" coords="808,321,1009,349"/>
+<area shape="rect" id="Node000002" href="$debug_8h.html#aee87d72abd6349f18c91e48447af3d1a" title="Print a value given as an integer with a fixed number of decimals, and a line end." alt="" coords="620,159,740,186"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="872,312,700,189,702,184,877,312"/>
+<area shape="rect" id="Node000010" href="$group__Telemetry.html#ga678079c20f2260c02b6d805a3252fdb8" title="One step of the datalog in text format." alt="" coords="626,291,734,318"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="790,320,734,314,734,309,795,319"/>
+<area shape="rect" id="Node000013" href="$embedded_2test__serial__output_2test__main_8cpp.html#aae27f1312bc163c3eb9f5309b9fdf7dd" title=" " alt="" coords="601,342,759,387"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="790,350,759,357,759,352,795,350"/>
+<area shape="rect" id="Node000015" href="$embedded_2test__serial__output_2test__main_8cpp.html#ae4661fa1d0daf8ee1282ebe4e9e68a60" title=" " alt="" coords="600,411,760,473"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="866,355,749,413,747,408,860,357"/>
 <area shape="rect" id="Node000003" href="$debug_8h.html#a8556357c0a2b1e78ae7e930668795c2e" title="Same as infolnDecimals(), with the value read from PROGMEM." alt="" coords="358,5,492,33"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="607,67,552,54,483,36,483,31,553,49,613,66"/>
-<area shape="rect" id="Node000004" href="$group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee" title="Print the configuration during startup." alt="" coords="111,56,249,84"/>
-<area shape="poly" id="edge5_Node000002_Node000004" title=" " alt="" coords="604,85,250,74,249,69,607,80"/>
-<area shape="rect" id="Node000006" href="$group__Initialization.html#gaa2b3b1d496e37e5f29af6a766743dc8b" title="Print the settings used for the selected output mode." alt="" coords="297,107,552,134"/>
-<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="602,96,528,109,527,103,608,94"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="340,38,250,58,248,53,344,35"/>
-<area shape="rect" id="Node000005" href="$group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,56,63,84"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="93,72,64,72,62,68,97,68"/>
-<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="337,104,250,87,249,82,342,102"/>
-<area shape="rect" id="Node000008" href="$group__GeneralProcessing.html#gade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="374,159,475,186"/>
-<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="608,162,476,172,475,167,613,161"/>
-<area shape="rect" id="Node000009" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="155,159,204,186"/>
-<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="357,174,205,175,205,170,361,171"/>
-<area shape="rect" id="Node000011" href="$embedded_2test__serial__output_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title=" " alt="" coords="396,239,453,266"/>
-<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="583,231,454,251,454,246,589,230"/>
-<area shape="poly" id="edge14_Node000012_Node000011" title=" " alt="" coords="582,279,454,260,454,255,588,279"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="656,146,611,99,582,74,551,54,522,41,493,32,492,27,524,36,554,49,586,70,615,95,661,146"/>
+<area shape="rect" id="Node000004" href="$group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee" title="Print the configuration during startup." alt="" coords="111,159,249,186"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="648,149,605,121,579,108,552,98,481,80,424,74,368,80,298,98,268,110,241,126,198,160,194,156,238,122,266,105,296,93,367,74,424,69,482,75,553,93,581,103,608,117,653,149"/>
+<area shape="rect" id="Node000006" href="$utils_8h.html#ac12e51aa41c49833077797b32733aea9" title="Print the power calibration of CT1 (grid) as calibration.h has it." alt="" coords="352,107,497,134"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="603,158,497,138,496,132,608,157"/>
+<area shape="rect" id="Node000007" href="$utils_8h.html#a418c7b4c97af7d5e52928b7ec2067225" title="Print the power calibration of CT2 (diverted energy) as calibration.h has it, when CT2 is fitted." alt="" coords="352,159,497,186"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="602,173,498,175,497,170,607,172"/>
+<area shape="rect" id="Node000008" href="$group__Initialization.html#gaa2b3b1d496e37e5f29af6a766743dc8b" title="Print the settings used for the selected output mode." alt="" coords="297,211,552,238"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="603,189,497,213,496,207,608,187"/>
+<area shape="rect" id="Node000009" href="$utils_8h.html#a6e82cd94dcf6b2127c3805870291bda0" title="Print the voltage calibration as calibration.h has it." alt="" coords="339,263,510,290"/>
+<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="650,194,605,226,553,252,512,265,510,260,551,247,602,222,645,197"/>
+<area shape="rect" id="Node000005" href="$group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,159,63,186"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="93,174,65,175,62,170,97,171"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="338,139,298,150,248,160,245,156,296,145,342,137"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="335,174,250,175,249,170,339,171"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="337,208,296,200,247,190,246,184,298,195,342,206"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="321,260,296,252,240,221,198,189,198,184,243,217,298,247,326,259"/>
+<area shape="rect" id="Node000011" href="$group__GeneralProcessing.html#gade56d6fce22a518b8feff1a150461f94" title="Prints or sends telemetry data logs based on the selected output format." alt="" coords="374,315,475,342"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="608,312,476,326,475,321,613,310"/>
+<area shape="rect" id="Node000012" href="$group__GeneralProcessing.html#gafe461d27b9c48d5921c00d521181f12f" title="Main processor loop." alt="" coords="155,315,204,342"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="357,330,205,331,205,326,361,327"/>
+<area shape="rect" id="Node000014" href="$embedded_2test__serial__output_2test__main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title=" " alt="" coords="396,389,453,417"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="583,379,454,402,454,396,589,378"/>
+<area shape="poly" id="edge19_Node000015_Node000014" title=" " alt="" coords="582,428,454,410,454,405,588,427"/>
 </map>

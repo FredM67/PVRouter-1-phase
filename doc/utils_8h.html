@@ -386,6 +386,14 @@ Functions</h2></td></tr>
 <tr class="memitem:gaa45f069fe76674a03f3dd560dd00b1ee" id="r_gaa45f069fe76674a03f3dd560dd00b1ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee">printConfiguration</a> ()</td></tr>
 <tr class="memdesc:gaa45f069fe76674a03f3dd560dd00b1ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the configuration during startup.  <br /></td></tr>
 <tr class="separator:gaa45f069fe76674a03f3dd560dd00b1ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac12e51aa41c49833077797b32733aea9" id="r_ac12e51aa41c49833077797b32733aea9"><td class="memTemplParams" colspan="2">template&lt;bool newBoard&gt; </td></tr>
+<tr class="memitem:ac12e51aa41c49833077797b32733aea9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#ac12e51aa41c49833077797b32733aea9">printCt1Calibration</a> ()</td></tr>
+<tr class="memdesc:ac12e51aa41c49833077797b32733aea9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the power calibration of CT1 (grid) as <a class="el" href="calibration_8h.html" title="Calibration values definition.">calibration.h</a> has it.  <br /></td></tr>
+<tr class="separator:ac12e51aa41c49833077797b32733aea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a418c7b4c97af7d5e52928b7ec2067225" id="r_a418c7b4c97af7d5e52928b7ec2067225"><td class="memTemplParams" colspan="2">template&lt;bool ct2, bool newBoard&gt; </td></tr>
+<tr class="memitem:a418c7b4c97af7d5e52928b7ec2067225"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a418c7b4c97af7d5e52928b7ec2067225">printCt2Calibration</a> ()</td></tr>
+<tr class="memdesc:a418c7b4c97af7d5e52928b7ec2067225"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the power calibration of CT2 (diverted energy) as <a class="el" href="calibration_8h.html" title="Calibration values definition.">calibration.h</a> has it, when CT2 is fitted.  <br /></td></tr>
+<tr class="separator:a418c7b4c97af7d5e52928b7ec2067225"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0018bc6f3f3b53571428522d11575051" id="r_ga0018bc6f3f3b53571428522d11575051"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telemetry.html#ga0018bc6f3f3b53571428522d11575051">printJsonStep</a> (Print &amp;out, uint8_t step)</td></tr>
 <tr class="memdesc:ga0018bc6f3f3b53571428522d11575051"><td class="mdescLeft">&#160;</td><td class="mdescRight">One step of the datalog in JSON format.  <br /></td></tr>
 <tr class="separator:ga0018bc6f3f3b53571428522d11575051"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -395,6 +403,10 @@ Functions</h2></td></tr>
 <tr class="memitem:ga678079c20f2260c02b6d805a3252fdb8" id="r_ga678079c20f2260c02b6d805a3252fdb8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Telemetry.html#ga678079c20f2260c02b6d805a3252fdb8">printTextStep</a> (Print &amp;out, uint8_t step)</td></tr>
 <tr class="memdesc:ga678079c20f2260c02b6d805a3252fdb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">One step of the datalog in text format.  <br /></td></tr>
 <tr class="separator:ga678079c20f2260c02b6d805a3252fdb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e82cd94dcf6b2127c3805870291bda0" id="r_a6e82cd94dcf6b2127c3805870291bda0"><td class="memTemplParams" colspan="2">template&lt;bool newBoard&gt; </td></tr>
+<tr class="memitem:a6e82cd94dcf6b2127c3805870291bda0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a6e82cd94dcf6b2127c3805870291bda0">printVoltageCalibration</a> ()</td></tr>
+<tr class="memdesc:a6e82cd94dcf6b2127c3805870291bda0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the voltage calibration as <a class="el" href="calibration_8h.html" title="Calibration values definition.">calibration.h</a> has it.  <br /></td></tr>
+<tr class="separator:a6e82cd94dcf6b2127c3805870291bda0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gade56d6fce22a518b8feff1a150461f94" id="r_gade56d6fce22a518b8feff1a150461f94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__GeneralProcessing.html#gade56d6fce22a518b8feff1a150461f94">sendResults</a> (bool bOffPeak)</td></tr>
 <tr class="memdesc:gade56d6fce22a518b8feff1a150461f94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints or sends telemetry data logs based on the selected output format.  <br /></td></tr>
 <tr class="separator:gade56d6fce22a518b8feff1a150461f94"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -411,7 +423,7 @@ Variables</h2></td></tr>
 <div class="textblock"><p>Some utility functions. </p>
 <dl class="section author"><dt>Author</dt><dd>Frédéric Metrich (<a href="#" onclick="location.href='mai'+'lto:'+'fre'+'de'+'ric'+'.m'+'etr'+'ic'+'h@l'+'iv'+'e.f'+'r'; return false;">frede<span class="obfuscator">.nosp@m.</span>ric.<span class="obfuscator">.nosp@m.</span>metri<span class="obfuscator">.nosp@m.</span>ch@l<span class="obfuscator">.nosp@m.</span>ive.f<span class="obfuscator">.nosp@m.</span>r</a>) </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2026-11-21</dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2026-11-26</dd></dl>
 <dl class="section copyright"><dt>Copyright</dt><dd>Copyright (c) 2023-2026 SPDX-License-Identifier: GPL-3.0-or-later </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
@@ -478,6 +490,220 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="ac12e51aa41c49833077797b32733aea9" name="ac12e51aa41c49833077797b32733aea9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac12e51aa41c49833077797b32733aea9">&#9670;&#160;</a></span>printCt1Calibration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool newBoard&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void printCt1Calibration </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the power calibration of CT1 (grid) as <a class="el" href="calibration_8h.html" title="Calibration values definition.">calibration.h</a> has it. </p>
+<p>The new board: f_ctRating and f_powerCalPerAmp; the old boards: f_powerCalOldBoard. The f_powerCal the router computes from them is not printed: what can be checked is what was typed. A template, so that each build compiles only its board's branch (its strings included).</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">newBoard</td><td>whether the router runs with the new board's calibration </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00083">83</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="utils_8h_ac12e51aa41c49833077797b32733aea9_cgraph.png" border="0" usemap="#autils_8h_ac12e51aa41c49833077797b32733aea9_cgraph" alt=""/></div>
+<map name="autils_8h_ac12e51aa41c49833077797b32733aea9_cgraph" id="autils_8h_ac12e51aa41c49833077797b32733aea9_cgraph">
+<area shape="rect" title="Print the power calibration of CT1 (grid) as calibration.h has it." alt="" coords="5,57,150,85"/>
+<area shape="rect" href="debug_8h.html#aca46af6ad7e486edceb7ad7752f02d6a" title="Print an informational message, as Serial.print() does." alt="" coords="267,5,313,33"/>
+<area shape="poly" title=" " alt="" coords="136,54,254,26,250,30,138,59"/>
+<area shape="rect" href="debug_8h.html#aee87d72abd6349f18c91e48447af3d1a" title="Print a value given as an integer with a fixed number of decimals, and a line end." alt="" coords="230,57,350,85"/>
+<area shape="poly" title=" " alt="" coords="150,69,217,70,212,72,150,74"/>
+<area shape="rect" href="namespaceSerialOutput.html#a92c5012053b5fe0d463a87a06be6fe40" title="A float constant as an integer with the given number of decimals, rounded." alt="" coords="198,109,382,137"/>
+<area shape="poly" title=" " alt="" coords="138,83,218,104,213,106,137,88"/>
+<area shape="rect" href="namespaceSerialOutput.html#a7a595eab49199186c178345e2e5a3ca5" title="Write whatever is left of the current output to Serial, waiting like a plain print." alt="" coords="445,5,616,33"/>
+<area shape="poly" title=" " alt="" coords="313,17,432,18,427,20,314,22"/>
+<area shape="rect" href="namespaceSerialOutput.html#a60a79de5db3bb8e9787c5430b5eaafa5" title="Run the next step of the current output." alt="" coords="679,5,840,33"/>
+<area shape="poly" title=" " alt="" coords="617,17,666,19,661,19,617,22"/>
+<area shape="poly" title=" " alt="" coords="349,56,451,36,446,37,351,61"/>
+<area shape="rect" href="namespaceSerialOutput.html#afe70890e346c41dfd6d25fae03235ad0" title="Print a value given as an integer with a fixed number of decimals (see toDecimals())" alt="" coords="430,57,631,85"/>
+<area shape="poly" title=" " alt="" coords="350,69,417,71,411,71,350,74"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="utils_8h_ac12e51aa41c49833077797b32733aea9_icgraph.png" border="0" usemap="#autils_8h_ac12e51aa41c49833077797b32733aea9_icgraph" alt=""/></div>
+<map name="autils_8h_ac12e51aa41c49833077797b32733aea9_icgraph" id="autils_8h_ac12e51aa41c49833077797b32733aea9_icgraph">
+<area shape="rect" title="Print the power calibration of CT1 (grid) as calibration.h has it." alt="" coords="297,5,441,33"/>
+<area shape="rect" href="group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee" title="Print the configuration during startup." alt="" coords="111,5,249,33"/>
+<area shape="poly" title=" " alt="" coords="279,19,250,22,250,17,284,19"/>
+<area shape="rect" href="group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,63,33"/>
+<area shape="poly" title=" " alt="" coords="92,20,63,22,63,17,98,19"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a418c7b4c97af7d5e52928b7ec2067225" name="a418c7b4c97af7d5e52928b7ec2067225"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a418c7b4c97af7d5e52928b7ec2067225">&#9670;&#160;</a></span>printCt2Calibration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool ct2, bool newBoard&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void printCt2Calibration </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the power calibration of CT2 (diverted energy) as <a class="el" href="calibration_8h.html" title="Calibration values definition.">calibration.h</a> has it, when CT2 is fitted. </p>
+<p>The new board: f_ctRatingDiverted (f_powerCalPerAmp is CT1's, printed before); the old boards: f_powerCalDivertedOldBoard. A template, so that a build without CT2 compiles none of it.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ct2</td><td>whether CT2 is fitted (DIVERTED_CT_PRESENT) </td></tr>
+    <tr><td class="paramname">newBoard</td><td>whether the router runs with the new board's calibration </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00112">112</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="utils_8h_a418c7b4c97af7d5e52928b7ec2067225_cgraph.png" border="0" usemap="#autils_8h_a418c7b4c97af7d5e52928b7ec2067225_cgraph" alt=""/></div>
+<map name="autils_8h_a418c7b4c97af7d5e52928b7ec2067225_cgraph" id="autils_8h_a418c7b4c97af7d5e52928b7ec2067225_cgraph">
+<area shape="rect" title="Print the power calibration of CT2 (diverted energy) as calibration.h has it, when CT2 is fitted." alt="" coords="5,57,150,85"/>
+<area shape="rect" href="debug_8h.html#aca46af6ad7e486edceb7ad7752f02d6a" title="Print an informational message, as Serial.print() does." alt="" coords="267,5,313,33"/>
+<area shape="poly" title=" " alt="" coords="136,54,254,26,250,30,138,59"/>
+<area shape="rect" href="debug_8h.html#aee87d72abd6349f18c91e48447af3d1a" title="Print a value given as an integer with a fixed number of decimals, and a line end." alt="" coords="230,57,350,85"/>
+<area shape="poly" title=" " alt="" coords="150,69,217,70,212,72,150,74"/>
+<area shape="rect" href="namespaceSerialOutput.html#a92c5012053b5fe0d463a87a06be6fe40" title="A float constant as an integer with the given number of decimals, rounded." alt="" coords="198,109,382,137"/>
+<area shape="poly" title=" " alt="" coords="138,83,218,104,213,106,137,88"/>
+<area shape="rect" href="namespaceSerialOutput.html#a7a595eab49199186c178345e2e5a3ca5" title="Write whatever is left of the current output to Serial, waiting like a plain print." alt="" coords="445,5,616,33"/>
+<area shape="poly" title=" " alt="" coords="313,17,432,18,427,20,314,22"/>
+<area shape="rect" href="namespaceSerialOutput.html#a60a79de5db3bb8e9787c5430b5eaafa5" title="Run the next step of the current output." alt="" coords="679,5,840,33"/>
+<area shape="poly" title=" " alt="" coords="617,17,666,19,661,19,617,22"/>
+<area shape="poly" title=" " alt="" coords="349,56,451,36,446,37,351,61"/>
+<area shape="rect" href="namespaceSerialOutput.html#afe70890e346c41dfd6d25fae03235ad0" title="Print a value given as an integer with a fixed number of decimals (see toDecimals())" alt="" coords="430,57,631,85"/>
+<area shape="poly" title=" " alt="" coords="350,69,417,71,411,71,350,74"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="utils_8h_a418c7b4c97af7d5e52928b7ec2067225_icgraph.png" border="0" usemap="#autils_8h_a418c7b4c97af7d5e52928b7ec2067225_icgraph" alt=""/></div>
+<map name="autils_8h_a418c7b4c97af7d5e52928b7ec2067225_icgraph" id="autils_8h_a418c7b4c97af7d5e52928b7ec2067225_icgraph">
+<area shape="rect" title="Print the power calibration of CT2 (diverted energy) as calibration.h has it, when CT2 is fitted." alt="" coords="297,5,441,33"/>
+<area shape="rect" href="group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee" title="Print the configuration during startup." alt="" coords="111,5,249,33"/>
+<area shape="poly" title=" " alt="" coords="279,19,250,22,250,17,284,19"/>
+<area shape="rect" href="group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,63,33"/>
+<area shape="poly" title=" " alt="" coords="92,20,63,22,63,17,98,19"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a6e82cd94dcf6b2127c3805870291bda0" name="a6e82cd94dcf6b2127c3805870291bda0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e82cd94dcf6b2127c3805870291bda0">&#9670;&#160;</a></span>printVoltageCalibration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool newBoard&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void printVoltageCalibration </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the voltage calibration as <a class="el" href="calibration_8h.html" title="Calibration values definition.">calibration.h</a> has it. </p>
+<p>The new board: f_voltageCalNewBoard; the old boards: f_voltageCalOldBoard. A template, so that each build compiles only its board's branch (its strings included).</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">newBoard</td><td>whether the router runs with the new board's calibration </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00138">138</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="utils_8h_a6e82cd94dcf6b2127c3805870291bda0_cgraph.png" border="0" usemap="#autils_8h_a6e82cd94dcf6b2127c3805870291bda0_cgraph" alt=""/></div>
+<map name="autils_8h_a6e82cd94dcf6b2127c3805870291bda0_cgraph" id="autils_8h_a6e82cd94dcf6b2127c3805870291bda0_cgraph">
+<area shape="rect" title="Print the voltage calibration as calibration.h has it." alt="" coords="5,57,177,85"/>
+<area shape="rect" href="debug_8h.html#aca46af6ad7e486edceb7ad7752f02d6a" title="Print an informational message, as Serial.print() does." alt="" coords="294,5,340,33"/>
+<area shape="poly" title=" " alt="" coords="154,54,281,26,276,29,155,59"/>
+<area shape="rect" href="debug_8h.html#aee87d72abd6349f18c91e48447af3d1a" title="Print a value given as an integer with a fixed number of decimals, and a line end." alt="" coords="257,57,376,85"/>
+<area shape="poly" title=" " alt="" coords="176,69,244,70,239,72,177,74"/>
+<area shape="rect" href="namespaceSerialOutput.html#a92c5012053b5fe0d463a87a06be6fe40" title="A float constant as an integer with the given number of decimals, rounded." alt="" coords="225,109,409,137"/>
+<area shape="poly" title=" " alt="" coords="155,83,241,104,236,106,154,88"/>
+<area shape="rect" href="namespaceSerialOutput.html#a7a595eab49199186c178345e2e5a3ca5" title="Write whatever is left of the current output to Serial, waiting like a plain print." alt="" coords="472,5,643,33"/>
+<area shape="poly" title=" " alt="" coords="340,17,459,19,454,20,341,22"/>
+<area shape="rect" href="namespaceSerialOutput.html#a60a79de5db3bb8e9787c5430b5eaafa5" title="Run the next step of the current output." alt="" coords="706,5,867,33"/>
+<area shape="poly" title=" " alt="" coords="644,17,693,19,688,19,644,22"/>
+<area shape="poly" title=" " alt="" coords="376,56,473,37,478,36,378,61"/>
+<area shape="rect" href="namespaceSerialOutput.html#afe70890e346c41dfd6d25fae03235ad0" title="Print a value given as an integer with a fixed number of decimals (see toDecimals())" alt="" coords="457,57,658,85"/>
+<area shape="poly" title=" " alt="" coords="377,69,444,71,438,71,377,74"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="utils_8h_a6e82cd94dcf6b2127c3805870291bda0_icgraph.png" border="0" usemap="#autils_8h_a6e82cd94dcf6b2127c3805870291bda0_icgraph" alt=""/></div>
+<map name="autils_8h_a6e82cd94dcf6b2127c3805870291bda0_icgraph" id="autils_8h_a6e82cd94dcf6b2127c3805870291bda0_icgraph">
+<area shape="rect" title="Print the voltage calibration as calibration.h has it." alt="" coords="297,5,468,33"/>
+<area shape="rect" href="group__Initialization.html#gaa45f069fe76674a03f3dd560dd00b1ee" title="Print the configuration during startup." alt="" coords="111,5,249,33"/>
+<area shape="poly" title=" " alt="" coords="279,19,249,22,249,17,284,19"/>
+<area shape="rect" href="group__Initialization.html#ga4fc01d736fe50cf5b977f755b675f11d" title="Called once during startup." alt="" coords="5,5,63,33"/>
+<area shape="poly" title=" " alt="" coords="92,20,63,22,63,17,98,19"/>
+</map>
+</div>
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="ac47772a18c87b4f0e7a52366398a43d3" name="ac47772a18c87b4f0e7a52366398a43d3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac47772a18c87b4f0e7a52366398a43d3">&#9670;&#160;</a></span>datalogOffPeak</h2>
@@ -500,7 +726,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p>tariff at the datalog being printed, for the JSON and IoT formats </p>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00258">258</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00334">334</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
