@@ -87,6 +87,10 @@ shipped `config.h`:
   that hold your settings are yours.
 - **RemoteLoadReceiver** is now in this repository (`RemoteLoadReceiver/`, copied from
   PVRouter-3-phase), built in CI; the READMEs link to it.
+- **Code graph:** `graphify-out/graph.json`, a [graphify](https://docs.graphify.com/cookbooks/shared-team-graph)
+  graph of the code (functions, files, calls, includes), built locally without an LLM. The pre-commit
+  hook rebuilds it on commits that change code, and skips when graphify is not installed; a merge
+  driver merges it instead of a conflict. Setup in `scripts/README.md`.
 
 ### Changed
 

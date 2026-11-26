@@ -1,0 +1,3 @@
+# graphify: paths left out of the shared code graph (graphify-out/graph.json)
+# PlatformIO build output and downloaded libraries: not our code, never committed
+.pio/

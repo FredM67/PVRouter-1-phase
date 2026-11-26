@@ -7,3 +7,9 @@ docs/.$*.drawio.*
 
 # Scratch of the agents
 .superpowers/
+
+# graphify: only the shared code graph is versioned, the rest is rebuilt on each machine.
+# !graphify-out/ re-includes the folder for clones that ignore it globally.
+!graphify-out/
+graphify-out/*
+!graphify-out/graph.json
