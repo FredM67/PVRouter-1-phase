@@ -111,6 +111,13 @@ shipped `config.h`:
 
 ### Fixed
 
+- **Relay filter longer than 255 datalog periods:** the build refuses it. The relay filter counts
+  `RELAY_FILTER_DELAY * 60 / DATALOG_PERIOD_IN_SECONDS` datalog periods in 8 bits: 22 minutes or
+  more at 5 s built silently with a much shorter filter (25 minutes gave 44 periods, under
+  4 minutes). Both bounds (5 and 255 periods) now apply to the delay that `relays` carries, also
+  when it differs from `RELAY_FILTER_DELAY` or is the default 10 minutes; the configurator
+  refuses a filter over 255 periods too (5 minutes or more with a 1 s datalog period).
+
 - **Start-up banner:** the calibration is printed as `calibration.h` has it, under its names
   there: `f_ctRating`, `f_powerCalPerAmp` and `f_voltageCalNewBoard` on the new board,
   `f_powerCalOldBoard` and `f_voltageCalOldBoard` on the old ones, and for CT2, when present,
