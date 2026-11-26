@@ -683,6 +683,63 @@
     "fastdivision: divu10(12345) per call": 41.01,
     "fastdivision: divmod10(12345678) per call": 130.05
    }
+  },
+  {
+   "commit": "714e770039b1e040f99655a8369a0f024ec4af10",
+   "date": "2026-11-26T15:34:15+01:00",
+   "message": "chore: a shared graphify code graph, rebuilt by the pre-commit hook; a root CLAUDE.md (#45)\n\n* chore: a shared graphify code graph, rebuilt by the pre-commit hook\n\ngraphify-out/graph.json is a code-only graphify graph (local AST, no LLM),\nas in https://docs.graphify.com/cookbooks/shared-team-graph, set up as in\nPVRouter-3-phase (#264 there). The pre-commit hook (framework and plain hook)\nrebuilds and stages it on commits that change code, with PYTHONHASHSEED=0,\nand skips when graphify is not installed or with GRAPHIFY_SKIP_HOOK=1;\npre-commit.ci skips it. No other hook checks the file. .gitattributes selects\nthe graphify union merge driver, registered per clone (scripts/README.md);\nthe rest of graphify-out/ stays ignored. .graphifyignore leaves out the\nPlatformIO build output (.pio/).\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: a root CLAUDE.md, as in PVRouter-3-phase\n\nGives Claude Code its bearings in the repository, next to the firmware's own\nguide (Mk2_1phase_RFdatalog_temp/CLAUDE.md): what is where, the commands\n(firmware, compile-fail checks, grid simulator, configurator) and the rules\n(branches, commits, formatting, the ISR budget and how it is measured, pins,\nwarnings, settings, parity with the 3-phase firmware). It follows the root\nCLAUDE.md of PVRouter-3-phase, adapted to this repository: the simulator\ntargets and limits of the single-phase firmware, its boards, no analysis/.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/714e770039b1e040f99655a8369a0f024ec4af10",
+   "sizes": {
+    "basic": {
+     "flash": 9194,
+     "ram": 378
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 10716,
+     "ram": 417
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 21998,
+     "ram": 844
+    },
+    "basic, NEW, OLED": {
+     "flash": 21596,
+     "ram": 841
+    },
+    "basic, remote loads": {
+     "flash": 13736,
+     "ram": 487
+    },
+    "basic, IoT": {
+     "flash": 9194,
+     "ram": 378
+    },
+    "basic, HumanReadable": {
+     "flash": 9096,
+     "ram": 358
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
   }
  ]
 }
