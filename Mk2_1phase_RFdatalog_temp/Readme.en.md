@@ -57,6 +57,8 @@ This program is designed to be used with the Arduino IDE and/or other developmen
 - [Advanced program configuration](#advanced-program-configuration)
   - [`DIVERSION_START_THRESHOLD_WATTS` parameter](#diversion_start_threshold_watts-parameter)
   - [`REQUIRED_EXPORT_IN_WATTS` parameter](#required_export_in_watts-parameter)
+  - [`SUPPLY_FREQUENCY` parameter](#supply_frequency-parameter)
+  - [`DATALOG_PERIOD_IN_SECONDS` parameter](#datalog_period_in_seconds-parameter)
 - [Configuration with the mk2Wifi module](#configuration-with-the-mk2wifi-module)
   - [Connections between the router and the module](#connections-between-the-router-and-the-module)
   - [Choosing the D5–D9 pins](#choosing-the-d5d9-pins)
@@ -120,46 +122,46 @@ All libraries are always included in the source code. However, only the code act
 
 # Quick overview of files
 
-- **Mk2_1phase_RFdatalog_temp.ino** : This file is needed for Arduino IDE
-- **adc_chain.h** : the order of the three analog channels (V, CT1, CT2) and the ADC input of each board — *do not edit*
-- **calibration.h** : contains the calibration parameters
-- **config.h** : the user's preferences are stored here (pin assignments, features ...), and nothing else
-- **config_types.h** : what **config.h** is written with (types, `LOAD()`, `HOURS()`...) — *do not edit*
-- **config_derived.h** : what the firmware builds from **config.h** — *do not edit*
-- **config_system.h** : rarely modified system constants
-- **constants.h** : some constants — *do not edit*
-- **ct_filter.h** : the CT1 filter of the old boards, in fixed point
-- **debug.h** : Some macros for serial output and debugging
-- **display_core.h** : what the display shows, and when, without Arduino
-- **diverted_energy.h** : the diverted energy counted from CT2
-- **dualtariff.h** : dual tariff function definitions
-- **ewma_avg.hpp** : EWMA averaging calculation functions
-- **fast_control.h** : the prediction and the decision of Robin's *fasterControl*
-- **main.cpp** : main source code
-- **processing.cpp** : processing engine source code
-- **processing.h** : processing engine function prototypes
-- **Readme.en.md** : this file
-- **relay_engine.h** : decisions of the *relay diversion* (thresholds, minimum times, order), Arduino-free
-- **rotation_groups.h** : the loads that take turns in the priority rotation
-- **sample_sets.h** : the count of sample sets of a datalog period
-- **teleinfo.h**: *IoT Telemetry* feature source code
-- **types.h** : type definitions ...
-- **type_traits.h** : some STL stuff not yet available in the avr package
-- **type_traits** : contains missing STL templates
-- **utils_display.h** : the 7-segment display of the OLD_SEG board
-- **utils_dualtariff.h** : *Off-peak hours management* feature source code
-- **utils_oled.h** : the OLED display of the OLD_OLED and NEW boards
-- **utils_pins.h** : some functions for direct access to microcontroller inputs/outputs
-- **utils_relay.h** : *relay diversion* feature source code
-- **utils_rf.h** : *RF* function source code
-- **utils_temp.h** : *Temperature* feature source code
-- **utils.h** : helper functions and miscellaneous stuff
-- **validation.h** : parameter validation, this code is executed at compile time only!
-- **platformio.ini** : PlatformIO settings
-- **inject_sketch_name.py** : helper script for PlatformIO
-- **Doxyfile** : parameter for Doxygen (code documentation)
+Settings (edited by the user, or written by the [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur-monophase/)):
 
-The end-user should ONLY edit the **calibration.h** and **config.h** files.
+- **config.h** : the user's settings (board, display, loads, relays, control pins, features), and nothing else
+- **config_system.h** : rarely modified system constants
+- **config_rf.h** : the RF module settings (RFM69)
+- **calibration.h** : the calibration values
+
+Firmware (*do not edit*):
+
+- **Mk2_1phase_RFdatalog_temp.ino** : needed for the Arduino IDE
+- **main.cpp**, **main.h** : main program
+- **processing.cpp**, **processing.h** : processing engine
+- **adc_chain.h** : the three ADC channels (V, CT1, CT2) of each board and the ADMUX pipeline of the free-running ADC
+- **fast_control.h** : the prediction and the decision of Robin's *fasterControl*
+- **config_types.h** : what **config.h** is written with (types, `LOAD()`, `HOURS()`...)
+- **config_derived.h** : what the firmware builds from **config.h**
+- **validation.h** : checks of the settings, run at compile time only
+- **ct_filter.h**, **datalog_math.h**, **energy_bucket.h**, **sample_sets.h**, **mult_asm.h**, **FastDivision.cpp**, **FastDivision.h** : integer and fixed-point arithmetic (CT1 filter, datalog, energy bucket, sample sets, multiplication, division)
+- **diverted_energy.h** : the diverted energy measured on CT2
+- **display_core.h**, **utils_display.h**, **utils_oled.h** : the displays (7-segment of `OLD_SEG`, OLED)
+- **load_priorities.h**, **load_map.h**, **rotation_groups.h** : load priorities, load map and rotation groups
+- **relay_engine.h**, **utils_relay.h**, **ewma_avg.hpp** : *relay diversion* and its EWMA averages
+- **dualtariff.h**, **utils_dualtariff.h**, **override_masks.h**, **utils_override.h**, **pin_edges.h** : *off-peak hours*, scheduled boosts, forced outputs and input pins
+- **remote_loads.h**, **remote_loads_core.h**, **utils_rf.h** : *RF* and remote loads
+- **utils_temp.h**, **ds18b20.h**, **onewire_search.h**, **temp_schedule.h** : *temperature* sensors
+- **serial_output.h**, **teleinfo.h**, **debug.h** : serial output (datalog, *IoT telemetry*, messages)
+- **shared_var.h** : variables shared between the interrupt and the main loop
+- **constants.h**, **types.h**, **utils.h**, **utils_bits.h**, **utils_pins.h** : constants, types, helpers, direct access to the microcontroller pins
+- **type_traits.hpp**, **type_traits/** : STL templates missing from the AVR toolchain
+- **version.h** : written by every build
+
+Other files:
+
+- **platformio.ini** : PlatformIO settings
+- **inject_sketch_name.py** : helper script for PlatformIO (writes **version.h**)
+- **Doxyfile** : parameter for Doxygen (code documentation)
+- **docs/** : technical documentation; **test/** : tests ([README](test/README.md))
+- **Readme.en.md** : this file
+
+The end-user should ONLY edit the four settings files: **config.h**, **config_system.h**, **config_rf.h** and **calibration.h**.
 
 > [!NOTE]
 > **config.h** only holds settings: it includes `config_types.h` and nothing else. Its settings have the names, the meaning and the syntax of the 3-phase firmware's. The **config.h** of `Mk2_fasterControl_Full` does not fit: start from the shipped one. A **config.h** with `#include` lines, `NO_OF_REMOTE_LOADS` or `remoteLoads` (the former layout of the 3-phase firmware) stops the build with *This config.h has the former layout*.
@@ -168,7 +170,19 @@ The end-user should ONLY edit the **calibration.h** and **config.h** files.
 
 # Development documentation
 
-The **[docs/](docs/)** folder holds the technical documentation: [architecture](docs/architecture.md), [interrupts](docs/interrupts.md), [power calculation](docs/power-calculation.md), [calibration values](docs/calibration.md), [performance](docs/performance.md), [tests](docs/testing.md). The tests themselves are described in [test/README.md](test/README.md), and the grid simulator, which runs this firmware on a simulated single-phase installation, in [sim/README.md](../sim/README.md).
+The [code documentation](https://fredm67.github.io/PVRouter-1-phase/doc/) (Doxygen) is on the [project site](https://fredm67.github.io/PVRouter-1-phase/).
+
+The **[docs/](docs/)** folder holds the technical documentation ([index](docs/README.md)):
+- **[Software architecture](docs/architecture.md)** - design and organisation of the modules
+- **[Configuration system](docs/configuration.md)** - how the settings are written and checked
+- **[Default calibration values](docs/calibration.md)** - where they come from
+- **[Memory layout](docs/memory-layout.md)** - use of the flash and RAM
+- **[Performance](docs/performance.md)** - timing
+- **[Testing](docs/testing.md)** - the tests and how to run them
+- **[Contributing](docs/contributing.md)** - code standards
+- **[Battery systems](docs/BATTERY_CONFIGURATION_GUIDE.en.md)** [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](docs/BATTERY_CONFIGURATION_GUIDE.md) - relay thresholds with a battery
+
+The tests themselves are described in [test/README.md](test/README.md), and the grid simulator, which runs this firmware on a simulated single-phase installation, in [sim/README.md](../sim/README.md).
 
 # How the router decides
 
@@ -181,7 +195,7 @@ The router samples, about every 312 µs, the mains voltage, the current at the g
 The order of the loads follows their priorities and the [priority rotation](#priority-rotation). The relays decide on the filtered grid power ([relays](#onoff-relay-output-configuration)), and the remote loads receive their state by RF once per decision.
 
 > [!NOTE]
-> The single-file sketches `Mk2_fasterControl_twoLoads_temp_1` and `Mk2_fasterControl_threeLoads_temp_1`, at the root of the repository, still carry the two-load logic of Robin's version 4, which he archived as problematic. This firmware has the logic of his version 5.
+> The single-file sketches `Mk2_fasterControl_twoLoads_temp_1` and `Mk2_fasterControl_threeLoads_temp_1`, in `obsolete/`, still carry the two-load logic of Robin's version 4, which he archived as problematic. This firmware has the logic of his version 5.
 
 # Router calibration
 Calibration values are found in the **calibration.h** file, one set for the two old boards and one for the new board: the router uses the one of `PCB_VERSION` (**config.h**). The power factor of CT1 is the one the router regulates with; the one of CT2 only serves the diverted energy it reports; the voltage (`V`) is only displayed.
@@ -222,14 +236,7 @@ A current transformer acts as a high-pass filter. On the old boards, as in Robin
 
 # Analysis documentation and tools
 
-📊 The **[docs/](docs/)** folder also holds analysis scripts and charts (`*.py`, `*.png`), and the [battery configuration guide](docs/BATTERY_CONFIGURATION_GUIDE.en.md), for:
-
-- **🔄 EWMA/TEMA Filtering** : Cloud immunity analysis and filter optimization
-- **📈 Performance Analysis** : Visualization scripts and benchmarks
-- **⚙️ Tuning Guide** : Documentation for parameter optimization
-- **📊 Technical Charts** : Visual comparisons of filtering algorithms
-
-> **Advanced users:** These tools will help you understand and optimize PV router behavior, especially for installations with solar production variability or battery systems.
+The **[docs/](docs/)** folder also holds the [battery configuration guide](docs/BATTERY_CONFIGURATION_GUIDE.en.md) and the Python scripts and charts it uses (`*.py`, `*.png`). The scripts simulate relay thresholds with a battery, to illustrate the guide; they do not run the firmware.
 
 # Program configuration
 
@@ -240,7 +247,7 @@ The configuration of a feature generally follows two steps:
 Configuration consistency is checked during compilation. For example, if a *pin* is accidentally allocated twice, the compiler will generate an error.
 
 > [!NOTE]
-> The [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur/) writes the files of the 3-phase firmware; its single-phase mode is still to come. Until then, edit `config.h` by hand: the settings have the same names and syntax.
+> The [configurator](https://fredm67.github.io/Mk2PVRouter/configurateur-monophase/) writes these settings from a web page, and checks them as the build does.
 
 ## Motherboard
 
@@ -275,6 +282,12 @@ To configure the serial output type, modify the following constant in the **conf
 inline constexpr SerialOutputType SERIAL_OUTPUT_TYPE = SerialOutputType::HumanReadable;
 ```
 Replace `HumanReadable` with `IoT` or `JSON` according to your needs.
+
+`ENABLE_DEBUG`, also in **config.h**, adds debug messages at startup (the free RAM):
+```cpp
+inline constexpr bool ENABLE_DEBUG{ true };
+```
+Whatever its value, the startup configuration is printed in every output type (with `IoT`, at 9600 baud 8N1, before the telemetry switches to 7E1); status messages while running are printed in `HumanReadable` output only.
 
 Every datalog period (5 s by default, `DATALOG_PERIOD_IN_SECONDS` in **config_system.h**, up to 30 s; with relays, a divisor of 60), the router prints:
 - **HumanReadable**: the bucket level, `P:` the grid power (and the relays' average), `V:` the voltage, `, diverted <W> W, <Wh> Wh` with CT2, each temperature, and diagnostics;
@@ -379,16 +392,16 @@ In all cases, minimum operating and shutdown durations are always respected.
 
 ### Operating principle
 Surplus and import thresholds are calculated using an exponentially weighted moving average (EWMA), in our specific case, it's a modification of a triple exponentially weighted moving average (TEMA).
-By default, this average is calculated over a window of approximately **10 min**. You can adjust this duration to suit your needs.
-It's possible to lengthen it but also to shorten it.
+The window of this average, in minutes, is the `RELAY_FILTER_DELAY` parameter of **config.h**, given to the relays with `MINUTES()`. The shipped **config.h** uses **2 min**:
+```cpp
+inline constexpr uint8_t RELAY_FILTER_DELAY{ 2 };
+inline constexpr RelayEngine relays{ MINUTES(RELAY_FILTER_DELAY), { { 3, 1000, 200, 1, 1 } } };
+```
+Without `MINUTES()`, as in the examples above, the window is **10 min**.
+It's possible to lengthen it but also to shorten it: for a 15 min window, set `RELAY_FILTER_DELAY{ 15 }`.
 For Arduino performance reasons, the chosen duration will be rounded to a close duration that allows calculations without impacting router performance.
 
-The time window duration is controlled by the `RELAY_FILTER_DELAY` parameter in the configuration file.
-
-If the user prefers a 15 min window, simply write:
-```cpp
-inline constexpr RelayEngine relays{ MINUTES(15), { { 3, 1000, 200, 1, 1 } } };
-```
+The window must span from 5 to 255 datalog periods (`minutes * 60 / DATALOG_PERIOD_IN_SECONDS`): with the default period of 5 s, from 1 to 21 min. The build refuses a window outside these bounds, and, with relays, a [`DATALOG_PERIOD_IN_SECONDS`](#datalog_period_in_seconds-parameter) that does not divide 60.
 ___
 > [!NOTE]
 > The `MINUTES()` macro automatically converts the value to a template parameter. No special suffix is needed! The same macro (and `HOURS()`) writes the times of the [scheduled boosts](#scheduled-boost-configuration-scheduledboosts).
@@ -501,7 +514,7 @@ Up to **three remote units** can be driven, each one a separate Arduino at its o
 - Arduino UNO or compatible
 - RFM69 module (same model as transmitter)
 - TRIAC or SSR to control loads
-- Optional status LEDs (D5=green watchdog, D7=red RF loss)
+- Optional status LEDs (D5 green: the firmware runs, D7 red: RF link lost)
 
 ### Software configuration
 
@@ -511,8 +524,6 @@ The RF module can be used for two independent features:
 
 1. **RF Telemetry** (`RF_LOGGING_PRESENT`): Sends power/voltage data to a gateway
 2. **Remote Loads** (`REMOTE_LOADS_PRESENT`): Load control via RF
-
-To enable the RF module with remote load control, configure in **config.h**:
 
 RF telemetry is enabled in **config.h**:
 
@@ -569,29 +580,35 @@ To modify these parameters, edit **config_rf.h**:
 inline constexpr uint8_t ROUTER_NODE_ID{ 10 };            // Router (this device) ID
 inline constexpr uint8_t GATEWAY_ID{ 1 };                 // Gateway ID (telemetry)
 inline constexpr uint8_t REMOTE_NODE_ID[]{ 15, 16, 17 };  // One ID per remote unit, unit 1 first
-inline constexpr uint8_t NETWORK_ID{ 210 };               // Network ID (1-255)
+inline constexpr uint8_t NETWORK_ID{ 210 };               // Network ID (1-250)
 ```
 
-`REMOTE_NODE_ID[0]` is the address of unit 1, `REMOTE_NODE_ID[1]` that of unit 2, and so on. The IDs must lie between 1 and 30, be distinct from each other and from `ROUTER_NODE_ID`; the compiler checks all of this.
+`REMOTE_NODE_ID[0]` is the address of unit 1, `REMOTE_NODE_ID[1]` that of unit 2, and so on. The IDs must lie between 1 and 30, be distinct from each other and from `ROUTER_NODE_ID`; the compiler checks all of this, and that `NETWORK_ID` lies between 1 and 250.
+
+Set the band and the module type to your hardware, in **config_rf.h** too: `FREQUENCY` (`RF69_433MHZ`, `RF69_868MHZ` or `RF69_915MHZ`) and `IS_RFM69HW` (`true` for an RFM69HW/HCW, `false` for an RFM69W/CW).
 
 ### Remote receiver configuration
 
 The **RemoteLoadReceiver** sketch is in the `RemoteLoadReceiver/` folder of this repository ([RemoteLoadReceiver](../RemoteLoadReceiver/)): the single-phase router sends the same frames. It needs no modification to support several units: build and upload it once per unit, changing only `REMOTE_NODE_ID` and the load list.
 
-**Minimum configuration (in receiver's config_rf.h):**
+**Minimum configuration**, in the receiver's **config_rf.h** (with the same `FREQUENCY` and `IS_RFM69HW` as the module):
 
 ```cpp
 // RF Configuration - must match router
 inline constexpr uint8_t ROUTER_NODE_ID{ 10 };  // Router ID
 inline constexpr uint8_t REMOTE_NODE_ID{ 15 };  // This unit's ID: the router's REMOTE_NODE_ID[unit - 1]
 inline constexpr uint8_t NETWORK_ID{ 210 };     // Network ID
+```
 
+and in its **config.h**:
+
+```cpp
 // Load configuration - one entry per bit of the payload, bit 0 first
 inline constexpr uint8_t NO_OF_LOADS{ 2 };                    // Number of loads on this receiver
 inline constexpr uint8_t loadPins[NO_OF_LOADS]{ 4, 3 };       // TRIAC/SSR output pins
 
 // Status LEDs (optional)
-inline constexpr uint8_t GREEN_LED_PIN{ 5 };        // Green LED: 1 Hz watchdog
+inline constexpr uint8_t GREEN_LED_PIN{ 5 };        // Green LED: blinks while the firmware runs
 inline constexpr uint8_t RED_LED_PIN{ 7 };          // Red LED: RF link lost (fast blink)
 inline constexpr bool STATUS_LEDS_PRESENT{ true };  // Enable LEDs
 ```
@@ -605,24 +622,16 @@ The receiver automatically turns OFF **all loads** if no message is received for
 Once configured and uploaded, the router and its units communicate automatically:
 - The router sends a unit's state as soon as it changes, and otherwise refreshes it every 5 mains cycles (~100 ms at 50 Hz) so a receiver that missed a packet, or was powered up late, catches up
 - Each unit is addressed separately: a change affecting only unit 2 generates no traffic towards unit 1
-- Receiver displays received commands on serial port
-- Green LED blinks at 1 Hz (system alive)
+- Green LED blinks slowly, 1 s on and 1 s off (the firmware runs)
 - Red LED blinks rapidly if RF link is lost
 
 **Diagnostics:**
 
-On the receiver's serial monitor, you should see:
-```
-Received: 0b01 (RSSI: -45) - Loads: 0:ON 1:OFF
-```
-
-An RSSI between -30 and -70 indicates good signal quality. Beyond -80, the link becomes unstable.
+On the receiver's serial monitor (9600 baud), `RF link restored` shows that the router's frames arrive, and `RF link LOST - turning all loads OFF` that they stopped. See the [receiver's README](../RemoteLoadReceiver/README.md) for the wiring and the troubleshooting.
 
 ## Watchdog configuration
-A watchdog is an electronic circuit or software used in digital electronics to ensure that an automaton or computer does not remain stuck at a particular stage of the processing it performs.
-
-This is achieved using an LED that blinks at a frequency of 1 Hz, i.e., every second.
-Thus, the user knows whether their router is powered on, and if this LED stops blinking, it means the Arduino is stuck (a case never encountered yet!).
+The watchdog is an LED that the main loop switches ON or OFF every second.
+Thus, the user knows whether their router is powered on, and if this LED stops blinking, it means the Arduino is stuck.
 A simple press of the *Reset* button will restart the system without unplugging anything.
 
 You need to activate the feature like this:
@@ -704,7 +713,7 @@ inline constexpr bool DUAL_TARIFF{ true };
 inline constexpr uint8_t dualTariffPin{ 3 };
 ```
 
-**Step 3:** Set the off-peak period duration in hours (currently, only one period per day is supported):
+**Step 3:** Set the off-peak period duration in hours, from 1 to 12 (currently, only one period per day is supported):
 ```cpp
 inline constexpr uint8_t ul_OFF_PEAK_DURATION{ 8 };
 ```
@@ -744,11 +753,11 @@ The targets are written as for the override pins: `LOAD(n)`, `REMOTE_LOAD(n)`, `
 > [!NOTE]
 > `RELAY(n)` only works with relay diversion on (`RELAY_DIVERSION`) and for a relay that exists. Otherwise the build fails: the same goes for the targets of the override pins.
 
-Three rules to remember:
+Four rules to remember:
 - **What is not listed is never boosted.** An empty list, `inline constexpr ScheduledBoosts scheduledBoosts{};`, means no boost at all.
 - **Every boost stops when the meter switches back to peak**, whatever its window.
 - **The whole window lies within the off-peak period** (`ul_OFF_PEAK_DURATION`): a window with `FOR` ends at the latest at the end of the period, or the build fails. `LAST` and a window without `FOR` run until the meter switches back to peak.
-- The temperature condition (`iTemperatureThreshold`) applies to all boosts: above it, nothing is boosted. It needs temperature sensing on the router (`TEMP_SENSOR_PRESENT`); `BOOST_TEMP_SENSOR` chooses the sensor, by its index in `temperatureSensing` (0: the first). The threshold is meant to be below the water heater's own thermostat, which stays the safety limit: for example, the thermostat at 80 °C so the heater takes as much surplus as possible, and the threshold at 60 °C so the off-peak boost leaves room for the next day's surplus. If the sensor cannot be read (disconnected, failed), the boosts run, up to the thermostat.
+- The temperature condition (`iTemperatureThreshold`, from 1 to 100 °C) applies to all boosts: above it, nothing is boosted. It needs temperature sensing on the router (`TEMP_SENSOR_PRESENT`); `BOOST_TEMP_SENSOR` chooses the sensor, by its index in `temperatureSensing` (0: the first). The threshold is meant to be below the water heater's own thermostat, which stays the safety limit: for example, the thermostat at 80 °C so the heater takes as much surplus as possible, and the threshold at 60 °C so the off-peak boost leaves room for the next day's surplus. If the sensor cannot be read (disconnected, failed), the boosts run, up to the thermostat.
 
 A load may be in several boosts: their windows add up. A window includes its start and excludes its end.
 
@@ -1053,6 +1062,14 @@ A negative value will force the router to consume this power from the grid. This
 > Unlike the first parameter, this one represents a permanent offset that is continuously subtracted from available surplus.
 > If set to 20 W for example, the system will **always** reserve 20 W for export, regardless of other conditions.
 
+## `SUPPLY_FREQUENCY` parameter
+The frequency of the grid, in Hz: 50 by default, or 60. The build refuses any other value.
+
+## `DATALOG_PERIOD_IN_SECONDS` parameter
+The period of the datalog, in seconds: 5 by default, 30 at most. The build also refuses:
+- with relay diversion, a period that does not divide 60, or that puts the [relay filter](#operating-principle) outside 5 to 255 periods;
+- with temperature sensing, a period too short for the sensors: the conversion (750 ms) and the reads of all the sensors (3 mains cycles each) must end within one period. With a 1 s period, that is 3 sensors at 50 Hz, 4 at 60 Hz. Lengthen the period, or use fewer sensors.
+
 # Configuration with the mk2Wifi module
 
 The **mk2Wifi** module connects an **ESP32-C6** (WiFi 6, Bluetooth LE, Zigbee, Thread) to the Mk2PVRouter, for monitoring and remote control from Home Assistant via ESPHome. It plugs onto the `UART_EXT` and `TRIG_EXT` connectors of the universal motherboard (`PcbVersion::NEW`) and replaces the former ESP32 extension board.
@@ -1154,7 +1171,7 @@ The [gist](https://gist.github.com/FredM67/986e1cb0fc020fa6324ccc151006af99) des
 - Check serial output for error messages.
 
 # Contributing
-Contributions are welcome! Please submit issues, feature requests, and pull requests via GitHub.
+Contributions are welcome: see [CONTRIBUTING.md](../CONTRIBUTING.md) for the workflow (branches, commits, pull requests to `dev`, hooks).
 
 # License
 
