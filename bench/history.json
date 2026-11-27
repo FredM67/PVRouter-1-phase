@@ -968,6 +968,63 @@
     "fastdivision: divu10(12345) per call": 41.01,
     "fastdivision: divmod10(12345678) per call": 130.05
    }
+  },
+  {
+   "commit": "3f9f884e5d9e719f24888093c5cf82411d21886d",
+   "date": "2026-11-27T11:45:37+01:00",
+   "message": "chore: no blank issue, the templates only (#52)\n\nblank_issues_enabled: false in .github/ISSUE_TEMPLATE/config.yml: the\nissue chooser no longer offers a blank issue.\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/3f9f884e5d9e719f24888093c5cf82411d21886d",
+   "sizes": {
+    "basic": {
+     "flash": 9194,
+     "ram": 378
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 10716,
+     "ram": 417
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 21998,
+     "ram": 844
+    },
+    "basic, NEW, OLED": {
+     "flash": 21596,
+     "ram": 841
+    },
+    "basic, remote loads": {
+     "flash": 13736,
+     "ram": 487
+    },
+    "basic, IoT": {
+     "flash": 9194,
+     "ram": 378
+    },
+    "basic, HumanReadable": {
+     "flash": 9096,
+     "ram": 358
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
   }
  ]
 }
