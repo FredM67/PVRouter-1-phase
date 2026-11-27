@@ -1,9 +1,16 @@
 # Where the default calibration values come from
 
 The new-board values of `calibration.h` suit the universal board (rev. 6.0 and later, the
-3phaseDiverter board, used here in single-phase mode) with 333 mV voltage-output CTs. They are calculated from the design of the board, then
-corrected by the calibration of a first board; this page shows how, out of curiosity. You don't need it to calibrate: compare with a reference meter, and
-new value = old value × reference reading / router reading.
+3phaseDiverter board, used here in single-phase mode) with 333 mV voltage-output CTs. They are
+calculated from the design of the board, then corrected by the calibration of a first board; this
+page shows how, out of curiosity. You don't need it to calibrate: compare with a reference meter,
+and new value = old value × reference reading / router reading.
+
+The procedure is in [Router calibration](../Readme.en.md#router-calibration). In short: set
+`CALIBRATION_MODE` to `true` in `config.h`, and the router measures and logs as usual but never
+switches any load (TRIACs, relays, remote loads, overrides), so its loads can stay connected. The
+configurator (`configurator/`) does the calculation in its calibration mode and can write
+`calibration.h` again with the new values.
 
 ## What the two factors mean
 
