@@ -911,6 +911,63 @@
     "fastdivision: divu10(12345) per call": 41.01,
     "fastdivision: divmod10(12345678) per call": 130.05
    }
+  },
+  {
+   "commit": "ae5fa460681e6c6658a661206f00998a9eafeaa0",
+   "date": "2026-11-27T06:24:24+01:00",
+   "message": "docs: READMEs, CONTRIBUTING.md and templates checked against the code (#49)\n\n* docs: CONTRIBUTING.md for this project, not the GitHub docs template\n\nThe page was GitHub's own docs contributing guide (docs.github.com, Git LFS,\nlinks to /contributing/*.md files that do not exist here). It now gives the\nworkflow of this repository: main and dev protected by rulesets and by the\nno-commit-to-branch hook, topic branches from dev, conventional commits,\npull requests to dev, the hooks of .pre-commit-config.yaml and the plain-hook\nalternative of scripts/, and the parity with the 3-phase firmware. Same shape\nas the 3-phase page (FredM67/PVRouter-3-phase#269).\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: issue and pull request templates with real names and links\n\n- bug_report.md and feature_request.md held issue-form YAML without the\n  front matter a Markdown template needs: GitHub could not offer them.\n  They become bug_report.yml and feature_request.yml. The bug form now asks\n  for what this firmware has: PCB_VERSION (OLD_SEG, OLD_OLED, NEW), the\n  PlatformIO environment (basic, basic_debug, uno) or the Arduino IDE, the\n  branch and commit of the startup banner, the display, CT2 and serial\n  output, the RFM69 module and remote units, the serial output and config.h.\n  The feature form uses the existing \"enhancement\" label (\"feature request\"\n  does not exist in this repository).\n- config.yml: the REPO_NAME/USERNAME placeholders become the user\n  documentation, the project site and the discussions (enabled, all HTTP 200).\n- pull_request_template.md: the README link becomes the contributing guide\n  on dev; checklist items for dev and conventional titles, a warning-free\n  build and the tests, and the 3-phase parity rule.\n- custom.md: the empty GitHub default, deleted.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: firmware Readme, real file list and settings as the code defines them\n\nChecked against config.h, config_system.h, config_rf.h, validation.h and the\nreceiver's sources, English and French alike:\n\n- file list: grouped into the four settings files, the firmware and the\n  other files; every header listed, type_traits.hpp under its real name;\n  the user edits the four settings files, not two;\n- development documentation: the Doxygen pages that doxygen-gh-pages.yml\n  publishes (PVRouter-1-phase/doc/), and the docs list without interrupts,\n  power-calculation and debugging, which leave docs/; the French\n  \"Documentation technique\" subsection merged into it;\n- analysis section: what docs/ really holds (the battery guide and its\n  scripts), without the EWMA/TEMA and benchmark claims;\n- the configurator note said its single-phase mode was still to come;\n- ENABLE_DEBUG (free RAM at startup, config.h comment and debug.h);\n- relay filter: RELAY_FILTER_DELAY{ 2 } with MINUTES(), 10 min without,\n  the 5 to 255 datalog periods that validation.h checks on filterDelay();\n- NETWORK_ID 1-250, FREQUENCY and IS_RFM69HW; a doubled lead-in removed;\n- receiver: loads and LEDs are in its config.h, not config_rf.h; the\n  green LED toggles every second; the \"Received: ... RSSI\" line it never\n  prints is gone, replaced by the link messages of receiver.cpp;\n- watchdog LED: toggled every second by the main loop, nothing more;\n- ul_OFF_PEAK_DURATION 1-12, iTemperatureThreshold 1-100 °C, four rules;\n- new SUPPLY_FREQUENCY and DATALOG_PERIOD_IN_SECONDS sections (30 s at\n  most, divisor of 60 and filter bounds with relays, the sensor round of\n  temp_schedule.h: 3 sensors at 1 s and 50 Hz, 4 at 60 Hz);\n- the older sketches are in obsolete/, not at the root;\n- Contributing points to CONTRIBUTING.md.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: root Readme, what the configurator writes, the docs that exist\n\n- Getting started: the configurator writes config.h, config_system.h,\n  config_rf.h and the remote units' files, and in calibration mode a copy\n  of the user's calibration.h with the corrected values (generate.js);\n- the technical documentation is listed without interrupts and power\n  calculation, which leave docs/, and with what stays;\n- \"Analysis tools\" (EWMA filtering, cloudy climates) described tools this\n  repository does not have: the line now points to the battery guide and\n  its scripts.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: configurator README, the calibration.h it writes, the dev preview\n\nIn calibration mode the configurator computes the corrected values and\nwrites them into a copy of the user's calibration.h (generate.js,\ncalibrationH()); the README listed only the config files. It also names\nthe preview of dev that the pages job publishes on the project site\n(scripts/ci/pages_update.py).\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: receiver README, antenna length and the router side of several units\n\n- antenna: \"10cm wire for 433MHz\" was neither a quarter wave nor the band\n  shipped (868 MHz): the lambda/4 lengths for 433, 868 and 915 MHz;\n- several units: what the router needs, REMOTE_NODE_ID[] unit 1 first,\n  the ID rules that validation.h checks, Load::remote(unit) 1 to 3, 8\n  remote loads in all, and which load each loadPins[] entry drives;\n- the message receiver.cpp prints when the RFM69 does not answer, and the\n  watchdog reset that follows.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* chore: the install scripts name the graphify step of the plain hook\n\nscripts/git-hooks/pre-commit also rebuilds the graphify code graph\n(scripts/hooks/graphify-update.sh); install-hooks.sh and .bat only\nmentioned clang-format and the @date / @copyright update. As in\nFredM67/PVRouter-3-phase#269.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: sim README, the receiver sources are in this repository\n\nThe simulator README still sent users to PVRouter-3-phase for the\nRemoteLoadReceiver sources and asked for RX_SRC; the receiver is now in\nRemoteLoadReceiver/ and sim/Makefile defaults RX_SRC to it.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/ae5fa460681e6c6658a661206f00998a9eafeaa0",
+   "sizes": {
+    "basic": {
+     "flash": 9194,
+     "ram": 378
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 10716,
+     "ram": 417
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 21998,
+     "ram": 844
+    },
+    "basic, NEW, OLED": {
+     "flash": 21596,
+     "ram": 841
+    },
+    "basic, remote loads": {
+     "flash": 13736,
+     "ram": 487
+    },
+    "basic, IoT": {
+     "flash": 9194,
+     "ram": 378
+    },
+    "basic, HumanReadable": {
+     "flash": 9096,
+     "ram": 358
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
   }
  ]
 }
