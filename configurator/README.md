@@ -2,8 +2,10 @@
 
 A static web page that writes the firmware configuration of the **single-phase** router
 (`Mk2_1phase_RFdatalog_temp`): `config.h`, `config_system.h` and `config_rf.h` for the router, and `config.h` and
-`config_rf.h` for each remote unit (`RemoteLoadReceiver`). It does not write the ESPHome YAML for the mk2Wifi
-module yet: that is the next step (`yaml.js` and its tests are in the repository, not used).
+`config_rf.h` for each remote unit (`RemoteLoadReceiver`). In calibration mode, it computes the corrected
+calibration values from the readings and writes them into a copy of the user's `calibration.h`, the rest of the
+file untouched. It does not write the ESPHome YAML for the mk2Wifi module yet: that is the next step (`yaml.js`
+and its tests are in the repository, not used).
 
 It is kept in sync with `Mk2_1phase_RFdatalog_temp` by a byte-for-byte test (see below). It started as a copy
 of the configurator of PVRouter-3-phase and was adapted to this firmware; each configurator is tested against its
@@ -14,7 +16,9 @@ The Mk2PVRouter documentation site publishes it at
 <https://fredm67.github.io/Mk2PVRouter/configurateur-monophase/>. A link on the page switches to the
 3-phase configurator (<https://fredm67.github.io/Mk2PVRouter/configurateur/>), and the other way round; each
 will refuse the saves of the other router (a save carries `router`: `1` here, `3` there); the 3-phase page
-does not yet, a coming 3-phase change adds it.
+does not yet, a coming 3-phase change adds it. The configurator as on `dev` is published as a preview on the
+[project site](https://fredm67.github.io/PVRouter-1-phase/configurator/), by the pages job of CI
+(`scripts/ci/pages_update.py`).
 
 No build step, no dependency: plain scripts that also load in Node for the tests.
 

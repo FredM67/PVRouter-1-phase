@@ -142,7 +142,7 @@ sed -n '/^diff --git/,$p' sim/configs/remote_loads.patch | patch -p1   # or git 
 (cd Mk2_1phase_RFdatalog_temp && PLATFORMIO_BUILD_DIR=.pio/build-rf pio run -e basic)
 restore
 make -C sim check-rf                                   # with ideal receivers
-make -C sim check-rf RX_NODES="15 16" RX_SRC=<path>/RemoteLoadReceiver   # with the receiver firmware
+make -C sim check-rf RX_NODES="15 16"                  # with the receiver firmware
 ```
 
 The radio model implements what the LowPowerLab library uses in packet mode:
@@ -156,7 +156,7 @@ A frame that has been sent reaches every other radio. A radio that is listening 
 
 Each remote unit is either:
 - **an ideal receiver**, when no firmware is given for its node (the default): its loads take their bit from each frame once it has been sent, and switch off when no frame has come for `rf_timeout` seconds (500 ms, like the receiver firmware);
-- **the `RemoteLoadReceiver` firmware** (`grid_sim -r <node>=<receiver.elf>`), in its own simulated AVR, running in step with the router on the same clock. Its load pins (`receiver_pins`) drive its remote loads, and its serial output is shown, prefixed with `R<node>|`. Its sources are not in this repository: they come with the 3-phase router (`PVRouter-3-phase/RemoteLoadReceiver`), whose receivers the single-phase router drives too. `build_receivers.sh` builds it once per node ID, since `REMOTE_NODE_ID` is a constant of its `config_rf.h`; `make check-rf RX_NODES=...` does this for the nodes given, from the sources in `RX_SRC`.
+- **the `RemoteLoadReceiver` firmware** (`grid_sim -r <node>=<receiver.elf>`), in its own simulated AVR, running in step with the router on the same clock. Its load pins (`receiver_pins`) drive its remote loads, and its serial output is shown, prefixed with `R<node>|`. Its sources are in `RemoteLoadReceiver/`, at the root of this repository. `build_receivers.sh` builds it once per node ID, since `REMOTE_NODE_ID` is a constant of its `config_rf.h`; `make check-rf RX_NODES=...` does this for the nodes given, from the sources in `RX_SRC` (`../RemoteLoadReceiver` by default).
 
 Frames get lost in `rf_drop` windows, and at random with `rf_loss`, from a fixed seed, so the same frames are lost on every run of the same firmware. Which frames the sequence falls on still depends on the firmware's timing; a limit on the losses in a row keeps the longest gap independent of it.
 

@@ -70,7 +70,7 @@ Ce que le routeur fait pour vous :
 ## Pour commencer
 
 1. **Matériel et câblage** : la [documentation utilisateur](https://fredm67.github.io/Mk2PVRouter/), la [notice d’installation](docs/HowToInstall.pdf), et les schémas de câblage dans [docs](docs/).
-2. **Configuration** : les réglages sont dans `config.h`, `config_system.h` et `config_rf.h`, l’étalonnage dans `calibration.h`. Le [configurateur](configurator/) écrit les réglages depuis une page web : ouvrez `configurator/index.html` dans un navigateur.
+2. **Configuration** : les réglages sont dans `config.h`, `config_system.h` et `config_rf.h`, l’étalonnage dans `calibration.h`. Le [configurateur](configurator/) écrit `config.h`, `config_system.h`, `config_rf.h` et les fichiers des unités distantes depuis une page web, et en mode étalonnage une copie de votre `calibration.h` avec les valeurs corrigées : ouvrez `configurator/index.html` dans un navigateur.
 3. **Compilation et téléversement** : avec [Visual Studio Code et PlatformIO](Mk2_1phase_RFdatalog_temp/Readme.md#utilisation-avec-visual-studio-code-recommandé) (recommandé) ou l’[Arduino IDE](Mk2_1phase_RFdatalog_temp/Readme.md#utilisation-avec-arduino-ide).
 4. **Étalonnage** : voir l’[étalonnage du routeur](Mk2_1phase_RFdatalog_temp/Readme.md#étalonnage-du-routeur).
 
@@ -90,10 +90,10 @@ Ce que le routeur fait pour vous :
 
 - [Documentation du code](https://fredm67.github.io/PVRouter-1-phase/doc/) (Doxygen, en anglais) et [historique de la taille et de la vitesse du firmware](https://fredm67.github.io/PVRouter-1-phase/bench/), sur le [site du projet](https://fredm67.github.io/PVRouter-1-phase/).
 - [Journal des modifications](CHANGELOG.md) (en anglais) des changements sur `dev`, pas encore sur `main`.
-- [Documentation technique](Mk2_1phase_RFdatalog_temp/docs/README.md) (en anglais) : architecture, interruptions, calcul de la puissance, valeurs d’étalonnage, performances.
+- [Documentation technique](Mk2_1phase_RFdatalog_temp/docs/README.md) (en anglais) : architecture, système de configuration, valeurs d’étalonnage, organisation de la mémoire, performances, tests.
 - [Tests](Mk2_1phase_RFdatalog_temp/test/README.md) (en anglais) : tests unitaires natifs, tests embarqués et mesures de performance dans simavr.
 - [Simulateur de réseau](sim/README.md) (en anglais) : régulation, timing de l’ISR, instants de commutation, radio et relais, vérifiés en CI.
-- [Outils d’analyse](Mk2_1phase_RFdatalog_temp/Readme.md#documentation-danalyse-et-outils) : filtrage des sorties relais, réglage pour les climats nuageux et les systèmes avec batterie.
+- [Systèmes avec batterie](Mk2_1phase_RFdatalog_temp/docs/BATTERY_CONFIGURATION_GUIDE.md) : seuils des relais avec une batterie domestique, et les scripts qui en tracent les graphiques.
 
 ## Installations en zéro injection (Enphase)
 

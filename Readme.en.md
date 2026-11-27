@@ -70,7 +70,7 @@ What the router does for you:
 ## Getting started
 
 1. **Hardware and wiring**: the [user documentation](https://fredm67.github.io/Mk2PVRouter/), the [installation guide](docs/HowToInstall.pdf), and the wiring diagrams in [docs](docs/).
-2. **Configuration**: the settings are in `config.h`, `config_system.h` and `config_rf.h`, the calibration in `calibration.h`. The [configurator](configurator/) writes the settings from a web page: open `configurator/index.html` in a browser.
+2. **Configuration**: the settings are in `config.h`, `config_system.h` and `config_rf.h`, the calibration in `calibration.h`. The [configurator](configurator/) writes `config.h`, `config_system.h`, `config_rf.h` and the remote units' files from a web page, and in calibration mode a copy of your `calibration.h` with the corrected values: open `configurator/index.html` in a browser.
 3. **Build and upload**: with [Visual Studio Code and PlatformIO](Mk2_1phase_RFdatalog_temp/Readme.en.md#use-with-visual-studio-code-recommended) (recommended) or the [Arduino IDE](Mk2_1phase_RFdatalog_temp/Readme.en.md#use-with-arduino-ide).
 4. **Calibration**: see [router calibration](Mk2_1phase_RFdatalog_temp/Readme.en.md#router-calibration).
 
@@ -90,10 +90,10 @@ What the router does for you:
 
 - [Code documentation](https://fredm67.github.io/PVRouter-1-phase/doc/) (Doxygen) and [firmware size and speed history](https://fredm67.github.io/PVRouter-1-phase/bench/), on the [project site](https://fredm67.github.io/PVRouter-1-phase/).
 - [Changelog](CHANGELOG.md) of the changes on `dev`, not yet on `main`.
-- [Technical documentation](Mk2_1phase_RFdatalog_temp/docs/README.md): architecture, interrupts, power calculation, calibration values, performance.
+- [Technical documentation](Mk2_1phase_RFdatalog_temp/docs/README.md): architecture, configuration system, calibration values, memory layout, performance, testing.
 - [Tests](Mk2_1phase_RFdatalog_temp/test/README.md): native unit tests, and embedded tests and benchmarks in simavr.
 - [Grid simulator](sim/README.md): regulation, ISR timing, switching instants, radio and relays, checked in CI.
-- [Analysis tools](Mk2_1phase_RFdatalog_temp/Readme.en.md#analysis-documentation-and-tools): filtering of the relay outputs, tuning for cloudy climates and battery systems.
+- [Battery systems](Mk2_1phase_RFdatalog_temp/docs/BATTERY_CONFIGURATION_GUIDE.en.md): relay thresholds with a home battery, and the scripts that draw its charts.
 
 ## Zero-export installations (Enphase)
 
