@@ -854,6 +854,63 @@
     "fastdivision: divu10(12345) per call": 41.01,
     "fastdivision: divmod10(12345678) per call": 130.05
    }
+  },
+  {
+   "commit": "9221bb64cb7ef26fbd0acaa0066a63e12ab32184",
+   "date": "2026-11-27T06:23:08+01:00",
+   "message": "docs: firmware docs checked against the code (#48)\n\n* docs: battery guides, relays as config.h writes them, and the limits of battery mode\n\nThe guides came from the 3-phase firmware before its review: relays written as\nrelayOutput(pin, ...), an internal class nobody writes in config.h, and a\nsurplus threshold at the load's power, at which the relay turns itself OFF once\nits minimum ON time is over (relay_engine.h, proceed_relay).\n\nThey now read as the 3-phase ones (#268 and #271 there), checked against this\nfirmware:\n- relays as RelayEngine relays{ MINUTES(RELAY_FILTER_DELAY), { ... } } with\n  RELAY_DIVERSION; what the engine does (TEMA, 60 s settle, one relay at a\n  time, forced relays never turned OFF); the rule surplus threshold >= load\n  power + |import threshold|;\n- a negative import threshold turns the relay OFF because the battery holds\n  the grid near 0 W, above the threshold: a charging battery hides a surplus;\n- troubleshooting: a threshold closer to 0 turns the relay OFF later;\n- Limits: with TRIAC loads, battery mode also turns the relay OFF while they\n  hold the grid near REQUIRED_EXPORT_IN_WATTS; an override pin on RELAY(n), from\n  a charger's dry contact or Home Assistant via mk2Wifi, can force it;\n- this repository has no Cloud_Pattern_Tuning_Guide.md: the 3-phase one is\n  linked by its full URL (dev, the main copy predates its rewrite).\n\nThe scripts turn the relay ON at load + |threshold|, say they illustrate the\nrule and not the firmware, have their corrupted docstrings repaired and a\nseeded noise; the PNGs are regenerated from them.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* chore: remove two PNGs that no page shows\n\ncloud_pattern_analysis.png and relay_switching_summary.png came with the docs\nof the 3-phase firmware, where a script that is not in this repository drew\nthem; no page links to them, and the legend of relay_switching_summary.png names\nRELAY_FILTER_DELAY_MINUTES,\nwhich does not exist.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: delete interrupts, debugging and power-calculation; architecture from the code\n\nThe three pages came from the 3-phase firmware with one-phase edits on top and\ndescribe code that does not exist here either: TIMER1 sampling, a watchdog,\nATOMIC_BLOCK sections, DEBUG_PRINT, SystemHealth, EmonTX, phase-balance code,\ninvented snippets and timings. What the code confirms now lives in\narchitecture.md and performance.md.\n\narchitecture.md is rewritten from processing.cpp, main.cpp, adc_chain.h,\nfast_control.h and shared_var.h: the three boards and their inputs, the ISR\nsteps, fasterControl (prediction, decision at DECISION_SAMPLE), the work of the\nmains cycle spread over the CT2 calls (CycleTask), CT2's diverted energy, the\nCT1 filter, the main loop flags, the displays, and a header table (every file\nchecked to exist, descriptions from its @brief). Removed: the watchdog, sleep,\nfault handling, graceful degradation, stale sizes and extension points.\n\nThe Readmes still link to interrupts.md and power-calculation.md: they are\nfixed in the Readme refresh.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: testing and contributing guides, the tests and rules that exist\n\nBoth pages came from the 3-phase firmware: tests of headers that do not exist\n(power_calculation.h), hardware test benches, fault injection and watchdog\ntests, none of which this repository has.\n\n- testing.md: the five kinds of checks (native, embedded in simavr,\n  compile-fail, grid simulator on every board, benchmarks) with the commands of\n  CLAUDE.md, platformio.ini, test/README.md, compile-fail.sh and sim/README.md,\n  the simulator targets of sim/Makefile, and the configurator tests;\n- contributing.md: setup (PlatformIO, or OneWire, RFM69 and U8g2 in the\n  Arduino IDE), the code rules of the CLAUDE.md files (no run-time float, no\n  version 4 control logic, the ISR and CycleTask rules, settings and their\n  compile-fail case), branches and commits, the port to the 3-phase firmware,\n  and the CI jobs build.yml and the other workflows run.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: configuration, memory, performance, calibration and index pages from the code\n\n- configuration.md: the header tree as config_derived.h includes it (the\n  calibration values of the board in PCB_VERSION, the sample-set and datalog\n  constants), the former-layout #error, features as constexpr, and a summary\n  of what validation.h checks, the board and display checks and the relay\n  filter bound of 5 to 255 datalog periods included; the invented snippets\n  (EmonTX, NO_OF_PHASES == 3, #ifdef TEMP_ENABLED, run-time self-tests) gone;\n- memory-layout.md: sizes from a build of the shipped config.h on dev\n  e8a912fe (pio run -e basic, avr-size: flash 9,190 B, 28.5 %; static RAM\n  378 B, 18.5 %), the largest RAM objects from avr-nm, freeRam(), what CI\n  measures; the per-feature tables, watchdog and SAMD21 lines gone;\n- performance.md: ISR timing measured in the grid simulator on dev e8a912fe\n  (make -C sim check, OLD_SEG: 347 cycles on average, 500 at most;\n  make -C sim check-new, NEW: 243 and 447), the CT1 filter and the cycle\n  tasks behind them, the limits the simulator enforces (sim/scenarios), the\n  ADMUX deadline and the 1-Wire slots, the main loop as main.cpp runs it;\n  the 3-phase figures, accuracy tables and invented code gone;\n- calibration.md: the calibration procedure in short, CALIBRATION_MODE and\n  the configurator's calibration mode; long lines rewrapped;\n- README.md: an index of the remaining pages, the 3-phase cloud tuning guide\n  by its full URL, a quick reference from the code (no watchdog, bounds\n  checking or accuracy claims).\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n* docs: the relay filter comment links to the 3-phase cloud guide\n\nconfig.h and the configurator's generated config.h pointed to\ndocs/Cloud_Pattern_Tuning_Guide.md, which this repository does not have;\nRELAY_FILTER_DELAY has the same name and meaning in the 3-phase firmware.\n\nCo-Authored-By: Claude <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+   "url": "https://github.com/FredM67/PVRouter-1-phase/commit/9221bb64cb7ef26fbd0acaa0066a63e12ab32184",
+   "sizes": {
+    "basic": {
+     "flash": 9194,
+     "ram": 378
+    },
+    "basic, OLD_SEG, SEG_HW": {
+     "flash": 10716,
+     "ram": 417
+    },
+    "basic, OLD_OLED, OLED": {
+     "flash": 21998,
+     "ram": 844
+    },
+    "basic, NEW, OLED": {
+     "flash": 21596,
+     "ram": 841
+    },
+    "basic, remote loads": {
+     "flash": 13736,
+     "ram": 487
+    },
+    "basic, IoT": {
+     "flash": 9194,
+     "ram": 378
+    },
+    "basic, HumanReadable": {
+     "flash": 9096,
+     "ram": 358
+    }
+   },
+   "speed": {
+    "mult_asm: multS16x16_to32 per op": 44.58,
+    "mult_asm: multU16x16_to32 per op": 42.33,
+    "mult_asm: mult16x8_q8 per op": 27.16,
+    "mult_asm: ISR simulation per sample": 132.09,
+    "datalog: isqrt avg": 414,
+    "datalog: isqrt max": 420,
+    "datalog: sqrtScaled avg": 446,
+    "datalog: sqrtScaled max": 513,
+    "datalog: vrms avg": 568,
+    "datalog: vrms max": 652,
+    "datalog: watts avg": 156,
+    "datalog: watts max": 158,
+    "fastdivision: divu10 small per call": 41.02,
+    "fastdivision: divu10 medium per call": 42.02,
+    "fastdivision: divu10 large per call": 40.02,
+    "fastdivision: divmod10 small per call": 141.08,
+    "fastdivision: divmod10 large per call": 141.08,
+    "fastdivision: divu10(12345) per call": 41.01,
+    "fastdivision: divmod10(12345678) per call": 130.05
+   }
   }
  ]
 }

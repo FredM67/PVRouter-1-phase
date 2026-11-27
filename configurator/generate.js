@@ -355,7 +355,7 @@
       '// - Frequently cloudy (coastal):         3 minutes (enhanced stability)',
       '// - Very cloudy (mountain, tropical):    4 minutes (maximum stability)',
       '//',
-      '// \u{1F4D6} Full guide: docs/Cloud_Pattern_Tuning_Guide.md, at the root of the repository',
+      '// \u{1F4D6} Full guide: https://github.com/FredM67/PVRouter-3-phase/blob/dev/docs/Cloud_Pattern_Tuning_Guide.md (same setting)',
       '//--------------------------------------------------------------------------------------------------',
       [`inline constexpr uint8_t RELAY_FILTER_DELAY{ ${m.relays.filterDelay} };`, '/**< EWMA filter delay in minutes for relay control */'],
       '',
